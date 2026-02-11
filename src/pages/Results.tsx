@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, Download, FileText, BarChart3 } from "lucide-react";
+import { ArrowRight, Download, FileText, BarChart3, FileArchive } from "lucide-react";
 
 interface ResultData {
   modifiedCount: number;
   fileSize: number;
+  compressedFileSize: number | null;
   data: string;
+  compressedData: string | null;
   entries: { label: string; original: string; processed: string }[];
 }
 
@@ -21,16 +23,15 @@ const Results = () => {
     }
   }, []);
 
-  const handleDownload = () => {
-    if (!result?.data) return;
-    const binary = atob(result.data);
+  const downloadFile = (base64Data: string, filename: string) => {
+    const binary = atob(base64Data);
     const bytes = new Uint8Array(binary.length);
     for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
     const blob = new Blob([bytes], { type: "application/octet-stream" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "arabized_output.sarc";
+    a.download = filename;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -76,7 +77,12 @@ const Results = () => {
                   </div>
                   <div>
                     <p className="text-2xl font-display font-bold">{(result.fileSize / 1024).toFixed(1)} KB</p>
-                    <p className="text-sm text-muted-foreground">حجم الملف</p>
+                    <p className="text-sm text-muted-foreground">حجم SARC</p>
+                    {result.compressedFileSize && (
+                      <p className="text-xs text-muted-foreground">
+                        مضغوط: {(result.compressedFileSize / 1024).toFixed(1)} KB
+                      </p>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -103,10 +109,25 @@ const Results = () => {
             )}
 
             {/* Download */}
-            <div className="text-center">
-              <Button size="lg" onClick={handleDownload} className="font-display font-bold text-lg px-10 py-6 bg-primary">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              {result.compressedData && (
+                <Button
+                  size="lg"
+                  onClick={() => downloadFile(result.compressedData!, "arabized_output.zs")}
+                  className="font-display font-bold text-lg px-10 py-6 bg-primary"
+                >
+                  <FileArchive className="w-5 h-5" />
+                  تحميل مضغوط (.zs)
+                </Button>
+              )}
+              <Button
+                size="lg"
+                variant={result.compressedData ? "outline" : "default"}
+                onClick={() => downloadFile(result.data, "arabized_output.sarc")}
+                className="font-display font-bold text-lg px-10 py-6"
+              >
                 <Download className="w-5 h-5" />
-                تحميل الملف المعرّب
+                تحميل SARC غير مضغوط
               </Button>
             </div>
           </>
