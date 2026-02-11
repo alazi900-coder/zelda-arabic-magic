@@ -1,4 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { createDCtx, decompressUsingDict, decompress } from "npm:@bokuweb/zstd-wasm";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -47,7 +48,6 @@ const ARABIC_CHARS: Record<string, [string, string, string, string]> = {
   'لا': ['ﻻ', 'ﻻ', 'ﻼ', 'ﻼ'],
 };
 
-// Characters that don't connect to the next letter
 const NON_CONNECTING = new Set(['ا', 'أ', 'إ', 'آ', 'د', 'ذ', 'ر', 'ز', 'و', 'ؤ', 'ة']);
 
 function isArabic(ch: string): boolean {
@@ -86,10 +86,8 @@ function reshapeArabic(text: string): string {
 }
 
 function reverseBidi(text: string): string {
-  // Split text into lines, reverse Arabic segments while keeping LTR (numbers, Latin) in place
   const lines = text.split('\n');
   return lines.map(line => {
-    // Simple bidi: reverse the entire line character by character for game engine display
     return [...line].reverse().join('');
   }).join('\n');
 }
@@ -97,23 +95,6 @@ function reverseBidi(text: string): string {
 function processArabicText(text: string): string {
   const reshaped = reshapeArabic(text);
   return reverseBidi(reshaped);
-}
-
-// ---- MSBT Parser ----
-function readUTF16String(data: Uint8Array, offset: number, length: number): string {
-  const decoder = new TextDecoder('utf-16le');
-  return decoder.decode(data.slice(offset, offset + length));
-}
-
-function writeUTF16String(text: string): Uint8Array {
-  const encoder = new TextEncoder();
-  const buf = new Uint8Array(text.length * 2);
-  for (let i = 0; i < text.length; i++) {
-    const code = text.charCodeAt(i);
-    buf[i * 2] = code & 0xFF;
-    buf[i * 2 + 1] = (code >> 8) & 0xFF;
-  }
-  return buf;
 }
 
 interface MsbtEntry {
@@ -133,8 +114,7 @@ function parseMSBT(data: Uint8Array): { entries: MsbtEntry[]; raw: Uint8Array } 
   }
 
   const entries: MsbtEntry[] = [];
-  // Simplified parser - find TXT2 section
-  let pos = 0x20; // Skip header
+  let pos = 0x20;
   
   while (pos < data.length - 16) {
     const sectionMagic = String.fromCharCode(...data.slice(pos, pos + 4));
@@ -153,17 +133,14 @@ function parseMSBT(data: Uint8Array): { entries: MsbtEntry[]; raw: Uint8Array } 
         const absOffset = txt2Start + entryOffset;
         const textLength = nextOffset - entryOffset;
         
-        // Read UTF-16LE string, stopping at null terminator
         let text = '';
         for (let j = 0; j < textLength - 2; j += 2) {
           const charCode = view.getUint16(absOffset + j, true);
           if (charCode === 0) break;
-          // Skip control codes (< 0x20 except newline-like)
           if (charCode === 0x0E) {
-            // MSBT control code: skip tag (2 bytes group + 2 bytes type + 2 bytes size + size bytes)
             const tagSize = view.getUint16(absOffset + j + 4, true);
             j += 4 + tagSize;
-            text += '\uFFFC'; // placeholder for control code
+            text += '\uFFFC';
             continue;
           }
           text += String.fromCharCode(charCode);
@@ -182,7 +159,6 @@ function parseMSBT(data: Uint8Array): { entries: MsbtEntry[]; raw: Uint8Array } 
     }
     
     pos += 16 + sectionSize;
-    // Align to 16 bytes
     pos = (pos + 15) & ~15;
   }
 
@@ -190,17 +166,19 @@ function parseMSBT(data: Uint8Array): { entries: MsbtEntry[]; raw: Uint8Array } 
 }
 
 function injectMSBT(data: Uint8Array, entries: MsbtEntry[]): Uint8Array {
-  // For now, create a copy and inject text in-place
-  // This is simplified - full implementation needs to handle size changes
   const result = new Uint8Array(data);
   const view = new DataView(result.buffer);
   
   for (const entry of entries) {
-    const encoded = writeUTF16String(entry.processedText);
-    // Only inject if it fits in the original size
+    const encoded = new Uint8Array(entry.processedText.length * 2);
+    for (let i = 0; i < entry.processedText.length; i++) {
+      const code = entry.processedText.charCodeAt(i);
+      encoded[i * 2] = code & 0xFF;
+      encoded[i * 2 + 1] = (code >> 8) & 0xFF;
+    }
+    
     if (encoded.length <= entry.size - 2) {
       result.set(encoded, entry.offset);
-      // Null terminate
       view.setUint16(entry.offset + encoded.length, 0, true);
     }
   }
@@ -208,7 +186,6 @@ function injectMSBT(data: Uint8Array, entries: MsbtEntry[]): Uint8Array {
   return result;
 }
 
-// ---- SARC Parser (simplified) ----
 interface SarcFile {
   name: string;
   data: Uint8Array;
@@ -225,14 +202,11 @@ function parseSARC(data: Uint8Array): SarcFile[] {
   const headerSize = view.getUint16(4, true);
   const dataOffset = view.getUint32(0x0C, true);
   
-  // Read SFAT
   const sfatOffset = headerSize;
   const sfatMagic = String.fromCharCode(...data.slice(sfatOffset, sfatOffset + 4));
   if (sfatMagic !== 'SFAT') throw new Error('Missing SFAT section');
   
   const nodeCount = view.getUint16(sfatOffset + 6, true);
-  
-  // Read SFNT
   const sfntOffset = sfatOffset + 12 + nodeCount * 16;
   
   const files: SarcFile[] = [];
@@ -243,7 +217,6 @@ function parseSARC(data: Uint8Array): SarcFile[] {
     const fileDataStart = view.getUint32(nodeOffset + 8, true);
     const fileDataEnd = view.getUint32(nodeOffset + 12, true);
     
-    // Read filename from SFNT
     let name = '';
     let pos = sfntOffset + 8 + nameOffset;
     while (pos < data.length && data[pos] !== 0) {
@@ -261,10 +234,6 @@ function parseSARC(data: Uint8Array): SarcFile[] {
 }
 
 function packSARC(files: SarcFile[], originalData: Uint8Array): Uint8Array {
-  // Simplified: rebuild SARC with the same structure
-  // For full compatibility, we'd need to reconstruct the full archive
-  // For now, we inject modified files back into the original data
-  
   const view = new DataView(originalData.buffer, originalData.byteOffset, originalData.byteLength);
   const headerSize = view.getUint16(4, true);
   const dataOffset = view.getUint32(0x0C, true);
@@ -305,32 +274,44 @@ Deno.serve(async (req) => {
     }
 
     const langData = new Uint8Array(await langFile.arrayBuffer());
-    const _dictData = new Uint8Array(await dictFile.arrayBuffer());
+    const dictData = new Uint8Array(await dictFile.arrayBuffer());
 
-    // Step 1: Zstandard decompression
-    // NOTE: Full zstd with dictionary decompression requires a native implementation
-    // For now, we'll attempt to parse the data directly (assuming pre-decompressed for testing)
-    // In production, this would use a WASM zstd library
-    
     let sarcData: Uint8Array;
+
+    // Check if already SARC (uncompressed)
     const isSARC = String.fromCharCode(...langData.slice(0, 4)) === 'SARC';
     
     if (isSARC) {
       sarcData = langData;
     } else {
-      // Try to detect if it's zstd compressed (magic: 0xFD2FB528)
+      // Try to detect zstd compression (magic: 0x28 0xB5 0x2F 0xFD)
       const isZstd = langData[0] === 0x28 && langData[1] === 0xB5 && langData[2] === 0x2F && langData[3] === 0xFD;
-      if (isZstd) {
+      
+      if (!isZstd) {
         return new Response(
-          JSON.stringify({ 
-            error: 'الملف مضغوط بـ Zstandard. يرجى فك الضغط أولاً باستخدام أداة zstd ثم إعادة الرفع.',
-            stage: 'decompressing',
-            needsDecompression: true,
-          }),
+          JSON.stringify({ error: 'الملف غير معروف: لا يبدو أنه SARC مضغوط أو SARC غير مضغوط' }),
           { status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
-      sarcData = langData;
+
+      // Decompress with dictionary
+      try {
+        const dctx = createDCtx();
+        sarcData = decompressUsingDict(dctx, langData, dictData);
+      } catch (e) {
+        // Try without dictionary
+        try {
+          sarcData = decompress(langData);
+        } catch {
+          return new Response(
+            JSON.stringify({ 
+              error: `فشل فك الضغط: ${e instanceof Error ? e.message : 'خطأ غير معروف'}`,
+              hint: 'تأكد من أن ملف القاموس صحيح ومطابق للملف المضغوط',
+            }),
+            { status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+      }
     }
 
     // Step 2: Extract SARC
