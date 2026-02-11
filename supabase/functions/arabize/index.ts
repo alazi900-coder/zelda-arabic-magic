@@ -1,5 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { decompress } from "jsr:@yu7400ki/zstd-wasm";
+import { compress, decompress } from "jsr:@yu7400ki/zstd-wasm";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -334,15 +334,31 @@ Deno.serve(async (req) => {
     // Step 4: Repack SARC
     const repackedData = packSARC(processedFiles, sarcData);
 
-    // Return as downloadable file
-    const base64 = btoa(String.fromCharCode(...repackedData));
+    // Step 5: Re-compress with Zstandard
+    let compressedData: Uint8Array | null = null;
+    try {
+      console.log(`Re-compressing SARC (${repackedData.length} bytes)...`);
+      compressedData = await compress(repackedData);
+      console.log(`Compressed: ${repackedData.length} -> ${compressedData.length} bytes`);
+    } catch (e) {
+      console.error(`Re-compression failed: ${e instanceof Error ? e.message : 'Unknown'}`);
+      // Continue without compression - user can still download uncompressed
+    }
+
+    // Return both compressed and uncompressed as base64
+    const uncompressedBase64 = btoa(String.fromCharCode(...repackedData));
+    const compressedBase64 = compressedData 
+      ? btoa(String.fromCharCode(...compressedData))
+      : null;
     
     return new Response(
       JSON.stringify({
         success: true,
         modifiedCount,
         fileSize: repackedData.length,
-        data: base64,
+        compressedFileSize: compressedData?.length ?? null,
+        data: uncompressedBase64,
+        compressedData: compressedBase64,
         entries: processedFiles
           .filter(f => f.name.endsWith('.msbt'))
           .flatMap(f => {
