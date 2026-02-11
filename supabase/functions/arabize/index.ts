@@ -1,5 +1,8 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createDCtx, decompressUsingDict, decompress } from "npm:@bokuweb/zstd-wasm";
+import { init, createDCtx, decompressUsingDict, decompress } from "https://deno.land/x/zstd_wasm/deno/zstd.ts";
+
+// Initialize zstd WASM module
+await init();
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
