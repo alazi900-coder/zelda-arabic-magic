@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Upload, FileArchive, ArrowRight, Loader2 } from "lucide-react";
@@ -26,7 +27,8 @@ const Process = () => {
   const [dictFile, setDictFile] = useState<File | null>(null);
   const [stage, setStage] = useState<ProcessingStage>("idle");
   const [logs, setLogs] = useState<string[]>([]);
-  const [resultData, setResultData] = useState<{ modifiedCount: number; fileSize: number; downloadUrl: string } | null>(null);
+  const [resultData, setResultData] = useState<{ modifiedCount: number; fileSize: number; data: string; entries: any[] } | null>(null);
+  const navigate = useNavigate();
 
   const addLog = (msg: string) => setLogs((prev) => [...prev, `[${new Date().toLocaleTimeString("ar-SA")}] ${msg}`]);
 
@@ -49,23 +51,35 @@ const Process = () => {
       formData.append("dictFile", dictFile);
 
       addLog("رفع الملفات للمعالجة...");
+      setStage("decompressing");
+      addLog(stageLabels.decompressing);
 
-      // TODO: Replace with actual edge function URL once Cloud is enabled
-      const response = await fetch("/api/arabize", {
-        method: "POST",
+      const { data, error } = await supabase.functions.invoke("arabize", {
         body: formData,
       });
 
-      if (!response.ok) throw new Error("فشل في المعالجة");
+      if (error) throw new Error(error.message || "فشل في المعالجة");
+      if (data?.error) throw new Error(data.error);
 
-      // Simulate stages for now
-      for (const s of ["decompressing", "extracting", "reshaping", "repacking", "done"] as ProcessingStage[]) {
-        setStage(s);
-        addLog(stageLabels[s]);
-        await new Promise((r) => setTimeout(r, 800));
-      }
+      setStage("extracting");
+      addLog(stageLabels.extracting);
+      await new Promise((r) => setTimeout(r, 300));
 
-      setResultData({ modifiedCount: 0, fileSize: 0, downloadUrl: "" });
+      setStage("reshaping");
+      addLog(stageLabels.reshaping);
+      await new Promise((r) => setTimeout(r, 300));
+
+      setStage("repacking");
+      addLog(stageLabels.repacking);
+      await new Promise((r) => setTimeout(r, 300));
+
+      setStage("done");
+      addLog(`اكتمل! تم تعديل ${data.modifiedCount} نص`);
+      addLog(`حجم الملف: ${(data.fileSize / 1024).toFixed(1)} كيلوبايت`);
+
+      setResultData(data);
+      // Store in sessionStorage for results page
+      sessionStorage.setItem("arabizeResult", JSON.stringify(data));
     } catch (err) {
       setStage("error");
       addLog(`خطأ: ${err instanceof Error ? err.message : "غير معروف"}`);
