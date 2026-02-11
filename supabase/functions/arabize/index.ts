@@ -299,17 +299,36 @@ Deno.serve(async (req) => {
 
       // Decompress with dictionary
       try {
+        // The dictionary file (ZsDic.pack.zs) is itself zstd-compressed
+        // We need to decompress it first to get the raw dictionary
+        let rawDict: Uint8Array;
+        const isDictZstd = dictData[0] === 0x28 && dictData[1] === 0xB5 && dictData[2] === 0x2F && dictData[3] === 0xFD;
+        
+        if (isDictZstd) {
+          console.log("Dictionary file is zstd-compressed, decompressing first...");
+          rawDict = decompress(dictData);
+          console.log(`Dictionary decompressed: ${dictData.length} -> ${rawDict.length} bytes`);
+        } else {
+          rawDict = dictData;
+          console.log(`Dictionary is raw: ${rawDict.length} bytes`);
+        }
+
         const dctx = createDCtx();
-        sarcData = decompressUsingDict(dctx, langData, dictData);
+        sarcData = decompressUsingDict(dctx, langData, rawDict);
+        console.log(`Language file decompressed: ${langData.length} -> ${sarcData.length} bytes`);
       } catch (e) {
-        // Try without dictionary
+        console.error("Decompression error:", e);
+        // Try without dictionary as fallback
         try {
+          console.log("Trying decompression without dictionary...");
           sarcData = decompress(langData);
-        } catch {
+          console.log(`Decompressed without dict: ${sarcData.length} bytes`);
+        } catch (e2) {
           return new Response(
             JSON.stringify({ 
               error: `فشل فك الضغط: ${e instanceof Error ? e.message : 'خطأ غير معروف'}`,
               hint: 'تأكد من أن ملف القاموس صحيح ومطابق للملف المضغوط',
+              details: `Dict error: ${e instanceof Error ? e.message : ''}, No-dict error: ${e2 instanceof Error ? e2.message : ''}`,
             }),
             { status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
           );
