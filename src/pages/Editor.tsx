@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save, Tag, Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle, Eye, EyeOff, Wifi, WifiOff } from "lucide-react";
+import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save, Tag, Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle, Eye, EyeOff } from "lucide-react";
 import ZeldaDialoguePreview from "@/components/ZeldaDialoguePreview";
 import { idbSet, idbGet } from "@/lib/idb-storage";
 import { useAuth } from "@/contexts/AuthContext";
@@ -83,7 +83,7 @@ const Editor = () => {
   const [technicalEditingMode, setTechnicalEditingMode] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
   const [previewKey, setPreviewKey] = useState<string | null>(null);
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  
   const navigate = useNavigate();
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -186,29 +186,6 @@ const Editor = () => {
     loadState();
   }, [detectPreTranslated]);
 
-  // Monitor online/offline status
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-
-    return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
-  }, []);
-
-  // Auto-sync when coming back online
-  useEffect(() => {
-    if (isOnline && state && user) {
-      const syncTimer = setTimeout(() => {
-        handleCloudSave();
-      }, 2000);
-      return () => clearTimeout(syncTimer);
-    }
-  }, [isOnline]);
 
   const saveToIDB = useCallback(async (editorState: EditorState) => {
     await idbSet("editorState", {
@@ -306,11 +283,6 @@ const Editor = () => {
   const handleAutoTranslate = async () => {
     if (!state) return;
 
-    if (!isOnline) {
-      setTranslateProgress("❌ الترجمة التلقائية تحتاج اتصال بالإنترنت");
-      setTimeout(() => setTranslateProgress(""), 4000);
-      return;
-    }
 
     const arabicRegex = /[\u0600-\u06FF]/;
     
@@ -493,11 +465,6 @@ const Editor = () => {
   const handleCloudSave = async () => {
     if (!state || !user) return;
     
-    if (!isOnline) {
-      setCloudStatus("❌ بدون اتصال بالإنترنت - تم حفظ التغييرات محلياً وستُرفع عند العودة");
-      setTimeout(() => setCloudStatus(""), 5000);
-      return;
-    }
     
     setCloudSyncing(true);
     setCloudStatus("جاري الحفظ في السحابة...");
@@ -541,11 +508,6 @@ const Editor = () => {
   const handleCloudLoad = async () => {
     if (!user) return;
     
-    if (!isOnline) {
-      setCloudStatus("❌ بدون اتصال بالإنترنت - لا يمكن التحميل من السحابة الآن");
-      setTimeout(() => setCloudStatus(""), 4000);
-      return;
-    }
     
     setCloudSyncing(true);
     setCloudStatus("جاري التحميل من السحابة...");
@@ -770,18 +732,6 @@ const Editor = () => {
           </Card>
         )}
 
-        {/* Connection Status Indicator */}
-        {!isOnline && (
-          <Card className="mb-4 border-accent bg-accent/5">
-            <CardContent className="flex items-center gap-3 p-4 font-body">
-              <WifiOff className="w-5 h-5 text-accent flex-shrink-0" />
-              <div>
-                <p className="font-bold">بدون اتصال بالإنترنت</p>
-                <p className="text-sm text-muted-foreground">التغييرات تُحفظ محلياً وسيتم مزامنتها تلقائياً عند عودة الاتصال</p>
-              </div>
-            </CardContent>
-          </Card>
-        )}
 
         {cloudStatus && (
           <Card className="mb-4 border-primary/30 bg-primary/5">
