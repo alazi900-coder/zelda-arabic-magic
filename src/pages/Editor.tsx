@@ -79,19 +79,45 @@ const Editor = () => {
   const { user } = useAuth();
 
   // Load state from IndexedDB
+  // Detect already-Arabic entries and auto-populate translations
+  const detectPreTranslated = useCallback((editorState: EditorState): Record<string, string> => {
+    const arabicRegex = /[\u0600-\u06FF]/;
+    const autoTranslations: Record<string, string> = {};
+    for (const entry of editorState.entries) {
+      const key = `${entry.msbtFile}:${entry.index}`;
+      // Only auto-fill if not already translated
+      if (!editorState.translations[key]?.trim() && arabicRegex.test(entry.original)) {
+        autoTranslations[key] = entry.original;
+      }
+    }
+    return autoTranslations;
+  }, []);
+
   useEffect(() => {
     const loadState = async () => {
       const stored = await idbGet<EditorState>("editorState");
       if (stored) {
-        setState({
+        // Auto-detect pre-translated Arabic entries
+        const autoTranslations = detectPreTranslated({
           entries: stored.entries,
           translations: stored.translations || {},
         });
-        setLastSaved("تم التحميل من الحفظ السابق");
+        const mergedTranslations = { ...autoTranslations, ...stored.translations };
+        
+        setState({
+          entries: stored.entries,
+          translations: mergedTranslations,
+        });
+
+        const autoCount = Object.keys(autoTranslations).length;
+        setLastSaved(autoCount > 0 
+          ? `تم التحميل + اكتشاف ${autoCount} نص معرّب مسبقاً`
+          : "تم التحميل من الحفظ السابق"
+        );
       }
     };
     loadState();
-  }, []);
+  }, [detectPreTranslated]);
 
   // Auto-save to IndexedDB on translation changes (debounced)
   const saveToIDB = useCallback(async (editorState: EditorState) => {
