@@ -1,147 +1,107 @@
 
-## تنفيذ الحل الجذري لضغط Zstandard مع القاموس
 
-### المشكلة الأساسية
-ملفات Zelda مضغوطة باستخدام **Zstandard مع قاموس (Dictionary)**. المكتبة الحالية `jsr:@yu7400ki/zstd-wasm` توفر فقط `compress` و `decompress` بدون دعم القاموس، مما يسبب فشل فك الضغط بخطأ "Unknown error" (code -32).
+## إصلاح خطأ code -32: استخراج القاموس الصحيح من أرشيف SARC
 
-### التغييرات المطلوبة
+### المشكلة
+ملف `ZsDic.pack.zs` عند فك ضغطه ينتج **أرشيف SARC** يحتوي على عدة قواميس `.zsdic` منفصلة. الكود الحالي يستخدم أرشيف SARC الكامل (~393KB) كقاموس، وهذا خاطئ -- يجب استخراج ملف `.zsdic` المناسب منه.
 
-#### 1. تحديث المكتبة والاستيرادات (الأسطر 1-2)
-**من:**
-```typescript
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { compress, decompress } from "jsr:@yu7400ki/zstd-wasm";
+بالإضافة لذلك، يوجد كتلة كود مكررة (الأسطر 311-324) تفك ضغط القاموس مرتين.
+
+### التغييرات في `supabase/functions/arabize/index.ts`
+
+#### 1. إزالة الكتلة المكررة (الأسطر 318-324)
+حذف فك ضغط القاموس المكرر الذي لا فائدة منه.
+
+#### 2. استبدال منطق القاموس (الأسطر 309-331)
+بدلاً من استخدام الناتج الخام كقاموس مباشرة، سيتم:
+
+1. فك ضغط `ZsDic.pack.zs` بالطريقة العادية (بدون قاموس)
+2. استخدام `parseSARC()` الموجودة بالفعل لاستخراج ملفات `.zsdic`
+3. اختيار القاموس المناسب تلقائياً حسب اسم ملف اللغة:
+   - `.pack.zs` --> `pack.zsdic`
+   - `.bcett.byml.zs` --> `bcett.byml.zsdic`
+   - غير ذلك --> `zs.zsdic`
+4. استخدام القاموس المستخرج مع `decompressUsingDict` و `compressUsingDict`
+
+### التدفق المصحح
+
+```text
+ZsDic.pack.zs
+  | decompress() -- عادي بدون قاموس
+  v
+SARC Archive (~393KB)
+  | parseSARC()
+  v
+zs.zsdic / pack.zsdic / bcett.byml.zsdic
+  |
+  v
+langFile.zs + pack.zsdic --> decompressUsingDict() --> SARC Data
+  |
+  v
+MSBT Processing --> Modified SARC
+  |
+  v
+compressUsingDict(modified, pack.zsdic) --> output.zs
 ```
 
-**إلى:**
+### التفاصيل التقنية
+
+الكود الجديد للأسطر 309-342:
+
 ```typescript
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import {
-  init,
-  createDCtx,
-  decompressUsingDict,
-  createCCtx,
-  compressUsingDict,
-  decompress,
-  compress,
-} from "https://deno.land/x/zstd_wasm@0.0.21/deno/zstd.ts";
-
-// Initialize WASM module
-await init();
-```
-
-**السبب:** المكتبة الجديدة من `deno.land/x/zstd_wasm` توفر الدوال الكاملة:
-- `decompressUsingDict(dctx, buffer, dict)` -- فك ضغط بالقاموس
-- `compressUsingDict(cctx, buffer, dict, level)` -- ضغط بالقاموس
-- `createDCtx()` / `createCCtx()` -- إنشاء سياقات الضغط
-
-#### 2. معالجة ملف القاموس (الأسطر 298-312)
-**قبل** (معالجة غير صحيحة):
-```typescript
+// Step 1: Decompress dictionary SARC archive
+console.log(`Decompressing dictionary file (${dictData.length} bytes)...`);
+let dictSarcData: Uint8Array;
 try {
-  console.log(`Decompressing language file (${langData.length} bytes)...`);
-  sarcData = await decompress(langData);
-  console.log(`Decompressed successfully: ${sarcData.length} bytes`);
-} catch (e) {
-  // خطأ ...
+  dictSarcData = decompress(dictData);
+  console.log(`Dictionary SARC decompressed: ${dictData.length} -> ${dictSarcData.length} bytes`);
+} catch {
+  dictSarcData = dictData;
+  console.log(`Dictionary file is raw: ${dictSarcData.length} bytes`);
 }
-```
 
-**بعد** (معالجة صحيحة مع القاموس):
-```typescript
-try {
-  // Step 1: Decompress dictionary file
-  console.log(`Decompressing dictionary file (${dictData.length} bytes)...`);
-  let rawDict: Uint8Array;
-  try {
-    // Dictionary file itself may be Zstandard compressed
-    rawDict = await decompress(dictData);
-    console.log(`Dictionary decompressed: ${dictData.length} -> ${rawDict.length} bytes`);
-  } catch {
-    // If decompression fails, assume it's already raw
-    rawDict = dictData;
-    console.log(`Dictionary is raw format: ${rawDict.length} bytes`);
-  }
+// Step 2: Parse SARC to extract individual .zsdic files
+const dictFiles = parseSARC(dictSarcData);
+console.log(`Found ${dictFiles.length} dictionaries: ${dictFiles.map(f => f.name).join(', ')}`);
 
-  // Step 2: Decompress language file using dictionary
-  console.log(`Decompressing language file (${langData.length} bytes) with dictionary...`);
-  const dctx = createDCtx();
-  sarcData = await decompressUsingDict(dctx, langData, rawDict);
-  console.log(`Decompressed successfully: ${langData.length} -> ${sarcData.length} bytes`);
-} catch (e) {
-  const error = e instanceof Error ? e.message : 'Unknown error';
-  console.error(`Decompression with dictionary failed: ${error}`);
+// Step 3: Select correct dictionary based on language filename
+const langFileName = (langFile?.name || '').toLowerCase();
+let selectedDictName = '';
+
+if (langFileName.includes('.pack.')) {
+  const found = dictFiles.find(f => f.name.endsWith('pack.zsdic'));
+  if (found) { rawDict = found.data; selectedDictName = found.name; }
+}
+if (!rawDict && langFileName.includes('.bcett.byml.')) {
+  const found = dictFiles.find(f => f.name.endsWith('bcett.byml.zsdic'));
+  if (found) { rawDict = found.data; selectedDictName = found.name; }
+}
+if (!rawDict) {
+  const found = dictFiles.find(f => f.name.endsWith('zs.zsdic') && !f.name.includes('pack') && !f.name.includes('bcett'));
+  if (found) { rawDict = found.data; selectedDictName = found.name; }
+}
+if (!rawDict && dictFiles.length > 0) {
+  rawDict = dictFiles[0].data;
+  selectedDictName = dictFiles[0].name;
+}
+
+if (!rawDict) {
   return new Response(
-    JSON.stringify({ 
-      error: `فشل فك الضغط مع القاموس: ${error}`,
-      hint: 'تأكد من أن الملف مضغوط بـ Zstandard مع القاموس بشكل صحيح',
-    }),
+    JSON.stringify({ error: 'لم يتم العثور على قاموس .zsdic في ملف القاموس' }),
     { status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
   );
 }
+
+console.log(`Using dictionary: ${selectedDictName} (${rawDict.length} bytes)`);
+
+// Step 4: Decompress language file using selected dictionary
+console.log(`Decompressing language file (${langData.length} bytes) with dictionary...`);
+const dctx = createDCtx();
+sarcData = decompressUsingDict(dctx, langData, rawDict);
+console.log(`Decompressed successfully: ${langData.length} -> ${sarcData.length} bytes`);
 ```
 
-#### 3. إعادة ضغط النتيجة بالقاموس (الأسطر 337-346)
-**قبل** (ضغط بدون قاموس):
-```typescript
-try {
-  console.log(`Re-compressing SARC (${repackedData.length} bytes)...`);
-  compressedData = await compress(repackedData);
-  console.log(`Compressed: ${repackedData.length} -> ${compressedData.length} bytes`);
-} catch (e) {
-  console.error(`Re-compression failed: ${e instanceof Error ? e.message : 'Unknown'}`);
-}
-```
+### النتيجة المتوقعة
+- اختفاء خطأ code -32 لأن القاموس الآن هو ملف `.zsdic` الفعلي وليس أرشيف SARC كامل
+- إعادة ضغط النتيجة بنفس القاموس لضمان التوافق مع اللعبة
 
-**بعد** (ضغط بالقاموس):
-```typescript
-try {
-  // We need the raw dictionary from decompression phase
-  // Make rawDict accessible by declaring it outside the try-catch block above
-  console.log(`Re-compressing SARC (${repackedData.length} bytes) with dictionary...`);
-  const cctx = createCCtx();
-  compressedData = await compressUsingDict(cctx, repackedData, rawDict, 3);
-  console.log(`Compressed: ${repackedData.length} -> ${compressedData.length} bytes`);
-} catch (e) {
-  console.error(`Re-compression failed: ${e instanceof Error ? e.message : 'Unknown'}`);
-  // Continue without compression
-}
-```
-
-### نقطة حرجة: إمكانية الوصول إلى rawDict
-يجب جعل متغير `rawDict` متاحاً في كل المراحل:
-- تصريح `rawDict` خارج كتل try-catch الداخلية
-- استخدامه في مرحلة إعادة الضغط
-
-### التدفق الصحيح
-```
-ZsDic.pack.zs 
-  ↓ (decompress)
-rawDict (القاموس الخام)
-  ↓
-langFile.zs + rawDict
-  ↓ (decompressUsingDict)
-SARC Data
-  ↓
-MSBT Processing (Arabic Reshaping/Bidi)
-  ↓
-Modified SARC
-  ↓ (compressUsingDict + rawDict)
-output.zs (متوافق مع اللعبة)
-```
-
-### الفوائد
-✓ فك الضغط الصحيح للملفات المضغوطة بالقاموس
-✓ إعادة ضغط النتيجة بنفس الطريقة لضمان توافقية اللعبة
-✓ معالجة جميع الملفات بشكل صحيح
-✓ سجلات واضحة لكل مرحلة من المعالجة
-
-### الملفات المتأثرة
-- `supabase/functions/arabize/index.ts` -- تحديث شامل للمكتبة ودعم القاموس
-
-### الاختبار المتوقع
-بعد التنفيذ، سيكون بإمكان المستخدم:
-1. رفع ملفات الزيلدا المضغوطة بالقاموس
-2. معالجة النصوص العربية بنجاح
-3. تحميل النتيجة مضغوطة أو غير مضغوطة
-4. رؤية رسائل تسجيل واضحة لكل مرحلة
