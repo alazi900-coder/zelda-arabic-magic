@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save, Tag, Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle, Eye, EyeOff, RotateCcw } from "lucide-react";
+import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save, Tag, Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle, Eye, EyeOff, RotateCcw, CheckCircle2, ShieldCheck } from "lucide-react";
 import ZeldaDialoguePreview from "@/components/ZeldaDialoguePreview";
 import { idbSet, idbGet } from "@/lib/idb-storage";
 import { useAuth } from "@/contexts/AuthContext";
@@ -130,6 +130,9 @@ const Editor = () => {
   const [technicalEditingMode, setTechnicalEditingMode] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
   const [previewKey, setPreviewKey] = useState<string | null>(null);
+  const [reviewing, setReviewing] = useState(false);
+  const [reviewResults, setReviewResults] = useState<{ issues: any[]; summary: any } | null>(null);
+  const [tmStats, setTmStats] = useState<{ reused: number; sent: number } | null>(null);
   
   const navigate = useNavigate();
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
@@ -368,10 +371,8 @@ const Editor = () => {
   const handleAutoTranslate = async () => {
     if (!state) return;
 
-
     const arabicRegex = /[\u0600-\u06FF]/;
     
-    // Debug: count why entries are skipped
     let skipEmpty = 0, skipArabic = 0, skipTechnical = 0, skipTranslated = 0, skipCategory = 0;
     
     const untranslated = state.entries.filter(e => {
@@ -381,18 +382,15 @@ const Editor = () => {
       if (!e.original.trim()) { skipEmpty++; return false; }
       
       const isAlreadyArabic = arabicRegex.test(e.original);
-      const isTechnical = isTechnicalText(e.original);
-      const bypassKey = `${e.msbtFile}:${e.index}`;
-      const hasBypass = state.technicalBypass?.has(bypassKey);
+      const isTech = isTechnicalText(e.original);
+      const hasBypass = state.technicalBypass?.has(key);
       
       if (isAlreadyArabic) { skipArabic++; return false; }
-      if (isTechnical && !hasBypass) { skipTechnical++; return false; }
+      if (isTech && !hasBypass) { skipTechnical++; return false; }
       if (state.translations[key] && state.translations[key].trim()) { skipTranslated++; return false; }
       
       return true;
     });
-
-    console.log(`[ترجمة تلقائية] إجمالي: ${state.entries.length}, متخطى: فئة=${skipCategory}, فارغ=${skipEmpty}, عربي=${skipArabic}, تقني=${skipTechnical}, مترجم=${skipTranslated}, متبقي للترجمة: ${untranslated.length}`);
 
     if (untranslated.length === 0) {
       const reasons: string[] = [];
@@ -400,14 +398,56 @@ const Editor = () => {
       if (skipTechnical > 0) reasons.push(`${skipTechnical} نص تقني`);
       if (skipTranslated > 0) reasons.push(`${skipTranslated} مترجم بالفعل`);
       if (skipCategory > 0) reasons.push(`${skipCategory} خارج الفئة`);
-      
       setTranslateProgress(`✅ لا توجد نصوص تحتاج ترجمة${reasons.length > 0 ? ` (${reasons.join('، ')})` : ''}`);
       setTimeout(() => setTranslateProgress(""), 5000);
       return;
     }
 
+    // === Translation Memory: reuse existing translations for identical texts ===
+    const tmMap = new Map<string, string>();
+    for (const [key, val] of Object.entries(state.translations)) {
+      if (val.trim()) {
+        const entry = state.entries.find(e => `${e.msbtFile}:${e.index}` === key);
+        if (entry) {
+          const norm = entry.original.trim().toLowerCase();
+          if (!tmMap.has(norm)) tmMap.set(norm, val);
+        }
+      }
+    }
+
+    const tmReused: Record<string, string> = {};
+    const needsAI: typeof untranslated = [];
+
+    for (const e of untranslated) {
+      const norm = e.original.trim().toLowerCase();
+      const cached = tmMap.get(norm);
+      if (cached) {
+        const key = `${e.msbtFile}:${e.index}`;
+        tmReused[key] = cached;
+      } else {
+        needsAI.push(e);
+      }
+    }
+
+    // Apply TM results immediately
+    if (Object.keys(tmReused).length > 0) {
+      setState(prev => prev ? {
+        ...prev,
+        translations: { ...prev.translations, ...tmReused },
+      } : null);
+    }
+
+    const tmCount = Object.keys(tmReused).length;
+    setTmStats({ reused: tmCount, sent: needsAI.length });
+
+    if (needsAI.length === 0) {
+      setTranslateProgress(`✅ تم إعادة استخدام ${tmCount} ترجمة من الذاكرة — لا حاجة للذكاء الاصطناعي!`);
+      setTimeout(() => setTranslateProgress(""), 5000);
+      return;
+    }
+
     setTranslating(true);
-    const totalBatches = Math.ceil(untranslated.length / AI_BATCH_SIZE);
+    const totalBatches = Math.ceil(needsAI.length / AI_BATCH_SIZE);
     let allTranslations: Record<string, string> = {};
     
     abortControllerRef.current = new AbortController();
@@ -420,13 +460,34 @@ const Editor = () => {
           break;
         }
 
-        const batch = untranslated.slice(b * AI_BATCH_SIZE, (b + 1) * AI_BATCH_SIZE);
-        setTranslateProgress(`جاري ترجمة الدفعة ${b + 1}/${totalBatches} (${batch.length} نص)...`);
+        const batch = needsAI.slice(b * AI_BATCH_SIZE, (b + 1) * AI_BATCH_SIZE);
+        const tmInfo = tmCount > 0 ? ` (+ ${tmCount} من الذاكرة)` : '';
+        setTranslateProgress(`جاري ترجمة الدفعة ${b + 1}/${totalBatches} (${batch.length} نص)...${tmInfo}`);
 
         const entries = batch.map(e => ({
           key: `${e.msbtFile}:${e.index}`,
           original: e.original,
         }));
+
+        // === Context: gather nearby translated entries for better accuracy ===
+        const batchIndices = batch.map(e => state.entries.indexOf(e));
+        const contextEntries: { key: string; original: string; translation?: string }[] = [];
+        const contextKeys = new Set<string>();
+        
+        for (const idx of batchIndices) {
+          for (let offset = -2; offset <= 2; offset++) {
+            if (offset === 0) continue;
+            const neighbor = state.entries[idx + offset];
+            if (!neighbor) continue;
+            const nKey = `${neighbor.msbtFile}:${neighbor.index}`;
+            if (contextKeys.has(nKey)) continue;
+            const nTranslation = state.translations[nKey];
+            if (nTranslation?.trim()) {
+              contextKeys.add(nKey);
+              contextEntries.push({ key: nKey, original: neighbor.original, translation: nTranslation });
+            }
+          }
+        }
 
         const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
         const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -438,7 +499,11 @@ const Editor = () => {
             'apikey': supabaseKey,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ entries, glossary: state.glossary || '' }),
+          body: JSON.stringify({
+            entries,
+            glossary: state.glossary || '',
+            context: contextEntries.slice(0, 10),
+          }),
           signal: abortControllerRef.current.signal,
         });
 
@@ -462,11 +527,13 @@ const Editor = () => {
         }
       }
 
-      const count = Object.keys(allTranslations).length;
-      if (count > 0) {
-        setTranslateProgress(`✅ تمت ترجمة ${count} نص بنجاح!`);
-      }
-      setTimeout(() => setTranslateProgress(""), 4000);
+      const aiCount = Object.keys(allTranslations).length;
+      const totalDone = aiCount + tmCount;
+      const parts: string[] = [];
+      if (aiCount > 0) parts.push(`${aiCount} بالذكاء الاصطناعي`);
+      if (tmCount > 0) parts.push(`${tmCount} من ذاكرة الترجمة`);
+      setTranslateProgress(`✅ تمت ترجمة ${totalDone} نص (${parts.join(' + ')})!`);
+      setTimeout(() => setTranslateProgress(""), 5000);
     } catch (err) {
       if (err instanceof Error && err.name === 'AbortError') {
         const savedCount = Object.keys(allTranslations).length;
@@ -485,6 +552,56 @@ const Editor = () => {
     } finally {
       setTranslating(false);
       abortControllerRef.current = null;
+    }
+  };
+
+  const handleReviewTranslations = async () => {
+    if (!state) return;
+    setReviewing(true);
+    setReviewResults(null);
+
+    try {
+      const reviewEntries = state.entries
+        .filter(e => {
+          const key = `${e.msbtFile}:${e.index}`;
+          return state.translations[key]?.trim();
+        })
+        .map(e => ({
+          key: `${e.msbtFile}:${e.index}`,
+          original: e.original,
+          translation: state.translations[`${e.msbtFile}:${e.index}`],
+          maxBytes: e.maxBytes || 0,
+        }));
+
+      if (reviewEntries.length === 0) {
+        setReviewResults({ issues: [], summary: { total: 0, errors: 0, warnings: 0, checked: 0 } });
+        return;
+      }
+
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+      const response = await fetch(`${supabaseUrl}/functions/v1/review-translations`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${supabaseKey}`,
+          'apikey': supabaseKey,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          entries: reviewEntries,
+          glossary: state.glossary || '',
+        }),
+      });
+
+      if (!response.ok) throw new Error(`خطأ ${response.status}`);
+      const data = await response.json();
+      setReviewResults(data);
+    } catch (err) {
+      setTranslateProgress(`❌ خطأ في المراجعة: ${err instanceof Error ? err.message : 'غير معروف'}`);
+      setTimeout(() => setTranslateProgress(""), 4000);
+    } finally {
+      setReviewing(false);
     }
   };
 
@@ -911,6 +1028,51 @@ const Editor = () => {
           </Card>
         )}
 
+        {tmStats && (
+          <Card className="mb-4 border-secondary/30 bg-secondary/5">
+            <CardContent className="p-4 text-center font-display">
+              🧠 ذاكرة الترجمة: أُعيد استخدام {tmStats.reused} ترجمة — أُرسل {tmStats.sent} للذكاء الاصطناعي
+            </CardContent>
+          </Card>
+        )}
+
+        {reviewResults && (
+          <Card className="mb-4 border-border bg-card">
+            <CardContent className="p-4">
+              <h3 className="font-display font-bold mb-3 flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5" />
+                تقرير المراجعة الذكية
+              </h3>
+              <div className="flex gap-4 mb-3 text-sm">
+                <span>✅ فُحص: {reviewResults.summary.checked}</span>
+                <span className="text-destructive">❌ أخطاء: {reviewResults.summary.errors}</span>
+                <span className="text-amber-500">⚠️ تحذيرات: {reviewResults.summary.warnings}</span>
+              </div>
+              {reviewResults.issues.length === 0 ? (
+                <p className="text-sm text-muted-foreground">🎉 لا توجد مشاكل! الترجمات تبدو سليمة.</p>
+              ) : (
+                <div className="max-h-60 overflow-y-auto space-y-2">
+                  {reviewResults.issues.slice(0, 50).map((issue: any, i: number) => (
+                    <div key={i} className={`p-2 rounded text-xs border ${
+                      issue.severity === 'error' ? 'border-destructive/30 bg-destructive/5' : 'border-amber-500/30 bg-amber-500/5'
+                    }`}>
+                      <p className="font-mono text-muted-foreground mb-1">{issue.key}</p>
+                      <p>{issue.message}</p>
+                      {issue.suggestion && <p className="text-primary mt-1">💡 {issue.suggestion}</p>}
+                    </div>
+                  ))}
+                  {reviewResults.issues.length > 50 && (
+                    <p className="text-xs text-muted-foreground text-center">... و {reviewResults.issues.length - 50} مشكلة أخرى</p>
+                  )}
+                </div>
+              )}
+              <Button variant="ghost" size="sm" onClick={() => setReviewResults(null)} className="mt-2 text-xs">
+                إغلاق التقرير ✕
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
         {!user && (
           <Card className="mb-4 border-primary/30 bg-primary/5">
             <CardContent className="flex items-center gap-3 p-4">
@@ -1020,6 +1182,15 @@ const Editor = () => {
           </Button>
           <Button variant="outline" onClick={handleFixAllReversed} className="font-body border-accent/30 text-accent hover:text-accent">
             <RotateCcw className="w-4 h-4" /> تصحيح الكل (عربي معكوس)
+          </Button>
+          <Button
+            variant="outline"
+            onClick={handleReviewTranslations}
+            disabled={reviewing || translatedCount === 0}
+            className="font-body border-green-500/30 text-green-600 hover:text-green-700"
+          >
+            {reviewing ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />}
+            مراجعة ذكية 🔍
           </Button>
         </div>
 
