@@ -35,7 +35,7 @@ const FILE_CATEGORIES: FileCategory[] = [
   { id: "story", label: "حوارات القصة", emoji: "📖", keywords: ["demo", "event", "scenario", "cutscene", "movie"] },
   { id: "npc", label: "حوارات الشخصيات", emoji: "💬", keywords: ["npc", "talk", "dialog", "shop"] },
   { id: "quest", label: "المهام", emoji: "📜", keywords: ["quest", "mission", "challenge", "minigame"] },
-  { id: "weapon", label: "الأسلحة", emoji: "⚔️", keywords: ["weapon", "sword", "bow", "shield", "spear", "lsword", "ssword"] },
+  { id: "weapon", label: "الأسلحة", emoji: "⚔️", keywords: ["weapon", "sword", "bow", "shield", "spear", "lsword", "ssword", "equip", "blade", "arm", "lance", "axe", "club", "rod", "wand", "boomerang"] },
   { id: "armor", label: "المعدات والدروع", emoji: "🛡️", keywords: ["armor", "helm", "equipment", "accessory"] },
   { id: "item", label: "الأدوات والمواد", emoji: "🎒", keywords: ["item", "material", "key", "important", "cook", "recipe", "food", "elixir", "rupee", "ore"] },
   { id: "enemy", label: "الأعداء", emoji: "👹", keywords: ["enemy", "boss", "monster", "guardian", "lynel", "hinox", "moblin"] },
