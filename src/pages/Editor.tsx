@@ -306,18 +306,46 @@ const Editor = () => {
   const handleAutoTranslate = async () => {
     if (!state) return;
 
+    if (!isOnline) {
+      setTranslateProgress("❌ الترجمة التلقائية تحتاج اتصال بالإنترنت");
+      setTimeout(() => setTranslateProgress(""), 4000);
+      return;
+    }
+
     const arabicRegex = /[\u0600-\u06FF]/;
+    
+    // Debug: count why entries are skipped
+    let skipEmpty = 0, skipArabic = 0, skipTechnical = 0, skipTranslated = 0, skipCategory = 0;
+    
     const untranslated = state.entries.filter(e => {
       const key = `${e.msbtFile}:${e.index}`;
       const matchCategory = filterCategory === "all" || categorizeFile(e.msbtFile) === filterCategory;
+      if (!matchCategory) { skipCategory++; return false; }
+      if (!e.original.trim()) { skipEmpty++; return false; }
+      
       const isAlreadyArabic = arabicRegex.test(e.original);
       const isTechnical = isTechnicalText(e.original);
-      return matchCategory && e.original.trim() && !isAlreadyArabic && !isTechnical && (!state.translations[key] || !state.translations[key].trim());
+      const bypassKey = `${e.msbtFile}:${e.index}`;
+      const hasBypass = state.technicalBypass?.has(bypassKey);
+      
+      if (isAlreadyArabic) { skipArabic++; return false; }
+      if (isTechnical && !hasBypass) { skipTechnical++; return false; }
+      if (state.translations[key] && state.translations[key].trim()) { skipTranslated++; return false; }
+      
+      return true;
     });
 
+    console.log(`[ترجمة تلقائية] إجمالي: ${state.entries.length}, متخطى: فئة=${skipCategory}, فارغ=${skipEmpty}, عربي=${skipArabic}, تقني=${skipTechnical}, مترجم=${skipTranslated}, متبقي للترجمة: ${untranslated.length}`);
+
     if (untranslated.length === 0) {
-      setTranslateProgress("✅ كل النصوص مترجمة بالفعل!");
-      setTimeout(() => setTranslateProgress(""), 3000);
+      const reasons: string[] = [];
+      if (skipArabic > 0) reasons.push(`${skipArabic} نص عربي أصلاً`);
+      if (skipTechnical > 0) reasons.push(`${skipTechnical} نص تقني`);
+      if (skipTranslated > 0) reasons.push(`${skipTranslated} مترجم بالفعل`);
+      if (skipCategory > 0) reasons.push(`${skipCategory} خارج الفئة`);
+      
+      setTranslateProgress(`✅ لا توجد نصوص تحتاج ترجمة${reasons.length > 0 ? ` (${reasons.join('، ')})` : ''}`);
+      setTimeout(() => setTranslateProgress(""), 5000);
       return;
     }
 
@@ -690,7 +718,7 @@ const Editor = () => {
               size="lg"
               variant="default"
               onClick={handleAutoTranslate}
-              disabled={translating || filterCategory !== "all"}
+              disabled={translating}
               className="font-display font-bold px-6"
             >
               <Sparkles className="w-4 h-4" /> ترجمة تلقائية 🤖
