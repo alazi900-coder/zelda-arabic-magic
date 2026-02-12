@@ -374,6 +374,7 @@ Deno.serve(async (req) => {
 
     // Step 2: Extract SARC
     const files = parseSARC(sarcData);
+    console.log(`Extracted ${files.length} files from SARC: ${files.map(f => f.name).join(', ')}`);
     
     // Step 3: Process MSBT files
     let modifiedCount = 0;
@@ -382,14 +383,18 @@ Deno.serve(async (req) => {
         try {
           const { entries, raw } = parseMSBT(file.data);
           const injected = injectMSBT(raw, entries);
+          console.log(`Processed MSBT ${file.name}: ${entries.length} entries`);
           modifiedCount += entries.length;
           return { ...file, data: injected };
-        } catch {
+        } catch (e) {
+          console.warn(`Failed to process MSBT ${file.name}: ${e instanceof Error ? e.message : 'unknown error'}`);
           return file;
         }
       }
       return file;
     });
+    
+    console.log(`Total modified entries: ${modifiedCount}`);
 
     // Step 4: Repack SARC
     const repackedData = packSARC(processedFiles, sarcData);
