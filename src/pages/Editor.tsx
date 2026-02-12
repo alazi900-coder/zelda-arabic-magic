@@ -179,10 +179,11 @@ const Editor = () => {
   const handleAutoTranslate = async () => {
     if (!state) return;
 
-    // Get untranslated entries with non-empty originals
+    // Get untranslated entries - only from selected category if filtered
     const untranslated = state.entries.filter(e => {
       const key = `${e.msbtFile}:${e.index}`;
-      return e.original.trim() && (!state.translations[key] || !state.translations[key].trim());
+      const matchCategory = filterCategory === "all" || categorizeFile(e.msbtFile) === filterCategory;
+      return matchCategory && e.original.trim() && (!state.translations[key] || !state.translations[key].trim());
     });
 
     if (untranslated.length === 0) {
