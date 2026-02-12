@@ -211,11 +211,14 @@ const Editor = () => {
   const handleAutoTranslate = async () => {
     if (!state) return;
 
-    // Get untranslated entries - only from selected category if filtered
+    const arabicRegex = /[\u0600-\u06FF]/;
+
+    // Get untranslated entries - skip already-Arabic originals and only from selected category
     const untranslated = state.entries.filter(e => {
       const key = `${e.msbtFile}:${e.index}`;
       const matchCategory = filterCategory === "all" || categorizeFile(e.msbtFile) === filterCategory;
-      return matchCategory && e.original.trim() && (!state.translations[key] || !state.translations[key].trim());
+      const isAlreadyArabic = arabicRegex.test(e.original);
+      return matchCategory && e.original.trim() && !isAlreadyArabic && (!state.translations[key] || !state.translations[key].trim());
     });
 
     if (untranslated.length === 0) {
