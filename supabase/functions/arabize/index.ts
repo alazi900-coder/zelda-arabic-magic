@@ -26,11 +26,162 @@ function hasArabicChars(text: string): boolean {
   return [...text].some(ch => isArabicChar(ch));
 }
 
-// BiDi reversal for LTR game engine - no reshaping needed (game handles Arabic shaping natively)
+// ============= Arabic Reshaping =============
+// Maps base Arabic characters to their Presentation Forms-B glyphs:
+// [Isolated, Final, Initial, Medial]
+// null means that form doesn't exist (char doesn't connect in that direction)
+const ARABIC_FORMS: Record<number, [number, number, number | null, number | null]> = {
+  0x0621: [0xFE80, 0xFE80, null, null],       // ء Hamza
+  0x0622: [0xFE81, 0xFE82, null, null],       // آ Alef Madda
+  0x0623: [0xFE83, 0xFE84, null, null],       // أ Alef Hamza Above
+  0x0624: [0xFE85, 0xFE86, null, null],       // ؤ Waw Hamza
+  0x0625: [0xFE87, 0xFE88, null, null],       // إ Alef Hamza Below
+  0x0626: [0xFE89, 0xFE8A, 0xFE8B, 0xFE8C], // ئ Yeh Hamza
+  0x0627: [0xFE8D, 0xFE8E, null, null],       // ا Alef
+  0x0628: [0xFE8F, 0xFE90, 0xFE91, 0xFE92], // ب Beh
+  0x0629: [0xFE93, 0xFE94, null, null],       // ة Teh Marbuta
+  0x062A: [0xFE95, 0xFE96, 0xFE97, 0xFE98], // ت Teh
+  0x062B: [0xFE99, 0xFE9A, 0xFE9B, 0xFE9C], // ث Theh
+  0x062C: [0xFE9D, 0xFE9E, 0xFE9F, 0xFEA0], // ج Jeem
+  0x062D: [0xFEA1, 0xFEA2, 0xFEA3, 0xFEA4], // ح Hah
+  0x062E: [0xFEA5, 0xFEA6, 0xFEA7, 0xFEA8], // خ Khah
+  0x062F: [0xFEA9, 0xFEAA, null, null],       // د Dal
+  0x0630: [0xFEAB, 0xFEAC, null, null],       // ذ Thal
+  0x0631: [0xFEAD, 0xFEAE, null, null],       // ر Reh
+  0x0632: [0xFEAF, 0xFEB0, null, null],       // ز Zain
+  0x0633: [0xFEB1, 0xFEB2, 0xFEB3, 0xFEB4], // س Seen
+  0x0634: [0xFEB5, 0xFEB6, 0xFEB7, 0xFEB8], // ش Sheen
+  0x0635: [0xFEB9, 0xFEBA, 0xFEBB, 0xFEBC], // ص Sad
+  0x0636: [0xFEBD, 0xFEBE, 0xFEBF, 0xFEC0], // ض Dad
+  0x0637: [0xFEC1, 0xFEC2, 0xFEC3, 0xFEC4], // ط Tah
+  0x0638: [0xFEC5, 0xFEC6, 0xFEC7, 0xFEC8], // ظ Zah
+  0x0639: [0xFEC9, 0xFECA, 0xFECB, 0xFECC], // ع Ain
+  0x063A: [0xFECD, 0xFECE, 0xFECF, 0xFED0], // غ Ghain
+  0x0640: [0x0640, 0x0640, 0x0640, 0x0640], // ـ Tatweel
+  0x0641: [0xFED1, 0xFED2, 0xFED3, 0xFED4], // ف Feh
+  0x0642: [0xFED5, 0xFED6, 0xFED7, 0xFED8], // ق Qaf
+  0x0643: [0xFED9, 0xFEDA, 0xFEDB, 0xFEDC], // ك Kaf
+  0x0644: [0xFEDD, 0xFEDE, 0xFEDF, 0xFEE0], // ل Lam
+  0x0645: [0xFEE1, 0xFEE2, 0xFEE3, 0xFEE4], // م Meem
+  0x0646: [0xFEE5, 0xFEE6, 0xFEE7, 0xFEE8], // ن Noon
+  0x0647: [0xFEE9, 0xFEEA, 0xFEEB, 0xFEEC], // ه Heh
+  0x0648: [0xFEED, 0xFEEE, null, null],       // و Waw
+  0x0649: [0xFEEF, 0xFEF0, null, null],       // ى Alef Maksura
+  0x064A: [0xFEF1, 0xFEF2, 0xFEF3, 0xFEF4], // ي Yeh
+};
+
+// Lam-Alef ligatures
+const LAM_ALEF_LIGATURES: Record<number, [number, number]> = {
+  0x0622: [0xFEF5, 0xFEF6], // لآ [isolated, final]
+  0x0623: [0xFEF7, 0xFEF8], // لأ
+  0x0625: [0xFEF9, 0xFEFA], // لإ
+  0x0627: [0xFEFB, 0xFEFC], // لا
+};
+
+// Characters that don't connect to the next character (right-joiners only)
+function canConnectAfter(code: number): boolean {
+  const forms = ARABIC_FORMS[code];
+  if (!forms) return false;
+  // Has initial or medial form = can connect to next
+  return forms[2] !== null;
+}
+
+function isTashkeel(code: number): boolean {
+  return code >= 0x064B && code <= 0x065F;
+}
+
+function reshapeArabic(text: string): string {
+  const chars = [...text];
+  const result: string[] = [];
+  
+  for (let i = 0; i < chars.length; i++) {
+    const code = chars[i].charCodeAt(0);
+    
+    // Skip tashkeel (diacritics) - pass through as-is
+    if (isTashkeel(code)) {
+      result.push(chars[i]);
+      continue;
+    }
+    
+    const forms = ARABIC_FORMS[code];
+    if (!forms) {
+      // Not an Arabic letter - pass through
+      result.push(chars[i]);
+      continue;
+    }
+    
+    // Check Lam-Alef ligature
+    if (code === 0x0644) { // Lam
+      // Look ahead (skip tashkeel) for Alef
+      let nextIdx = i + 1;
+      while (nextIdx < chars.length && isTashkeel(chars[nextIdx].charCodeAt(0))) nextIdx++;
+      if (nextIdx < chars.length) {
+        const nextCode = chars[nextIdx].charCodeAt(0);
+        const ligature = LAM_ALEF_LIGATURES[nextCode];
+        if (ligature) {
+          // Determine if previous connects to this lam
+          const prevCode = getPrevArabicCode(chars, i);
+          const prevConnects = prevCode !== null && canConnectAfter(prevCode);
+          result.push(String.fromCharCode(prevConnects ? ligature[1] : ligature[0]));
+          // Skip the alef (and any tashkeel between lam and alef)
+          i = nextIdx;
+          continue;
+        }
+      }
+    }
+    
+    // Determine context: does previous connect to us? Can we connect to next?
+    const prevCode = getPrevArabicCode(chars, i);
+    const prevConnects = prevCode !== null && canConnectAfter(prevCode);
+    
+    const nextCode = getNextArabicCode(chars, i);
+    const nextExists = nextCode !== null && ARABIC_FORMS[nextCode] !== undefined;
+    
+    let formIndex: number;
+    if (prevConnects && nextExists && forms[2] !== null) {
+      // Medial
+      formIndex = 3; // medial
+      if (forms[3] === null) formIndex = 1; // fallback to final
+    } else if (prevConnects) {
+      formIndex = 1; // final
+    } else if (nextExists && forms[2] !== null) {
+      formIndex = 2; // initial
+    } else {
+      formIndex = 0; // isolated
+    }
+    
+    const glyph = forms[formIndex];
+    result.push(String.fromCharCode(glyph !== null ? glyph : forms[0]));
+  }
+  
+  return result.join('');
+}
+
+function getPrevArabicCode(chars: string[], index: number): number | null {
+  for (let i = index - 1; i >= 0; i--) {
+    const c = chars[i].charCodeAt(0);
+    if (isTashkeel(c)) continue;
+    if (ARABIC_FORMS[c] !== undefined) return c;
+    return null;
+  }
+  return null;
+}
+
+function getNextArabicCode(chars: string[], index: number): number | null {
+  for (let i = index + 1; i < chars.length; i++) {
+    const c = chars[i].charCodeAt(0);
+    if (isTashkeel(c)) continue;
+    if (ARABIC_FORMS[c] !== undefined) return c;
+    return null;
+  }
+  return null;
+}
+
+// ============= End Arabic Reshaping =============
+
+// BiDi reversal for LTR game engine
 function reverseBidi(text: string): string {
   return text.split('\n').map(line => {
-    // Split line into segments: Arabic runs vs LTR runs (Latin, digits, punctuation)
-    // This ensures numbers and English words maintain correct LTR order after reversal
     const segments: { text: string; isLTR: boolean }[] = [];
     let current = '';
     let currentIsLTR: boolean | null = null;
@@ -54,25 +205,22 @@ function reverseBidi(text: string): string {
         currentIsLTR = true;
         current += ch;
       } else {
-        // Neutral chars (spaces, punctuation) - attach to current run
         current += ch;
       }
     }
     if (current) segments.push({ text: current, isLTR: currentIsLTR === true });
 
-    // Reverse segment order (RTL base), but keep LTR segment content intact
     return segments.reverse().map(seg => {
-      if (seg.isLTR) return seg.text; // Keep English/numbers in original order
-      return [...seg.text].reverse().join(''); // Reverse Arabic characters
+      if (seg.isLTR) return seg.text;
+      return [...seg.text].reverse().join('');
     }).join('');
   }).join('\n');
 }
 
 function processArabicText(text: string): string {
-  // Skip processing for text with no Arabic characters (keep English as-is)
   if (!hasArabicChars(text)) return text;
-  // Only reverse for BiDi - NO reshaping needed (game engine handles Arabic shaping natively)
-  return reverseBidi(text);
+  // 1. Reverse BiDi for LTR engine, 2. Reshape Arabic letters to joined forms
+  return reshapeArabic(reverseBidi(text));
 }
 
 interface MsbtEntry {
@@ -146,6 +294,8 @@ function injectMSBT(data: Uint8Array, entries: MsbtEntry[]): Uint8Array {
     if (encoded.length <= entry.size - 2) {
       result.set(encoded, entry.offset);
       view.setUint16(entry.offset + encoded.length, 0, true);
+    } else {
+      console.warn(`⚠️ Skipping entry "${entry.label}" - translated text (${encoded.length} bytes) exceeds slot size (${entry.size - 2} bytes)`);
     }
   }
   return result;
@@ -203,7 +353,6 @@ function packSARC(files: SarcFile[], originalData: Uint8Array): Uint8Array {
   return result;
 }
 
-// Decompress lang file helper
 function decompressLangFile(langData: Uint8Array, dictData: Uint8Array, langFileName: string): { sarcData: Uint8Array; rawDict: Uint8Array | null } {
   const isSARC = String.fromCharCode(...langData.slice(0, 4)) === 'SARC';
   if (isSARC) return { sarcData: langData, rawDict: null };
@@ -211,7 +360,6 @@ function decompressLangFile(langData: Uint8Array, dictData: Uint8Array, langFile
   const isZstd = langData[0] === 0x28 && langData[1] === 0xB5 && langData[2] === 0x2F && langData[3] === 0xFD;
   if (!isZstd) throw new Error('الملف غير معروف: لا يبدو أنه SARC مضغوط أو SARC غير مضغوط');
 
-  // Decompress dictionary SARC
   let dictSarcData: Uint8Array;
   try { dictSarcData = decompress(dictData); } catch { dictSarcData = dictData; }
 
@@ -252,7 +400,7 @@ Deno.serve(async (req) => {
 
   try {
     const url = new URL(req.url);
-    const mode = url.searchParams.get('mode') || 'auto'; // 'auto' | 'extract' | 'build'
+    const mode = url.searchParams.get('mode') || 'auto';
 
     const formData = await req.formData();
     const langFile = formData.get('langFile') as File;
@@ -268,14 +416,12 @@ Deno.serve(async (req) => {
     const langData = new Uint8Array(await langFile.arrayBuffer());
     const dictData = new Uint8Array(await dictFile.arrayBuffer());
 
-    // Decompress
     const { sarcData, rawDict } = decompressLangFile(langData, dictData, langFile.name || '');
 
-    // Extract SARC
     const files = parseSARC(sarcData);
     console.log(`Extracted ${files.length} files from SARC`);
 
-    // ===== EXTRACT MODE: Return all entries as JSON =====
+    // ===== EXTRACT MODE =====
     if (mode === 'extract') {
       const allEntries: { msbtFile: string; index: number; label: string; original: string; maxBytes: number }[] = [];
 
@@ -309,9 +455,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    // ===== BUILD MODE: Use custom translations =====
-    // translations = JSON map: { "msbtFile:index": "translated text" }
-    // protectedEntries = Array of keys that should skip BiDi processing
+    // ===== BUILD MODE =====
     const translationsRaw = formData.get('translations') as string | null;
     const protectedRaw = formData.get('protectedEntries') as string | null;
     const translations: Record<string, string> = translationsRaw ? JSON.parse(translationsRaw) : {};
@@ -319,19 +463,22 @@ Deno.serve(async (req) => {
     const hasCustomTranslations = Object.keys(translations).length > 0;
 
     let modifiedCount = 0;
+    let skippedOversize = 0;
     const processedFiles = files.map(file => {
       if (file.name.endsWith('.msbt')) {
         try {
           const { entries, raw } = parseMSBT(file.data);
 
           if (hasCustomTranslations) {
-            // Apply custom translations with Arabic processing
             for (let i = 0; i < entries.length; i++) {
               const key = `${file.name}:${i}`;
               if (translations[key] !== undefined && translations[key] !== '') {
-                // If entry is protected, skip processing (keep original or don't apply BiDi)
-                if (protectedEntries.has(key) || translations[key] === entries[i].originalText) {
-                  // Keep original - no processing needed
+                if (protectedEntries.has(key)) {
+                  // Protected entry: apply reshaping only (NO BiDi reversal)
+                  entries[i].processedText = reshapeArabic(translations[key]);
+                  modifiedCount++;
+                } else if (translations[key] === entries[i].originalText) {
+                  // Same as original - no processing needed
                   modifiedCount++;
                 } else {
                   entries[i].processedText = processArabicText(translations[key]);
@@ -340,7 +487,6 @@ Deno.serve(async (req) => {
               }
             }
           } else {
-            // Auto mode: process all entries
             modifiedCount += entries.length;
           }
 
@@ -356,17 +502,14 @@ Deno.serve(async (req) => {
 
     console.log(`Modified ${modifiedCount} entries (mode: ${hasCustomTranslations ? 'custom' : 'auto'})`);
 
-    // Repack
     const repackedData = packSARC(processedFiles, sarcData);
 
-    // Re-compress
     let outputData: Uint8Array = repackedData;
     let isCompressed = false;
     try {
       console.log(`Re-compressing SARC (${repackedData.length} bytes)...`);
       if (rawDict) {
         const cctx = createCCtx();
-        // Level 3 (default) to avoid CPU time limit on edge functions
         outputData = compressUsingDict(cctx, repackedData, rawDict, 3);
         isCompressed = true;
         console.log(`Compressed with dict: ${repackedData.length} -> ${outputData.length} bytes`);
@@ -379,7 +522,6 @@ Deno.serve(async (req) => {
       console.error(`Re-compression failed: ${e instanceof Error ? e.message : 'Unknown'}`);
     }
 
-    // Preview
     let entriesPreview: { label: string; original: string; processed: string }[] = [];
     try {
       for (const f of processedFiles) {
