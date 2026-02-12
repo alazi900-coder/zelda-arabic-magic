@@ -1,10 +1,11 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { ArrowRight, Download, Search, FileText, Loader2, Filter } from "lucide-react";
+import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save } from "lucide-react";
+import { idbSet, idbGet } from "@/lib/idb-storage";
 
 interface ExtractedEntry {
   msbtFile: string;
@@ -17,9 +18,10 @@ interface ExtractedEntry {
 interface EditorState {
   entries: ExtractedEntry[];
   translations: Record<string, string>;
-  langFile: File;
-  dictFile: File;
 }
+
+const AUTOSAVE_DELAY = 1500; // ms
+const AI_BATCH_SIZE = 30;
 
 const Editor = () => {
   const [state, setState] = useState<EditorState | null>(null);
@@ -27,32 +29,49 @@ const Editor = () => {
   const [filterFile, setFilterFile] = useState<string>("all");
   const [building, setBuilding] = useState(false);
   const [buildProgress, setBuildProgress] = useState("");
+  const [translating, setTranslating] = useState(false);
+  const [translateProgress, setTranslateProgress] = useState("");
+  const [lastSaved, setLastSaved] = useState<string>("");
   const navigate = useNavigate();
+  const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
 
+  // Load state from IndexedDB
   useEffect(() => {
     const loadState = async () => {
-      const { idbGet } = await import("@/lib/idb-storage");
-      const stored = await idbGet<{ entries: ExtractedEntry[]; translations: Record<string, string> }>("editorState");
+      const stored = await idbGet<EditorState>("editorState");
       if (stored) {
         setState({
           entries: stored.entries,
           translations: stored.translations || {},
-          langFile: null as any,
-          dictFile: null as any,
         });
+        setLastSaved("تم التحميل من الحفظ السابق");
       }
     };
     loadState();
   }, []);
 
-  // Get unique MSBT file names
+  // Auto-save to IndexedDB on translation changes (debounced)
+  const saveToIDB = useCallback(async (editorState: EditorState) => {
+    await idbSet("editorState", {
+      entries: editorState.entries,
+      translations: editorState.translations,
+    });
+    setLastSaved(`آخر حفظ: ${new Date().toLocaleTimeString("ar-SA")}`);
+  }, []);
+
+  useEffect(() => {
+    if (!state) return;
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    saveTimerRef.current = setTimeout(() => saveToIDB(state), AUTOSAVE_DELAY);
+    return () => { if (saveTimerRef.current) clearTimeout(saveTimerRef.current); };
+  }, [state?.translations, saveToIDB]);
+
   const msbtFiles = useMemo(() => {
     if (!state) return [];
     const set = new Set(state.entries.map(e => e.msbtFile));
     return Array.from(set).sort();
   }, [state?.entries]);
 
-  // Filtered entries
   const filteredEntries = useMemo(() => {
     if (!state) return [];
     return state.entries.filter(e => {
@@ -78,15 +97,84 @@ const Editor = () => {
     return Object.values(state.translations).filter(v => v.trim() !== '').length;
   }, [state?.translations]);
 
+  // AI Auto-translate
+  const handleAutoTranslate = async () => {
+    if (!state) return;
+
+    // Get untranslated entries with non-empty originals
+    const untranslated = state.entries.filter(e => {
+      const key = `${e.msbtFile}:${e.index}`;
+      return e.original.trim() && (!state.translations[key] || !state.translations[key].trim());
+    });
+
+    if (untranslated.length === 0) {
+      setTranslateProgress("✅ كل النصوص مترجمة بالفعل!");
+      setTimeout(() => setTranslateProgress(""), 3000);
+      return;
+    }
+
+    setTranslating(true);
+    const totalBatches = Math.ceil(untranslated.length / AI_BATCH_SIZE);
+    let allTranslations: Record<string, string> = {};
+
+    try {
+      for (let b = 0; b < totalBatches; b++) {
+        const batch = untranslated.slice(b * AI_BATCH_SIZE, (b + 1) * AI_BATCH_SIZE);
+        setTranslateProgress(`جاري ترجمة الدفعة ${b + 1}/${totalBatches} (${batch.length} نص)...`);
+
+        const entries = batch.map(e => ({
+          key: `${e.msbtFile}:${e.index}`,
+          original: e.original,
+        }));
+
+        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+        const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+        const response = await fetch(`${supabaseUrl}/functions/v1/translate-entries`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${supabaseKey}`,
+            'apikey': supabaseKey,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ entries }),
+        });
+
+        if (!response.ok) {
+          const err = await response.json().catch(() => ({}));
+          throw new Error(err.error || `خطأ ${response.status}`);
+        }
+
+        const data = await response.json();
+        allTranslations = { ...allTranslations, ...data.translations };
+      }
+
+      // Merge with existing translations
+      setState(prev => {
+        if (!prev) return null;
+        return {
+          ...prev,
+          translations: { ...prev.translations, ...allTranslations },
+        };
+      });
+
+      const count = Object.keys(allTranslations).length;
+      setTranslateProgress(`✅ تمت ترجمة ${count} نص بنجاح!`);
+      setTimeout(() => setTranslateProgress(""), 4000);
+    } catch (err) {
+      setTranslateProgress(`❌ ${err instanceof Error ? err.message : 'خطأ في الترجمة'}`);
+      setTimeout(() => setTranslateProgress(""), 5000);
+    } finally {
+      setTranslating(false);
+    }
+  };
+
   const handleBuild = async () => {
     if (!state) return;
 
-    // Get files from IndexedDB
-    const { idbGet } = await import("@/lib/idb-storage");
     const langBuf = await idbGet<ArrayBuffer>("editorLangFile");
     const dictBuf = await idbGet<ArrayBuffer>("editorDictFile");
     const langFileName = (await idbGet<string>("editorLangFileName")) || "output.zs";
-    const dictFileName = (await idbGet<string>("editorDictFileName")) || "ZsDic.pack.zs";
 
     if (!langBuf || !dictBuf) {
       alert("يجب إعادة رفع الملفات. يرجى العودة لصفحة المعالجة.");
@@ -98,17 +186,10 @@ const Editor = () => {
     setBuildProgress("تجهيز الترجمات...");
 
     try {
-      const langBytes = new Uint8Array(langBuf);
-      const dictBytes = new Uint8Array(dictBuf);
-
-      const langBlob = new Blob([langBytes]);
-      const dictBlob = new Blob([dictBytes]);
-
       const formData = new FormData();
-      formData.append("langFile", new File([langBlob], langFileName));
-      formData.append("dictFile", new File([dictBlob], dictFileName));
+      formData.append("langFile", new File([new Uint8Array(langBuf)], langFileName));
+      formData.append("dictFile", new File([new Uint8Array(dictBuf)], (await idbGet<string>("editorDictFileName")) || "ZsDic.pack.zs"));
 
-      // Only send non-empty translations
       const nonEmptyTranslations: Record<string, string> = {};
       for (const [k, v] of Object.entries(state.translations)) {
         if (v.trim()) nonEmptyTranslations[k] = v;
@@ -144,7 +225,6 @@ const Editor = () => {
       const blobUrl = URL.createObjectURL(blob);
       const modifiedCount = parseInt(response.headers.get('X-Modified-Count') || '0');
 
-      // Download
       const a = document.createElement("a");
       a.href = blobUrl;
       a.download = `arabized_${langFileName}`;
@@ -181,12 +261,12 @@ const Editor = () => {
 
         <h1 className="text-3xl font-display font-bold mb-2">محرر الترجمة ✍️</h1>
         <p className="text-muted-foreground mb-6 font-body">
-          عدّل النصوص العربية يدوياً ثم اضغط "بناء الملف" لإنتاج الملف النهائي
+          عدّل النصوص العربية يدوياً أو استخدم الترجمة التلقائية بالذكاء الاصطناعي
         </p>
 
         {/* Stats & Actions Bar */}
         <div className="flex flex-wrap items-center gap-4 mb-6">
-          <Card className="flex-1 min-w-[200px]">
+          <Card className="flex-1 min-w-[140px]">
             <CardContent className="flex items-center gap-3 p-4">
               <FileText className="w-5 h-5 text-primary" />
               <div>
@@ -195,33 +275,63 @@ const Editor = () => {
               </div>
             </CardContent>
           </Card>
-          <Card className="flex-1 min-w-[200px]">
+          <Card className="flex-1 min-w-[140px]">
             <CardContent className="flex items-center gap-3 p-4">
               <FileText className="w-5 h-5 text-secondary" />
               <div>
                 <p className="text-lg font-display font-bold">{translatedCount}</p>
-                <p className="text-xs text-muted-foreground">ترجمة مخصصة</p>
+                <p className="text-xs text-muted-foreground">مترجم</p>
               </div>
             </CardContent>
           </Card>
+
+          {/* AI Translate button */}
+          <Button
+            size="lg"
+            variant="secondary"
+            onClick={handleAutoTranslate}
+            disabled={translating || building}
+            className="font-display font-bold px-6"
+          >
+            {translating ? (
+              <><Loader2 className="w-4 h-4 animate-spin" /> جاري الترجمة...</>
+            ) : (
+              <><Sparkles className="w-4 h-4" /> ترجمة تلقائية 🤖</>
+            )}
+          </Button>
+
           <Button
             size="lg"
             onClick={handleBuild}
             disabled={building || translatedCount === 0}
-            className="font-display font-bold px-8"
+            className="font-display font-bold px-6"
           >
             {building ? (
               <><Loader2 className="w-4 h-4 animate-spin" /> جاري البناء...</>
             ) : (
-              <><Download className="w-4 h-4" /> بناء وتحميل الملف</>
+              <><Download className="w-4 h-4" /> بناء وتحميل</>
             )}
           </Button>
         </div>
 
+        {/* Progress bars */}
+        {translateProgress && (
+          <Card className="mb-4 border-secondary/30 bg-secondary/5">
+            <CardContent className="p-4 text-center font-display">{translateProgress}</CardContent>
+          </Card>
+        )}
         {buildProgress && (
           <Card className="mb-4 border-primary/30 bg-primary/5">
             <CardContent className="p-4 text-center font-display">{buildProgress}</CardContent>
           </Card>
+        )}
+
+        {/* Auto-save indicator */}
+        {lastSaved && (
+          <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
+            <Save className="w-3 h-3" />
+            <span>{lastSaved}</span>
+          </div>
         )}
 
         {/* Search & Filter */}
