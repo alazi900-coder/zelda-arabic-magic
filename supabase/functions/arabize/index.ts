@@ -306,24 +306,52 @@ Deno.serve(async (req) => {
         );
       }
 
-      // Step 1: Decompress dictionary file
+      // Step 1: Decompress dictionary SARC archive
       console.log(`Decompressing dictionary file (${dictData.length} bytes)...`);
+      let dictSarcData: Uint8Array;
       try {
-        rawDict = decompress(dictData);
-        console.log(`Dictionary decompressed: ${dictData.length} -> ${rawDict.length} bytes`);
+        dictSarcData = decompress(dictData);
+        console.log(`Dictionary SARC decompressed: ${dictData.length} -> ${dictSarcData.length} bytes`);
       } catch {
-        rawDict = dictData;
-        console.log(`Dictionary is raw format: ${rawDict.length} bytes`);
-      }
-      try {
-        rawDict = decompress(dictData);
-        console.log(`Dictionary decompressed: ${dictData.length} -> ${rawDict.length} bytes`);
-      } catch {
-        rawDict = dictData;
-        console.log(`Dictionary is raw format: ${rawDict.length} bytes`);
+        dictSarcData = dictData;
+        console.log(`Dictionary file is raw: ${dictSarcData.length} bytes`);
       }
 
-      // Step 2: Decompress language file using dictionary
+      // Step 2: Parse SARC to extract individual .zsdic files
+      const dictFiles = parseSARC(dictSarcData);
+      console.log(`Found ${dictFiles.length} dictionaries: ${dictFiles.map(f => f.name).join(', ')}`);
+
+      // Step 3: Select correct dictionary based on language filename
+      const langFileName = (langFile?.name || '').toLowerCase();
+      let selectedDictName = '';
+
+      if (langFileName.includes('.pack.')) {
+        const found = dictFiles.find(f => f.name.endsWith('pack.zsdic'));
+        if (found) { rawDict = found.data; selectedDictName = found.name; }
+      }
+      if (!rawDict && langFileName.includes('.bcett.byml.')) {
+        const found = dictFiles.find(f => f.name.endsWith('bcett.byml.zsdic'));
+        if (found) { rawDict = found.data; selectedDictName = found.name; }
+      }
+      if (!rawDict) {
+        const found = dictFiles.find(f => f.name.endsWith('zs.zsdic') && !f.name.includes('pack') && !f.name.includes('bcett'));
+        if (found) { rawDict = found.data; selectedDictName = found.name; }
+      }
+      if (!rawDict && dictFiles.length > 0) {
+        rawDict = dictFiles[0].data;
+        selectedDictName = dictFiles[0].name;
+      }
+
+      if (!rawDict) {
+        return new Response(
+          JSON.stringify({ error: 'لم يتم العثور على قاموس .zsdic في ملف القاموس' }),
+          { status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      console.log(`Using dictionary: ${selectedDictName} (${rawDict.length} bytes)`);
+
+      // Step 4: Decompress language file using selected dictionary
       try {
         console.log(`Decompressing language file (${langData.length} bytes) with dictionary...`);
         const dctx = createDCtx();
@@ -336,6 +364,8 @@ Deno.serve(async (req) => {
           JSON.stringify({ 
             error: `فشل فك الضغط مع القاموس: ${error}`,
             hint: 'تأكد من أن الملف مضغوط بـ Zstandard مع القاموس بشكل صحيح',
+            dictionary_used: selectedDictName,
+            dictionaries_available: dictFiles.map(f => f.name),
           }),
           { status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
