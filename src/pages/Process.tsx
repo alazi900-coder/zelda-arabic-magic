@@ -212,27 +212,18 @@ const Process = () => {
 
       const data = await response.json();
 
-      // Store files as base64 for later use in editor
+      // Store files in IndexedDB to avoid sessionStorage quota
+      const { idbSet } = await import("@/lib/idb-storage");
       const langBuf = await langFile.arrayBuffer();
       const dictBuf = await dictFile.arrayBuffer();
-      const toBase64 = (buf: ArrayBuffer) => {
-        const bytes = new Uint8Array(buf);
-        const CHUNK = 0x8000;
-        const parts: string[] = [];
-        for (let i = 0; i < bytes.length; i += CHUNK) {
-          parts.push(String.fromCharCode(...bytes.subarray(i, i + CHUNK)));
-        }
-        return btoa(parts.join(''));
-      };
-
-      sessionStorage.setItem("editorLangFile", toBase64(langBuf));
-      sessionStorage.setItem("editorDictFile", toBase64(dictBuf));
-      sessionStorage.setItem("editorLangFileName", langFile.name);
-      sessionStorage.setItem("editorDictFileName", dictFile.name);
-      sessionStorage.setItem("editorState", JSON.stringify({
+      await idbSet("editorLangFile", langBuf);
+      await idbSet("editorDictFile", dictBuf);
+      await idbSet("editorLangFileName", langFile.name);
+      await idbSet("editorDictFileName", dictFile.name);
+      await idbSet("editorState", {
         entries: data.entries,
         translations: {},
-      }));
+      });
 
       navigate("/editor");
     } catch (err) {

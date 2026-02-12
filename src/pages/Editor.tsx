@@ -30,17 +30,19 @@ const Editor = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const stored = sessionStorage.getItem("editorState");
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      // Reconstruct translations map
-      setState({
-        entries: parsed.entries,
-        translations: parsed.translations || {},
-        langFile: null as any, // will be re-uploaded
-        dictFile: null as any,
-      });
-    }
+    const loadState = async () => {
+      const { idbGet } = await import("@/lib/idb-storage");
+      const stored = await idbGet<{ entries: ExtractedEntry[]; translations: Record<string, string> }>("editorState");
+      if (stored) {
+        setState({
+          entries: stored.entries,
+          translations: stored.translations || {},
+          langFile: null as any,
+          dictFile: null as any,
+        });
+      }
+    };
+    loadState();
   }, []);
 
   // Get unique MSBT file names
@@ -79,13 +81,14 @@ const Editor = () => {
   const handleBuild = async () => {
     if (!state) return;
 
-    // Get files from sessionStorage (stored as base64)
-    const langFileB64 = sessionStorage.getItem("editorLangFile");
-    const dictFileB64 = sessionStorage.getItem("editorDictFile");
-    const langFileName = sessionStorage.getItem("editorLangFileName") || "output.zs";
-    const dictFileName = sessionStorage.getItem("editorDictFileName") || "ZsDic.pack.zs";
+    // Get files from IndexedDB
+    const { idbGet } = await import("@/lib/idb-storage");
+    const langBuf = await idbGet<ArrayBuffer>("editorLangFile");
+    const dictBuf = await idbGet<ArrayBuffer>("editorDictFile");
+    const langFileName = (await idbGet<string>("editorLangFileName")) || "output.zs";
+    const dictFileName = (await idbGet<string>("editorDictFileName")) || "ZsDic.pack.zs";
 
-    if (!langFileB64 || !dictFileB64) {
+    if (!langBuf || !dictBuf) {
       alert("يجب إعادة رفع الملفات. يرجى العودة لصفحة المعالجة.");
       navigate("/process");
       return;
@@ -95,9 +98,8 @@ const Editor = () => {
     setBuildProgress("تجهيز الترجمات...");
 
     try {
-      // Reconstruct files from base64
-      const langBytes = Uint8Array.from(atob(langFileB64), c => c.charCodeAt(0));
-      const dictBytes = Uint8Array.from(atob(dictFileB64), c => c.charCodeAt(0));
+      const langBytes = new Uint8Array(langBuf);
+      const dictBytes = new Uint8Array(dictBuf);
 
       const langBlob = new Blob([langBytes]);
       const dictBlob = new Blob([dictBytes]);
