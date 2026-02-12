@@ -63,13 +63,8 @@ ${textsBlock}`;
     const jsonMatch = content.match(/\[[\s\S]*\]/);
     if (!jsonMatch) throw new Error('Failed to parse AI response');
 
-    // Sanitize control characters inside JSON string values
-    const sanitized = jsonMatch[0].replace(/[\x00-\x1F\x7F]/g, (ch) => {
-      if (ch === '\n') return '\\n';
-      if (ch === '\r') return '\\r';
-      if (ch === '\t') return '\\t';
-      return '';
-    });
+    // Replace ALL control characters with spaces (safe for both JSON whitespace and string values)
+    const sanitized = jsonMatch[0].replace(/[\x00-\x1F\x7F]/g, ' ');
 
     const translations: string[] = JSON.parse(sanitized);
 
