@@ -20,6 +20,7 @@ interface ExtractedEntry {
 interface EditorState {
   entries: ExtractedEntry[];
   translations: Record<string, string>;
+  protectedEntries?: Set<string>; // entries marked as "skip processing"
 }
 
 const AUTOSAVE_DELAY = 1500;
@@ -78,6 +79,17 @@ const Editor = () => {
   const abortControllerRef = useRef<AbortController | null>(null);
   const { user } = useAuth();
 
+  const toggleProtection = (key: string) => {
+    if (!state) return;
+    const newProtected = new Set(state.protectedEntries || []);
+    if (newProtected.has(key)) {
+      newProtected.delete(key);
+    } else {
+      newProtected.add(key);
+    }
+    setState(prev => prev ? { ...prev, protectedEntries: newProtected } : null);
+  };
+
   // Load state from IndexedDB
   // Detect already-Arabic entries and auto-populate translations
   const detectPreTranslated = useCallback((editorState: EditorState): Record<string, string> => {
@@ -101,12 +113,28 @@ const Editor = () => {
         const autoTranslations = detectPreTranslated({
           entries: stored.entries,
           translations: stored.translations || {},
+          protectedEntries: new Set(),
         });
         const mergedTranslations = { ...autoTranslations, ...stored.translations };
+        
+        // Restore protected entries from array to Set
+        const protectedSet = new Set(
+          Array.isArray(stored.protectedEntries) ? stored.protectedEntries : []
+        );
+
+        // Auto-protect newly detected Arabic entries
+        const arabicRegex = /[\u0600-\u06FF]/;
+        for (const entry of stored.entries) {
+          const key = `${entry.msbtFile}:${entry.index}`;
+          if (arabicRegex.test(entry.original)) {
+            protectedSet.add(key);
+          }
+        }
         
         setState({
           entries: stored.entries,
           translations: mergedTranslations,
+          protectedEntries: protectedSet,
         });
 
         const autoCount = Object.keys(autoTranslations).length;
@@ -124,6 +152,7 @@ const Editor = () => {
     await idbSet("editorState", {
       entries: editorState.entries,
       translations: editorState.translations,
+      protectedEntries: Array.from(editorState.protectedEntries || []),
     });
     setLastSaved(`آخر حفظ: ${new Date().toLocaleTimeString("ar-SA")}`);
   }, []);
@@ -459,6 +488,7 @@ const Editor = () => {
         if (v.trim()) nonEmptyTranslations[k] = v;
       }
       formData.append("translations", JSON.stringify(nonEmptyTranslations));
+      formData.append("protectedEntries", JSON.stringify(Array.from(state.protectedEntries || [])));
 
       setBuildProgress("إرسال للمعالجة...");
 
@@ -754,8 +784,9 @@ const Editor = () => {
 
         {/* Translation Table */}
         <div className="border border-border rounded-lg overflow-hidden">
-          <div className="bg-muted px-4 py-3 grid grid-cols-[80px_1fr_1fr] gap-3 text-sm font-display font-bold border-b border-border">
+          <div className="bg-muted px-4 py-3 grid grid-cols-[50px_50px_1fr_1fr] gap-3 text-sm font-display font-bold border-b border-border">
             <span>#</span>
+            <span>🛡️</span>
             <span>النص الأصلي</span>
             <span>الترجمة العربية</span>
           </div>
@@ -763,10 +794,11 @@ const Editor = () => {
           <div className="max-h-[60vh] overflow-y-auto">
             {filteredEntries.map((entry) => {
               const key = `${entry.msbtFile}:${entry.index}`;
+              const isProtected = state?.protectedEntries?.has(key) || false;
               return (
                 <div
                   key={key}
-                  className="px-4 py-3 grid grid-cols-[80px_1fr_1fr] gap-3 items-start border-b border-border/50 hover:bg-muted/30 transition-colors"
+                  className="px-4 py-3 grid grid-cols-[50px_50px_1fr_1fr] gap-3 items-start border-b border-border/50 hover:bg-muted/30 transition-colors"
                 >
                   <div className="text-xs text-muted-foreground pt-2">
                     <span className="font-mono">{entry.index}</span>
@@ -774,6 +806,17 @@ const Editor = () => {
                       {entry.msbtFile.split('/').pop()}
                     </p>
                   </div>
+                  <button
+                    onClick={() => toggleProtection(key)}
+                    title={isProtected ? "إزالة الحماية من العكس" : "حماية من عكس النص"}
+                    className={`px-2 py-1 rounded text-xs font-bold transition-colors ${
+                      isProtected
+                        ? "bg-primary/20 text-primary border border-primary/30"
+                        : "bg-muted/50 text-muted-foreground border border-border hover:bg-muted"
+                    }`}
+                  >
+                    {isProtected ? "🔒" : "🔓"}
+                  </button>
                   <div className="text-sm text-muted-foreground py-2 break-words font-body" dir="ltr">
                     {entry.original || <span className="italic text-muted-foreground/50">(فارغ)</span>}
                   </div>

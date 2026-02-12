@@ -281,8 +281,11 @@ Deno.serve(async (req) => {
 
     // ===== BUILD MODE: Use custom translations =====
     // translations = JSON map: { "msbtFile:index": "translated text" }
+    // protectedEntries = Array of keys that should skip BiDi processing
     const translationsRaw = formData.get('translations') as string | null;
+    const protectedRaw = formData.get('protectedEntries') as string | null;
     const translations: Record<string, string> = translationsRaw ? JSON.parse(translationsRaw) : {};
+    const protectedEntries = new Set(protectedRaw ? JSON.parse(protectedRaw) : []);
     const hasCustomTranslations = Object.keys(translations).length > 0;
 
     let modifiedCount = 0;
@@ -296,8 +299,8 @@ Deno.serve(async (req) => {
             for (let i = 0; i < entries.length; i++) {
               const key = `${file.name}:${i}`;
               if (translations[key] !== undefined && translations[key] !== '') {
-                // If translation equals original text, skip processing (text was already correct in MSBT)
-                if (translations[key] === entries[i].originalText) {
+                // If entry is protected, skip processing (keep original or don't apply BiDi)
+                if (protectedEntries.has(key) || translations[key] === entries[i].originalText) {
                   // Keep original - no processing needed
                   modifiedCount++;
                 } else {
