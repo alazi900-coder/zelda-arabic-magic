@@ -36,23 +36,93 @@ function getUtf16ByteLength(text: string): number {
 }
 
 Deno.serve(async (req) => {
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
-  }
+   if (req.method === 'OPTIONS') {
+     return new Response(null, { headers: corsHeaders });
+   }
 
-  try {
-    const { entries, glossary } = await req.json() as {
-      entries: ReviewEntry[];
-      glossary?: string;
-    };
+   try {
+     const { entries, glossary, action } = await req.json() as {
+       entries: ReviewEntry[];
+       glossary?: string;
+       action?: 'review' | 'suggest-short';
+     };
 
-    if (!entries || entries.length === 0) {
-      return new Response(JSON.stringify({ issues: [] }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
+     if (!entries || entries.length === 0) {
+       return new Response(JSON.stringify({ issues: [] }), {
+         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+       });
+     }
 
-    const issues: ReviewIssue[] = [];
+     // --- Handle "suggest short translations" action ---
+     if (action === 'suggest-short') {
+       const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+       if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY is not configured');
+
+       const tooLongEntries = entries.filter(e => {
+         const bytes = getUtf16ByteLength(e.translation);
+         return bytes > e.maxBytes && e.maxBytes > 0;
+       });
+
+       if (tooLongEntries.length === 0) {
+         return new Response(JSON.stringify({ suggestions: [] }), {
+           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+         });
+       }
+
+       const prompt = `أنت مترجم متخصص في ألعاب الفيديو. يجب عليك اختصار الترجمات التالية بحيث تكون أقصر بـ 20-30% مع الحفاظ على المعنى والجودة:
+
+${tooLongEntries.map((e, i) => `[${i}] الأصلي: "${e.original}"
+الترجمة الحالية (${getUtf16ByteLength(e.translation)} بايت - الحد: ${e.maxBytes} بايت): "${e.translation}"`).join('\n\n')}
+
+قدم ONLY صيغة مختصرة لكل واحدة بنفس الترتيب. إذا كان اختصار واحدة مستحيلاً، اعتمد على نفس الترجمة. أخرج JSON array فقط.`;
+
+       const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+         method: 'POST',
+         headers: {
+           'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+           'Content-Type': 'application/json',
+         },
+         body: JSON.stringify({
+           model: 'google/gemini-2.5-flash',
+           messages: [
+             { role: 'system', content: 'أنت متخصص في اختصار النصوص. اخرج ONLY JSON arrays.' },
+             { role: 'user', content: prompt },
+           ],
+           temperature: 0.3,
+         }),
+       });
+
+       if (!response.ok) {
+         const err = await response.text();
+         console.error('AI gateway error:', err);
+         throw new Error(`AI error: ${response.status}`);
+       }
+
+       const data = await response.json();
+       const content = data.choices?.[0]?.message?.content || '';
+       const jsonMatch = content.match(/\[[\s\S]*\]/);
+       if (!jsonMatch) throw new Error('Failed to parse AI response');
+
+       const sanitized = jsonMatch[0].replace(/[\x00-\x1F\x7F]/g, ' ');
+       const suggestions: string[] = JSON.parse(sanitized);
+
+       const result = tooLongEntries.map((entry, i) => ({
+         key: entry.key,
+         original: entry.original,
+         current: entry.translation,
+         currentBytes: getUtf16ByteLength(entry.translation),
+         maxBytes: entry.maxBytes,
+         suggested: suggestions[i] || entry.translation,
+         suggestedBytes: getUtf16ByteLength(suggestions[i] || entry.translation),
+       }));
+
+       return new Response(JSON.stringify({ suggestions: result }), {
+         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+       });
+     }
+
+     // --- Default review action ---
+     const issues: ReviewIssue[] = [];
 
     // Parse glossary for consistency checks
     const glossaryMap = new Map<string, string>();
