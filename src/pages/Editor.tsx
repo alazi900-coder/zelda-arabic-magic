@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save } from "lucide-react";
+import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save, Tag } from "lucide-react";
 import { idbSet, idbGet } from "@/lib/idb-storage";
 
 interface ExtractedEntry {
@@ -20,13 +20,49 @@ interface EditorState {
   translations: Record<string, string>;
 }
 
-const AUTOSAVE_DELAY = 1500; // ms
+const AUTOSAVE_DELAY = 1500;
 const AI_BATCH_SIZE = 30;
+
+// --- Category system for MSBT files ---
+interface FileCategory {
+  id: string;
+  label: string;
+  emoji: string;
+  keywords: string[];
+}
+
+const FILE_CATEGORIES: FileCategory[] = [
+  { id: "story", label: "حوارات القصة", emoji: "📖", keywords: ["demo", "event", "scenario", "cutscene", "movie"] },
+  { id: "npc", label: "حوارات الشخصيات", emoji: "💬", keywords: ["npc", "talk", "dialog", "shop"] },
+  { id: "quest", label: "المهام", emoji: "📜", keywords: ["quest", "mission", "challenge", "minigame"] },
+  { id: "weapon", label: "الأسلحة", emoji: "⚔️", keywords: ["weapon", "sword", "bow", "shield", "spear", "lsword", "ssword"] },
+  { id: "armor", label: "المعدات والدروع", emoji: "🛡️", keywords: ["armor", "helm", "equipment", "accessory"] },
+  { id: "item", label: "الأدوات والمواد", emoji: "🎒", keywords: ["item", "material", "key", "important", "cook", "recipe", "food", "elixir", "rupee", "ore"] },
+  { id: "enemy", label: "الأعداء", emoji: "👹", keywords: ["enemy", "boss", "monster", "guardian", "lynel", "hinox", "moblin"] },
+  { id: "ui", label: "القوائم والواجهة", emoji: "🖥️", keywords: ["ui", "menu", "system", "pause", "hud", "button", "option", "setting", "save", "load", "config", "common"] },
+  { id: "map", label: "المواقع والخرائط", emoji: "🗺️", keywords: ["map", "location", "place", "area", "dungeon", "shrine", "tower", "village", "town", "region"] },
+  { id: "tips", label: "النصائح والتعليمات", emoji: "💡", keywords: ["tips", "tutorial", "help", "guide", "hint", "loading", "gameover", "gamebalance"] },
+  { id: "ability", label: "القدرات والمهارات", emoji: "✨", keywords: ["ability", "skill", "rune", "champion", "sage", "zonai"] },
+  { id: "horse", label: "الأحصنة والمراكب", emoji: "🐴", keywords: ["horse", "stable", "vehicle", "paraglider", "raft"] },
+  { id: "actor", label: "الممثلون", emoji: "🎭", keywords: ["actor", "profile", "name"] },
+];
+
+function categorizeFile(filePath: string): string {
+  const lower = filePath.toLowerCase();
+  for (const cat of FILE_CATEGORIES) {
+    if (cat.keywords.some(kw => lower.includes(kw))) {
+      return cat.id;
+    }
+  }
+  return "other";
+}
+
 
 const Editor = () => {
   const [state, setState] = useState<EditorState | null>(null);
   const [search, setSearch] = useState("");
   const [filterFile, setFilterFile] = useState<string>("all");
+  const [filterCategory, setFilterCategory] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<"all" | "translated" | "untranslated">("all");
   const [building, setBuilding] = useState(false);
   const [buildProgress, setBuildProgress] = useState("");
@@ -73,6 +109,17 @@ const Editor = () => {
     return Array.from(set).sort();
   }, [state?.entries]);
 
+  // Category counts
+  const categoryCounts = useMemo(() => {
+    if (!state) return {};
+    const counts: Record<string, number> = {};
+    for (const e of state.entries) {
+      const cat = categorizeFile(e.msbtFile);
+      counts[cat] = (counts[cat] || 0) + 1;
+    }
+    return counts;
+  }, [state?.entries]);
+
   const filteredEntries = useMemo(() => {
     if (!state) return [];
     return state.entries.filter(e => {
@@ -84,14 +131,15 @@ const Editor = () => {
         e.label.includes(search) ||
         (state.translations[key] || '').includes(search);
       const matchFile = filterFile === "all" || e.msbtFile === filterFile;
+      const matchCategory = filterCategory === "all" || categorizeFile(e.msbtFile) === filterCategory;
       const matchStatus = 
         filterStatus === "all" || 
         (filterStatus === "translated" && isTranslated) ||
         (filterStatus === "untranslated" && !isTranslated);
       
-      return matchSearch && matchFile && matchStatus;
+      return matchSearch && matchFile && matchCategory && matchStatus;
     });
-  }, [state, search, filterFile, filterStatus]);
+  }, [state, search, filterFile, filterCategory, filterStatus]);
 
   const updateTranslation = (key: string, value: string) => {
     if (!state) return;
@@ -343,6 +391,51 @@ const Editor = () => {
           </div>
         )}
 
+        {/* Category Chips */}
+        <div className="mb-4">
+          <div className="flex items-center gap-2 mb-2">
+            <Tag className="w-4 h-4 text-muted-foreground" />
+            <span className="text-sm font-display font-bold text-muted-foreground">تصنيف الملفات:</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setFilterCategory("all")}
+              className={`px-3 py-1.5 rounded-full text-xs font-display font-bold transition-colors border ${
+                filterCategory === "all"
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "bg-muted/50 text-muted-foreground border-border hover:bg-muted"
+              }`}
+            >
+              🗂️ الكل ({state.entries.length})
+            </button>
+            {FILE_CATEGORIES.filter(cat => categoryCounts[cat.id]).map(cat => (
+              <button
+                key={cat.id}
+                onClick={() => setFilterCategory(cat.id)}
+                className={`px-3 py-1.5 rounded-full text-xs font-display font-bold transition-colors border ${
+                  filterCategory === cat.id
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-muted/50 text-muted-foreground border-border hover:bg-muted"
+                }`}
+              >
+                {cat.emoji} {cat.label} ({categoryCounts[cat.id]})
+              </button>
+            ))}
+            {categoryCounts["other"] && (
+              <button
+                onClick={() => setFilterCategory("other")}
+                className={`px-3 py-1.5 rounded-full text-xs font-display font-bold transition-colors border ${
+                  filterCategory === "other"
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-muted/50 text-muted-foreground border-border hover:bg-muted"
+                }`}
+              >
+                📄 أخرى ({categoryCounts["other"]})
+              </button>
+            )}
+          </div>
+        </div>
+
         {/* Search & Filter */}
         <div className="flex flex-wrap gap-3 mb-4">
           <div className="relative flex-1 min-w-[250px]">
@@ -364,8 +457,8 @@ const Editor = () => {
               className="border border-border rounded-md px-3 py-2 bg-background text-sm font-body"
             >
               <option value="all">كل النصوص</option>
-              <option value="translated">✅ المترجم فقط ({state ? Object.values(state.translations).filter(v => v.trim()).length : 0})</option>
-              <option value="untranslated">❌ غير المترجم ({state ? state.entries.length - Object.values(state.translations).filter(v => v.trim()).length : 0})</option>
+              <option value="translated">✅ المترجم فقط ({translatedCount})</option>
+              <option value="untranslated">❌ غير المترجم ({state.entries.length - translatedCount})</option>
             </select>
           </div>
 
