@@ -63,6 +63,32 @@ function categorizeFile(filePath: string): string {
   return "other";
 }
 
+// Detect technical text that may cause issues in translation
+function isTechnicalText(text: string): boolean {
+  // Check for patterns that indicate technical/system text
+  // Examples: IDs, paths, hex codes, variable names, code, etc.
+  
+  // Pattern: mostly numbers/hex codes
+  if (/^[0-9A-Fa-f\-\._:\/]+$/.test(text.trim())) return true;
+  
+  // Pattern: contains brackets for system tags/commands
+  if (/\[[^\]]*\]/.test(text) && text.length < 50) return true;
+  
+  // Pattern: XML/HTML-like tags
+  if (/<[^>]+>/.test(text)) return true;
+  
+  // Pattern: file paths
+  if (/[\\/][\w\-]+[\\/]/i.test(text)) return true;
+  
+  // Pattern: very short text with special characters (likely technical identifiers)
+  if (text.length < 10 && /[{}()\[\]<>|&%$#@!]/.test(text)) return true;
+  
+  // Pattern: camelCase or snake_case identifiers
+  if (/^[a-z]+([A-Z][a-z]*)+$|^[a-z]+(_[a-z]+)+$/.test(text.trim())) return true;
+  
+  return false;
+}
+
 
 const Editor = () => {
   const [state, setState] = useState<EditorState | null>(null);
@@ -70,6 +96,7 @@ const Editor = () => {
   const [filterFile, setFilterFile] = useState<string>("all");
   const [filterCategory, setFilterCategory] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<"all" | "translated" | "untranslated">("all");
+  const [filterTechnical, setFilterTechnical] = useState<"all" | "only" | "exclude">("all");
   const [building, setBuilding] = useState(false);
   const [buildProgress, setBuildProgress] = useState("");
   const [translating, setTranslating] = useState(false);
@@ -229,6 +256,7 @@ const Editor = () => {
     return state.entries.filter(e => {
       const key = `${e.msbtFile}:${e.index}`;
       const isTranslated = state.translations[key] && state.translations[key].trim() !== '';
+      const isTechnical = isTechnicalText(e.original);
       
       const matchSearch = !search ||
         e.original.toLowerCase().includes(search.toLowerCase()) ||
@@ -240,10 +268,14 @@ const Editor = () => {
         filterStatus === "all" || 
         (filterStatus === "translated" && isTranslated) ||
         (filterStatus === "untranslated" && !isTranslated);
+      const matchTechnical = 
+        filterTechnical === "all" ||
+        (filterTechnical === "only" && isTechnical) ||
+        (filterTechnical === "exclude" && !isTechnical);
       
-      return matchSearch && matchFile && matchCategory && matchStatus;
+      return matchSearch && matchFile && matchCategory && matchStatus && matchTechnical;
     });
-  }, [state, search, filterFile, filterCategory, filterStatus]);
+  }, [state, search, filterFile, filterCategory, filterStatus, filterTechnical]);
 
   const updateTranslation = (key: string, value: string) => {
     if (!state) return;
@@ -264,12 +296,13 @@ const Editor = () => {
 
     const arabicRegex = /[\u0600-\u06FF]/;
 
-    // Get untranslated entries - skip already-Arabic originals and only from selected category
+    // Get untranslated entries - skip already-Arabic originals, technical text, and only from selected category
     const untranslated = state.entries.filter(e => {
       const key = `${e.msbtFile}:${e.index}`;
       const matchCategory = filterCategory === "all" || categorizeFile(e.msbtFile) === filterCategory;
       const isAlreadyArabic = arabicRegex.test(e.original);
-      return matchCategory && e.original.trim() && !isAlreadyArabic && (!state.translations[key] || !state.translations[key].trim());
+      const isTechnical = isTechnicalText(e.original);
+      return matchCategory && e.original.trim() && !isAlreadyArabic && !isTechnical && (!state.translations[key] || !state.translations[key].trim());
     });
 
     if (untranslated.length === 0) {
@@ -896,6 +929,19 @@ const Editor = () => {
 
           <div className="flex items-center gap-2">
             <select
+              value={filterTechnical}
+              onChange={(e) => setFilterTechnical(e.target.value as any)}
+              className="border border-border rounded-md px-3 py-2 bg-background text-sm font-body"
+              title="تصفية النصوص التقنية التي قد تسبب مشاكل في الترجمة"
+            >
+              <option value="all">🔧 كل النصوص</option>
+              <option value="only">⚙️ النصوص التقنية فقط</option>
+              <option value="exclude">✨ استبعاد النصوص التقنية</option>
+            </select>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <select
               value={filterFile}
               onChange={(e) => setFilterFile(e.target.value)}
               className="border border-border rounded-md px-3 py-2 bg-background text-sm font-body"
@@ -947,8 +993,11 @@ const Editor = () => {
                   >
                     {isProtected ? "🔒" : "🔓"}
                   </button>
-                  <div className="text-sm text-muted-foreground py-2 break-words font-body" dir="ltr">
-                    {entry.original || <span className="italic text-muted-foreground/50">(فارغ)</span>}
+                  <div className="text-sm text-muted-foreground py-2 break-words font-body flex items-start gap-2" dir="ltr">
+                    {isTechnicalText(entry.original) && (
+                      <span className="text-xs bg-warning/20 text-warning px-2 py-1 rounded mt-0.5 flex-shrink-0 font-bold" title="نص تقني قد لا يحتاج ترجمة">⚙️ تقني</span>
+                    )}
+                    <span>{entry.original || <span className="italic text-muted-foreground/50">(فارغ)</span>}</span>
                   </div>
                   <div>
                     {(() => {
