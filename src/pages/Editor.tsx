@@ -71,6 +71,7 @@ const Editor = () => {
   const [lastSaved, setLastSaved] = useState<string>("");
   const navigate = useNavigate();
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   // Load state from IndexedDB
   useEffect(() => {
@@ -195,9 +196,19 @@ const Editor = () => {
     setTranslating(true);
     const totalBatches = Math.ceil(untranslated.length / AI_BATCH_SIZE);
     let allTranslations: Record<string, string> = {};
+    
+    // Create new abort controller for this translation session
+    abortControllerRef.current = new AbortController();
 
     try {
       for (let b = 0; b < totalBatches; b++) {
+        // Check if abort was requested
+        if (abortControllerRef.current.signal.aborted) {
+          setTranslateProgress("⏹️ تم إيقاف الترجمة");
+          setTimeout(() => setTranslateProgress(""), 3000);
+          break;
+        }
+
         const batch = untranslated.slice(b * AI_BATCH_SIZE, (b + 1) * AI_BATCH_SIZE);
         setTranslateProgress(`جاري ترجمة الدفعة ${b + 1}/${totalBatches} (${batch.length} نص)...`);
 
@@ -217,6 +228,7 @@ const Editor = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ entries }),
+          signal: abortControllerRef.current.signal,
         });
 
         if (!response.ok) {
@@ -238,13 +250,26 @@ const Editor = () => {
       });
 
       const count = Object.keys(allTranslations).length;
-      setTranslateProgress(`✅ تمت ترجمة ${count} نص بنجاح!`);
+      if (count > 0) {
+        setTranslateProgress(`✅ تمت ترجمة ${count} نص بنجاح!`);
+      }
       setTimeout(() => setTranslateProgress(""), 4000);
     } catch (err) {
-      setTranslateProgress(`❌ ${err instanceof Error ? err.message : 'خطأ في الترجمة'}`);
-      setTimeout(() => setTranslateProgress(""), 5000);
+      if (err instanceof Error && err.name === 'AbortError') {
+        // Already handled abort in the loop
+      } else {
+        setTranslateProgress(`❌ ${err instanceof Error ? err.message : 'خطأ في الترجمة'}`);
+        setTimeout(() => setTranslateProgress(""), 5000);
+      }
     } finally {
       setTranslating(false);
+      abortControllerRef.current = null;
+    }
+  };
+
+  const handleStopTranslate = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
     }
   };
 
@@ -365,19 +390,26 @@ const Editor = () => {
           </Card>
 
           {/* AI Translate button */}
-          <Button
-            size="lg"
-            variant="secondary"
-            onClick={handleAutoTranslate}
-            disabled={translating || building}
-            className="font-display font-bold px-6"
-          >
-            {translating ? (
-              <><Loader2 className="w-4 h-4 animate-spin" /> جاري الترجمة...</>
-            ) : (
+          {translating ? (
+            <Button
+              size="lg"
+              variant="destructive"
+              onClick={handleStopTranslate}
+              className="font-display font-bold px-6"
+            >
+              <><Loader2 className="w-4 h-4 animate-spin" /> إيقاف الترجمة ⏹️</>
+            </Button>
+          ) : (
+            <Button
+              size="lg"
+              variant="secondary"
+              onClick={handleAutoTranslate}
+              disabled={building}
+              className="font-display font-bold px-6"
+            >
               <><Sparkles className="w-4 h-4" /> ترجمة تلقائية 🤖</>
-            )}
-          </Button>
+            </Button>
+          )}
 
           <Button
             size="lg"
