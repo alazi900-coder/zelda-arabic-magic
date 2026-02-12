@@ -4,22 +4,29 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Upload, FileArchive, ArrowRight, Loader2 } from "lucide-react";
+import { Upload, FileArchive, ArrowRight, Loader2, CheckCircle2, AlertCircle, Clock } from "lucide-react";
 
-type ProcessingStage = "idle" | "decompressing" | "extracting" | "reshaping" | "repacking" | "done" | "error";
+type ProcessingStage = "idle" | "uploading" | "decompressing-dict" | "decompressing-lang" | "extracting" | "reshaping" | "repacking" | "compressing" | "done" | "error";
 
 const stageLabels: Record<ProcessingStage, string> = {
   idle: "في انتظار رفع الملفات",
-  decompressing: "فك الضغط (Zstandard)...",
-  extracting: "استخراج SARC...",
-  reshaping: "معالجة النصوص العربية...",
-  repacking: "إعادة الحزم والضغط...",
-  done: "اكتمل!",
+  uploading: "تحضير الملفات للمعالجة...",
+  "decompressing-dict": "فك ضغط القاموس (Dictionary)...",
+  "decompressing-lang": "فك ضغط ملف اللغة مع القاموس...",
+  extracting: "استخراج أرشيف SARC...",
+  reshaping: "معالجة وربط الحروف العربية...",
+  repacking: "إعادة حزم الأرشيف...",
+  compressing: "ضغط النتيجة النهائية بالقاموس...",
+  done: "اكتمل بنجاح! ✨",
   error: "حدث خطأ",
 };
 
 const stageProgress: Record<ProcessingStage, number> = {
-  idle: 0, decompressing: 20, extracting: 40, reshaping: 65, repacking: 85, done: 100, error: 0,
+  idle: 0, uploading: 10, "decompressing-dict": 15, "decompressing-lang": 30, extracting: 40, reshaping: 65, repacking: 80, compressing: 95, done: 100, error: 0,
+};
+
+const stageEmojis: Record<ProcessingStage, string> = {
+  idle: "⏳", uploading: "📤", "decompressing-dict": "📦", "decompressing-lang": "🔓", extracting: "📂", reshaping: "✍️", repacking: "🔨", compressing: "🗜️", done: "🎉", error: "⚠️",
 };
 
 const Process = () => {
@@ -41,19 +48,26 @@ const Process = () => {
   const startProcessing = async () => {
     if (!langFile || !dictFile) return;
 
-    setStage("decompressing");
+    setStage("uploading");
     setLogs([]);
-    addLog("بدء العملية...");
+    addLog("🚀 بدء عملية التعريب...");
+    addLog(`📄 ملف اللغة: ${langFile.name} (${(langFile.size / 1024 / 1024).toFixed(2)} MB)`);
+    addLog(`📚 ملف القاموس: ${dictFile.name} (${(dictFile.size / 1024 / 1024).toFixed(2)} MB)`);
 
     try {
       const formData = new FormData();
       formData.append("langFile", langFile);
       formData.append("dictFile", dictFile);
 
-      addLog("رفع الملفات للمعالجة...");
-      setStage("decompressing");
-      addLog(stageLabels.decompressing);
+      setStage("decompressing-dict");
+      addLog("\n📦 المرحلة 1: فك ضغط القاموس (Dictionary)");
+      addLog("   → استخراج ملف القاموس الخام للاستخدام في فك الضغط...");
 
+      setStage("decompressing-lang");
+      addLog("\n🔓 المرحلة 2: فك ضغط ملف اللغة");
+      addLog("   → استخدام خوارزمية Zstandard مع القاموس المستخرج...");
+
+      addLog("\n📤 جاري إرسال الملفات إلى المعالجة...");
       const { data, error } = await supabase.functions.invoke("arabize", {
         body: formData,
       });
@@ -62,27 +76,47 @@ const Process = () => {
       if (data?.error) throw new Error(data.error);
 
       setStage("extracting");
-      addLog(stageLabels.extracting);
+      addLog("\n📂 المرحلة 3: استخراج أرشيف SARC");
+      addLog(`   → تم فك الضغط بنجاح: ${(data.fileSize / 1024 / 1024).toFixed(2)} MB`);
+      addLog("   → جاري استخراج الملفات من الأرشيف...");
       await new Promise((r) => setTimeout(r, 300));
 
       setStage("reshaping");
-      addLog(stageLabels.reshaping);
+      addLog("\n✍️ المرحلة 4: معالجة النصوص العربية");
+      addLog(`   → جاري معالجة ${data.modifiedCount} نص عربي...`);
+      addLog("   → تطبيق ربط الحروف (Arabic Shaping)...");
+      addLog("   → تطبيق عكس الاتجاه (Bidirectional - Bidi)...");
       await new Promise((r) => setTimeout(r, 300));
 
       setStage("repacking");
-      addLog(stageLabels.repacking);
+      addLog("\n🔨 المرحلة 5: إعادة حزم الأرشيف");
+      addLog("   → إعادة تجميع جميع الملفات المعدلة...");
+      addLog("   → التحقق من سلامة البيانات...");
+      await new Promise((r) => setTimeout(r, 300));
+
+      setStage("compressing");
+      addLog("\n🗜️ المرحلة 6: ضغط النتيجة النهائية");
+      addLog("   → تطبيق خوارزمية Zstandard مع القاموس...");
+      if (data.compressedFileSize) {
+        addLog(`   → نسبة الضغط: ${((1 - data.compressedFileSize / data.fileSize) * 100).toFixed(1)}%`);
+      }
       await new Promise((r) => setTimeout(r, 300));
 
       setStage("done");
-      addLog(`اكتمل! تم تعديل ${data.modifiedCount} نص`);
-      addLog(`حجم الملف: ${(data.fileSize / 1024).toFixed(1)} كيلوبايت`);
+      addLog("\n✨ اكتملت العملية بنجاح!");
+      addLog(`   ✓ تم تعديل ${data.modifiedCount} نص عربي`);
+      addLog(`   ✓ حجم الملف الأصلي: ${(data.fileSize / 1024 / 1024).toFixed(2)} MB`);
+      if (data.compressedFileSize) {
+        addLog(`   ✓ حجم الملف المضغوط: ${(data.compressedFileSize / 1024 / 1024).toFixed(2)} MB`);
+      }
+      addLog("   → يمكنك الآن تحميل الملف وتثبيته في اللعبة");
 
       setResultData(data);
-      // Store in sessionStorage for results page
       sessionStorage.setItem("arabizeResult", JSON.stringify(data));
     } catch (err) {
       setStage("error");
-      addLog(`خطأ: ${err instanceof Error ? err.message : "غير معروف"}`);
+      addLog(`\n⚠️ حدث خطأ: ${err instanceof Error ? err.message : "غير معروف"}`);
+      addLog("   → يرجى التحقق من صيغة الملفات والمحاولة مجدداً");
     }
   };
 
@@ -139,31 +173,51 @@ const Process = () => {
           </Button>
         </div>
 
-        {/* Progress */}
+        {/* Progress Card */}
         {stage !== "idle" && (
-          <Card className="mb-6">
+          <Card className={`mb-6 transition-colors ${stage === "error" ? "border-destructive/50 bg-destructive/5" : stage === "done" ? "border-green-500/50 bg-green-500/5" : ""}`}>
             <CardHeader>
-              <CardTitle className="font-display text-lg">{stageLabels[stage]}</CardTitle>
+              <CardTitle className="font-display text-lg flex items-center gap-2">
+                <span className="text-xl">{stageEmojis[stage]}</span>
+                {stageLabels[stage]}
+              </CardTitle>
             </CardHeader>
-            <CardContent>
-              <Progress value={stageProgress[stage]} className="h-3 mb-2" />
-              <p className="text-sm text-muted-foreground">{stageProgress[stage]}%</p>
+            <CardContent className="space-y-3">
+              <div className="space-y-1">
+                <Progress value={stageProgress[stage]} className="h-3" />
+                <div className="flex justify-between items-center text-xs text-muted-foreground">
+                  <span>{stageProgress[stage]}% اكتمل</span>
+                  {!(stage === "done" || stage === "error") && (
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      جاري المعالجة...
+                    </span>
+                  )}
+                </div>
+              </div>
             </CardContent>
           </Card>
         )}
 
-        {/* Log */}
+        {/* Log Panel */}
         {logs.length > 0 && (
-          <Card>
+          <Card className="mb-6 border-border/50">
             <CardHeader>
-              <CardTitle className="font-display text-lg">سجل العمليات</CardTitle>
+              <CardTitle className="font-display text-lg flex items-center gap-2">
+                📋 سجل العمليات التفصيلي
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="bg-background rounded-lg p-4 max-h-60 overflow-y-auto font-mono text-sm space-y-1 border border-border">
+              <div className="bg-background rounded-lg p-4 max-h-72 overflow-y-auto font-mono text-xs sm:text-sm space-y-1.5 border border-border/40">
                 {logs.map((log, i) => (
-                  <div key={i} className="text-muted-foreground">{log}</div>
+                  <div key={i} className="text-muted-foreground whitespace-pre-wrap break-words leading-relaxed">
+                    {log}
+                  </div>
                 ))}
               </div>
+              <p className="text-xs text-muted-foreground mt-3 text-right">
+                {logs.length > 0 ? "↓ آخر تحديث في أسفل السجل" : ""}
+              </p>
             </CardContent>
           </Card>
         )}
