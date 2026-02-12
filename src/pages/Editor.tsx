@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save, Tag, Upload, FileDown } from "lucide-react";
+import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save, Tag, Upload, FileDown, Cloud, CloudUpload, LogIn } from "lucide-react";
 import { idbSet, idbGet } from "@/lib/idb-storage";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ExtractedEntry {
   msbtFile: string;
@@ -69,9 +71,12 @@ const Editor = () => {
   const [translating, setTranslating] = useState(false);
   const [translateProgress, setTranslateProgress] = useState("");
   const [lastSaved, setLastSaved] = useState<string>("");
+  const [cloudSyncing, setCloudSyncing] = useState(false);
+  const [cloudStatus, setCloudStatus] = useState("");
   const navigate = useNavigate();
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const abortControllerRef = useRef<AbortController | null>(null);
+  const { user } = useAuth();
 
   // Load state from IndexedDB
   useEffect(() => {
@@ -321,6 +326,84 @@ const Editor = () => {
     input.click();
   };
 
+  // Cloud save
+  const handleCloudSave = async () => {
+    if (!state || !user) return;
+    setCloudSyncing(true);
+    setCloudStatus("جاري الحفظ في السحابة...");
+    try {
+      const translated = Object.values(state.translations).filter(v => v.trim() !== '').length;
+      // Upsert: check if project exists for this user
+      const { data: existing } = await supabase
+        .from('translation_projects')
+        .select('id')
+        .eq('user_id', user.id)
+        .order('updated_at', { ascending: false })
+        .limit(1);
+
+      if (existing && existing.length > 0) {
+        await supabase
+          .from('translation_projects')
+          .update({
+            translations: state.translations,
+            entry_count: state.entries.length,
+            translated_count: translated,
+          })
+          .eq('id', existing[0].id);
+      } else {
+        await supabase
+          .from('translation_projects')
+          .insert({
+            user_id: user.id,
+            translations: state.translations,
+            entry_count: state.entries.length,
+            translated_count: translated,
+          });
+      }
+      setCloudStatus("☁️ تم الحفظ في السحابة بنجاح!");
+    } catch (err) {
+      setCloudStatus(`❌ ${err instanceof Error ? err.message : 'خطأ في الحفظ'}`);
+    } finally {
+      setCloudSyncing(false);
+      setTimeout(() => setCloudStatus(""), 4000);
+    }
+  };
+
+  // Cloud load
+  const handleCloudLoad = async () => {
+    if (!user) return;
+    setCloudSyncing(true);
+    setCloudStatus("جاري التحميل من السحابة...");
+    try {
+      const { data, error } = await supabase
+        .from('translation_projects')
+        .select('translations')
+        .eq('user_id', user.id)
+        .order('updated_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (error) throw error;
+      if (!data) {
+        setCloudStatus("لا توجد ترجمات محفوظة في السحابة");
+        setTimeout(() => setCloudStatus(""), 3000);
+        return;
+      }
+
+      const cloudTranslations = data.translations as Record<string, string>;
+      setState(prev => {
+        if (!prev) return null;
+        return { ...prev, translations: { ...prev.translations, ...cloudTranslations } };
+      });
+      setCloudStatus(`☁️ تم تحميل ${Object.keys(cloudTranslations).length} ترجمة من السحابة`);
+    } catch (err) {
+      setCloudStatus(`❌ ${err instanceof Error ? err.message : 'خطأ في التحميل'}`);
+    } finally {
+      setCloudSyncing(false);
+      setTimeout(() => setCloudStatus(""), 4000);
+    }
+  };
+
   const handleBuild = async () => {
     if (!state) return;
 
@@ -490,6 +573,40 @@ const Editor = () => {
           >
             <><Upload className="w-4 h-4" /> استيراد ترجمات</>
           </Button>
+
+          {/* Cloud sync buttons */}
+          {user ? (
+            <>
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={handleCloudSave}
+                disabled={cloudSyncing || translatedCount === 0}
+                className="font-display font-bold px-4 border-primary/30"
+              >
+                {cloudSyncing ? <Loader2 className="w-4 h-4 animate-spin" /> : <CloudUpload className="w-4 h-4" />}
+                حفظ في السحابة ☁️
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={handleCloudLoad}
+                disabled={cloudSyncing}
+                className="font-display font-bold px-4 border-primary/30"
+              >
+                <Cloud className="w-4 h-4" /> تحميل من السحابة
+              </Button>
+            </>
+          ) : (
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => navigate("/auth")}
+              className="font-display font-bold px-4"
+            >
+              <LogIn className="w-4 h-4" /> سجّل دخولك للمزامنة
+            </Button>
+          )}
         </div>
 
         {/* Progress bars */}
@@ -501,6 +618,11 @@ const Editor = () => {
         {buildProgress && (
           <Card className="mb-4 border-primary/30 bg-primary/5">
             <CardContent className="p-4 text-center font-display">{buildProgress}</CardContent>
+          </Card>
+        )}
+        {cloudStatus && (
+          <Card className="mb-4 border-primary/30 bg-primary/5">
+            <CardContent className="p-4 text-center font-display">{cloudStatus}</CardContent>
           </Card>
         )}
 
