@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save, Tag, Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle, Eye, EyeOff } from "lucide-react";
+import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save, Tag, Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle, Eye, EyeOff, Wifi, WifiOff } from "lucide-react";
 import ZeldaDialoguePreview from "@/components/ZeldaDialoguePreview";
 import { idbSet, idbGet } from "@/lib/idb-storage";
 import { useAuth } from "@/contexts/AuthContext";
@@ -22,14 +22,13 @@ interface EditorState {
   entries: ExtractedEntry[];
   translations: Record<string, string>;
   protectedEntries?: Set<string>;
-  glossary?: string; // glossary text for AI translation context
-  technicalBypass?: Set<string>; // technical entries allowed for manual translation
+  glossary?: string;
+  technicalBypass?: Set<string>;
 }
 
 const AUTOSAVE_DELAY = 1500;
 const AI_BATCH_SIZE = 30;
 
-// --- Category system for MSBT files (path-based) ---
 interface FileCategory {
   id: string;
   label: string;
@@ -47,50 +46,25 @@ const FILE_CATEGORIES: FileCategory[] = [
 ];
 
 function categorizeFile(filePath: string): string {
-  // Priority 1: ActorMsg/PouchContent.msbt → inventory
   if (/ActorMsg\/PouchContent\.msbt/i.test(filePath)) return "inventory";
-  // Priority 2: LayoutMsg/* → ui
   if (/LayoutMsg\//i.test(filePath)) return "ui";
-  // Priority 3: ChallengeMsg/* → challenge
   if (/ChallengeMsg\//i.test(filePath)) return "challenge";
-  // Priority 4: EventFlowMsg/* → story
   if (/EventFlowMsg\//i.test(filePath)) return "story";
-  // Priority 5: LocationMsg/* → map
   if (/LocationMsg\//i.test(filePath)) return "map";
-  // Priority 6: StaticMsg/(Tips|GuideKeyIcon).msbt → tips
   if (/StaticMsg\/(Tips|GuideKeyIcon)\.msbt/i.test(filePath)) return "tips";
-  // Priority 7: ActorMsg/* (except PouchContent) → character
   if (/ActorMsg\//i.test(filePath)) return "character";
-  // Priority 8: everything else
   return "other";
 }
 
-// Detect technical text that may cause issues in translation
 function isTechnicalText(text: string): boolean {
-  // Check for patterns that indicate technical/system text
-  // Examples: IDs, paths, hex codes, variable names, code, etc.
-  
-  // Pattern: mostly numbers/hex codes
   if (/^[0-9A-Fa-f\-\._:\/]+$/.test(text.trim())) return true;
-  
-  // Pattern: contains brackets for system tags/commands
   if (/\[[^\]]*\]/.test(text) && text.length < 50) return true;
-  
-  // Pattern: XML/HTML-like tags
   if (/<[^>]+>/.test(text)) return true;
-  
-  // Pattern: file paths
   if (/[\\/][\w\-]+[\\/]/i.test(text)) return true;
-  
-  // Pattern: very short text with special characters (likely technical identifiers)
   if (text.length < 10 && /[{}()\[\]<>|&%$#@!]/.test(text)) return true;
-  
-  // Pattern: camelCase or snake_case identifiers
   if (/^[a-z]+([A-Z][a-z]*)+$|^[a-z]+(_[a-z]+)+$/.test(text.trim())) return true;
-  
   return false;
 }
-
 
 const Editor = () => {
   const [state, setState] = useState<EditorState | null>(null);
@@ -106,9 +80,10 @@ const Editor = () => {
   const [lastSaved, setLastSaved] = useState<string>("");
   const [cloudSyncing, setCloudSyncing] = useState(false);
   const [cloudStatus, setCloudStatus] = useState("");
-  const [technicalEditingMode, setTechnicalEditingMode] = useState<string | null>(null); // key of technical entry being edited
+  const [technicalEditingMode, setTechnicalEditingMode] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
   const [previewKey, setPreviewKey] = useState<string | null>(null);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
   const navigate = useNavigate();
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -155,14 +130,11 @@ const Editor = () => {
     setTimeout(() => setLastSaved(""), 3000);
   };
 
-  // Load state from IndexedDB
-  // Detect already-Arabic entries and auto-populate translations
   const detectPreTranslated = useCallback((editorState: EditorState): Record<string, string> => {
     const arabicRegex = /[\u0600-\u06FF]/;
     const autoTranslations: Record<string, string> = {};
     for (const entry of editorState.entries) {
       const key = `${entry.msbtFile}:${entry.index}`;
-      // Only auto-fill if not already translated
       if (!editorState.translations[key]?.trim() && arabicRegex.test(entry.original)) {
         autoTranslations[key] = entry.original;
       }
@@ -174,7 +146,6 @@ const Editor = () => {
     const loadState = async () => {
       const stored = await idbGet<EditorState>("editorState");
       if (stored) {
-        // Auto-detect pre-translated Arabic entries
         const autoTranslations = detectPreTranslated({
           entries: stored.entries,
           translations: stored.translations || {},
@@ -182,17 +153,14 @@ const Editor = () => {
         });
         const mergedTranslations = { ...autoTranslations, ...stored.translations };
         
-        // Restore protected entries from array to Set
         const protectedSet = new Set<string>(
           Array.isArray(stored.protectedEntries) ? (stored.protectedEntries as string[]) : []
         );
 
-        // Restore technical bypass entries from array to Set
         const bypassSet = new Set<string>(
           Array.isArray((stored as any).technicalBypass) ? ((stored as any).technicalBypass as string[]) : []
         );
 
-        // Auto-protect newly detected Arabic entries
         const arabicRegex = /[\u0600-\u06FF]/;
         for (const entry of stored.entries) {
           const key = `${entry.msbtFile}:${entry.index}`;
@@ -218,7 +186,30 @@ const Editor = () => {
     loadState();
   }, [detectPreTranslated]);
 
-  // Auto-save to IndexedDB on translation changes (debounced)
+  // Monitor online/offline status
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
+  // Auto-sync when coming back online
+  useEffect(() => {
+    if (isOnline && state && user) {
+      const syncTimer = setTimeout(() => {
+        handleCloudSave();
+      }, 2000);
+      return () => clearTimeout(syncTimer);
+    }
+  }, [isOnline]);
+
   const saveToIDB = useCallback(async (editorState: EditorState) => {
     await idbSet("editorState", {
       entries: editorState.entries,
@@ -242,7 +233,6 @@ const Editor = () => {
     return Array.from(set).sort();
   }, [state?.entries]);
 
-  // Category counts and translation progress
   const categoryCounts = useMemo(() => {
     if (!state) return {};
     const counts: Record<string, number> = {};
@@ -313,13 +303,10 @@ const Editor = () => {
     return Object.values(state.translations).filter(v => v.trim() !== '').length;
   }, [state?.translations]);
 
-  // AI Auto-translate
   const handleAutoTranslate = async () => {
     if (!state) return;
 
     const arabicRegex = /[\u0600-\u06FF]/;
-
-    // Get untranslated entries - skip already-Arabic originals, technical text, and only from selected category
     const untranslated = state.entries.filter(e => {
       const key = `${e.msbtFile}:${e.index}`;
       const matchCategory = filterCategory === "all" || categorizeFile(e.msbtFile) === filterCategory;
@@ -338,12 +325,10 @@ const Editor = () => {
     const totalBatches = Math.ceil(untranslated.length / AI_BATCH_SIZE);
     let allTranslations: Record<string, string> = {};
     
-    // Create new abort controller for this translation session
     abortControllerRef.current = new AbortController();
 
     try {
       for (let b = 0; b < totalBatches; b++) {
-        // Check if abort was requested
         if (abortControllerRef.current.signal.aborted) {
           setTranslateProgress("⏹️ تم إيقاف الترجمة");
           setTimeout(() => setTranslateProgress(""), 3000);
@@ -381,7 +366,6 @@ const Editor = () => {
         const batchTranslations = data.translations || {};
         allTranslations = { ...allTranslations, ...batchTranslations };
 
-        // Save immediately after each batch
         if (Object.keys(batchTranslations).length > 0) {
           setState(prev => {
             if (!prev) return null;
@@ -400,7 +384,6 @@ const Editor = () => {
       setTimeout(() => setTranslateProgress(""), 4000);
     } catch (err) {
       if (err instanceof Error && err.name === 'AbortError') {
-        // Translations already saved per-batch, just show message
         const savedCount = Object.keys(allTranslations).length;
         if (savedCount > 0) {
           setTranslateProgress(`⏹️ تم إيقاف الترجمة - تم حفظ ${savedCount} نص مترجم`);
@@ -426,7 +409,6 @@ const Editor = () => {
     }
   };
 
-  // Export translations as JSON
   const handleExportTranslations = () => {
     if (!state) return;
     const data = JSON.stringify(state.translations, null, 2);
@@ -439,7 +421,6 @@ const Editor = () => {
     URL.revokeObjectURL(url);
   };
 
-  // Import translations from JSON
   const handleImportTranslations = () => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -462,7 +443,6 @@ const Editor = () => {
     input.click();
   };
 
-  // Glossary import
   const handleImportGlossary = () => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -482,14 +462,19 @@ const Editor = () => {
     input.click();
   };
 
-  // Cloud save
   const handleCloudSave = async () => {
     if (!state || !user) return;
+    
+    if (!isOnline) {
+      setCloudStatus("❌ بدون اتصال بالإنترنت - تم حفظ التغييرات محلياً وستُرفع عند العودة");
+      setTimeout(() => setCloudStatus(""), 5000);
+      return;
+    }
+    
     setCloudSyncing(true);
     setCloudStatus("جاري الحفظ في السحابة...");
     try {
       const translated = Object.values(state.translations).filter(v => v.trim() !== '').length;
-      // Upsert: check if project exists for this user
       const { data: existing } = await supabase
         .from('translation_projects')
         .select('id')
@@ -525,9 +510,15 @@ const Editor = () => {
     }
   };
 
-  // Cloud load
   const handleCloudLoad = async () => {
     if (!user) return;
+    
+    if (!isOnline) {
+      setCloudStatus("❌ بدون اتصال بالإنترنت - لا يمكن التحميل من السحابة الآن");
+      setTimeout(() => setCloudStatus(""), 4000);
+      return;
+    }
+    
     setCloudSyncing(true);
     setCloudStatus("جاري التحميل من السحابة...");
     try {
@@ -656,7 +647,6 @@ const Editor = () => {
           عدّل النصوص العربية يدوياً أو استخدم الترجمة التلقائية بالذكاء الاصطناعي
         </p>
 
-        {/* Stats & Actions Bar */}
         <div className="flex flex-wrap items-center gap-4 mb-6">
           <Card className="flex-1 min-w-[140px]">
             <CardContent className="flex items-center gap-3 p-4">
@@ -686,7 +676,6 @@ const Editor = () => {
             </CardContent>
           </Card>
 
-          {/* AI Translate button */}
           {translating ? (
             <Button
               size="lg"
@@ -699,430 +688,201 @@ const Editor = () => {
           ) : (
             <Button
               size="lg"
-              variant="secondary"
+              variant="default"
               onClick={handleAutoTranslate}
-              disabled={building}
+              disabled={translating || filterCategory !== "all"}
               className="font-display font-bold px-6"
             >
-              <><Sparkles className="w-4 h-4" /> ترجمة تلقائية 🤖</>
-            </Button>
-          )}
-
-          <Button
-            size="lg"
-            onClick={handleBuild}
-            disabled={building || translatedCount === 0}
-            className="font-display font-bold px-6"
-          >
-            {building ? (
-              <><Loader2 className="w-4 h-4 animate-spin" /> جاري البناء...</>
-            ) : (
-              <><Download className="w-4 h-4" /> بناء وتحميل</>
-            )}
-          </Button>
-
-          <Button
-            size="lg"
-            variant="outline"
-            onClick={handleProtectAllArabic}
-            disabled={building || translating}
-            className="font-display font-bold px-6"
-          >
-            <><Filter className="w-4 h-4" /> حماية النصوص المعربة 🛡️</>
-          </Button>
-
-          <Button
-            size="lg"
-            variant={showPreview ? "secondary" : "outline"}
-            onClick={() => setShowPreview(!showPreview)}
-            className="font-display font-bold px-6"
-          >
-            {showPreview ? <><EyeOff className="w-4 h-4" /> إخفاء المعاينة</> : <><Eye className="w-4 h-4" /> معاينة الحوار 👁️</>}
-          </Button>
-
-          {/* Export/Import buttons */}
-          <Button
-            size="lg"
-            variant="outline"
-            onClick={handleExportTranslations}
-            disabled={translatedCount === 0}
-            className="font-display font-bold px-4"
-          >
-            <><FileDown className="w-4 h-4" /> تصدير الترجمات</>
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            onClick={handleImportTranslations}
-            className="font-display font-bold px-4"
-          >
-            <><Upload className="w-4 h-4" /> استيراد ترجمات</>
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            onClick={handleImportGlossary}
-            className="font-display font-bold px-4"
-          >
-            <><BookOpen className="w-4 h-4" /> قاموس مصطلحات 📖</>
-          </Button>
-          {state.glossary && (
-            <span className="text-xs text-primary font-display flex items-center gap-1">
-              <BookOpen className="w-3 h-3" /> القاموس مُفعّل
-              <button 
-                onClick={() => setState(prev => prev ? { ...prev, glossary: undefined } : null)}
-                className="text-destructive hover:underline mr-1"
-              >
-                (إزالة)
-              </button>
-            </span>
-          )}
-
-          {/* Cloud sync buttons */}
-          {user ? (
-            <>
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={handleCloudSave}
-                disabled={cloudSyncing || translatedCount === 0}
-                className="font-display font-bold px-4 border-primary/30"
-              >
-                {cloudSyncing ? <Loader2 className="w-4 h-4 animate-spin" /> : <CloudUpload className="w-4 h-4" />}
-                حفظ في السحابة ☁️
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={handleCloudLoad}
-                disabled={cloudSyncing}
-                className="font-display font-bold px-4 border-primary/30"
-              >
-                <Cloud className="w-4 h-4" /> تحميل من السحابة
-              </Button>
-            </>
-          ) : (
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={() => navigate("/auth")}
-              className="font-display font-bold px-4"
-            >
-              <LogIn className="w-4 h-4" /> سجّل دخولك للمزامنة
+              <Sparkles className="w-4 h-4" /> ترجمة تلقائية 🤖
             </Button>
           )}
         </div>
 
-        {/* Progress bars */}
+        {/* Status Messages */}
+        {lastSaved && (
+          <Card className="mb-4 border-secondary/30 bg-secondary/5">
+            <CardContent className="p-4 text-center font-display">{lastSaved}</CardContent>
+          </Card>
+        )}
+        
         {translateProgress && (
           <Card className="mb-4 border-secondary/30 bg-secondary/5">
             <CardContent className="p-4 text-center font-display">{translateProgress}</CardContent>
           </Card>
         )}
+
         {buildProgress && (
-          <Card className="mb-4 border-primary/30 bg-primary/5">
+          <Card className="mb-4 border-secondary/30 bg-secondary/5">
             <CardContent className="p-4 text-center font-display">{buildProgress}</CardContent>
           </Card>
         )}
+
+        {/* Connection Status Indicator */}
+        {!isOnline && (
+          <Card className="mb-4 border-accent bg-accent/5">
+            <CardContent className="flex items-center gap-3 p-4 font-body">
+              <WifiOff className="w-5 h-5 text-accent flex-shrink-0" />
+              <div>
+                <p className="font-bold">بدون اتصال بالإنترنت</p>
+                <p className="text-sm text-muted-foreground">التغييرات تُحفظ محلياً وسيتم مزامنتها تلقائياً عند عودة الاتصال</p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {cloudStatus && (
           <Card className="mb-4 border-primary/30 bg-primary/5">
             <CardContent className="p-4 text-center font-display">{cloudStatus}</CardContent>
           </Card>
         )}
 
-        {/* Auto-save indicator */}
-        {lastSaved && (
-          <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
-            <Save className="w-3 h-3" />
-            <span>{lastSaved}</span>
-          </div>
+        {!user && (
+          <Card className="mb-4 border-primary/30 bg-primary/5">
+            <CardContent className="flex items-center gap-3 p-4">
+              <LogIn className="w-4 h-4" /> سجّل دخولك للمزامنة
+            </CardContent>
+          </Card>
         )}
 
-        {/* Category Statistics Bar */}
         {state && (
           <div className="mb-6 p-4 bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 rounded-lg border border-border">
-            {/* Technical Bypass Statistics */}
-            <div className="mb-4 p-3 bg-accent/15 rounded-lg border border-accent/30">
-              <div className="flex items-center gap-2 justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg font-display font-bold">⚙️</span>
-                  <span className="text-sm font-display font-semibold text-foreground">النصوص التقنية المسموح بترجمتها:</span>
-                </div>
-                <span className="px-3 py-1 rounded-full bg-accent/30 text-accent font-display font-bold text-sm">
-                  {state.technicalBypass?.size || 0}
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
-              <span className="text-sm font-display font-bold text-foreground">نسبة الإنجاز حسب الفئة:</span>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {FILE_CATEGORIES.map(cat => {
-                const catProgress = categoryProgress[cat.id];
-                if (!catProgress || catProgress.total === 0) return null;
-                const percentage = Math.round((catProgress.translated / catProgress.total) * 100);
+                const prog = categoryProgress[cat.id];
+                const pct = prog?.total ? Math.round((prog.translated / prog.total) * 100) : 0;
                 return (
-                  <div key={cat.id} className="space-y-1">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="font-display font-semibold">{cat.emoji} {cat.label}</span>
-                      <span className="text-xs text-muted-foreground">{percentage}%</span>
-                    </div>
-                    <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-to-r from-primary to-secondary transition-all duration-300"
-                        style={{ width: `${percentage}%` }}
-                      ></div>
-                    </div>
-                    <span className="text-xs text-muted-foreground">{catProgress.translated}/{catProgress.total}</span>
+                  <div key={cat.id} className="p-3 bg-card rounded border border-border/50">
+                    <p className="text-sm font-bold mb-2">{cat.emoji} {cat.label}</p>
+                    <Progress value={pct} className="h-2 mb-1" />
+                    <p className="text-xs text-muted-foreground text-center">{pct}%</p>
                   </div>
                 );
               })}
-              {categoryProgress["other"]?.total > 0 && (
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-display font-semibold">📁 أخرى</span>
-                    <span className="text-xs text-muted-foreground">
-                      {Math.round((categoryProgress["other"].translated / categoryProgress["other"].total) * 100)}%
-                    </span>
-                  </div>
-                  <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-primary to-secondary transition-all duration-300"
-                      style={{ width: `${Math.round((categoryProgress["other"].translated / categoryProgress["other"].total) * 100)}%` }}
-                    ></div>
-                  </div>
-                  <span className="text-xs text-muted-foreground">
-                    {categoryProgress["other"].translated}/{categoryProgress["other"].total}
-                  </span>
-                </div>
-              )}
             </div>
           </div>
         )}
 
-        <div className="mb-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Tag className="w-4 h-4 text-muted-foreground" />
-            <span className="text-sm font-display font-bold text-muted-foreground">تصنيف الملفات:</span>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => setFilterCategory("all")}
-              className={`px-3 py-1.5 rounded-full text-xs font-display font-bold transition-colors border ${
-                filterCategory === "all"
-                  ? "bg-primary text-primary-foreground border-primary"
-                  : "bg-muted/50 text-muted-foreground border-border hover:bg-muted"
-              }`}
-            >
-              🗂️ الكل ({state.entries.length})
-            </button>
-            {FILE_CATEGORIES.filter(cat => categoryCounts[cat.id]).map(cat => (
-              <button
-                key={cat.id}
-                onClick={() => setFilterCategory(cat.id)}
-                className={`px-3 py-1.5 rounded-full text-xs font-display font-bold transition-colors border ${
-                  filterCategory === cat.id
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-muted/50 text-muted-foreground border-border hover:bg-muted"
-                }`}
-              >
-                {cat.emoji} {cat.label} ({categoryProgress[cat.id]?.translated}/{categoryCounts[cat.id]})
-              </button>
-            ))}
-            {categoryCounts["other"] && (
-              <button
-                onClick={() => setFilterCategory("other")}
-                className={`px-3 py-1.5 rounded-full text-xs font-display font-bold transition-colors border ${
-                  filterCategory === "other"
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-muted/50 text-muted-foreground border-border hover:bg-muted"
-                }`}
-              >
-                📁 أخرى ({categoryProgress["other"]?.translated}/{categoryCounts["other"]})
-              </button>
-            )}
-          </div>
+        {/* Filter Bar */}
+        <div className="mb-6 p-4 bg-card rounded border border-border flex flex-wrap gap-3 items-center">
+          <Input
+            placeholder="ابحث عن نصوص..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="flex-1 min-w-[200px] font-body"
+          />
+          <select
+            value={filterFile}
+            onChange={(e) => setFilterFile(e.target.value)}
+            className="px-3 py-2 rounded bg-background border border-border font-body text-sm"
+          >
+            <option value="all">كل الملفات</option>
+            {msbtFiles.map(f => <option key={f} value={f}>{f}</option>)}
+          </select>
+          <select
+            value={filterCategory}
+            onChange={(e) => setFilterCategory(e.target.value)}
+            className="px-3 py-2 rounded bg-background border border-border font-body text-sm"
+          >
+            <option value="all">كل الفئات</option>
+            {FILE_CATEGORIES.map(cat => <option key={cat.id} value={cat.id}>{cat.emoji} {cat.label}</option>)}
+          </select>
+          <select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value as any)}
+            className="px-3 py-2 rounded bg-background border border-border font-body text-sm"
+          >
+            <option value="all">الكل</option>
+            <option value="translated">مترجم</option>
+            <option value="untranslated">غير مترجم</option>
+          </select>
         </div>
 
-        {/* Search & Filter */}
-        <div className="flex flex-wrap gap-3 mb-4">
-          <div className="relative flex-1 min-w-[250px]">
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              placeholder="بحث في النصوص..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pr-10 font-body"
-              dir="rtl"
-            />
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-muted-foreground" />
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value as any)}
-              className="border border-border rounded-md px-3 py-2 bg-background text-sm font-body"
+        {/* Cloud Actions */}
+        {user && (
+          <div className="mb-6 flex gap-3 flex-wrap">
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={handleCloudSave}
+              disabled={cloudSyncing || translatedCount === 0}
+              className="font-display font-bold px-4 border-primary/30"
             >
-              <option value="all">كل النصوص</option>
-              <option value="translated">✅ المترجم فقط ({translatedCount})</option>
-              <option value="untranslated">❌ غير المترجم ({state.entries.length - translatedCount})</option>
-            </select>
+              <CloudUpload className="w-4 h-4" /> حفظ في السحابة
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={handleCloudLoad}
+              disabled={cloudSyncing}
+              className="font-display font-bold px-4 border-primary/30"
+            >
+              <Cloud className="w-4 h-4" /> تحميل من السحابة
+            </Button>
           </div>
+        )}
 
-          <div className="flex items-center gap-2">
-            <select
-              value={filterTechnical}
-              onChange={(e) => setFilterTechnical(e.target.value as any)}
-              className="border border-border rounded-md px-3 py-2 bg-background text-sm font-body"
-              title="تصفية النصوص التقنية التي قد تسبب مشاكل في الترجمة"
-            >
-              <option value="all">🔧 كل النصوص</option>
-              <option value="only">⚙️ النصوص التقنية فقط</option>
-              <option value="exclude">✨ استبعاد النصوص التقنية</option>
-            </select>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <select
-              value={filterFile}
-              onChange={(e) => setFilterFile(e.target.value)}
-              className="border border-border rounded-md px-3 py-2 bg-background text-sm font-body"
-            >
-              <option value="all">كل الملفات ({msbtFiles.length})</option>
-              {msbtFiles.map(f => (
-                <option key={f} value={f}>{f}</option>
-              ))}
-            </select>
-          </div>
+        {/* Export/Import Actions */}
+        <div className="mb-6 flex gap-3 flex-wrap">
+          <Button variant="outline" onClick={handleExportTranslations} className="font-body">
+            <Download className="w-4 h-4" /> تصدير JSON
+          </Button>
+          <Button variant="outline" onClick={handleImportTranslations} className="font-body">
+            <Upload className="w-4 h-4" /> استيراد JSON
+          </Button>
+          <Button variant="outline" onClick={handleImportGlossary} className="font-body">
+            <BookOpen className="w-4 h-4" /> تحميل قاموس
+          </Button>
         </div>
 
-        <p className="text-xs text-muted-foreground mb-3">
-          عرض {filteredEntries.length} من {state.entries.length} نص
-        </p>
+        {/* Build Button */}
+        <Button
+          size="lg"
+          onClick={handleBuild}
+          disabled={building}
+          className="w-full font-display font-bold mb-6"
+        >
+          {building ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <FileDown className="w-4 h-4 mr-2" />}
+          بناء الملف النهائي
+        </Button>
 
-        {/* Translation Table */}
-        <div className="border border-border rounded-lg overflow-hidden">
-          <div className="bg-muted px-4 py-3 grid grid-cols-[50px_50px_1fr_1fr] gap-3 text-sm font-display font-bold border-b border-border">
-            <span>#</span>
-            <span>🛡️</span>
-            <span>النص الأصلي</span>
-            <span>الترجمة العربية</span>
-          </div>
-
-          <div className="max-h-[60vh] overflow-y-auto">
-            {filteredEntries.map((entry) => {
+        {/* Entries List */}
+        <div className="space-y-2">
+          {filteredEntries.length === 0 ? (
+            <p className="text-center text-muted-foreground py-8">لا توجد نصوص مطابقة</p>
+          ) : (
+            filteredEntries.map((entry, idx) => {
               const key = `${entry.msbtFile}:${entry.index}`;
-              const isProtected = state?.protectedEntries?.has(key) || false;
+              const translation = state?.translations[key] || '';
+              const isProtected = state?.protectedEntries?.has(key);
+              const isTechnical = isTechnicalText(entry.original);
+              
               return (
-                <div
-                  key={key}
-                  className="px-4 py-3 grid grid-cols-[50px_50px_1fr_1fr] gap-3 items-start border-b border-border/50 hover:bg-muted/30 transition-colors"
-                >
-                  <div className="text-xs text-muted-foreground pt-2">
-                    <span className="font-mono">{entry.index}</span>
-                    <p className="text-[10px] truncate" title={entry.msbtFile}>
-                      {entry.msbtFile.split('/').pop()}
-                    </p>
+                <Card key={idx} className="p-4 border-border/50 hover:border-border transition-colors">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs text-muted-foreground mb-1">{entry.msbtFile} • {entry.label}</p>
+                      <p className="font-body text-sm mb-2">{entry.original}</p>
+                      {isTechnical && (
+                        <p className="text-xs text-accent mb-2">⚠️ نص تقني - تحتاج حذر في الترجمة</p>
+                      )}
+                      <input
+                        type="text"
+                        value={translation}
+                        onChange={(e) => updateTranslation(key, e.target.value)}
+                        placeholder="أدخل الترجمة..."
+                        className="w-full px-3 py-2 rounded bg-background border border-border font-body text-sm"
+                      />
+                    </div>
+                    <div className="flex gap-1">
+                      {isProtected && <Tag className="w-5 h-5 text-accent" />}
+                    </div>
                   </div>
-                  <button
-                    onClick={() => toggleProtection(key)}
-                    title={isProtected ? "إزالة الحماية من العكس" : "حماية من عكس النص"}
-                    className={`px-2 py-1 rounded text-xs font-bold transition-colors ${
-                      isProtected
-                        ? "bg-primary/20 text-primary border border-primary/30"
-                        : "bg-muted/50 text-muted-foreground border border-border hover:bg-muted"
-                    }`}
-                  >
-                    {isProtected ? "🔒" : "🔓"}
-                  </button>
-                  <div className="text-sm text-muted-foreground py-2 break-words font-body flex items-start gap-2 flex-wrap" dir="ltr">
-                    {isTechnicalText(entry.original) && !state?.technicalBypass?.has(key) && (
-                      <div className="flex items-center gap-1 text-xs bg-destructive/20 text-destructive px-2 py-1 rounded flex-shrink-0 font-bold w-full">
-                        <AlertTriangle className="w-3 h-3 flex-shrink-0" />
-                        <span className="flex-1">نص تقني - قد يسبب مشاكل إذا تمت ترجمته</span>
-                        <button
-                          onClick={() => toggleTechnicalBypass(key)}
-                          className="text-xs underline hover:no-underline ml-2 flex-shrink-0"
-                          title="السماح بترجمة هذا النص التقني"
-                        >
-                          السماح بالترجمة
-                        </button>
-                      </div>
-                    )}
-                    {isTechnicalText(entry.original) && state?.technicalBypass?.has(key) && (
-                      <span className="text-xs bg-warning/20 text-warning px-2 py-1 rounded flex-shrink-0 font-bold flex items-center gap-1" title="هذا النص التقني مسموح بترجمته">
-                        ⚠️ مسموح بالترجمة
-                        <button
-                          onClick={() => toggleTechnicalBypass(key)}
-                          className="text-xs underline hover:no-underline ml-1"
-                          title="إلغاء السماح بترجمة هذا النص"
-                        >
-                          إلغاء
-                        </button>
-                      </span>
-                    )}
-                    <span>{entry.original || <span className="italic text-muted-foreground/50">(فارغ)</span>}</span>
-                  </div>
-                  <div>
-                    {(() => {
-                      const translation = state.translations[key] || '';
-                      const originalLen = entry.original.length;
-                      const translationLen = translation.length;
-                      const isOverLength = originalLen > 0 && translationLen > 0 && translationLen > originalLen * 1.2;
-                      const overPercent = originalLen > 0 ? Math.round(((translationLen - originalLen) / originalLen) * 100) : 0;
-                      return (
-                        <>
-                          <div className="flex items-center gap-1">
-                            <Input
-                              value={translation}
-                              onChange={(e) => updateTranslation(key, e.target.value)}
-                              placeholder={entry.original ? "اكتب الترجمة..." : ""}
-                              dir="rtl"
-                              className={`font-body text-sm ${isOverLength ? 'border-destructive ring-destructive/30 ring-1' : ''}`}
-                            />
-                            {showPreview && translation && (
-                              <button
-                                onClick={() => setPreviewKey(key)}
-                                className="p-1.5 rounded text-muted-foreground hover:text-secondary transition-colors flex-shrink-0"
-                                title="معاينة في صندوق الحوار"
-                              >
-                                <Eye className="w-4 h-4" />
-                              </button>
-                            )}
-                          </div>
-                          {isOverLength && (
-                            <div className="flex items-center gap-1 mt-1 text-xs text-destructive">
-                              <AlertTriangle className="w-3 h-3" />
-                              <span>أطول بنسبة {overPercent}% من الأصل ({translationLen}/{originalLen} حرف)</span>
-                            </div>
-                          )}
-                        </>
-                      );
-                    })()}
-                  </div>
-                </div>
+                </Card>
               );
-            })}
+            })
+          )}
         </div>
-
-        {/* Zelda Dialogue Preview Modal */}
-        {showPreview && previewKey && (() => {
-          const entry = state.entries.find(e => `${e.msbtFile}:${e.index}` === previewKey);
-          if (!entry) return null;
-          return (
-            <ZeldaDialoguePreview
-              original={entry.original}
-              translation={state.translations[previewKey] || ''}
-              label={`${entry.msbtFile.split('/').pop()} #${entry.index}`}
-              onClose={() => setPreviewKey(null)}
-            />
-          );
-        })()}
       </div>
-    </div>
     </div>
   );
 };
