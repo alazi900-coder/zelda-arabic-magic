@@ -653,13 +653,31 @@ const Editor = () => {
      }
    };
 
-   const handleApplyShorterTranslation = (key: string, suggested: string) => {
-     if (!state) return;
-     setState(prev => prev ? {
-       ...prev,
-       translations: { ...prev.translations, [key]: suggested },
-     } : null);
-   };
+    const handleApplyShorterTranslation = (key: string, suggested: string) => {
+      if (!state) return;
+      setState(prev => prev ? {
+        ...prev,
+        translations: { ...prev.translations, [key]: suggested },
+      } : null);
+    };
+
+    const handleApplyAllShorterTranslations = () => {
+      if (!state || !shortSuggestions) return;
+      
+      const updates: Record<string, string> = {};
+      shortSuggestions.forEach((suggestion: any) => {
+        updates[suggestion.key] = suggestion.suggested;
+      });
+
+      setState(prev => prev ? {
+        ...prev,
+        translations: { ...prev.translations, ...updates },
+      } : null);
+
+      setShortSuggestions(null);
+      setLastSaved(`✅ تم تطبيق ${Object.keys(updates).length} اقتراح قصير`);
+      setTimeout(() => setLastSaved(""), 3000);
+    };
 
   const handleStopTranslate = () => {
     if (abortControllerRef.current) {
@@ -1174,14 +1192,23 @@ const Editor = () => {
                        ✓ تطبيق المقترح
                      </Button>
                    </div>
-                 ))}
-               </div>
-               <Button variant="ghost" size="sm" onClick={() => setShortSuggestions(null)} className="mt-3 text-xs">
-                 إغلاق الاقتراحات ✕
-               </Button>
-             </CardContent>
-           </Card>
-         )}
+                  ))}
+                </div>
+                <div className="flex gap-2 mt-3">
+                  <Button 
+                    size="sm"
+                    onClick={handleApplyAllShorterTranslations}
+                    className="text-xs h-7 flex-1"
+                  >
+                    ✓ تطبيق الكل ({shortSuggestions.length})
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={() => setShortSuggestions(null)} className="mt-0 text-xs">
+                    إغلاق الاقتراحات ✕
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
         {!user && (
           <Card className="mb-4 border-primary/30 bg-primary/5">
