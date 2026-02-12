@@ -696,6 +696,15 @@ const Editor = () => {
           </Card>
           <Card className="flex-1 min-w-[140px]">
             <CardContent className="flex items-center gap-3 p-4">
+              <FileText className="w-5 h-5 text-destructive" />
+              <div>
+                <p className="text-lg font-display font-bold">{state.entries.length - translatedCount}</p>
+                <p className="text-xs text-muted-foreground">غير مترجم</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="flex-1 min-w-[140px]">
+            <CardContent className="flex items-center gap-3 p-4">
               <Tag className="w-5 h-5 text-accent" />
               <div>
                 <p className="text-lg font-display font-bold">{state.protectedEntries?.size || 0} / {state.entries.length}</p>
