@@ -22,6 +22,7 @@ interface EditorState {
   translations: Record<string, string>;
   protectedEntries?: Set<string>;
   glossary?: string; // glossary text for AI translation context
+  technicalBypass?: Set<string>; // technical entries allowed for manual translation
 }
 
 const AUTOSAVE_DELAY = 1500;
@@ -104,6 +105,7 @@ const Editor = () => {
   const [lastSaved, setLastSaved] = useState<string>("");
   const [cloudSyncing, setCloudSyncing] = useState(false);
   const [cloudStatus, setCloudStatus] = useState("");
+  const [technicalEditingMode, setTechnicalEditingMode] = useState<string | null>(null); // key of technical entry being edited
   const navigate = useNavigate();
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -118,6 +120,17 @@ const Editor = () => {
       newProtected.add(key);
     }
     setState(prev => prev ? { ...prev, protectedEntries: newProtected } : null);
+  };
+
+  const toggleTechnicalBypass = (key: string) => {
+    if (!state) return;
+    const newBypass = new Set(state.technicalBypass || []);
+    if (newBypass.has(key)) {
+      newBypass.delete(key);
+    } else {
+      newBypass.add(key);
+    }
+    setState(prev => prev ? { ...prev, technicalBypass: newBypass } : null);
   };
 
   const handleProtectAllArabic = () => {
@@ -167,8 +180,13 @@ const Editor = () => {
         const mergedTranslations = { ...autoTranslations, ...stored.translations };
         
         // Restore protected entries from array to Set
-        const protectedSet = new Set(
-          Array.isArray(stored.protectedEntries) ? stored.protectedEntries : []
+        const protectedSet = new Set<string>(
+          Array.isArray(stored.protectedEntries) ? (stored.protectedEntries as string[]) : []
+        );
+
+        // Restore technical bypass entries from array to Set
+        const bypassSet = new Set<string>(
+          Array.isArray((stored as any).technicalBypass) ? ((stored as any).technicalBypass as string[]) : []
         );
 
         // Auto-protect newly detected Arabic entries
@@ -184,6 +202,7 @@ const Editor = () => {
           entries: stored.entries,
           translations: mergedTranslations,
           protectedEntries: protectedSet,
+          technicalBypass: bypassSet,
         });
 
         const autoCount = Object.keys(autoTranslations).length;
@@ -202,6 +221,7 @@ const Editor = () => {
       entries: editorState.entries,
       translations: editorState.translations,
       protectedEntries: Array.from(editorState.protectedEntries || []),
+      technicalBypass: Array.from(editorState.technicalBypass || []),
     });
     setLastSaved(`آخر حفظ: ${new Date().toLocaleTimeString("ar-SA")}`);
   }, []);
@@ -993,9 +1013,31 @@ const Editor = () => {
                   >
                     {isProtected ? "🔒" : "🔓"}
                   </button>
-                  <div className="text-sm text-muted-foreground py-2 break-words font-body flex items-start gap-2" dir="ltr">
-                    {isTechnicalText(entry.original) && (
-                      <span className="text-xs bg-warning/20 text-warning px-2 py-1 rounded mt-0.5 flex-shrink-0 font-bold" title="نص تقني قد لا يحتاج ترجمة">⚙️ تقني</span>
+                  <div className="text-sm text-muted-foreground py-2 break-words font-body flex items-start gap-2 flex-wrap" dir="ltr">
+                    {isTechnicalText(entry.original) && !state?.technicalBypass?.has(key) && (
+                      <div className="flex items-center gap-1 text-xs bg-destructive/20 text-destructive px-2 py-1 rounded flex-shrink-0 font-bold w-full">
+                        <AlertTriangle className="w-3 h-3 flex-shrink-0" />
+                        <span className="flex-1">نص تقني - قد يسبب مشاكل إذا تمت ترجمته</span>
+                        <button
+                          onClick={() => toggleTechnicalBypass(key)}
+                          className="text-xs underline hover:no-underline ml-2 flex-shrink-0"
+                          title="السماح بترجمة هذا النص التقني"
+                        >
+                          السماح بالترجمة
+                        </button>
+                      </div>
+                    )}
+                    {isTechnicalText(entry.original) && state?.technicalBypass?.has(key) && (
+                      <span className="text-xs bg-warning/20 text-warning px-2 py-1 rounded flex-shrink-0 font-bold flex items-center gap-1" title="هذا النص التقني مسموح بترجمته">
+                        ⚠️ مسموح بالترجمة
+                        <button
+                          onClick={() => toggleTechnicalBypass(key)}
+                          className="text-xs underline hover:no-underline ml-1"
+                          title="إلغاء السماح بترجمة هذا النص"
+                        >
+                          إلغاء
+                        </button>
+                      </span>
                     )}
                     <span>{entry.original || <span className="italic text-muted-foreground/50">(فارغ)</span>}</span>
                   </div>
