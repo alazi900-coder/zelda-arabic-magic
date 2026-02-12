@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Upload, FileArchive, ArrowRight, Loader2, CheckCircle2, AlertCircle, Clock, Download } from "lucide-react";
+import { Upload, FileArchive, ArrowRight, Loader2, CheckCircle2, AlertCircle, Clock, Download, Pencil } from "lucide-react";
 
 type ProcessingStage = "idle" | "uploading" | "decompressing-dict" | "decompressing-lang" | "extracting" | "reshaping" | "repacking" | "compressing" | "done" | "error";
 
@@ -35,6 +35,7 @@ const Process = () => {
   const [stage, setStage] = useState<ProcessingStage>("idle");
   const [logs, setLogs] = useState<string[]>([]);
   const [resultData, setResultData] = useState<{ modifiedCount: number; fileSize: number; compressedFileSize: number | null; entries: any[]; blobUrl: string } | null>(null);
+  const [extracting, setExtracting] = useState(false);
   const navigate = useNavigate();
 
   const addLog = (msg: string) => setLogs((prev) => [...prev, `[${new Date().toLocaleTimeString("ar-SA")}] ${msg}`]);
@@ -182,6 +183,65 @@ const Process = () => {
 
   const isProcessing = !["idle", "done", "error"].includes(stage);
 
+  const handleExtract = async () => {
+    if (!langFile || !dictFile) return;
+    setExtracting(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("langFile", langFile);
+      formData.append("dictFile", dictFile);
+
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+      const response = await fetch(`${supabaseUrl}/functions/v1/arabize?mode=extract`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const ct = response.headers.get('content-type') || '';
+        if (ct.includes('json')) {
+          const err = await response.json();
+          throw new Error(err.error || `خطأ ${response.status}`);
+        }
+        throw new Error(`خطأ ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      // Store files as base64 for later use in editor
+      const langBuf = await langFile.arrayBuffer();
+      const dictBuf = await dictFile.arrayBuffer();
+      const toBase64 = (buf: ArrayBuffer) => {
+        const bytes = new Uint8Array(buf);
+        const CHUNK = 0x8000;
+        const parts: string[] = [];
+        for (let i = 0; i < bytes.length; i += CHUNK) {
+          parts.push(String.fromCharCode(...bytes.subarray(i, i + CHUNK)));
+        }
+        return btoa(parts.join(''));
+      };
+
+      sessionStorage.setItem("editorLangFile", toBase64(langBuf));
+      sessionStorage.setItem("editorDictFile", toBase64(dictBuf));
+      sessionStorage.setItem("editorLangFileName", langFile.name);
+      sessionStorage.setItem("editorDictFileName", dictFile.name);
+      sessionStorage.setItem("editorState", JSON.stringify({
+        entries: data.entries,
+        translations: {},
+      }));
+
+      navigate("/editor");
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "خطأ غير معروف");
+    } finally {
+      setExtracting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen py-8 px-4">
       <div className="max-w-3xl mx-auto">
@@ -214,21 +274,31 @@ const Process = () => {
           />
         </div>
 
-        {/* Start Button */}
-        <div className="text-center mb-8">
+        {/* Start Buttons */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
           <Button
             size="lg"
             onClick={startProcessing}
-            disabled={!langFile || !dictFile || isProcessing}
+            disabled={!langFile || !dictFile || isProcessing || extracting}
             className="font-display font-bold text-lg px-10 py-6"
           >
             {isProcessing ? (
-              <>
-                <Loader2 className="w-5 h-5 animate-spin" />
-                جاري المعالجة...
-              </>
+              <><Loader2 className="w-5 h-5 animate-spin" /> جاري المعالجة...</>
             ) : (
-              "ابدأ التعريب 🚀"
+              "ابدأ التعريب التلقائي 🚀"
+            )}
+          </Button>
+          <Button
+            size="lg"
+            variant="outline"
+            onClick={handleExtract}
+            disabled={!langFile || !dictFile || isProcessing || extracting}
+            className="font-display font-bold text-lg px-10 py-6"
+          >
+            {extracting ? (
+              <><Loader2 className="w-5 h-5 animate-spin" /> جاري الاستخراج...</>
+            ) : (
+              <><Pencil className="w-5 h-5" /> تحرير يدوي ✍️</>
             )}
           </Button>
         </div>

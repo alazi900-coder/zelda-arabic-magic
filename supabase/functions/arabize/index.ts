@@ -9,7 +9,6 @@ import {
   compress,
 } from "https://deno.land/x/zstd_wasm@0.0.21/deno/zstd.ts";
 
-// Initialize WASM module
 await init();
 
 const corsHeaders = {
@@ -19,43 +18,24 @@ const corsHeaders = {
 
 // Arabic character maps for reshaping
 const ARABIC_CHARS: Record<string, [string, string, string, string]> = {
-  // [isolated, initial, medial, final]
-  'ا': ['ﺍ', 'ﺍ', 'ﺎ', 'ﺎ'],
-  'أ': ['ﺃ', 'ﺃ', 'ﺄ', 'ﺄ'],
-  'إ': ['ﺇ', 'ﺇ', 'ﺈ', 'ﺈ'],
-  'آ': ['ﺁ', 'ﺁ', 'ﺂ', 'ﺂ'],
-  'ب': ['ﺏ', 'ﺑ', 'ﺒ', 'ﺐ'],
-  'ت': ['ﺕ', 'ﺗ', 'ﺘ', 'ﺖ'],
-  'ث': ['ﺙ', 'ﺛ', 'ﺜ', 'ﺚ'],
-  'ج': ['ﺝ', 'ﺟ', 'ﺠ', 'ﺞ'],
-  'ح': ['ﺡ', 'ﺣ', 'ﺤ', 'ﺢ'],
-  'خ': ['ﺥ', 'ﺧ', 'ﺨ', 'ﺦ'],
-  'د': ['ﺩ', 'ﺩ', 'ﺪ', 'ﺪ'],
-  'ذ': ['ﺫ', 'ﺫ', 'ﺬ', 'ﺬ'],
-  'ر': ['ﺭ', 'ﺭ', 'ﺮ', 'ﺮ'],
-  'ز': ['ﺯ', 'ﺯ', 'ﺰ', 'ﺰ'],
-  'س': ['ﺱ', 'ﺳ', 'ﺴ', 'ﺲ'],
-  'ش': ['ﺵ', 'ﺷ', 'ﺸ', 'ﺶ'],
-  'ص': ['ﺹ', 'ﺻ', 'ﺼ', 'ﺺ'],
-  'ض': ['ﺽ', 'ﺿ', 'ﻀ', 'ﺾ'],
-  'ط': ['ﻁ', 'ﻃ', 'ﻄ', 'ﻂ'],
-  'ظ': ['ﻅ', 'ﻇ', 'ﻈ', 'ﻆ'],
-  'ع': ['ﻉ', 'ﻋ', 'ﻌ', 'ﻊ'],
-  'غ': ['ﻍ', 'ﻏ', 'ﻐ', 'ﻎ'],
-  'ف': ['ﻑ', 'ﻓ', 'ﻔ', 'ﻒ'],
-  'ق': ['ﻕ', 'ﻗ', 'ﻘ', 'ﻖ'],
-  'ك': ['ﻙ', 'ﻛ', 'ﻜ', 'ﻚ'],
-  'ل': ['ﻝ', 'ﻟ', 'ﻠ', 'ﻞ'],
-  'م': ['ﻡ', 'ﻣ', 'ﻤ', 'ﻢ'],
-  'ن': ['ﻥ', 'ﻧ', 'ﻨ', 'ﻦ'],
-  'ه': ['ﻩ', 'ﻫ', 'ﻬ', 'ﻪ'],
-  'و': ['ﻭ', 'ﻭ', 'ﻮ', 'ﻮ'],
-  'ي': ['ﻱ', 'ﻳ', 'ﻴ', 'ﻲ'],
-  'ى': ['ﻯ', 'ﻯ', 'ﻰ', 'ﻰ'],
-  'ة': ['ﺓ', 'ﺓ', 'ﺔ', 'ﺔ'],
-  'ء': ['ء', 'ء', 'ء', 'ء'],
-  'ؤ': ['ﺅ', 'ﺅ', 'ﺆ', 'ﺆ'],
-  'ئ': ['ﺉ', 'ﺋ', 'ﺌ', 'ﺊ'],
+  'ا': ['ﺍ', 'ﺍ', 'ﺎ', 'ﺎ'], 'أ': ['ﺃ', 'ﺃ', 'ﺄ', 'ﺄ'],
+  'إ': ['ﺇ', 'ﺇ', 'ﺈ', 'ﺈ'], 'آ': ['ﺁ', 'ﺁ', 'ﺂ', 'ﺂ'],
+  'ب': ['ﺏ', 'ﺑ', 'ﺒ', 'ﺐ'], 'ت': ['ﺕ', 'ﺗ', 'ﺘ', 'ﺖ'],
+  'ث': ['ﺙ', 'ﺛ', 'ﺜ', 'ﺚ'], 'ج': ['ﺝ', 'ﺟ', 'ﺠ', 'ﺞ'],
+  'ح': ['ﺡ', 'ﺣ', 'ﺤ', 'ﺢ'], 'خ': ['ﺥ', 'ﺧ', 'ﺨ', 'ﺦ'],
+  'د': ['ﺩ', 'ﺩ', 'ﺪ', 'ﺪ'], 'ذ': ['ﺫ', 'ﺫ', 'ﺬ', 'ﺬ'],
+  'ر': ['ﺭ', 'ﺭ', 'ﺮ', 'ﺮ'], 'ز': ['ﺯ', 'ﺯ', 'ﺰ', 'ﺰ'],
+  'س': ['ﺱ', 'ﺳ', 'ﺴ', 'ﺲ'], 'ش': ['ﺵ', 'ﺷ', 'ﺸ', 'ﺶ'],
+  'ص': ['ﺹ', 'ﺻ', 'ﺼ', 'ﺺ'], 'ض': ['ﺽ', 'ﺿ', 'ﻀ', 'ﺾ'],
+  'ط': ['ﻁ', 'ﻃ', 'ﻄ', 'ﻂ'], 'ظ': ['ﻅ', 'ﻇ', 'ﻈ', 'ﻆ'],
+  'ع': ['ﻉ', 'ﻋ', 'ﻌ', 'ﻊ'], 'غ': ['ﻍ', 'ﻏ', 'ﻐ', 'ﻎ'],
+  'ف': ['ﻑ', 'ﻓ', 'ﻔ', 'ﻒ'], 'ق': ['ﻕ', 'ﻗ', 'ﻘ', 'ﻖ'],
+  'ك': ['ﻙ', 'ﻛ', 'ﻜ', 'ﻚ'], 'ل': ['ﻝ', 'ﻟ', 'ﻠ', 'ﻞ'],
+  'م': ['ﻡ', 'ﻣ', 'ﻤ', 'ﻢ'], 'ن': ['ﻥ', 'ﻧ', 'ﻨ', 'ﻦ'],
+  'ه': ['ﻩ', 'ﻫ', 'ﻬ', 'ﻪ'], 'و': ['ﻭ', 'ﻭ', 'ﻮ', 'ﻮ'],
+  'ي': ['ﻱ', 'ﻳ', 'ﻴ', 'ﻲ'], 'ى': ['ﻯ', 'ﻯ', 'ﻰ', 'ﻰ'],
+  'ة': ['ﺓ', 'ﺓ', 'ﺔ', 'ﺔ'], 'ء': ['ء', 'ء', 'ء', 'ء'],
+  'ؤ': ['ﺅ', 'ﺅ', 'ﺆ', 'ﺆ'], 'ئ': ['ﺉ', 'ﺋ', 'ﺌ', 'ﺊ'],
   'لا': ['ﻻ', 'ﻻ', 'ﻼ', 'ﻼ'],
 };
 
@@ -69,43 +49,26 @@ function isArabic(ch: string): boolean {
 function reshapeArabic(text: string): string {
   const result: string[] = [];
   const chars = [...text];
-
   for (let i = 0; i < chars.length; i++) {
     const ch = chars[i];
     const forms = ARABIC_CHARS[ch];
-
-    if (!forms) {
-      result.push(ch);
-      continue;
-    }
-
+    if (!forms) { result.push(ch); continue; }
     const prevArabic = i > 0 && isArabic(chars[i - 1]) && !NON_CONNECTING.has(chars[i - 1]);
     const nextArabic = i < chars.length - 1 && isArabic(chars[i + 1]) && ARABIC_CHARS[chars[i + 1]];
-
-    if (prevArabic && nextArabic && !NON_CONNECTING.has(ch)) {
-      result.push(forms[2]); // medial
-    } else if (prevArabic && !NON_CONNECTING.has(ch)) {
-      result.push(forms[3]); // final  
-    } else if (nextArabic && !NON_CONNECTING.has(ch)) {
-      result.push(forms[1]); // initial
-    } else {
-      result.push(forms[0]); // isolated
-    }
+    if (prevArabic && nextArabic && !NON_CONNECTING.has(ch)) result.push(forms[2]);
+    else if (prevArabic && !NON_CONNECTING.has(ch)) result.push(forms[3]);
+    else if (nextArabic && !NON_CONNECTING.has(ch)) result.push(forms[1]);
+    else result.push(forms[0]);
   }
-
   return result.join('');
 }
 
 function reverseBidi(text: string): string {
-  const lines = text.split('\n');
-  return lines.map(line => {
-    return [...line].reverse().join('');
-  }).join('\n');
+  return text.split('\n').map(line => [...line].reverse().join('')).join('\n');
 }
 
 function processArabicText(text: string): string {
-  const reshaped = reshapeArabic(text);
-  return reverseBidi(reshaped);
+  return reverseBidi(reshapeArabic(text));
 }
 
 interface MsbtEntry {
@@ -119,31 +82,28 @@ interface MsbtEntry {
 function parseMSBT(data: Uint8Array): { entries: MsbtEntry[]; raw: Uint8Array } {
   const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
   const magic = String.fromCharCode(...data.slice(0, 8));
-  
-  if (!magic.startsWith('MsgStdBn')) {
-    throw new Error('Not a valid MSBT file');
-  }
+  if (!magic.startsWith('MsgStdBn')) throw new Error('Not a valid MSBT file');
 
   const entries: MsbtEntry[] = [];
   let pos = 0x20;
-  
+
   while (pos < data.length - 16) {
     const sectionMagic = String.fromCharCode(...data.slice(pos, pos + 4));
     const sectionSize = view.getUint32(pos + 4, true);
-    
+
     if (sectionMagic === 'TXT2') {
       const txt2Start = pos + 16;
       const entryCount = view.getUint32(txt2Start, true);
-      
+
       for (let i = 0; i < entryCount; i++) {
         const entryOffset = view.getUint32(txt2Start + 4 + i * 4, true);
-        const nextOffset = i < entryCount - 1 
+        const nextOffset = i < entryCount - 1
           ? view.getUint32(txt2Start + 4 + (i + 1) * 4, true)
           : sectionSize;
-        
+
         const absOffset = txt2Start + entryOffset;
         const textLength = nextOffset - entryOffset;
-        
+
         let text = '';
         for (let j = 0; j < textLength - 2; j += 2) {
           const charCode = view.getUint16(absOffset + j, true);
@@ -158,17 +118,10 @@ function parseMSBT(data: Uint8Array): { entries: MsbtEntry[]; raw: Uint8Array } 
         }
 
         const processed = processArabicText(text);
-        entries.push({
-          label: `entry_${i}`,
-          originalText: text,
-          processedText: processed,
-          offset: absOffset,
-          size: textLength,
-        });
+        entries.push({ label: `entry_${i}`, originalText: text, processedText: processed, offset: absOffset, size: textLength });
       }
       break;
     }
-    
     pos += 16 + sectionSize;
     pos = (pos + 15) & ~15;
   }
@@ -179,7 +132,6 @@ function parseMSBT(data: Uint8Array): { entries: MsbtEntry[]; raw: Uint8Array } 
 function injectMSBT(data: Uint8Array, entries: MsbtEntry[]): Uint8Array {
   const result = new Uint8Array(data);
   const view = new DataView(result.buffer);
-  
   for (const entry of entries) {
     const encoded = new Uint8Array(entry.processedText.length * 2);
     for (let i = 0; i < entry.processedText.length; i++) {
@@ -187,60 +139,43 @@ function injectMSBT(data: Uint8Array, entries: MsbtEntry[]): Uint8Array {
       encoded[i * 2] = code & 0xFF;
       encoded[i * 2 + 1] = (code >> 8) & 0xFF;
     }
-    
     if (encoded.length <= entry.size - 2) {
       result.set(encoded, entry.offset);
       view.setUint16(entry.offset + encoded.length, 0, true);
     }
   }
-  
   return result;
 }
 
-interface SarcFile {
-  name: string;
-  data: Uint8Array;
-}
+interface SarcFile { name: string; data: Uint8Array; }
 
 function parseSARC(data: Uint8Array): SarcFile[] {
   const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
   const magic = String.fromCharCode(...data.slice(0, 4));
-  
-  if (magic !== 'SARC') {
-    throw new Error('Not a valid SARC archive');
-  }
-  
+  if (magic !== 'SARC') throw new Error('Not a valid SARC archive');
+
   const headerSize = view.getUint16(4, true);
   const dataOffset = view.getUint32(0x0C, true);
-  
   const sfatOffset = headerSize;
   const sfatMagic = String.fromCharCode(...data.slice(sfatOffset, sfatOffset + 4));
   if (sfatMagic !== 'SFAT') throw new Error('Missing SFAT section');
-  
+
   const nodeCount = view.getUint16(sfatOffset + 6, true);
   const sfntOffset = sfatOffset + 12 + nodeCount * 16;
-  
   const files: SarcFile[] = [];
-  
+
   for (let i = 0; i < nodeCount; i++) {
     const nodeOffset = sfatOffset + 12 + i * 16;
     const nameOffset = (view.getUint32(nodeOffset + 4, true) & 0x00FFFFFF) * 4;
     const fileDataStart = view.getUint32(nodeOffset + 8, true);
     const fileDataEnd = view.getUint32(nodeOffset + 12, true);
-    
+
     let name = '';
-    let pos = sfntOffset + 8 + nameOffset;
-    while (pos < data.length && data[pos] !== 0) {
-      name += String.fromCharCode(data[pos]);
-      pos++;
-    }
-    
-    files.push({
-      name,
-      data: data.slice(dataOffset + fileDataStart, dataOffset + fileDataEnd),
-    });
+    let p = sfntOffset + 8 + nameOffset;
+    while (p < data.length && data[p] !== 0) { name += String.fromCharCode(data[p]); p++; }
+
+    files.push({ name, data: data.slice(dataOffset + fileDataStart, dataOffset + fileDataEnd) });
   }
-  
   return files;
 }
 
@@ -250,21 +185,60 @@ function packSARC(files: SarcFile[], originalData: Uint8Array): Uint8Array {
   const dataOffset = view.getUint32(0x0C, true);
   const sfatOffset = headerSize;
   const nodeCount = view.getUint16(sfatOffset + 6, true);
-  
   const result = new Uint8Array(originalData);
-  
+
   for (let i = 0; i < nodeCount && i < files.length; i++) {
     const nodeOffset = sfatOffset + 12 + i * 16;
     const fileDataStart = view.getUint32(nodeOffset + 8, true);
     const fileDataEnd = view.getUint32(nodeOffset + 12, true);
     const originalSize = fileDataEnd - fileDataStart;
-    
     if (files[i].data.length <= originalSize) {
       result.set(files[i].data, dataOffset + fileDataStart);
     }
   }
-  
   return result;
+}
+
+// Decompress lang file helper
+function decompressLangFile(langData: Uint8Array, dictData: Uint8Array, langFileName: string): { sarcData: Uint8Array; rawDict: Uint8Array | null } {
+  const isSARC = String.fromCharCode(...langData.slice(0, 4)) === 'SARC';
+  if (isSARC) return { sarcData: langData, rawDict: null };
+
+  const isZstd = langData[0] === 0x28 && langData[1] === 0xB5 && langData[2] === 0x2F && langData[3] === 0xFD;
+  if (!isZstd) throw new Error('الملف غير معروف: لا يبدو أنه SARC مضغوط أو SARC غير مضغوط');
+
+  // Decompress dictionary SARC
+  let dictSarcData: Uint8Array;
+  try { dictSarcData = decompress(dictData); } catch { dictSarcData = dictData; }
+
+  const dictFiles = parseSARC(dictSarcData);
+  console.log(`Found ${dictFiles.length} dictionaries: ${dictFiles.map(f => f.name).join(', ')}`);
+
+  let rawDict: Uint8Array | null = null;
+  let selectedDictName = '';
+  const lowerName = langFileName.toLowerCase();
+
+  if (lowerName.includes('.pack.')) {
+    const f = dictFiles.find(f => f.name.endsWith('pack.zsdic'));
+    if (f) { rawDict = f.data; selectedDictName = f.name; }
+  }
+  if (!rawDict && lowerName.includes('.bcett.byml.')) {
+    const f = dictFiles.find(f => f.name.endsWith('bcett.byml.zsdic'));
+    if (f) { rawDict = f.data; selectedDictName = f.name; }
+  }
+  if (!rawDict) {
+    const f = dictFiles.find(f => f.name.endsWith('zs.zsdic') && !f.name.includes('pack') && !f.name.includes('bcett'));
+    if (f) { rawDict = f.data; selectedDictName = f.name; }
+  }
+  if (!rawDict && dictFiles.length > 0) { rawDict = dictFiles[0].data; selectedDictName = dictFiles[0].name; }
+  if (!rawDict) throw new Error('لم يتم العثور على قاموس .zsdic في ملف القاموس');
+
+  console.log(`Using dictionary: ${selectedDictName} (${rawDict.length} bytes)`);
+  const dctx = createDCtx();
+  const sarcData = decompressUsingDict(dctx, langData, rawDict);
+  console.log(`Decompressed: ${langData.length} -> ${sarcData.length} bytes`);
+
+  return { sarcData, rawDict };
 }
 
 Deno.serve(async (req) => {
@@ -273,6 +247,9 @@ Deno.serve(async (req) => {
   }
 
   try {
+    const url = new URL(req.url);
+    const mode = url.searchParams.get('mode') || 'auto'; // 'auto' | 'extract' | 'build'
+
     const formData = await req.formData();
     const langFile = formData.get('langFile') as File;
     const dictFile = formData.get('dictFile') as File;
@@ -287,119 +264,89 @@ Deno.serve(async (req) => {
     const langData = new Uint8Array(await langFile.arrayBuffer());
     const dictData = new Uint8Array(await dictFile.arrayBuffer());
 
-    let sarcData: Uint8Array;
-    let rawDict: Uint8Array | null = null;
+    // Decompress
+    const { sarcData, rawDict } = decompressLangFile(langData, dictData, langFile.name || '');
 
-    // Check if already SARC (uncompressed)
-    const isSARC = String.fromCharCode(...langData.slice(0, 4)) === 'SARC';
-    
-    if (isSARC) {
-      sarcData = langData;
-    } else {
-      // Try to detect zstd compression (magic: 0x28 0xB5 0x2F 0xFD)
-      const isZstd = langData[0] === 0x28 && langData[1] === 0xB5 && langData[2] === 0x2F && langData[3] === 0xFD;
-      
-      if (!isZstd) {
-        return new Response(
-          JSON.stringify({ error: 'الملف غير معروف: لا يبدو أنه SARC مضغوط أو SARC غير مضغوط' }),
-          { status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
+    // Extract SARC
+    const files = parseSARC(sarcData);
+    console.log(`Extracted ${files.length} files from SARC`);
+
+    // ===== EXTRACT MODE: Return all entries as JSON =====
+    if (mode === 'extract') {
+      const allEntries: { msbtFile: string; index: number; label: string; original: string; maxBytes: number }[] = [];
+
+      for (const file of files) {
+        if (file.name.endsWith('.msbt')) {
+          try {
+            const { entries } = parseMSBT(file.data);
+            for (let i = 0; i < entries.length; i++) {
+              allEntries.push({
+                msbtFile: file.name,
+                index: i,
+                label: entries[i].label,
+                original: entries[i].originalText,
+                maxBytes: entries[i].size,
+              });
+            }
+          } catch (e) {
+            console.warn(`Failed to parse MSBT ${file.name}: ${e instanceof Error ? e.message : 'unknown'}`);
+          }
+        }
       }
 
-      // Step 1: Decompress dictionary SARC archive
-      console.log(`Decompressing dictionary file (${dictData.length} bytes)...`);
-      let dictSarcData: Uint8Array;
-      try {
-        dictSarcData = decompress(dictData);
-        console.log(`Dictionary SARC decompressed: ${dictData.length} -> ${dictSarcData.length} bytes`);
-      } catch {
-        dictSarcData = dictData;
-        console.log(`Dictionary file is raw: ${dictSarcData.length} bytes`);
-      }
+      console.log(`Extract mode: found ${allEntries.length} entries across ${files.filter(f => f.name.endsWith('.msbt')).length} MSBT files`);
 
-      // Step 2: Parse SARC to extract individual .zsdic files
-      const dictFiles = parseSARC(dictSarcData);
-      console.log(`Found ${dictFiles.length} dictionaries: ${dictFiles.map(f => f.name).join(', ')}`);
-
-      // Step 3: Select correct dictionary based on language filename
-      const langFileName = (langFile?.name || '').toLowerCase();
-      let selectedDictName = '';
-
-      if (langFileName.includes('.pack.')) {
-        const found = dictFiles.find(f => f.name.endsWith('pack.zsdic'));
-        if (found) { rawDict = found.data; selectedDictName = found.name; }
-      }
-      if (!rawDict && langFileName.includes('.bcett.byml.')) {
-        const found = dictFiles.find(f => f.name.endsWith('bcett.byml.zsdic'));
-        if (found) { rawDict = found.data; selectedDictName = found.name; }
-      }
-      if (!rawDict) {
-        const found = dictFiles.find(f => f.name.endsWith('zs.zsdic') && !f.name.includes('pack') && !f.name.includes('bcett'));
-        if (found) { rawDict = found.data; selectedDictName = found.name; }
-      }
-      if (!rawDict && dictFiles.length > 0) {
-        rawDict = dictFiles[0].data;
-        selectedDictName = dictFiles[0].name;
-      }
-
-      if (!rawDict) {
-        return new Response(
-          JSON.stringify({ error: 'لم يتم العثور على قاموس .zsdic في ملف القاموس' }),
-          { status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-      }
-
-      console.log(`Using dictionary: ${selectedDictName} (${rawDict.length} bytes)`);
-
-      // Step 4: Decompress language file using selected dictionary
-      try {
-        console.log(`Decompressing language file (${langData.length} bytes) with dictionary...`);
-        const dctx = createDCtx();
-        sarcData = decompressUsingDict(dctx, langData, rawDict);
-        console.log(`Decompressed successfully: ${langData.length} -> ${sarcData.length} bytes`);
-      } catch (e) {
-        const error = e instanceof Error ? e.message : 'Unknown error';
-        console.error(`Decompression with dictionary failed: ${error}`);
-        return new Response(
-          JSON.stringify({ 
-            error: `فشل فك الضغط مع القاموس: ${error}`,
-            hint: 'تأكد من أن الملف مضغوط بـ Zstandard مع القاموس بشكل صحيح',
-            dictionary_used: selectedDictName,
-            dictionaries_available: dictFiles.map(f => f.name),
-          }),
-          { status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-      }
+      return new Response(JSON.stringify({
+        entries: allEntries,
+        fileCount: files.length,
+        msbtCount: files.filter(f => f.name.endsWith('.msbt')).length,
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
-    // Step 2: Extract SARC
-    const files = parseSARC(sarcData);
-    console.log(`Extracted ${files.length} files from SARC: ${files.map(f => f.name).join(', ')}`);
-    
-    // Step 3: Process MSBT files
+    // ===== BUILD MODE: Use custom translations =====
+    // translations = JSON map: { "msbtFile:index": "translated text" }
+    const translationsRaw = formData.get('translations') as string | null;
+    const translations: Record<string, string> = translationsRaw ? JSON.parse(translationsRaw) : {};
+    const hasCustomTranslations = Object.keys(translations).length > 0;
+
     let modifiedCount = 0;
     const processedFiles = files.map(file => {
       if (file.name.endsWith('.msbt')) {
         try {
           const { entries, raw } = parseMSBT(file.data);
+
+          if (hasCustomTranslations) {
+            // Apply custom translations with Arabic processing
+            for (let i = 0; i < entries.length; i++) {
+              const key = `${file.name}:${i}`;
+              if (translations[key] !== undefined && translations[key] !== '') {
+                entries[i].processedText = processArabicText(translations[key]);
+                modifiedCount++;
+              }
+            }
+          } else {
+            // Auto mode: process all entries
+            modifiedCount += entries.length;
+          }
+
           const injected = injectMSBT(raw, entries);
-          console.log(`Processed MSBT ${file.name}: ${entries.length} entries`);
-          modifiedCount += entries.length;
           return { ...file, data: injected };
         } catch (e) {
-          console.warn(`Failed to process MSBT ${file.name}: ${e instanceof Error ? e.message : 'unknown error'}`);
+          console.warn(`Failed to process MSBT ${file.name}: ${e instanceof Error ? e.message : 'unknown'}`);
           return file;
         }
       }
       return file;
     });
-    
-    console.log(`Total modified entries: ${modifiedCount}`);
 
-    // Step 4: Repack SARC
+    console.log(`Modified ${modifiedCount} entries (mode: ${hasCustomTranslations ? 'custom' : 'auto'})`);
+
+    // Repack
     const repackedData = packSARC(processedFiles, sarcData);
 
-    // Step 5: Re-compress with Zstandard using dictionary
+    // Re-compress
     let outputData: Uint8Array = repackedData;
     let isCompressed = false;
     try {
@@ -416,11 +363,9 @@ Deno.serve(async (req) => {
       }
     } catch (e) {
       console.error(`Re-compression failed: ${e instanceof Error ? e.message : 'Unknown'}`);
-      // Fall back to uncompressed
-      outputData = repackedData;
     }
 
-    // Build a small entries preview (first 20 entries from first MSBT)
+    // Preview
     let entriesPreview: { label: string; original: string; processed: string }[] = [];
     try {
       for (const f of processedFiles) {
@@ -434,9 +379,8 @@ Deno.serve(async (req) => {
           break;
         }
       }
-    } catch { /* ignore preview errors */ }
+    } catch { /* ignore */ }
 
-    // Return binary data with metadata in headers
     return new Response(outputData, {
       headers: {
         ...corsHeaders,
@@ -450,6 +394,7 @@ Deno.serve(async (req) => {
       },
     });
   } catch (error) {
+    console.error(`Error: ${error instanceof Error ? error.message : 'Unknown'}`);
     return new Response(
       JSON.stringify({ error: error instanceof Error ? error.message : 'حدث خطأ غير متوقع' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
