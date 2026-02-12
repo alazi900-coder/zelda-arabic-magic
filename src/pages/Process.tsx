@@ -220,9 +220,20 @@ const Process = () => {
       await idbSet("editorDictFile", dictBuf);
       await idbSet("editorLangFileName", langFile.name);
       await idbSet("editorDictFileName", dictFile.name);
+      // Auto-detect already-Arabic entries and pre-populate as translated
+      const autoTranslations: Record<string, string> = {};
+      const arabicRegex = /[\u0600-\u06FF]/;
+      for (const entry of data.entries) {
+        if (arabicRegex.test(entry.original)) {
+          const key = `${entry.msbtFile}:${entry.index}`;
+          autoTranslations[key] = entry.original;
+        }
+      }
+      console.log(`Auto-detected ${Object.keys(autoTranslations).length} pre-translated Arabic entries`);
+
       await idbSet("editorState", {
         entries: data.entries,
-        translations: {},
+        translations: autoTranslations,
       });
 
       navigate("/editor");
