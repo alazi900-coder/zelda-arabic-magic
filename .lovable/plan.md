@@ -1,107 +1,59 @@
 
+## خطة تحسين نظام التصنيف بناءً على مسار الملف
 
-## إصلاح خطأ code -32: استخراج القاموس الصحيح من أرشيف SARC
+### المشكلة الحالية
+النظام الحالي يعتمد على البحث عن **كلمات مفتاحية** (keywords) في اسم الملف فقط، مما يؤدي إلى تصنيفات غير دقيقة. على سبيل المثال، ملف قد يحتوي على كلمة "item" فيتم تصنيفه كـ "أدوات" حتى لو كان في مسار مختلف تماماً.
 
-### المشكلة
-ملف `ZsDic.pack.zs` عند فك ضغطه ينتج **أرشيف SARC** يحتوي على عدة قواميس `.zsdic` منفصلة. الكود الحالي يستخدم أرشيف SARC الكامل (~393KB) كقاموس، وهذا خاطئ -- يجب استخراج ملف `.zsdic` المناسب منه.
+### الحل المقترح
+استبدال نظام الكلمات المفتاحية بـ **نظام يعتمد على مسار الملف (File Path)**، مع 8 فئات دقيقة محددة بقواعس واضحة.
 
-بالإضافة لذلك، يوجد كتلة كود مكررة (الأسطر 311-324) تفك ضغط القاموس مرتين.
-
-### التغييرات في `supabase/functions/arabize/index.ts`
-
-#### 1. إزالة الكتلة المكررة (الأسطر 318-324)
-حذف فك ضغط القاموس المكرر الذي لا فائدة منه.
-
-#### 2. استبدال منطق القاموس (الأسطر 309-331)
-بدلاً من استخدام الناتج الخام كقاموس مباشرة، سيتم:
-
-1. فك ضغط `ZsDic.pack.zs` بالطريقة العادية (بدون قاموس)
-2. استخدام `parseSARC()` الموجودة بالفعل لاستخراج ملفات `.zsdic`
-3. اختيار القاموس المناسب تلقائياً حسب اسم ملف اللغة:
-   - `.pack.zs` --> `pack.zsdic`
-   - `.bcett.byml.zs` --> `bcett.byml.zsdic`
-   - غير ذلك --> `zs.zsdic`
-4. استخدام القاموس المستخرج مع `decompressUsingDict` و `compressUsingDict`
-
-### التدفق المصحح
-
-```text
-ZsDic.pack.zs
-  | decompress() -- عادي بدون قاموس
-  v
-SARC Archive (~393KB)
-  | parseSARC()
-  v
-zs.zsdic / pack.zsdic / bcett.byml.zsdic
-  |
-  v
-langFile.zs + pack.zsdic --> decompressUsingDict() --> SARC Data
-  |
-  v
-MSBT Processing --> Modified SARC
-  |
-  v
-compressUsingDict(modified, pack.zsdic) --> output.zs
+### الفئات الجديدة (8 فئات بدلاً من 13)
+```
+1. 🎒 الأسلحة والأدوات والمواد        → ActorMsg/PouchContent.msbt
+2. 🖥️ القوائم والواجهة              → LayoutMsg/*
+3. 📜 المهام والتحديات               → ChallengeMsg/*
+4. 📖 حوارات القصة والمهام           → EventFlowMsg/*
+5. 🗺️ المواقع والخرائط             → LocationMsg/*
+6. 💡 النصائح والتعليمات            → StaticMsg/(Tips.msbt|GuideKeyIcon.msbt)
+7. 🎭 أسماء الشخصيات والأعداء      → ActorMsg/* (except PouchContent.msbt)
+8. 📁 أخرى                         → جميع الملفات الأخرى
 ```
 
-### التفاصيل التقنية
+### التغييرات المطلوبة في الكود
 
-الكود الجديد للأسطر 309-342:
+#### 1. تحديث `FILE_CATEGORIES` (الأسطر 37-51)
+- استبدال الـ 13 فئة بـ 8 فئات جديدة فقط
+- حذف `keywords` من كل فئة (لن نعود نستخدمها)
+- إضافة وصف يوضح قواعد التصنيف في التعليقات
 
-```typescript
-// Step 1: Decompress dictionary SARC archive
-console.log(`Decompressing dictionary file (${dictData.length} bytes)...`);
-let dictSarcData: Uint8Array;
-try {
-  dictSarcData = decompress(dictData);
-  console.log(`Dictionary SARC decompressed: ${dictData.length} -> ${dictSarcData.length} bytes`);
-} catch {
-  dictSarcData = dictData;
-  console.log(`Dictionary file is raw: ${dictSarcData.length} bytes`);
-}
+#### 2. إعادة كتابة دالة `categorizeFile` (السطور 53-61)
+- تغيير المنطق من البحث عن كلمات مفتاحية إلى فحص مسار الملف
+- تطبيق القواعس بالترتيب الأولوية (الفئات الأكثر تحديداً أولاً):
+  ```
+  الأولوية 1: ActorMsg/PouchContent.msbt → "inventory" (🎒)
+  الأولوية 2: LayoutMsg/* → "ui" (🖥️)
+  الأولوية 3: ChallengeMsg/* → "challenge" (📜)
+  الأولوية 4: EventFlowMsg/* → "story" (📖)
+  الأولوية 5: LocationMsg/* → "map" (🗺️)
+  الأولوية 6: StaticMsg/(Tips|GuideKeyIcon) → "tips" (💡)
+  الأولوية 7: ActorMsg/* (not PouchContent) → "character" (🎭)
+  الأولوية 8: باقي الملفات → "other" (📁)
+  ```
 
-// Step 2: Parse SARC to extract individual .zsdic files
-const dictFiles = parseSARC(dictSarcData);
-console.log(`Found ${dictFiles.length} dictionaries: ${dictFiles.map(f => f.name).join(', ')}`);
+#### 3. تحديث واجهة المستخدمة
+- تحديث أسماء الفئات في زرار الفلترة (الأسطر حول 751)
+- الفئات الجديدة ستظهر تلقائياً بعد تحديث `FILE_CATEGORIES`
 
-// Step 3: Select correct dictionary based on language filename
-const langFileName = (langFile?.name || '').toLowerCase();
-let selectedDictName = '';
+### التأثيرات على باقي الكود
+- جميع المتغيرات والدوال التي تستخدم `categorizeFile()` ستعمل تلقائياً مع القواعس الجديدة
+- لا حاجة لتعديل منطق الفلترة أو الترجمة التلقائية أو الحماية (Protection)
+- الـ IDs الجديدة للفئات: `inventory`, `ui`, `challenge`, `story`, `map`, `tips`, `character`, `other`
 
-if (langFileName.includes('.pack.')) {
-  const found = dictFiles.find(f => f.name.endsWith('pack.zsdic'));
-  if (found) { rawDict = found.data; selectedDictName = found.name; }
-}
-if (!rawDict && langFileName.includes('.bcett.byml.')) {
-  const found = dictFiles.find(f => f.name.endsWith('bcett.byml.zsdic'));
-  if (found) { rawDict = found.data; selectedDictName = found.name; }
-}
-if (!rawDict) {
-  const found = dictFiles.find(f => f.name.endsWith('zs.zsdic') && !f.name.includes('pack') && !f.name.includes('bcett'));
-  if (found) { rawDict = found.data; selectedDictName = found.name; }
-}
-if (!rawDict && dictFiles.length > 0) {
-  rawDict = dictFiles[0].data;
-  selectedDictName = dictFiles[0].name;
-}
+### الملفات المراد تعديلها
+- **`src/pages/Editor.tsx`** - تحديث `FILE_CATEGORIES` و `categorizeFile()`
 
-if (!rawDict) {
-  return new Response(
-    JSON.stringify({ error: 'لم يتم العثور على قاموس .zsdic في ملف القاموس' }),
-    { status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-  );
-}
-
-console.log(`Using dictionary: ${selectedDictName} (${rawDict.length} bytes)`);
-
-// Step 4: Decompress language file using selected dictionary
-console.log(`Decompressing language file (${langData.length} bytes) with dictionary...`);
-const dctx = createDCtx();
-sarcData = decompressUsingDict(dctx, langData, rawDict);
-console.log(`Decompressed successfully: ${langData.length} -> ${sarcData.length} bytes`);
-```
-
-### النتيجة المتوقعة
-- اختفاء خطأ code -32 لأن القاموس الآن هو ملف `.zsdic` الفعلي وليس أرشيف SARC كامل
-- إعادة ضغط النتيجة بنفس القاموس لضمان التوافق مع اللعبة
-
+### الفوائد المتوقعة
+✅ دقة تصنيف أعلى بناءً على مسار الملف الفعلي  
+✅ نظام أبسط وأكثر موثوقية  
+✅ سهولة إضافة قواعس جديدة في المستقبل  
+✅ لا تضارب بين ملفات من فئات مختلفة لكن بأسماء متشابهة
