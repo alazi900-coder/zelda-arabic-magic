@@ -353,8 +353,8 @@ Deno.serve(async (req) => {
       console.log(`Re-compressing SARC (${repackedData.length} bytes)...`);
       if (rawDict) {
         const cctx = createCCtx();
-        // Use level 16 for better game compatibility (matching other TotK modding tools)
-        outputData = compressUsingDict(cctx, repackedData, rawDict, 16);
+        // Level 3 (default) to avoid CPU time limit on edge functions
+        outputData = compressUsingDict(cctx, repackedData, rawDict, 3);
         isCompressed = true;
         console.log(`Compressed with dict: ${repackedData.length} -> ${outputData.length} bytes`);
       } else {
