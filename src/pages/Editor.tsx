@@ -733,7 +733,57 @@ const Editor = () => {
           </div>
         )}
 
-        {/* Category Chips */}
+        {/* Category Statistics Bar */}
+        {state && (
+          <div className="mb-6 p-4 bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 rounded-lg border border-border">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+              <span className="text-sm font-display font-bold text-foreground">نسبة الإنجاز حسب الفئة:</span>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+              {FILE_CATEGORIES.map(cat => {
+                const catProgress = categoryProgress[cat.id];
+                if (!catProgress || catProgress.total === 0) return null;
+                const percentage = Math.round((catProgress.translated / catProgress.total) * 100);
+                return (
+                  <div key={cat.id} className="space-y-1">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-display font-semibold">{cat.emoji} {cat.label}</span>
+                      <span className="text-xs text-muted-foreground">{percentage}%</span>
+                    </div>
+                    <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-primary to-secondary transition-all duration-300"
+                        style={{ width: `${percentage}%` }}
+                      ></div>
+                    </div>
+                    <span className="text-xs text-muted-foreground">{catProgress.translated}/{catProgress.total}</span>
+                  </div>
+                );
+              })}
+              {categoryProgress["other"]?.total > 0 && (
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-display font-semibold">📁 أخرى</span>
+                    <span className="text-xs text-muted-foreground">
+                      {Math.round((categoryProgress["other"].translated / categoryProgress["other"].total) * 100)}%
+                    </span>
+                  </div>
+                  <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-primary to-secondary transition-all duration-300"
+                      style={{ width: `${Math.round((categoryProgress["other"].translated / categoryProgress["other"].total) * 100)}%` }}
+                    ></div>
+                  </div>
+                  <span className="text-xs text-muted-foreground">
+                    {categoryProgress["other"].translated}/{categoryProgress["other"].total}
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         <div className="mb-4">
           <div className="flex items-center gap-2 mb-2">
             <Tag className="w-4 h-4 text-muted-foreground" />
