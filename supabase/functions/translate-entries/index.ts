@@ -5,14 +5,35 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// --- Tag Protection: replace [content] with TAG_N placeholders ---
+function protectTags(text: string): { cleaned: string; tags: Map<string, string> } {
+  const tags = new Map<string, string>();
+  let counter = 0;
+  const cleaned = text.replace(/\[[^\]]*\]/g, (match) => {
+    const placeholder = `TAG_${counter++}`;
+    tags.set(placeholder, match);
+    return placeholder;
+  });
+  return { cleaned, tags };
+}
+
+function restoreTags(text: string, tags: Map<string, string>): string {
+  let result = text;
+  for (const [placeholder, original] of tags) {
+    result = result.replace(placeholder, original);
+  }
+  return result;
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { entries } = await req.json() as {
+    const { entries, glossary } = await req.json() as {
       entries: { key: string; original: string }[];
+      glossary?: string;
     };
 
     if (!entries || entries.length === 0) {
@@ -22,11 +43,22 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Build prompt with all entries
-    const textsBlock = entries.map((e, i) => `[${i}] ${e.original}`).join('\n');
+    // Protect tags in brackets before translation
+    const protectedEntries = entries.map(e => {
+      const { cleaned, tags } = protectTags(e.original);
+      return { ...e, cleaned, tags };
+    });
+
+    // Build prompt with cleaned texts
+    const textsBlock = protectedEntries.map((e, i) => `[${i}] ${e.cleaned}`).join('\n');
+
+    let glossarySection = '';
+    if (glossary && glossary.trim()) {
+      glossarySection = `\n\nIMPORTANT - Use this glossary for consistent terminology:\n${glossary}\n`;
+    }
 
     const prompt = `You are a professional game translator. Translate the following game UI texts from English/Japanese to Arabic. 
-Keep any placeholder tags like \uFFFC intact. Return ONLY a JSON array of strings in the same order. No explanations.
+Keep any placeholder tags like \uFFFC and TAG_0, TAG_1, etc. intact in their exact positions. Return ONLY a JSON array of strings in the same order. No explanations.${glossarySection}
 
 Texts:
 ${textsBlock}`;
@@ -68,11 +100,11 @@ ${textsBlock}`;
 
     const translations: string[] = JSON.parse(sanitized);
 
-    // Map back to keys
+    // Map back to keys and restore protected tags
     const result: Record<string, string> = {};
-    for (let i = 0; i < Math.min(entries.length, translations.length); i++) {
+    for (let i = 0; i < Math.min(protectedEntries.length, translations.length); i++) {
       if (translations[i] && translations[i].trim()) {
-        result[entries[i].key] = translations[i];
+        result[protectedEntries[i].key] = restoreTags(translations[i], protectedEntries[i].tags);
       }
     }
 

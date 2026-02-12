@@ -29,12 +29,42 @@ function hasArabicChars(text: string): boolean {
 // BiDi reversal for LTR game engine - no reshaping needed (game handles Arabic shaping natively)
 function reverseBidi(text: string): string {
   return text.split('\n').map(line => {
-    // Reverse entire line for RTL base direction in LTR renderer
-    const reversed = [...line].reverse().join('');
-    // Fix Latin/number runs that got wrongly reversed
-    return reversed.replace(/[a-zA-Z0-9][a-zA-Z0-9 .,!?:;'"\-]*/g, match => {
-      return [...match].reverse().join('');
-    });
+    // Split line into segments: Arabic runs vs LTR runs (Latin, digits, punctuation)
+    // This ensures numbers and English words maintain correct LTR order after reversal
+    const segments: { text: string; isLTR: boolean }[] = [];
+    let current = '';
+    let currentIsLTR: boolean | null = null;
+
+    for (const ch of line) {
+      const charIsArabic = isArabicChar(ch);
+      const charIsLTR = /[a-zA-Z0-9]/.test(ch);
+      
+      if (charIsArabic) {
+        if (currentIsLTR === true && current) {
+          segments.push({ text: current, isLTR: true });
+          current = '';
+        }
+        currentIsLTR = false;
+        current += ch;
+      } else if (charIsLTR) {
+        if (currentIsLTR === false && current) {
+          segments.push({ text: current, isLTR: false });
+          current = '';
+        }
+        currentIsLTR = true;
+        current += ch;
+      } else {
+        // Neutral chars (spaces, punctuation) - attach to current run
+        current += ch;
+      }
+    }
+    if (current) segments.push({ text: current, isLTR: currentIsLTR === true });
+
+    // Reverse segment order (RTL base), but keep LTR segment content intact
+    return segments.reverse().map(seg => {
+      if (seg.isLTR) return seg.text; // Keep English/numbers in original order
+      return [...seg.text].reverse().join(''); // Reverse Arabic characters
+    }).join('');
   }).join('\n');
 }
 
