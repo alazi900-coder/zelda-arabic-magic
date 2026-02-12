@@ -138,6 +138,8 @@ const Editor = () => {
    const [quickReviewMode, setQuickReviewMode] = useState(false);
    const [quickReviewIndex, setQuickReviewIndex] = useState(0);
    const [showQualityStats, setShowQualityStats] = useState(false);
+   const [translatingSingle, setTranslatingSingle] = useState<string | null>(null);
+   const [previousTranslations, setPreviousTranslations] = useState<Record<string, string>>({});
   
   const navigate = useNavigate();
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
@@ -397,10 +399,76 @@ const Editor = () => {
 
   const updateTranslation = (key: string, value: string) => {
     if (!state) return;
+    // Save previous value for undo
+    const prev = state.translations[key] || '';
+    if (prev !== value) {
+      setPreviousTranslations(old => ({ ...old, [key]: prev }));
+    }
     setState(prev => prev ? {
       ...prev,
       translations: { ...prev.translations, [key]: value },
     } : null);
+  };
+
+  const handleUndoTranslation = (key: string) => {
+    if (previousTranslations[key] !== undefined) {
+      setState(prev => prev ? {
+        ...prev,
+        translations: { ...prev.translations, [key]: previousTranslations[key] },
+      } : null);
+      setPreviousTranslations(old => {
+        const copy = { ...old };
+        delete copy[key];
+        return copy;
+      });
+    }
+  };
+
+  const handleTranslateSingle = async (entry: ExtractedEntry) => {
+    if (!state) return;
+    const key = `${entry.msbtFile}:${entry.index}`;
+    setTranslatingSingle(key);
+
+    try {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+      // Gather context from neighbors
+      const idx = state.entries.indexOf(entry);
+      const contextEntries = [-2, -1, 1, 2]
+        .map(offset => state.entries[idx + offset])
+        .filter(n => n && state.translations[`${n.msbtFile}:${n.index}`]?.trim())
+        .map(n => ({
+          key: `${n.msbtFile}:${n.index}`,
+          original: n.original,
+          translation: state.translations[`${n.msbtFile}:${n.index}`],
+        }));
+
+      const response = await fetch(`${supabaseUrl}/functions/v1/translate-entries`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${supabaseKey}`,
+          'apikey': supabaseKey,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          entries: [{ key, original: entry.original }],
+          glossary: state.glossary || '',
+          context: contextEntries.length > 0 ? contextEntries : undefined,
+        }),
+      });
+
+      if (!response.ok) throw new Error(`خطأ ${response.status}`);
+      const data = await response.json();
+      
+      if (data.translations && data.translations[key]) {
+        updateTranslation(key, data.translations[key]);
+      }
+    } catch (err) {
+      console.error('Single translate error:', err);
+    } finally {
+      setTranslatingSingle(null);
+    }
   };
 
   const translatedCount = useMemo(() => {
@@ -1583,15 +1651,38 @@ const Editor = () => {
                           <RotateCcw className="w-3 h-3" /> تصحيح المعكوس
                         </Button>
                       )}
-                      <input
-                        type="text"
-                        value={translation}
-                        onChange={(e) => updateTranslation(key, e.target.value)}
-                        placeholder="أدخل الترجمة..."
-                        className="w-full px-3 py-2 rounded bg-background border border-border font-body text-sm"
-                      />
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          value={translation}
+                          onChange={(e) => updateTranslation(key, e.target.value)}
+                          placeholder="أدخل الترجمة..."
+                          className="flex-1 px-3 py-2 rounded bg-background border border-border font-body text-sm"
+                        />
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-9 w-9 shrink-0"
+                          onClick={() => handleTranslateSingle(entry)}
+                          disabled={translatingSingle === key}
+                          title="ترجمة هذا النص"
+                        >
+                          {translatingSingle === key ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4 text-primary" />}
+                        </Button>
+                        {previousTranslations[key] !== undefined && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-9 w-9 shrink-0"
+                            onClick={() => handleUndoTranslation(key)}
+                            title="تراجع عن التعديل"
+                          >
+                            <RotateCcw className="w-4 h-4 text-muted-foreground" />
+                          </Button>
+                        )}
+                      </div>
                     </div>
-                    <div className="flex gap-1">
+                    <div className="flex flex-col gap-1 items-center">
                       {isProtected && <Tag className="w-5 h-5 text-accent" />}
                     </div>
                   </div>
