@@ -735,6 +735,22 @@ const Editor = () => {
           )}
         </div>
 
+        {/* Progress Bar */}
+        <div className="space-y-2 mb-6">
+          <div className="flex justify-between items-center">
+            <span className="text-sm font-display font-bold text-foreground">
+              نسبة الإنجاز
+            </span>
+            <span className="text-sm font-body text-muted-foreground">
+              {translatedCount} / {state.entries.length} ({state.entries.length > 0 ? Math.round((translatedCount / state.entries.length) * 100) : 0}%)
+            </span>
+          </div>
+          <Progress 
+            value={state.entries.length > 0 ? (translatedCount / state.entries.length) * 100 : 0}
+            className="h-2.5"
+          />
+        </div>
+
         {/* Status Messages */}
         {lastSaved && (
           <Card className="mb-4 border-secondary/30 bg-secondary/5">
