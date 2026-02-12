@@ -27,6 +27,7 @@ const Editor = () => {
   const [state, setState] = useState<EditorState | null>(null);
   const [search, setSearch] = useState("");
   const [filterFile, setFilterFile] = useState<string>("all");
+  const [filterStatus, setFilterStatus] = useState<"all" | "translated" | "untranslated">("all");
   const [building, setBuilding] = useState(false);
   const [buildProgress, setBuildProgress] = useState("");
   const [translating, setTranslating] = useState(false);
@@ -75,14 +76,22 @@ const Editor = () => {
   const filteredEntries = useMemo(() => {
     if (!state) return [];
     return state.entries.filter(e => {
+      const key = `${e.msbtFile}:${e.index}`;
+      const isTranslated = state.translations[key] && state.translations[key].trim() !== '';
+      
       const matchSearch = !search ||
         e.original.toLowerCase().includes(search.toLowerCase()) ||
         e.label.includes(search) ||
-        (state.translations[`${e.msbtFile}:${e.index}`] || '').includes(search);
+        (state.translations[key] || '').includes(search);
       const matchFile = filterFile === "all" || e.msbtFile === filterFile;
-      return matchSearch && matchFile;
+      const matchStatus = 
+        filterStatus === "all" || 
+        (filterStatus === "translated" && isTranslated) ||
+        (filterStatus === "untranslated" && !isTranslated);
+      
+      return matchSearch && matchFile && matchStatus;
     });
-  }, [state, search, filterFile]);
+  }, [state, search, filterFile, filterStatus]);
 
   const updateTranslation = (key: string, value: string) => {
     if (!state) return;
@@ -346,8 +355,21 @@ const Editor = () => {
               dir="rtl"
             />
           </div>
+          
           <div className="flex items-center gap-2">
             <Filter className="w-4 h-4 text-muted-foreground" />
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value as any)}
+              className="border border-border rounded-md px-3 py-2 bg-background text-sm font-body"
+            >
+              <option value="all">كل النصوص</option>
+              <option value="translated">✅ المترجم فقط ({state ? Object.values(state.translations).filter(v => v.trim()).length : 0})</option>
+              <option value="untranslated">❌ غير المترجم ({state ? state.entries.length - Object.values(state.translations).filter(v => v.trim()).length : 0})</option>
+            </select>
+          </div>
+
+          <div className="flex items-center gap-2">
             <select
               value={filterFile}
               onChange={(e) => setFilterFile(e.target.value)}
