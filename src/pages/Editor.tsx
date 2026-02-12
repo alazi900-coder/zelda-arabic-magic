@@ -561,6 +561,79 @@ const Editor = () => {
     }
   };
 
+  const handleSaveGlossaryToCloud = async () => {
+    if (!state || !user || !state.glossary) {
+      setCloudStatus('❌ لا يوجد قاموس لحفظه');
+      setTimeout(() => setCloudStatus(""), 3000);
+      return;
+    }
+
+    setCloudSyncing(true);
+    setCloudStatus('جاري حفظ القاموس...');
+
+    try {
+      const { data, error } = await supabase
+        .from('glossaries')
+        .insert({
+          user_id: user.id,
+          name: 'قاموسي',
+          content: state.glossary,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      setCloudStatus(`✅ تم حفظ القاموس في السحابة (${state.glossary.split('\n').filter(l => l.includes('=') && l.trim()).length} مصطلح)`);
+      setTimeout(() => setCloudStatus(""), 3000);
+    } catch (error) {
+      console.error('خطأ في حفظ القاموس:', error);
+      setCloudStatus('❌ فشل حفظ القاموس في السحابة');
+      setTimeout(() => setCloudStatus(""), 3000);
+    } finally {
+      setCloudSyncing(false);
+    }
+  };
+
+  const handleLoadGlossaryFromCloud = async () => {
+    if (!user) {
+      setCloudStatus('❌ يجب تسجيل الدخول أولاً');
+      setTimeout(() => setCloudStatus(""), 3000);
+      return;
+    }
+
+    setCloudSyncing(true);
+    setCloudStatus('جاري تحميل القاموس من السحابة...');
+
+    try {
+      const { data, error } = await supabase
+        .from('glossaries')
+        .select('content')
+        .eq('user_id', user.id)
+        .order('updated_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (!data) {
+        setCloudStatus('❌ لم يتم العثور على قاموس محفوظ');
+        setTimeout(() => setCloudStatus(""), 3000);
+        return;
+      }
+
+      setState(prev => prev ? { ...prev, glossary: data.content } : null);
+      setCloudStatus(`✅ تم تحميل القاموس من السحابة (${data.content.split('\n').filter(l => l.includes('=') && l.trim()).length} مصطلح)`);
+      setTimeout(() => setCloudStatus(""), 3000);
+    } catch (error) {
+      console.error('خطأ في تحميل القاموس من السحابة:', error);
+      setCloudStatus('❌ فشل تحميل القاموس من السحابة');
+      setTimeout(() => setCloudStatus(""), 3000);
+    } finally {
+      setCloudSyncing(false);
+    }
+  };
+
   const handleCloudSave = async () => {
     if (!state || !user) return;
     
@@ -936,6 +1009,14 @@ const Editor = () => {
           </Button>
           <Button variant="outline" onClick={handleLoadDefaultGlossary} className="font-body border-primary/30 text-primary hover:text-primary">
             📖 القاموس الافتراضي
+          </Button>
+          <Button variant="outline" onClick={handleSaveGlossaryToCloud} disabled={!user || cloudSyncing} className="font-body border-secondary/30 text-secondary hover:text-secondary">
+            {cloudSyncing ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <CloudUpload className="w-4 h-4 mr-2" />}
+            حفظ القاموس ☁️
+          </Button>
+          <Button variant="outline" onClick={handleLoadGlossaryFromCloud} disabled={!user || cloudSyncing} className="font-body border-secondary/30 text-secondary hover:text-secondary">
+            {cloudSyncing ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Cloud className="w-4 h-4 mr-2" />}
+            تحميل من السحابة ☁️
           </Button>
           <Button variant="outline" onClick={handleFixAllReversed} className="font-body border-accent/30 text-accent hover:text-accent">
             <RotateCcw className="w-4 h-4" /> تصحيح الكل (عربي معكوس)
