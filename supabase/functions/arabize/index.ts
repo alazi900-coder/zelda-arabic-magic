@@ -296,8 +296,14 @@ Deno.serve(async (req) => {
             for (let i = 0; i < entries.length; i++) {
               const key = `${file.name}:${i}`;
               if (translations[key] !== undefined && translations[key] !== '') {
-                entries[i].processedText = processArabicText(translations[key]);
-                modifiedCount++;
+                // If translation equals original text, skip processing (text was already correct in MSBT)
+                if (translations[key] === entries[i].originalText) {
+                  // Keep original - no processing needed
+                  modifiedCount++;
+                } else {
+                  entries[i].processedText = processArabicText(translations[key]);
+                  modifiedCount++;
+                }
               }
             }
           } else {
