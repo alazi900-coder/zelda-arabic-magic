@@ -16,147 +16,33 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
-// Arabic diacritics (tashkeel) marks
-const ARABIC_DIACRITICS = new Set([
-  '\u064B', // Fathatan ً
-  '\u064C', // Dammatan ٌ
-  '\u064D', // Kasratan ٍ
-  '\u064E', // Fatha َ
-  '\u064F', // Damma ُ
-  '\u0650', // Kasra ِ
-  '\u0651', // Shadda ّ
-  '\u0652', // Sukun ْ
-  '\u0653', // Maddah ٓ
-  '\u0654', // Hamza above ٔ
-  '\u0655', // Hamza below ٕ
-  '\u0656', // Subscript alef ٖ
-  '\u0657', // Inverted damma ٗ
-  '\u0658', // Mark noon ٘
-  '\u0670', // Superscript alef ٰ
-]);
-
-// Arabic character maps for reshaping
-const ARABIC_CHARS: Record<string, [string, string, string, string]> = {
-  'ا': ['ﺍ', 'ﺍ', 'ﺎ', 'ﺎ'], 'أ': ['ﺃ', 'ﺃ', 'ﺄ', 'ﺄ'],
-  'إ': ['ﺇ', 'ﺇ', 'ﺈ', 'ﺈ'], 'آ': ['ﺁ', 'ﺁ', 'ﺂ', 'ﺂ'],
-  'ب': ['ﺏ', 'ﺑ', 'ﺒ', 'ﺖ'], 'ت': ['ﺕ', 'ﺗ', 'ﺘ', 'ﺖ'],
-  'ث': ['ﺙ', 'ﺛ', 'ﺜ', 'ﺚ'], 'ج': ['ﺝ', 'ﺟ', 'ﺠ', 'ﺞ'],
-  'ح': ['ﺡ', 'ﺣ', 'ﺤ', 'ﺢ'], 'خ': ['ﺥ', 'ﺧ', 'ﺨ', 'ﺦ'],
-  'د': ['ﺩ', 'ﺩ', 'ﺪ', 'ﺪ'], 'ذ': ['ﺫ', 'ﺫ', 'ﺬ', 'ﺬ'],
-  'ر': ['ﺭ', 'ﺭ', 'ﺮ', 'ﺮ'], 'ز': ['ﺯ', 'ﺯ', 'ﺰ', 'ﺰ'],
-  'س': ['ﺱ', 'ﺳ', 'ﺴ', 'ﺲ'], 'ش': ['ﺵ', 'ﺷ', 'ﺸ', 'ﺶ'],
-  'ص': ['ﺹ', 'ﺻ', 'ﺼ', 'ﺺ'], 'ض': ['ﺽ', 'ﺿ', 'ﻀ', 'ﺾ'],
-  'ط': ['ﻁ', 'ﻃ', 'ﻄ', 'ﻂ'], 'ظ': ['ﻅ', 'ﻇ', 'ﻈ', 'ﻆ'],
-  'ع': ['ﻉ', 'ﻋ', 'ﻌ', 'ﻊ'], 'غ': ['ﻍ', 'ﻏ', 'ﻐ', 'ﻎ'],
-  'ف': ['ﻑ', 'ﻓ', 'ﻔ', 'ﻒ'], 'ق': ['ﻕ', 'ﻗ', 'ﻘ', 'ﻖ'],
-  'ك': ['ﻙ', 'ﻛ', 'ﻜ', 'ﻚ'], 'ل': ['ﻝ', 'ﻟ', 'ﻠ', 'ﻞ'],
-  'م': ['ﻡ', 'ﻣ', 'ﻤ', 'ﻢ'], 'ن': ['ﻥ', 'ﻧ', 'ﻨ', 'ﻦ'],
-  'ه': ['ﻩ', 'ﻫ', 'ﻬ', 'ﻪ'], 'و': ['ﻭ', 'ﻭ', 'ﻮ', 'ﻮ'],
-  'ي': ['ﻱ', 'ﻳ', 'ﻴ', 'ﻲ'], 'ى': ['ﻯ', 'ﻯ', 'ﻰ', 'ﻰ'],
-  'ة': ['ﺓ', 'ﺓ', 'ﺔ', 'ﺔ'], 'ء': ['ء', 'ء', 'ء', 'ء'],
-  'ؤ': ['ﺅ', 'ﺅ', 'ﺆ', 'ﺆ'], 'ئ': ['ﺉ', 'ﺋ', 'ﺌ', 'ﺊ'],
-  'لا': ['ﻻ', 'ﻻ', 'ﻼ', 'ﻼ'],
-};
-
-const NON_CONNECTING = new Set(['ا', 'أ', 'إ', 'آ', 'د', 'ذ', 'ر', 'ز', 'و', 'ؤ', 'ة']);
-
-function isArabic(ch: string): boolean {
-  const code = ch.charCodeAt(0);
-  return (code >= 0x0600 && code <= 0x06FF) || (code >= 0xFB50 && code <= 0xFDFF) || (code >= 0xFE70 && code <= 0xFEFF);
-}
-
-// Extract base character without diacritics
-function removeArabicDiacritics(text: string): string {
-  return [...text].filter(ch => !ARABIC_DIACRITICS.has(ch)).join('');
-}
-
-// Reattach diacritics to their base characters in reshaped text
-function reattachDiacritics(reshaped: string, originalWithDiacritics: string): string {
-  const baseless = removeArabicDiacritics(originalWithDiacritics);
-  if (baseless !== removeArabicDiacritics(reshaped)) {
-    // Mismatch - return reshaped as is
-    return reshaped;
-  }
-
-  const result: string[] = [];
-  let origIdx = 0;
-  let reshapedIdx = 0;
-
-  const origChars = [...originalWithDiacritics];
-  const reshapedChars = [...reshaped];
-
-  while (origIdx < origChars.length && reshapedIdx < reshapedChars.length) {
-    if (ARABIC_DIACRITICS.has(origChars[origIdx])) {
-      // Collect diacritics
-      const diacritics: string[] = [];
-      while (origIdx < origChars.length && ARABIC_DIACRITICS.has(origChars[origIdx])) {
-        diacritics.push(origChars[origIdx]);
-        origIdx++;
-      }
-      // Attach to previous reshaped character
-      if (result.length > 0) {
-        result[result.length - 1] += diacritics.join('');
-      }
-    } else {
-      // Base character
-      result.push(reshapedChars[reshapedIdx]);
-      origIdx++;
-      reshapedIdx++;
-    }
-  }
-
-  return result.join('');
-}
-
-function reshapeArabic(text: string): string {
-  // Remove diacritics for processing
-  const withoutDiacritics = removeArabicDiacritics(text);
-  const chars = [...withoutDiacritics];
-  const result: string[] = [];
-
-  for (let i = 0; i < chars.length; i++) {
-    const ch = chars[i];
-    const forms = ARABIC_CHARS[ch];
-    if (!forms) { result.push(ch); continue; }
-    const prevArabic = i > 0 && isArabic(chars[i - 1]) && !NON_CONNECTING.has(chars[i - 1]);
-    const nextArabic = i < chars.length - 1 && isArabic(chars[i + 1]) && ARABIC_CHARS[chars[i + 1]];
-    if (prevArabic && nextArabic && !NON_CONNECTING.has(ch)) result.push(forms[2]);
-    else if (prevArabic && !NON_CONNECTING.has(ch)) result.push(forms[3]);
-    else if (nextArabic && !NON_CONNECTING.has(ch)) result.push(forms[1]);
-    else result.push(forms[0]);
-  }
-
-  const reshaped = result.join('');
-  // Reattach diacritics to reshaped text
-  return reattachDiacritics(reshaped, text);
-}
-
-// Check if a char is Arabic (including reshaped presentation forms)
+// Check if a char is Arabic (standard range)
 function isArabicChar(ch: string): boolean {
   const code = ch.charCodeAt(0);
   return (code >= 0x0600 && code <= 0x06FF) || (code >= 0xFB50 && code <= 0xFDFF) || (code >= 0xFE70 && code <= 0xFEFF);
-}
-
-function reverseBidi(text: string): string {
-  return text.split('\n').map(line => {
-    // Reverse entire line for RTL base direction
-    const reversed = [...line].reverse().join('');
-    // Fix Latin/number runs that got wrongly reversed
-    return reversed.replace(/[a-zA-Z0-9][a-zA-Z0-9 .,!?:;'"\-]*/g, match => {
-      // Reverse the Latin run back to its original order
-      return [...match].reverse().join('');
-    });
-  }).join('\n');
 }
 
 function hasArabicChars(text: string): boolean {
   return [...text].some(ch => isArabicChar(ch));
 }
 
+// BiDi reversal for LTR game engine - no reshaping needed (game handles Arabic shaping natively)
+function reverseBidi(text: string): string {
+  return text.split('\n').map(line => {
+    // Reverse entire line for RTL base direction in LTR renderer
+    const reversed = [...line].reverse().join('');
+    // Fix Latin/number runs that got wrongly reversed
+    return reversed.replace(/[a-zA-Z0-9][a-zA-Z0-9 .,!?:;'"\-]*/g, match => {
+      return [...match].reverse().join('');
+    });
+  }).join('\n');
+}
+
 function processArabicText(text: string): string {
-  // Skip processing for text with no Arabic characters
+  // Skip processing for text with no Arabic characters (keep English as-is)
   if (!hasArabicChars(text)) return text;
-  return reverseBidi(reshapeArabic(text));
+  // Only reverse for BiDi - NO reshaping needed (game engine handles Arabic shaping natively)
+  return reverseBidi(text);
 }
 
 interface MsbtEntry {
