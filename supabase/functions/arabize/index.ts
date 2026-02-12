@@ -16,11 +16,30 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
+// Arabic diacritics (tashkeel) marks
+const ARABIC_DIACRITICS = new Set([
+  '\u064B', // Fathatan ً
+  '\u064C', // Dammatan ٌ
+  '\u064D', // Kasratan ٍ
+  '\u064E', // Fatha َ
+  '\u064F', // Damma ُ
+  '\u0650', // Kasra ِ
+  '\u0651', // Shadda ّ
+  '\u0652', // Sukun ْ
+  '\u0653', // Maddah ٓ
+  '\u0654', // Hamza above ٔ
+  '\u0655', // Hamza below ٕ
+  '\u0656', // Subscript alef ٖ
+  '\u0657', // Inverted damma ٗ
+  '\u0658', // Mark noon ٘
+  '\u0670', // Superscript alef ٰ
+]);
+
 // Arabic character maps for reshaping
 const ARABIC_CHARS: Record<string, [string, string, string, string]> = {
   'ا': ['ﺍ', 'ﺍ', 'ﺎ', 'ﺎ'], 'أ': ['ﺃ', 'ﺃ', 'ﺄ', 'ﺄ'],
   'إ': ['ﺇ', 'ﺇ', 'ﺈ', 'ﺈ'], 'آ': ['ﺁ', 'ﺁ', 'ﺂ', 'ﺂ'],
-  'ب': ['ﺏ', 'ﺑ', 'ﺒ', 'ﺐ'], 'ت': ['ﺕ', 'ﺗ', 'ﺘ', 'ﺖ'],
+  'ب': ['ﺏ', 'ﺑ', 'ﺒ', 'ﺖ'], 'ت': ['ﺕ', 'ﺗ', 'ﺘ', 'ﺖ'],
   'ث': ['ﺙ', 'ﺛ', 'ﺜ', 'ﺚ'], 'ج': ['ﺝ', 'ﺟ', 'ﺠ', 'ﺞ'],
   'ح': ['ﺡ', 'ﺣ', 'ﺤ', 'ﺢ'], 'خ': ['ﺥ', 'ﺧ', 'ﺨ', 'ﺦ'],
   'د': ['ﺩ', 'ﺩ', 'ﺪ', 'ﺪ'], 'ذ': ['ﺫ', 'ﺫ', 'ﺬ', 'ﺬ'],
@@ -46,9 +65,55 @@ function isArabic(ch: string): boolean {
   return (code >= 0x0600 && code <= 0x06FF) || (code >= 0xFB50 && code <= 0xFDFF) || (code >= 0xFE70 && code <= 0xFEFF);
 }
 
-function reshapeArabic(text: string): string {
+// Extract base character without diacritics
+function removeArabicDiacritics(text: string): string {
+  return [...text].filter(ch => !ARABIC_DIACRITICS.has(ch)).join('');
+}
+
+// Reattach diacritics to their base characters in reshaped text
+function reattachDiacritics(reshaped: string, originalWithDiacritics: string): string {
+  const baseless = removeArabicDiacritics(originalWithDiacritics);
+  if (baseless !== removeArabicDiacritics(reshaped)) {
+    // Mismatch - return reshaped as is
+    return reshaped;
+  }
+
   const result: string[] = [];
-  const chars = [...text];
+  let origIdx = 0;
+  let reshapedIdx = 0;
+
+  const origChars = [...originalWithDiacritics];
+  const reshapedChars = [...reshaped];
+
+  while (origIdx < origChars.length && reshapedIdx < reshapedChars.length) {
+    if (ARABIC_DIACRITICS.has(origChars[origIdx])) {
+      // Collect diacritics
+      const diacritics: string[] = [];
+      while (origIdx < origChars.length && ARABIC_DIACRITICS.has(origChars[origIdx])) {
+        diacritics.push(origChars[origIdx]);
+        origIdx++;
+      }
+      // Attach to previous reshaped character
+      if (result.length > 0) {
+        result[result.length - 1] += diacritics.join('');
+      }
+    } else {
+      // Base character
+      result.push(reshapedChars[reshapedIdx]);
+      origIdx++;
+      reshapedIdx++;
+    }
+  }
+
+  return result.join('');
+}
+
+function reshapeArabic(text: string): string {
+  // Remove diacritics for processing
+  const withoutDiacritics = removeArabicDiacritics(text);
+  const chars = [...withoutDiacritics];
+  const result: string[] = [];
+
   for (let i = 0; i < chars.length; i++) {
     const ch = chars[i];
     const forms = ARABIC_CHARS[ch];
@@ -60,7 +125,10 @@ function reshapeArabic(text: string): string {
     else if (nextArabic && !NON_CONNECTING.has(ch)) result.push(forms[1]);
     else result.push(forms[0]);
   }
-  return result.join('');
+
+  const reshaped = result.join('');
+  // Reattach diacritics to reshaped text
+  return reattachDiacritics(reshaped, text);
 }
 
 // Check if a char is Arabic (including reshaped presentation forms)
