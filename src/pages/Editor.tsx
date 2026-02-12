@@ -109,7 +109,7 @@ const Editor = () => {
     return Array.from(set).sort();
   }, [state?.entries]);
 
-  // Category counts
+  // Category counts and translation progress
   const categoryCounts = useMemo(() => {
     if (!state) return {};
     const counts: Record<string, number> = {};
@@ -119,6 +119,27 @@ const Editor = () => {
     }
     return counts;
   }, [state?.entries]);
+
+  const categoryProgress = useMemo(() => {
+    if (!state) return {};
+    const progress: Record<string, { translated: number; total: number }> = {};
+    
+    for (const cat of FILE_CATEGORIES) {
+      progress[cat.id] = { translated: 0, total: 0 };
+    }
+    progress["other"] = { translated: 0, total: 0 };
+
+    for (const e of state.entries) {
+      const cat = categorizeFile(e.msbtFile);
+      const key = `${e.msbtFile}:${e.index}`;
+      const isTranslated = state.translations[key] && state.translations[key].trim() !== '';
+      
+      progress[cat].total += 1;
+      if (isTranslated) progress[cat].translated += 1;
+    }
+    
+    return progress;
+  }, [state?.entries, state?.translations]);
 
   const filteredEntries = useMemo(() => {
     if (!state) return [];
@@ -418,7 +439,7 @@ const Editor = () => {
                     : "bg-muted/50 text-muted-foreground border-border hover:bg-muted"
                 }`}
               >
-                {cat.emoji} {cat.label} ({categoryCounts[cat.id]})
+                {cat.emoji} {cat.label} ({categoryProgress[cat.id]?.translated}/{categoryCounts[cat.id]})
               </button>
             ))}
             {categoryCounts["other"] && (
@@ -430,7 +451,7 @@ const Editor = () => {
                     : "bg-muted/50 text-muted-foreground border-border hover:bg-muted"
                 }`}
               >
-                📄 أخرى ({categoryCounts["other"]})
+                📄 أخرى ({categoryProgress["other"]?.translated}/{categoryCounts["other"]})
               </button>
             )}
           </div>
