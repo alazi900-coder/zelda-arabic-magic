@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save, Tag } from "lucide-react";
+import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save, Tag, Upload, FileDown } from "lucide-react";
 import { idbSet, idbGet } from "@/lib/idb-storage";
 
 interface ExtractedEntry {
@@ -285,6 +285,42 @@ const Editor = () => {
     }
   };
 
+  // Export translations as JSON
+  const handleExportTranslations = () => {
+    if (!state) return;
+    const data = JSON.stringify(state.translations, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `translations_${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // Import translations from JSON
+  const handleImportTranslations = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+      try {
+        const text = await file.text();
+        const imported = JSON.parse(text) as Record<string, string>;
+        setState(prev => {
+          if (!prev) return null;
+          return { ...prev, translations: { ...prev.translations, ...imported } };
+        });
+        setLastSaved(`✅ تم استيراد ${Object.keys(imported).length} ترجمة`);
+      } catch {
+        alert('ملف JSON غير صالح');
+      }
+    };
+    input.click();
+  };
+
   const handleBuild = async () => {
     if (!state) return;
 
@@ -434,6 +470,25 @@ const Editor = () => {
             ) : (
               <><Download className="w-4 h-4" /> بناء وتحميل</>
             )}
+          </Button>
+
+          {/* Export/Import buttons */}
+          <Button
+            size="lg"
+            variant="outline"
+            onClick={handleExportTranslations}
+            disabled={translatedCount === 0}
+            className="font-display font-bold px-4"
+          >
+            <><FileDown className="w-4 h-4" /> تصدير الترجمات</>
+          </Button>
+          <Button
+            size="lg"
+            variant="outline"
+            onClick={handleImportTranslations}
+            className="font-display font-bold px-4"
+          >
+            <><Upload className="w-4 h-4" /> استيراد ترجمات</>
           </Button>
         </div>
 
