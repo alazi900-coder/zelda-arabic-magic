@@ -90,6 +90,25 @@ const Editor = () => {
     setState(prev => prev ? { ...prev, protectedEntries: newProtected } : null);
   };
 
+  const handleProtectAllArabic = () => {
+    if (!state) return;
+    const arabicRegex = /[\u0600-\u06FF]/;
+    const newProtected = new Set(state.protectedEntries || []);
+    let count = 0;
+    
+    for (const entry of state.entries) {
+      const key = `${entry.msbtFile}:${entry.index}`;
+      if (arabicRegex.test(entry.original) && !newProtected.has(key)) {
+        newProtected.add(key);
+        count++;
+      }
+    }
+    
+    setState(prev => prev ? { ...prev, protectedEntries: newProtected } : null);
+    setLastSaved(`✅ تم حماية ${count} نص معرّب من العكس`);
+    setTimeout(() => setLastSaved(""), 3000);
+  };
+
   // Load state from IndexedDB
   // Detect already-Arabic entries and auto-populate translations
   const detectPreTranslated = useCallback((editorState: EditorState): Record<string, string> => {
@@ -612,6 +631,16 @@ const Editor = () => {
             ) : (
               <><Download className="w-4 h-4" /> بناء وتحميل</>
             )}
+          </Button>
+
+          <Button
+            size="lg"
+            variant="outline"
+            onClick={handleProtectAllArabic}
+            disabled={building || translating}
+            className="font-display font-bold px-6"
+          >
+            <><Filter className="w-4 h-4" /> حماية النصوص المعربة 🛡️</>
           </Button>
 
           {/* Export/Import buttons */}
