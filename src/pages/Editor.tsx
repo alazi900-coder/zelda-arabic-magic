@@ -237,17 +237,20 @@ const Editor = () => {
         }
 
         const data = await response.json();
-        allTranslations = { ...allTranslations, ...data.translations };
-      }
+        const batchTranslations = data.translations || {};
+        allTranslations = { ...allTranslations, ...batchTranslations };
 
-      // Merge with existing translations
-      setState(prev => {
-        if (!prev) return null;
-        return {
-          ...prev,
-          translations: { ...prev.translations, ...allTranslations },
-        };
-      });
+        // Save immediately after each batch
+        if (Object.keys(batchTranslations).length > 0) {
+          setState(prev => {
+            if (!prev) return null;
+            return {
+              ...prev,
+              translations: { ...prev.translations, ...batchTranslations },
+            };
+          });
+        }
+      }
 
       const count = Object.keys(allTranslations).length;
       if (count > 0) {
@@ -256,9 +259,18 @@ const Editor = () => {
       setTimeout(() => setTranslateProgress(""), 4000);
     } catch (err) {
       if (err instanceof Error && err.name === 'AbortError') {
-        // Already handled abort in the loop
+        // Translations already saved per-batch, just show message
+        const savedCount = Object.keys(allTranslations).length;
+        if (savedCount > 0) {
+          setTranslateProgress(`⏹️ تم إيقاف الترجمة - تم حفظ ${savedCount} نص مترجم`);
+        } else {
+          setTranslateProgress("⏹️ تم إيقاف الترجمة");
+        }
+        setTimeout(() => setTranslateProgress(""), 4000);
       } else {
-        setTranslateProgress(`❌ ${err instanceof Error ? err.message : 'خطأ في الترجمة'}`);
+        const savedCount = Object.keys(allTranslations).length;
+        const errMsg = err instanceof Error ? err.message : 'خطأ في الترجمة';
+        setTranslateProgress(`❌ ${errMsg}${savedCount > 0 ? ` (تم حفظ ${savedCount} نص قبل الخطأ)` : ''}`);
         setTimeout(() => setTranslateProgress(""), 5000);
       }
     } finally {
