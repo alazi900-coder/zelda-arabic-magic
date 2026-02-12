@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save, Tag, Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle, Eye, EyeOff } from "lucide-react";
+import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save, Tag, Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle, Eye, EyeOff, RotateCcw } from "lucide-react";
 import ZeldaDialoguePreview from "@/components/ZeldaDialoguePreview";
 import { idbSet, idbGet } from "@/lib/idb-storage";
 import { useAuth } from "@/contexts/AuthContext";
@@ -54,6 +54,53 @@ function categorizeFile(filePath: string): string {
   if (/StaticMsg\/(Tips|GuideKeyIcon)\.msbt/i.test(filePath)) return "tips";
   if (/ActorMsg\//i.test(filePath)) return "character";
   return "other";
+}
+
+// Same algorithm as reverseBidi in edge function - reversing twice restores original
+function isArabicChar(ch: string): boolean {
+  const code = ch.charCodeAt(0);
+  return (code >= 0x0600 && code <= 0x06FF) || (code >= 0xFB50 && code <= 0xFDFF) || (code >= 0xFE70 && code <= 0xFEFF);
+}
+
+function unReverseBidi(text: string): string {
+  return text.split('\n').map(line => {
+    const segments: { text: string; isLTR: boolean }[] = [];
+    let current = '';
+    let currentIsLTR: boolean | null = null;
+
+    for (const ch of line) {
+      const charIsArabic = isArabicChar(ch);
+      const charIsLTR = /[a-zA-Z0-9]/.test(ch);
+      
+      if (charIsArabic) {
+        if (currentIsLTR === true && current) {
+          segments.push({ text: current, isLTR: true });
+          current = '';
+        }
+        currentIsLTR = false;
+        current += ch;
+      } else if (charIsLTR) {
+        if (currentIsLTR === false && current) {
+          segments.push({ text: current, isLTR: false });
+          current = '';
+        }
+        currentIsLTR = true;
+        current += ch;
+      } else {
+        current += ch;
+      }
+    }
+    if (current) segments.push({ text: current, isLTR: currentIsLTR === true });
+
+    return segments.reverse().map(seg => {
+      if (seg.isLTR) return seg.text;
+      return [...seg.text].reverse().join('');
+    }).join('');
+  }).join('\n');
+}
+
+function hasArabicChars(text: string): boolean {
+  return [...text].some(ch => isArabicChar(ch));
 }
 
 function isTechnicalText(text: string): boolean {
@@ -127,6 +174,44 @@ const Editor = () => {
     
     setState(prev => prev ? { ...prev, protectedEntries: newProtected } : null);
     setLastSaved(`✅ تم حماية ${count} نص معرّب من العكس`);
+    setTimeout(() => setLastSaved(""), 3000);
+  };
+
+  const handleFixReversed = (entry: ExtractedEntry) => {
+    if (!state) return;
+    const key = `${entry.msbtFile}:${entry.index}`;
+    const corrected = unReverseBidi(entry.original);
+    const newProtected = new Set(state.protectedEntries || []);
+    newProtected.add(key);
+    setState(prev => prev ? {
+      ...prev,
+      translations: { ...prev.translations, [key]: corrected },
+      protectedEntries: newProtected,
+    } : null);
+  };
+
+  const handleFixAllReversed = () => {
+    if (!state) return;
+    const newTranslations = { ...state.translations };
+    const newProtected = new Set(state.protectedEntries || []);
+    let count = 0;
+
+    for (const entry of state.entries) {
+      const key = `${entry.msbtFile}:${entry.index}`;
+      const hasTranslation = newTranslations[key]?.trim();
+      if (!hasTranslation && hasArabicChars(entry.original)) {
+        newTranslations[key] = unReverseBidi(entry.original);
+        newProtected.add(key);
+        count++;
+      }
+    }
+
+    setState(prev => prev ? {
+      ...prev,
+      translations: newTranslations,
+      protectedEntries: newProtected,
+    } : null);
+    setLastSaved(`✅ تم تصحيح ${count} نص عربي معكوس`);
     setTimeout(() => setLastSaved(""), 3000);
   };
 
@@ -835,6 +920,9 @@ const Editor = () => {
           <Button variant="outline" onClick={handleImportGlossary} className="font-body">
             <BookOpen className="w-4 h-4" /> تحميل قاموس
           </Button>
+          <Button variant="outline" onClick={handleFixAllReversed} className="font-body border-accent/30 text-accent hover:text-accent">
+            <RotateCcw className="w-4 h-4" /> تصحيح الكل (عربي معكوس)
+          </Button>
         </div>
 
         {/* Build Button */}
@@ -867,6 +955,16 @@ const Editor = () => {
                       <p className="font-body text-sm mb-2">{entry.original}</p>
                       {isTechnical && (
                         <p className="text-xs text-accent mb-2">⚠️ نص تقني - تحتاج حذر في الترجمة</p>
+                      )}
+                      {!translation && hasArabicChars(entry.original) && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleFixReversed(entry)}
+                          className="text-xs text-accent mb-2 h-7 px-2"
+                        >
+                          <RotateCcw className="w-3 h-3" /> تصحيح المعكوس
+                        </Button>
                       )}
                       <input
                         type="text"
