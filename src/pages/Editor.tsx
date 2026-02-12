@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save, Tag, Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle, Eye, EyeOff, RotateCcw, CheckCircle2, ShieldCheck } from "lucide-react";
+import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save, Tag, Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle, Eye, EyeOff, RotateCcw, CheckCircle2, ShieldCheck, ChevronLeft, ChevronRight, Check, X, BarChart3 } from "lucide-react";
 import ZeldaDialoguePreview from "@/components/ZeldaDialoguePreview";
 import { idbSet, idbGet } from "@/lib/idb-storage";
 import { useAuth } from "@/contexts/AuthContext";
@@ -118,7 +118,7 @@ const Editor = () => {
   const [search, setSearch] = useState("");
   const [filterFile, setFilterFile] = useState<string>("all");
   const [filterCategory, setFilterCategory] = useState<string>("all");
-  const [filterStatus, setFilterStatus] = useState<"all" | "translated" | "untranslated">("all");
+  const [filterStatus, setFilterStatus] = useState<"all" | "translated" | "untranslated" | "problems">("all");
   const [filterTechnical, setFilterTechnical] = useState<"all" | "only" | "exclude">("all");
   const [building, setBuilding] = useState(false);
   const [buildProgress, setBuildProgress] = useState("");
@@ -135,6 +135,9 @@ const Editor = () => {
    const [tmStats, setTmStats] = useState<{ reused: number; sent: number } | null>(null);
    const [suggestingShort, setSuggestingShort] = useState(false);
    const [shortSuggestions, setShortSuggestions] = useState<any[] | null>(null);
+   const [quickReviewMode, setQuickReviewMode] = useState(false);
+   const [quickReviewIndex, setQuickReviewIndex] = useState(0);
+   const [showQualityStats, setShowQualityStats] = useState(false);
   
   const navigate = useNavigate();
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
@@ -331,6 +334,40 @@ const Editor = () => {
     return progress;
   }, [state?.entries, state?.translations]);
 
+  // Quality stats computation
+  const qualityStats = useMemo(() => {
+    if (!state) return { tooLong: 0, nearLimit: 0, missingTags: 0, placeholderMismatch: 0, total: 0, problemKeys: new Set<string>() };
+    
+    let tooLong = 0, nearLimit = 0, missingTags = 0, placeholderMismatch = 0;
+    const problemKeys = new Set<string>();
+
+    for (const entry of state.entries) {
+      const key = `${entry.msbtFile}:${entry.index}`;
+      const translation = state.translations[key]?.trim();
+      if (!translation) continue;
+
+      // Byte limit check
+      if (entry.maxBytes > 0) {
+        const bytes = translation.length * 2;
+        if (bytes > entry.maxBytes) { tooLong++; problemKeys.add(key); }
+        else if (bytes / entry.maxBytes > 0.8) { nearLimit++; problemKeys.add(key); }
+      }
+
+      // Missing tags
+      const origTags = entry.original.match(/\[[^\]]*\]/g) || [];
+      for (const tag of origTags) {
+        if (!translation.includes(tag)) { missingTags++; problemKeys.add(key); break; }
+      }
+
+      // Placeholder mismatch
+      const origPh = (entry.original.match(/\uFFFC/g) || []).length;
+      const transPh = (translation.match(/\uFFFC/g) || []).length;
+      if (origPh !== transPh) { placeholderMismatch++; problemKeys.add(key); }
+    }
+
+    return { tooLong, nearLimit, missingTags, placeholderMismatch, total: problemKeys.size, problemKeys };
+  }, [state?.entries, state?.translations]);
+
   const filteredEntries = useMemo(() => {
     if (!state) return [];
     return state.entries.filter(e => {
@@ -347,7 +384,8 @@ const Editor = () => {
       const matchStatus = 
         filterStatus === "all" || 
         (filterStatus === "translated" && isTranslated) ||
-        (filterStatus === "untranslated" && !isTranslated);
+        (filterStatus === "untranslated" && !isTranslated) ||
+        (filterStatus === "problems" && qualityStats.problemKeys.has(key));
       const matchTechnical = 
         filterTechnical === "all" ||
         (filterTechnical === "only" && isTechnical) ||
@@ -355,7 +393,7 @@ const Editor = () => {
       
       return matchSearch && matchFile && matchCategory && matchStatus && matchTechnical;
     });
-  }, [state, search, filterFile, filterCategory, filterStatus, filterTechnical]);
+  }, [state, search, filterFile, filterCategory, filterStatus, filterTechnical, qualityStats.problemKeys]);
 
   const updateTranslation = (key: string, value: string) => {
     if (!state) return;
@@ -1268,7 +1306,24 @@ const Editor = () => {
             <option value="all">الكل</option>
             <option value="translated">مترجم</option>
             <option value="untranslated">غير مترجم</option>
+            <option value="problems">⚠️ بها مشاكل ({qualityStats.total})</option>
           </select>
+          <Button
+            variant={showQualityStats ? "secondary" : "outline"}
+            size="sm"
+            onClick={() => setShowQualityStats(!showQualityStats)}
+            className="font-body text-xs"
+          >
+            <BarChart3 className="w-3 h-3" /> إحصائيات الجودة
+          </Button>
+          <Button
+            variant={quickReviewMode ? "secondary" : "outline"}
+            size="sm"
+            onClick={() => { setQuickReviewMode(!quickReviewMode); setQuickReviewIndex(0); }}
+            className="font-body text-xs"
+          >
+            <Eye className="w-3 h-3" /> مراجعة سريعة
+          </Button>
         </div>
 
         {/* Cloud Actions */}
@@ -1342,6 +1397,156 @@ const Editor = () => {
           بناء الملف النهائي
         </Button>
 
+        {/* Quality Stats Panel */}
+        {showQualityStats && (
+          <Card className="mb-6 border-border">
+            <CardContent className="p-4">
+              <h3 className="font-display font-bold mb-3 flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-primary" />
+                إحصائيات الجودة
+              </h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="p-3 rounded border border-destructive/30 bg-destructive/5 text-center">
+                  <p className="text-2xl font-display font-bold text-destructive">{qualityStats.tooLong}</p>
+                  <p className="text-xs text-muted-foreground">تجاوز حد البايت</p>
+                </div>
+                <div className="p-3 rounded border border-amber-500/30 bg-amber-500/5 text-center">
+                  <p className="text-2xl font-display font-bold text-amber-500">{qualityStats.nearLimit}</p>
+                  <p className="text-xs text-muted-foreground">قريب من الحد (&gt;80%)</p>
+                </div>
+                <div className="p-3 rounded border border-destructive/30 bg-destructive/5 text-center">
+                  <p className="text-2xl font-display font-bold text-destructive">{qualityStats.missingTags}</p>
+                  <p className="text-xs text-muted-foreground">Tags مفقودة</p>
+                </div>
+                <div className="p-3 rounded border border-destructive/30 bg-destructive/5 text-center">
+                  <p className="text-2xl font-display font-bold text-destructive">{qualityStats.placeholderMismatch}</p>
+                  <p className="text-xs text-muted-foreground">عناصر نائبة مختلفة</p>
+                </div>
+              </div>
+              <div className="mt-3 flex items-center gap-2">
+                <Progress value={qualityStats.total > 0 ? Math.max(0, 100 - (qualityStats.total / Math.max(translatedCount, 1)) * 100) : 100} className="h-2 flex-1" />
+                <span className="text-xs font-display text-muted-foreground">
+                  {qualityStats.total > 0 ? `${qualityStats.total} نص بمشاكل` : '✅ لا مشاكل'}
+                </span>
+              </div>
+              {qualityStats.total > 0 && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => { setFilterStatus("problems"); setShowQualityStats(false); }}
+                  className="mt-3 text-xs"
+                >
+                  <Filter className="w-3 h-3" /> عرض النصوص بها مشاكل فقط
+                </Button>
+              )}
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Quick Review Mode */}
+        {quickReviewMode && filteredEntries.length > 0 ? (
+          <Card className="mb-6 border-primary/30">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-display font-bold flex items-center gap-2">
+                  <Eye className="w-5 h-5 text-primary" />
+                  المراجعة السريعة
+                </h3>
+                <span className="text-sm text-muted-foreground font-display">
+                  {quickReviewIndex + 1} / {filteredEntries.length}
+                </span>
+              </div>
+              
+              <Progress value={((quickReviewIndex + 1) / filteredEntries.length) * 100} className="h-1.5 mb-4" />
+
+              {(() => {
+                const entry = filteredEntries[quickReviewIndex];
+                if (!entry) return null;
+                const key = `${entry.msbtFile}:${entry.index}`;
+                const translation = state?.translations[key] || '';
+                const hasProblem = qualityStats.problemKeys.has(key);
+                const byteUsed = entry.maxBytes > 0 ? translation.length * 2 : 0;
+                
+                return (
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-2">{entry.msbtFile} • {entry.label}</p>
+                    
+                    <div className="p-3 rounded border border-border/50 bg-muted/30 mb-3">
+                      <p className="text-xs text-muted-foreground mb-1">النص الأصلي:</p>
+                      <p className="font-body text-sm">{entry.original}</p>
+                    </div>
+
+                    {hasProblem && (
+                      <p className="text-xs text-destructive mb-2 flex items-center gap-1">
+                        <AlertTriangle className="w-3 h-3" /> هذا النص به مشكلة
+                        {entry.maxBytes > 0 && byteUsed > entry.maxBytes && ` (${byteUsed}/${entry.maxBytes} بايت)`}
+                      </p>
+                    )}
+
+                    <div className="mb-4">
+                      <p className="text-xs text-muted-foreground mb-1">الترجمة:</p>
+                      <input
+                        type="text"
+                        value={translation}
+                        onChange={(e) => updateTranslation(key, e.target.value)}
+                        placeholder="أدخل الترجمة..."
+                        className="w-full px-3 py-2 rounded bg-background border border-border font-body text-sm"
+                        autoFocus
+                      />
+                      {entry.maxBytes > 0 && (
+                        <p className={`text-xs mt-1 ${byteUsed > entry.maxBytes ? 'text-destructive' : 'text-muted-foreground'}`}>
+                          {byteUsed}/{entry.maxBytes} بايت
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setQuickReviewIndex(Math.max(0, quickReviewIndex - 1))}
+                        disabled={quickReviewIndex === 0}
+                      >
+                        <ChevronRight className="w-4 h-4" /> السابق
+                      </Button>
+                      
+                      <Button
+                        variant="default"
+                        size="sm"
+                        onClick={() => setQuickReviewIndex(Math.min(filteredEntries.length - 1, quickReviewIndex + 1))}
+                        disabled={quickReviewIndex >= filteredEntries.length - 1}
+                        className="flex-1"
+                      >
+                        <Check className="w-4 h-4" /> قبول والتالي
+                      </Button>
+
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => {
+                          updateTranslation(key, '');
+                          setQuickReviewIndex(Math.min(filteredEntries.length - 1, quickReviewIndex + 1));
+                        }}
+                        disabled={quickReviewIndex >= filteredEntries.length - 1 && !translation}
+                      >
+                        <X className="w-4 h-4" /> رفض
+                      </Button>
+
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setQuickReviewMode(false)}
+                      >
+                        إغلاق
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })()}
+            </CardContent>
+          </Card>
+        ) : null}
+
         {/* Entries List */}
         <div className="space-y-2">
           {filteredEntries.length === 0 ? (
@@ -1351,16 +1556,22 @@ const Editor = () => {
               const key = `${entry.msbtFile}:${entry.index}`;
               const translation = state?.translations[key] || '';
               const isProtected = state?.protectedEntries?.has(key);
-              const isTechnical = isTechnicalText(entry.original);
+              const isTech = isTechnicalText(entry.original);
+              const hasProblem = qualityStats.problemKeys.has(key);
               
               return (
-                <Card key={idx} className="p-4 border-border/50 hover:border-border transition-colors">
+                <Card key={idx} className={`p-4 border-border/50 hover:border-border transition-colors ${hasProblem ? 'border-destructive/30 bg-destructive/5' : ''}`}>
                   <div className="flex items-start gap-4">
                     <div className="flex-1 min-w-0">
                       <p className="text-xs text-muted-foreground mb-1">{entry.msbtFile} • {entry.label}</p>
                       <p className="font-body text-sm mb-2">{entry.original}</p>
-                      {isTechnical && (
+                      {isTech && (
                         <p className="text-xs text-accent mb-2">⚠️ نص تقني - تحتاج حذر في الترجمة</p>
+                      )}
+                      {hasProblem && (
+                        <p className="text-xs text-destructive mb-2 flex items-center gap-1">
+                          <AlertTriangle className="w-3 h-3" /> يحتاج مراجعة
+                        </p>
                       )}
                       {!translation && hasArabicChars(entry.original) && (
                         <Button
