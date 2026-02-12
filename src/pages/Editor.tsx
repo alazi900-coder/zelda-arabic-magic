@@ -26,37 +26,39 @@ interface EditorState {
 const AUTOSAVE_DELAY = 1500;
 const AI_BATCH_SIZE = 30;
 
-// --- Category system for MSBT files ---
+// --- Category system for MSBT files (path-based) ---
 interface FileCategory {
   id: string;
   label: string;
   emoji: string;
-  keywords: string[];
 }
 
 const FILE_CATEGORIES: FileCategory[] = [
-  { id: "story", label: "حوارات القصة", emoji: "📖", keywords: ["demo", "event", "scenario", "cutscene", "movie"] },
-  { id: "npc", label: "حوارات الشخصيات", emoji: "💬", keywords: ["npc", "talk", "dialog", "shop"] },
-  { id: "quest", label: "المهام", emoji: "📜", keywords: ["quest", "mission", "challenge", "minigame"] },
-  { id: "weapon", label: "الأسلحة", emoji: "⚔️", keywords: ["weapon", "sword", "bow", "shield", "spear", "lsword", "ssword", "equip", "blade", "arm", "lance", "axe", "club", "rod", "wand", "boomerang"] },
-  { id: "armor", label: "المعدات والدروع", emoji: "🛡️", keywords: ["armor", "helm", "equipment", "accessory"] },
-  { id: "item", label: "الأدوات والمواد", emoji: "🎒", keywords: ["item", "material", "key", "important", "cook", "recipe", "food", "elixir", "rupee", "ore"] },
-  { id: "enemy", label: "الأعداء", emoji: "👹", keywords: ["enemy", "boss", "monster", "guardian", "lynel", "hinox", "moblin"] },
-  { id: "ui", label: "القوائم والواجهة", emoji: "🖥️", keywords: ["ui", "menu", "system", "pause", "hud", "button", "option", "setting", "save", "load", "config", "common"] },
-  { id: "map", label: "المواقع والخرائط", emoji: "🗺️", keywords: ["map", "location", "place", "area", "dungeon", "shrine", "tower", "village", "town", "region"] },
-  { id: "tips", label: "النصائح والتعليمات", emoji: "💡", keywords: ["tips", "tutorial", "help", "guide", "hint", "loading", "gameover", "gamebalance"] },
-  { id: "ability", label: "القدرات والمهارات", emoji: "✨", keywords: ["ability", "skill", "rune", "champion", "sage", "zonai"] },
-  { id: "horse", label: "الأحصنة والمراكب", emoji: "🐴", keywords: ["horse", "stable", "vehicle", "paraglider", "raft"] },
-  { id: "actor", label: "الممثلون", emoji: "🎭", keywords: ["actor", "profile", "name"] },
+  { id: "inventory", label: "الأسلحة والأدوات والمواد", emoji: "🎒" },
+  { id: "ui", label: "القوائم والواجهة", emoji: "🖥️" },
+  { id: "challenge", label: "المهام والتحديات", emoji: "📜" },
+  { id: "story", label: "حوارات القصة والمهام", emoji: "📖" },
+  { id: "map", label: "المواقع والخرائط", emoji: "🗺️" },
+  { id: "tips", label: "النصائح والتعليمات", emoji: "💡" },
+  { id: "character", label: "أسماء الشخصيات والأعداء", emoji: "🎭" },
 ];
 
 function categorizeFile(filePath: string): string {
-  const lower = filePath.toLowerCase();
-  for (const cat of FILE_CATEGORIES) {
-    if (cat.keywords.some(kw => lower.includes(kw))) {
-      return cat.id;
-    }
-  }
+  // Priority 1: ActorMsg/PouchContent.msbt → inventory
+  if (/ActorMsg\/PouchContent\.msbt/i.test(filePath)) return "inventory";
+  // Priority 2: LayoutMsg/* → ui
+  if (/LayoutMsg\//i.test(filePath)) return "ui";
+  // Priority 3: ChallengeMsg/* → challenge
+  if (/ChallengeMsg\//i.test(filePath)) return "challenge";
+  // Priority 4: EventFlowMsg/* → story
+  if (/EventFlowMsg\//i.test(filePath)) return "story";
+  // Priority 5: LocationMsg/* → map
+  if (/LocationMsg\//i.test(filePath)) return "map";
+  // Priority 6: StaticMsg/(Tips|GuideKeyIcon).msbt → tips
+  if (/StaticMsg\/(Tips|GuideKeyIcon)\.msbt/i.test(filePath)) return "tips";
+  // Priority 7: ActorMsg/* (except PouchContent) → character
+  if (/ActorMsg\//i.test(filePath)) return "character";
+  // Priority 8: everything else
   return "other";
 }
 
@@ -770,7 +772,7 @@ const Editor = () => {
                     : "bg-muted/50 text-muted-foreground border-border hover:bg-muted"
                 }`}
               >
-                📄 أخرى ({categoryProgress["other"]?.translated}/{categoryCounts["other"]})
+                📁 أخرى ({categoryProgress["other"]?.translated}/{categoryCounts["other"]})
               </button>
             )}
           </div>
