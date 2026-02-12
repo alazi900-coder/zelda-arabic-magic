@@ -34,7 +34,7 @@ const Process = () => {
   const [dictFile, setDictFile] = useState<File | null>(null);
   const [stage, setStage] = useState<ProcessingStage>("idle");
   const [logs, setLogs] = useState<string[]>([]);
-  const [resultData, setResultData] = useState<{ modifiedCount: number; fileSize: number; data: string; entries: any[] } | null>(null);
+  const [resultData, setResultData] = useState<{ modifiedCount: number; fileSize: number; compressedFileSize: number | null; entries: any[]; blobUrl: string } | null>(null);
   const navigate = useNavigate();
 
   const addLog = (msg: string) => setLogs((prev) => [...prev, `[${new Date().toLocaleTimeString("ar-SA")}] ${msg}`]);
@@ -68,51 +68,80 @@ const Process = () => {
       addLog("   → استخدام خوارزمية Zstandard مع القاموس المستخرج...");
 
       addLog("\n📤 جاري إرسال الملفات إلى المعالجة...");
-      const { data, error } = await supabase.functions.invoke("arabize", {
+      
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+      
+      const response = await fetch(`${supabaseUrl}/functions/v1/arabize`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${supabaseKey}`,
+          'apikey': supabaseKey,
+        },
         body: formData,
       });
 
-      if (error) throw new Error(error.message || "فشل في المعالجة");
-      if (data?.error) throw new Error(data.error);
+      if (!response.ok) {
+        const contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+          const errData = await response.json();
+          throw new Error(errData.error || `خطأ ${response.status}`);
+        }
+        throw new Error(`Edge function returned ${response.status}: ${response.statusText}`);
+      }
+
+      // Read metadata from headers
+      const modifiedCount = parseInt(response.headers.get('X-Modified-Count') || '0');
+      const fileSize = parseInt(response.headers.get('X-File-Size') || '0');
+      const compressedSize = response.headers.get('X-Compressed-Size');
+      const compressedFileSize = compressedSize ? parseInt(compressedSize) : null;
+      let entries: any[] = [];
+      try {
+        const entriesHeader = response.headers.get('X-Entries-Preview');
+        if (entriesHeader) entries = JSON.parse(decodeURIComponent(entriesHeader));
+      } catch { /* ignore */ }
+
+      // Get binary blob
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+
+      const data = { modifiedCount, fileSize, compressedFileSize, entries, blobUrl };
 
       setStage("extracting");
       addLog("\n📂 المرحلة 3: استخراج أرشيف SARC");
-      addLog(`   → تم فك الضغط بنجاح: ${(data.fileSize / 1024 / 1024).toFixed(2)} MB`);
-      addLog("   → جاري استخراج الملفات من الأرشيف...");
-      await new Promise((r) => setTimeout(r, 300));
+      addLog(`   → تم فك الضغط بنجاح: ${(fileSize / 1024 / 1024).toFixed(2)} MB`);
+      await new Promise((r) => setTimeout(r, 200));
 
       setStage("reshaping");
       addLog("\n✍️ المرحلة 4: معالجة النصوص العربية");
-      addLog(`   → جاري معالجة ${data.modifiedCount} نص عربي...`);
-      addLog("   → تطبيق ربط الحروف (Arabic Shaping)...");
-      addLog("   → تطبيق عكس الاتجاه (Bidirectional - Bidi)...");
-      await new Promise((r) => setTimeout(r, 300));
+      addLog(`   → جاري معالجة ${modifiedCount} نص عربي...`);
+      await new Promise((r) => setTimeout(r, 200));
 
       setStage("repacking");
       addLog("\n🔨 المرحلة 5: إعادة حزم الأرشيف");
-      addLog("   → إعادة تجميع جميع الملفات المعدلة...");
-      addLog("   → التحقق من سلامة البيانات...");
-      await new Promise((r) => setTimeout(r, 300));
+      await new Promise((r) => setTimeout(r, 200));
 
       setStage("compressing");
       addLog("\n🗜️ المرحلة 6: ضغط النتيجة النهائية");
-      addLog("   → تطبيق خوارزمية Zstandard مع القاموس...");
-      if (data.compressedFileSize) {
-        addLog(`   → نسبة الضغط: ${((1 - data.compressedFileSize / data.fileSize) * 100).toFixed(1)}%`);
+      if (compressedFileSize) {
+        addLog(`   → نسبة الضغط: ${((1 - compressedFileSize / fileSize) * 100).toFixed(1)}%`);
       }
-      await new Promise((r) => setTimeout(r, 300));
+      await new Promise((r) => setTimeout(r, 200));
 
       setStage("done");
       addLog("\n✨ اكتملت العملية بنجاح!");
-      addLog(`   ✓ تم تعديل ${data.modifiedCount} نص عربي`);
-      addLog(`   ✓ حجم الملف الأصلي: ${(data.fileSize / 1024 / 1024).toFixed(2)} MB`);
-      if (data.compressedFileSize) {
-        addLog(`   ✓ حجم الملف المضغوط: ${(data.compressedFileSize / 1024 / 1024).toFixed(2)} MB`);
+      addLog(`   ✓ تم تعديل ${modifiedCount} نص عربي`);
+      addLog(`   ✓ حجم الملف الأصلي: ${(fileSize / 1024 / 1024).toFixed(2)} MB`);
+      if (compressedFileSize) {
+        addLog(`   ✓ حجم الملف المضغوط: ${(compressedFileSize / 1024 / 1024).toFixed(2)} MB`);
       }
       addLog("   → يمكنك الآن تحميل الملف وتثبيته في اللعبة");
 
       setResultData(data);
-      sessionStorage.setItem("arabizeResult", JSON.stringify(data));
+      // Store metadata only (not binary) in sessionStorage
+      sessionStorage.setItem("arabizeResult", JSON.stringify({
+        modifiedCount, fileSize, compressedFileSize, entries, blobUrl
+      }));
     } catch (err) {
       setStage("error");
       const errorMsg = err instanceof Error ? err.message : "غير معروف";
