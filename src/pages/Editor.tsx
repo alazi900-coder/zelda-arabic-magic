@@ -127,12 +127,14 @@ const Editor = () => {
   const [lastSaved, setLastSaved] = useState<string>("");
   const [cloudSyncing, setCloudSyncing] = useState(false);
   const [cloudStatus, setCloudStatus] = useState("");
-  const [technicalEditingMode, setTechnicalEditingMode] = useState<string | null>(null);
-  const [showPreview, setShowPreview] = useState(false);
-  const [previewKey, setPreviewKey] = useState<string | null>(null);
-  const [reviewing, setReviewing] = useState(false);
-  const [reviewResults, setReviewResults] = useState<{ issues: any[]; summary: any } | null>(null);
-  const [tmStats, setTmStats] = useState<{ reused: number; sent: number } | null>(null);
+   const [technicalEditingMode, setTechnicalEditingMode] = useState<string | null>(null);
+   const [showPreview, setShowPreview] = useState(false);
+   const [previewKey, setPreviewKey] = useState<string | null>(null);
+   const [reviewing, setReviewing] = useState(false);
+   const [reviewResults, setReviewResults] = useState<{ issues: any[]; summary: any } | null>(null);
+   const [tmStats, setTmStats] = useState<{ reused: number; sent: number } | null>(null);
+   const [suggestingShort, setSuggestingShort] = useState(false);
+   const [shortSuggestions, setShortSuggestions] = useState<any[] | null>(null);
   
   const navigate = useNavigate();
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
@@ -597,13 +599,67 @@ const Editor = () => {
       if (!response.ok) throw new Error(`خطأ ${response.status}`);
       const data = await response.json();
       setReviewResults(data);
-    } catch (err) {
-      setTranslateProgress(`❌ خطأ في المراجعة: ${err instanceof Error ? err.message : 'غير معروف'}`);
-      setTimeout(() => setTranslateProgress(""), 4000);
-    } finally {
-      setReviewing(false);
-    }
-  };
+     } catch (err) {
+       setTranslateProgress(`❌ خطأ في المراجعة: ${err instanceof Error ? err.message : 'غير معروف'}`);
+       setTimeout(() => setTranslateProgress(""), 4000);
+     } finally {
+       setReviewing(false);
+     }
+   };
+
+   const handleSuggestShorterTranslations = async () => {
+     if (!state || !reviewResults) return;
+     
+     setSuggestingShort(true);
+     setShortSuggestions(null);
+
+     try {
+       const reviewEntries = state.entries
+         .filter(e => {
+           const key = `${e.msbtFile}:${e.index}`;
+           return state.translations[key]?.trim();
+         })
+         .map(e => ({
+           key: `${e.msbtFile}:${e.index}`,
+           original: e.original,
+           translation: state.translations[`${e.msbtFile}:${e.index}`],
+           maxBytes: e.maxBytes || 0,
+         }));
+
+       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+       const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+       const response = await fetch(`${supabaseUrl}/functions/v1/review-translations`, {
+         method: 'POST',
+         headers: {
+           'Authorization': `Bearer ${supabaseKey}`,
+           'apikey': supabaseKey,
+           'Content-Type': 'application/json',
+         },
+         body: JSON.stringify({
+           entries: reviewEntries,
+           glossary: state.glossary || '',
+           action: 'suggest-short',
+         }),
+       });
+
+       if (!response.ok) throw new Error(`خطأ ${response.status}`);
+       const data = await response.json();
+       setShortSuggestions(data.suggestions || []);
+     } catch (err) {
+       setShortSuggestions([]);
+     } finally {
+       setSuggestingShort(false);
+     }
+   };
+
+   const handleApplyShorterTranslation = (key: string, suggested: string) => {
+     if (!state) return;
+     setState(prev => prev ? {
+       ...prev,
+       translations: { ...prev.translations, [key]: suggested },
+     } : null);
+   };
 
   const handleStopTranslate = () => {
     if (abortControllerRef.current) {
@@ -1065,13 +1121,67 @@ const Editor = () => {
                     <p className="text-xs text-muted-foreground text-center">... و {reviewResults.issues.length - 50} مشكلة أخرى</p>
                   )}
                 </div>
-              )}
-              <Button variant="ghost" size="sm" onClick={() => setReviewResults(null)} className="mt-2 text-xs">
-                إغلاق التقرير ✕
-              </Button>
-            </CardContent>
-          </Card>
-        )}
+               )}
+               <div className="flex gap-2 mt-3">
+                 <Button 
+                   variant="outline"
+                   size="sm" 
+                   onClick={handleSuggestShorterTranslations}
+                   disabled={suggestingShort || reviewResults.issues.length === 0}
+                   className="text-xs border-primary/30"
+                 >
+                   {suggestingShort ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <Sparkles className="w-3 h-3 mr-1" />}
+                   اقترح بدائل أقصر
+                 </Button>
+                 <Button variant="ghost" size="sm" onClick={() => { setReviewResults(null); setShortSuggestions(null); }} className="text-xs">
+                   إغلاق ✕
+                 </Button>
+               </div>
+             </CardContent>
+           </Card>
+         )}
+
+         {shortSuggestions && shortSuggestions.length > 0 && (
+           <Card className="mb-4 border-border bg-card">
+             <CardContent className="p-4">
+               <h3 className="font-display font-bold mb-3 flex items-center gap-2">
+                 <Sparkles className="w-5 h-5 text-primary" />
+                 بدائل أقصر مقترحة
+               </h3>
+               <div className="max-h-64 overflow-y-auto space-y-3">
+                 {shortSuggestions.map((suggestion: any, i: number) => (
+                   <div key={i} className="p-3 rounded border border-border/50 bg-background/50">
+                     <p className="text-xs text-muted-foreground mb-2">{suggestion.key}</p>
+                     <p className="text-xs mb-2"><strong>الأصلي:</strong> {suggestion.original}</p>
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs mb-2">
+                       <div>
+                         <p className="text-muted-foreground">الحالي ({suggestion.currentBytes}/{suggestion.maxBytes} بايت)</p>
+                         <p className="p-2 bg-destructive/5 rounded border border-destructive/30">{suggestion.current}</p>
+                       </div>
+                       <div>
+                         <p className="text-muted-foreground">المقترح ({suggestion.suggestedBytes}/{suggestion.maxBytes} بايت)</p>
+                         <p className="p-2 bg-primary/5 rounded border border-primary/30">{suggestion.suggested}</p>
+                       </div>
+                     </div>
+                     <Button 
+                       size="sm"
+                       onClick={() => {
+                         handleApplyShorterTranslation(suggestion.key, suggestion.suggested);
+                         setShortSuggestions(shortSuggestions.filter((_: any, idx: number) => idx !== i));
+                       }}
+                       className="text-xs h-7"
+                     >
+                       ✓ تطبيق المقترح
+                     </Button>
+                   </div>
+                 ))}
+               </div>
+               <Button variant="ghost" size="sm" onClick={() => setShortSuggestions(null)} className="mt-3 text-xs">
+                 إغلاق الاقتراحات ✕
+               </Button>
+             </CardContent>
+           </Card>
+         )}
 
         {!user && (
           <Card className="mb-4 border-primary/30 bg-primary/5">
