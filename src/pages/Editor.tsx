@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save, Tag, Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle } from "lucide-react";
+import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save, Tag, Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle, Eye, EyeOff } from "lucide-react";
+import ZeldaDialoguePreview from "@/components/ZeldaDialoguePreview";
 import { idbSet, idbGet } from "@/lib/idb-storage";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -106,6 +107,8 @@ const Editor = () => {
   const [cloudSyncing, setCloudSyncing] = useState(false);
   const [cloudStatus, setCloudStatus] = useState("");
   const [technicalEditingMode, setTechnicalEditingMode] = useState<string | null>(null); // key of technical entry being edited
+  const [showPreview, setShowPreview] = useState(false);
+  const [previewKey, setPreviewKey] = useState<string | null>(null);
   const navigate = useNavigate();
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -728,6 +731,15 @@ const Editor = () => {
             <><Filter className="w-4 h-4" /> حماية النصوص المعربة 🛡️</>
           </Button>
 
+          <Button
+            size="lg"
+            variant={showPreview ? "secondary" : "outline"}
+            onClick={() => setShowPreview(!showPreview)}
+            className="font-display font-bold px-6"
+          >
+            {showPreview ? <><EyeOff className="w-4 h-4" /> إخفاء المعاينة</> : <><Eye className="w-4 h-4" /> معاينة الحوار 👁️</>}
+          </Button>
+
           {/* Export/Import buttons */}
           <Button
             size="lg"
@@ -1063,13 +1075,24 @@ const Editor = () => {
                       const overPercent = originalLen > 0 ? Math.round(((translationLen - originalLen) / originalLen) * 100) : 0;
                       return (
                         <>
-                          <Input
-                            value={translation}
-                            onChange={(e) => updateTranslation(key, e.target.value)}
-                            placeholder={entry.original ? "اكتب الترجمة..." : ""}
-                            dir="rtl"
-                            className={`font-body text-sm ${isOverLength ? 'border-destructive ring-destructive/30 ring-1' : ''}`}
-                          />
+                          <div className="flex items-center gap-1">
+                            <Input
+                              value={translation}
+                              onChange={(e) => updateTranslation(key, e.target.value)}
+                              placeholder={entry.original ? "اكتب الترجمة..." : ""}
+                              dir="rtl"
+                              className={`font-body text-sm ${isOverLength ? 'border-destructive ring-destructive/30 ring-1' : ''}`}
+                            />
+                            {showPreview && translation && (
+                              <button
+                                onClick={() => setPreviewKey(key)}
+                                className="p-1.5 rounded text-muted-foreground hover:text-secondary transition-colors flex-shrink-0"
+                                title="معاينة في صندوق الحوار"
+                              >
+                                <Eye className="w-4 h-4" />
+                              </button>
+                            )}
+                          </div>
                           {isOverLength && (
                             <div className="flex items-center gap-1 mt-1 text-xs text-destructive">
                               <AlertTriangle className="w-3 h-3" />
@@ -1083,9 +1106,23 @@ const Editor = () => {
                 </div>
               );
             })}
-          </div>
         </div>
+
+        {/* Zelda Dialogue Preview Modal */}
+        {showPreview && previewKey && (() => {
+          const entry = state.entries.find(e => `${e.msbtFile}:${e.index}` === previewKey);
+          if (!entry) return null;
+          return (
+            <ZeldaDialoguePreview
+              original={entry.original}
+              translation={state.translations[previewKey] || ''}
+              label={`${entry.msbtFile.split('/').pop()} #${entry.index}`}
+              onClose={() => setPreviewKey(null)}
+            />
+          );
+        })()}
       </div>
+    </div>
     </div>
   );
 };
