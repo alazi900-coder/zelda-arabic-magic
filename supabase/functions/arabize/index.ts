@@ -1,5 +1,16 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { compress, decompress } from "jsr:@yu7400ki/zstd-wasm";
+import {
+  init,
+  createDCtx,
+  decompressUsingDict,
+  createCCtx,
+  compressUsingDict,
+  decompress,
+  compress,
+} from "https://deno.land/x/zstd_wasm@0.0.21/deno/zstd.ts";
+
+// Initialize WASM module
+await init();
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -277,6 +288,7 @@ Deno.serve(async (req) => {
     const dictData = new Uint8Array(await dictFile.arrayBuffer());
 
     let sarcData: Uint8Array;
+    let rawDict: Uint8Array | null = null;
 
     // Check if already SARC (uncompressed)
     const isSARC = String.fromCharCode(...langData.slice(0, 4)) === 'SARC';
@@ -294,18 +306,36 @@ Deno.serve(async (req) => {
         );
       }
 
-      // Decompress with zstd
+      // Step 1: Decompress dictionary file
+      console.log(`Decompressing dictionary file (${dictData.length} bytes)...`);
       try {
-        console.log(`Decompressing language file (${langData.length} bytes)...`);
-        sarcData = await decompress(langData);
-        console.log(`Decompressed successfully: ${sarcData.length} bytes`);
+        rawDict = decompress(dictData);
+        console.log(`Dictionary decompressed: ${dictData.length} -> ${rawDict.length} bytes`);
+      } catch {
+        rawDict = dictData;
+        console.log(`Dictionary is raw format: ${rawDict.length} bytes`);
+      }
+      try {
+        rawDict = decompress(dictData);
+        console.log(`Dictionary decompressed: ${dictData.length} -> ${rawDict.length} bytes`);
+      } catch {
+        rawDict = dictData;
+        console.log(`Dictionary is raw format: ${rawDict.length} bytes`);
+      }
+
+      // Step 2: Decompress language file using dictionary
+      try {
+        console.log(`Decompressing language file (${langData.length} bytes) with dictionary...`);
+        const dctx = createDCtx();
+        sarcData = decompressUsingDict(dctx, langData, rawDict);
+        console.log(`Decompressed successfully: ${langData.length} -> ${sarcData.length} bytes`);
       } catch (e) {
         const error = e instanceof Error ? e.message : 'Unknown error';
-        console.error(`Decompression failed: ${error}`);
+        console.error(`Decompression with dictionary failed: ${error}`);
         return new Response(
           JSON.stringify({ 
-            error: `فشل فك الضغط: ${error}`,
-            hint: 'تأكد من أن الملف مضغوط بـ Zstandard بشكل صحيح',
+            error: `فشل فك الضغط مع القاموس: ${error}`,
+            hint: 'تأكد من أن الملف مضغوط بـ Zstandard مع القاموس بشكل صحيح',
           }),
           { status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
@@ -334,15 +364,20 @@ Deno.serve(async (req) => {
     // Step 4: Repack SARC
     const repackedData = packSARC(processedFiles, sarcData);
 
-    // Step 5: Re-compress with Zstandard
+    // Step 5: Re-compress with Zstandard using dictionary
     let compressedData: Uint8Array | null = null;
     try {
       console.log(`Re-compressing SARC (${repackedData.length} bytes)...`);
-      compressedData = await compress(repackedData);
-      console.log(`Compressed: ${repackedData.length} -> ${compressedData.length} bytes`);
+      if (rawDict) {
+        const cctx = createCCtx();
+        compressedData = compressUsingDict(cctx, repackedData, rawDict, 3);
+        console.log(`Compressed with dict: ${repackedData.length} -> ${compressedData.length} bytes`);
+      } else {
+        compressedData = compress(repackedData);
+        console.log(`Compressed: ${repackedData.length} -> ${compressedData.length} bytes`);
+      }
     } catch (e) {
       console.error(`Re-compression failed: ${e instanceof Error ? e.message : 'Unknown'}`);
-      // Continue without compression - user can still download uncompressed
     }
 
     // Return both compressed and uncompressed as base64
