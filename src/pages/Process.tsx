@@ -46,19 +46,43 @@ const Process = () => {
     if (file) setter(file);
   }, []);
 
+  // Auto-detect and swap files if they're in the wrong slots
+  const getCorrectFiles = useCallback((): { lang: File; dict: File; swapped: boolean } => {
+    if (!langFile || !dictFile) return { lang: langFile!, dict: dictFile!, swapped: false };
+    
+    const langName = langFile.name.toLowerCase();
+    const dictName = dictFile.name.toLowerCase();
+    
+    // If dict slot has a non-dictionary file and lang slot has the dictionary
+    const langIsDictionary = langName.includes('zsdic') || langName === 'zsdic.pack.zs';
+    const dictIsDictionary = dictName.includes('zsdic') || dictName === 'zsdic.pack.zs';
+    
+    if (langIsDictionary && !dictIsDictionary) {
+      // Files are swapped - fix them
+      return { lang: dictFile, dict: langFile, swapped: true };
+    }
+    
+    return { lang: langFile, dict: dictFile, swapped: false };
+  }, [langFile, dictFile]);
+
   const startProcessing = async () => {
     if (!langFile || !dictFile) return;
+    
+    const { lang, dict, swapped } = getCorrectFiles();
 
     setStage("uploading");
     setLogs([]);
     addLog("🚀 بدء عملية التعريب...");
-    addLog(`📄 ملف اللغة: ${langFile.name} (${(langFile.size / 1024 / 1024).toFixed(2)} MB)`);
-    addLog(`📚 ملف القاموس: ${dictFile.name} (${(dictFile.size / 1024 / 1024).toFixed(2)} MB)`);
+    if (swapped) {
+      addLog("🔄 تم اكتشاف أن الملفات مقلوبة - تم تبديلها تلقائياً");
+    }
+    addLog(`📄 ملف اللغة: ${lang.name} (${(lang.size / 1024 / 1024).toFixed(2)} MB)`);
+    addLog(`📚 ملف القاموس: ${dict.name} (${(dict.size / 1024 / 1024).toFixed(2)} MB)`);
 
     try {
       const formData = new FormData();
-      formData.append("langFile", langFile);
-      formData.append("dictFile", dictFile);
+      formData.append("langFile", lang);
+      formData.append("dictFile", dict);
 
       setStage("decompressing-dict");
       addLog("\n📦 المرحلة 1: فك ضغط القاموس (Dictionary)");
@@ -187,10 +211,12 @@ const Process = () => {
     if (!langFile || !dictFile) return;
     setExtracting(true);
 
+    const { lang, dict } = getCorrectFiles();
+
     try {
       const formData = new FormData();
-      formData.append("langFile", langFile);
-      formData.append("dictFile", dictFile);
+      formData.append("langFile", lang);
+      formData.append("dictFile", dict);
 
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
