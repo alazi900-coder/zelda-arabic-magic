@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save, Tag, Upload, FileDown, Cloud, CloudUpload, LogIn } from "lucide-react";
+import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save, Tag, Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle } from "lucide-react";
 import { idbSet, idbGet } from "@/lib/idb-storage";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -20,7 +20,8 @@ interface ExtractedEntry {
 interface EditorState {
   entries: ExtractedEntry[];
   translations: Record<string, string>;
-  protectedEntries?: Set<string>; // entries marked as "skip processing"
+  protectedEntries?: Set<string>;
+  glossary?: string; // glossary text for AI translation context
 }
 
 const AUTOSAVE_DELAY = 1500;
@@ -311,7 +312,7 @@ const Editor = () => {
             'apikey': supabaseKey,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ entries }),
+          body: JSON.stringify({ entries, glossary: state.glossary || '' }),
           signal: abortControllerRef.current.signal,
         });
 
@@ -400,6 +401,26 @@ const Editor = () => {
         setLastSaved(`✅ تم استيراد ${Object.keys(imported).length} ترجمة`);
       } catch {
         alert('ملف JSON غير صالح');
+      }
+    };
+    input.click();
+  };
+
+  // Glossary import
+  const handleImportGlossary = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.txt,.csv,.json';
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+      try {
+        const text = await file.text();
+        setState(prev => prev ? { ...prev, glossary: text } : null);
+        setLastSaved(`📖 تم تحميل قاموس المصطلحات (${file.name})`);
+        setTimeout(() => setLastSaved(""), 3000);
+      } catch {
+        alert('خطأ في قراءة الملف');
       }
     };
     input.click();
@@ -672,6 +693,25 @@ const Editor = () => {
           >
             <><Upload className="w-4 h-4" /> استيراد ترجمات</>
           </Button>
+          <Button
+            size="lg"
+            variant="outline"
+            onClick={handleImportGlossary}
+            className="font-display font-bold px-4"
+          >
+            <><BookOpen className="w-4 h-4" /> قاموس مصطلحات 📖</>
+          </Button>
+          {state.glossary && (
+            <span className="text-xs text-primary font-display flex items-center gap-1">
+              <BookOpen className="w-3 h-3" /> القاموس مُفعّل
+              <button 
+                onClick={() => setState(prev => prev ? { ...prev, glossary: undefined } : null)}
+                className="text-destructive hover:underline mr-1"
+              >
+                (إزالة)
+              </button>
+            </span>
+          )}
 
           {/* Cloud sync buttons */}
           {user ? (
@@ -911,13 +951,30 @@ const Editor = () => {
                     {entry.original || <span className="italic text-muted-foreground/50">(فارغ)</span>}
                   </div>
                   <div>
-                    <Input
-                      value={state.translations[key] || ''}
-                      onChange={(e) => updateTranslation(key, e.target.value)}
-                      placeholder={entry.original ? "اكتب الترجمة..." : ""}
-                      dir="rtl"
-                      className="font-body text-sm"
-                    />
+                    {(() => {
+                      const translation = state.translations[key] || '';
+                      const originalLen = entry.original.length;
+                      const translationLen = translation.length;
+                      const isOverLength = originalLen > 0 && translationLen > 0 && translationLen > originalLen * 1.2;
+                      const overPercent = originalLen > 0 ? Math.round(((translationLen - originalLen) / originalLen) * 100) : 0;
+                      return (
+                        <>
+                          <Input
+                            value={translation}
+                            onChange={(e) => updateTranslation(key, e.target.value)}
+                            placeholder={entry.original ? "اكتب الترجمة..." : ""}
+                            dir="rtl"
+                            className={`font-body text-sm ${isOverLength ? 'border-destructive ring-destructive/30 ring-1' : ''}`}
+                          />
+                          {isOverLength && (
+                            <div className="flex items-center gap-1 mt-1 text-xs text-destructive">
+                              <AlertTriangle className="w-3 h-3" />
+                              <span>أطول بنسبة {overPercent}% من الأصل ({translationLen}/{originalLen} حرف)</span>
+                            </div>
+                          )}
+                        </>
+                      );
+                    })()}
                   </div>
                 </div>
               );
