@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Upload, FileArchive, ArrowRight, Loader2, CheckCircle2, AlertCircle, Clock } from "lucide-react";
+import { Upload, FileArchive, ArrowRight, Loader2, CheckCircle2, AlertCircle, Clock, Download } from "lucide-react";
 
 type ProcessingStage = "idle" | "uploading" | "decompressing-dict" | "decompressing-lang" | "extracting" | "reshaping" | "repacking" | "compressing" | "done" | "error";
 
@@ -282,12 +282,25 @@ const Process = () => {
           </Card>
         )}
 
-        {/* Results link */}
+        {/* Download & Results */}
         {stage === "done" && resultData && (
-          <div className="text-center mt-8">
+          <div className="flex flex-col items-center gap-4 mt-8">
+            <Button
+              size="lg"
+              onClick={() => {
+                const a = document.createElement("a");
+                a.href = resultData.blobUrl;
+                a.download = langFile?.name ? `arabized_${langFile.name}` : "arabized_output.zs";
+                a.click();
+              }}
+              className="font-display font-bold text-lg px-10 py-6"
+            >
+              <Download className="w-5 h-5" />
+              تحميل الملف المعرّب (.zs)
+            </Button>
             <Link to="/results">
-              <Button size="lg" className="font-display font-bold bg-secondary text-secondary-foreground hover:bg-secondary/90">
-                عرض النتائج والتحميل
+              <Button variant="outline" size="lg" className="font-display font-bold">
+                عرض تفاصيل النتائج
               </Button>
             </Link>
           </div>
