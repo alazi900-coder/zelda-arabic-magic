@@ -829,6 +829,19 @@ const Editor = () => {
         {/* Category Statistics Bar */}
         {state && (
           <div className="mb-6 p-4 bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 rounded-lg border border-border">
+            {/* Technical Bypass Statistics */}
+            <div className="mb-4 p-3 bg-accent/15 rounded-lg border border-accent/30">
+              <div className="flex items-center gap-2 justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg font-display font-bold">⚙️</span>
+                  <span className="text-sm font-display font-semibold text-foreground">النصوص التقنية المسموح بترجمتها:</span>
+                </div>
+                <span className="px-3 py-1 rounded-full bg-accent/30 text-accent font-display font-bold text-sm">
+                  {state.technicalBypass?.size || 0}
+                </span>
+              </div>
+            </div>
+
             <div className="flex items-center gap-2 mb-3">
               <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
               <span className="text-sm font-display font-bold text-foreground">نسبة الإنجاز حسب الفئة:</span>
