@@ -31,9 +31,10 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { entries, glossary } = await req.json() as {
+    const { entries, glossary, context } = await req.json() as {
       entries: { key: string; original: string }[];
       glossary?: string;
+      context?: { key: string; original: string; translation?: string }[];
     };
 
     if (!entries || entries.length === 0) {
@@ -57,8 +58,20 @@ Deno.serve(async (req) => {
       glossarySection = `\n\nIMPORTANT - Use this glossary for consistent terminology:\n${glossary}\n`;
     }
 
+    let contextSection = '';
+    if (context && context.length > 0) {
+      const contextLines = context
+        .filter(c => c.translation?.trim())
+        .map(c => `"${c.original}" → "${c.translation}"`)
+        .slice(0, 10)
+        .join('\n');
+      if (contextLines) {
+        contextSection = `\n\nHere are some nearby already-translated texts for context and consistency:\n${contextLines}\n`;
+      }
+    }
+
     const prompt = `You are a professional game translator. Translate the following game UI texts from English/Japanese to Arabic. 
-Keep any placeholder tags like \uFFFC and TAG_0, TAG_1, etc. intact in their exact positions. Return ONLY a JSON array of strings in the same order. No explanations.${glossarySection}
+Keep any placeholder tags like \uFFFC and TAG_0, TAG_1, etc. intact in their exact positions. Return ONLY a JSON array of strings in the same order. No explanations.${glossarySection}${contextSection}
 
 Texts:
 ${textsBlock}`;
