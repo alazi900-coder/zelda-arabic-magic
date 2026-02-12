@@ -8,8 +8,7 @@ interface ResultData {
   modifiedCount: number;
   fileSize: number;
   compressedFileSize: number | null;
-  data: string;
-  compressedData: string | null;
+  blobUrl: string;
   entries: { label: string; original: string; processed: string }[];
 }
 
@@ -23,17 +22,11 @@ const Results = () => {
     }
   }, []);
 
-  const downloadFile = (base64Data: string, filename: string) => {
-    const binary = atob(base64Data);
-    const bytes = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-    const blob = new Blob([bytes], { type: "application/octet-stream" });
-    const url = URL.createObjectURL(blob);
+  const downloadFile = (blobUrl: string, filename: string) => {
     const a = document.createElement("a");
-    a.href = url;
+    a.href = blobUrl;
     a.download = filename;
     a.click();
-    URL.revokeObjectURL(url);
   };
 
   return (
@@ -110,24 +103,13 @@ const Results = () => {
 
             {/* Download */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              {result.compressedData && (
-                <Button
-                  size="lg"
-                  onClick={() => downloadFile(result.compressedData!, "arabized_output.zs")}
-                  className="font-display font-bold text-lg px-10 py-6 bg-primary"
-                >
-                  <FileArchive className="w-5 h-5" />
-                  تحميل مضغوط (.zs)
-                </Button>
-              )}
               <Button
                 size="lg"
-                variant={result.compressedData ? "outline" : "default"}
-                onClick={() => downloadFile(result.data, "arabized_output.sarc")}
-                className="font-display font-bold text-lg px-10 py-6"
+                onClick={() => downloadFile(result.blobUrl, "arabized_output.zs")}
+                className="font-display font-bold text-lg px-10 py-6 bg-primary"
               >
-                <Download className="w-5 h-5" />
-                تحميل SARC غير مضغوط
+                <FileArchive className="w-5 h-5" />
+                تحميل الملف المعرّب (.zs)
               </Button>
             </div>
           </>

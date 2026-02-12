@@ -395,57 +395,55 @@ Deno.serve(async (req) => {
     const repackedData = packSARC(processedFiles, sarcData);
 
     // Step 5: Re-compress with Zstandard using dictionary
-    let compressedData: Uint8Array | null = null;
+    let outputData: Uint8Array = repackedData;
+    let isCompressed = false;
     try {
       console.log(`Re-compressing SARC (${repackedData.length} bytes)...`);
       if (rawDict) {
         const cctx = createCCtx();
-        compressedData = compressUsingDict(cctx, repackedData, rawDict, 3);
-        console.log(`Compressed with dict: ${repackedData.length} -> ${compressedData.length} bytes`);
+        outputData = compressUsingDict(cctx, repackedData, rawDict, 3);
+        isCompressed = true;
+        console.log(`Compressed with dict: ${repackedData.length} -> ${outputData.length} bytes`);
       } else {
-        compressedData = compress(repackedData);
-        console.log(`Compressed: ${repackedData.length} -> ${compressedData.length} bytes`);
+        outputData = compress(repackedData);
+        isCompressed = true;
+        console.log(`Compressed: ${repackedData.length} -> ${outputData.length} bytes`);
       }
     } catch (e) {
       console.error(`Re-compression failed: ${e instanceof Error ? e.message : 'Unknown'}`);
+      // Fall back to uncompressed
+      outputData = repackedData;
     }
 
-    // Convert Uint8Array to base64 in chunks to avoid stack overflow
-    function uint8ToBase64(arr: Uint8Array): string {
-      const CHUNK = 0x8000;
-      const parts: string[] = [];
-      for (let i = 0; i < arr.length; i += CHUNK) {
-        parts.push(String.fromCharCode(...arr.subarray(i, i + CHUNK)));
+    // Build a small entries preview (first 20 entries from first MSBT)
+    let entriesPreview: { label: string; original: string; processed: string }[] = [];
+    try {
+      for (const f of processedFiles) {
+        if (f.name.endsWith('.msbt')) {
+          const parsed = parseMSBT(f.data);
+          entriesPreview = parsed.entries.slice(0, 20).map(e => ({
+            label: e.label,
+            original: e.originalText.substring(0, 100),
+            processed: e.processedText.substring(0, 100),
+          }));
+          break;
+        }
       }
-      return btoa(parts.join(''));
-    }
+    } catch { /* ignore preview errors */ }
 
-    // Return both compressed and uncompressed as base64
-    const uncompressedBase64 = uint8ToBase64(repackedData);
-    const compressedBase64 = compressedData ? uint8ToBase64(compressedData) : null;
-    
-    return new Response(
-      JSON.stringify({
-        success: true,
-        modifiedCount,
-        fileSize: repackedData.length,
-        compressedFileSize: compressedData?.length ?? null,
-        data: uncompressedBase64,
-        compressedData: compressedBase64,
-        entries: processedFiles
-          .filter(f => f.name.endsWith('.msbt'))
-          .flatMap(f => {
-            try {
-              return parseMSBT(f.data).entries.slice(0, 20).map(e => ({
-                label: e.label,
-                original: e.originalText.substring(0, 100),
-                processed: e.processedText.substring(0, 100),
-              }));
-            } catch { return []; }
-          }),
-      }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    // Return binary data with metadata in headers
+    return new Response(outputData, {
+      headers: {
+        ...corsHeaders,
+        'Content-Type': 'application/octet-stream',
+        'Content-Disposition': 'attachment; filename="arabized_output.zs"',
+        'X-Modified-Count': String(modifiedCount),
+        'X-File-Size': String(repackedData.length),
+        'X-Compressed-Size': isCompressed ? String(outputData.length) : '',
+        'X-Is-Compressed': String(isCompressed),
+        'X-Entries-Preview': encodeURIComponent(JSON.stringify(entriesPreview)),
+      },
+    });
   } catch (error) {
     return new Response(
       JSON.stringify({ error: error instanceof Error ? error.message : 'حدث خطأ غير متوقع' }),
