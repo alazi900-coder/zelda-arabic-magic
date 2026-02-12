@@ -103,14 +103,13 @@ const Results = () => {
 
             {/* Download */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button
-                size="lg"
+              <button
                 onClick={() => downloadFile(result.blobUrl, "arabized_output.zs")}
-                className="font-display font-bold text-lg px-10 py-6 bg-primary"
+                className="inline-flex items-center justify-center gap-2 px-10 py-6 rounded-lg bg-primary text-primary-foreground font-display font-bold text-lg hover:bg-primary/90 transition-colors"
               >
                 <FileArchive className="w-5 h-5" />
                 تحميل الملف المعرّب (.zs)
-              </Button>
+              </button>
             </div>
           </>
         )}
