@@ -63,11 +63,31 @@ function reshapeArabic(text: string): string {
   return result.join('');
 }
 
+// Check if a char is Arabic (including reshaped presentation forms)
+function isArabicChar(ch: string): boolean {
+  const code = ch.charCodeAt(0);
+  return (code >= 0x0600 && code <= 0x06FF) || (code >= 0xFB50 && code <= 0xFDFF) || (code >= 0xFE70 && code <= 0xFEFF);
+}
+
 function reverseBidi(text: string): string {
-  return text.split('\n').map(line => [...line].reverse().join('')).join('\n');
+  return text.split('\n').map(line => {
+    // Reverse entire line for RTL base direction
+    const reversed = [...line].reverse().join('');
+    // Fix Latin/number runs that got wrongly reversed
+    return reversed.replace(/[a-zA-Z0-9][a-zA-Z0-9 .,!?:;'"\-]*/g, match => {
+      // Reverse the Latin run back to its original order
+      return [...match].reverse().join('');
+    });
+  }).join('\n');
+}
+
+function hasArabicChars(text: string): boolean {
+  return [...text].some(ch => isArabicChar(ch));
 }
 
 function processArabicText(text: string): string {
+  // Skip processing for text with no Arabic characters
+  if (!hasArabicChars(text)) return text;
   return reverseBidi(reshapeArabic(text));
 }
 
