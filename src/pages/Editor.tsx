@@ -547,6 +547,20 @@ const Editor = () => {
     input.click();
   };
 
+  const handleLoadDefaultGlossary = async () => {
+    try {
+      const response = await fetch('/zelda-glossary.txt');
+      if (!response.ok) throw new Error('فشل تحميل القاموس');
+      const text = await response.text();
+      setState(prev => prev ? { ...prev, glossary: text } : null);
+      const termCount = text.split('\n').filter(l => l.includes('=')).length;
+      setLastSaved(`📖 تم تحميل القاموس الافتراضي (${termCount} مصطلح)`);
+      setTimeout(() => setLastSaved(""), 3000);
+    } catch {
+      alert('خطأ في تحميل القاموس الافتراضي');
+    }
+  };
+
   const handleCloudSave = async () => {
     if (!state || !user) return;
     
@@ -919,6 +933,9 @@ const Editor = () => {
           </Button>
           <Button variant="outline" onClick={handleImportGlossary} className="font-body">
             <BookOpen className="w-4 h-4" /> تحميل قاموس
+          </Button>
+          <Button variant="outline" onClick={handleLoadDefaultGlossary} className="font-body border-primary/30 text-primary hover:text-primary">
+            📖 القاموس الافتراضي
           </Button>
           <Button variant="outline" onClick={handleFixAllReversed} className="font-body border-accent/30 text-accent hover:text-accent">
             <RotateCcw className="w-4 h-4" /> تصحيح الكل (عربي معكوس)
