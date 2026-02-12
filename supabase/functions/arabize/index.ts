@@ -410,11 +410,19 @@ Deno.serve(async (req) => {
       console.error(`Re-compression failed: ${e instanceof Error ? e.message : 'Unknown'}`);
     }
 
+    // Convert Uint8Array to base64 in chunks to avoid stack overflow
+    function uint8ToBase64(arr: Uint8Array): string {
+      const CHUNK = 0x8000;
+      const parts: string[] = [];
+      for (let i = 0; i < arr.length; i += CHUNK) {
+        parts.push(String.fromCharCode(...arr.subarray(i, i + CHUNK)));
+      }
+      return btoa(parts.join(''));
+    }
+
     // Return both compressed and uncompressed as base64
-    const uncompressedBase64 = btoa(String.fromCharCode(...repackedData));
-    const compressedBase64 = compressedData 
-      ? btoa(String.fromCharCode(...compressedData))
-      : null;
+    const uncompressedBase64 = uint8ToBase64(repackedData);
+    const compressedBase64 = compressedData ? uint8ToBase64(compressedData) : null;
     
     return new Response(
       JSON.stringify({
