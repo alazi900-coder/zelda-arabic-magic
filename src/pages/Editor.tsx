@@ -248,13 +248,13 @@ const Editor = () => {
     } : null);
     
     // بناء رسالة تفصيلية
-    const messageLines = [`✅ النتائج:`];
-    if (count > 0) messageLines.push(`• تم تصحيح: ${count} نص`);
-    if (skippedProtected > 0) messageLines.push(`• تم تخطي (محمية): ${skippedProtected} نص`);
-    if (skippedTranslated > 0) messageLines.push(`• تم تخطي (مترجمة): ${skippedTranslated} نص`);
-    if (skippedSame > 0) messageLines.push(`• تم تخطي (بلا تغيير): ${skippedSame} نص`);
+    const parts: string[] = [];
+    if (count > 0) parts.push("تم تصحيح: " + count + " نص");
+    if (skippedProtected > 0) parts.push("محمية: " + skippedProtected);
+    if (skippedTranslated > 0) parts.push("مترجمة: " + skippedTranslated);
+    if (skippedSame > 0) parts.push("بلا تغيير: " + skippedSame);
     
-    const detailedMessage = messageLines.join('\n');
+    const detailedMessage = (count > 0 ? "\u2705 " : "\u26A0\uFE0F ") + parts.join(" | ");
     setLastSaved(detailedMessage);
     setTimeout(() => setLastSaved(""), 5000);
   };
