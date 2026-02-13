@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save, Tag, Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle, Eye, EyeOff, RotateCcw, CheckCircle2, ShieldCheck, ChevronLeft, ChevronRight, Check, X, BarChart3, Menu, MoreVertical } from "lucide-react";
 import ZeldaDialoguePreview from "@/components/ZeldaDialoguePreview";
 import { idbSet, idbGet } from "@/lib/idb-storage";
+import { processArabicText, hasArabicChars as hasArabicCharsProcessing, hasArabicPresentationForms } from "@/lib/arabic-processing";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -191,8 +192,9 @@ const Editor = () => {
    const [translatingSingle, setTranslatingSingle] = useState<string | null>(null);
     const [previousTranslations, setPreviousTranslations] = useState<Record<string, string>>({});
     const [currentPage, setCurrentPage] = useState(0);
-    const [arabicNumerals, setArabicNumerals] = useState(false);
-    const [mirrorPunctuation, setMirrorPunctuation] = useState(false);
+  const [arabicNumerals, setArabicNumerals] = useState(false);
+     const [mirrorPunctuation, setMirrorPunctuation] = useState(false);
+     const [applyingArabic, setApplyingArabic] = useState(false);
   
   const navigate = useNavigate();
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
@@ -1248,6 +1250,43 @@ const Editor = () => {
     }
   };
 
+  const handleApplyArabicProcessing = () => {
+    if (!state) return;
+    const confirmed = window.confirm(
+      "⚠️ تطبيق المعالجة العربية\n\n" +
+      "سيتم تطبيق ربط الحروف (Reshaping) وعكس الاتجاه (BiDi Reversal) على جميع الترجمات.\n\n" +
+      "بعد التطبيق، ستظهر النصوص \"معكوسة\" في المحرر - وهذا طبيعي لأن هذا ما تحتاجه اللعبة.\n\n" +
+      "هل تريد المتابعة؟"
+    );
+    if (!confirmed) return;
+
+    setApplyingArabic(true);
+    const newTranslations = { ...state.translations };
+    let processedCount = 0;
+    let skippedCount = 0;
+
+    for (const [key, value] of Object.entries(newTranslations)) {
+      if (!value?.trim()) continue;
+      // Skip texts that already have Presentation Forms (already processed)
+      if (hasArabicPresentationForms(value)) {
+        skippedCount++;
+        continue;
+      }
+      if (!hasArabicCharsProcessing(value)) continue;
+      
+      newTranslations[key] = processArabicText(value, {
+        arabicNumerals,
+        mirrorPunct: mirrorPunctuation,
+      });
+      processedCount++;
+    }
+
+    setState(prev => prev ? { ...prev, translations: newTranslations } : null);
+    setApplyingArabic(false);
+    setLastSaved(`✅ تم تطبيق المعالجة العربية على ${processedCount} نص` + (skippedCount > 0 ? ` (تم تخطي ${skippedCount} نص معالج مسبقاً)` : ''));
+    setTimeout(() => setLastSaved(""), 5000);
+  };
+
   const handleBuild = async () => {
     if (!state) return;
 
@@ -1761,6 +1800,9 @@ const Editor = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="bg-card border-border z-50">
+                <DropdownMenuItem onClick={handleApplyArabicProcessing} disabled={applyingArabic || translatedCount === 0}>
+                  <Sparkles className="w-4 h-4" /> تطبيق المعالجة العربية ✨
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleFixAllReversed}>
                   <RotateCcw className="w-4 h-4" /> تصحيح الكل (معكوس)
                 </DropdownMenuItem>
@@ -1834,16 +1876,28 @@ const Editor = () => {
           </CardContent>
         </Card>
 
-        {/* Build Button */}
-        <Button
-          size="lg"
-          onClick={handleBuild}
-          disabled={building}
-          className="w-full font-display font-bold mb-6"
-        >
-          {building ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <FileDown className="w-4 h-4 mr-2" />}
-          بناء الملف النهائي
-        </Button>
+        {/* Arabic Processing + Build Buttons */}
+        <div className="flex gap-3 mb-6">
+          <Button
+            size="lg"
+            variant="secondary"
+            onClick={handleApplyArabicProcessing}
+            disabled={applyingArabic || translatedCount === 0}
+            className="flex-1 font-display font-bold"
+          >
+            {applyingArabic ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Sparkles className="w-4 h-4 mr-2" />}
+            تطبيق المعالجة العربية ✨
+          </Button>
+          <Button
+            size="lg"
+            onClick={handleBuild}
+            disabled={building}
+            className="flex-1 font-display font-bold"
+          >
+            {building ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <FileDown className="w-4 h-4 mr-2" />}
+            بناء الملف النهائي
+          </Button>
+        </div>
 
         {/* Quality Stats Panel */}
         {showQualityStats && (
