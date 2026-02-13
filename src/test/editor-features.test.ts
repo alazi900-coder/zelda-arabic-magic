@@ -163,17 +163,57 @@ describe("Editor Features", () => {
   });
 
   describe("Auto-detect Arabic Feature", () => {
-    it("should detect pre-translated Arabic texts", () => {
-      const arabicRegex = /[\u0600-\u06FF\uFB50-\uFDFF\uFE70-\uFEFF\u0750-\u077F\u08A0-\u08FF]/;
-      
-      const entries = [
-        { original: "السلام عليكم" },
-        { original: "Hello" },
-        { original: "مرحبا" },
-      ];
+     it("should detect pre-translated Arabic texts", () => {
+       const arabicRegex = /[\u0600-\u06FF\uFB50-\uFDFF\uFE70-\uFEFF\u0750-\u077F\u08A0-\u08FF]/;
+       
+       const entries = [
+         { original: "السلام عليكم" },
+         { original: "Hello" },
+         { original: "مرحبا" },
+       ];
 
-      const autoDetectedCount = entries.filter(e => arabicRegex.test(e.original)).length;
-      expect(autoDetectedCount).toBe(2);
+       const autoDetectedCount = entries.filter(e => arabicRegex.test(e.original)).length;
+       expect(autoDetectedCount).toBe(2);
+     });
+   });
+
+  describe("Status Message Generation", () => {
+    it("should generate correct status message for fixed reversed texts", () => {
+      const count = 5;
+      const skippedProtected = 2;
+      const skippedTranslated = 3;
+      const skippedSame = 1;
+
+      const parts: string[] = [];
+      if (count > 0) parts.push("تم تصحيح: " + count + " نص");
+      if (skippedProtected > 0) parts.push("محمية: " + skippedProtected);
+      if (skippedTranslated > 0) parts.push("مترجمة: " + skippedTranslated);
+      if (skippedSame > 0) parts.push("بلا تغيير: " + skippedSame);
+
+      const detailedMessage = (count > 0 ? "\u2705 " : "\u26A0\uFE0F ") + parts.join(" | ");
+      
+      expect(detailedMessage).toContain("✅");
+      expect(detailedMessage).toContain("تم تصحيح: 5");
+      expect(detailedMessage).toContain("محمية: 2");
+      expect(detailedMessage).toContain("مترجمة: 3");
+      expect(detailedMessage).toContain("بلا تغيير: 1");
+    });
+
+    it("should generate warning message when no texts were fixed", () => {
+      const count = 0;
+      const skippedProtected = 0;
+      const skippedTranslated = 0;
+      const skippedSame = 0;
+
+      const parts: string[] = [];
+      if (count > 0) parts.push("تم تصحيح: " + count + " نص");
+      if (skippedProtected > 0) parts.push("محمية: " + skippedProtected);
+      if (skippedTranslated > 0) parts.push("مترجمة: " + skippedTranslated);
+      if (skippedSame > 0) parts.push("بلا تغيير: " + skippedSame);
+
+      const detailedMessage = (count > 0 ? "\u2705 " : "\u26A0\uFE0F ") + parts.join(" | ");
+      
+      expect(detailedMessage).toContain("⚠️");
     });
   });
 });
