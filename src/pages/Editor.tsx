@@ -345,8 +345,6 @@ const Editor = () => {
         for (const entry of stored.entries) {
           const key = `${entry.msbtFile}:${entry.index}`;
           if (arabicRegex.test(entry.original)) {
-            // Only protect if there's a real translation that differs from original
-            // Don't protect auto-detected entries (translation === original) so Fix Reversed can work on them
             const existingTranslation = mergedTranslations[key]?.trim();
             if (existingTranslation && existingTranslation !== entry.original && existingTranslation !== entry.original.trim()) {
               protectedSet.add(key);
@@ -1539,22 +1537,22 @@ const Editor = () => {
 
         {/* Cloud Actions */}
         {user && (
-          <div className="mb-6 flex gap-3 flex-wrap">
+          <div className={`mb-6 flex gap-${isMobile ? '2' : '3'} flex-wrap`}>
             <Button
-              size="lg"
+              size={isMobile ? "sm" : "lg"}
               variant="outline"
               onClick={handleCloudSave}
               disabled={cloudSyncing || translatedCount === 0}
-              className="font-display font-bold px-4 border-primary/30"
+              className={`font-display font-bold px-4 border-primary/30 ${isMobile ? 'text-xs' : ''}`}
             >
               <CloudUpload className="w-4 h-4" /> حفظ في السحابة
             </Button>
             <Button
-              size="lg"
+              size={isMobile ? "sm" : "lg"}
               variant="outline"
               onClick={handleCloudLoad}
               disabled={cloudSyncing}
-              className="font-display font-bold px-4 border-primary/30"
+              className={`font-display font-bold px-4 border-primary/30 ${isMobile ? 'text-xs' : ''}`}
             >
               <Cloud className="w-4 h-4" /> تحميل من السحابة
             </Button>
@@ -1562,40 +1560,101 @@ const Editor = () => {
         )}
 
         {/* Export/Import Actions */}
-        <div className="mb-6 flex gap-3 flex-wrap">
-          <Button variant="outline" onClick={handleExportTranslations} className="font-body">
-            <Download className="w-4 h-4" /> تصدير JSON
-          </Button>
-          <Button variant="outline" onClick={handleImportTranslations} className="font-body">
-            <Upload className="w-4 h-4" /> استيراد JSON
-          </Button>
-          <Button variant="outline" onClick={handleImportGlossary} className="font-body">
-            <BookOpen className="w-4 h-4" /> تحميل قاموس
-          </Button>
-          <Button variant="outline" onClick={handleLoadDefaultGlossary} className="font-body border-primary/30 text-primary hover:text-primary">
-            📖 القاموس الافتراضي
-          </Button>
-          <Button variant="outline" onClick={handleSaveGlossaryToCloud} disabled={!user || cloudSyncing} className="font-body border-secondary/30 text-secondary hover:text-secondary">
-            {cloudSyncing ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <CloudUpload className="w-4 h-4 mr-2" />}
-            حفظ القاموس ☁️
-          </Button>
-          <Button variant="outline" onClick={handleLoadGlossaryFromCloud} disabled={!user || cloudSyncing} className="font-body border-secondary/30 text-secondary hover:text-secondary">
-            {cloudSyncing ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Cloud className="w-4 h-4 mr-2" />}
-            تحميل من السحابة ☁️
-          </Button>
-          <Button variant="outline" onClick={handleFixAllReversed} className="font-body border-accent/30 text-accent hover:text-accent">
-            <RotateCcw className="w-4 h-4" /> تصحيح الكل (عربي معكوس)
-          </Button>
-          <Button
-            variant="outline"
-            onClick={handleReviewTranslations}
-            disabled={reviewing || translatedCount === 0}
-            className="font-body border-green-500/30 text-green-600 hover:text-green-700"
-          >
-            {reviewing ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />}
-            مراجعة ذكية 🔍
-          </Button>
-        </div>
+        {isMobile ? (
+          <div className="mb-6 flex gap-2 flex-wrap">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="font-body text-xs">
+                  <Download className="w-3 h-3" /> ملفات
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-card border-border z-50">
+                <DropdownMenuLabel className="text-xs">تصدير واستيراد</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleExportTranslations}>
+                  <Download className="w-4 h-4" /> تصدير JSON
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleImportTranslations}>
+                  <Upload className="w-4 h-4" /> استيراد JSON
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleImportGlossary}>
+                  <BookOpen className="w-4 h-4" /> تحميل قاموس
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLoadDefaultGlossary}>
+                  📖 القاموس الافتراضي
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="font-body text-xs" disabled={!user}>
+                  <Cloud className="w-3 h-3" /> سحابة
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-card border-border z-50">
+                <DropdownMenuLabel className="text-xs">المزامنة السحابية</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleSaveGlossaryToCloud} disabled={!user || cloudSyncing}>
+                  <CloudUpload className="w-4 h-4" /> حفظ القاموس
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLoadGlossaryFromCloud} disabled={!user || cloudSyncing}>
+                  <Cloud className="w-4 h-4" /> تحميل القاموس
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="font-body text-xs">
+                  <MoreVertical className="w-3 h-3" /> أدوات
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-card border-border z-50">
+                <DropdownMenuItem onClick={handleFixAllReversed}>
+                  <RotateCcw className="w-4 h-4" /> تصحيح الكل (معكوس)
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleReviewTranslations} disabled={reviewing || translatedCount === 0}>
+                  <ShieldCheck className="w-4 h-4" /> مراجعة ذكية 🔍
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        ) : (
+          <div className="mb-6 flex gap-3 flex-wrap">
+            <Button variant="outline" onClick={handleExportTranslations} className="font-body">
+              <Download className="w-4 h-4" /> تصدير JSON
+            </Button>
+            <Button variant="outline" onClick={handleImportTranslations} className="font-body">
+              <Upload className="w-4 h-4" /> استيراد JSON
+            </Button>
+            <Button variant="outline" onClick={handleImportGlossary} className="font-body">
+              <BookOpen className="w-4 h-4" /> تحميل قاموس
+            </Button>
+            <Button variant="outline" onClick={handleLoadDefaultGlossary} className="font-body border-primary/30 text-primary hover:text-primary">
+              📖 القاموس الافتراضي
+            </Button>
+            <Button variant="outline" onClick={handleSaveGlossaryToCloud} disabled={!user || cloudSyncing} className="font-body border-secondary/30 text-secondary hover:text-secondary">
+              {cloudSyncing ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <CloudUpload className="w-4 h-4 mr-2" />}
+              حفظ القاموس ☁️
+            </Button>
+            <Button variant="outline" onClick={handleLoadGlossaryFromCloud} disabled={!user || cloudSyncing} className="font-body border-secondary/30 text-secondary hover:text-secondary">
+              {cloudSyncing ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Cloud className="w-4 h-4 mr-2" />}
+              تحميل من السحابة ☁️
+            </Button>
+            <Button variant="outline" onClick={handleFixAllReversed} className="font-body border-accent/30 text-accent hover:text-accent">
+              <RotateCcw className="w-4 h-4" /> تصحيح الكل (عربي معكوس)
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleReviewTranslations}
+              disabled={reviewing || translatedCount === 0}
+              className="font-body border-green-500/30 text-green-600 hover:text-green-700"
+            >
+              {reviewing ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />}
+              مراجعة ذكية 🔍
+            </Button>
+          </div>
+        )}
 
         {/* Build Button */}
         <Button
