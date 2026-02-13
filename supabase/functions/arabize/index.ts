@@ -597,6 +597,10 @@ Deno.serve(async (req) => {
                 } else if (translationText === entries[i].originalText) {
                   // Same as original - no processing needed, skip injection
                   continue;
+                } else if (hasArabicPresentationForms(translationText)) {
+                  // Already processed (has presentation forms from manual processing or external tool)
+                  // Just inject as-is, no re-processing needed
+                  entries[i].processedText = translationText;
                 } else {
                   entries[i].processedText = processArabicText(translationText, processOptions);
                 }
