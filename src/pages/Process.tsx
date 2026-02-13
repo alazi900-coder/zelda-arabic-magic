@@ -277,8 +277,6 @@ const Process = () => {
       });
 
       navigate("/editor");
-
-      navigate("/editor");
     } catch (err) {
       alert(err instanceof Error ? err.message : "خطأ غير معروف");
     } finally {
