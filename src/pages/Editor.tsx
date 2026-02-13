@@ -28,6 +28,7 @@ interface EditorState {
 
 const AUTOSAVE_DELAY = 1500;
 const AI_BATCH_SIZE = 30;
+const PAGE_SIZE = 50;
 
 interface FileCategory {
   id: string;
@@ -139,7 +140,8 @@ const Editor = () => {
    const [quickReviewIndex, setQuickReviewIndex] = useState(0);
    const [showQualityStats, setShowQualityStats] = useState(false);
    const [translatingSingle, setTranslatingSingle] = useState<string | null>(null);
-   const [previousTranslations, setPreviousTranslations] = useState<Record<string, string>>({});
+    const [previousTranslations, setPreviousTranslations] = useState<Record<string, string>>({});
+    const [currentPage, setCurrentPage] = useState(0);
   
   const navigate = useNavigate();
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
@@ -208,11 +210,18 @@ const Editor = () => {
 
     for (const entry of state.entries) {
       const key = `${entry.msbtFile}:${entry.index}`;
-      const hasTranslation = newTranslations[key]?.trim();
-      if (!hasTranslation && hasArabicChars(entry.original)) {
-        newTranslations[key] = unReverseBidi(entry.original);
-        newProtected.add(key);
-        count++;
+      if (hasArabicChars(entry.original)) {
+        const existing = newTranslations[key]?.trim();
+        // Fix if no translation, or if translation is same as original (auto-detected)
+        if (!existing || existing === entry.original) {
+          const corrected = unReverseBidi(entry.original);
+          // Only count if the correction actually changes something
+          if (corrected !== entry.original) {
+            newTranslations[key] = corrected;
+            newProtected.add(key);
+            count++;
+          }
+        }
       }
     }
 
@@ -396,6 +405,17 @@ const Editor = () => {
       return matchSearch && matchFile && matchCategory && matchStatus && matchTechnical;
     });
   }, [state, search, filterFile, filterCategory, filterStatus, filterTechnical, qualityStats.problemKeys]);
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [search, filterFile, filterCategory, filterStatus, filterTechnical]);
+
+  const totalPages = Math.ceil(filteredEntries.length / PAGE_SIZE);
+  const paginatedEntries = useMemo(() => {
+    const start = currentPage * PAGE_SIZE;
+    return filteredEntries.slice(start, start + PAGE_SIZE);
+  }, [filteredEntries, currentPage]);
 
   const updateTranslation = (key: string, value: string) => {
     if (!state) return;
@@ -1615,12 +1635,40 @@ const Editor = () => {
           </Card>
         ) : null}
 
+        {/* Pagination Header */}
+        {filteredEntries.length > 0 && (
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-sm text-muted-foreground">
+              عرض {currentPage * PAGE_SIZE + 1}-{Math.min((currentPage + 1) * PAGE_SIZE, filteredEntries.length)} من {filteredEntries.length} نص
+            </p>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(p => Math.max(0, p - 1))}
+                disabled={currentPage === 0}
+              >
+                <ChevronRight className="w-4 h-4" /> السابق
+              </Button>
+              <span className="text-sm font-display">{currentPage + 1} / {totalPages}</span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(p => Math.min(totalPages - 1, p + 1))}
+                disabled={currentPage >= totalPages - 1}
+              >
+                التالي <ChevronLeft className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+        )}
+
         {/* Entries List */}
         <div className="space-y-2">
           {filteredEntries.length === 0 ? (
             <p className="text-center text-muted-foreground py-8">لا توجد نصوص مطابقة</p>
           ) : (
-            filteredEntries.map((entry, idx) => {
+            paginatedEntries.map((entry, idx) => {
               const key = `${entry.msbtFile}:${entry.index}`;
               const translation = state?.translations[key] || '';
               const isProtected = state?.protectedEntries?.has(key);
@@ -1628,7 +1676,7 @@ const Editor = () => {
               const hasProblem = qualityStats.problemKeys.has(key);
               
               return (
-                <Card key={idx} className={`p-4 border-border/50 hover:border-border transition-colors ${hasProblem ? 'border-destructive/30 bg-destructive/5' : ''}`}>
+                <Card key={key} className={`p-4 border-border/50 hover:border-border transition-colors ${hasProblem ? 'border-destructive/30 bg-destructive/5' : ''}`}>
                   <div className="flex items-start gap-4">
                     <div className="flex-1 min-w-0">
                       <p className="text-xs text-muted-foreground mb-1">{entry.msbtFile} • {entry.label}</p>
@@ -1641,7 +1689,7 @@ const Editor = () => {
                           <AlertTriangle className="w-3 h-3" /> يحتاج مراجعة
                         </p>
                       )}
-                      {!translation && hasArabicChars(entry.original) && (
+                      {hasArabicChars(entry.original) && (!translation || translation === entry.original) && (
                         <Button
                           variant="ghost"
                           size="sm"
@@ -1691,6 +1739,29 @@ const Editor = () => {
             })
           )}
         </div>
+
+        {/* Pagination Footer */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2 mt-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(p => Math.max(0, p - 1))}
+              disabled={currentPage === 0}
+            >
+              <ChevronRight className="w-4 h-4" /> السابق
+            </Button>
+            <span className="text-sm font-display">{currentPage + 1} / {totalPages}</span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(p => Math.min(totalPages - 1, p + 1))}
+              disabled={currentPage >= totalPages - 1}
+            >
+              التالي <ChevronLeft className="w-4 h-4" />
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
