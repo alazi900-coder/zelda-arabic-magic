@@ -239,7 +239,7 @@ const Process = () => {
       const data = await response.json();
 
       // Store files in IndexedDB to avoid sessionStorage quota
-      const { idbSet } = await import("@/lib/idb-storage");
+      const { idbSet, idbGet } = await import("@/lib/idb-storage");
       const langBuf = await langFile.arrayBuffer();
       const dictBuf = await dictFile.arrayBuffer();
       await idbSet("editorLangFile", langBuf);
@@ -257,9 +257,21 @@ const Process = () => {
       }
       console.log(`Auto-detected ${Object.keys(autoTranslations).length} pre-translated Arabic entries`);
 
+      // Merge with existing translations so previous work is preserved
+      const existing = await idbGet<{ translations?: Record<string, string> }>("editorState");
+      const mergedTranslations = { ...autoTranslations, ...(existing?.translations || {}) };
+      // Only keep translations whose keys exist in the new entries
+      const validKeys = new Set(data.entries.map((e: any) => `${e.msbtFile}:${e.index}`));
+      const finalTranslations: Record<string, string> = {};
+      for (const [k, v] of Object.entries(mergedTranslations)) {
+        if (validKeys.has(k) && v) finalTranslations[k] = v as string;
+      }
+      const preservedCount = Object.keys(finalTranslations).length - Object.keys(autoTranslations).length;
+      if (preservedCount > 0) console.log(`Preserved ${preservedCount} previous translations`);
+
       await idbSet("editorState", {
         entries: data.entries,
-        translations: autoTranslations,
+        translations: finalTranslations,
       });
 
       navigate("/editor");
