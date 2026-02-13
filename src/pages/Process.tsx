@@ -248,7 +248,7 @@ const Process = () => {
       await idbSet("editorDictFileName", dictFile.name);
       // Auto-detect already-Arabic entries and pre-populate as translated
       const autoTranslations: Record<string, string> = {};
-      const arabicRegex = /[\u0600-\u06FF]/;
+      const arabicRegex = /[\u0600-\u06FF\uFB50-\uFDFF\uFE70-\uFEFF\u0750-\u077F\u08A0-\u08FF]/;
       for (const entry of data.entries) {
         if (arabicRegex.test(entry.original)) {
           const key = `${entry.msbtFile}:${entry.index}`;

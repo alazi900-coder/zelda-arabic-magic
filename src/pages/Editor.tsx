@@ -170,7 +170,7 @@ const Editor = () => {
 
   const handleProtectAllArabic = () => {
     if (!state) return;
-    const arabicRegex = /[\u0600-\u06FF]/;
+    const arabicRegex = /[\u0600-\u06FF\uFB50-\uFDFF\uFE70-\uFEFF\u0750-\u077F\u08A0-\u08FF]/;
     const newProtected = new Set(state.protectedEntries || []);
     let count = 0;
     
@@ -226,7 +226,7 @@ const Editor = () => {
   };
 
   const detectPreTranslated = useCallback((editorState: EditorState): Record<string, string> => {
-    const arabicRegex = /[\u0600-\u06FF]/;
+    const arabicRegex = /[\u0600-\u06FF\uFB50-\uFDFF\uFE70-\uFEFF\u0750-\u077F\u08A0-\u08FF]/;
     const autoTranslations: Record<string, string> = {};
     for (const entry of editorState.entries) {
       const key = `${entry.msbtFile}:${entry.index}`;
@@ -256,7 +256,7 @@ const Editor = () => {
           Array.isArray((stored as any).technicalBypass) ? ((stored as any).technicalBypass as string[]) : []
         );
 
-        const arabicRegex = /[\u0600-\u06FF]/;
+        const arabicRegex = /[\u0600-\u06FF\uFB50-\uFDFF\uFE70-\uFEFF\u0750-\u077F\u08A0-\u08FF]/;
         for (const entry of stored.entries) {
           const key = `${entry.msbtFile}:${entry.index}`;
           if (arabicRegex.test(entry.original)) {
