@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback, memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -29,6 +29,45 @@ interface EditorState {
 const AUTOSAVE_DELAY = 1500;
 const AI_BATCH_SIZE = 30;
 const PAGE_SIZE = 50;
+const INPUT_DEBOUNCE = 300;
+
+// Debounced input component to prevent re-renders on every keystroke
+const DebouncedInput = memo(({ value, onChange, placeholder, className, autoFocus }: {
+  value: string;
+  onChange: (val: string) => void;
+  placeholder?: string;
+  className?: string;
+  autoFocus?: boolean;
+}) => {
+  const [localValue, setLocalValue] = useState(value);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  
+  useEffect(() => {
+    setLocalValue(value);
+  }, [value]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVal = e.target.value;
+    setLocalValue(newVal);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => onChange(newVal), INPUT_DEBOUNCE);
+  };
+
+  useEffect(() => {
+    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
+  }, []);
+
+  return (
+    <input
+      type="text"
+      value={localValue}
+      onChange={handleChange}
+      placeholder={placeholder}
+      className={className}
+      autoFocus={autoFocus}
+    />
+  );
+});
 
 interface FileCategory {
   id: string;
@@ -354,59 +393,43 @@ const Editor = () => {
     return counts;
   }, [state?.entries]);
 
-  const categoryProgress = useMemo(() => {
-    if (!state) return {};
-    const progress: Record<string, { translated: number; total: number }> = {};
-    
-    for (const cat of FILE_CATEGORIES) {
-      progress[cat.id] = { translated: 0, total: 0 };
-    }
-    progress["other"] = { translated: 0, total: 0 };
+  // categoryProgress removed - was computed but never displayed, causing unnecessary recalculation
 
-    for (const e of state.entries) {
-      const cat = categorizeFile(e.msbtFile);
-      const key = `${e.msbtFile}:${e.index}`;
-      const isTranslated = state.translations[key] && state.translations[key].trim() !== '';
-      
-      progress[cat].total += 1;
-      if (isTranslated) progress[cat].translated += 1;
-    }
-    
-    return progress;
-  }, [state?.entries, state?.translations]);
+  // Quality stats computation - debounced to avoid recomputing on every keystroke
+  const [qualityStats, setQualityStats] = useState({ tooLong: 0, nearLimit: 0, missingTags: 0, placeholderMismatch: 0, total: 0, problemKeys: new Set<string>() });
+  const qualityTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  
+  useEffect(() => {
+    if (!state) return;
+    if (qualityTimerRef.current) clearTimeout(qualityTimerRef.current);
+    qualityTimerRef.current = setTimeout(() => {
+      let tooLong = 0, nearLimit = 0, missingTags = 0, placeholderMismatch = 0;
+      const problemKeys = new Set<string>();
 
-  // Quality stats computation
-  const qualityStats = useMemo(() => {
-    if (!state) return { tooLong: 0, nearLimit: 0, missingTags: 0, placeholderMismatch: 0, total: 0, problemKeys: new Set<string>() };
-    
-    let tooLong = 0, nearLimit = 0, missingTags = 0, placeholderMismatch = 0;
-    const problemKeys = new Set<string>();
+      for (const entry of state.entries) {
+        const key = `${entry.msbtFile}:${entry.index}`;
+        const translation = state.translations[key]?.trim();
+        if (!translation) continue;
 
-    for (const entry of state.entries) {
-      const key = `${entry.msbtFile}:${entry.index}`;
-      const translation = state.translations[key]?.trim();
-      if (!translation) continue;
+        if (entry.maxBytes > 0) {
+          const bytes = translation.length * 2;
+          if (bytes > entry.maxBytes) { tooLong++; problemKeys.add(key); }
+          else if (bytes / entry.maxBytes > 0.8) { nearLimit++; problemKeys.add(key); }
+        }
 
-      // Byte limit check
-      if (entry.maxBytes > 0) {
-        const bytes = translation.length * 2;
-        if (bytes > entry.maxBytes) { tooLong++; problemKeys.add(key); }
-        else if (bytes / entry.maxBytes > 0.8) { nearLimit++; problemKeys.add(key); }
+        const origTags = entry.original.match(/\[[^\]]*\]/g) || [];
+        for (const tag of origTags) {
+          if (!translation.includes(tag)) { missingTags++; problemKeys.add(key); break; }
+        }
+
+        const origPh = (entry.original.match(/\uFFFC/g) || []).length;
+        const transPh = (translation.match(/\uFFFC/g) || []).length;
+        if (origPh !== transPh) { placeholderMismatch++; problemKeys.add(key); }
       }
 
-      // Missing tags
-      const origTags = entry.original.match(/\[[^\]]*\]/g) || [];
-      for (const tag of origTags) {
-        if (!translation.includes(tag)) { missingTags++; problemKeys.add(key); break; }
-      }
-
-      // Placeholder mismatch
-      const origPh = (entry.original.match(/\uFFFC/g) || []).length;
-      const transPh = (translation.match(/\uFFFC/g) || []).length;
-      if (origPh !== transPh) { placeholderMismatch++; problemKeys.add(key); }
-    }
-
-    return { tooLong, nearLimit, missingTags, placeholderMismatch, total: problemKeys.size, problemKeys };
+      setQualityStats({ tooLong, nearLimit, missingTags, placeholderMismatch, total: problemKeys.size, problemKeys });
+    }, 1000); // 1 second debounce for quality stats
+    return () => { if (qualityTimerRef.current) clearTimeout(qualityTimerRef.current); };
   }, [state?.entries, state?.translations]);
 
   const filteredEntries = useMemo(() => {
@@ -521,9 +544,14 @@ const Editor = () => {
     }
   };
 
-  const translatedCount = useMemo(() => {
-    if (!state) return 0;
-    return Object.values(state.translations).filter(v => v.trim() !== '').length;
+  // Debounced translated count to avoid recounting on every keystroke
+  const [translatedCount, setTranslatedCount] = useState(0);
+  useEffect(() => {
+    if (!state) return;
+    const timer = setTimeout(() => {
+      setTranslatedCount(Object.values(state.translations).filter(v => v.trim() !== '').length);
+    }, 500);
+    return () => clearTimeout(timer);
   }, [state?.translations]);
 
   const handleAutoTranslate = async () => {
@@ -1374,31 +1402,15 @@ const Editor = () => {
           </Card>
         )}
 
-        {state && (
-          <div className="mb-6 p-4 bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 rounded-lg border border-border">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {FILE_CATEGORIES.map(cat => {
-                const prog = categoryProgress[cat.id];
-                const pct = prog?.total ? Math.round((prog.translated / prog.total) * 100) : 0;
-                return (
-                  <div key={cat.id} className="p-3 bg-card rounded border border-border/50">
-                    <p className="text-sm font-bold mb-2">{cat.emoji} {cat.label}</p>
-                    <Progress value={pct} className="h-2 mb-1" />
-                    <p className="text-xs text-muted-foreground text-center">{pct}%</p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
+        {/* Category progress section removed for performance */}
 
         {/* Filter Bar */}
         <div className="mb-6 p-4 bg-card rounded border border-border flex flex-wrap gap-3 items-center">
-          <Input
+          <DebouncedInput
             placeholder="ابحث عن نصوص..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="flex-1 min-w-[200px] font-body"
+            onChange={(val) => setSearch(val)}
+            className="flex-1 min-w-[200px] px-3 py-2 rounded bg-background border border-border font-body text-sm"
           />
           <select
             value={filterFile}
@@ -1603,10 +1615,9 @@ const Editor = () => {
 
                     <div className="mb-4">
                       <p className="text-xs text-muted-foreground mb-1">الترجمة:</p>
-                      <input
-                        type="text"
+                      <DebouncedInput
                         value={translation}
-                        onChange={(e) => updateTranslation(key, e.target.value)}
+                        onChange={(val) => updateTranslation(key, val)}
                         placeholder="أدخل الترجمة..."
                         className="w-full px-3 py-2 rounded bg-background border border-border font-body text-sm"
                         autoFocus
@@ -1730,10 +1741,9 @@ const Editor = () => {
                         </Button>
                       )}
                       <div className="flex items-center gap-2">
-                        <input
-                          type="text"
+                        <DebouncedInput
                           value={translation}
-                          onChange={(e) => updateTranslation(key, e.target.value)}
+                          onChange={(val) => updateTranslation(key, val)}
                           placeholder="أدخل الترجمة..."
                           className="flex-1 px-3 py-2 rounded bg-background border border-border font-body text-sm"
                         />
