@@ -240,10 +240,11 @@ ${tooLongEntries.map((e, i) => `[${i}] الأصلي: "${e.original}"
         'of', 'to', 'in', 'at', 'by', 'or', 'an', 'is', 'as',
       ]);
 
-      const englishWords = entry.translation.match(/[a-zA-Z]{2,}/g) || [];
+      // Strip tags [Tag:Value] before scanning for English words
+      const textWithoutTags = entry.translation.replace(/\[[^\]]*\]/g, '');
+      const englishWords = textWithoutTags.match(/[a-zA-Z]{2,}/g) || [];
       const remainingEnglish = englishWords.filter(w => {
         const lower = w.toLowerCase();
-        // Skip if it's a proper noun, button abbreviation, or < 3 chars
         return (
           !ZELDA_PROPER_NOUNS.has(lower) && 
           !BUTTON_ABBREVIATIONS.has(lower) && 
