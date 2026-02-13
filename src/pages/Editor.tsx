@@ -247,11 +247,15 @@ const Editor = () => {
       protectedEntries: newProtected,
     } : null);
     
-    if (count > 0) {
-      setLastSaved(`✅ تم تصحيح ${count} نص عربي معكوس`);
-    } else {
-      setLastSaved(`⚠️ لم يتم العثور على نصوص تحتاج تصحيح (محمية: ${skippedProtected}، مترجمة: ${skippedTranslated}، مطابقة: ${skippedSame})`);
-    }
+    // بناء رسالة تفصيلية
+    const messageLines = [`✅ النتائج:`];
+    if (count > 0) messageLines.push(`• تم تصحيح: ${count} نص`);
+    if (skippedProtected > 0) messageLines.push(`• تم تخطي (محمية): ${skippedProtected} نص`);
+    if (skippedTranslated > 0) messageLines.push(`• تم تخطي (مترجمة): ${skippedTranslated} نص`);
+    if (skippedSame > 0) messageLines.push(`• تم تخطي (بلا تغيير): ${skippedSame} نص`);
+    
+    const detailedMessage = messageLines.join('\n');
+    setLastSaved(detailedMessage);
     setTimeout(() => setLastSaved(""), 5000);
   };
 
