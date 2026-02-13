@@ -1252,13 +1252,6 @@ const Editor = () => {
 
   const handleApplyArabicProcessing = () => {
     if (!state) return;
-    const confirmed = window.confirm(
-      "⚠️ تطبيق المعالجة العربية\n\n" +
-      "سيتم تطبيق ربط الحروف (Reshaping) وعكس الاتجاه (BiDi Reversal) على جميع الترجمات.\n\n" +
-      "بعد التطبيق، ستظهر النصوص \"معكوسة\" في المحرر - وهذا طبيعي لأن هذا ما تحتاجه اللعبة.\n\n" +
-      "هل تريد المتابعة؟"
-    );
-    if (!confirmed) return;
 
     setApplyingArabic(true);
     const newTranslations = { ...state.translations };
@@ -1800,7 +1793,7 @@ const Editor = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="bg-card border-border z-50">
-                <DropdownMenuItem onClick={handleApplyArabicProcessing} disabled={applyingArabic || translatedCount === 0}>
+                <DropdownMenuItem onClick={handleApplyArabicProcessing} disabled={applyingArabic}>
                   <Sparkles className="w-4 h-4" /> تطبيق المعالجة العربية ✨
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleFixAllReversed}>
@@ -1882,7 +1875,7 @@ const Editor = () => {
             size="lg"
             variant="secondary"
             onClick={handleApplyArabicProcessing}
-            disabled={applyingArabic || translatedCount === 0}
+            disabled={applyingArabic}
             className="flex-1 font-display font-bold"
           >
             {applyingArabic ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Sparkles className="w-4 h-4 mr-2" />}
