@@ -977,34 +977,91 @@ const Editor = () => {
     URL.revokeObjectURL(url);
   };
 
-  const handleImportTranslations = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json';
-    input.onchange = async (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (!file) return;
-      try {
-        const text = await file.text();
-        const imported = JSON.parse(text) as Record<string, string>;
-        
-        // تنظيف أحرف Presentation Forms من جميع الترجمات المستوردة
-        const cleanedImported: Record<string, string> = {};
-        for (const [key, value] of Object.entries(imported)) {
-          cleanedImported[key] = normalizeArabicPresentationForms(value);
-        }
-        
-        setState(prev => {
-          if (!prev) return null;
-          return { ...prev, translations: { ...prev.translations, ...cleanedImported } };
-        });
-        setLastSaved(`✅ تم استيراد ${Object.keys(imported).length} ترجمة وتنظيفها`);
-      } catch {
-        alert('ملف JSON غير صالح');
-      }
-    };
-    input.click();
-  };
+   const handleImportTranslations = () => {
+     const input = document.createElement('input');
+     input.type = 'file';
+     input.accept = '.json';
+     input.onchange = async (e) => {
+       const file = (e.target as HTMLInputElement).files?.[0];
+       if (!file) return;
+       try {
+         const text = await file.text();
+         const imported = JSON.parse(text) as Record<string, string>;
+         
+         // تنظيف أحرف Presentation Forms من جميع الترجمات المستوردة
+         const cleanedImported: Record<string, string> = {};
+         for (const [key, value] of Object.entries(imported)) {
+           cleanedImported[key] = normalizeArabicPresentationForms(value);
+         }
+         
+         setState(prev => {
+           if (!prev) return null;
+           return { ...prev, translations: { ...prev.translations, ...cleanedImported } };
+         });
+         setLastSaved(`✅ تم استيراد ${Object.keys(imported).length} ترجمة وتنظيفها`);
+         
+         // تصحيح النصوص المعكوسة تلقائياً بعد الاستيراد
+         setTimeout(() => {
+           setState(prevState => {
+             if (!prevState) return null;
+             const newTranslations = { ...prevState.translations };
+             const newProtected = new Set(prevState.protectedEntries || []);
+             let count = 0;
+             let skippedProtected = 0;
+             let skippedTranslated = 0;
+             let skippedSame = 0;
+
+             for (const entry of prevState.entries) {
+               const key = `${entry.msbtFile}:${entry.index}`;
+               if (hasArabicChars(entry.original)) {
+                 if (newProtected.has(key)) {
+                   skippedProtected++;
+                   continue;
+                 }
+                 
+                 const existing = newTranslations[key]?.trim();
+                 const isAutoDetected = !existing || existing === entry.original || existing === entry.original.trim();
+                 
+                 if (isAutoDetected) {
+                   const corrected = unReverseBidi(entry.original);
+                   if (corrected !== entry.original) {
+                     newTranslations[key] = corrected;
+                     newProtected.add(key);
+                     count++;
+                   } else {
+                     skippedSame++;
+                   }
+                 } else {
+                   skippedTranslated++;
+                 }
+               }
+             }
+
+             if (count > 0 || skippedProtected > 0 || skippedTranslated > 0 || skippedSame > 0) {
+               const parts: string[] = [];
+               if (count > 0) parts.push("تم تصحيح: " + count + " نص");
+               if (skippedProtected > 0) parts.push("محمية: " + skippedProtected);
+               if (skippedTranslated > 0) parts.push("مترجمة: " + skippedTranslated);
+               if (skippedSame > 0) parts.push("بلا تغيير: " + skippedSame);
+               
+               const detailedMessage = (count > 0 ? "\u2705 " : "\u26A0\uFE0F ") + "تم التصحيح | " + parts.join(" | ");
+               setLastSaved(detailedMessage);
+               setTimeout(() => setLastSaved(""), 5000);
+             }
+
+             return {
+               ...prevState,
+               translations: newTranslations,
+               protectedEntries: newProtected,
+             };
+           });
+         }, 0);
+       } catch {
+         alert('ملف JSON غير صالح');
+       }
+     };
+     input.click();
+   };
 
   const handleImportGlossary = () => {
     const input = document.createElement('input');
