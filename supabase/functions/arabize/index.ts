@@ -632,6 +632,7 @@ Deno.serve(async (req) => {
         'Content-Type': 'application/octet-stream',
         'Content-Disposition': 'attachment; filename="arabized_output.zs"',
         'X-Modified-Count': String(modifiedCount),
+        'X-Skipped-Already-Arabized': String(skippedAlreadyArabized),
         'X-File-Size': String(repackedData.length),
         'X-Compressed-Size': isCompressed ? String(outputData.length) : '',
         'X-Is-Compressed': String(isCompressed),
