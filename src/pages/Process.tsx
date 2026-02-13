@@ -34,9 +34,10 @@ const Process = () => {
   const [dictFile, setDictFile] = useState<File | null>(null);
   const [stage, setStage] = useState<ProcessingStage>("idle");
   const [logs, setLogs] = useState<string[]>([]);
-  const [resultData, setResultData] = useState<{ modifiedCount: number; fileSize: number; compressedFileSize: number | null; entries: any[]; blobUrl: string } | null>(null);
-  const [extracting, setExtracting] = useState(false);
-  const navigate = useNavigate();
+   const [resultData, setResultData] = useState<{ modifiedCount: number; fileSize: number; compressedFileSize: number | null; entries: any[]; blobUrl: string } | null>(null);
+   const [extracting, setExtracting] = useState(false);
+   const [autoDetectedCount, setAutoDetectedCount] = useState(0);
+   const navigate = useNavigate();
 
   const addLog = (msg: string) => setLogs((prev) => [...prev, `[${new Date().toLocaleTimeString("ar-SA")}] ${msg}`]);
 
@@ -256,6 +257,7 @@ const Process = () => {
         }
       }
       console.log(`Auto-detected ${Object.keys(autoTranslations).length} pre-translated Arabic entries`);
+      setAutoDetectedCount(Object.keys(autoTranslations).length);
 
       // Merge with existing translations so previous work is preserved
       const existing = await idbGet<{ translations?: Record<string, string> }>("editorState");
@@ -273,6 +275,8 @@ const Process = () => {
         entries: data.entries,
         translations: finalTranslations,
       });
+
+      navigate("/editor");
 
       navigate("/editor");
     } catch (err) {
@@ -328,19 +332,26 @@ const Process = () => {
               "ابدأ التعريب التلقائي 🚀"
             )}
           </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            onClick={handleExtract}
-            disabled={!langFile || !dictFile || isProcessing || extracting}
-            className="font-display font-bold text-lg px-10 py-6"
-          >
-            {extracting ? (
-              <><Loader2 className="w-5 h-5 animate-spin" /> جاري الاستخراج...</>
-            ) : (
-              <><Pencil className="w-5 h-5" /> تحرير يدوي ✍️</>
-            )}
-          </Button>
+           <Button
+             size="lg"
+             variant="outline"
+             onClick={handleExtract}
+             disabled={!langFile || !dictFile || isProcessing || extracting}
+             className="font-display font-bold text-lg px-10 py-6"
+           >
+             {extracting ? (
+               <><Loader2 className="w-5 h-5 animate-spin" /> جاري الاستخراج...</>
+             ) : (
+               <><Pencil className="w-5 h-5" /> تحرير يدوي ✍️</>
+             )}
+           </Button>
+           {autoDetectedCount > 0 && (
+             <div className="text-center">
+               <p className="text-sm text-muted-foreground">
+                 تم اكتشاف <span className="font-bold text-primary">{autoDetectedCount}</span> نص معرّب تلقائياً 🎯
+               </p>
+             </div>
+           )}
         </div>
 
         {/* Progress Card */}
