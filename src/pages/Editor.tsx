@@ -207,31 +207,52 @@ const Editor = () => {
     const newTranslations = { ...state.translations };
     const newProtected = new Set(state.protectedEntries || []);
     let count = 0;
+    let skippedProtected = 0;
+    let skippedTranslated = 0;
+    let skippedSame = 0;
 
     for (const entry of state.entries) {
       const key = `${entry.msbtFile}:${entry.index}`;
       if (hasArabicChars(entry.original)) {
+        // Skip if already protected (user already fixed this)
+        if (newProtected.has(key)) {
+          skippedProtected++;
+          continue;
+        }
+        
         const existing = newTranslations[key]?.trim();
-        // Fix if no translation, or if translation is same as original (auto-detected)
-        if (!existing || existing === entry.original) {
+        // Fix if: no translation, or translation matches original (auto-detected), or translation matches original trimmed
+        const isAutoDetected = !existing || existing === entry.original || existing === entry.original.trim();
+        
+        if (isAutoDetected) {
           const corrected = unReverseBidi(entry.original);
-          // Only count if the correction actually changes something
           if (corrected !== entry.original) {
             newTranslations[key] = corrected;
             newProtected.add(key);
             count++;
+          } else {
+            skippedSame++;
           }
+        } else {
+          skippedTranslated++;
         }
       }
     }
+
+    console.log(`[Fix Reversed] Fixed: ${count}, Skipped protected: ${skippedProtected}, Skipped translated: ${skippedTranslated}, Skipped same: ${skippedSame}`);
 
     setState(prev => prev ? {
       ...prev,
       translations: newTranslations,
       protectedEntries: newProtected,
     } : null);
-    setLastSaved(`✅ تم تصحيح ${count} نص عربي معكوس`);
-    setTimeout(() => setLastSaved(""), 3000);
+    
+    if (count > 0) {
+      setLastSaved(`✅ تم تصحيح ${count} نص عربي معكوس`);
+    } else {
+      setLastSaved(`⚠️ لم يتم العثور على نصوص تحتاج تصحيح (محمية: ${skippedProtected}، مترجمة: ${skippedTranslated}، مطابقة: ${skippedSame})`);
+    }
+    setTimeout(() => setLastSaved(""), 5000);
   };
 
   const detectPreTranslated = useCallback((editorState: EditorState): Record<string, string> => {
@@ -269,7 +290,12 @@ const Editor = () => {
         for (const entry of stored.entries) {
           const key = `${entry.msbtFile}:${entry.index}`;
           if (arabicRegex.test(entry.original)) {
-            protectedSet.add(key);
+            // Only protect if there's a real translation that differs from original
+            // Don't protect auto-detected entries (translation === original) so Fix Reversed can work on them
+            const existingTranslation = mergedTranslations[key]?.trim();
+            if (existingTranslation && existingTranslation !== entry.original && existingTranslation !== entry.original.trim()) {
+              protectedSet.add(key);
+            }
           }
         }
         
