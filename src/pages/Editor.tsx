@@ -4,11 +4,21 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save, Tag, Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle, Eye, EyeOff, RotateCcw, CheckCircle2, ShieldCheck, ChevronLeft, ChevronRight, Check, X, BarChart3 } from "lucide-react";
+import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save, Tag, Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle, Eye, EyeOff, RotateCcw, CheckCircle2, ShieldCheck, ChevronLeft, ChevronRight, Check, X, BarChart3, Menu, MoreVertical } from "lucide-react";
 import ZeldaDialoguePreview from "@/components/ZeldaDialoguePreview";
 import { idbSet, idbGet } from "@/lib/idb-storage";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+} from "@/components/ui/dropdown-menu";
 
 interface ExtractedEntry {
   msbtFile: string;
@@ -186,6 +196,8 @@ const Editor = () => {
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const abortControllerRef = useRef<AbortController | null>(null);
   const { user } = useAuth();
+  const isMobile = useIsMobile();
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const toggleProtection = (key: string) => {
     if (!state) return;
@@ -1172,72 +1184,77 @@ const Editor = () => {
   }
 
   return (
-    <div className="min-h-screen py-8 px-4">
+    <div className="min-h-screen py-4 md:py-8 px-3 md:px-4">
       <div className="max-w-6xl mx-auto">
-        <Link to="/process" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 font-body">
+        <Link to="/process" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-4 md:mb-6 font-body text-sm">
           <ArrowRight className="w-4 h-4" />
           العودة للمعالجة
         </Link>
 
-        <h1 className="text-3xl font-display font-bold mb-2">محرر الترجمة ✍️</h1>
-        <p className="text-muted-foreground mb-6 font-body">
-          عدّل النصوص العربية يدوياً أو استخدم الترجمة التلقائية بالذكاء الاصطناعي
+        <h1 className="text-2xl md:text-3xl font-display font-bold mb-1 md:mb-2">محرر الترجمة ✍️</h1>
+        <p className="text-sm md:text-base text-muted-foreground mb-4 md:mb-6 font-body">
+          عدّل النصوص العربية يدوياً أو استخدم الترجمة التلقائية
         </p>
 
-        <div className="flex flex-wrap items-center gap-4 mb-6">
-          <Card className="flex-1 min-w-[140px]">
-            <CardContent className="flex items-center gap-3 p-4">
-              <FileText className="w-5 h-5 text-primary" />
+        {/* Stats Cards - simplified on mobile */}
+        <div className="flex flex-wrap items-center gap-3 md:gap-4 mb-6">
+          <Card className="flex-1 min-w-[100px]">
+            <CardContent className="flex items-center gap-2 md:gap-3 p-3 md:p-4">
+              <FileText className="w-4 h-4 md:w-5 md:h-5 text-primary" />
               <div>
-                <p className="text-lg font-display font-bold">{state.entries.length}</p>
-                <p className="text-xs text-muted-foreground">نص إجمالي</p>
+                <p className="text-base md:text-lg font-display font-bold">{state.entries.length}</p>
+                <p className="text-[10px] md:text-xs text-muted-foreground">إجمالي</p>
               </div>
             </CardContent>
           </Card>
-          <Card className="flex-1 min-w-[140px]">
-            <CardContent className="flex items-center gap-3 p-4">
-              <FileText className="w-5 h-5 text-secondary" />
+          <Card className="flex-1 min-w-[100px]">
+            <CardContent className="flex items-center gap-2 md:gap-3 p-3 md:p-4">
+              <FileText className="w-4 h-4 md:w-5 md:h-5 text-secondary" />
               <div>
-                <p className="text-lg font-display font-bold">{translatedCount}</p>
-                <p className="text-xs text-muted-foreground">مترجم</p>
+                <p className="text-base md:text-lg font-display font-bold">{translatedCount}</p>
+                <p className="text-[10px] md:text-xs text-muted-foreground">مترجم</p>
               </div>
             </CardContent>
           </Card>
-          <Card className="flex-1 min-w-[140px]">
-            <CardContent className="flex items-center gap-3 p-4">
-              <FileText className="w-5 h-5 text-destructive" />
-              <div>
-                <p className="text-lg font-display font-bold">{state.entries.length - translatedCount}</p>
-                <p className="text-xs text-muted-foreground">غير مترجم</p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="flex-1 min-w-[140px]">
-            <CardContent className="flex items-center gap-3 p-4">
-              <Tag className="w-5 h-5 text-accent" />
-              <div>
-                <p className="text-lg font-display font-bold">{state.protectedEntries?.size || 0} / {state.entries.length}</p>
-                <p className="text-xs text-muted-foreground">محمي من العكس</p>
-              </div>
-            </CardContent>
-          </Card>
+          {!isMobile && (
+            <>
+              <Card className="flex-1 min-w-[140px]">
+                <CardContent className="flex items-center gap-3 p-4">
+                  <FileText className="w-5 h-5 text-destructive" />
+                  <div>
+                    <p className="text-lg font-display font-bold">{state.entries.length - translatedCount}</p>
+                    <p className="text-xs text-muted-foreground">غير مترجم</p>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="flex-1 min-w-[140px]">
+                <CardContent className="flex items-center gap-3 p-4">
+                  <Tag className="w-5 h-5 text-accent" />
+                  <div>
+                    <p className="text-lg font-display font-bold">{state.protectedEntries?.size || 0} / {state.entries.length}</p>
+                    <p className="text-xs text-muted-foreground">محمي من العكس</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          )}
 
           {translating ? (
             <Button
-              size="lg"
+              size={isMobile ? "default" : "lg"}
               variant="destructive"
               onClick={handleStopTranslate}
-              className="font-display font-bold px-6"
+              className="font-display font-bold px-4 md:px-6"
             >
-              <><Loader2 className="w-4 h-4 animate-spin" /> إيقاف الترجمة ⏹️</>
+              <><Loader2 className="w-4 h-4 animate-spin" /> إيقاف ⏹️</>
             </Button>
           ) : (
             <Button
-              size="lg"
+              size={isMobile ? "default" : "lg"}
               variant="default"
               onClick={handleAutoTranslate}
               disabled={translating}
-              className="font-display font-bold px-6"
+              className="font-display font-bold px-4 md:px-6"
             >
               <Sparkles className="w-4 h-4" /> ترجمة تلقائية 🤖
             </Button>
@@ -1404,56 +1421,120 @@ const Editor = () => {
 
         {/* Category progress section removed for performance */}
 
-        {/* Filter Bar */}
-        <div className="mb-6 p-4 bg-card rounded border border-border flex flex-wrap gap-3 items-center">
-          <DebouncedInput
-            placeholder="ابحث عن نصوص..."
-            value={search}
-            onChange={(val) => setSearch(val)}
-            className="flex-1 min-w-[200px] px-3 py-2 rounded bg-background border border-border font-body text-sm"
-          />
-          <select
-            value={filterFile}
-            onChange={(e) => setFilterFile(e.target.value)}
-            className="px-3 py-2 rounded bg-background border border-border font-body text-sm"
-          >
-            <option value="all">كل الملفات</option>
-            {msbtFiles.map(f => <option key={f} value={f}>{f}</option>)}
-          </select>
-          <select
-            value={filterCategory}
-            onChange={(e) => setFilterCategory(e.target.value)}
-            className="px-3 py-2 rounded bg-background border border-border font-body text-sm"
-          >
-            <option value="all">كل الفئات</option>
-            {FILE_CATEGORIES.map(cat => <option key={cat.id} value={cat.id}>{cat.emoji} {cat.label}</option>)}
-          </select>
-          <select
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value as any)}
-            className="px-3 py-2 rounded bg-background border border-border font-body text-sm"
-          >
-            <option value="all">الكل</option>
-            <option value="translated">مترجم</option>
-            <option value="untranslated">غير مترجم</option>
-            <option value="problems">⚠️ بها مشاكل ({qualityStats.total})</option>
-          </select>
-          <Button
-            variant={showQualityStats ? "secondary" : "outline"}
-            size="sm"
-            onClick={() => setShowQualityStats(!showQualityStats)}
-            className="font-body text-xs"
-          >
-            <BarChart3 className="w-3 h-3" /> إحصائيات الجودة
-          </Button>
-          <Button
-            variant={quickReviewMode ? "secondary" : "outline"}
-            size="sm"
-            onClick={() => { setQuickReviewMode(!quickReviewMode); setQuickReviewIndex(0); }}
-            className="font-body text-xs"
-          >
-            <Eye className="w-3 h-3" /> مراجعة سريعة
-          </Button>
+        {/* Filter Bar - collapsible on mobile */}
+        <div className="mb-6 p-3 md:p-4 bg-card rounded border border-border">
+          <div className="flex gap-2 md:gap-3 items-center">
+            <DebouncedInput
+              placeholder="ابحث عن نصوص..."
+              value={search}
+              onChange={(val) => setSearch(val)}
+              className="flex-1 min-w-[120px] px-3 py-2 rounded bg-background border border-border font-body text-sm"
+            />
+            {isMobile ? (
+              <Button
+                variant={filtersOpen ? "secondary" : "outline"}
+                size="sm"
+                onClick={() => setFiltersOpen(!filtersOpen)}
+                className="font-body text-xs shrink-0"
+              >
+                <Filter className="w-3 h-3" /> فلاتر
+              </Button>
+            ) : (
+              <>
+                <select
+                  value={filterFile}
+                  onChange={(e) => setFilterFile(e.target.value)}
+                  className="px-3 py-2 rounded bg-background border border-border font-body text-sm"
+                >
+                  <option value="all">كل الملفات</option>
+                  {msbtFiles.map(f => <option key={f} value={f}>{f}</option>)}
+                </select>
+                <select
+                  value={filterCategory}
+                  onChange={(e) => setFilterCategory(e.target.value)}
+                  className="px-3 py-2 rounded bg-background border border-border font-body text-sm"
+                >
+                  <option value="all">كل الفئات</option>
+                  {FILE_CATEGORIES.map(cat => <option key={cat.id} value={cat.id}>{cat.emoji} {cat.label}</option>)}
+                </select>
+                <select
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value as any)}
+                  className="px-3 py-2 rounded bg-background border border-border font-body text-sm"
+                >
+                  <option value="all">الكل</option>
+                  <option value="translated">مترجم</option>
+                  <option value="untranslated">غير مترجم</option>
+                  <option value="problems">⚠️ بها مشاكل ({qualityStats.total})</option>
+                </select>
+                <Button
+                  variant={showQualityStats ? "secondary" : "outline"}
+                  size="sm"
+                  onClick={() => setShowQualityStats(!showQualityStats)}
+                  className="font-body text-xs"
+                >
+                  <BarChart3 className="w-3 h-3" /> إحصائيات الجودة
+                </Button>
+                <Button
+                  variant={quickReviewMode ? "secondary" : "outline"}
+                  size="sm"
+                  onClick={() => { setQuickReviewMode(!quickReviewMode); setQuickReviewIndex(0); }}
+                  className="font-body text-xs"
+                >
+                  <Eye className="w-3 h-3" /> مراجعة سريعة
+                </Button>
+              </>
+            )}
+          </div>
+          {/* Mobile filters dropdown */}
+          {isMobile && filtersOpen && (
+            <div className="mt-3 flex flex-col gap-2">
+              <select
+                value={filterFile}
+                onChange={(e) => setFilterFile(e.target.value)}
+                className="w-full px-3 py-2 rounded bg-background border border-border font-body text-sm"
+              >
+                <option value="all">كل الملفات</option>
+                {msbtFiles.map(f => <option key={f} value={f}>{f}</option>)}
+              </select>
+              <select
+                value={filterCategory}
+                onChange={(e) => setFilterCategory(e.target.value)}
+                className="w-full px-3 py-2 rounded bg-background border border-border font-body text-sm"
+              >
+                <option value="all">كل الفئات</option>
+                {FILE_CATEGORIES.map(cat => <option key={cat.id} value={cat.id}>{cat.emoji} {cat.label}</option>)}
+              </select>
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value as any)}
+                className="w-full px-3 py-2 rounded bg-background border border-border font-body text-sm"
+              >
+                <option value="all">الكل</option>
+                <option value="translated">مترجم</option>
+                <option value="untranslated">غير مترجم</option>
+                <option value="problems">⚠️ بها مشاكل ({qualityStats.total})</option>
+              </select>
+              <div className="flex gap-2">
+                <Button
+                  variant={showQualityStats ? "secondary" : "outline"}
+                  size="sm"
+                  onClick={() => setShowQualityStats(!showQualityStats)}
+                  className="font-body text-xs flex-1"
+                >
+                  <BarChart3 className="w-3 h-3" /> جودة
+                </Button>
+                <Button
+                  variant={quickReviewMode ? "secondary" : "outline"}
+                  size="sm"
+                  onClick={() => { setQuickReviewMode(!quickReviewMode); setQuickReviewIndex(0); }}
+                  className="font-body text-xs flex-1"
+                >
+                  <Eye className="w-3 h-3" /> مراجعة
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Cloud Actions */}
@@ -1717,11 +1798,11 @@ const Editor = () => {
               const hasProblem = qualityStats.problemKeys.has(key);
               
               return (
-                <Card key={key} className={`p-4 border-border/50 hover:border-border transition-colors ${hasProblem ? 'border-destructive/30 bg-destructive/5' : ''}`}>
-                  <div className="flex items-start gap-4">
+                <Card key={key} className={`p-3 md:p-4 border-border/50 hover:border-border transition-colors ${hasProblem ? 'border-destructive/30 bg-destructive/5' : ''}`}>
+                  <div className={`flex ${isMobile ? 'flex-col' : 'items-start'} gap-3 md:gap-4`}>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs text-muted-foreground mb-1">{entry.msbtFile} • {entry.label}</p>
-                      <p className="font-body text-sm mb-2">{entry.original}</p>
+                      <p className="text-xs text-muted-foreground mb-1 truncate">{entry.msbtFile} • {entry.label}</p>
+                      <p className="font-body text-sm mb-2 break-words">{entry.original}</p>
                       {isTech && (
                         <p className="text-xs text-accent mb-2">⚠️ نص تقني - تحتاج حذر في الترجمة</p>
                       )}
@@ -1740,39 +1821,43 @@ const Editor = () => {
                           <RotateCcw className="w-3 h-3" /> تصحيح المعكوس
                         </Button>
                       )}
-                      <div className="flex items-center gap-2">
+                      <div className={`flex ${isMobile ? 'flex-col' : 'items-center'} gap-2`}>
                         <DebouncedInput
                           value={translation}
                           onChange={(val) => updateTranslation(key, val)}
                           placeholder="أدخل الترجمة..."
-                          className="flex-1 px-3 py-2 rounded bg-background border border-border font-body text-sm"
+                          className="flex-1 w-full px-3 py-2 rounded bg-background border border-border font-body text-sm"
                         />
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-9 w-9 shrink-0"
-                          onClick={() => handleTranslateSingle(entry)}
-                          disabled={translatingSingle === key}
-                          title="ترجمة هذا النص"
-                        >
-                          {translatingSingle === key ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4 text-primary" />}
-                        </Button>
-                        {previousTranslations[key] !== undefined && (
+                        <div className="flex items-center gap-1 shrink-0">
                           <Button
                             variant="ghost"
                             size="icon"
                             className="h-9 w-9 shrink-0"
-                            onClick={() => handleUndoTranslation(key)}
-                            title="تراجع عن التعديل"
+                            onClick={() => handleTranslateSingle(entry)}
+                            disabled={translatingSingle === key}
+                            title="ترجمة هذا النص"
                           >
-                            <RotateCcw className="w-4 h-4 text-muted-foreground" />
+                            {translatingSingle === key ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4 text-primary" />}
                           </Button>
-                        )}
+                          {previousTranslations[key] !== undefined && (
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-9 w-9 shrink-0"
+                              onClick={() => handleUndoTranslation(key)}
+                              title="تراجع عن التعديل"
+                            >
+                              <RotateCcw className="w-4 h-4 text-muted-foreground" />
+                            </Button>
+                          )}
+                        </div>
                       </div>
                     </div>
-                    <div className="flex flex-col gap-1 items-center">
-                      {isProtected && <Tag className="w-5 h-5 text-accent" />}
-                    </div>
+                    {!isMobile && (
+                      <div className="flex flex-col gap-1 items-center">
+                        {isProtected && <Tag className="w-5 h-5 text-accent" />}
+                      </div>
+                    )}
                   </div>
                 </Card>
               );
