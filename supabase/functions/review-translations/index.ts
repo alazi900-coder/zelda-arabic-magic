@@ -14,7 +14,7 @@ interface ReviewEntry {
 
 interface ReviewIssue {
   key: string;
-  type: 'missing_tag' | 'too_long' | 'inconsistent' | 'untranslated_term' | 'placeholder_mismatch';
+  type: 'missing_tag' | 'too_long' | 'inconsistent' | 'untranslated_term' | 'placeholder_mismatch' | 'remaining_english';
   severity: 'error' | 'warning' | 'info';
   message: string;
   suggestion?: string;
@@ -209,6 +209,27 @@ ${tooLongEntries.map((e, i) => `[${i}] الأصلي: "${e.original}"
             suggestion: expected,
           });
         }
+      }
+
+      // 6. Remaining English text detection
+      // Skip proper nouns and very short words
+      const ZELDA_PROPER_NOUNS = new Set([
+        'link', 'zelda', 'ganon', 'ganondorf', 'hyrule', 'navi', 'epona', 'triforce',
+        'sheikah', 'goron', 'zora', 'gerudo', 'rito', 'korok', 'bokoblin', 'moblin',
+        'lynel', 'hinox', 'guardian', 'malice', 'calamity', 'master', 'sword',
+        'purah', 'impa', 'robbie', 'sidon', 'mipha', 'daruk', 'revali', 'urbosa',
+        'rauru', 'sonia', 'mineru', 'tulin', 'yunobo', 'riju',
+      ]);
+      const englishWords = entry.translation.match(/[a-zA-Z]{3,}/g) || [];
+      const remainingEnglish = englishWords.filter(w => !ZELDA_PROPER_NOUNS.has(w.toLowerCase()));
+      if (remainingEnglish.length > 0) {
+        issues.push({
+          key: entry.key,
+          type: 'untranslated_term' as any,
+          severity: 'warning',
+          message: `كلمات إنجليزية متبقية: ${remainingEnglish.slice(0, 5).join(', ')}`,
+          suggestion: 'تحقق من ترجمة هذه الكلمات أو أنها أسماء علم',
+        });
       }
     }
 

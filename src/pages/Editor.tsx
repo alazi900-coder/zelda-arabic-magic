@@ -187,10 +187,12 @@ const Editor = () => {
    const [shortSuggestions, setShortSuggestions] = useState<any[] | null>(null);
    const [quickReviewMode, setQuickReviewMode] = useState(false);
    const [quickReviewIndex, setQuickReviewIndex] = useState(0);
-   const [showQualityStats, setShowQualityStats] = useState(false);
+    const [showQualityStats, setShowQualityStats] = useState(false);
    const [translatingSingle, setTranslatingSingle] = useState<string | null>(null);
     const [previousTranslations, setPreviousTranslations] = useState<Record<string, string>>({});
     const [currentPage, setCurrentPage] = useState(0);
+    const [arabicNumerals, setArabicNumerals] = useState(false);
+    const [mirrorPunctuation, setMirrorPunctuation] = useState(false);
   
   const navigate = useNavigate();
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
@@ -1150,7 +1152,8 @@ const Editor = () => {
       }
       formData.append("translations", JSON.stringify(nonEmptyTranslations));
       formData.append("protectedEntries", JSON.stringify(Array.from(state.protectedEntries || [])));
-
+      if (arabicNumerals) formData.append("arabicNumerals", "true");
+      if (mirrorPunctuation) formData.append("mirrorPunctuation", "true");
       setBuildProgress("إرسال للمعالجة...");
 
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -1681,6 +1684,33 @@ const Editor = () => {
           </div>
         )}
 
+        {/* Build Options */}
+        <Card className="mb-4 border-border">
+          <CardContent className="p-4">
+            <h3 className="font-display font-bold mb-3 text-sm">⚙️ خيارات البناء</h3>
+            <div className="flex flex-wrap gap-4">
+              <label className="flex items-center gap-2 cursor-pointer text-sm font-body">
+                <input
+                  type="checkbox"
+                  checked={arabicNumerals}
+                  onChange={(e) => setArabicNumerals(e.target.checked)}
+                  className="rounded border-border"
+                />
+                تحويل الأرقام إلى هندية (٠١٢٣٤٥٦٧٨٩)
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer text-sm font-body">
+                <input
+                  type="checkbox"
+                  checked={mirrorPunctuation}
+                  onChange={(e) => setMirrorPunctuation(e.target.checked)}
+                  className="rounded border-border"
+                />
+                عكس علامات الترقيم (؟ ، ؛)
+              </label>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Build Button */}
         <Button
           size="lg"
@@ -1936,6 +1966,24 @@ const Editor = () => {
                           )}
                         </div>
                       </div>
+                      {/* Byte usage progress bar */}
+                      {entry.maxBytes > 0 && translation && (() => {
+                        const byteUsed = translation.length * 2;
+                        const ratio = byteUsed / entry.maxBytes;
+                        const percent = Math.min(ratio * 100, 100);
+                        const colorClass = ratio > 1 ? 'bg-destructive' : ratio > 0.8 ? 'bg-amber-500' : 'bg-primary';
+                        return (
+                          <div className="mt-1.5">
+                            <div className="flex justify-between items-center text-[10px] text-muted-foreground mb-0.5">
+                              <span>{byteUsed}/{entry.maxBytes} بايت</span>
+                              <span className={ratio > 1 ? 'text-destructive font-bold' : ''}>{Math.round(ratio * 100)}%</span>
+                            </div>
+                            <div className="h-1 w-full bg-secondary rounded-full overflow-hidden">
+                              <div className={`h-full ${colorClass} rounded-full transition-all`} style={{ width: `${percent}%` }} />
+                            </div>
+                          </div>
+                        );
+                      })()}
                     </div>
                     {!isMobile && (
                       <div className="flex flex-col gap-1 items-center">
