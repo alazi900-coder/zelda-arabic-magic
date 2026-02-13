@@ -212,7 +212,7 @@ ${tooLongEntries.map((e, i) => `[${i}] الأصلي: "${e.original}"
       }
 
       // 6. Remaining English text detection
-      // Skip proper nouns and very short words
+      // Skip proper nouns, button abbreviations, technical symbols, and short words
       const ZELDA_PROPER_NOUNS = new Set([
         'link', 'zelda', 'ganon', 'ganondorf', 'hyrule', 'navi', 'epona', 'triforce',
         'sheikah', 'goron', 'zora', 'gerudo', 'rito', 'korok', 'bokoblin', 'moblin',
@@ -220,15 +220,44 @@ ${tooLongEntries.map((e, i) => `[${i}] الأصلي: "${e.original}"
         'purah', 'impa', 'robbie', 'sidon', 'mipha', 'daruk', 'revali', 'urbosa',
         'rauru', 'sonia', 'mineru', 'tulin', 'yunobo', 'riju',
       ]);
-      const englishWords = entry.translation.match(/[a-zA-Z]{3,}/g) || [];
-      const remainingEnglish = englishWords.filter(w => !ZELDA_PROPER_NOUNS.has(w.toLowerCase()));
+
+      // Button abbreviations and technical symbols commonly left in Arabic text
+      const BUTTON_ABBREVIATIONS = new Set([
+        // Controller buttons
+        'a', 'b', 'x', 'y', 'l', 'r', 'zl', 'zr', 'ls', 'rs',
+        'lb', 'rb', 'lt', 'rt', 'up', 'down', 'left', 'right',
+        // Common abbreviations
+        'hp', 'mp', 'sp', 'atk', 'def', 'exp', 'lvl', 'lv', 'max',
+        'min', 'dmg', 'dps', 'crit', 'xp', 'buff', 'debuff',
+        // UI terms commonly left
+        'ui', 'fps', 'hud', 'api', 'fps', 'rng', 'ai', 'npc',
+        // Common game words variants
+        'bow', 'map', 'key', 'item', 'shop', 'save', 'load', 'quit',
+        'menu', 'back', 'next', 'ok', 'yes', 'no', 'on', 'off',
+        // Tech symbols and codes
+        'rgb', 'hex', 'var', 'def', 'fn', 'obj', 'arr', 'etc',
+        // Very common short English prepositions/particles
+        'of', 'to', 'in', 'at', 'by', 'or', 'an', 'is', 'as',
+      ]);
+
+      const englishWords = entry.translation.match(/[a-zA-Z]{2,}/g) || [];
+      const remainingEnglish = englishWords.filter(w => {
+        const lower = w.toLowerCase();
+        // Skip if it's a proper noun, button abbreviation, or < 3 chars
+        return (
+          !ZELDA_PROPER_NOUNS.has(lower) && 
+          !BUTTON_ABBREVIATIONS.has(lower) && 
+          lower.length > 2
+        );
+      });
+
       if (remainingEnglish.length > 0) {
         issues.push({
           key: entry.key,
-          type: 'untranslated_term' as any,
+          type: 'remaining_english',
           severity: 'warning',
           message: `كلمات إنجليزية متبقية: ${remainingEnglish.slice(0, 5).join(', ')}`,
-          suggestion: 'تحقق من ترجمة هذه الكلمات أو أنها أسماء علم',
+          suggestion: 'تحقق من ترجمة هذه الكلمات أو أنها مصطلحات فنية معترف بها',
         });
       }
     }
