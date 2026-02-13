@@ -229,9 +229,44 @@ function reverseBidi(text: string): string {
   }).join('\n');
 }
 
-function processArabicText(text: string): string {
+// ============= Arabic Numeral Conversion =============
+const NUMERAL_MAP: Record<string, string> = {
+  '0': '٠', '1': '١', '2': '٢', '3': '٣', '4': '٤',
+  '5': '٥', '6': '٦', '7': '٧', '8': '٨', '9': '٩',
+};
+
+function convertToArabicNumerals(text: string): string {
+  // Convert Western digits to Arabic-Indic, skipping PUA markers
+  return [...text].map(ch => {
+    const code = ch.charCodeAt(0);
+    if (code >= 0xE000 && code <= 0xE0FF) return ch; // PUA markers
+    return NUMERAL_MAP[ch] || ch;
+  }).join('');
+}
+
+// ============= Punctuation Mirroring =============
+function mirrorPunctuation(text: string): string {
+  const PUNCT_MAP: Record<string, string> = {
+    '?': '؟', ',': '،', ';': '؛',
+  };
+  // Swap parentheses/brackets for RTL
+  const BRACKET_MAP: Record<string, string> = {
+    '(': ')', ')': '(',
+  };
+  
+  return [...text].map(ch => {
+    const code = ch.charCodeAt(0);
+    if (code >= 0xE000 && code <= 0xE0FF) return ch; // PUA markers
+    return PUNCT_MAP[ch] || BRACKET_MAP[ch] || ch;
+  }).join('');
+}
+
+function processArabicText(text: string, options?: { arabicNumerals?: boolean; mirrorPunct?: boolean }): string {
   if (!hasArabicChars(text)) return text;
-  return reshapeArabic(reverseBidi(text));
+  let result = reshapeArabic(reverseBidi(text));
+  if (options?.arabicNumerals) result = convertToArabicNumerals(result);
+  if (options?.mirrorPunct) result = mirrorPunctuation(result);
+  return result;
 }
 
 // ============= Tag tracking =============
@@ -521,6 +556,9 @@ Deno.serve(async (req) => {
     // ===== BUILD MODE =====
     const translationsRaw = formData.get('translations') as string | null;
     const protectedRaw = formData.get('protectedEntries') as string | null;
+    const arabicNumerals = formData.get('arabicNumerals') === 'true';
+    const mirrorPunct = formData.get('mirrorPunctuation') === 'true';
+    const processOptions = { arabicNumerals, mirrorPunct };
     const translations: Record<string, string> = translationsRaw ? JSON.parse(translationsRaw) : {};
     const protectedEntries = new Set(protectedRaw ? JSON.parse(protectedRaw) : []);
     const hasCustomTranslations = Object.keys(translations).length > 0;
@@ -552,12 +590,15 @@ Deno.serve(async (req) => {
 
                 if (protectedEntries.has(key)) {
                   // Protected entry: apply reshaping only (NO BiDi reversal)
-                  entries[i].processedText = reshapeArabic(translationText);
+                  let processed = reshapeArabic(translationText);
+                  if (processOptions.arabicNumerals) processed = convertToArabicNumerals(processed);
+                  if (processOptions.mirrorPunct) processed = mirrorPunctuation(processed);
+                  entries[i].processedText = processed;
                 } else if (translationText === entries[i].originalText) {
                   // Same as original - no processing needed, skip injection
                   continue;
                 } else {
-                  entries[i].processedText = processArabicText(translationText);
+                  entries[i].processedText = processArabicText(translationText, processOptions);
                 }
                 entriesToModify.add(i);
                 modifiedCount++;
@@ -572,7 +613,7 @@ Deno.serve(async (req) => {
                 skippedAlreadyArabized++;
                 continue;
               }
-              entries[i].processedText = processArabicText(entries[i].originalText);
+              entries[i].processedText = processArabicText(entries[i].originalText, processOptions);
               entriesToModify.add(i);
               modifiedCount++;
             }

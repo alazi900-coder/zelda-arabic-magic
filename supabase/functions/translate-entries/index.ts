@@ -70,8 +70,26 @@ Deno.serve(async (req) => {
       }
     }
 
-    const prompt = `You are a professional game translator. Translate the following game UI texts from English/Japanese to Arabic. 
-Keep any placeholder tags like \uFFFC and TAG_0, TAG_1, etc. intact in their exact positions. Return ONLY a JSON array of strings in the same order. No explanations.${glossarySection}${contextSection}
+    // Detect category from entry keys for style guidance
+    let categoryHint = '';
+    const sampleKey = entries[0]?.key || '';
+    if (/ActorMsg\/PouchContent/i.test(sampleKey)) categoryHint = 'هذه نصوص أسماء أسلحة وأدوات ومواد - استخدم صيغة مختصرة ومباشرة.';
+    else if (/LayoutMsg/i.test(sampleKey)) categoryHint = 'هذه نصوص واجهة مستخدم وقوائم - استخدم صيغة مختصرة وواضحة.';
+    else if (/EventFlowMsg/i.test(sampleKey)) categoryHint = 'هذه حوارات قصة ومهام - استخدم أسلوباً سردياً طبيعياً وممتعاً.';
+    else if (/ChallengeMsg/i.test(sampleKey)) categoryHint = 'هذه نصوص مهام وتحديات - استخدم أسلوباً تحفيزياً واضحاً.';
+    else if (/LocationMsg/i.test(sampleKey)) categoryHint = 'هذه أسماء مواقع وخرائط - حافظ على الأسماء العلم أو ترجمها بالطريقة الشائعة.';
+    else if (/ActorMsg/i.test(sampleKey)) categoryHint = 'هذه أسماء شخصيات وأعداء - حافظ على الأسماء العلم الشهيرة كما هي.';
+
+    const categorySection = categoryHint ? `\n\n${categoryHint}` : '';
+
+    const prompt = `You are a professional game translator specializing in The Legend of Zelda series. Translate the following game texts from English/Japanese to Arabic.
+
+CRITICAL RULES:
+- Keep placeholder tags like \uFFFC and TAG_0, TAG_1, etc. intact in their exact positions.
+- Keep the translation length close to the original to fit in-game text boxes.
+- Use terminology consistent with the Arabic gaming community (e.g. تريفورس for Triforce, سيف الماستر for Master Sword).
+- Preserve proper nouns like Link, Zelda, Ganon, Hyrule as-is or use their well-known Arabic equivalents.
+- Return ONLY a JSON array of strings in the same order. No explanations.${categorySection}${glossarySection}${contextSection}
 
 Texts:
 ${textsBlock}`;
