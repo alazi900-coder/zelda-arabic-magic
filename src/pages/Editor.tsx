@@ -370,24 +370,33 @@ const Editor = () => {
         // Create demo data for testing mobile layout
         const demoEntries: ExtractedEntry[] = [
           { msbtFile: "ActorMsg/Link.msbt", index: 0, label: "Link", original: "Link", maxBytes: 64 },
-          { msbtFile: "ActorMsg/Link.msbt", index: 1, label: "Hero", original: "البطل", maxBytes: 64 },
-          { msbtFile: "LayoutMsg/Common.msbt", index: 0, label: "Accept", original: "Accept", maxBytes: 32 },
-          { msbtFile: "LayoutMsg/Common.msbt", index: 1, label: "Cancel", original: "إلغاء", maxBytes: 32 },
-          { msbtFile: "StoryMsg/MainQuest.msbt", index: 0, label: "Quest", original: "مهمة رئيسية", maxBytes: 128 },
-          { msbtFile: "StoryMsg/MainQuest.msbt", index: 1, label: "Complete", original: "مكتملة", maxBytes: 64 },
+          { msbtFile: "ActorMsg/Link.msbt", index: 1, label: "Hero", original: "The Hero of Hyrule", maxBytes: 32 },
+          { msbtFile: "LayoutMsg/Common.msbt", index: 0, label: "Accept", original: "Accept", maxBytes: 20 },
+          { msbtFile: "LayoutMsg/Common.msbt", index: 1, label: "Cancel", original: "Cancel", maxBytes: 20 },
+          { msbtFile: "StoryMsg/MainQuest.msbt", index: 0, label: "Quest_Intro", original: "The ancient evil has returned to [Color:Red]Hyrule[Color:White]. You must find the Master Sword.", maxBytes: 80 },
+          { msbtFile: "StoryMsg/MainQuest.msbt", index: 1, label: "Quest_Complete", original: "You have completed the trial!", maxBytes: 40 },
+          { msbtFile: "EventFlowMsg/NPC_Dialog.msbt", index: 0, label: "Greet", original: "Hello, traveler! Welcome to our village.", maxBytes: 50 },
+          { msbtFile: "EventFlowMsg/NPC_Dialog.msbt", index: 1, label: "Warning", original: "Be careful! The monsters in the forest are very dangerous at night.", maxBytes: 60 },
+          { msbtFile: "ChallengeMsg/Shrine.msbt", index: 0, label: "Shrine_Name", original: "Trial of Power", maxBytes: 30 },
+          { msbtFile: "ChallengeMsg/Shrine.msbt", index: 1, label: "Shrine_Desc", original: "Defeat all enemies within the time limit to prove your strength.", maxBytes: 50 },
         ];
         const demoTranslations: Record<string, string> = {
           "ActorMsg/Link.msbt:0": "لينك",
-          "ActorMsg/Link.msbt:1": "البطل الشجاع",
-          "LayoutMsg/Common.msbt:0": "موافق",
-          "LayoutMsg/Common.msbt:1": "إلغاء",
-          "StoryMsg/MainQuest.msbt:0": "المهمة الرئيسية",
+          "ActorMsg/Link.msbt:1": "بطل مملكة هايرول الأسطوري العظيم المختار من الآلهة القديمة",
+          "LayoutMsg/Common.msbt:0": "الموافقة والقبول على جميع الشروط",
+          "LayoutMsg/Common.msbt:1": "إلغاء العملية والرجوع للخلف",
+          "StoryMsg/MainQuest.msbt:0": "لقد عاد الشر القديم إلى [Color:Red]هايرول[Color:White]. يجب عليك أن تجد سيف الماستر السحري الأسطوري لهزيمة الشر وإنقاذ المملكة من الدمار الشامل",
+          "StoryMsg/MainQuest.msbt:1": "لقد أكملت التحدي بنجاح! تهانينا يا بطل هايرول الشجاع",
+          "EventFlowMsg/NPC_Dialog.msbt:0": "مرحباً أيها المسافر الشجاع! أهلاً وسهلاً بك في قريتنا الصغيرة الجميلة",
+          "EventFlowMsg/NPC_Dialog.msbt:1": "احذر جيداً! الوحوش الموجودة في الغابة المظلمة خطيرة للغاية خاصةً في الليل عندما يحل الظلام الدامس",
+          "ChallengeMsg/Shrine.msbt:0": "تحدي القوة والشجاعة الأسطورية",
+          "ChallengeMsg/Shrine.msbt:1": "اهزم جميع الأعداء والوحوش الخطيرة خلال الوقت المحدد لإثبات قوتك وشجاعتك في المعركة",
         };
         
         setState({
           entries: demoEntries,
           translations: demoTranslations,
-          protectedEntries: new Set(["ActorMsg/Link.msbt:1", "StoryMsg/MainQuest.msbt:0"]),
+          protectedEntries: new Set(),
           technicalBypass: new Set(),
         });
         setLastSaved("تم تحميل بيانات تجريبية");
