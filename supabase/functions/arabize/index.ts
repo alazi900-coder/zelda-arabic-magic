@@ -26,6 +26,14 @@ function hasArabicChars(text: string): boolean {
   return [...text].some(ch => isArabicChar(ch));
 }
 
+// Check if text already has Arabic Presentation Forms (already reshaped/arabized)
+function hasArabicPresentationForms(text: string): boolean {
+  return [...text].some(ch => {
+    const code = ch.charCodeAt(0);
+    return (code >= 0xFB50 && code <= 0xFDFF) || (code >= 0xFE70 && code <= 0xFEFF);
+  });
+}
+
 // ============= Arabic Reshaping =============
 // Maps base Arabic characters to their Presentation Forms-B glyphs:
 // [Isolated, Final, Initial, Medial]
@@ -70,19 +78,16 @@ const ARABIC_FORMS: Record<number, [number, number, number | null, number | null
   0x064A: [0xFEF1, 0xFEF2, 0xFEF3, 0xFEF4], // ي Yeh
 };
 
-// Lam-Alef ligatures
 const LAM_ALEF_LIGATURES: Record<number, [number, number]> = {
-  0x0622: [0xFEF5, 0xFEF6], // لآ [isolated, final]
-  0x0623: [0xFEF7, 0xFEF8], // لأ
-  0x0625: [0xFEF9, 0xFEFA], // لإ
-  0x0627: [0xFEFB, 0xFEFC], // لا
+  0x0622: [0xFEF5, 0xFEF6],
+  0x0623: [0xFEF7, 0xFEF8],
+  0x0625: [0xFEF9, 0xFEFA],
+  0x0627: [0xFEFB, 0xFEFC],
 };
 
-// Characters that don't connect to the next character (right-joiners only)
 function canConnectAfter(code: number): boolean {
   const forms = ARABIC_FORMS[code];
   if (!forms) return false;
-  // Has initial or medial form = can connect to next
   return forms[2] !== null;
 }
 
@@ -97,40 +102,39 @@ function reshapeArabic(text: string): string {
   for (let i = 0; i < chars.length; i++) {
     const code = chars[i].charCodeAt(0);
     
-    // Skip tashkeel (diacritics) - pass through as-is
     if (isTashkeel(code)) {
+      result.push(chars[i]);
+      continue;
+    }
+    
+    // Skip PUA tag markers - pass through as-is
+    if (code >= 0xE000 && code <= 0xE0FF) {
       result.push(chars[i]);
       continue;
     }
     
     const forms = ARABIC_FORMS[code];
     if (!forms) {
-      // Not an Arabic letter - pass through
       result.push(chars[i]);
       continue;
     }
     
-    // Check Lam-Alef ligature
-    if (code === 0x0644) { // Lam
-      // Look ahead (skip tashkeel) for Alef
+    if (code === 0x0644) {
       let nextIdx = i + 1;
       while (nextIdx < chars.length && isTashkeel(chars[nextIdx].charCodeAt(0))) nextIdx++;
       if (nextIdx < chars.length) {
         const nextCode = chars[nextIdx].charCodeAt(0);
         const ligature = LAM_ALEF_LIGATURES[nextCode];
         if (ligature) {
-          // Determine if previous connects to this lam
           const prevCode = getPrevArabicCode(chars, i);
           const prevConnects = prevCode !== null && canConnectAfter(prevCode);
           result.push(String.fromCharCode(prevConnects ? ligature[1] : ligature[0]));
-          // Skip the alef (and any tashkeel between lam and alef)
           i = nextIdx;
           continue;
         }
       }
     }
     
-    // Determine context: does previous connect to us? Can we connect to next?
     const prevCode = getPrevArabicCode(chars, i);
     const prevConnects = prevCode !== null && canConnectAfter(prevCode);
     
@@ -139,15 +143,14 @@ function reshapeArabic(text: string): string {
     
     let formIndex: number;
     if (prevConnects && nextExists && forms[2] !== null) {
-      // Medial
-      formIndex = 3; // medial
-      if (forms[3] === null) formIndex = 1; // fallback to final
+      formIndex = 3;
+      if (forms[3] === null) formIndex = 1;
     } else if (prevConnects) {
-      formIndex = 1; // final
+      formIndex = 1;
     } else if (nextExists && forms[2] !== null) {
-      formIndex = 2; // initial
+      formIndex = 2;
     } else {
-      formIndex = 0; // isolated
+      formIndex = 0;
     }
     
     const glyph = forms[formIndex];
@@ -161,6 +164,7 @@ function getPrevArabicCode(chars: string[], index: number): number | null {
   for (let i = index - 1; i >= 0; i--) {
     const c = chars[i].charCodeAt(0);
     if (isTashkeel(c)) continue;
+    if (c >= 0xE000 && c <= 0xE0FF) continue; // Skip PUA tag markers
     if (ARABIC_FORMS[c] !== undefined) return c;
     return null;
   }
@@ -171,6 +175,7 @@ function getNextArabicCode(chars: string[], index: number): number | null {
   for (let i = index + 1; i < chars.length; i++) {
     const c = chars[i].charCodeAt(0);
     if (isTashkeel(c)) continue;
+    if (c >= 0xE000 && c <= 0xE0FF) continue; // Skip PUA tag markers
     if (ARABIC_FORMS[c] !== undefined) return c;
     return null;
   }
@@ -187,6 +192,13 @@ function reverseBidi(text: string): string {
     let currentIsLTR: boolean | null = null;
 
     for (const ch of line) {
+      const code = ch.charCodeAt(0);
+      // PUA tag markers are treated as neutral (stay with current segment)
+      if (code >= 0xE000 && code <= 0xE0FF) {
+        current += ch;
+        continue;
+      }
+      
       const charIsArabic = isArabicChar(ch);
       const charIsLTR = /[a-zA-Z0-9]/.test(ch);
       
@@ -219,8 +231,13 @@ function reverseBidi(text: string): string {
 
 function processArabicText(text: string): string {
   if (!hasArabicChars(text)) return text;
-  // 1. Reverse BiDi for LTR engine, 2. Reshape Arabic letters to joined forms
   return reshapeArabic(reverseBidi(text));
+}
+
+// ============= Tag tracking =============
+interface TagInfo {
+  markerCode: number; // PUA character code (0xE000+)
+  bytes: Uint8Array;  // raw tag bytes from MSBT
 }
 
 interface MsbtEntry {
@@ -229,6 +246,7 @@ interface MsbtEntry {
   processedText: string;
   offset: number;
   size: number;
+  tags: TagInfo[];
 }
 
 function parseMSBT(data: Uint8Array): { entries: MsbtEntry[]; raw: Uint8Array } {
@@ -257,20 +275,39 @@ function parseMSBT(data: Uint8Array): { entries: MsbtEntry[]; raw: Uint8Array } 
         const textLength = nextOffset - entryOffset;
 
         let text = '';
+        const tags: TagInfo[] = [];
+
         for (let j = 0; j < textLength - 2; j += 2) {
           const charCode = view.getUint16(absOffset + j, true);
           if (charCode === 0) break;
           if (charCode === 0x0E) {
+            // Tag: 0x0E (2 bytes) + group (2 bytes) + size (2 bytes) + data (size bytes)
             const tagSize = view.getUint16(absOffset + j + 4, true);
+            const totalTagBytes = 6 + tagSize;
+            const markerCode = 0xE000 + tags.length;
+            // Copy tag bytes (create a proper copy, not a view)
+            const tagBytes = new Uint8Array(totalTagBytes);
+            for (let b = 0; b < totalTagBytes; b++) {
+              tagBytes[b] = data[absOffset + j + b];
+            }
+            tags.push({ markerCode, bytes: tagBytes });
             j += 4 + tagSize;
-            text += '\uFFFC';
+            text += String.fromCharCode(markerCode); // PUA marker instead of \uFFFC
             continue;
           }
           text += String.fromCharCode(charCode);
         }
 
-        const processed = processArabicText(text);
-        entries.push({ label: `entry_${i}`, originalText: text, processedText: processed, offset: absOffset, size: textLength });
+        // DON'T apply processArabicText here - keep raw text
+        // Processing will be applied selectively in build mode
+        entries.push({
+          label: `entry_${i}`,
+          originalText: text,
+          processedText: text, // same as original - no processing yet
+          offset: absOffset,
+          size: textLength,
+          tags,
+        });
       }
       break;
     }
@@ -281,21 +318,45 @@ function parseMSBT(data: Uint8Array): { entries: MsbtEntry[]; raw: Uint8Array } 
   return { entries, raw: data };
 }
 
-function injectMSBT(data: Uint8Array, entries: MsbtEntry[]): Uint8Array {
+function injectMSBT(data: Uint8Array, entries: MsbtEntry[], entriesToModify?: Set<number>): Uint8Array {
   const result = new Uint8Array(data);
   const view = new DataView(result.buffer);
-  for (const entry of entries) {
-    const encoded = new Uint8Array(entry.processedText.length * 2);
+
+  for (let idx = 0; idx < entries.length; idx++) {
+    // Skip entries not in the modify set (if provided)
+    if (entriesToModify && !entriesToModify.has(idx)) continue;
+
+    const entry = entries[idx];
+
+    // Build tag lookup from PUA markers
+    const tagMap = new Map<number, Uint8Array>();
+    for (const tag of entry.tags) {
+      tagMap.set(tag.markerCode, tag.bytes);
+    }
+
+    // Encode processedText, preserving tag bytes
+    const outputBytes: number[] = [];
     for (let i = 0; i < entry.processedText.length; i++) {
       const code = entry.processedText.charCodeAt(i);
-      encoded[i * 2] = code & 0xFF;
-      encoded[i * 2 + 1] = (code >> 8) & 0xFF;
+      const tagBytes = tagMap.get(code);
+      if (tagBytes) {
+        // Write original tag bytes instead of the PUA marker
+        for (const b of tagBytes) outputBytes.push(b);
+      } else {
+        // Write character as UTF-16LE
+        outputBytes.push(code & 0xFF);
+        outputBytes.push((code >> 8) & 0xFF);
+      }
     }
-    if (encoded.length <= entry.size - 2) {
-      result.set(encoded, entry.offset);
-      view.setUint16(entry.offset + encoded.length, 0, true);
+
+    if (outputBytes.length <= entry.size - 2) {
+      for (let i = 0; i < outputBytes.length; i++) {
+        result[entry.offset + i] = outputBytes[i];
+      }
+      // Null terminator
+      view.setUint16(entry.offset + outputBytes.length, 0, true);
     } else {
-      console.warn(`⚠️ Skipping entry "${entry.label}" - translated text (${encoded.length} bytes) exceeds slot size (${entry.size - 2} bytes)`);
+      console.warn(`⚠️ Skipping entry ${idx} "${entry.label}" - encoded size (${outputBytes.length} bytes) exceeds slot size (${entry.size - 2} bytes)`);
     }
   }
   return result;
@@ -430,11 +491,13 @@ Deno.serve(async (req) => {
           try {
             const { entries } = parseMSBT(file.data);
             for (let i = 0; i < entries.length; i++) {
+              // Convert PUA markers back to \uFFFC for display in the editor
+              const displayText = entries[i].originalText.replace(/[\uE000-\uE0FF]/g, '\uFFFC');
               allEntries.push({
                 msbtFile: file.name,
                 index: i,
                 label: entries[i].label,
-                original: entries[i].originalText,
+                original: displayText,
                 maxBytes: entries[i].size,
               });
             }
@@ -464,33 +527,59 @@ Deno.serve(async (req) => {
 
     let modifiedCount = 0;
     let skippedOversize = 0;
+    let skippedAlreadyArabized = 0;
+
     const processedFiles = files.map(file => {
       if (file.name.endsWith('.msbt')) {
         try {
           const { entries, raw } = parseMSBT(file.data);
+          const entriesToModify = new Set<number>();
 
           if (hasCustomTranslations) {
+            // BUILD mode with custom translations
             for (let i = 0; i < entries.length; i++) {
               const key = `${file.name}:${i}`;
               if (translations[key] !== undefined && translations[key] !== '') {
+                // Convert \uFFFC in translation back to PUA markers from original entry
+                let translationText = translations[key];
+                let tagIdx = 0;
+                translationText = translationText.replace(/\uFFFC/g, () => {
+                  if (tagIdx < entries[i].tags.length) {
+                    return String.fromCharCode(entries[i].tags[tagIdx++].markerCode);
+                  }
+                  return '\uFFFC'; // no corresponding tag, keep as-is
+                });
+
                 if (protectedEntries.has(key)) {
                   // Protected entry: apply reshaping only (NO BiDi reversal)
-                  entries[i].processedText = reshapeArabic(translations[key]);
-                  modifiedCount++;
-                } else if (translations[key] === entries[i].originalText) {
-                  // Same as original - no processing needed
-                  modifiedCount++;
+                  entries[i].processedText = reshapeArabic(translationText);
+                } else if (translationText === entries[i].originalText) {
+                  // Same as original - no processing needed, skip injection
+                  continue;
                 } else {
-                  entries[i].processedText = processArabicText(translations[key]);
-                  modifiedCount++;
+                  entries[i].processedText = processArabicText(translationText);
                 }
+                entriesToModify.add(i);
+                modifiedCount++;
               }
+              // Entries WITHOUT translations are NOT modified at all
             }
           } else {
-            modifiedCount += entries.length;
+            // AUTO mode (no custom translations) - process all non-arabized entries
+            for (let i = 0; i < entries.length; i++) {
+              if (hasArabicPresentationForms(entries[i].originalText)) {
+                // Already arabized (has presentation forms) - skip to avoid double processing
+                skippedAlreadyArabized++;
+                continue;
+              }
+              entries[i].processedText = processArabicText(entries[i].originalText);
+              entriesToModify.add(i);
+              modifiedCount++;
+            }
           }
 
-          const injected = injectMSBT(raw, entries);
+          // Only inject entries that were actually modified
+          const injected = injectMSBT(raw, entries, entriesToModify);
           return { ...file, data: injected };
         } catch (e) {
           console.warn(`Failed to process MSBT ${file.name}: ${e instanceof Error ? e.message : 'unknown'}`);
@@ -500,7 +589,7 @@ Deno.serve(async (req) => {
       return file;
     });
 
-    console.log(`Modified ${modifiedCount} entries (mode: ${hasCustomTranslations ? 'custom' : 'auto'})`);
+    console.log(`Modified ${modifiedCount} entries (mode: ${hasCustomTranslations ? 'custom' : 'auto'}), skipped already-arabized: ${skippedAlreadyArabized}`);
 
     const repackedData = packSARC(processedFiles, sarcData);
 
