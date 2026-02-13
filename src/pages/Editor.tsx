@@ -364,6 +364,31 @@ const Editor = () => {
           ? `تم التحميل + اكتشاف ${autoCount} نص معرّب مسبقاً`
           : "تم التحميل من الحفظ السابق"
         );
+      } else {
+        // Create demo data for testing mobile layout
+        const demoEntries: ExtractedEntry[] = [
+          { msbtFile: "ActorMsg/Link.msbt", index: 0, label: "Link", original: "Link", maxBytes: 64 },
+          { msbtFile: "ActorMsg/Link.msbt", index: 1, label: "Hero", original: "البطل", maxBytes: 64 },
+          { msbtFile: "LayoutMsg/Common.msbt", index: 0, label: "Accept", original: "Accept", maxBytes: 32 },
+          { msbtFile: "LayoutMsg/Common.msbt", index: 1, label: "Cancel", original: "إلغاء", maxBytes: 32 },
+          { msbtFile: "StoryMsg/MainQuest.msbt", index: 0, label: "Quest", original: "مهمة رئيسية", maxBytes: 128 },
+          { msbtFile: "StoryMsg/MainQuest.msbt", index: 1, label: "Complete", original: "مكتملة", maxBytes: 64 },
+        ];
+        const demoTranslations: Record<string, string> = {
+          "ActorMsg/Link.msbt:0": "لينك",
+          "ActorMsg/Link.msbt:1": "البطل الشجاع",
+          "LayoutMsg/Common.msbt:0": "موافق",
+          "LayoutMsg/Common.msbt:1": "إلغاء",
+          "StoryMsg/MainQuest.msbt:0": "المهمة الرئيسية",
+        };
+        
+        setState({
+          entries: demoEntries,
+          translations: demoTranslations,
+          protectedEntries: new Set(["ActorMsg/Link.msbt:1", "StoryMsg/MainQuest.msbt:0"]),
+          technicalBypass: new Set(),
+        });
+        setLastSaved("تم تحميل بيانات تجريبية");
       }
     };
     loadState();
