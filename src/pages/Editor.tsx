@@ -1,4 +1,14 @@
 import { useState, useEffect, useMemo, useRef, useCallback, memo } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -191,7 +201,8 @@ const Editor = () => {
     const [showQualityStats, setShowQualityStats] = useState(false);
    const [translatingSingle, setTranslatingSingle] = useState<string | null>(null);
     const [previousTranslations, setPreviousTranslations] = useState<Record<string, string>>({});
-    const [currentPage, setCurrentPage] = useState(0);
+     const [currentPage, setCurrentPage] = useState(0);
+     const [showRetranslateConfirm, setShowRetranslateConfirm] = useState(false);
   const [arabicNumerals, setArabicNumerals] = useState(false);
      const [mirrorPunctuation, setMirrorPunctuation] = useState(false);
      const [applyingArabic, setApplyingArabic] = useState(false);
@@ -1906,7 +1917,7 @@ const Editor = () => {
           <Button
             size={isMobile ? "default" : "lg"}
             variant="outline"
-            onClick={handleRetranslatePage}
+            onClick={() => setShowRetranslateConfirm(true)}
             disabled={translating}
             className="font-display font-bold px-4 md:px-6 border-accent/30 text-accent hover:text-accent"
           >
@@ -2860,6 +2871,26 @@ const Editor = () => {
           </div>
         )}
       </div>
+
+      <AlertDialog open={showRetranslateConfirm} onOpenChange={setShowRetranslateConfirm}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>إعادة ترجمة الصفحة؟</AlertDialogTitle>
+            <AlertDialogDescription>
+              سيتم استبدال جميع الترجمات الموجودة في هذه الصفحة بترجمات جديدة. يمكنك التراجع عن هذا الإجراء لاحقاً.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>إلغاء</AlertDialogCancel>
+            <AlertDialogAction onClick={() => {
+              setShowRetranslateConfirm(false);
+              handleRetranslatePage();
+            }}>
+              إعادة الترجمة
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
