@@ -1282,6 +1282,65 @@ const Editor = () => {
     setTimeout(() => setLastSaved(""), 3000);
   };
 
+  const handleImproveSingleTranslation = async (entry: ExtractedEntry) => {
+    if (!state) return;
+    
+    const key = `${entry.msbtFile}:${entry.index}`;
+    const translation = state.translations[key];
+    
+    if (!translation?.trim()) {
+      setTranslateProgress("⚠️ لا توجد ترجمة لتحسينها");
+      setTimeout(() => setTranslateProgress(""), 3000);
+      return;
+    }
+
+    setImprovingTranslations(true);
+    setImproveResults(null);
+
+    try {
+      setTranslateProgress(`جاري تحسين الترجمة...`);
+
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+      const response = await fetch(`${supabaseUrl}/functions/v1/review-translations`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${supabaseKey}`,
+          'apikey': supabaseKey,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          entries: [{
+            key,
+            original: entry.original,
+            translation,
+            maxBytes: entry.maxBytes || 0,
+          }],
+          glossary: state.glossary || '',
+          action: 'improve',
+        }),
+      });
+
+      if (!response.ok) throw new Error(`خطأ ${response.status}`);
+      const data = await response.json();
+      const improvements = data.improvements || [];
+      
+      if (improvements.length === 0) {
+        setTranslateProgress("✅ هذه الترجمة ممتازة — لا تحتاج تحسين!");
+      } else {
+        setTranslateProgress(`✅ تم اقتراح تحسين لهذه الترجمة`);
+        setImproveResults(improvements);
+      }
+      setTimeout(() => setTranslateProgress(""), 4000);
+    } catch (err) {
+      setTranslateProgress(`❌ خطأ في التحسين: ${err instanceof Error ? err.message : 'غير معروف'}`);
+      setTimeout(() => setTranslateProgress(""), 4000);
+    } finally {
+      setImprovingTranslations(false);
+    }
+  };
+
   const handleCloudSave = async () => {
     if (!state || !user) return;
     setCloudSyncing(true);
@@ -2337,28 +2396,38 @@ const Editor = () => {
                           className="flex-1 w-full px-3 py-2 rounded bg-background border border-border font-body text-sm"
                         />
                         <div className="flex items-center gap-1 shrink-0">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-9 w-9 shrink-0"
-                            onClick={() => handleTranslateSingle(entry)}
-                            disabled={translatingSingle === key}
-                            title="ترجمة هذا النص"
-                          >
-                            {translatingSingle === key ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4 text-primary" />}
-                          </Button>
-                          {previousTranslations[key] !== undefined && (
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-9 w-9 shrink-0"
-                              onClick={() => handleUndoTranslation(key)}
-                              title="تراجع عن التعديل"
-                            >
-                              <RotateCcw className="w-4 h-4 text-muted-foreground" />
-                            </Button>
-                          )}
-                        </div>
+                           <Button
+                             variant="ghost"
+                             size="icon"
+                             className="h-9 w-9 shrink-0"
+                             onClick={() => handleTranslateSingle(entry)}
+                             disabled={translatingSingle === key}
+                             title="ترجمة هذا النص"
+                           >
+                             {translatingSingle === key ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4 text-primary" />}
+                           </Button>
+                           <Button
+                             variant="ghost"
+                             size="icon"
+                             className="h-9 w-9 shrink-0"
+                             onClick={() => handleImproveSingleTranslation(entry)}
+                             disabled={improvingTranslations || !translation?.trim()}
+                             title="تحسين هذه الترجمة"
+                           >
+                             {improvingTranslations ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4 text-secondary" />}
+                           </Button>
+                           {previousTranslations[key] !== undefined && (
+                             <Button
+                               variant="ghost"
+                               size="icon"
+                               className="h-9 w-9 shrink-0"
+                               onClick={() => handleUndoTranslation(key)}
+                               title="تراجع عن التعديل"
+                             >
+                               <RotateCcw className="w-4 h-4 text-muted-foreground" />
+                             </Button>
+                           )}
+                         </div>
                       </div>
                       {/* Byte usage progress bar */}
                       {entry.maxBytes > 0 && translation && (() => {
