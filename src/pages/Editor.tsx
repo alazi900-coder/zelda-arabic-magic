@@ -330,12 +330,18 @@ const Editor = () => {
     const loadState = async () => {
       const stored = await idbGet<EditorState>("editorState");
       if (stored) {
+        // Only keep translations for keys that exist in the current file's entries
+        const validKeys = new Set(stored.entries.map(e => `${e.msbtFile}:${e.index}`));
         const autoTranslations = detectPreTranslated({
           entries: stored.entries,
           translations: stored.translations || {},
           protectedEntries: new Set(),
         });
-        const mergedTranslations = { ...autoTranslations, ...stored.translations };
+        const filteredStored: Record<string, string> = {};
+        for (const [k, v] of Object.entries(stored.translations || {})) {
+          if (validKeys.has(k)) filteredStored[k] = v;
+        }
+        const mergedTranslations = { ...autoTranslations, ...filteredStored };
         
         const protectedSet = new Set<string>(
           Array.isArray(stored.protectedEntries) ? (stored.protectedEntries as string[]) : []
