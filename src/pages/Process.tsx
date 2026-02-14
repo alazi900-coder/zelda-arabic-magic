@@ -315,8 +315,12 @@ const Process = () => {
         if (preservedCount > 0) console.log(`Preserved ${preservedCount} previous translations`);
       }
 
-      // Clear old data first, then write fresh state
+      // Clear old data first, then write fresh state (re-save files after clear)
       await idbClear();
+      await idbSet("editorLangFile", langBuf);
+      await idbSet("editorDictFile", dictBuf);
+      await idbSet("editorLangFileName", langFile.name);
+      await idbSet("editorDictFileName", dictFile.name);
       await idbSet("editorState", {
         entries: data.entries,
         translations: finalTranslations,
