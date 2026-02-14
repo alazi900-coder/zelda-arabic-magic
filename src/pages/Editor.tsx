@@ -2877,7 +2877,13 @@ const Editor = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>إعادة ترجمة الصفحة؟</AlertDialogTitle>
             <AlertDialogDescription>
-              سيتم استبدال جميع الترجمات الموجودة في هذه الصفحة بترجمات جديدة. يمكنك التراجع عن هذا الإجراء لاحقاً.
+              {(() => {
+                const count = paginatedEntries.filter(e => {
+                  const key = `${e.msbtFile}:${e.index}`;
+                  return state?.translations[key]?.trim() && !isTechnicalText(e.original);
+                }).length;
+                return `سيتم استبدال ${count} ترجمة موجودة في هذه الصفحة بترجمات جديدة. يمكنك التراجع عن هذا الإجراء لاحقاً.`;
+              })()}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
