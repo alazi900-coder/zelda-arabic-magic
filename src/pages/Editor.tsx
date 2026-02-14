@@ -891,7 +891,7 @@ const Editor = () => {
     setReviewResults(null);
 
     try {
-      const reviewEntries = state.entries
+      const reviewEntries = filteredEntries
         .filter(e => {
           const key = `${e.msbtFile}:${e.index}`;
           return state.translations[key]?.trim();
