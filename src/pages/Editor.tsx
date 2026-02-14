@@ -441,7 +441,23 @@ const Editor = () => {
     return counts;
   }, [state?.entries]);
 
-  // categoryProgress removed - was computed but never displayed, causing unnecessary recalculation
+  // Category progress: how many translated per category
+  const [categoryProgress, setCategoryProgress] = useState<Record<string, { total: number; translated: number }>>({});
+  useEffect(() => {
+    if (!state) return;
+    const timer = setTimeout(() => {
+      const progress: Record<string, { total: number; translated: number }> = {};
+      for (const e of state.entries) {
+        const cat = categorizeFile(e.msbtFile);
+        if (!progress[cat]) progress[cat] = { total: 0, translated: 0 };
+        progress[cat].total++;
+        const key = `${e.msbtFile}:${e.index}`;
+        if (state.translations[key]?.trim()) progress[cat].translated++;
+      }
+      setCategoryProgress(progress);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [state?.entries, state?.translations]);
 
   // Quality stats computation - debounced to avoid recomputing on every keystroke
   const [qualityStats, setQualityStats] = useState({ tooLong: 0, nearLimit: 0, missingTags: 0, placeholderMismatch: 0, total: 0, problemKeys: new Set<string>() });
@@ -1441,6 +1457,55 @@ const Editor = () => {
             </Button>
           )}
         </div>
+
+        {/* Category Progress */}
+        {Object.keys(categoryProgress).length > 0 && (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
+            {FILE_CATEGORIES.filter(cat => categoryProgress[cat.id]).map(cat => {
+              const prog = categoryProgress[cat.id];
+              const pct = prog.total > 0 ? Math.round((prog.translated / prog.total) * 100) : 0;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setFilterCategory(filterCategory === cat.id ? "all" : cat.id)}
+                  className={`p-2 rounded-lg border text-xs text-right transition-colors ${
+                    filterCategory === cat.id
+                      ? 'border-primary bg-primary/10'
+                      : 'border-border/50 bg-card/50 hover:border-primary/30'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span>{cat.emoji}</span>
+                    <span className="font-mono text-muted-foreground">{pct}%</span>
+                  </div>
+                  <p className="font-display font-bold truncate">{cat.label}</p>
+                  <Progress value={pct} className="h-1 mt-1" />
+                  <p className="text-muted-foreground mt-1">{prog.translated}/{prog.total}</p>
+                </button>
+              );
+            })}
+            {categoryProgress['other'] && (
+              <button
+                onClick={() => setFilterCategory(filterCategory === "other" ? "all" : "other")}
+                className={`p-2 rounded-lg border text-xs text-right transition-colors ${
+                  filterCategory === "other"
+                    ? 'border-primary bg-primary/10'
+                    : 'border-border/50 bg-card/50 hover:border-primary/30'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span>📁</span>
+                  <span className="font-mono text-muted-foreground">
+                    {categoryProgress['other'].total > 0 ? Math.round((categoryProgress['other'].translated / categoryProgress['other'].total) * 100) : 0}%
+                  </span>
+                </div>
+                <p className="font-display font-bold truncate">أخرى</p>
+                <Progress value={categoryProgress['other'].total > 0 ? (categoryProgress['other'].translated / categoryProgress['other'].total) * 100 : 0} className="h-1 mt-1" />
+                <p className="text-muted-foreground mt-1">{categoryProgress['other'].translated}/{categoryProgress['other'].total}</p>
+              </button>
+            )}
+          </div>
+        )}
 
         {/* Progress Bar */}
         <div className="space-y-2 mb-6">

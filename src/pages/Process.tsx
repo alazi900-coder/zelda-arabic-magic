@@ -263,16 +263,29 @@ const Process = () => {
       console.log(`Auto-detected ${Object.keys(autoTranslations).length} pre-translated Arabic entries`);
       setAutoDetectedCount(Object.keys(autoTranslations).length);
 
-      // Merge with existing translations so previous work is preserved
+      // Only merge with existing translations if new file actually has translations to preserve
       const existing = await idbGet<{ translations?: Record<string, string> }>("editorState");
-      const mergedTranslations = { ...autoTranslations, ...(existing?.translations || {}) };
+      const existingTranslations = existing?.translations || {};
+      
+      // Check if the new file has any pre-existing translations (Arabic entries)
+      const hasNewTranslations = Object.keys(autoTranslations).length > 0;
+      
+      // Only merge old translations if the new file also has translations (same project)
+      // If the file has zero Arabic entries, start fresh
+      const mergedTranslations = hasNewTranslations 
+        ? { ...autoTranslations, ...existingTranslations }
+        : { ...autoTranslations };
+        
       // Only keep translations whose keys exist in the new entries
       const validKeys = new Set(data.entries.map((e: any) => `${e.msbtFile}:${e.index}`));
       const finalTranslations: Record<string, string> = {};
+      let preservedCount = 0;
       for (const [k, v] of Object.entries(mergedTranslations)) {
-        if (validKeys.has(k) && v) finalTranslations[k] = v as string;
+        if (validKeys.has(k) && v) {
+          finalTranslations[k] = v as string;
+          if (!autoTranslations[k]) preservedCount++;
+        }
       }
-      const preservedCount = Object.keys(finalTranslations).length - Object.keys(autoTranslations).length;
       if (preservedCount > 0) console.log(`Preserved ${preservedCount} previous translations`);
 
       await idbSet("editorState", {
