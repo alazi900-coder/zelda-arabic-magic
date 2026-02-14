@@ -264,12 +264,35 @@ const Process = () => {
       await idbSet("editorLangFileName", langFile.name);
       await idbSet("editorDictFileName", dictFile.name);
       // Auto-detect already-Arabic entries and pre-populate as translated
+      // Clean presentation forms and fix reversed text so editor shows readable Arabic
       const autoTranslations: Record<string, string> = {};
       const arabicRegex = /[\u0600-\u06FF\uFB50-\uFDFF\uFE70-\uFEFF\u0750-\u077F\u08A0-\u08FF]/;
       for (const entry of data.entries) {
         if (arabicRegex.test(entry.original)) {
           const key = `${entry.msbtFile}:${entry.index}`;
-          autoTranslations[key] = entry.original;
+          // Normalize presentation forms to standard Arabic characters
+          let cleaned = entry.original.normalize("NFKD");
+          // Reverse the BiDi so text reads correctly in the editor
+          cleaned = cleaned.split('\n').map((line: string) => {
+            const segments: { text: string; isLTR: boolean }[] = [];
+            let current = '';
+            let currentIsLTR: boolean | null = null;
+            for (const ch of line) {
+              const code = ch.charCodeAt(0);
+              const charIsArabic = (code >= 0x0600 && code <= 0x06FF) || (code >= 0xFB50 && code <= 0xFDFF) || (code >= 0xFE70 && code <= 0xFEFF);
+              const charIsLTR = /[a-zA-Z0-9]/.test(ch);
+              if (charIsArabic) {
+                if (currentIsLTR === true && current) { segments.push({ text: current, isLTR: true }); current = ''; }
+                currentIsLTR = false; current += ch;
+              } else if (charIsLTR) {
+                if (currentIsLTR === false && current) { segments.push({ text: current, isLTR: false }); current = ''; }
+                currentIsLTR = true; current += ch;
+              } else { current += ch; }
+            }
+            if (current) segments.push({ text: current, isLTR: currentIsLTR === true });
+            return segments.reverse().map(seg => seg.isLTR ? seg.text : [...seg.text].reverse().join('')).join('');
+          }).join('\n');
+          autoTranslations[key] = cleaned;
         }
       }
       console.log(`Auto-detected ${Object.keys(autoTranslations).length} pre-translated Arabic entries`);
