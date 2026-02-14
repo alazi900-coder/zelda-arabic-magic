@@ -1821,6 +1821,39 @@ const Editor = () => {
                 <ShieldCheck className="w-5 h-5" />
                 تقرير المراجعة الذكية
               </h3>
+              
+              {/* Filter Scope Label */}
+              <div className="mb-3 p-2 rounded bg-secondary/30 border border-secondary/50 text-xs text-muted-foreground">
+                <p className="font-medium mb-1">نطاق المراجعة:</p>
+                <p>
+                  {(() => {
+                    const filters: string[] = [];
+                    if (filterCategory !== "all") {
+                      const category = FILE_CATEGORIES.find(c => c.id === filterCategory);
+                      if (category) filters.push(`${category.emoji} ${category.label}`);
+                    } else {
+                      filters.push("📚 جميع الفئات");
+                    }
+                    if (filterFile !== "all") filters.push(`📄 ملف محدد`);
+                    if (filterStatus !== "all") {
+                      const statusLabels: Record<string, string> = {
+                        "translated": "✅ مترجمة",
+                        "untranslated": "⬜ غير مترجمة",
+                        "problems": "🚨 بها مشاكل",
+                        "needs-improve": "⚠️ تحتاج تحسين",
+                        "too-short": "📏 قصيرة جداً",
+                        "too-long": "📐 طويلة جداً",
+                        "stuck-chars": "🔤 أحرف ملتصقة",
+                        "mixed-lang": "🌐 عربي + إنجليزي"
+                      };
+                      if (statusLabels[filterStatus]) filters.push(statusLabels[filterStatus]);
+                    }
+                    if (search) filters.push(`🔍 بحث: "${search}"`);
+                    return filters.join(" • ");
+                  })()}
+                </p>
+              </div>
+              
               <div className="flex gap-4 mb-3 text-sm">
                 <span>✅ فُحص: {reviewResults.summary.checked}</span>
                 <span className="text-destructive">❌ أخطاء: {reviewResults.summary.errors}</span>
