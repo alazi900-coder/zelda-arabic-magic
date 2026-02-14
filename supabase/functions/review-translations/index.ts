@@ -69,12 +69,24 @@ Deno.serve(async (req) => {
          });
        }
 
-       const prompt = `أنت مترجم متخصص في ألعاب الفيديو. يجب عليك اختصار الترجمات التالية بحيث تكون أقصر بـ 20-30% مع الحفاظ على المعنى والجودة:
+        const prompt = `أنت مترجم ألعاب فيديو متخصص في الاختصار. مهمتك: اختصار كل ترجمة لتصبح أقل من الحد المسموح بالبايت.
 
-${tooLongEntries.map((e, i) => `[${i}] الأصلي: "${e.original}"
-الترجمة الحالية (${getUtf16ByteLength(e.translation)} بايت - الحد: ${e.maxBytes} بايت): "${e.translation}"`).join('\n\n')}
+قواعد صارمة:
+- يجب أن تكون الترجمة المقترحة مختلفة وأقصر فعلياً من الحالية
+- لا تُعِد نفس النص أبداً - استخدم مرادفات أقصر، احذف كلمات زائدة، أعد صياغة الجملة
+- حافظ على جميع الوسوم [Tags] كما هي بدون تغيير
+- حافظ على المعنى الأساسي
+- كل حرف عربي = 2 بايت في UTF-16
 
-قدم ONLY صيغة مختصرة لكل واحدة بنفس الترتيب. إذا كان اختصار واحدة مستحيلاً، اعتمد على نفس الترجمة. أخرج JSON array فقط.`;
+${tooLongEntries.map((e, i) => {
+          const currentBytes = getUtf16ByteLength(e.translation);
+          const charsToRemove = Math.ceil((currentBytes - e.maxBytes) / 2);
+          return `[${i}] الأصلي: "${e.original}"
+الترجمة الحالية (${currentBytes} بايت): "${e.translation}"
+الحد الأقصى: ${e.maxBytes} بايت — يجب حذف ${charsToRemove} حرف على الأقل`;
+        }).join('\n\n')}
+
+أخرج JSON array فقط بنفس الترتيب. مثال: ["ترجمة مختصرة 1", "ترجمة مختصرة 2"]`;
 
        const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
          method: 'POST',
