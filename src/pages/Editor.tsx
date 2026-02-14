@@ -7,7 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { ArrowRight, Download, Search, FileText, Loader2, Filter, Sparkles, Save, Tag, Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle, Eye, EyeOff, RotateCcw, CheckCircle2, ShieldCheck, ChevronLeft, ChevronRight, Check, X, BarChart3, Menu, MoreVertical } from "lucide-react";
 import ZeldaDialoguePreview from "@/components/ZeldaDialoguePreview";
 import { idbSet, idbGet } from "@/lib/idb-storage";
-import { processArabicText, hasArabicChars as hasArabicCharsProcessing, hasArabicPresentationForms } from "@/lib/arabic-processing";
+import { processArabicText, hasArabicChars as hasArabicCharsProcessing, hasArabicPresentationForms, removeArabicPresentationForms } from "@/lib/arabic-processing";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -1011,6 +1011,37 @@ const Editor = () => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
+  };
+
+  const handleFixAllStuckCharacters = () => {
+    if (!state) return;
+    
+    let fixedCount = 0;
+    const updates: Record<string, string> = {};
+    
+    for (const [key, translation] of Object.entries(state.translations)) {
+      if (translation?.trim() && hasArabicPresentationForms(translation)) {
+        const fixed = removeArabicPresentationForms(translation);
+        if (fixed !== translation) {
+          updates[key] = fixed;
+          fixedCount++;
+        }
+      }
+    }
+    
+    if (fixedCount === 0) {
+      setLastSaved("لا توجد ترجمات بها أحرف ملتصقة");
+      setTimeout(() => setLastSaved(""), 3000);
+      return;
+    }
+    
+    setState(prev => prev ? {
+      ...prev,
+      translations: { ...prev.translations, ...updates },
+    } : null);
+    
+    setLastSaved(`✅ تم إصلاح ${fixedCount} ترجمة من الأحرف الملتصقة`);
+    setTimeout(() => setLastSaved(""), 3000);
   };
 
   // تنظيف أحرف Presentation Forms - تحويل أحرف العرض المتصلة إلى أحرف عادية
@@ -2157,6 +2188,10 @@ const Editor = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleImproveTranslations} disabled={improvingTranslations || translatedCount === 0}>
                   <Sparkles className="w-4 h-4" /> تحسين الترجمات ✨
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleFixAllStuckCharacters} disabled={needsImproveCount.stuck === 0}>
+                  <AlertTriangle className="w-4 h-4" /> إصلاح الأحرف الملتصقة 🔤
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
