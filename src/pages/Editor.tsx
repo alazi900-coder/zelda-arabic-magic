@@ -195,6 +195,8 @@ const Editor = () => {
   const [arabicNumerals, setArabicNumerals] = useState(false);
      const [mirrorPunctuation, setMirrorPunctuation] = useState(false);
      const [applyingArabic, setApplyingArabic] = useState(false);
+     const [improvingTranslations, setImprovingTranslations] = useState(false);
+     const [improveResults, setImproveResults] = useState<any[] | null>(null);
   
   const navigate = useNavigate();
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
@@ -1193,10 +1195,95 @@ const Editor = () => {
     }
   };
 
+  const handleImproveTranslations = async () => {
+    if (!state) return;
+    setImprovingTranslations(true);
+    setImproveResults(null);
+
+    try {
+      const translatedEntries = filteredEntries
+        .filter(e => {
+          const key = `${e.msbtFile}:${e.index}`;
+          return state.translations[key]?.trim();
+        })
+        .map(e => ({
+          key: `${e.msbtFile}:${e.index}`,
+          original: e.original,
+          translation: state.translations[`${e.msbtFile}:${e.index}`],
+          maxBytes: e.maxBytes || 0,
+        }));
+
+      if (translatedEntries.length === 0) {
+        setTranslateProgress("⚠️ لا توجد ترجمات لتحسينها في النطاق المحدد");
+        setTimeout(() => setTranslateProgress(""), 3000);
+        return;
+      }
+
+      setTranslateProgress(`جاري تحسين ${translatedEntries.length} ترجمة...`);
+
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+      const response = await fetch(`${supabaseUrl}/functions/v1/review-translations`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${supabaseKey}`,
+          'apikey': supabaseKey,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          entries: translatedEntries,
+          glossary: state.glossary || '',
+          action: 'improve',
+        }),
+      });
+
+      if (!response.ok) throw new Error(`خطأ ${response.status}`);
+      const data = await response.json();
+      const improvements = data.improvements || [];
+      
+      if (improvements.length === 0) {
+        setTranslateProgress("✅ جميع الترجمات ممتازة — لا تحتاج تحسين!");
+      } else {
+        setTranslateProgress(`✅ تم اقتراح تحسينات لـ ${improvements.length} ترجمة`);
+        setImproveResults(improvements);
+      }
+      setTimeout(() => setTranslateProgress(""), 4000);
+    } catch (err) {
+      setTranslateProgress(`❌ خطأ في التحسين: ${err instanceof Error ? err.message : 'غير معروف'}`);
+      setTimeout(() => setTranslateProgress(""), 4000);
+    } finally {
+      setImprovingTranslations(false);
+    }
+  };
+
+  const handleApplyImprovement = (key: string, improved: string) => {
+    if (!state) return;
+    setState(prev => prev ? {
+      ...prev,
+      translations: { ...prev.translations, [key]: improved },
+    } : null);
+  };
+
+  const handleApplyAllImprovements = () => {
+    if (!state || !improveResults) return;
+    const updates: Record<string, string> = {};
+    improveResults.forEach((item: any) => {
+      if (item.improvedBytes <= item.maxBytes || item.maxBytes === 0) {
+        updates[item.key] = item.improved;
+      }
+    });
+    setState(prev => prev ? {
+      ...prev,
+      translations: { ...prev.translations, ...updates },
+    } : null);
+    setImproveResults(null);
+    setLastSaved(`✅ تم تطبيق ${Object.keys(updates).length} تحسين`);
+    setTimeout(() => setLastSaved(""), 3000);
+  };
+
   const handleCloudSave = async () => {
     if (!state || !user) return;
-    
-    
     setCloudSyncing(true);
     setCloudStatus("جاري الحفظ في السحابة...");
     try {
@@ -1665,6 +1752,58 @@ const Editor = () => {
             </Card>
           )}
 
+          {/* Improve Results */}
+          {improveResults && improveResults.length > 0 && (
+            <Card className="mb-4 border-border bg-card">
+              <CardContent className="p-4">
+                <h3 className="font-display font-bold mb-3 flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-secondary" />
+                  تحسينات مقترحة ({improveResults.length})
+                </h3>
+                <div className="max-h-80 overflow-y-auto space-y-3">
+                  {improveResults.map((item: any, i: number) => (
+                    <div key={i} className="p-3 rounded border border-border/50 bg-background/50">
+                      <p className="text-xs text-muted-foreground mb-2 font-mono">{item.key}</p>
+                      <p className="text-xs mb-2"><strong>الأصلي:</strong> {item.original}</p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs mb-2">
+                        <div>
+                          <p className="text-muted-foreground">الحالي ({item.currentBytes} بايت)</p>
+                          <p className="p-2 bg-muted/30 rounded border border-border/30" dir="rtl">{item.current}</p>
+                        </div>
+                        <div>
+                          <p className="text-muted-foreground">المحسّن ({item.improvedBytes} بايت){item.maxBytes > 0 && item.improvedBytes > item.maxBytes ? ' ⚠️ يتجاوز الحد' : ''}</p>
+                          <p className="p-2 bg-secondary/5 rounded border border-secondary/30" dir="rtl">{item.improved}</p>
+                        </div>
+                      </div>
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          handleApplyImprovement(item.key, item.improved);
+                          setImproveResults(improveResults.filter((_: any, idx: number) => idx !== i));
+                        }}
+                        disabled={item.maxBytes > 0 && item.improvedBytes > item.maxBytes}
+                        className="text-xs h-7"
+                      >
+                        ✓ تطبيق التحسين
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex gap-2 mt-3">
+                  <Button
+                    size="sm"
+                    onClick={handleApplyAllImprovements}
+                    className="text-xs h-7 flex-1"
+                  >
+                    ✓ تطبيق الكل ({improveResults.length})
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={() => setImproveResults(null)} className="text-xs">
+                    إغلاق ✕
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         {!user && (
           <Card className="mb-4 border-primary/30 bg-primary/5">
             <CardContent className="flex items-center gap-3 p-4">
@@ -1875,6 +2014,9 @@ const Editor = () => {
                 <DropdownMenuItem onClick={handleReviewTranslations} disabled={reviewing || translatedCount === 0}>
                   <ShieldCheck className="w-4 h-4" /> مراجعة ذكية 🔍
                 </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleImproveTranslations} disabled={improvingTranslations || translatedCount === 0}>
+                  <Sparkles className="w-4 h-4" /> تحسين الترجمات ✨
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -1911,6 +2053,15 @@ const Editor = () => {
             >
               {reviewing ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />}
               مراجعة ذكية 🔍
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleImproveTranslations}
+              disabled={improvingTranslations || translatedCount === 0}
+              className="font-body border-secondary/30 text-secondary hover:text-secondary"
+            >
+              {improvingTranslations ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+              تحسين الترجمات ✨
             </Button>
           </div>
         )}

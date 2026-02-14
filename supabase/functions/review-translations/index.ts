@@ -44,7 +44,7 @@ Deno.serve(async (req) => {
      const { entries, glossary, action } = await req.json() as {
        entries: ReviewEntry[];
        glossary?: string;
-       action?: 'review' | 'suggest-short';
+       action?: 'review' | 'suggest-short' | 'improve';
      };
 
      if (!entries || entries.length === 0) {
@@ -133,7 +133,99 @@ ${tooLongEntries.map((e, i) => {
        });
      }
 
-     // --- Default review action ---
+      // --- Handle "improve translations" action ---
+      if (action === 'improve') {
+        const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+        if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY is not configured');
+
+        const translatedEntries = entries.filter(e => e.translation?.trim());
+
+        if (translatedEntries.length === 0) {
+          return new Response(JSON.stringify({ improvements: [] }), {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          });
+        }
+
+        // Process in chunks of 25
+        const CHUNK_SIZE = 25;
+        const allImprovements: any[] = [];
+
+        for (let c = 0; c < translatedEntries.length; c += CHUNK_SIZE) {
+          const chunk = translatedEntries.slice(c, c + CHUNK_SIZE);
+
+          const prompt = `أنت مترجم ألعاب فيديو محترف متخصص في سلسلة زيلدا. مهمتك: تحسين الترجمات العربية التالية لتكون أكثر طبيعية ودقة وملاءمة لسياق اللعبة.
+
+قواعد صارمة:
+- حسّن الأسلوب والصياغة لتكون أكثر طبيعية وسلاسة في العربية
+- صحّح أي أخطاء نحوية أو إملائية
+- استخدم مصطلحات مجتمع الألعاب العربي المعروفة (مثل: تريفورس، سيف الماستر، هايرول)
+- حافظ على جميع الوسوم [Tags] و ￼ كما هي بدون أي تغيير
+- حافظ على طول الترجمة قريباً من الأصل لتناسب صناديق النص في اللعبة
+- الحد الأقصى بالبايت مذكور لكل نص — لا تتجاوزه (كل حرف عربي = 2 بايت)
+- إذا كانت الترجمة ممتازة أصلاً، أعدها كما هي بدون تغيير
+- لا تترجم الأسماء العلم المعروفة (Link, Zelda, Ganon) إلا إذا كان لها مقابل عربي شائع
+
+${glossary ? `\nالقاموس:\n${glossary}\n` : ''}
+
+${chunk.map((e, i) => `[${i}] الأصلي: "${e.original}"
+الترجمة الحالية: "${e.translation}"
+الحد: ${e.maxBytes} بايت`).join('\n\n')}
+
+أخرج JSON array فقط بنفس الترتيب يحتوي الترجمات المحسّنة. مثال: ["ترجمة محسنة 1", "ترجمة محسنة 2"]`;
+
+          const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              model: 'google/gemini-2.5-flash',
+              messages: [
+                { role: 'system', content: 'أنت محسّن ترجمات ألعاب. أخرج ONLY JSON arrays.' },
+                { role: 'user', content: prompt },
+              ],
+              temperature: 0.4,
+            }),
+          });
+
+          if (!response.ok) {
+            const err = await response.text();
+            console.error('AI gateway error:', err);
+            throw new Error(`AI error: ${response.status}`);
+          }
+
+          const data = await response.json();
+          const content = data.choices?.[0]?.message?.content || '';
+          const jsonMatch = content.match(/\[[\s\S]*\]/);
+          if (!jsonMatch) throw new Error('Failed to parse AI response');
+
+          const sanitized = jsonMatch[0].replace(/[\x00-\x1F\x7F]/g, ' ');
+          const improved: string[] = JSON.parse(sanitized);
+
+          for (let i = 0; i < Math.min(chunk.length, improved.length); i++) {
+            const entry = chunk[i];
+            const improvedText = improved[i]?.trim();
+            if (improvedText && improvedText !== entry.translation) {
+              allImprovements.push({
+                key: entry.key,
+                original: entry.original,
+                current: entry.translation,
+                currentBytes: getUtf16ByteLength(entry.translation),
+                maxBytes: entry.maxBytes,
+                improved: improvedText,
+                improvedBytes: getUtf16ByteLength(improvedText),
+              });
+            }
+          }
+        }
+
+        return new Response(JSON.stringify({ improvements: allImprovements }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      // --- Default review action ---
      const issues: ReviewIssue[] = [];
 
     // Parse glossary for consistency checks
