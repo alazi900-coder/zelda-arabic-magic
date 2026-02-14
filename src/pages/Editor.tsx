@@ -169,7 +169,7 @@ const Editor = () => {
   const [search, setSearch] = useState("");
   const [filterFile, setFilterFile] = useState<string>("all");
   const [filterCategory, setFilterCategory] = useState<string>("all");
-  const [filterStatus, setFilterStatus] = useState<"all" | "translated" | "untranslated" | "problems">("all");
+  const [filterStatus, setFilterStatus] = useState<"all" | "translated" | "untranslated" | "problems" | "needs-improve" | "too-short" | "too-long" | "stuck-chars" | "mixed-lang">("all");
   const [filterTechnical, setFilterTechnical] = useState<"all" | "only" | "exclude">("all");
   const [building, setBuilding] = useState(false);
   const [buildProgress, setBuildProgress] = useState("");
@@ -504,24 +504,96 @@ const Editor = () => {
     return () => { if (qualityTimerRef.current) clearTimeout(qualityTimerRef.current); };
   }, [state?.entries, state?.translations]);
 
+  // Helper functions for "needs improvement" filters
+  const isTranslationTooShort = useCallback((entry: ExtractedEntry, translation: string): boolean => {
+    if (!translation?.trim() || !entry.original?.trim()) return false;
+    // Translation is less than 30% of original length (suspiciously short)
+    return translation.trim().length < entry.original.trim().length * 0.3 && entry.original.trim().length > 5;
+  }, []);
+
+  const isTranslationTooLong = useCallback((entry: ExtractedEntry, translation: string): boolean => {
+    if (!translation?.trim() || entry.maxBytes <= 0) return false;
+    return (translation.length * 2) > entry.maxBytes;
+  }, []);
+
+  const hasStuckChars = useCallback((translation: string): boolean => {
+    if (!translation?.trim()) return false;
+    // Detect Presentation Forms (already processed/stuck characters)
+    return hasArabicPresentationForms(translation);
+  }, []);
+
+  const isMixedLanguage = useCallback((translation: string): boolean => {
+    if (!translation?.trim()) return false;
+    // Strip tags before checking
+    const stripped = translation.replace(/\[[^\]]*\]/g, '').replace(/\uFFFC/g, '').trim();
+    if (!stripped) return false;
+    const hasArabic = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/.test(stripped);
+    // Check for actual English words (2+ letters), not just single chars or numbers
+    const englishWords = stripped.match(/[a-zA-Z]{2,}/g) || [];
+    // Whitelist common gaming terms
+    const whitelist = new Set(['HP', 'MP', 'ATK', 'DEF', 'NPC', 'HUD', 'FPS', 'XP', 'DLC', 'UI', 'OK']);
+    const realEnglish = englishWords.filter(w => !whitelist.has(w.toUpperCase()));
+    return hasArabic && realEnglish.length > 0;
+  }, []);
+
+  const needsImprovement = useCallback((entry: ExtractedEntry, translation: string): boolean => {
+    return isTranslationTooShort(entry, translation) || 
+           isTranslationTooLong(entry, translation) || 
+           hasStuckChars(translation) || 
+           isMixedLanguage(translation);
+  }, [isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage]);
+
+  // Count entries needing improvement (debounced)
+  const [needsImproveCount, setNeedsImproveCount] = useState({ total: 0, tooShort: 0, tooLong: 0, stuck: 0, mixed: 0 });
+  const needsImproveTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  useEffect(() => {
+    if (!state) return;
+    if (needsImproveTimerRef.current) clearTimeout(needsImproveTimerRef.current);
+    needsImproveTimerRef.current = setTimeout(() => {
+      let tooShort = 0, tooLong = 0, stuck = 0, mixed = 0;
+      for (const entry of state.entries) {
+        const key = `${entry.msbtFile}:${entry.index}`;
+        const translation = state.translations[key];
+        if (!translation?.trim()) continue;
+        if (isTranslationTooShort(entry, translation)) tooShort++;
+        if (isTranslationTooLong(entry, translation)) tooLong++;
+        if (hasStuckChars(translation)) stuck++;
+        if (isMixedLanguage(translation)) mixed++;
+      }
+      const total = new Set([...state.entries.filter(e => {
+        const k = `${e.msbtFile}:${e.index}`;
+        const t = state.translations[k];
+        return t?.trim() && needsImprovement(e, t);
+      }).map(e => `${e.msbtFile}:${e.index}`)]).size;
+      setNeedsImproveCount({ total, tooShort, tooLong, stuck, mixed });
+    }, 1000);
+    return () => { if (needsImproveTimerRef.current) clearTimeout(needsImproveTimerRef.current); };
+  }, [state?.entries, state?.translations, isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage, needsImprovement]);
+
   const filteredEntries = useMemo(() => {
     if (!state) return [];
     return state.entries.filter(e => {
       const key = `${e.msbtFile}:${e.index}`;
-      const isTranslated = state.translations[key] && state.translations[key].trim() !== '';
+      const translation = state.translations[key] || '';
+      const isTranslated = translation.trim() !== '';
       const isTechnical = isTechnicalText(e.original);
       
       const matchSearch = !search ||
         e.original.toLowerCase().includes(search.toLowerCase()) ||
         e.label.includes(search) ||
-        (state.translations[key] || '').includes(search);
+        translation.includes(search);
       const matchFile = filterFile === "all" || e.msbtFile === filterFile;
       const matchCategory = filterCategory === "all" || categorizeFile(e.msbtFile) === filterCategory;
       const matchStatus = 
         filterStatus === "all" || 
         (filterStatus === "translated" && isTranslated) ||
         (filterStatus === "untranslated" && !isTranslated) ||
-        (filterStatus === "problems" && qualityStats.problemKeys.has(key));
+        (filterStatus === "problems" && qualityStats.problemKeys.has(key)) ||
+        (filterStatus === "needs-improve" && isTranslated && needsImprovement(e, translation)) ||
+        (filterStatus === "too-short" && isTranslated && isTranslationTooShort(e, translation)) ||
+        (filterStatus === "too-long" && isTranslated && isTranslationTooLong(e, translation)) ||
+        (filterStatus === "stuck-chars" && isTranslated && hasStuckChars(translation)) ||
+        (filterStatus === "mixed-lang" && isTranslated && isMixedLanguage(translation));
       const matchTechnical = 
         filterTechnical === "all" ||
         (filterTechnical === "only" && isTechnical) ||
@@ -529,7 +601,7 @@ const Editor = () => {
       
       return matchSearch && matchFile && matchCategory && matchStatus && matchTechnical;
     });
-  }, [state, search, filterFile, filterCategory, filterStatus, filterTechnical, qualityStats.problemKeys]);
+  }, [state, search, filterFile, filterCategory, filterStatus, filterTechnical, qualityStats.problemKeys, needsImprovement, isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage]);
 
   // Reset page when filters change
   useEffect(() => {
@@ -1915,9 +1987,14 @@ const Editor = () => {
                   className="px-3 py-2 rounded bg-background border border-border font-body text-sm"
                 >
                   <option value="all">الكل</option>
-                  <option value="translated">مترجم</option>
-                  <option value="untranslated">غير مترجم</option>
-                  <option value="problems">⚠️ بها مشاكل ({qualityStats.total})</option>
+                   <option value="translated">مترجم</option>
+                   <option value="untranslated">غير مترجم</option>
+                   <option value="problems">⚠️ بها مشاكل ({qualityStats.total})</option>
+                   <option value="needs-improve">🔧 تحتاج تحسين ({needsImproveCount.total})</option>
+                   <option value="too-short">📏 قصيرة جداً ({needsImproveCount.tooShort})</option>
+                   <option value="too-long">📐 طويلة جداً ({needsImproveCount.tooLong})</option>
+                   <option value="stuck-chars">🔤 أحرف ملتصقة ({needsImproveCount.stuck})</option>
+                   <option value="mixed-lang">🌐 عربي + إنجليزي ({needsImproveCount.mixed})</option>
                 </select>
                 <Button
                   variant={showQualityStats ? "secondary" : "outline"}
@@ -1963,9 +2040,14 @@ const Editor = () => {
                 className="w-full px-3 py-2 rounded bg-background border border-border font-body text-sm"
               >
                 <option value="all">الكل</option>
-                <option value="translated">مترجم</option>
-                <option value="untranslated">غير مترجم</option>
-                <option value="problems">⚠️ بها مشاكل ({qualityStats.total})</option>
+                 <option value="translated">مترجم</option>
+                 <option value="untranslated">غير مترجم</option>
+                 <option value="problems">⚠️ بها مشاكل ({qualityStats.total})</option>
+                 <option value="needs-improve">🔧 تحتاج تحسين ({needsImproveCount.total})</option>
+                 <option value="too-short">📏 قصيرة جداً ({needsImproveCount.tooShort})</option>
+                 <option value="too-long">📐 طويلة جداً ({needsImproveCount.tooLong})</option>
+                 <option value="stuck-chars">🔤 أحرف ملتصقة ({needsImproveCount.stuck})</option>
+                 <option value="mixed-lang">🌐 عربي + إنجليزي ({needsImproveCount.mixed})</option>
               </select>
               <div className="flex gap-2">
                 <Button
@@ -2377,6 +2459,22 @@ const Editor = () => {
                         <p className="text-xs text-destructive mb-2 flex items-center gap-1">
                           <AlertTriangle className="w-3 h-3" /> يحتاج مراجعة
                         </p>
+                      )}
+                      {translation?.trim() && (
+                        <div className="flex flex-wrap gap-1 mb-2">
+                          {isTranslationTooShort(entry, translation) && (
+                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 border border-amber-500/20">📏 قصيرة جداً</span>
+                          )}
+                          {isTranslationTooLong(entry, translation) && (
+                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-destructive/10 text-destructive border border-destructive/20">📐 تتجاوز الحد</span>
+                          )}
+                          {hasStuckChars(translation) && (
+                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-secondary/10 text-secondary border border-secondary/20">🔤 أحرف ملتصقة</span>
+                          )}
+                          {isMixedLanguage(translation) && (
+                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">🌐 عربي + إنجليزي</span>
+                          )}
+                        </div>
                       )}
                       {hasArabicChars(entry.original) && (!translation || translation === entry.original) && (
                         <Button
