@@ -256,7 +256,7 @@ const Process = () => {
       const data = await response.json();
 
       // Store files in IndexedDB to avoid sessionStorage quota
-      const { idbSet, idbGet } = await import("@/lib/idb-storage");
+      const { idbSet, idbGet, idbClear } = await import("@/lib/idb-storage");
       const langBuf = await langFile.arrayBuffer();
       const dictBuf = await dictFile.arrayBuffer();
       await idbSet("editorLangFile", langBuf);
@@ -292,6 +292,8 @@ const Process = () => {
         if (preservedCount > 0) console.log(`Preserved ${preservedCount} previous translations`);
       }
 
+      // Clear old data first, then write fresh state
+      await idbClear();
       await idbSet("editorState", {
         entries: data.entries,
         translations: finalTranslations,
