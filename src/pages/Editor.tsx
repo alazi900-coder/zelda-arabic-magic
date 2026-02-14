@@ -197,6 +197,7 @@ const Editor = () => {
      const [applyingArabic, setApplyingArabic] = useState(false);
      const [improvingTranslations, setImprovingTranslations] = useState(false);
      const [improveResults, setImproveResults] = useState<any[] | null>(null);
+     const [fixingMixed, setFixingMixed] = useState(false);
   
   const navigate = useNavigate();
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
@@ -1042,6 +1043,92 @@ const Editor = () => {
     
     setLastSaved(`✅ تم إصلاح ${fixedCount} ترجمة من الأحرف الملتصقة`);
     setTimeout(() => setLastSaved(""), 3000);
+  };
+
+
+  const handleFixMixedLanguage = async () => {
+    if (!state) return;
+    setFixingMixed(true);
+    setTranslateProgress("🌐 جاري إصلاح النصوص المختلطة...");
+
+    try {
+      const mixedEntries = state.entries
+        .filter(e => {
+          const key = `${e.msbtFile}:${e.index}`;
+          const translation = state.translations[key];
+          return translation?.trim() && isMixedLanguage(translation);
+        })
+        .map(e => ({
+          key: `${e.msbtFile}:${e.index}`,
+          original: e.original,
+          translation: state.translations[`${e.msbtFile}:${e.index}`],
+        }));
+
+      if (mixedEntries.length === 0) {
+        setTranslateProgress("لا توجد نصوص مختلطة للإصلاح");
+        setTimeout(() => setTranslateProgress(""), 3000);
+        return;
+      }
+
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+      // Process in batches of 20
+      const BATCH = 20;
+      const allUpdates: Record<string, string> = {};
+      let processed = 0;
+
+      for (let i = 0; i < mixedEntries.length; i += BATCH) {
+        const batch = mixedEntries.slice(i, i + BATCH);
+        setTranslateProgress(`🌐 إصلاح النصوص المختلطة... ${processed}/${mixedEntries.length}`);
+
+        const response = await fetch(`${supabaseUrl}/functions/v1/fix-mixed-language`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${supabaseKey}`,
+            'apikey': supabaseKey,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            entries: batch,
+            glossary: state.glossary || '',
+          }),
+        });
+
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          throw new Error(errData.error || `خطأ ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data.translations) {
+          // Store previous translations for undo
+          for (const [key, val] of Object.entries(data.translations)) {
+            if (state.translations[key] !== val) {
+              setPreviousTranslations(prev => ({ ...prev, [key]: state.translations[key] || '' }));
+              allUpdates[key] = val as string;
+            }
+          }
+        }
+        processed += batch.length;
+      }
+
+      const fixedCount = Object.keys(allUpdates).length;
+      if (fixedCount > 0) {
+        setState(prev => prev ? {
+          ...prev,
+          translations: { ...prev.translations, ...allUpdates },
+        } : null);
+      }
+
+      setTranslateProgress(`✅ تم إصلاح ${fixedCount} ترجمة مختلطة اللغة`);
+      setTimeout(() => setTranslateProgress(""), 4000);
+    } catch (err) {
+      setTranslateProgress(`❌ خطأ: ${err instanceof Error ? err.message : 'غير معروف'}`);
+      setTimeout(() => setTranslateProgress(""), 4000);
+    } finally {
+      setFixingMixed(false);
+    }
   };
 
   // تنظيف أحرف Presentation Forms - تحويل أحرف العرض المتصلة إلى أحرف عادية
@@ -2226,6 +2313,9 @@ const Editor = () => {
                 <DropdownMenuItem onClick={handleFixAllStuckCharacters} disabled={needsImproveCount.stuck === 0}>
                   <AlertTriangle className="w-4 h-4" /> إصلاح الأحرف الملتصقة 🔤
                 </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleFixMixedLanguage} disabled={fixingMixed || needsImproveCount.mixed === 0}>
+                  {fixingMixed ? <Loader2 className="w-4 h-4 animate-spin" /> : <Filter className="w-4 h-4" />} إصلاح النصوص المختلطة 🌐
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -2271,6 +2361,15 @@ const Editor = () => {
             >
               {improvingTranslations ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
               تحسين الترجمات ✨
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleFixMixedLanguage}
+              disabled={fixingMixed || needsImproveCount.mixed === 0}
+              className="font-body border-primary/30 text-primary hover:text-primary"
+            >
+              {fixingMixed ? <Loader2 className="w-4 h-4 animate-spin" /> : <Filter className="w-4 h-4" />}
+              إصلاح النصوص المختلطة 🌐
             </Button>
           </div>
         )}
