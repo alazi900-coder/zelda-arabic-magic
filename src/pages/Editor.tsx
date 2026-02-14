@@ -1014,6 +1014,109 @@ const Editor = () => {
     }
   };
 
+  const handleRetranslatePage = async () => {
+    if (!state) return;
+
+    // Get currently visible translated entries on this page
+    const entriesToRetranslate = paginatedEntries.filter(e => {
+      const key = `${e.msbtFile}:${e.index}`;
+      const translation = state.translations[key]?.trim();
+      return translation && !isTechnicalText(e.original);
+    });
+
+    if (entriesToRetranslate.length === 0) {
+      setTranslateProgress("⚠️ لا توجد ترجمات في هذه الصفحة لإعادة ترجمتها");
+      setTimeout(() => setTranslateProgress(""), 3000);
+      return;
+    }
+
+    // Save previous translations for undo
+    const prevTrans: Record<string, string> = {};
+    for (const e of entriesToRetranslate) {
+      const key = `${e.msbtFile}:${e.index}`;
+      prevTrans[key] = state.translations[key] || '';
+    }
+    setPreviousTranslations(old => ({ ...old, ...prevTrans }));
+
+    setTranslating(true);
+    abortControllerRef.current = new AbortController();
+
+    try {
+      const totalBatches = Math.ceil(entriesToRetranslate.length / AI_BATCH_SIZE);
+
+      for (let b = 0; b < totalBatches; b++) {
+        if (abortControllerRef.current.signal.aborted) {
+          setTranslateProgress("⏹️ تم إيقاف إعادة الترجمة");
+          setTimeout(() => setTranslateProgress(""), 3000);
+          break;
+        }
+
+        const batch = entriesToRetranslate.slice(b * AI_BATCH_SIZE, (b + 1) * AI_BATCH_SIZE);
+        setTranslateProgress(`🔄 إعادة ترجمة الدفعة ${b + 1}/${totalBatches} (${batch.length} نص)...`);
+
+        const entries = batch.map(e => ({
+          key: `${e.msbtFile}:${e.index}`,
+          original: e.original,
+        }));
+
+        // Context from nearby translated entries
+        const contextEntries: { key: string; original: string; translation?: string }[] = [];
+        const contextKeys = new Set<string>();
+        for (const e of batch) {
+          const idx = state.entries.indexOf(e);
+          for (const offset of [-2, -1, 1, 2]) {
+            const neighbor = state.entries[idx + offset];
+            if (neighbor) {
+              const nKey = `${neighbor.msbtFile}:${neighbor.index}`;
+              if (!contextKeys.has(nKey) && state.translations[nKey]?.trim()) {
+                contextKeys.add(nKey);
+                contextEntries.push({ key: nKey, original: neighbor.original, translation: state.translations[nKey] });
+              }
+            }
+          }
+        }
+
+        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+        const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+        const response = await fetch(`${supabaseUrl}/functions/v1/translate-entries`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${supabaseKey}`,
+            'apikey': supabaseKey,
+            'Content-Type': 'application/json',
+          },
+          signal: abortControllerRef.current.signal,
+          body: JSON.stringify({
+            entries,
+            glossary: state.glossary || '',
+            context: contextEntries.length > 0 ? contextEntries.slice(0, 10) : undefined,
+          }),
+        });
+
+        if (!response.ok) throw new Error(`خطأ ${response.status}`);
+        const data = await response.json();
+
+        if (data.translations) {
+          setState(prev => prev ? {
+            ...prev,
+            translations: { ...prev.translations, ...data.translations },
+          } : null);
+        }
+      }
+
+      setTranslateProgress(`✅ تم إعادة ترجمة ${entriesToRetranslate.length} نص في هذه الصفحة`);
+      setTimeout(() => setTranslateProgress(""), 4000);
+    } catch (err) {
+      if ((err as Error).name !== 'AbortError') {
+        setTranslateProgress(`❌ خطأ: ${err instanceof Error ? err.message : 'غير معروف'}`);
+        setTimeout(() => setTranslateProgress(""), 4000);
+      }
+    } finally {
+      setTranslating(false);
+    }
+  };
+
   const handleFixAllStuckCharacters = () => {
     if (!state) return;
     
@@ -1800,6 +1903,15 @@ const Editor = () => {
               <Sparkles className="w-4 h-4" /> ترجمة تلقائية 🤖
             </Button>
           )}
+          <Button
+            size={isMobile ? "default" : "lg"}
+            variant="outline"
+            onClick={handleRetranslatePage}
+            disabled={translating}
+            className="font-display font-bold px-4 md:px-6 border-accent/30 text-accent hover:text-accent"
+          >
+            <RotateCcw className="w-4 h-4" /> إعادة ترجمة الصفحة 🔄
+          </Button>
         </div>
 
         {/* Category Progress */}
