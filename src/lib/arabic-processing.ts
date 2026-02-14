@@ -208,8 +208,9 @@ export function mirrorPunctuation(text: string): string {
 
 export function processArabicText(text: string, options?: { arabicNumerals?: boolean; mirrorPunct?: boolean }): string {
   if (!hasArabicChars(text)) return text;
-  // Only reverse BiDi — let the game engine handle letter shaping/connecting
-  let result = reverseBidi(text);
+  // Reshape Arabic letters (connect them) then reverse BiDi for LTR game engine
+  let result = reshapeArabic(text);
+  result = reverseBidi(result);
   if (options?.arabicNumerals) result = convertToArabicNumerals(result);
   if (options?.mirrorPunct) result = mirrorPunctuation(result);
   return result;
