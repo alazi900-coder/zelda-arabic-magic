@@ -1309,9 +1309,9 @@ const Editor = () => {
     const dictBuf = await idbGet<ArrayBuffer>("editorDictFile");
     const langFileName = (await idbGet<string>("editorLangFileName")) || "output.zs";
 
-    if (!langBuf || !dictBuf) {
-      alert("يجب إعادة رفع الملفات. يرجى العودة لصفحة المعالجة.");
-      navigate("/process");
+    if (!langBuf) {
+      setBuildProgress("❌ ملف اللغة غير موجود. يرجى العودة لصفحة المعالجة وإعادة رفع الملفات.");
+      setTimeout(() => setBuildProgress(""), 5000);
       return;
     }
 
@@ -1321,7 +1321,9 @@ const Editor = () => {
     try {
       const formData = new FormData();
       formData.append("langFile", new File([new Uint8Array(langBuf)], langFileName));
-      formData.append("dictFile", new File([new Uint8Array(dictBuf)], (await idbGet<string>("editorDictFileName")) || "ZsDic.pack.zs"));
+      if (dictBuf) {
+        formData.append("dictFile", new File([new Uint8Array(dictBuf)], (await idbGet<string>("editorDictFileName")) || "ZsDic.pack.zs"));
+      }
 
       const nonEmptyTranslations: Record<string, string> = {};
       for (const [k, v] of Object.entries(state.translations)) {
