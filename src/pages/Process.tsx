@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -37,7 +37,19 @@ const Process = () => {
    const [resultData, setResultData] = useState<{ modifiedCount: number; fileSize: number; compressedFileSize: number | null; entries: any[]; blobUrl: string } | null>(null);
    const [extracting, setExtracting] = useState(false);
    const [autoDetectedCount, setAutoDetectedCount] = useState(0);
+   const [mergeMode, setMergeMode] = useState<"fresh" | "merge">("fresh");
+   const [hasPreviousSession, setHasPreviousSession] = useState(false);
    const navigate = useNavigate();
+
+   // Check if there's a previous editing session in IndexedDB
+   useEffect(() => {
+     (async () => {
+       const { idbGet } = await import("@/lib/idb-storage");
+       const existing = await idbGet<{ translations?: Record<string, string> }>("editorState");
+       const hasTranslations = existing?.translations && Object.keys(existing.translations).length > 0;
+       setHasPreviousSession(!!hasTranslations);
+     })();
+   }, []);
 
   const addLog = (msg: string) => setLogs((prev) => [...prev, `[${new Date().toLocaleTimeString("ar-SA")}] ${msg}`]);
 
@@ -263,9 +275,22 @@ const Process = () => {
       console.log(`Auto-detected ${Object.keys(autoTranslations).length} pre-translated Arabic entries`);
       setAutoDetectedCount(Object.keys(autoTranslations).length);
 
-      // Always start fresh - never merge old translations from previous sessions
-      // Only use auto-detected Arabic entries from the current file
-      const finalTranslations: Record<string, string> = { ...autoTranslations };
+      // Merge or start fresh based on user choice
+      let finalTranslations: Record<string, string> = { ...autoTranslations };
+      
+      if (mergeMode === "merge") {
+        const existing = await idbGet<{ translations?: Record<string, string> }>("editorState");
+        const existingTranslations = existing?.translations || {};
+        const validKeys = new Set(data.entries.map((e: any) => `${e.msbtFile}:${e.index}`));
+        let preservedCount = 0;
+        for (const [k, v] of Object.entries(existingTranslations)) {
+          if (validKeys.has(k) && v && !finalTranslations[k]) {
+            finalTranslations[k] = v as string;
+            preservedCount++;
+          }
+        }
+        if (preservedCount > 0) console.log(`Preserved ${preservedCount} previous translations`);
+      }
 
       await idbSet("editorState", {
         entries: data.entries,
@@ -312,7 +337,34 @@ const Process = () => {
           />
         </div>
 
-        {/* Start Buttons */}
+        {/* Merge Mode Toggle */}
+        {hasPreviousSession && (
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <button
+              onClick={() => setMergeMode("fresh")}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border text-sm font-display font-bold transition-all ${
+                mergeMode === "fresh"
+                  ? "border-primary bg-primary/10 text-primary"
+                  : "border-border text-muted-foreground hover:border-primary/50"
+              }`}
+            >
+              <FileArchive className="w-4 h-4" />
+              بدء مشروع جديد
+            </button>
+            <button
+              onClick={() => setMergeMode("merge")}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border text-sm font-display font-bold transition-all ${
+                mergeMode === "merge"
+                  ? "border-primary bg-primary/10 text-primary"
+                  : "border-border text-muted-foreground hover:border-primary/50"
+              }`}
+            >
+              <CheckCircle2 className="w-4 h-4" />
+              استمرار مع دمج الترجمات السابقة
+            </button>
+          </div>
+        )}
+
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
           <Button
             size="lg"
