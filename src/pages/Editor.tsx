@@ -1,4 +1,5 @@
-import { useState, useEffect, useMemo, useRef, useCallback, memo } from "react";
+import React, { useState, useEffect, useMemo, useRef, useCallback, memo } from "react";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -52,14 +53,29 @@ const AI_BATCH_SIZE = 30;
 const PAGE_SIZE = 50;
 const INPUT_DEBOUNCE = 300;
 
-// Sanitize original text for display: collapse PUA tag markers and binary artifacts into single readable placeholders
-function displayOriginal(text: string): string {
-  // Collapse consecutive PUA markers, Object Replacement Chars, and CJK-like binary artifacts into a single [...]
-  // This covers: PUA (E000-F8FF), FFFC, and other non-printable control chars that appear as garbled text
-  return text
-    .replace(/[\uE000-\uF8FF\uFFFC\u0000-\u0008\u000E-\u001F]+/g, ' [...] ')
+// Sanitize original text for display: collapse PUA tag markers and binary artifacts into readable placeholders with tooltip
+function displayOriginal(text: string): React.ReactNode {
+  const cleaned = text
+    .replace(/[\uE000-\uF8FF\uFFFC\u0000-\u0008\u000E-\u001F]+/g, '\u0000TAG\u0000')
     .replace(/\s{2,}/g, ' ')
     .trim();
+  const parts = cleaned.split('\u0000TAG\u0000');
+  if (parts.length === 1) return parts[0];
+  return parts.map((part, i) => (
+    <React.Fragment key={i}>
+      {part}
+      {i < parts.length - 1 && (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span className="inline-block px-1 rounded bg-muted text-muted-foreground text-xs cursor-help mx-0.5">[...]</span>
+          </TooltipTrigger>
+          <TooltipContent side="top" className="max-w-xs text-xs">
+            رموز تقنية خاصة بمحرك اللعبة (أكواد تنسيق وتحكم). لا تؤثر على الترجمة ويتم الحفاظ عليها تلقائياً في الملف النهائي.
+          </TooltipContent>
+        </Tooltip>
+      )}
+    </React.Fragment>
+  ));
 }
 
 // Debounced input component to prevent re-renders on every keystroke
