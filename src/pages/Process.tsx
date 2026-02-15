@@ -266,12 +266,19 @@ const Process = () => {
       // Auto-detect already-Arabic entries and pre-populate as translated
       // Clean presentation forms and fix reversed text so editor shows readable Arabic
       const autoTranslations: Record<string, string> = {};
-      const arabicRegex = /[\u0600-\u06FF\uFB50-\uFDFF\uFE70-\uFEFF\u0750-\u077F\u08A0-\u08FF]/;
+      // Only match actual Arabic letters (not just any char in the range)
+      const arabicLetterRegex = /[\u0621-\u064A\u0671-\u06D3\uFB50-\uFDFF\uFE70-\uFEFF]/g;
       for (const entry of data.entries) {
-        if (arabicRegex.test(entry.original)) {
+        // Strip tag markers and control chars before checking for Arabic
+        const stripped = entry.original
+          .replace(/[\uE000-\uF8FF\uFFF9-\uFFFC\u0000-\u001F]/g, '')
+          .trim();
+        // Require at least 2 actual Arabic letters to avoid false positives from binary noise
+        const arabicMatches = stripped.match(arabicLetterRegex);
+        if (arabicMatches && arabicMatches.length >= 2) {
           const key = `${entry.msbtFile}:${entry.index}`;
           // Normalize presentation forms to standard Arabic characters
-          let cleaned = entry.original.normalize("NFKD");
+          let cleaned = stripped.normalize("NFKD");
           // Reverse the BiDi so text reads correctly in the editor
           cleaned = cleaned.split('\n').map((line: string) => {
             const segments: { text: string; isLTR: boolean }[] = [];
