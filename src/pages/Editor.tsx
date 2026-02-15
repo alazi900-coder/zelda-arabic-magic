@@ -52,12 +52,14 @@ const AI_BATCH_SIZE = 30;
 const PAGE_SIZE = 50;
 const INPUT_DEBOUNCE = 300;
 
-// Sanitize original text for display: replace PUA tag markers and other binary artifacts with readable placeholder
+// Sanitize original text for display: collapse PUA tag markers and binary artifacts into single readable placeholders
 function displayOriginal(text: string): string {
-  // Replace PUA markers (0xE000-0xE0FF) used for MSBT binary tags
-  // Also replace Object Replacement Character (0xFFFC) used as placeholder
-  // Also replace other common non-printable/control characters that appear as "Chinese symbols"
-  return text.replace(/[\uE000-\uF8FF\uFFFC]/g, '[▪]');
+  // Collapse consecutive PUA markers, Object Replacement Chars, and CJK-like binary artifacts into a single [...]
+  // This covers: PUA (E000-F8FF), FFFC, and other non-printable control chars that appear as garbled text
+  return text
+    .replace(/[\uE000-\uF8FF\uFFFC\u0000-\u0008\u000E-\u001F]+/g, ' [...] ')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
 }
 
 // Debounced input component to prevent re-renders on every keystroke
