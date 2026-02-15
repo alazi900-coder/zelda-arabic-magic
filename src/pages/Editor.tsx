@@ -53,29 +53,41 @@ const AI_BATCH_SIZE = 30;
 const PAGE_SIZE = 50;
 const INPUT_DEBOUNCE = 300;
 
-// Sanitize original text for display: collapse PUA tag markers and binary artifacts into readable placeholders with tooltip
+// Tag type config for color-coded display
+const TAG_TYPES: Record<string, { label: string; color: string; tooltip: string }> = {
+  '\uFFF9': { label: '⚙', color: 'bg-blue-500/20 text-blue-400 border-blue-500/30', tooltip: 'رمز تحكم (إيقاف مؤقت، انتظار، سرعة نص)' },
+  '\uFFFA': { label: '🎨', color: 'bg-purple-500/20 text-purple-400 border-purple-500/30', tooltip: 'رمز تنسيق (لون، حجم خط، روبي)' },
+  '\uFFFB': { label: '📌', color: 'bg-amber-500/20 text-amber-400 border-amber-500/30', tooltip: 'متغير (اسم اللاعب، عدد، اسم عنصر)' },
+};
+const TAG_FALLBACK = { label: '…', color: 'bg-muted text-muted-foreground', tooltip: 'رمز تقني خاص بمحرك اللعبة' };
+
+// Sanitize original text: replace binary tag markers with color-coded, tooltipped badges
 function displayOriginal(text: string): React.ReactNode {
-  const cleaned = text
-    .replace(/[\uE000-\uF8FF\uFFFC\u0000-\u0008\u000E-\u001F]+/g, '\u0000TAG\u0000')
-    .replace(/\s{2,}/g, ' ')
-    .trim();
-  const parts = cleaned.split('\u0000TAG\u0000');
-  if (parts.length === 1) return parts[0];
-  return parts.map((part, i) => (
-    <React.Fragment key={i}>
-      {part}
-      {i < parts.length - 1 && (
-        <Tooltip>
+  // Split on any known tag marker or remaining PUA/control chars
+  const regex = /([\uFFF9\uFFFA\uFFFB\uFFFC\uE000-\uF8FF\u0000-\u0008\u000E-\u001F]+)/g;
+  const parts = text.split(regex);
+  if (parts.length === 1 && !regex.test(text)) return text;
+  return parts.map((part, i) => {
+    if (!part) return null;
+    // Check if this part is a tag sequence
+    const firstChar = part[0];
+    const tagType = TAG_TYPES[firstChar] || (part.match(/[\uFFF9\uFFFA\uFFFB\uFFFC\uE000-\uF8FF\u0000-\u0008\u000E-\u001F]/) ? TAG_FALLBACK : null);
+    if (tagType) {
+      return (
+        <Tooltip key={i}>
           <TooltipTrigger asChild>
-            <span className="inline-block px-1 rounded bg-muted text-muted-foreground text-xs cursor-help mx-0.5">[...]</span>
+            <span className={`inline-block px-1 rounded border text-xs cursor-help mx-0.5 ${tagType.color}`}>
+              {tagType.label}
+            </span>
           </TooltipTrigger>
           <TooltipContent side="top" className="max-w-xs text-xs">
-            رموز تقنية خاصة بمحرك اللعبة (أكواد تنسيق وتحكم). لا تؤثر على الترجمة ويتم الحفاظ عليها تلقائياً في الملف النهائي.
+            {tagType.tooltip}
           </TooltipContent>
         </Tooltip>
-      )}
-    </React.Fragment>
-  ));
+      );
+    }
+    return <React.Fragment key={i}>{part}</React.Fragment>;
+  });
 }
 
 // Debounced input component to prevent re-renders on every keystroke
