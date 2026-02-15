@@ -390,8 +390,10 @@ function injectMSBT(data: Uint8Array, entries: MsbtEntry[], entriesToModify?: Se
       for (let i = 0; i < outputBytes.length; i++) {
         result[entry.offset + i] = outputBytes[i];
       }
-      // Null terminator
-      view.setUint16(entry.offset + outputBytes.length, 0, true);
+      // Zero-fill remaining bytes to avoid leftover data from original string
+      for (let i = outputBytes.length; i < entry.size; i++) {
+        result[entry.offset + i] = 0;
+      }
     } else {
       console.warn(`⚠️ Skipping entry ${idx} "${entry.label}" - encoded size (${outputBytes.length} bytes) exceeds slot size (${entry.size - 2} bytes)`);
     }
@@ -607,9 +609,6 @@ Deno.serve(async (req) => {
                   if (processOptions.arabicNumerals) processed = convertToArabicNumerals(processed);
                   if (processOptions.mirrorPunct) processed = mirrorPunctuation(processed);
                   entries[i].processedText = processed;
-                } else if (translationText === entries[i].originalText) {
-                  // Same as original - no processing needed, skip injection
-                  continue;
                 } else if (hasArabicPresentationForms(translationText)) {
                   // Already processed (has presentation forms from manual processing or external tool)
                   // Just inject as-is, no re-processing needed
