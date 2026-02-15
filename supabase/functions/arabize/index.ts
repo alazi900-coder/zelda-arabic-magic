@@ -17,21 +17,28 @@ const corsHeaders = {
 };
 
 // Check if a char is Arabic (standard range)
-function isArabicChar(ch: string): boolean {
-  const code = ch.charCodeAt(0);
+function isArabicCode(code: number): boolean {
   return (code >= 0x0600 && code <= 0x06FF) || (code >= 0xFB50 && code <= 0xFDFF) || (code >= 0xFE70 && code <= 0xFEFF);
 }
 
+function isArabicChar(ch: string): boolean {
+  return isArabicCode(ch.charCodeAt(0));
+}
+
 function hasArabicChars(text: string): boolean {
-  return [...text].some(ch => isArabicChar(ch));
+  for (let i = 0; i < text.length; i++) {
+    if (isArabicCode(text.charCodeAt(i))) return true;
+  }
+  return false;
 }
 
 // Check if text already has Arabic Presentation Forms (already reshaped/arabized)
 function hasArabicPresentationForms(text: string): boolean {
-  return [...text].some(ch => {
-    const code = ch.charCodeAt(0);
-    return (code >= 0xFB50 && code <= 0xFDFF) || (code >= 0xFE70 && code <= 0xFEFF);
-  });
+  for (let i = 0; i < text.length; i++) {
+    const code = text.charCodeAt(i);
+    if ((code >= 0xFB50 && code <= 0xFDFF) || (code >= 0xFE70 && code <= 0xFEFF)) return true;
+  }
+  return false;
 }
 
 // ============= Arabic Reshaping =============
@@ -96,37 +103,37 @@ function isTashkeel(code: number): boolean {
 }
 
 function reshapeArabic(text: string): string {
-  const chars = [...text];
+  const len = text.length;
   const result: string[] = [];
   
-  for (let i = 0; i < chars.length; i++) {
-    const code = chars[i].charCodeAt(0);
+  for (let i = 0; i < len; i++) {
+    const code = text.charCodeAt(i);
     
     if (isTashkeel(code)) {
-      result.push(chars[i]);
+      result.push(text[i]);
       continue;
     }
     
     // Skip PUA tag markers - pass through as-is
     if (code >= 0xE000 && code <= 0xE0FF) {
-      result.push(chars[i]);
+      result.push(text[i]);
       continue;
     }
     
     const forms = ARABIC_FORMS[code];
     if (!forms) {
-      result.push(chars[i]);
+      result.push(text[i]);
       continue;
     }
     
     if (code === 0x0644) {
       let nextIdx = i + 1;
-      while (nextIdx < chars.length && isTashkeel(chars[nextIdx].charCodeAt(0))) nextIdx++;
-      if (nextIdx < chars.length) {
-        const nextCode = chars[nextIdx].charCodeAt(0);
+      while (nextIdx < len && isTashkeel(text.charCodeAt(nextIdx))) nextIdx++;
+      if (nextIdx < len) {
+        const nextCode = text.charCodeAt(nextIdx);
         const ligature = LAM_ALEF_LIGATURES[nextCode];
         if (ligature) {
-          const prevCode = getPrevArabicCode(chars, i);
+          const prevCode = getPrevArabicCodeStr(text, i);
           const prevConnects = prevCode !== null && canConnectAfter(prevCode);
           result.push(String.fromCharCode(prevConnects ? ligature[1] : ligature[0]));
           i = nextIdx;
@@ -135,10 +142,10 @@ function reshapeArabic(text: string): string {
       }
     }
     
-    const prevCode = getPrevArabicCode(chars, i);
+    const prevCode = getPrevArabicCodeStr(text, i);
     const prevConnects = prevCode !== null && canConnectAfter(prevCode);
     
-    const nextCode = getNextArabicCode(chars, i);
+    const nextCode = getNextArabicCodeStr(text, i);
     const nextExists = nextCode !== null && ARABIC_FORMS[nextCode] !== undefined;
     
     let formIndex: number;
@@ -160,22 +167,22 @@ function reshapeArabic(text: string): string {
   return result.join('');
 }
 
-function getPrevArabicCode(chars: string[], index: number): number | null {
+function getPrevArabicCodeStr(text: string, index: number): number | null {
   for (let i = index - 1; i >= 0; i--) {
-    const c = chars[i].charCodeAt(0);
+    const c = text.charCodeAt(i);
     if (isTashkeel(c)) continue;
-    if (c >= 0xE000 && c <= 0xE0FF) continue; // Skip PUA tag markers
+    if (c >= 0xE000 && c <= 0xE0FF) continue;
     if (ARABIC_FORMS[c] !== undefined) return c;
     return null;
   }
   return null;
 }
 
-function getNextArabicCode(chars: string[], index: number): number | null {
-  for (let i = index + 1; i < chars.length; i++) {
-    const c = chars[i].charCodeAt(0);
+function getNextArabicCodeStr(text: string, index: number): number | null {
+  for (let i = index + 1; i < text.length; i++) {
+    const c = text.charCodeAt(i);
     if (isTashkeel(c)) continue;
-    if (c >= 0xE000 && c <= 0xE0FF) continue; // Skip PUA tag markers
+    if (c >= 0xE000 && c <= 0xE0FF) continue;
     if (ARABIC_FORMS[c] !== undefined) return c;
     return null;
   }
@@ -191,16 +198,17 @@ function reverseBidi(text: string): string {
     let current = '';
     let currentIsLTR: boolean | null = null;
 
-    for (const ch of line) {
-      const code = ch.charCodeAt(0);
+    for (let ci = 0; ci < line.length; ci++) {
+      const code = line.charCodeAt(ci);
+      const ch = line[ci];
       // PUA tag markers are treated as neutral (stay with current segment)
       if (code >= 0xE000 && code <= 0xE0FF) {
         current += ch;
         continue;
       }
       
-      const charIsArabic = isArabicChar(ch);
-      const charIsLTR = /[a-zA-Z0-9]/.test(ch);
+      const charIsArabic = isArabicCode(code);
+      const charIsLTR = (code >= 0x30 && code <= 0x39) || (code >= 0x41 && code <= 0x5A) || (code >= 0x61 && code <= 0x7A);
       
       if (charIsArabic) {
         if (currentIsLTR === true && current) {
@@ -224,7 +232,10 @@ function reverseBidi(text: string): string {
 
     return segments.reverse().map(seg => {
       if (seg.isLTR) return seg.text;
-      return [...seg.text].reverse().join('');
+      // Reverse string without spread operator
+      let rev = '';
+      for (let ri = seg.text.length - 1; ri >= 0; ri--) rev += seg.text[ri];
+      return rev;
     }).join('');
   }).join('\n');
 }
@@ -236,12 +247,13 @@ const NUMERAL_MAP: Record<string, string> = {
 };
 
 function convertToArabicNumerals(text: string): string {
-  // Convert Western digits to Arabic-Indic, skipping PUA markers
-  return [...text].map(ch => {
-    const code = ch.charCodeAt(0);
-    if (code >= 0xE000 && code <= 0xE0FF) return ch; // PUA markers
-    return NUMERAL_MAP[ch] || ch;
-  }).join('');
+  let result = '';
+  for (let i = 0; i < text.length; i++) {
+    const code = text.charCodeAt(i);
+    if (code >= 0xE000 && code <= 0xE0FF) { result += text[i]; continue; }
+    result += NUMERAL_MAP[text[i]] || text[i];
+  }
+  return result;
 }
 
 // ============= Punctuation Mirroring =============
@@ -254,11 +266,13 @@ function mirrorPunctuation(text: string): string {
     '(': ')', ')': '(',
   };
   
-  return [...text].map(ch => {
-    const code = ch.charCodeAt(0);
-    if (code >= 0xE000 && code <= 0xE0FF) return ch; // PUA markers
-    return PUNCT_MAP[ch] || BRACKET_MAP[ch] || ch;
-  }).join('');
+  let result = '';
+  for (let i = 0; i < text.length; i++) {
+    const code = text.charCodeAt(i);
+    if (code >= 0xE000 && code <= 0xE0FF) { result += text[i]; continue; }
+    result += PUNCT_MAP[text[i]] || BRACKET_MAP[text[i]] || text[i];
+  }
+  return result;
 }
 
 function processArabicText(text: string, options?: { arabicNumerals?: boolean; mirrorPunct?: boolean }): string {
@@ -311,7 +325,7 @@ function parseMSBT(data: Uint8Array): { entries: MsbtEntry[]; raw: Uint8Array } 
         const absOffset = txt2Start + entryOffset;
         const textLength = nextOffset - entryOffset;
 
-        let text = '';
+        const textParts: string[] = [];
         const tags: TagInfo[] = [];
 
         for (let j = 0; j < textLength - 2; j += 2) {
@@ -322,18 +336,16 @@ function parseMSBT(data: Uint8Array): { entries: MsbtEntry[]; raw: Uint8Array } 
             const tagSize = view.getUint16(absOffset + j + 4, true);
             const totalTagBytes = 6 + tagSize;
             const markerCode = 0xE000 + tags.length;
-            // Copy tag bytes (create a proper copy, not a view)
-            const tagBytes = new Uint8Array(totalTagBytes);
-            for (let b = 0; b < totalTagBytes; b++) {
-              tagBytes[b] = data[absOffset + j + b];
-            }
+            // Copy tag bytes using slice (faster than manual loop)
+            const tagBytes = data.slice(absOffset + j, absOffset + j + totalTagBytes);
             tags.push({ markerCode, bytes: tagBytes });
             j += 4 + tagSize;
-            text += String.fromCharCode(markerCode); // PUA marker instead of \uFFFC
+            textParts.push(String.fromCharCode(markerCode));
             continue;
           }
-          text += String.fromCharCode(charCode);
+          textParts.push(String.fromCharCode(charCode));
         }
+        const text = textParts.join('');
 
         // DON'T apply processArabicText here - keep raw text
         // Processing will be applied selectively in build mode
