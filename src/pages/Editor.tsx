@@ -52,6 +52,14 @@ const AI_BATCH_SIZE = 30;
 const PAGE_SIZE = 50;
 const INPUT_DEBOUNCE = 300;
 
+// Sanitize original text for display: replace PUA tag markers and other binary artifacts with readable placeholder
+function displayOriginal(text: string): string {
+  // Replace PUA markers (0xE000-0xE0FF) used for MSBT binary tags
+  // Also replace Object Replacement Character (0xFFFC) used as placeholder
+  // Also replace other common non-printable/control characters that appear as "Chinese symbols"
+  return text.replace(/[\uE000-\uF8FF\uFFFC]/g, '[▪]');
+}
+
 // Debounced input component to prevent re-renders on every keystroke
 const DebouncedInput = memo(({ value, onChange, placeholder, className, autoFocus }: {
   value: string;
@@ -2623,7 +2631,7 @@ const Editor = () => {
                     
                     <div className="p-3 rounded border border-border/50 bg-muted/30 mb-3">
                       <p className="text-xs text-muted-foreground mb-1">النص الأصلي:</p>
-                      <p className="font-body text-sm">{entry.original}</p>
+                      <p className="font-body text-sm">{displayOriginal(entry.original)}</p>
                     </div>
 
                     {hasProblem && (
@@ -2741,7 +2749,7 @@ const Editor = () => {
                   <div className={`flex ${isMobile ? 'flex-col' : 'items-start'} gap-3 md:gap-4`}>
                     <div className="flex-1 min-w-0">
                       <p className="text-xs text-muted-foreground mb-1 truncate">{entry.msbtFile} • {entry.label}</p>
-                      <p className="font-body text-sm mb-2 break-words">{entry.original}</p>
+                      <p className="font-body text-sm mb-2 break-words">{displayOriginal(entry.original)}</p>
                       {isTech && (
                         <p className="text-xs text-accent mb-2">⚠️ نص تقني - تحتاج حذر في الترجمة</p>
                       )}
