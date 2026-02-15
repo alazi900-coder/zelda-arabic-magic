@@ -594,11 +594,11 @@ Deno.serve(async (req) => {
                 // Convert \uFFFC in translation back to PUA markers from original entry
                 let translationText = translations[key];
                 let tagIdx = 0;
-                translationText = translationText.replace(/\uFFFC/g, () => {
+                translationText = translationText.replace(/[\uFFF9\uFFFA\uFFFB\uFFFC]/g, () => {
                   if (tagIdx < entries[i].tags.length) {
                     return String.fromCharCode(entries[i].tags[tagIdx++].markerCode);
                   }
-                  return '\uFFFC'; // no corresponding tag, keep as-is
+                  return ''; // no corresponding tag, remove marker
                 });
 
                 if (protectedEntries.has(key)) {
