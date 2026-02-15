@@ -528,8 +528,19 @@ Deno.serve(async (req) => {
           try {
             const { entries } = parseMSBT(file.data);
             for (let i = 0; i < entries.length; i++) {
-              // Convert PUA markers back to \uFFFC for display in the editor
-              const displayText = entries[i].originalText.replace(/[\uE000-\uE0FF]/g, '\uFFFC');
+              // Convert PUA markers to typed markers for color-coded display in the editor
+              // \uFFF9 = control (group 0), \uFFFA = formatting (group 1), \uFFFB = variable (group 2+)
+              let displayText = entries[i].originalText;
+              for (const tag of entries[i].tags) {
+                const group = tag.bytes.length >= 3 ? tag.bytes[2] : 0;
+                let marker: string;
+                if (group === 0) marker = '\uFFF9';      // control (pauses, waits)
+                else if (group === 1) marker = '\uFFFA';  // formatting (color, font, ruby)
+                else marker = '\uFFFB';                   // variable (player name, items)
+                displayText = displayText.replace(String.fromCharCode(tag.markerCode), marker);
+              }
+              // Replace any remaining PUA markers
+              displayText = displayText.replace(/[\uE000-\uE0FF]/g, '\uFFFC');
               allEntries.push({
                 msbtFile: file.name,
                 index: i,
