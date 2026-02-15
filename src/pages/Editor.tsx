@@ -499,65 +499,9 @@ const Editor = () => {
     return counts;
   }, [state?.entries]);
 
-  // Category progress: how many translated per category
-  const [categoryProgress, setCategoryProgress] = useState<Record<string, { total: number; translated: number }>>({});
-  useEffect(() => {
-    if (!state) return;
-    const timer = setTimeout(() => {
-      const progress: Record<string, { total: number; translated: number }> = {};
-      for (const e of state.entries) {
-        const cat = categorizeFile(e.msbtFile);
-        if (!progress[cat]) progress[cat] = { total: 0, translated: 0 };
-        progress[cat].total++;
-        const key = `${e.msbtFile}:${e.index}`;
-        if (state.translations[key]?.trim()) progress[cat].translated++;
-      }
-      setCategoryProgress(progress);
-    }, 800);
-    return () => clearTimeout(timer);
-  }, [state?.entries, state?.translations]);
-
-  // Quality stats computation - debounced to avoid recomputing on every keystroke
-  const [qualityStats, setQualityStats] = useState({ tooLong: 0, nearLimit: 0, missingTags: 0, placeholderMismatch: 0, total: 0, problemKeys: new Set<string>() });
-  const qualityTimerRef = useRef<ReturnType<typeof setTimeout>>();
-  
-  useEffect(() => {
-    if (!state) return;
-    if (qualityTimerRef.current) clearTimeout(qualityTimerRef.current);
-    qualityTimerRef.current = setTimeout(() => {
-      let tooLong = 0, nearLimit = 0, missingTags = 0, placeholderMismatch = 0;
-      const problemKeys = new Set<string>();
-
-      for (const entry of state.entries) {
-        const key = `${entry.msbtFile}:${entry.index}`;
-        const translation = state.translations[key]?.trim();
-        if (!translation) continue;
-
-        if (entry.maxBytes > 0) {
-          const bytes = translation.length * 2;
-          if (bytes > entry.maxBytes) { tooLong++; problemKeys.add(key); }
-          else if (bytes / entry.maxBytes > 0.8) { nearLimit++; problemKeys.add(key); }
-        }
-
-        const origTags = entry.original.match(/\[[^\]]*\]/g) || [];
-        for (const tag of origTags) {
-          if (!translation.includes(tag)) { missingTags++; problemKeys.add(key); break; }
-        }
-
-        const origPh = (entry.original.match(/\uFFFC/g) || []).length;
-        const transPh = (translation.match(/\uFFFC/g) || []).length;
-        if (origPh !== transPh) { placeholderMismatch++; problemKeys.add(key); }
-      }
-
-      setQualityStats({ tooLong, nearLimit, missingTags, placeholderMismatch, total: problemKeys.size, problemKeys });
-    }, 1000); // 1 second debounce for quality stats
-    return () => { if (qualityTimerRef.current) clearTimeout(qualityTimerRef.current); };
-  }, [state?.entries, state?.translations]);
-
-  // Helper functions for "needs improvement" filters
+  // Helper functions for quality/improvement filters
   const isTranslationTooShort = useCallback((entry: ExtractedEntry, translation: string): boolean => {
     if (!translation?.trim() || !entry.original?.trim()) return false;
-    // Translation is less than 30% of original length (suspiciously short)
     return translation.trim().length < entry.original.trim().length * 0.3 && entry.original.trim().length > 5;
   }, []);
 
@@ -568,19 +512,15 @@ const Editor = () => {
 
   const hasStuckChars = useCallback((translation: string): boolean => {
     if (!translation?.trim()) return false;
-    // Detect Presentation Forms (already processed/stuck characters)
     return hasArabicPresentationForms(translation);
   }, []);
 
   const isMixedLanguage = useCallback((translation: string): boolean => {
     if (!translation?.trim()) return false;
-    // Strip tags before checking
     const stripped = translation.replace(/\[[^\]]*\]/g, '').replace(/\uFFFC/g, '').trim();
     if (!stripped) return false;
     const hasArabic = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/.test(stripped);
-    // Check for actual English words (2+ letters), not just single chars or numbers
     const englishWords = stripped.match(/[a-zA-Z]{2,}/g) || [];
-    // Whitelist common gaming terms
     const whitelist = new Set(['HP', 'MP', 'ATK', 'DEF', 'NPC', 'HUD', 'FPS', 'XP', 'DLC', 'UI', 'OK']);
     const realEnglish = englishWords.filter(w => !whitelist.has(w.toUpperCase()));
     return hasArabic && realEnglish.length > 0;
@@ -593,32 +533,75 @@ const Editor = () => {
            isMixedLanguage(translation);
   }, [isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage]);
 
-  // Count entries needing improvement (debounced)
+  // === COMBINED STATS: single debounced pass over all entries ===
+  const [categoryProgress, setCategoryProgress] = useState<Record<string, { total: number; translated: number }>>({});
+  const [qualityStats, setQualityStats] = useState({ tooLong: 0, nearLimit: 0, missingTags: 0, placeholderMismatch: 0, total: 0, problemKeys: new Set<string>() });
   const [needsImproveCount, setNeedsImproveCount] = useState({ total: 0, tooShort: 0, tooLong: 0, stuck: 0, mixed: 0 });
-  const needsImproveTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const [translatedCount, setTranslatedCount] = useState(0);
+  const combinedStatsTimerRef = useRef<ReturnType<typeof setTimeout>>();
+
   useEffect(() => {
     if (!state) return;
-    if (needsImproveTimerRef.current) clearTimeout(needsImproveTimerRef.current);
-    needsImproveTimerRef.current = setTimeout(() => {
-      let tooShort = 0, tooLong = 0, stuck = 0, mixed = 0;
+    if (combinedStatsTimerRef.current) clearTimeout(combinedStatsTimerRef.current);
+    combinedStatsTimerRef.current = setTimeout(() => {
+      // Category progress
+      const progress: Record<string, { total: number; translated: number }> = {};
+      // Quality stats
+      let qTooLong = 0, qNearLimit = 0, qMissingTags = 0, qPlaceholderMismatch = 0;
+      const problemKeys = new Set<string>();
+      // Needs improvement
+      let niTooShort = 0, niTooLong = 0, niStuck = 0, niMixed = 0;
+      const needsImproveKeys = new Set<string>();
+      // Translated count
+      let translated = 0;
+
       for (const entry of state.entries) {
         const key = `${entry.msbtFile}:${entry.index}`;
-        const translation = state.translations[key];
-        if (!translation?.trim()) continue;
-        if (isTranslationTooShort(entry, translation)) tooShort++;
-        if (isTranslationTooLong(entry, translation)) tooLong++;
-        if (hasStuckChars(translation)) stuck++;
-        if (isMixedLanguage(translation)) mixed++;
+        const translation = state.translations[key] || '';
+        const trimmed = translation.trim();
+        const isTranslated = trimmed !== '';
+        const cat = categorizeFile(entry.msbtFile);
+
+        // Category progress
+        if (!progress[cat]) progress[cat] = { total: 0, translated: 0 };
+        progress[cat].total++;
+        if (isTranslated) {
+          progress[cat].translated++;
+          translated++;
+        }
+
+        if (!isTranslated) continue;
+
+        // Quality stats
+        if (entry.maxBytes > 0) {
+          const bytes = trimmed.length * 2;
+          if (bytes > entry.maxBytes) { qTooLong++; problemKeys.add(key); }
+          else if (bytes / entry.maxBytes > 0.8) { qNearLimit++; problemKeys.add(key); }
+        }
+
+        const origTags = entry.original.match(/\[[^\]]*\]/g) || [];
+        for (const tag of origTags) {
+          if (!trimmed.includes(tag)) { qMissingTags++; problemKeys.add(key); break; }
+        }
+
+        const origPh = (entry.original.match(/\uFFFC/g) || []).length;
+        const transPh = (trimmed.match(/\uFFFC/g) || []).length;
+        if (origPh !== transPh) { qPlaceholderMismatch++; problemKeys.add(key); }
+
+        // Needs improvement checks
+        if (isTranslationTooShort(entry, trimmed)) { niTooShort++; needsImproveKeys.add(key); }
+        if (isTranslationTooLong(entry, trimmed)) { niTooLong++; needsImproveKeys.add(key); }
+        if (hasStuckChars(trimmed)) { niStuck++; needsImproveKeys.add(key); }
+        if (isMixedLanguage(trimmed)) { niMixed++; needsImproveKeys.add(key); }
       }
-      const total = new Set([...state.entries.filter(e => {
-        const k = `${e.msbtFile}:${e.index}`;
-        const t = state.translations[k];
-        return t?.trim() && needsImprovement(e, t);
-      }).map(e => `${e.msbtFile}:${e.index}`)]).size;
-      setNeedsImproveCount({ total, tooShort, tooLong, stuck, mixed });
-    }, 1000);
-    return () => { if (needsImproveTimerRef.current) clearTimeout(needsImproveTimerRef.current); };
-  }, [state?.entries, state?.translations, isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage, needsImprovement]);
+
+      setCategoryProgress(progress);
+      setQualityStats({ tooLong: qTooLong, nearLimit: qNearLimit, missingTags: qMissingTags, placeholderMismatch: qPlaceholderMismatch, total: problemKeys.size, problemKeys });
+      setNeedsImproveCount({ total: needsImproveKeys.size, tooShort: niTooShort, tooLong: niTooLong, stuck: niStuck, mixed: niMixed });
+      setTranslatedCount(translated);
+    }, 800);
+    return () => { if (combinedStatsTimerRef.current) clearTimeout(combinedStatsTimerRef.current); };
+  }, [state?.entries, state?.translations, isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage]);
 
   const filteredEntries = useMemo(() => {
     if (!state) return [];
@@ -738,15 +721,7 @@ const Editor = () => {
     }
   };
 
-  // Debounced translated count to avoid recounting on every keystroke
-  const [translatedCount, setTranslatedCount] = useState(0);
-  useEffect(() => {
-    if (!state) return;
-    const timer = setTimeout(() => {
-      setTranslatedCount(Object.values(state.translations).filter(v => v.trim() !== '').length);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [state?.translations]);
+  // translatedCount is now computed in the combined stats above
 
   const handleAutoTranslate = async () => {
     if (!state) return;
@@ -1284,49 +1259,51 @@ const Editor = () => {
   };
 
   // تنظيف أحرف Presentation Forms - تحويل أحرف العرض المتصلة إلى أحرف عادية
-  const normalizeArabicPresentationForms = (text: string): string => {
+  const normalizeArabicPresentationForms = useCallback((text: string): string => {
     if (!text) return text;
-    let result = text;
-    const presentationMap: Record<string, string> = {
-      '\uFB50': 'ا', '\uFB51': 'ا',
-      '\uFB52': 'ب', '\uFB53': 'ب', '\uFB54': 'ب', '\uFB55': 'ب',
-      '\uFB56': 'ة', '\uFB57': 'ة',
-      '\uFB58': 'ت', '\uFB59': 'ت', '\uFB5A': 'ت', '\uFB5B': 'ت',
-      '\uFB5C': 'ث', '\uFB5D': 'ث', '\uFB5E': 'ث', '\uFB5F': 'ث',
-      '\uFB60': 'ج', '\uFB61': 'ج',
-      '\uFB62': 'ح', '\uFB63': 'ح', '\uFB64': 'ح', '\uFB65': 'ح',
-      '\uFB66': 'خ', '\uFB67': 'خ',
-      '\uFB68': 'د', '\uFB69': 'د',
-      '\uFB6A': 'ذ', '\uFB6B': 'ذ',
-      '\uFB6C': 'ر', '\uFB6D': 'ر',
-      '\uFB6E': 'ز', '\uFB6F': 'ز',
-      '\uFB70': 'س', '\uFB71': 'س', '\uFB72': 'س', '\uFB73': 'س',
-      '\uFB74': 'ش', '\uFB75': 'ش', '\uFB76': 'ش', '\uFB77': 'ش',
-      '\uFB78': 'ص', '\uFB79': 'ص',
-      '\uFB7A': 'ض', '\uFB7B': 'ض',
-      '\uFB7C': 'ط', '\uFB7D': 'ط',
-      '\uFB7E': 'ظ', '\uFB7F': 'ظ',
-      '\uFB80': 'ع', '\uFB81': 'ع',
-      '\uFB82': 'غ', '\uFB83': 'غ',
-      '\uFB84': 'ف', '\uFB85': 'ف',
-      '\uFB86': 'ق', '\uFB87': 'ق',
-      '\uFB88': 'ك', '\uFB89': 'ك',
-      '\uFB8A': 'ل', '\uFB8B': 'ل',
-      '\uFB8C': 'م', '\uFB8D': 'م',
-      '\uFB8E': 'ن', '\uFB8F': 'ن',
-      '\uFB90': 'ه', '\uFB91': 'ه',
-      '\uFB92': 'و', '\uFB93': 'و',
-      '\uFB94': 'ي', '\uFB95': 'ي', '\uFB96': 'ي', '\uFB97': 'ي',
-      '\uFEFB': 'لا', '\uFEFC': 'لا', '\uFEF5': 'لأ', '\uFEF6': 'لأ',
-      '\uFEF7': 'لؤ', '\uFEF8': 'لؤ', '\uFEF9': 'لا', '\uFEFA': 'لا',
+    // Build a single regex-based replacement instead of repeated split/join
+    // First handle Presentation Forms-A (FB50-FDFF) with the map
+    const presentationMap: Record<number, string> = {
+      0xFB50: 'ا', 0xFB51: 'ا',
+      0xFB52: 'ب', 0xFB53: 'ب', 0xFB54: 'ب', 0xFB55: 'ب',
+      0xFB56: 'ة', 0xFB57: 'ة',
+      0xFB58: 'ت', 0xFB59: 'ت', 0xFB5A: 'ت', 0xFB5B: 'ت',
+      0xFB5C: 'ث', 0xFB5D: 'ث', 0xFB5E: 'ث', 0xFB5F: 'ث',
+      0xFB60: 'ج', 0xFB61: 'ج',
+      0xFB62: 'ح', 0xFB63: 'ح', 0xFB64: 'ح', 0xFB65: 'ح',
+      0xFB66: 'خ', 0xFB67: 'خ',
+      0xFB68: 'د', 0xFB69: 'د',
+      0xFB6A: 'ذ', 0xFB6B: 'ذ',
+      0xFB6C: 'ر', 0xFB6D: 'ر',
+      0xFB6E: 'ز', 0xFB6F: 'ز',
+      0xFB70: 'س', 0xFB71: 'س', 0xFB72: 'س', 0xFB73: 'س',
+      0xFB74: 'ش', 0xFB75: 'ش', 0xFB76: 'ش', 0xFB77: 'ش',
+      0xFB78: 'ص', 0xFB79: 'ص',
+      0xFB7A: 'ض', 0xFB7B: 'ض',
+      0xFB7C: 'ط', 0xFB7D: 'ط',
+      0xFB7E: 'ظ', 0xFB7F: 'ظ',
+      0xFB80: 'ع', 0xFB81: 'ع',
+      0xFB82: 'غ', 0xFB83: 'غ',
+      0xFB84: 'ف', 0xFB85: 'ف',
+      0xFB86: 'ق', 0xFB87: 'ق',
+      0xFB88: 'ك', 0xFB89: 'ك',
+      0xFB8A: 'ل', 0xFB8B: 'ل',
+      0xFB8C: 'م', 0xFB8D: 'م',
+      0xFB8E: 'ن', 0xFB8F: 'ن',
+      0xFB90: 'ه', 0xFB91: 'ه',
+      0xFB92: 'و', 0xFB93: 'و',
+      0xFB94: 'ي', 0xFB95: 'ي', 0xFB96: 'ي', 0xFB97: 'ي',
+      0xFEFB: 'لا', 0xFEFC: 'لا', 0xFEF5: 'لأ', 0xFEF6: 'لأ',
+      0xFEF7: 'لؤ', 0xFEF8: 'لؤ', 0xFEF9: 'لا', 0xFEFA: 'لا',
     };
-    for (const [p, s] of Object.entries(presentationMap)) {
-      result = result.split(p).join(s);
-    }
-    result = result.replace(/[\uFE70-\uFEFF]/g, ch => ch.normalize('NFKD'));
-    result = result.normalize('NFKD');
-    return result;
-  };
+    // Single pass: replace all Presentation Forms characters
+    let result = text.replace(/[\uFB50-\uFDFF\uFE70-\uFEFF]/g, ch => {
+      const mapped = presentationMap[ch.charCodeAt(0)];
+      if (mapped) return mapped;
+      return ch.normalize('NFKD');
+    });
+    return result.normalize('NFKD');
+  }, []);
 
   const handleExportTranslations = () => {
     if (!state) return;
