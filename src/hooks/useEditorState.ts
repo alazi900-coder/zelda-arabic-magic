@@ -180,6 +180,8 @@ export function useEditorState() {
         for (const entry of stored.entries) {
           const key = `${entry.msbtFile}:${entry.index}`;
           if (arabicRegex.test(entry.original)) {
+            // تخطي الحماية إذا كان الأصل من بناء سابق (يحتوي presentation forms)
+            if (hasArabicPresentationForms(entry.original)) continue;
             const existingTranslation = mergedTranslations[key]?.trim();
             if (existingTranslation && existingTranslation !== entry.original && existingTranslation !== entry.original.trim()) {
               protectedSet.add(key);
@@ -458,7 +460,10 @@ export function useEditorState() {
   };
 
   // === File IO (extracted to useEditorFileIO) ===
-  const fileIO = useEditorFileIO({ state, setState, setLastSaved });
+  const filterLabel = filterCategory !== "all" ? filterCategory
+    : filterFile !== "all" ? filterFile
+    : "";
+  const fileIO = useEditorFileIO({ state, setState, setLastSaved, filteredEntries, filterLabel });
   const { normalizeArabicPresentationForms } = fileIO;
 
   // === Improve translations ===
