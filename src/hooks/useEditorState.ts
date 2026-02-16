@@ -388,6 +388,22 @@ export function useEditorState() {
     return filteredEntries.slice(start, start + PAGE_SIZE);
   }, [filteredEntries, currentPage]);
 
+  // === Glossary lookup (direct translation without AI) ===
+  const parseGlossaryMap = useCallback((glossaryText: string): Map<string, string> => {
+    const map = new Map<string, string>();
+    if (!glossaryText?.trim()) return map;
+    for (const line of glossaryText.split('\n')) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('//')) continue;
+      const eqIdx = trimmed.indexOf('=');
+      if (eqIdx < 1) continue;
+      const eng = trimmed.slice(0, eqIdx).trim().toLowerCase();
+      const arb = trimmed.slice(eqIdx + 1).trim();
+      if (eng && arb) map.set(eng, arb);
+    }
+    return map;
+  }, []);
+
   // === Translation handlers ===
   const updateTranslation = (key: string, value: string) => {
     if (!state) return;
@@ -410,6 +426,17 @@ export function useEditorState() {
     const key = `${entry.msbtFile}:${entry.index}`;
     setTranslatingSingle(key);
     try {
+      // Check glossary first (free, no AI)
+      const glossaryMap = parseGlossaryMap(state.glossary || '');
+      const originalNorm = entry.original.trim().toLowerCase();
+      const glossaryHit = glossaryMap.get(originalNorm);
+      if (glossaryHit) {
+        updateTranslation(key, glossaryHit);
+        setLastSaved(`📖 ترجمة مباشرة من القاموس (بدون ذكاء اصطناعي)`);
+        setTimeout(() => setLastSaved(""), 3000);
+        return;
+      }
+
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
       const idx = state.entries.indexOf(entry);
@@ -468,20 +495,37 @@ export function useEditorState() {
       }
     }
     const tmReused: Record<string, string> = {};
-    const needsAI: typeof untranslated = [];
+    const afterTM: typeof untranslated = [];
     for (const e of untranslated) {
       const norm = e.original.trim().toLowerCase();
       const cached = tmMap.get(norm);
       if (cached) { tmReused[`${e.msbtFile}:${e.index}`] = cached; }
+      else { afterTM.push(e); }
+    }
+
+    // Glossary direct translation (free, no AI)
+    const glossaryMap = parseGlossaryMap(state.glossary || '');
+    const glossaryReused: Record<string, string> = {};
+    const needsAI: typeof untranslated = [];
+    for (const e of afterTM) {
+      const norm = e.original.trim().toLowerCase();
+      const glossaryHit = glossaryMap.get(norm);
+      if (glossaryHit) { glossaryReused[`${e.msbtFile}:${e.index}`] = glossaryHit; }
       else { needsAI.push(e); }
     }
-    if (Object.keys(tmReused).length > 0) {
-      setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...tmReused } } : null);
+
+    const freeTranslations = { ...tmReused, ...glossaryReused };
+    if (Object.keys(freeTranslations).length > 0) {
+      setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...freeTranslations } } : null);
     }
     const tmCount = Object.keys(tmReused).length;
-    setTmStats({ reused: tmCount, sent: needsAI.length });
+    const glossaryCount = Object.keys(glossaryReused).length;
+    setTmStats({ reused: tmCount + glossaryCount, sent: needsAI.length });
     if (needsAI.length === 0) {
-      setTranslateProgress(`✅ تم إعادة استخدام ${tmCount} ترجمة من الذاكرة — لا حاجة للذكاء الاصطناعي!`);
+      const parts: string[] = [];
+      if (tmCount > 0) parts.push(`${tmCount} من الذاكرة`);
+      if (glossaryCount > 0) parts.push(`${glossaryCount} من القاموس 📖`);
+      setTranslateProgress(`✅ تم ترجمة ${tmCount + glossaryCount} نص مجاناً (${parts.join(' + ')}) — لا حاجة للذكاء الاصطناعي!`);
       setTimeout(() => setTranslateProgress(""), 5000);
       return;
     }
