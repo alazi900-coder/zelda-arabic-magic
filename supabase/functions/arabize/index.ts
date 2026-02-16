@@ -367,49 +367,167 @@ function parseMSBT(data: Uint8Array): { entries: MsbtEntry[]; raw: Uint8Array } 
   return { entries, raw: data };
 }
 
-function injectMSBT(data: Uint8Array, entries: MsbtEntry[], entriesToModify?: Set<number>): Uint8Array {
-  const result = new Uint8Array(data);
-  const view = new DataView(result.buffer);
+// Encode a single entry's processedText to UTF-16LE bytes, restoring tag bytes
+function encodeEntryToBytes(entry: MsbtEntry): Uint8Array {
+  const tagMap = new Map<number, Uint8Array>();
+  for (const tag of entry.tags) {
+    tagMap.set(tag.markerCode, tag.bytes);
+  }
 
-  for (let idx = 0; idx < entries.length; idx++) {
-    // Skip entries not in the modify set (if provided)
-    if (entriesToModify && !entriesToModify.has(idx)) continue;
-
-    const entry = entries[idx];
-
-    // Build tag lookup from PUA markers
-    const tagMap = new Map<number, Uint8Array>();
-    for (const tag of entry.tags) {
-      tagMap.set(tag.markerCode, tag.bytes);
-    }
-
-    // Encode processedText, preserving tag bytes
-    const outputBytes: number[] = [];
-    for (let i = 0; i < entry.processedText.length; i++) {
-      const code = entry.processedText.charCodeAt(i);
-      const tagBytes = tagMap.get(code);
-      if (tagBytes) {
-        // Write original tag bytes instead of the PUA marker
-        for (const b of tagBytes) outputBytes.push(b);
-      } else {
-        // Write character as UTF-16LE
-        outputBytes.push(code & 0xFF);
-        outputBytes.push((code >> 8) & 0xFF);
-      }
-    }
-
-    if (outputBytes.length <= entry.size - 2) {
-      for (let i = 0; i < outputBytes.length; i++) {
-        result[entry.offset + i] = outputBytes[i];
-      }
-      // Zero-fill remaining bytes to avoid leftover data from original string
-      for (let i = outputBytes.length; i < entry.size; i++) {
-        result[entry.offset + i] = 0;
-      }
+  const parts: number[] = [];
+  for (let i = 0; i < entry.processedText.length; i++) {
+    const code = entry.processedText.charCodeAt(i);
+    const tagBytes = tagMap.get(code);
+    if (tagBytes) {
+      for (const b of tagBytes) parts.push(b);
     } else {
-      console.warn(`⚠️ Skipping entry ${idx} "${entry.label}" - encoded size (${outputBytes.length} bytes) exceeds slot size (${entry.size - 2} bytes)`);
+      parts.push(code & 0xFF);
+      parts.push((code >> 8) & 0xFF);
     }
   }
+  // Null terminator (UTF-16LE)
+  parts.push(0, 0);
+  return new Uint8Array(parts);
+}
+
+// Pad to 16-byte alignment using 0xAB
+function alignTo16(size: number): number {
+  return (size + 15) & ~15;
+}
+
+function padSection(buf: Uint8Array, contentLen: number): Uint8Array {
+  const aligned = alignTo16(contentLen);
+  if (aligned === contentLen) return buf;
+  const padded = new Uint8Array(aligned);
+  padded.set(buf);
+  for (let i = contentLen; i < aligned; i++) padded[i] = 0xAB;
+  return padded;
+}
+
+// Parse all sections from MSBT (returns raw section data with positions)
+interface MsbtSection {
+  magic: string;
+  data: Uint8Array; // section content (excluding the 16-byte header)
+  size: number;
+}
+
+function parseMSBTSections(data: Uint8Array): MsbtSection[] {
+  const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
+  const sections: MsbtSection[] = [];
+  let pos = 0x20; // skip MSBT header
+
+  while (pos < data.length - 16) {
+    const magic = String.fromCharCode(...data.slice(pos, pos + 4));
+    const sectionSize = view.getUint32(pos + 4, true);
+    if (sectionSize === 0 && magic === '\0\0\0\0') break;
+    
+    sections.push({
+      magic,
+      data: data.slice(pos + 16, pos + 16 + sectionSize),
+      size: sectionSize,
+    });
+    
+    pos += 16 + sectionSize;
+    pos = (pos + 15) & ~15; // align to 16
+  }
+  return sections;
+}
+
+// Rebuild MSBT with dynamically-sized TXT2
+function rebuildMSBT(data: Uint8Array, entries: MsbtEntry[], entriesToModify?: Set<number>): Uint8Array {
+  const sections = parseMSBTSections(data);
+  
+  // Find TXT2 section and get entry count
+  const txt2Section = sections.find(s => s.magic === 'TXT2');
+  if (!txt2Section) {
+    console.warn('No TXT2 section found, returning original');
+    return data;
+  }
+  
+  const txt2View = new DataView(txt2Section.data.buffer, txt2Section.data.byteOffset, txt2Section.data.byteLength);
+  const entryCount = txt2View.getUint32(0, true);
+  
+  // Encode all entries to bytes
+  const encodedEntries: Uint8Array[] = [];
+  for (let i = 0; i < entries.length; i++) {
+    if (entriesToModify && !entriesToModify.has(i)) {
+      // Use original bytes from the TXT2 section
+      const origOffset = txt2View.getUint32(4 + i * 4, true);
+      const nextOffset = i < entryCount - 1
+        ? txt2View.getUint32(4 + (i + 1) * 4, true)
+        : txt2Section.size;
+      encodedEntries.push(txt2Section.data.slice(origOffset, nextOffset));
+    } else {
+      encodedEntries.push(encodeEntryToBytes(entries[i]));
+    }
+  }
+
+  // Build new TXT2 content: entryCount(4) + offsets(N*4) + data
+  const offsetTableSize = 4 + entryCount * 4;
+  let dataSize = 0;
+  for (const enc of encodedEntries) dataSize += enc.length;
+  const txt2ContentSize = offsetTableSize + dataSize;
+  
+  const newTxt2Content = new Uint8Array(txt2ContentSize);
+  const txt2ContentView = new DataView(newTxt2Content.buffer);
+  
+  // Write entry count
+  txt2ContentView.setUint32(0, entryCount, true);
+  
+  // Write offsets and data
+  let currentOffset = offsetTableSize;
+  for (let i = 0; i < encodedEntries.length; i++) {
+    txt2ContentView.setUint32(4 + i * 4, currentOffset, true);
+    newTxt2Content.set(encodedEntries[i], currentOffset);
+    currentOffset += encodedEntries[i].length;
+  }
+
+  // Reassemble MSBT: Header + sections with padding
+  const sectionBuffers: Uint8Array[] = [];
+  let totalContentSize = 0;
+  
+  for (const section of sections) {
+    // 16-byte section header
+    const sectionHeader = new Uint8Array(16);
+    const shView = new DataView(sectionHeader.buffer);
+    // Write magic
+    for (let i = 0; i < 4; i++) sectionHeader[i] = section.magic.charCodeAt(i);
+    
+    let content: Uint8Array;
+    if (section.magic === 'TXT2') {
+      content = newTxt2Content;
+      shView.setUint32(4, txt2ContentSize, true);
+    } else {
+      content = section.data;
+      shView.setUint32(4, section.size, true);
+    }
+    // Bytes 8-15 are reserved/padding (zeros)
+    
+    const fullSection = new Uint8Array(16 + content.length);
+    fullSection.set(sectionHeader);
+    fullSection.set(content, 16);
+    
+    const padded = padSection(fullSection, fullSection.length);
+    sectionBuffers.push(padded);
+    totalContentSize += padded.length;
+  }
+
+  // Build final file
+  const msbtHeader = new Uint8Array(0x20);
+  msbtHeader.set(data.slice(0, 0x20)); // copy original header
+  
+  const fileSize = 0x20 + totalContentSize;
+  const headerView = new DataView(msbtHeader.buffer);
+  headerView.setUint32(18, fileSize, true); // update file size at offset 0x12
+  
+  const result = new Uint8Array(fileSize);
+  result.set(msbtHeader);
+  let writePos = 0x20;
+  for (const buf of sectionBuffers) {
+    result.set(buf, writePos);
+    writePos += buf.length;
+  }
+  
   return result;
 }
 
@@ -445,23 +563,127 @@ function parseSARC(data: Uint8Array): SarcFile[] {
   return files;
 }
 
-function packSARC(files: SarcFile[], originalData: Uint8Array): Uint8Array {
-  const view = new DataView(originalData.buffer, originalData.byteOffset, originalData.byteLength);
-  const headerSize = view.getUint16(4, true);
-  const dataOffset = view.getUint32(0x0C, true);
-  const sfatOffset = headerSize;
-  const nodeCount = view.getUint16(sfatOffset + 6, true);
-  const result = new Uint8Array(originalData);
+// Hash function for SARC file names (same as Nintendo's)
+function sarcHash(name: string, multiplier: number): number {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = (hash * multiplier + name.charCodeAt(i)) & 0xFFFFFFFF;
+  }
+  return hash >>> 0;
+}
 
-  for (let i = 0; i < nodeCount && i < files.length; i++) {
-    const nodeOffset = sfatOffset + 12 + i * 16;
-    const fileDataStart = view.getUint32(nodeOffset + 8, true);
-    const fileDataEnd = view.getUint32(nodeOffset + 12, true);
-    const originalSize = fileDataEnd - fileDataStart;
-    if (files[i].data.length <= originalSize) {
-      result.set(files[i].data, dataOffset + fileDataStart);
+function rebuildSARC(files: SarcFile[], originalData: Uint8Array): Uint8Array {
+  const origView = new DataView(originalData.buffer, originalData.byteOffset, originalData.byteLength);
+  const headerSize = origView.getUint16(4, true); // typically 0x14 (20)
+  const bom = origView.getUint16(6, true);
+  const origDataOffset = origView.getUint32(0x0C, true);
+  const version = origView.getUint16(0x10, true);
+  
+  // Read SFAT header info
+  const sfatOffset = headerSize;
+  const nodeCount = origView.getUint16(sfatOffset + 6, true);
+  const hashMultiplier = origView.getUint32(sfatOffset + 8, true);
+  
+  // Read SFNT from original to get its structure
+  const sfntOffset = sfatOffset + 12 + nodeCount * 16;
+  
+  // Build SFNT (String File Name Table) from file names
+  // SFNT header: "SFNT"(4) + headerSize(2) + padding(2) = 8 bytes
+  const nameBytes: Uint8Array[] = [];
+  const nameOffsets: number[] = [];
+  let namePos = 0;
+  
+  for (const file of files) {
+    nameOffsets.push(namePos);
+    const encoded = new TextEncoder().encode(file.name);
+    const padded = new Uint8Array(alignTo16(encoded.length + 1)); // +1 for null, align to 4
+    // Actually SFNT names are padded to 4-byte alignment
+    const nameAligned = (encoded.length + 1 + 3) & ~3;
+    const nameBuf = new Uint8Array(nameAligned);
+    nameBuf.set(encoded);
+    // rest is already 0 (null padding)
+    nameBytes.push(nameBuf);
+    namePos += nameAligned;
+  }
+  
+  const sfntContentSize = namePos;
+  const sfntTotalSize = 8 + sfntContentSize; // header + content
+  const sfntAligned = alignTo16(sfntTotalSize);
+  
+  // Calculate data offset (must be aligned)
+  const sfatTotalSize = 12 + nodeCount * 16;
+  const metaSize = headerSize + sfatTotalSize + sfntAligned;
+  const dataOffset = alignTo16(metaSize);
+  
+  // Calculate file data positions (each file aligned to 16 bytes within data section)
+  const fileDataOffsets: number[] = [];
+  const fileDataEnds: number[] = [];
+  let filePos = 0;
+  
+  for (const file of files) {
+    const alignedStart = (filePos + 15) & ~15; // align start to 16
+    // First file starts at 0
+    if (fileDataOffsets.length === 0) {
+      fileDataOffsets.push(0);
+      fileDataEnds.push(file.data.length);
+      filePos = file.data.length;
+    } else {
+      fileDataOffsets.push(alignedStart);
+      fileDataEnds.push(alignedStart + file.data.length);
+      filePos = alignedStart + file.data.length;
     }
   }
+  
+  const totalDataSize = filePos;
+  const totalFileSize = dataOffset + totalDataSize;
+  
+  // Build the output
+  const result = new Uint8Array(totalFileSize);
+  const resultView = new DataView(result.buffer);
+  
+  // SARC Header (20 bytes)
+  result[0] = 0x53; result[1] = 0x41; result[2] = 0x52; result[3] = 0x43; // "SARC"
+  resultView.setUint16(4, headerSize, true);
+  resultView.setUint16(6, bom, true);
+  resultView.setUint32(8, totalFileSize, true); // file size
+  resultView.setUint32(0x0C, dataOffset, true); // data offset
+  resultView.setUint16(0x10, version, true);
+  // bytes 0x12-0x13: reserved (0)
+  
+  // SFAT Header
+  let wp = headerSize;
+  result[wp] = 0x53; result[wp+1] = 0x46; result[wp+2] = 0x41; result[wp+3] = 0x54; // "SFAT"
+  resultView.setUint16(wp + 4, 0x0C, true); // SFAT header size
+  resultView.setUint16(wp + 6, files.length, true); // node count
+  resultView.setUint32(wp + 8, hashMultiplier, true);
+  
+  // SFAT Nodes
+  wp += 12;
+  for (let i = 0; i < files.length; i++) {
+    const hash = sarcHash(files[i].name, hashMultiplier);
+    resultView.setUint32(wp, hash, true); // name hash
+    // Name offset in SFNT (divided by 4, with flag 0x01000000)
+    resultView.setUint32(wp + 4, 0x01000000 | (nameOffsets[i] / 4), true);
+    resultView.setUint32(wp + 8, fileDataOffsets[i], true); // data start
+    resultView.setUint32(wp + 12, fileDataEnds[i], true); // data end
+    wp += 16;
+  }
+  
+  // SFNT Header + names
+  result[wp] = 0x53; result[wp+1] = 0x46; result[wp+2] = 0x4E; result[wp+3] = 0x54; // "SFNT"
+  resultView.setUint16(wp + 4, 0x08, true); // SFNT header size
+  wp += 8;
+  
+  for (const nameBuf of nameBytes) {
+    result.set(nameBuf, wp);
+    wp += nameBuf.length;
+  }
+  
+  // File Data
+  for (let i = 0; i < files.length; i++) {
+    result.set(files[i].data, dataOffset + fileDataOffsets[i]);
+  }
+  
   return result;
 }
 
@@ -560,7 +782,7 @@ Deno.serve(async (req) => {
                 index: i,
                 label: entries[i].label,
                 original: displayText,
-                maxBytes: entries[i].size,
+                maxBytes: entries[i].size * 3,
               });
             }
           } catch (e) {
@@ -648,7 +870,7 @@ Deno.serve(async (req) => {
           }
 
           // Only inject entries that were actually modified
-          const injected = injectMSBT(raw, entries, entriesToModify);
+          const injected = rebuildMSBT(raw, entries, entriesToModify);
           return { ...file, data: injected };
         } catch (e) {
           console.warn(`Failed to process MSBT ${file.name}: ${e instanceof Error ? e.message : 'unknown'}`);
@@ -660,7 +882,7 @@ Deno.serve(async (req) => {
 
     console.log(`Modified ${modifiedCount} entries (mode: ${hasCustomTranslations ? 'custom' : 'auto'}), skipped already-arabized: ${skippedAlreadyArabized}`);
 
-    const repackedData = packSARC(processedFiles, sarcData);
+    const repackedData = rebuildSARC(processedFiles, sarcData);
 
     let outputData: Uint8Array = repackedData;
     let isCompressed = false;
