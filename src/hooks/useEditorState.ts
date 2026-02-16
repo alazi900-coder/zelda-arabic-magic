@@ -1021,6 +1021,62 @@ export function useEditorState() {
     } catch { alert('خطأ في تحميل القاموس الافتراضي'); }
   };
 
+  const mergeGlossaryText = (prev: EditorState, newText: string): EditorState => {
+    const existing = prev.glossary?.trim() || '';
+    const merged = existing ? existing + '\n' + newText : newText;
+    const seen = new Map<string, string>();
+    for (const line of merged.split('\n')) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('//')) continue;
+      const eqIdx = trimmed.indexOf('=');
+      if (eqIdx < 1) continue;
+      const key = trimmed.slice(0, eqIdx).trim().toLowerCase();
+      seen.set(key, trimmed);
+    }
+    return { ...prev, glossary: Array.from(seen.values()).join('\n') };
+  };
+
+  const handleLoadTOTKGlossary = async () => {
+    try {
+      const response = await fetch('/zelda-totk-glossary.txt');
+      if (!response.ok) throw new Error('فشل تحميل القاموس');
+      const text = await response.text();
+      const newCount = text.split('\n').filter(l => l.includes('=')).length;
+      setState(prev => prev ? mergeGlossaryText(prev, text) : null);
+      setLastSaved(`📖 تم دمج قاموس TOTK (${newCount} مصطلح)`);
+      setTimeout(() => setLastSaved(""), 3000);
+    } catch { alert('خطأ في تحميل قاموس TOTK'); }
+  };
+
+  const handleLoadTOTKItemsGlossary = async () => {
+    try {
+      const response = await fetch('/zelda-totk-items-glossary.txt');
+      if (!response.ok) throw new Error('فشل تحميل القاموس');
+      const text = await response.text();
+      const newCount = text.split('\n').filter(l => l.includes('=')).length;
+      setState(prev => prev ? mergeGlossaryText(prev, text) : null);
+      setLastSaved(`📖 تم دمج قاموس العناصر (${newCount} مصطلح)`);
+      setTimeout(() => setLastSaved(""), 3000);
+    } catch { alert('خطأ في تحميل قاموس العناصر'); }
+  };
+
+  const handleLoadAllGlossaries = async () => {
+    try {
+      const [r1, r2, r3] = await Promise.all([
+        fetch('/zelda-glossary.txt'),
+        fetch('/zelda-totk-glossary.txt'),
+        fetch('/zelda-totk-items-glossary.txt'),
+      ]);
+      if (!r1.ok || !r2.ok || !r3.ok) throw new Error('فشل تحميل أحد القواميس');
+      const [t1, t2, t3] = await Promise.all([r1.text(), r2.text(), r3.text()]);
+      const combined = t1 + '\n' + t2 + '\n' + t3;
+      setState(prev => prev ? mergeGlossaryText(prev, combined) : null);
+      const totalTerms = combined.split('\n').filter(l => l.includes('=')).length;
+      setLastSaved(`📖 تم تحميل جميع القواميس (${totalTerms} مصطلح)`);
+      setTimeout(() => setLastSaved(""), 3000);
+    } catch { alert('خطأ في تحميل القواميس'); }
+  };
+
   const handleSaveGlossaryToCloud = async () => {
     if (!state || !user || !state.glossary) { setCloudStatus('❌ لا يوجد قاموس لحفظه'); setTimeout(() => setCloudStatus(""), 3000); return; }
     setCloudSyncing(true); setCloudStatus('جاري حفظ القاموس...');
@@ -1265,7 +1321,7 @@ export function useEditorState() {
     handleSuggestShorterTranslations, handleApplyShorterTranslation, handleApplyAllShorterTranslations,
     handleFixAllStuckCharacters, handleFixMixedLanguage,
     handleExportTranslations, handleImportTranslations, handleExportCSV, handleImportCSV,
-    handleImportGlossary, handleLoadDefaultGlossary,
+    handleImportGlossary, handleLoadDefaultGlossary, handleLoadTOTKGlossary, handleLoadTOTKItemsGlossary, handleLoadAllGlossaries,
     handleSaveGlossaryToCloud, handleLoadGlossaryFromCloud,
     handleImproveTranslations, handleApplyImprovement, handleApplyAllImprovements,
     handleImproveSingleTranslation,
