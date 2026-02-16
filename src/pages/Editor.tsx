@@ -456,6 +456,7 @@ const Editor = () => {
                     key={key}
                     entry={entry}
                     translation={editor.state?.translations[key] || ''}
+                    glossary={editor.state?.glossary}
                     isProtected={editor.state?.protectedEntries?.has(key) || false}
                     hasProblem={editor.qualityStats.problemKeys.has(key)}
                     translatingSingle={editor.translatingSingle}
