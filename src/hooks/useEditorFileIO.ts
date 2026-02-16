@@ -118,30 +118,45 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       return;
     }
 
-    // بناء CSV مرتب ومرقم مع BOM للتوافق مع Excel
-    const BOM = '\uFEFF';
-    const csvLines: string[] = [];
-    csvLines.push('#,file,index,label,english_text,translation');
+    // بناء ملف نصي مرتب ومرقم وواضح لسهولة الترجمة الخارجية
+    const lines: string[] = [];
+    lines.push('='.repeat(60));
+    lines.push(`  English Texts for Translation — ${new Date().toISOString().slice(0, 10)}`);
+    lines.push(`  Total: ${totalCount} texts`);
+    if (isFilterActive) lines.push(`  Filter: ${filterLabel}`);
+    lines.push('='.repeat(60));
+    lines.push('');
 
     let rowNum = 1;
     const sortedFiles = Object.keys(groupedByFile).sort();
     for (const file of sortedFiles) {
+      lines.push('─'.repeat(60));
+      lines.push(`📁 ${file}`);
+      lines.push('─'.repeat(60));
+      lines.push('');
+
       const entries = groupedByFile[file].sort((a, b) => a.index - b.index);
       for (const entry of entries) {
-        csvLines.push(
-          `${rowNum},${escapeCSV(file)},${entry.index},${escapeCSV(entry.label)},${escapeCSV(entry.original)},`
-        );
+        lines.push(`[${rowNum}] (${file}:${entry.index})`);
+        if (entry.label) lines.push(`Label: ${entry.label}`);
+        lines.push('');
+        lines.push(entry.original);
+        lines.push('');
+        lines.push('▶ Translation:');
+        lines.push('');
+        lines.push('═'.repeat(60));
+        lines.push('');
         rowNum++;
       }
     }
 
-    const csvContent = BOM + csvLines.join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+    const textContent = lines.join('\n');
+    const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
     const suffix = isFilterActive ? `_${filterLabel}` : '';
-    a.download = `english-only${suffix}_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.download = `english-only${suffix}_${new Date().toISOString().slice(0, 10)}.txt`;
     a.click();
     URL.revokeObjectURL(url);
 
