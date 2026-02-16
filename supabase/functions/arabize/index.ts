@@ -815,6 +815,7 @@ Deno.serve(async (req) => {
     let modifiedCount = 0;
     let skippedOversize = 0;
     let skippedAlreadyArabized = 0;
+    let expandedCount = 0;
 
     const processedFiles = files.map(file => {
       if (file.name.endsWith('.msbt')) {
@@ -852,6 +853,9 @@ Deno.serve(async (req) => {
                 }
                 entriesToModify.add(i);
                 modifiedCount++;
+                // Check if translation is larger than original slot
+                const encoded = encodeEntryToBytes(entries[i]);
+                if (encoded.length > entries[i].size) expandedCount++;
               }
               // Entries WITHOUT translations are NOT modified at all
             }
@@ -880,7 +884,7 @@ Deno.serve(async (req) => {
       return file;
     });
 
-    console.log(`Modified ${modifiedCount} entries (mode: ${hasCustomTranslations ? 'custom' : 'auto'}), skipped already-arabized: ${skippedAlreadyArabized}`);
+    console.log(`Modified ${modifiedCount} entries (${expandedCount} expanded), skipped already-arabized: ${skippedAlreadyArabized}`);
 
     const repackedData = rebuildSARC(processedFiles, sarcData);
 
@@ -923,6 +927,7 @@ Deno.serve(async (req) => {
         'Content-Type': 'application/octet-stream',
         'Content-Disposition': 'attachment; filename="arabized_output.zs"',
         'X-Modified-Count': String(modifiedCount),
+        'X-Expanded-Count': String(expandedCount),
         'X-Skipped-Already-Arabized': String(skippedAlreadyArabized),
         'X-File-Size': String(repackedData.length),
         'X-Compressed-Size': isCompressed ? String(outputData.length) : '',
