@@ -288,7 +288,21 @@ const Editor = () => {
           {editor.glossaryTermCount > 0 && (
             <div className="flex items-center gap-2 mb-4 px-3 py-1.5 rounded-lg bg-primary/5 border border-primary/15">
               <BookOpen className="w-3.5 h-3.5 text-primary/70" />
-              <span className="text-xs text-primary/80 font-body">📖 القاموس محمّل: <strong>{editor.glossaryTermCount}</strong> مصطلح</span>
+              <span className="text-xs text-primary/80 font-body">
+                📖 القاموس: <strong>{editor.glossaryTermCount}</strong> مصطلح
+              </span>
+              <Button
+                variant={editor.glossaryEnabled ? "secondary" : "outline"}
+                size="sm"
+                onClick={() => editor.setGlossaryEnabled(!editor.glossaryEnabled)}
+                className="mr-auto h-6 px-2 text-xs font-body"
+              >
+                {editor.glossaryEnabled ? (
+                  <><Eye className="w-3 h-3" /> مفعّل</>
+                ) : (
+                  <><EyeOff className="w-3 h-3" /> معطّل</>
+                )}
+              </Button>
             </div>
           )}
 
