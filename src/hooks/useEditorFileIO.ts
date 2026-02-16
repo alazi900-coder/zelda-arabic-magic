@@ -61,7 +61,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     if (!state) return;
     const cleanTranslations: Record<string, string> = {};
 
-    if (isFilterActive && filteredEntries.length < state.entries.length) {
+    if (isFilterActive) {
       const allowedKeys = new Set(filteredEntries.map(e => `${e.msbtFile}:${e.index}`));
       for (const [key, value] of Object.entries(state.translations)) {
         if (allowedKeys.has(key)) {
