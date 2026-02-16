@@ -2,6 +2,7 @@ import { useState } from "react";
 import { idbGet } from "@/lib/idb-storage";
 import { processArabicText, hasArabicChars as hasArabicCharsProcessing, hasArabicPresentationForms } from "@/lib/arabic-processing";
 import { EditorState } from "@/components/editor/types";
+import { BuildPreview } from "@/components/editor/BuildConfirmDialog";
 
 export interface BuildStats {
   modifiedCount: number;
@@ -28,6 +29,8 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
   const [buildProgress, setBuildProgress] = useState("");
   const [applyingArabic, setApplyingArabic] = useState(false);
   const [buildStats, setBuildStats] = useState<BuildStats | null>(null);
+  const [buildPreview, setBuildPreview] = useState<BuildPreview | null>(null);
+  const [showBuildConfirm, setShowBuildConfirm] = useState(false);
 
   const handleApplyArabicProcessing = () => {
     if (!state) return;
@@ -47,8 +50,45 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
     setTimeout(() => setLastSaved(""), 5000);
   };
 
+  const handlePreBuild = () => {
+    if (!state) return;
+    
+    const nonEmptyTranslations: Record<string, string> = {};
+    for (const [k, v] of Object.entries(state.translations)) {
+      if (v.trim()) nonEmptyTranslations[k] = v;
+    }
+
+    const protectedCount = Array.from(state.protectedEntries || []).filter(k => nonEmptyTranslations[k]).length;
+    const normalCount = Object.keys(nonEmptyTranslations).length - protectedCount;
+
+    // Category breakdown
+    const categories: Record<string, number> = {};
+    for (const key of Object.keys(nonEmptyTranslations)) {
+      const parts = key.split(':')[0].split('/');
+      const cat = parts.length > 1 ? parts[0] : 'Other';
+      categories[cat] = (categories[cat] || 0) + 1;
+    }
+
+    const sampleKeys = Object.keys(nonEmptyTranslations).slice(0, 10);
+
+    console.log('[BUILD-PREVIEW] Total translations:', Object.keys(nonEmptyTranslations).length);
+    console.log('[BUILD-PREVIEW] Protected entries:', protectedCount);
+    console.log('[BUILD-PREVIEW] Categories:', categories);
+    console.log('[BUILD-PREVIEW] Sample keys:', sampleKeys);
+
+    setBuildPreview({
+      totalTranslations: Object.keys(nonEmptyTranslations).length,
+      protectedCount,
+      normalCount,
+      categories,
+      sampleKeys,
+    });
+    setShowBuildConfirm(true);
+  };
+
   const handleBuild = async () => {
     if (!state) return;
+    setShowBuildConfirm(false);
     const langBuf = await idbGet<ArrayBuffer>("editorLangFile");
     const dictBuf = await idbGet<ArrayBuffer>("editorDictFile");
     const langFileName = (await idbGet<string>("editorLangFileName")) || "output.zs";
@@ -60,6 +100,11 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
       if (dictBuf) formData.append("dictFile", new File([new Uint8Array(dictBuf)], (await idbGet<string>("editorDictFileName")) || "ZsDic.pack.zs"));
       const nonEmptyTranslations: Record<string, string> = {};
       for (const [k, v] of Object.entries(state.translations)) { if (v.trim()) nonEmptyTranslations[k] = v; }
+      
+      console.log('[BUILD] Total translations being sent:', Object.keys(nonEmptyTranslations).length);
+      console.log('[BUILD] Protected entries:', Array.from(state.protectedEntries || []).length);
+      console.log('[BUILD] Sample keys:', Object.keys(nonEmptyTranslations).slice(0, 10));
+      
       formData.append("translations", JSON.stringify(nonEmptyTranslations));
       formData.append("protectedEntries", JSON.stringify(Array.from(state.protectedEntries || [])));
       if (arabicNumerals) formData.append("arabicNumerals", "true");
@@ -84,6 +129,9 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
       const expandedCount = parseInt(response.headers.get('X-Expanded-Count') || '0');
       const fileSize = parseInt(response.headers.get('X-File-Size') || '0');
       const compressedSize = response.headers.get('X-Compressed-Size');
+      
+      console.log('[BUILD] Response headers - Modified:', response.headers.get('X-Modified-Count'), 'Expanded:', response.headers.get('X-Expanded-Count'));
+      
       let buildStatsData: BuildStats | null = null;
       try { buildStatsData = JSON.parse(decodeURIComponent(response.headers.get('X-Build-Stats') || '{}')); } catch {}
       const a = document.createElement("a");
@@ -116,7 +164,11 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
     applyingArabic,
     buildStats,
     setBuildStats,
+    buildPreview,
+    showBuildConfirm,
+    setShowBuildConfirm,
     handleApplyArabicProcessing,
+    handlePreBuild,
     handleBuild,
   };
 }

@@ -812,6 +812,9 @@ Deno.serve(async (req) => {
     const protectedEntries = new Set(protectedRaw ? JSON.parse(protectedRaw) : []);
     const hasCustomTranslations = Object.keys(translations).length > 0;
 
+    console.log(`[BUILD] Received ${Object.keys(translations).length} translations, ${protectedEntries.size} protected`);
+    console.log(`[BUILD] Sample translation keys: ${Object.keys(translations).slice(0, 5).join(', ')}`);
+
     let modifiedCount = 0;
     let skippedOversize = 0;
     let skippedAlreadyArabized = 0;
@@ -828,7 +831,17 @@ Deno.serve(async (req) => {
           const { entries, raw } = parseMSBT(file.data);
           const entriesToModify = new Set<number>();
 
+          console.log(`[BUILD] MSBT file: ${file.name}, entries: ${entries.length}`);
+
           if (hasCustomTranslations) {
+            // Count matching keys for this file
+            let matchCount = 0;
+            for (let i = 0; i < entries.length; i++) {
+              const key = `${file.name}:${i}`;
+              if (translations[key] !== undefined && translations[key] !== '') matchCount++;
+            }
+            console.log(`[BUILD] File ${file.name}: ${matchCount} matching translations`);
+
             // BUILD mode with custom translations
             for (let i = 0; i < entries.length; i++) {
               const key = `${file.name}:${i}`;
@@ -953,6 +966,7 @@ Deno.serve(async (req) => {
         ...corsHeaders,
         'Content-Type': 'application/octet-stream',
         'Content-Disposition': 'attachment; filename="arabized_output.zs"',
+        'Access-Control-Expose-Headers': 'X-Modified-Count, X-Expanded-Count, X-File-Size, X-Compressed-Size, X-Build-Stats, X-Entries-Preview, X-Skipped-Already-Arabized, X-Is-Compressed',
         'X-Modified-Count': String(modifiedCount),
         'X-Expanded-Count': String(expandedCount),
         'X-Skipped-Already-Arabized': String(skippedAlreadyArabized),

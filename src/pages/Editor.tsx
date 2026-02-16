@@ -39,6 +39,7 @@ import PaginationControls from "@/components/editor/PaginationControls";
 import FindReplacePanel from "@/components/editor/FindReplacePanel";
 import DiffView from "@/components/editor/DiffView";
 import BuildStatsDialog from "@/components/editor/BuildStatsDialog";
+import BuildConfirmDialog from "@/components/editor/BuildConfirmDialog";
 
 const Editor = () => {
   const editor = useEditorState();
@@ -438,7 +439,7 @@ const Editor = () => {
             <Button size="lg" variant="secondary" onClick={editor.handleApplyArabicProcessing} disabled={editor.applyingArabic} className="flex-1 font-display font-bold">
               {editor.applyingArabic ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Sparkles className="w-4 h-4 mr-2" />} تطبيق المعالجة العربية ✨
             </Button>
-            <Button size="lg" onClick={editor.handleBuild} disabled={editor.building} className="flex-1 font-display font-bold">
+            <Button size="lg" onClick={editor.handlePreBuild} disabled={editor.building} className="flex-1 font-display font-bold">
               {editor.building ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <FileDown className="w-4 h-4 mr-2" />} بناء الملف النهائي
             </Button>
           </div>
@@ -555,6 +556,13 @@ const Editor = () => {
         </AlertDialog>
 
         <BuildStatsDialog stats={editor.buildStats} onClose={() => editor.setBuildStats(null)} />
+        <BuildConfirmDialog
+          open={editor.showBuildConfirm}
+          onOpenChange={editor.setShowBuildConfirm}
+          preview={editor.buildPreview}
+          onConfirm={editor.handleBuild}
+          building={editor.building}
+        />
       </div>
     </TooltipProvider>
   );
