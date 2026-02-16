@@ -38,6 +38,7 @@ import QuickReviewMode from "@/components/editor/QuickReviewMode";
 import PaginationControls from "@/components/editor/PaginationControls";
 import FindReplacePanel from "@/components/editor/FindReplacePanel";
 import DiffView from "@/components/editor/DiffView";
+import BuildStatsDialog from "@/components/editor/BuildStatsDialog";
 
 const Editor = () => {
   const editor = useEditorState();
@@ -152,7 +153,12 @@ const Editor = () => {
             <Card className="mb-4 border-secondary/30 bg-secondary/5"><CardContent className="p-4 text-center font-display">{editor.translateProgress}</CardContent></Card>
           )}
           {editor.buildProgress && (
-            <Card className="mb-4 border-secondary/30 bg-secondary/5"><CardContent className="p-4 text-center font-display">{editor.buildProgress}</CardContent></Card>
+            <Card className="mb-4 border-secondary/30 bg-secondary/5 cursor-pointer" onClick={() => editor.buildStats && editor.setBuildStats(editor.buildStats)}>
+              <CardContent className="p-4 text-center font-display">
+                {editor.buildProgress}
+                {editor.buildStats && <span className="text-xs text-muted-foreground mr-2"> (اضغط للتفاصيل)</span>}
+              </CardContent>
+            </Card>
           )}
           {editor.cloudStatus && (
             <Card className="mb-4 border-primary/30 bg-primary/5"><CardContent className="p-4 text-center font-display">{editor.cloudStatus}</CardContent></Card>
@@ -546,6 +552,8 @@ const Editor = () => {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+
+        <BuildStatsDialog stats={editor.buildStats} onClose={() => editor.setBuildStats(null)} />
       </div>
     </TooltipProvider>
   );
