@@ -1,12 +1,14 @@
 import { useCallback } from "react";
 import { removeArabicPresentationForms } from "@/lib/arabic-processing";
 import type { EditorState } from "@/components/editor/types";
-import { hasArabicChars, unReverseBidi } from "@/components/editor/types";
+import { ExtractedEntry, hasArabicChars, unReverseBidi } from "@/components/editor/types";
 
 interface UseEditorFileIOProps {
   state: EditorState | null;
   setState: React.Dispatch<React.SetStateAction<EditorState | null>>;
   setLastSaved: React.Dispatch<React.SetStateAction<string>>;
+  filteredEntries: ExtractedEntry[];
+  filterLabel: string;
 }
 
 function normalizeArabicPresentationForms(text: string): string {
@@ -51,22 +53,44 @@ function parseCSVLine(line: string): string[] {
   return result;
 }
 
-export function useEditorFileIO({ state, setState, setLastSaved }: UseEditorFileIOProps) {
+export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries, filterLabel }: UseEditorFileIOProps) {
+
+  const isFilterActive = filterLabel !== "";
 
   const handleExportTranslations = () => {
     if (!state) return;
     const cleanTranslations: Record<string, string> = {};
-    for (const [key, value] of Object.entries(state.translations)) {
-      cleanTranslations[key] = normalizeArabicPresentationForms(value);
+
+    if (isFilterActive && filteredEntries.length < state.entries.length) {
+      // تصدير مفلتر - فقط مفاتيح النصوص المفلترة
+      const allowedKeys = new Set(filteredEntries.map(e => `${e.msbtFile}:${e.index}`));
+      for (const [key, value] of Object.entries(state.translations)) {
+        if (allowedKeys.has(key)) {
+          cleanTranslations[key] = normalizeArabicPresentationForms(value);
+        }
+      }
+    } else {
+      for (const [key, value] of Object.entries(state.translations)) {
+        cleanTranslations[key] = normalizeArabicPresentationForms(value);
+      }
     }
+
     const data = JSON.stringify(cleanTranslations, null, 2);
     const blob = new Blob([data], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `translations_${new Date().toISOString().slice(0, 10)}.json`;
+    const suffix = isFilterActive ? `_${filterLabel}` : '';
+    a.download = `translations${suffix}_${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
+
+    const countMsg = Object.keys(cleanTranslations).length;
+    setLastSaved(isFilterActive
+      ? `✅ تم تصدير ${countMsg} ترجمة (${filterLabel})`
+      : `✅ تم تصدير ${countMsg} ترجمة`
+    );
+    setTimeout(() => setLastSaved(""), 3000);
   };
 
   const handleImportTranslations = () => {
@@ -79,12 +103,31 @@ export function useEditorFileIO({ state, setState, setLastSaved }: UseEditorFile
       try {
         const text = await file.text();
         const imported = JSON.parse(text) as Record<string, string>;
-        const cleanedImported: Record<string, string> = {};
-        for (const [key, value] of Object.entries(imported)) {
-          cleanedImported[key] = normalizeArabicPresentationForms(value);
+        let cleanedImported: Record<string, string> = {};
+
+        if (isFilterActive && filteredEntries.length < (state?.entries.length || 0)) {
+          // استيراد مفلتر - فقط مفاتيح النصوص المفلترة
+          const allowedKeys = new Set(filteredEntries.map(e => `${e.msbtFile}:${e.index}`));
+          for (const [key, value] of Object.entries(imported)) {
+            if (allowedKeys.has(key)) {
+              cleanedImported[key] = normalizeArabicPresentationForms(value);
+            }
+          }
+        } else {
+          for (const [key, value] of Object.entries(imported)) {
+            cleanedImported[key] = normalizeArabicPresentationForms(value);
+          }
         }
+
         setState(prev => { if (!prev) return null; return { ...prev, translations: { ...prev.translations, ...cleanedImported } }; });
-        setLastSaved(`✅ تم استيراد ${Object.keys(imported).length} ترجمة وتنظيفها`);
+
+        const totalImported = Object.keys(imported).length;
+        const appliedCount = Object.keys(cleanedImported).length;
+        const msg = isFilterActive
+          ? `✅ تم استيراد ${appliedCount} من ${totalImported} ترجمة (${filterLabel})`
+          : `✅ تم استيراد ${appliedCount} ترجمة وتنظيفها`;
+        setLastSaved(msg);
+
         setTimeout(() => {
           setState(prevState => {
             if (!prevState) return null;
@@ -118,8 +161,9 @@ export function useEditorFileIO({ state, setState, setLastSaved }: UseEditorFile
 
   const handleExportCSV = () => {
     if (!state) return;
+    const entriesToExport = (isFilterActive && filteredEntries.length < state.entries.length) ? filteredEntries : state.entries;
     const header = 'file,index,label,original,translation,max_bytes';
-    const rows = state.entries.map(entry => {
+    const rows = entriesToExport.map(entry => {
       const key = `${entry.msbtFile}:${entry.index}`;
       const translation = normalizeArabicPresentationForms(state.translations[key] || '');
       return [
@@ -136,10 +180,14 @@ export function useEditorFileIO({ state, setState, setLastSaved }: UseEditorFile
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `translations_${new Date().toISOString().slice(0, 10)}.csv`;
+    const suffix = isFilterActive ? `_${filterLabel}` : '';
+    a.download = `translations${suffix}_${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
-    setLastSaved(`✅ تم تصدير ${state.entries.length} نص كملف CSV`);
+    const msg = isFilterActive
+      ? `✅ تم تصدير ${entriesToExport.length} نص كملف CSV (${filterLabel})`
+      : `✅ تم تصدير ${entriesToExport.length} نص كملف CSV`;
+    setLastSaved(msg);
     setTimeout(() => setLastSaved(""), 3000);
   };
 
@@ -159,6 +207,10 @@ export function useEditorFileIO({ state, setState, setLastSaved }: UseEditorFile
         const hasHeader = header.includes('file') || header.includes('translation') || header.includes('original');
         const dataLines = hasHeader ? lines.slice(1) : lines;
 
+        const allowedKeys = isFilterActive && filteredEntries.length < (state?.entries.length || 0)
+          ? new Set(filteredEntries.map(e => `${e.msbtFile}:${e.index}`))
+          : null;
+
         let imported = 0;
         const updates: Record<string, string> = {};
 
@@ -170,13 +222,17 @@ export function useEditorFileIO({ state, setState, setLastSaved }: UseEditorFile
           const translation = cols[4].trim();
           if (!filePath || !index || !translation) continue;
           const key = `${filePath}:${index}`;
+          if (allowedKeys && !allowedKeys.has(key)) continue;
           updates[key] = normalizeArabicPresentationForms(translation);
           imported++;
         }
 
         if (imported === 0) { alert('لم يتم العثور على ترجمات في الملف'); return; }
         setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...updates } } : null);
-        setLastSaved(`✅ تم استيراد ${imported} ترجمة من CSV`);
+        const msg = isFilterActive
+          ? `✅ تم استيراد ${imported} ترجمة من CSV (${filterLabel})`
+          : `✅ تم استيراد ${imported} ترجمة من CSV`;
+        setLastSaved(msg);
         setTimeout(() => setLastSaved(""), 4000);
       } catch { alert('خطأ في قراءة ملف CSV'); }
     };
@@ -189,5 +245,7 @@ export function useEditorFileIO({ state, setState, setLastSaved }: UseEditorFile
     handleExportCSV,
     handleImportCSV,
     normalizeArabicPresentationForms,
+    isFilterActive,
+    filterLabel,
   };
 }
