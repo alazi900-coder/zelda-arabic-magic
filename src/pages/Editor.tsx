@@ -18,7 +18,7 @@ import {
   ArrowRight, Download, FileText, Loader2, Filter, Sparkles, Save, Tag,
   Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle,
   Eye, EyeOff, RotateCcw, CheckCircle2, ShieldCheck, ChevronLeft, ChevronRight,
-  BarChart3, Menu, MoreVertical, Replace,
+  BarChart3, Menu, MoreVertical, Replace, Columns,
 } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -37,10 +37,12 @@ import ReviewPanel from "@/components/editor/ReviewPanel";
 import QuickReviewMode from "@/components/editor/QuickReviewMode";
 import PaginationControls from "@/components/editor/PaginationControls";
 import FindReplacePanel from "@/components/editor/FindReplacePanel";
+import DiffView from "@/components/editor/DiffView";
 
 const Editor = () => {
   const editor = useEditorState();
   const isMobile = useIsMobile();
+  const [showDiffView, setShowDiffView] = React.useState(false);
 
   if (!editor.state) {
     return (
@@ -230,6 +232,9 @@ const Editor = () => {
                   <Button variant={editor.showFindReplace ? "secondary" : "outline"} size="sm" onClick={() => editor.setShowFindReplace(!editor.showFindReplace)} className="font-body text-xs">
                     <Replace className="w-3 h-3" /> بحث واستبدال
                   </Button>
+                  <Button variant={showDiffView ? "secondary" : "outline"} size="sm" onClick={() => setShowDiffView(!showDiffView)} className="font-body text-xs">
+                    <Columns className="w-3 h-3" /> مقارنة
+                  </Button>
                 </>
               )}
             </div>
@@ -417,6 +422,15 @@ const Editor = () => {
               translations={editor.state.translations}
               onReplace={editor.handleBulkReplace}
               onClose={() => editor.setShowFindReplace(false)}
+            />
+          )}
+
+          {/* Diff View */}
+          {showDiffView && editor.state && (
+            <DiffView
+              entries={editor.filteredEntries}
+              translations={editor.state.translations}
+              onClose={() => setShowDiffView(false)}
             />
           )}
 
