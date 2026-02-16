@@ -1294,11 +1294,13 @@ export function useEditorState() {
       const blob = await response.blob();
       const blobUrl = URL.createObjectURL(blob);
       const modifiedCount = parseInt(response.headers.get('X-Modified-Count') || '0');
+      const expandedCount = parseInt(response.headers.get('X-Expanded-Count') || '0');
       const a = document.createElement("a");
       a.href = blobUrl;
       a.download = `arabized_${langFileName}`;
       a.click();
-      setBuildProgress(`✅ تم بنجاح! تم تعديل ${modifiedCount} نص`);
+      const expandedMsg = expandedCount > 0 ? ` (${expandedCount} تم توسيعها 📐)` : '';
+      setBuildProgress(`✅ تم بنجاح! تم تعديل ${modifiedCount} نص${expandedMsg}`);
       setTimeout(() => { setBuilding(false); setBuildProgress(""); }, 3000);
     } catch (err) {
       setBuildProgress(`❌ ${err instanceof Error ? err.message : 'خطأ غير معروف'}`);

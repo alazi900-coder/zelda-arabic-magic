@@ -130,6 +130,7 @@ const Process = () => {
 
       // Read metadata from headers
       const modifiedCount = parseInt(response.headers.get('X-Modified-Count') || '0');
+      const expandedCount = parseInt(response.headers.get('X-Expanded-Count') || '0');
       const skippedAlreadyArabized = parseInt(response.headers.get('X-Skipped-Already-Arabized') || '0');
       const fileSize = parseInt(response.headers.get('X-File-Size') || '0');
       const compressedSize = response.headers.get('X-Compressed-Size');
@@ -170,6 +171,9 @@ const Process = () => {
       setStage("done");
       addLog("\n✨ اكتملت العملية بنجاح!");
       addLog(`   ✓ تم تعديل ${modifiedCount} نص عربي`);
+      if (expandedCount > 0) {
+        addLog(`   📐 تم توسيع ${expandedCount} نص (أكبر من الحجم الأصلي)`);
+      }
       if (skippedAlreadyArabized > 0) {
         addLog(`   ✓ تم تخطي ${skippedAlreadyArabized} نص معرب مسبقاً (لمنع العكس المزدوج)`);
       }
