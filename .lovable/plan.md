@@ -1,67 +1,105 @@
 
 
-# Fix: Garbled Text in MSBT Extraction (UTF-16 Alignment Bug)
+# توسيع حدود البايت: إعادة بناء TXT2 و SARC ديناميكياً
 
-## Root Cause
+## المشكلة الحالية
 
-The `parseMSBT` function in `supabase/functions/arabize/index.ts` has an incorrect MSBT control code structure assumption.
-
-### Current (Wrong)
-
-The code assumes a **6-byte** tag header:
+دالة `injectMSBT` (سطر 370-414) تكتب النص المترجم في نفس الخانة الأصلية. إذا كان النص العربي أكبر من الإنجليزي، يتم تخطيه مع تحذير:
 
 ```text
-0x000E (2) + group (2) + size (2) + data (size)
+⚠️ Skipping entry - encoded size exceeds slot size
 ```
 
-And reads `tagSize` from offset `j+4`.
+## الحل: إعادة بناء كاملة (ليس تعديل جزئي)
 
-### Actual MSBT Format (Nintendo TOTK)
+كما أكد ChatGPT، التعديل الجزئي (inplace) خطير. الحل الصحيح هو **بناء MSBT جديد كـ Uint8Array من الصفر**، ثم **بناء SARC جديد بالكامل**.
 
-The real structure is an **8-byte** header:
+---
+
+## التغييرات المطلوبة
+
+### 1. دالة جديدة: `rebuildMSBT` (تستبدل `injectMSBT`)
+
+**الملف**: `supabase/functions/arabize/index.ts`
+
+بدلاً من الكتابة في الخانة الأصلية، ستقوم الدالة الجديدة بـ:
+
+1. **نسخ أقسام LBL1 و ATR1 كما هي** (بدون تعديل) -- هذا يحافظ على ربط label بـ index
+2. **بناء قسم TXT2 جديد بالكامل**:
+   - تحويل كل نص (مترجم أو أصلي) إلى بايتات UTF-16LE
+   - حساب جدول offsets جديد بناءً على الأحجام الفعلية
+   - كتابة البيانات النصية بالتسلسل
+3. **تجميع الملف**: Header + LBL1 (+ padding) + ATR1 (+ padding) + TXT2 (+ padding)
+4. **تحديث حجم الملف** في رأس MSBT (بايت 18-21)
+
+كل قسم يُختم بمحاذاة 16 بايت (0xAB padding).
+
+### 2. دالة جديدة: `rebuildSARC` (تستبدل `packSARC`)
+
+**الملف**: `supabase/functions/arabize/index.ts`
+
+الدالة الحالية `packSARC` (سطر 448-466) تكتب في نفس المواقع الأصلية وتتخطى الملفات الأكبر. الدالة الجديدة:
+
+1. **بناء SFNT** (جدول الأسماء) من أسماء الملفات
+2. **بناء SFAT** (جدول الملفات) مع حساب offsets جديدة بناءً على أحجام الملفات الفعلية
+3. **كتابة بيانات الملفات** بالتسلسل مع محاذاة كل ملف
+4. **تجميع SARC**: Header + SFAT + SFNT + Data
+
+### 3. تحديث `maxBytes` في وضع الاستخراج
+
+**الملف**: `supabase/functions/arabize/index.ts` (سطر 563)
+
+تغيير `maxBytes: entries[i].size` إلى `maxBytes: entries[i].size * 3` لمنح المستخدم مساحة أكبر (3x الحجم الأصلي كحد أقصى).
+
+### 4. تحديث واجهة المحرر
+
+**الملف**: `src/hooks/useEditorState.ts`
+
+تحديث دالة فحص تجاوز الحد لتعكس الحد الجديد (3x).
+
+---
+
+## التفاصيل التقنية
+
+### هيكل MSBT المُعاد بناؤه
 
 ```text
-0x000E (2) + group (2) + type (2) + paramSize (2) + params (paramSize)
+┌──────────────────────────────┐
+│ MSBT Header (32 bytes)       │ -- تحديث fileSize و sectionCount
+├──────────────────────────────┤
+│ LBL1 Section (نسخ حرفي)     │ -- بدون أي تعديل
+│ + padding to 16-byte align   │
+├──────────────────────────────┤
+│ ATR1 Section (نسخ حرفي)     │ -- بدون أي تعديل (إن وُجد)
+│ + padding to 16-byte align   │
+├──────────────────────────────┤
+│ TXT2 Header (16 bytes)       │ -- حجم جديد
+│ Entry Count (4 bytes)        │
+│ Offset Table (N x 4 bytes)   │ -- offsets جديدة
+│ Text Data (أحجام ديناميكية) │ -- النصوص المترجمة بأحجامها الفعلية
+│ + padding to 16-byte align   │
+└──────────────────────────────┘
 ```
 
-The size field is at offset `j+6`, not `j+4`. By reading the "type" field as "size", the code:
-1. Gets a wrong byte count to skip
-2. Leaves leftover tag bytes in the text stream
-3. Breaks UTF-16LE alignment
-4. `TextDecoder` then produces CJK garbage like "昀椀瘀攀" instead of "five"
+### هيكل SARC المُعاد بناؤه
 
-## The Fix
-
-**File:** `supabase/functions/arabize/index.ts` (lines 334-342)
-
-Change the tag parsing from:
-
-```typescript
-if (charCode === 0x0E) {
-  const tagSize = view.getUint16(absOffset + j + 4, true);
-  const totalTagBytes = 6 + tagSize;
-  ...
-  j += 4 + tagSize; // + 2 from loop = 6 + tagSize (WRONG)
+```text
+┌──────────────────────────────┐
+│ SARC Header (20 bytes)       │ -- تحديث fileSize و dataOffset
+├──────────────────────────────┤
+│ SFAT Header + Nodes          │ -- offsets جديدة لكل ملف
+├──────────────────────────────┤
+│ SFNT (جدول الأسماء)         │ -- نسخ من الأصل
+├──────────────────────────────┤
+│ File Data                    │ -- الملفات بأحجامها الجديدة
+│ (مع محاذاة بين كل ملف)     │
+└──────────────────────────────┘
 ```
 
-To:
+### الاحتياطات الأمنية
 
-```typescript
-if (charCode === 0x0E) {
-  // 0x0E(2) + group(2) + type(2) + paramSize(2) + params(paramSize)
-  const paramSize = view.getUint16(absOffset + j + 6, true);
-  const totalTagBytes = 8 + paramSize;
-  ...
-  j += 6 + paramSize; // + 2 from loop = 8 + paramSize (CORRECT)
-```
-
-This ensures:
-- The correct field (paramSize at offset j+6) is read
-- The full tag (8 + paramSize bytes) is captured in `tagBytes`
-- UTF-16LE alignment is preserved after every tag
-- No more garbled CJK text
-
-## Verification
-
-After deploying the fix, re-upload and extract the same MSBT files. Entries like `entry_3` in `EventFlowMsg/Obj_DiaryAssassin_A_05.msbt` should display clean English text instead of "昀椀瘀攀 挀栀愀洀戀攀爀猀".
+- **عدم تغيير عدد entries**: فقط أحجام النصوص تتغير، الفهارس تبقى كما هي
+- **حد أقصى 3x**: لمنع إنتاج ملفات ضخمة قد تسبب مشاكل في اللعبة
+- **نسخ LBL1 حرفياً**: لضمان عدم كسر الربط بين label و text index
+- **محاذاة 16 بايت**: بين كل قسم باستخدام padding byte 0xAB (معيار نينتندو)
 
