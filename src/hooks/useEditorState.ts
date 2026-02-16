@@ -45,6 +45,7 @@ export function useEditorState() {
   const [fixingMixed, setFixingMixed] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [showFindReplace, setShowFindReplace] = useState(false);
+  const [glossaryEnabled, setGlossaryEnabled] = useState(true);
 
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -427,7 +428,7 @@ export function useEditorState() {
     setTranslatingSingle(key);
     try {
       // Check glossary first (free, no AI)
-      const glossaryMap = parseGlossaryMap(state.glossary || '');
+      const glossaryMap = parseGlossaryMap(activeGlossary);
       const originalNorm = entry.original.trim().toLowerCase();
       const glossaryHit = glossaryMap.get(originalNorm);
       if (glossaryHit) {
@@ -448,7 +449,7 @@ export function useEditorState() {
       const response = await fetch(`${supabaseUrl}/functions/v1/translate-entries`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ entries: [{ key, original: entry.original }], glossary: state.glossary || '', context: contextEntries.length > 0 ? contextEntries : undefined }),
+        body: JSON.stringify({ entries: [{ key, original: entry.original }], glossary: activeGlossary, context: contextEntries.length > 0 ? contextEntries : undefined }),
       });
       if (!response.ok) throw new Error(`خطأ ${response.status}`);
       const data = await response.json();
@@ -504,7 +505,7 @@ export function useEditorState() {
     }
 
     // Glossary direct translation (free, no AI)
-    const glossaryMap = parseGlossaryMap(state.glossary || '');
+    const glossaryMap = parseGlossaryMap(activeGlossary);
     const glossaryReused: Record<string, string> = {};
     const needsAI: typeof untranslated = [];
     for (const e of afterTM) {
@@ -568,7 +569,7 @@ export function useEditorState() {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
           signal: abortControllerRef.current.signal,
-          body: JSON.stringify({ entries, glossary: state.glossary || '', context: contextEntries.length > 0 ? contextEntries.slice(0, 10) : undefined }),
+          body: JSON.stringify({ entries, glossary: activeGlossary, context: contextEntries.length > 0 ? contextEntries.slice(0, 10) : undefined }),
         });
         if (!response.ok) throw new Error(`خطأ ${response.status}`);
         const data = await response.json();
@@ -651,7 +652,7 @@ export function useEditorState() {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
           signal: abortControllerRef.current.signal,
-          body: JSON.stringify({ entries, glossary: state.glossary || '', context: contextEntries.length > 0 ? contextEntries.slice(0, 10) : undefined }),
+          body: JSON.stringify({ entries, glossary: activeGlossary, context: contextEntries.length > 0 ? contextEntries.slice(0, 10) : undefined }),
         });
         if (!response.ok) throw new Error(`خطأ ${response.status}`);
         const data = await response.json();
@@ -684,7 +685,7 @@ export function useEditorState() {
       const response = await fetch(`${supabaseUrl}/functions/v1/review-translations`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ entries: reviewEntries, glossary: state.glossary || '' }),
+        body: JSON.stringify({ entries: reviewEntries, glossary: activeGlossary }),
       });
       if (!response.ok) throw new Error(`خطأ ${response.status}`);
       setReviewResults(await response.json());
@@ -707,7 +708,7 @@ export function useEditorState() {
       const response = await fetch(`${supabaseUrl}/functions/v1/review-translations`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ entries: reviewEntries, glossary: state.glossary || '', action: 'suggest-short' }),
+        body: JSON.stringify({ entries: reviewEntries, glossary: activeGlossary, action: 'suggest-short' }),
       });
       if (!response.ok) throw new Error(`خطأ ${response.status}`);
       const data = await response.json();
@@ -767,7 +768,7 @@ export function useEditorState() {
         const response = await fetch(`${supabaseUrl}/functions/v1/fix-mixed-language`, {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ entries: batch, glossary: state.glossary || '' }),
+          body: JSON.stringify({ entries: batch, glossary: activeGlossary }),
         });
         if (!response.ok) { const errData = await response.json().catch(() => ({})); throw new Error(errData.error || `خطأ ${response.status}`); }
         const data = await response.json();
@@ -1118,7 +1119,7 @@ export function useEditorState() {
       const response = await fetch(`${supabaseUrl}/functions/v1/review-translations`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ entries: translatedEntries, glossary: state.glossary || '', action: 'improve' }),
+        body: JSON.stringify({ entries: translatedEntries, glossary: activeGlossary, action: 'improve' }),
       });
       if (!response.ok) throw new Error(`خطأ ${response.status}`);
       const data = await response.json();
@@ -1157,7 +1158,7 @@ export function useEditorState() {
       const response = await fetch(`${supabaseUrl}/functions/v1/review-translations`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ entries: [{ key, original: entry.original, translation, maxBytes: entry.maxBytes || 0 }], glossary: state.glossary || '', action: 'improve' }),
+        body: JSON.stringify({ entries: [{ key, original: entry.original, translation, maxBytes: entry.maxBytes || 0 }], glossary: activeGlossary, action: 'improve' }),
       });
       if (!response.ok) throw new Error(`خطأ ${response.status}`);
       const data = await response.json();
@@ -1286,6 +1287,8 @@ export function useEditorState() {
     }).length;
   }, [state?.glossary]);
 
+  const activeGlossary = glossaryEnabled ? (state?.glossary || '') : '';
+
   return {
     // State
     state, search, filterFile, filterCategory, filterStatus, filterTechnical, showFindReplace,
@@ -1301,13 +1304,14 @@ export function useEditorState() {
     applyingArabic, improvingTranslations, improveResults,
     fixingMixed, filtersOpen,
     categoryProgress, qualityStats, needsImproveCount, translatedCount,
-    glossaryTermCount,
+    glossaryTermCount, glossaryEnabled,
     msbtFiles, filteredEntries, paginatedEntries, totalPages,
     user,
 
     // Setters
     setSearch, setFilterFile, setFilterCategory, setFilterStatus, setFilterTechnical,
     setFiltersOpen, setShowQualityStats, setQuickReviewMode, setQuickReviewIndex, setShowFindReplace,
+    setGlossaryEnabled,
     setCurrentPage, setShowRetranslateConfirm, setShowPreview, setPreviewKey,
     setArabicNumerals, setMirrorPunctuation,
     setReviewResults, setShortSuggestions, setImproveResults,
