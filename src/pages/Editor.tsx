@@ -284,6 +284,14 @@ const Editor = () => {
             </div>
           )}
 
+          {/* Glossary indicator */}
+          {editor.glossaryTermCount > 0 && (
+            <div className="flex items-center gap-2 mb-4 px-3 py-1.5 rounded-lg bg-primary/5 border border-primary/15">
+              <BookOpen className="w-3.5 h-3.5 text-primary/70" />
+              <span className="text-xs text-primary/80 font-body">📖 القاموس محمّل: <strong>{editor.glossaryTermCount}</strong> مصطلح</span>
+            </div>
+          )}
+
           {/* Cloud & Actions */}
           {isMobile ? (
             <div className="flex flex-wrap gap-2 mb-6">
