@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag } from "lucide-react";
+import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag, BookOpen } from "lucide-react";
 import DebouncedInput from "./DebouncedInput";
 import { ExtractedEntry, displayOriginal, hasArabicChars, isTechnicalText } from "./types";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -14,6 +14,7 @@ interface EntryCardProps {
   translatingSingle: string | null;
   improvingTranslations: boolean;
   previousTranslations: Record<string, string>;
+  glossary?: string;
   isTranslationTooShort: (entry: ExtractedEntry, translation: string) => boolean;
   isTranslationTooLong: (entry: ExtractedEntry, translation: string) => boolean;
   hasStuckChars: (translation: string) => boolean;
@@ -25,9 +26,32 @@ interface EntryCardProps {
   handleFixReversed: (entry: ExtractedEntry) => void;
 }
 
+function findGlossaryMatches(original: string, glossary?: string): { term: string; translation: string }[] {
+  if (!glossary?.trim() || !original?.trim()) return [];
+  const origLower = original.toLowerCase();
+  const matches: { term: string; translation: string }[] = [];
+  for (const line of glossary.split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('//')) continue;
+    const eqIdx = trimmed.indexOf('=');
+    if (eqIdx < 1) continue;
+    const eng = trimmed.slice(0, eqIdx).trim();
+    const arb = trimmed.slice(eqIdx + 1).trim();
+    if (!eng || !arb) continue;
+    // Word-boundary partial match (case-insensitive)
+    const engLower = eng.toLowerCase();
+    const regex = new RegExp(`\\b${engLower.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+    if (regex.test(origLower)) {
+      matches.push({ term: eng, translation: arb });
+    }
+  }
+  // Sort by term length descending (longer matches first)
+  return matches.sort((a, b) => b.term.length - a.term.length).slice(0, 6);
+}
+
 const EntryCard: React.FC<EntryCardProps> = ({
   entry, translation, isProtected, hasProblem,
-  translatingSingle, improvingTranslations, previousTranslations,
+  translatingSingle, improvingTranslations, previousTranslations, glossary,
   isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage,
   updateTranslation, handleTranslateSingle, handleImproveSingleTranslation,
   handleUndoTranslation, handleFixReversed,
@@ -35,6 +59,11 @@ const EntryCard: React.FC<EntryCardProps> = ({
   const key = `${entry.msbtFile}:${entry.index}`;
   const isMobile = useIsMobile();
   const isTech = isTechnicalText(entry.original);
+
+  const glossaryMatches = useMemo(
+    () => findGlossaryMatches(entry.original, glossary),
+    [entry.original, glossary]
+  );
 
   return (
     <Card className={`p-3 md:p-4 border-border/50 hover:border-border transition-colors ${hasProblem ? 'border-destructive/30 bg-destructive/5' : ''}`}>
@@ -47,6 +76,17 @@ const EntryCard: React.FC<EntryCardProps> = ({
             <p className="text-xs text-destructive mb-2 flex items-center gap-1">
               <AlertTriangle className="w-3 h-3" /> يحتاج مراجعة
             </p>
+          )}
+          {/* Glossary hints */}
+          {glossaryMatches.length > 0 && (
+            <div className="flex flex-wrap items-center gap-1 mb-2">
+              <BookOpen className="w-3 h-3 text-primary/60 shrink-0" />
+              {glossaryMatches.map((m, i) => (
+                <span key={i} className="text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
+                  {m.term} → {m.translation}
+                </span>
+              ))}
+            </div>
           )}
           {translation?.trim() && (
             <div className="flex flex-wrap gap-1 mb-2">
