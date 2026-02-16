@@ -62,7 +62,6 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     const cleanTranslations: Record<string, string> = {};
 
     if (isFilterActive && filteredEntries.length < state.entries.length) {
-      // تصدير مفلتر - فقط مفاتيح النصوص المفلترة
       const allowedKeys = new Set(filteredEntries.map(e => `${e.msbtFile}:${e.index}`));
       for (const [key, value] of Object.entries(state.translations)) {
         if (allowedKeys.has(key)) {
@@ -90,6 +89,40 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       ? `✅ تم تصدير ${countMsg} ترجمة (${filterLabel})`
       : `✅ تم تصدير ${countMsg} ترجمة`
     );
+    setTimeout(() => setLastSaved(""), 3000);
+  };
+
+  const handleExportEnglishOnly = () => {
+    if (!state) return;
+    const englishOnly: Record<string, string> = {};
+    const entriesToExport = (isFilterActive && filteredEntries.length < state.entries.length) ? filteredEntries : state.entries;
+
+    for (const entry of entriesToExport) {
+      const key = `${entry.msbtFile}:${entry.index}`;
+      const translation = state.translations[key]?.trim();
+      // تصدير فقط النصوص غير المترجمة (فارغة أو مطابقة للأصل)
+      if (!translation || translation === entry.original || translation === entry.original.trim()) {
+        englishOnly[key] = entry.original;
+      }
+    }
+
+    if (Object.keys(englishOnly).length === 0) {
+      setLastSaved("ℹ️ لا توجد نصوص غير مترجمة للتصدير");
+      setTimeout(() => setLastSaved(""), 3000);
+      return;
+    }
+
+    const data = JSON.stringify(englishOnly, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const suffix = isFilterActive ? `_${filterLabel}` : '';
+    a.download = `english-only${suffix}_${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    setLastSaved(`✅ تم تصدير ${Object.keys(englishOnly).length} نص إنجليزي غير مترجم`);
     setTimeout(() => setLastSaved(""), 3000);
   };
 
@@ -241,6 +274,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
 
   return {
     handleExportTranslations,
+    handleExportEnglishOnly,
     handleImportTranslations,
     handleExportCSV,
     handleImportCSV,
