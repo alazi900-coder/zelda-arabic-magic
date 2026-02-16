@@ -59,7 +59,7 @@ export function useEditorState() {
   const { isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage, needsImprovement, qualityStats, needsImproveCount, categoryProgress, translatedCount } = quality;
 
   const build = useEditorBuild({ state, setState, setLastSaved, arabicNumerals, mirrorPunctuation });
-  const { building, buildProgress, applyingArabic, buildStats, setBuildStats, handleApplyArabicProcessing, handleBuild } = build;
+  const { building, buildProgress, applyingArabic, buildStats, setBuildStats, buildPreview, showBuildConfirm, setShowBuildConfirm, handleApplyArabicProcessing, handlePreBuild, handleBuild } = build;
 
 
   // === Protection handlers ===
@@ -592,7 +592,7 @@ export function useEditorState() {
     previousTranslations, currentPage,
     showRetranslateConfirm, arabicNumerals, mirrorPunctuation,
     applyingArabic, improvingTranslations, improveResults,
-    fixingMixed, filtersOpen, buildStats,
+    fixingMixed, filtersOpen, buildStats, buildPreview, showBuildConfirm,
     categoryProgress, qualityStats, needsImproveCount, translatedCount,
     ...glossary,
     msbtFiles, filteredEntries, paginatedEntries, totalPages,
@@ -603,7 +603,7 @@ export function useEditorState() {
     setFiltersOpen, setShowQualityStats, setQuickReviewMode, setQuickReviewIndex, setShowFindReplace,
     setCurrentPage, setShowRetranslateConfirm, setShowPreview, setPreviewKey,
     setArabicNumerals, setMirrorPunctuation,
-    setReviewResults, setShortSuggestions, setImproveResults, setBuildStats,
+    setReviewResults, setShortSuggestions, setImproveResults, setBuildStats, setShowBuildConfirm,
 
     // Handlers
     toggleProtection, toggleTechnicalBypass,
@@ -617,7 +617,7 @@ export function useEditorState() {
     handleImproveTranslations, handleApplyImprovement, handleApplyAllImprovements,
     handleImproveSingleTranslation,
     handleCloudSave, handleCloudLoad,
-    handleApplyArabicProcessing, handleBuild, handleBulkReplace,
+    handleApplyArabicProcessing, handlePreBuild, handleBuild, handleBulkReplace,
 
     // Quality helpers
     isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage, needsImprovement,
