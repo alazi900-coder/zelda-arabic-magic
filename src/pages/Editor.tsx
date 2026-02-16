@@ -328,7 +328,7 @@ const Editor = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="bg-card border-border z-50">
                   <DropdownMenuItem onClick={editor.handleExportTranslations}><Download className="w-4 h-4" /> تصدير JSON{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
-                  <DropdownMenuItem onClick={editor.handleExportEnglishOnly}><FileText className="w-4 h-4" /> تصدير الإنجليزية فقط (غير مترجمة)</DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleExportEnglishOnly}><FileText className="w-4 h-4" /> تصدير الإنجليزية فقط ({editor.state.entries.length - editor.translatedCount})</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleImportTranslations}><Upload className="w-4 h-4" /> استيراد JSON{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={editor.handleExportCSV}><FileDown className="w-4 h-4" /> تصدير CSV{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
@@ -378,7 +378,7 @@ const Editor = () => {
           ) : (
             <div className="mb-6 flex gap-3 flex-wrap">
               <Button variant="outline" onClick={editor.handleExportTranslations} className="font-body"><Download className="w-4 h-4" /> تصدير JSON{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</Button>
-              <Button variant="outline" onClick={editor.handleExportEnglishOnly} className="font-body"><FileText className="w-4 h-4" /> تصدير الإنجليزية فقط 🇬🇧</Button>
+              <Button variant="outline" onClick={editor.handleExportEnglishOnly} className="font-body"><FileText className="w-4 h-4" /> تصدير الإنجليزية فقط ({editor.state.entries.length - editor.translatedCount}) 🇬🇧</Button>
               <Button variant="outline" onClick={editor.handleImportTranslations} className="font-body"><Upload className="w-4 h-4" /> استيراد JSON{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</Button>
               <Button variant="outline" onClick={editor.handleExportCSV} className="font-body"><FileDown className="w-4 h-4" /> تصدير CSV{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</Button>
               <Button variant="outline" onClick={editor.handleImportCSV} className="font-body"><Upload className="w-4 h-4" /> استيراد CSV{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</Button>
