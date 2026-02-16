@@ -4,13 +4,14 @@ import { Button } from "@/components/ui/button";
 import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag, BookOpen } from "lucide-react";
 import DebouncedInput from "./DebouncedInput";
 import { ExtractedEntry, displayOriginal, hasArabicChars, isTechnicalText } from "./types";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { utf16leByteLength } from "@/lib/byte-utils";
 
 interface EntryCardProps {
   entry: ExtractedEntry;
   translation: string;
   isProtected: boolean;
   hasProblem: boolean;
+  isMobile: boolean;
   translatingSingle: string | null;
   improvingTranslations: boolean;
   previousTranslations: Record<string, string>;
@@ -50,14 +51,13 @@ function findGlossaryMatches(original: string, glossary?: string): { term: strin
 }
 
 const EntryCard: React.FC<EntryCardProps> = ({
-  entry, translation, isProtected, hasProblem,
+  entry, translation, isProtected, hasProblem, isMobile,
   translatingSingle, improvingTranslations, previousTranslations, glossary,
   isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage,
   updateTranslation, handleTranslateSingle, handleImproveSingleTranslation,
   handleUndoTranslation, handleFixReversed,
 }) => {
   const key = `${entry.msbtFile}:${entry.index}`;
-  const isMobile = useIsMobile();
   const isTech = isTechnicalText(entry.original);
 
   const glossaryMatches = useMemo(
@@ -132,7 +132,7 @@ const EntryCard: React.FC<EntryCardProps> = ({
           </div>
           {/* Byte usage progress bar */}
           {entry.maxBytes > 0 && translation && (() => {
-            const byteUsed = new Blob([translation], { type: 'text/plain;charset=utf-16le' }).size;
+            const byteUsed = utf16leByteLength(translation);
             const ratio = byteUsed / entry.maxBytes;
             const percent = Math.min(ratio * 100, 100);
             const colorClass = ratio > 1 ? 'bg-destructive' : ratio > 0.85 ? 'bg-amber-500' : 'bg-primary';

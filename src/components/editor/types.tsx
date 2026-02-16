@@ -17,6 +17,46 @@ export interface EditorState {
   technicalBypass?: Set<string>;
 }
 
+export interface ReviewIssue {
+  key: string;
+  type: 'error' | 'warning' | 'info';
+  message: string;
+  original?: string;
+  translation?: string;
+}
+
+export interface ReviewSummary {
+  total: number;
+  errors: number;
+  warnings: number;
+  checked: number;
+}
+
+export interface ReviewResults {
+  issues: ReviewIssue[];
+  summary: ReviewSummary;
+}
+
+export interface ShortSuggestion {
+  key: string;
+  original: string;
+  current: string;
+  suggested: string;
+  currentBytes: number;
+  suggestedBytes: number;
+  maxBytes: number;
+}
+
+export interface ImproveResult {
+  key: string;
+  original: string;
+  current: string;
+  improved: string;
+  reason: string;
+  improvedBytes: number;
+  maxBytes: number;
+}
+
 export interface FileCategory {
   id: string;
   label: string;

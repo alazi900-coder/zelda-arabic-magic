@@ -3,6 +3,7 @@ import { idbSet, idbGet } from "@/lib/idb-storage";
 import { processArabicText, hasArabicChars as hasArabicCharsProcessing, hasArabicPresentationForms, removeArabicPresentationForms } from "@/lib/arabic-processing";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { utf16leByteLength } from "@/lib/byte-utils";
 import {
   ExtractedEntry, EditorState, AUTOSAVE_DELAY, AI_BATCH_SIZE, PAGE_SIZE,
   categorizeFile, hasArabicChars, unReverseBidi, isTechnicalText,
@@ -72,7 +73,7 @@ export function useEditorState() {
 
   const isTranslationTooLong = useCallback((entry: ExtractedEntry, translation: string): boolean => {
     if (!translation?.trim() || entry.maxBytes <= 0) return false;
-    return new Blob([translation], { type: 'text/plain;charset=utf-16le' }).size > entry.maxBytes;
+    return utf16leByteLength(translation) > entry.maxBytes;
   }, []);
 
   const hasStuckChars = useCallback((translation: string): boolean => {
@@ -337,7 +338,7 @@ export function useEditorState() {
         if (!isTranslated) continue;
 
         if (entry.maxBytes > 0) {
-          const bytes = new Blob([trimmed], { type: 'text/plain;charset=utf-16le' }).size;
+          const bytes = utf16leByteLength(trimmed);
           if (bytes > entry.maxBytes) { qTooLong++; problemKeys.add(key); }
           else if (bytes / entry.maxBytes > 0.8) { qNearLimit++; problemKeys.add(key); }
         }
@@ -1024,18 +1025,6 @@ export function useEditorState() {
     input.click();
   };
 
-  const handleLoadDefaultGlossary = async () => {
-    try {
-      const response = await fetch('/zelda-glossary.txt');
-      if (!response.ok) throw new Error('فشل تحميل القاموس');
-      const text = await response.text();
-      setState(prev => prev ? { ...prev, glossary: text } : null);
-      const termCount = text.split('\n').filter(l => l.includes('=')).length;
-      setLastSaved(`📖 تم تحميل القاموس الافتراضي (${termCount} مصطلح)`);
-      setTimeout(() => setLastSaved(""), 3000);
-    } catch { alert('خطأ في تحميل القاموس الافتراضي'); }
-  };
-
   const mergeGlossaryText = (prev: EditorState, newText: string): EditorState => {
     const existing = prev.glossary?.trim() || '';
     const merged = existing ? existing + '\n' + newText : newText;
@@ -1051,65 +1040,28 @@ export function useEditorState() {
     return { ...prev, glossary: Array.from(seen.values()).join('\n') };
   };
 
-  const handleLoadTOTKGlossary = async () => {
+  const loadGlossary = useCallback(async (url: string, name: string, replace = false) => {
     try {
-      const response = await fetch('/zelda-totk-glossary.txt');
+      const response = await fetch(url);
       if (!response.ok) throw new Error('فشل تحميل القاموس');
       const text = await response.text();
       const newCount = text.split('\n').filter(l => l.includes('=')).length;
-      setState(prev => prev ? mergeGlossaryText(prev, text) : null);
-      setLastSaved(`📖 تم دمج قاموس TOTK (${newCount} مصطلح)`);
+      if (replace) {
+        setState(prev => prev ? { ...prev, glossary: text } : null);
+      } else {
+        setState(prev => prev ? mergeGlossaryText(prev, text) : null);
+      }
+      setLastSaved(`📖 تم ${replace ? 'تحميل' : 'دمج'} ${name} (${newCount} مصطلح)`);
       setTimeout(() => setLastSaved(""), 3000);
-    } catch { alert('خطأ في تحميل قاموس TOTK'); }
-  };
+    } catch { alert(`خطأ في تحميل ${name}`); }
+  }, []);
 
-  const handleLoadTOTKItemsGlossary = async () => {
-    try {
-      const response = await fetch('/zelda-totk-items-glossary.txt');
-      if (!response.ok) throw new Error('فشل تحميل القاموس');
-      const text = await response.text();
-      const newCount = text.split('\n').filter(l => l.includes('=')).length;
-      setState(prev => prev ? mergeGlossaryText(prev, text) : null);
-      setLastSaved(`📖 تم دمج قاموس العناصر (${newCount} مصطلح)`);
-      setTimeout(() => setLastSaved(""), 3000);
-    } catch { alert('خطأ في تحميل قاموس العناصر'); }
-  };
-
-  const handleLoadMaterialsGlossary = async () => {
-    try {
-      const response = await fetch('/zelda-materials-glossary.txt');
-      if (!response.ok) throw new Error('فشل تحميل القاموس');
-      const text = await response.text();
-      const newCount = text.split('\n').filter(l => l.includes('=')).length;
-      setState(prev => prev ? mergeGlossaryText(prev, text) : null);
-      setLastSaved(`📖 تم دمج قاموس المواد والأسلحة (${newCount} مصطلح)`);
-      setTimeout(() => setLastSaved(""), 3000);
-    } catch { alert('خطأ في تحميل قاموس المواد والأسلحة'); }
-  };
-
-  const handleLoadUIGlossary = async () => {
-    try {
-      const response = await fetch('/zelda-ui-glossary.txt');
-      if (!response.ok) throw new Error('فشل تحميل القاموس');
-      const text = await response.text();
-      const newCount = text.split('\n').filter(l => l.includes('=')).length;
-      setState(prev => prev ? mergeGlossaryText(prev, text) : null);
-      setLastSaved(`📖 تم دمج قاموس الواجهة والقوائم (${newCount} مصطلح)`);
-      setTimeout(() => setLastSaved(""), 3000);
-    } catch { alert('خطأ في تحميل قاموس الواجهة والقوائم'); }
-  };
-
-  const handleLoadLocationsGlossary = async () => {
-    try {
-      const response = await fetch('/zelda-locations-characters-glossary.txt');
-      if (!response.ok) throw new Error('فشل تحميل القاموس');
-      const text = await response.text();
-      const newCount = text.split('\n').filter(l => l.includes('=')).length;
-      setState(prev => prev ? mergeGlossaryText(prev, text) : null);
-      setLastSaved(`📖 تم دمج قاموس المواقع والشخصيات (${newCount} مصطلح)`);
-      setTimeout(() => setLastSaved(""), 3000);
-    } catch { alert('خطأ في تحميل قاموس المواقع والشخصيات'); }
-  };
+  const handleLoadDefaultGlossary = useCallback(() => loadGlossary('/zelda-glossary.txt', 'القاموس الافتراضي', true), [loadGlossary]);
+  const handleLoadTOTKGlossary = useCallback(() => loadGlossary('/zelda-totk-glossary.txt', 'قاموس TOTK'), [loadGlossary]);
+  const handleLoadTOTKItemsGlossary = useCallback(() => loadGlossary('/zelda-totk-items-glossary.txt', 'قاموس العناصر'), [loadGlossary]);
+  const handleLoadMaterialsGlossary = useCallback(() => loadGlossary('/zelda-materials-glossary.txt', 'قاموس المواد والأسلحة'), [loadGlossary]);
+  const handleLoadUIGlossary = useCallback(() => loadGlossary('/zelda-ui-glossary.txt', 'قاموس الواجهة والقوائم'), [loadGlossary]);
+  const handleLoadLocationsGlossary = useCallback(() => loadGlossary('/zelda-locations-characters-glossary.txt', 'قاموس المواقع والشخصيات'), [loadGlossary]);
 
   const handleLoadAllGlossaries = async () => {
     try {
