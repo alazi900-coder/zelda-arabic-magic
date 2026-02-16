@@ -9,10 +9,11 @@ interface CategoryProgressProps {
 }
 
 const CategoryProgress: React.FC<CategoryProgressProps> = ({ categoryProgress, filterCategory, setFilterCategory }) => {
-  if (Object.keys(categoryProgress).length === 0) return null;
+  const activeCats = FILE_CATEGORIES.filter(cat => categoryProgress[cat.id]);
+  if (activeCats.length === 0 && !categoryProgress['other']) return null;
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 mb-6">
       {FILE_CATEGORIES.filter(cat => categoryProgress[cat.id]).map(cat => {
         const prog = categoryProgress[cat.id];
         const pct = prog.total > 0 ? Math.round((prog.translated / prog.total) * 100) : 0;
