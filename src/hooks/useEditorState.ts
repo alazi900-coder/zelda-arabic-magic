@@ -7,6 +7,7 @@ import { utf16leByteLength } from "@/lib/byte-utils";
 import {
   ExtractedEntry, EditorState, AUTOSAVE_DELAY, AI_BATCH_SIZE, PAGE_SIZE,
   categorizeFile, hasArabicChars, unReverseBidi, isTechnicalText,
+  ReviewIssue, ReviewSummary, ReviewResults, ShortSuggestion, ImproveResult,
 } from "@/components/editor/types";
 
 export interface BuildStats {
@@ -39,10 +40,10 @@ export function useEditorState() {
   const [showPreview, setShowPreview] = useState(false);
   const [previewKey, setPreviewKey] = useState<string | null>(null);
   const [reviewing, setReviewing] = useState(false);
-  const [reviewResults, setReviewResults] = useState<{ issues: any[]; summary: any } | null>(null);
+  const [reviewResults, setReviewResults] = useState<ReviewResults | null>(null);
   const [tmStats, setTmStats] = useState<{ reused: number; sent: number } | null>(null);
   const [suggestingShort, setSuggestingShort] = useState(false);
-  const [shortSuggestions, setShortSuggestions] = useState<any[] | null>(null);
+  const [shortSuggestions, setShortSuggestions] = useState<ShortSuggestion[] | null>(null);
   const [quickReviewMode, setQuickReviewMode] = useState(false);
   const [quickReviewIndex, setQuickReviewIndex] = useState(0);
   const [showQualityStats, setShowQualityStats] = useState(false);
@@ -54,7 +55,7 @@ export function useEditorState() {
   const [mirrorPunctuation, setMirrorPunctuation] = useState(false);
   const [applyingArabic, setApplyingArabic] = useState(false);
   const [improvingTranslations, setImprovingTranslations] = useState(false);
-  const [improveResults, setImproveResults] = useState<any[] | null>(null);
+  const [improveResults, setImproveResults] = useState<ImproveResult[] | null>(null);
   const [fixingMixed, setFixingMixed] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [showFindReplace, setShowFindReplace] = useState(false);
@@ -739,7 +740,7 @@ export function useEditorState() {
   const handleApplyAllShorterTranslations = () => {
     if (!state || !shortSuggestions) return;
     const updates: Record<string, string> = {};
-    shortSuggestions.forEach((s: any) => { updates[s.key] = s.suggested; });
+    shortSuggestions.forEach((s) => { updates[s.key] = s.suggested; });
     setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...updates } } : null);
     setShortSuggestions(null);
     setLastSaved(`✅ تم تطبيق ${Object.keys(updates).length} اقتراح قصير`);
@@ -1143,7 +1144,7 @@ export function useEditorState() {
   const handleApplyAllImprovements = () => {
     if (!state || !improveResults) return;
     const updates: Record<string, string> = {};
-    improveResults.forEach((item: any) => { if (item.improvedBytes <= item.maxBytes || item.maxBytes === 0) updates[item.key] = item.improved; });
+    improveResults.forEach((item) => { if (item.improvedBytes <= item.maxBytes || item.maxBytes === 0) updates[item.key] = item.improved; });
     setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...updates } } : null);
     setImproveResults(null);
     setLastSaved(`✅ تم تطبيق ${Object.keys(updates).length} تحسين`);
@@ -1263,7 +1264,7 @@ export function useEditorState() {
       const expandedCount = parseInt(response.headers.get('X-Expanded-Count') || '0');
       const fileSize = parseInt(response.headers.get('X-File-Size') || '0');
       const compressedSize = response.headers.get('X-Compressed-Size');
-      let buildStatsData: any = null;
+      let buildStatsData: BuildStats | null = null;
       try { buildStatsData = JSON.parse(decodeURIComponent(response.headers.get('X-Build-Stats') || '{}')); } catch {}
       const a = document.createElement("a");
       a.href = blobUrl;
