@@ -135,12 +135,16 @@ const EntryCard: React.FC<EntryCardProps> = ({
             const byteUsed = new Blob([translation], { type: 'text/plain;charset=utf-16le' }).size;
             const ratio = byteUsed / entry.maxBytes;
             const percent = Math.min(ratio * 100, 100);
-            const colorClass = ratio > 1 ? 'bg-destructive' : ratio > 0.8 ? 'bg-amber-500' : 'bg-primary';
+            const colorClass = ratio > 1 ? 'bg-destructive' : ratio > 0.85 ? 'bg-amber-500' : 'bg-primary';
+            const warningLabel = ratio > 1 ? '⛔ تجاوز الحد!' : ratio > 0.85 ? '⚠️ اقتربت من الحد' : null;
             return (
               <div className="mt-1.5">
                 <div className="flex justify-between items-center text-[10px] text-muted-foreground mb-0.5">
                   <span>{byteUsed}/{entry.maxBytes} بايت</span>
-                  <span className={ratio > 1 ? 'text-destructive font-bold' : ''}>{Math.round(ratio * 100)}%</span>
+                  <div className="flex items-center gap-1.5">
+                    {warningLabel && <span className={`font-bold ${ratio > 1 ? 'text-destructive' : 'text-amber-600'}`}>{warningLabel}</span>}
+                    <span className={ratio > 1 ? 'text-destructive font-bold' : ''}>{Math.round(ratio * 100)}%</span>
+                  </div>
                 </div>
                 <div className="h-1 w-full bg-secondary rounded-full overflow-hidden">
                   <div className={`h-full ${colorClass} rounded-full transition-all`} style={{ width: `${percent}%` }} />
