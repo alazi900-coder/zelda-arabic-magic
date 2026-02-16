@@ -18,7 +18,7 @@ import {
   ArrowRight, Download, FileText, Loader2, Filter, Sparkles, Save, Tag,
   Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle,
   Eye, EyeOff, RotateCcw, CheckCircle2, ShieldCheck, ChevronLeft, ChevronRight,
-  BarChart3, Menu, MoreVertical,
+  BarChart3, Menu, MoreVertical, Replace,
 } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -36,6 +36,7 @@ import EntryCard from "@/components/editor/EntryCard";
 import ReviewPanel from "@/components/editor/ReviewPanel";
 import QuickReviewMode from "@/components/editor/QuickReviewMode";
 import PaginationControls from "@/components/editor/PaginationControls";
+import FindReplacePanel from "@/components/editor/FindReplacePanel";
 
 const Editor = () => {
   const editor = useEditorState();
@@ -226,6 +227,9 @@ const Editor = () => {
                   <Button variant={editor.quickReviewMode ? "secondary" : "outline"} size="sm" onClick={() => { editor.setQuickReviewMode(!editor.quickReviewMode); editor.setQuickReviewIndex(0); }} className="font-body text-xs">
                     <Eye className="w-3 h-3" /> مراجعة سريعة
                   </Button>
+                  <Button variant={editor.showFindReplace ? "secondary" : "outline"} size="sm" onClick={() => editor.setShowFindReplace(!editor.showFindReplace)} className="font-body text-xs">
+                    <Replace className="w-3 h-3" /> بحث واستبدال
+                  </Button>
                 </>
               )}
             </div>
@@ -398,6 +402,16 @@ const Editor = () => {
               translations={editor.state.translations}
               qualityProblemKeys={editor.qualityStats.problemKeys}
               updateTranslation={editor.updateTranslation}
+            />
+          )}
+
+          {/* Find & Replace */}
+          {editor.showFindReplace && editor.state && (
+            <FindReplacePanel
+              entries={editor.state.entries}
+              translations={editor.state.translations}
+              onReplace={editor.handleBulkReplace}
+              onClose={() => editor.setShowFindReplace(false)}
             />
           )}
 

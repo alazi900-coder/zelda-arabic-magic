@@ -44,6 +44,7 @@ export function useEditorState() {
   const [improveResults, setImproveResults] = useState<any[] | null>(null);
   const [fixingMixed, setFixingMixed] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [showFindReplace, setShowFindReplace] = useState(false);
 
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -1056,9 +1057,21 @@ export function useEditorState() {
     }
   };
 
+  const handleBulkReplace = useCallback((replacements: Record<string, string>) => {
+    if (!state) return;
+    const prev: Record<string, string> = {};
+    for (const key of Object.keys(replacements)) {
+      prev[key] = state.translations[key] || '';
+    }
+    setPreviousTranslations(p => ({ ...p, ...prev }));
+    setState(s => s ? { ...s, translations: { ...s.translations, ...replacements } } : null);
+    setLastSaved(`✅ تم استبدال ${Object.keys(replacements).length} نص`);
+    setTimeout(() => setLastSaved(""), 3000);
+  }, [state]);
+
   return {
     // State
-    state, search, filterFile, filterCategory, filterStatus, filterTechnical,
+    state, search, filterFile, filterCategory, filterStatus, filterTechnical, showFindReplace,
     building, buildProgress, translating, translateProgress,
     lastSaved, cloudSyncing, cloudStatus,
     technicalEditingMode, showPreview, previewKey,
@@ -1076,7 +1089,7 @@ export function useEditorState() {
 
     // Setters
     setSearch, setFilterFile, setFilterCategory, setFilterStatus, setFilterTechnical,
-    setFiltersOpen, setShowQualityStats, setQuickReviewMode, setQuickReviewIndex,
+    setFiltersOpen, setShowQualityStats, setQuickReviewMode, setQuickReviewIndex, setShowFindReplace,
     setCurrentPage, setShowRetranslateConfirm, setShowPreview, setPreviewKey,
     setArabicNumerals, setMirrorPunctuation,
     setReviewResults, setShortSuggestions, setImproveResults,
@@ -1095,7 +1108,7 @@ export function useEditorState() {
     handleImproveTranslations, handleApplyImprovement, handleApplyAllImprovements,
     handleImproveSingleTranslation,
     handleCloudSave, handleCloudLoad,
-    handleApplyArabicProcessing, handleBuild,
+    handleApplyArabicProcessing, handleBuild, handleBulkReplace,
 
     // Quality helpers
     isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage, needsImprovement,
