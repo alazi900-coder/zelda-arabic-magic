@@ -332,14 +332,14 @@ function parseMSBT(data: Uint8Array): { entries: MsbtEntry[]; raw: Uint8Array } 
           const charCode = view.getUint16(absOffset + j, true);
           if (charCode === 0) break;
           if (charCode === 0x0E) {
-            // Tag: 0x0E (2 bytes) + group (2 bytes) + size (2 bytes) + data (size bytes)
-            const tagSize = view.getUint16(absOffset + j + 4, true);
-            const totalTagBytes = 6 + tagSize;
+            // Tag: 0x0E(2) + group(2) + type(2) + paramSize(2) + params(paramSize)
+            const paramSize = view.getUint16(absOffset + j + 6, true);
+            const totalTagBytes = 8 + paramSize;
             const markerCode = 0xE000 + tags.length;
             // Copy tag bytes using slice (faster than manual loop)
             const tagBytes = data.slice(absOffset + j, absOffset + j + totalTagBytes);
             tags.push({ markerCode, bytes: tagBytes });
-            j += 4 + tagSize;
+            j += 6 + paramSize;
             textParts.push(String.fromCharCode(markerCode));
             continue;
           }
