@@ -972,14 +972,38 @@ export function useEditorState() {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.txt,.csv,.json';
+    input.multiple = true;
     input.onchange = async (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (!file) return;
+      const files = (e.target as HTMLInputElement).files;
+      if (!files || files.length === 0) return;
       try {
-        const text = await file.text();
-        setState(prev => prev ? { ...prev, glossary: text } : null);
-        setLastSaved(`📖 تم تحميل قاموس المصطلحات (${file.name})`);
-        setTimeout(() => setLastSaved(""), 3000);
+        let newTerms = '';
+        for (const file of Array.from(files)) {
+          const text = await file.text();
+          newTerms += (newTerms ? '\n' : '') + text;
+        }
+        // Merge with existing glossary instead of replacing
+        setState(prev => {
+          if (!prev) return null;
+          const existing = prev.glossary?.trim() || '';
+          const merged = existing ? existing + '\n' + newTerms : newTerms;
+          // Deduplicate by key (last occurrence wins)
+          const seen = new Map<string, string>();
+          for (const line of merged.split('\n')) {
+            const trimmed = line.trim();
+            if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('//')) continue;
+            const eqIdx = trimmed.indexOf('=');
+            if (eqIdx < 1) continue;
+            const key = trimmed.slice(0, eqIdx).trim().toLowerCase();
+            seen.set(key, trimmed);
+          }
+          const deduped = Array.from(seen.values()).join('\n');
+          return { ...prev, glossary: deduped };
+        });
+        const fileNames = Array.from(files).map(f => f.name).join('، ');
+        const newCount = newTerms.split('\n').filter(l => l.includes('=')).length;
+        setLastSaved(`📖 تم دمج ${newCount} مصطلح من (${fileNames})`);
+        setTimeout(() => setLastSaved(""), 4000);
       } catch { alert('خطأ في قراءة الملف'); }
     };
     input.click();
@@ -1198,6 +1222,14 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 3000);
   }, [state]);
 
+  const glossaryTermCount = useMemo(() => {
+    if (!state?.glossary?.trim()) return 0;
+    return state.glossary.split('\n').filter(l => {
+      const t = l.trim();
+      return t && !t.startsWith('#') && !t.startsWith('//') && t.includes('=');
+    }).length;
+  }, [state?.glossary]);
+
   return {
     // State
     state, search, filterFile, filterCategory, filterStatus, filterTechnical, showFindReplace,
@@ -1213,6 +1245,7 @@ export function useEditorState() {
     applyingArabic, improvingTranslations, improveResults,
     fixingMixed, filtersOpen,
     categoryProgress, qualityStats, needsImproveCount, translatedCount,
+    glossaryTermCount,
     msbtFiles, filteredEntries, paginatedEntries, totalPages,
     user,
 
