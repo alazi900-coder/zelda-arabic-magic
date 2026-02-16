@@ -58,7 +58,7 @@ export function useEditorState() {
 
   const isTranslationTooLong = useCallback((entry: ExtractedEntry, translation: string): boolean => {
     if (!translation?.trim() || entry.maxBytes <= 0) return false;
-    return (translation.length * 2) > entry.maxBytes;
+    return new Blob([translation], { type: 'text/plain;charset=utf-16le' }).size > entry.maxBytes;
   }, []);
 
   const hasStuckChars = useCallback((translation: string): boolean => {
@@ -322,7 +322,7 @@ export function useEditorState() {
         if (!isTranslated) continue;
 
         if (entry.maxBytes > 0) {
-          const bytes = trimmed.length * 2;
+          const bytes = new Blob([trimmed], { type: 'text/plain;charset=utf-16le' }).size;
           if (bytes > entry.maxBytes) { qTooLong++; problemKeys.add(key); }
           else if (bytes / entry.maxBytes > 0.8) { qNearLimit++; problemKeys.add(key); }
         }
@@ -747,31 +747,10 @@ export function useEditorState() {
     } finally { setFixingMixed(false); }
   };
 
-  // === Normalize presentation forms ===
+  // === Normalize presentation forms (uses accurate map from arabic-processing) ===
   const normalizeArabicPresentationForms = useCallback((text: string): string => {
     if (!text) return text;
-    const presentationMap: Record<number, string> = {
-      0xFB50: 'ا', 0xFB51: 'ا', 0xFB52: 'ب', 0xFB53: 'ب', 0xFB54: 'ب', 0xFB55: 'ب',
-      0xFB56: 'ة', 0xFB57: 'ة', 0xFB58: 'ت', 0xFB59: 'ت', 0xFB5A: 'ت', 0xFB5B: 'ت',
-      0xFB5C: 'ث', 0xFB5D: 'ث', 0xFB5E: 'ث', 0xFB5F: 'ث', 0xFB60: 'ج', 0xFB61: 'ج',
-      0xFB62: 'ح', 0xFB63: 'ح', 0xFB64: 'ح', 0xFB65: 'ح', 0xFB66: 'خ', 0xFB67: 'خ',
-      0xFB68: 'د', 0xFB69: 'د', 0xFB6A: 'ذ', 0xFB6B: 'ذ', 0xFB6C: 'ر', 0xFB6D: 'ر',
-      0xFB6E: 'ز', 0xFB6F: 'ز', 0xFB70: 'س', 0xFB71: 'س', 0xFB72: 'س', 0xFB73: 'س',
-      0xFB74: 'ش', 0xFB75: 'ش', 0xFB76: 'ش', 0xFB77: 'ش', 0xFB78: 'ص', 0xFB79: 'ص',
-      0xFB7A: 'ض', 0xFB7B: 'ض', 0xFB7C: 'ط', 0xFB7D: 'ط', 0xFB7E: 'ظ', 0xFB7F: 'ظ',
-      0xFB80: 'ع', 0xFB81: 'ع', 0xFB82: 'غ', 0xFB83: 'غ', 0xFB84: 'ف', 0xFB85: 'ف',
-      0xFB86: 'ق', 0xFB87: 'ق', 0xFB88: 'ك', 0xFB89: 'ك', 0xFB8A: 'ل', 0xFB8B: 'ل',
-      0xFB8C: 'م', 0xFB8D: 'م', 0xFB8E: 'ن', 0xFB8F: 'ن', 0xFB90: 'ه', 0xFB91: 'ه',
-      0xFB92: 'و', 0xFB93: 'و', 0xFB94: 'ي', 0xFB95: 'ي', 0xFB96: 'ي', 0xFB97: 'ي',
-      0xFEFB: 'لا', 0xFEFC: 'لا', 0xFEF5: 'لأ', 0xFEF6: 'لأ',
-      0xFEF7: 'لؤ', 0xFEF8: 'لؤ', 0xFEF9: 'لا', 0xFEFA: 'لا',
-    };
-    let result = text.replace(/[\uFB50-\uFDFF\uFE70-\uFEFF]/g, ch => {
-      const mapped = presentationMap[ch.charCodeAt(0)];
-      if (mapped) return mapped;
-      return ch.normalize('NFKD');
-    });
-    return result.normalize('NFKD');
+    return removeArabicPresentationForms(text);
   }, []);
 
   // === Export/Import ===
