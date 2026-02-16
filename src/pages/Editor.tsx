@@ -328,7 +328,7 @@ const Editor = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="bg-card border-border z-50">
                   <DropdownMenuItem onClick={editor.handleExportTranslations}><Download className="w-4 h-4" /> تصدير JSON{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
-                  <DropdownMenuItem onClick={editor.handleExportEnglishOnly}><FileText className="w-4 h-4" /> تصدير الإنجليزية فقط ({editor.state.entries.length - editor.translatedCount})</DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleExportEnglishOnly}><FileText className="w-4 h-4" /> تصدير الإنجليزية فقط ({editor.state.entries.length - editor.translatedCount}) 🇬🇧</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleImportTranslations}><Upload className="w-4 h-4" /> استيراد JSON{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={editor.handleExportCSV}><FileDown className="w-4 h-4" /> تصدير CSV{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
