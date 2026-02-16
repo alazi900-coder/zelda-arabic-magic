@@ -92,7 +92,7 @@ const EntryCard: React.FC<EntryCardProps> = ({
           </div>
           {/* Byte usage progress bar */}
           {entry.maxBytes > 0 && translation && (() => {
-            const byteUsed = translation.length * 2;
+            const byteUsed = new Blob([translation], { type: 'text/plain;charset=utf-16le' }).size;
             const ratio = byteUsed / entry.maxBytes;
             const percent = Math.min(ratio * 100, 100);
             const colorClass = ratio > 1 ? 'bg-destructive' : ratio > 0.8 ? 'bg-amber-500' : 'bg-primary';

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -37,7 +37,6 @@ const FindReplacePanel: React.FC<FindReplacePanelProps> = ({
 
   const matches = useMemo<FindReplaceMatch[]>(() => {
     if (!findText.trim()) return [];
-    setApplied(false);
 
     try {
       let regex: RegExp;
@@ -72,8 +71,13 @@ const FindReplacePanel: React.FC<FindReplacePanelProps> = ({
     }
   }, [findText, replaceText, useRegex, caseSensitive, searchInOriginal, entries, translations]);
 
+  // Reset applied state when search changes
+  useEffect(() => {
+    setApplied(false);
+  }, [findText, replaceText, useRegex, caseSensitive, searchInOriginal]);
+
   // Auto-select all matches
-  useMemo(() => {
+  useEffect(() => {
     setSelectedKeys(new Set(matches.map(m => m.key)));
   }, [matches]);
 

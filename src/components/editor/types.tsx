@@ -84,51 +84,8 @@ export function categorizeFile(filePath: string): string {
   return "other";
 }
 
-export function isArabicChar(ch: string): boolean {
-  const code = ch.charCodeAt(0);
-  return (code >= 0x0600 && code <= 0x06FF) || (code >= 0xFB50 && code <= 0xFDFF) || (code >= 0xFE70 && code <= 0xFEFF);
-}
-
-export function unReverseBidi(text: string): string {
-  return text.split('\n').map(line => {
-    const segments: { text: string; isLTR: boolean }[] = [];
-    let current = '';
-    let currentIsLTR: boolean | null = null;
-
-    for (const ch of line) {
-      const charIsArabic = isArabicChar(ch);
-      const charIsLTR = /[a-zA-Z0-9]/.test(ch);
-      
-      if (charIsArabic) {
-        if (currentIsLTR === true && current) {
-          segments.push({ text: current, isLTR: true });
-          current = '';
-        }
-        currentIsLTR = false;
-        current += ch;
-      } else if (charIsLTR) {
-        if (currentIsLTR === false && current) {
-          segments.push({ text: current, isLTR: false });
-          current = '';
-        }
-        currentIsLTR = true;
-        current += ch;
-      } else {
-        current += ch;
-      }
-    }
-    if (current) segments.push({ text: current, isLTR: currentIsLTR === true });
-
-    return segments.reverse().map(seg => {
-      if (seg.isLTR) return seg.text;
-      return [...seg.text].reverse().join('');
-    }).join('');
-  }).join('\n');
-}
-
-export function hasArabicChars(text: string): boolean {
-  return [...text].some(ch => isArabicChar(ch));
-}
+// Re-export from canonical source to avoid duplication
+export { isArabicChar, hasArabicChars, reverseBidi as unReverseBidi } from "@/lib/arabic-processing";
 
 export function isTechnicalText(text: string): boolean {
   if (/^[0-9A-Fa-f\-\._:\/]+$/.test(text.trim())) return true;
