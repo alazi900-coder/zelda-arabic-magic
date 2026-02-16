@@ -1085,18 +1085,31 @@ export function useEditorState() {
     } catch { alert('خطأ في تحميل قاموس الواجهة والقوائم'); }
   };
 
+  const handleLoadLocationsGlossary = async () => {
+    try {
+      const response = await fetch('/zelda-locations-characters-glossary.txt');
+      if (!response.ok) throw new Error('فشل تحميل القاموس');
+      const text = await response.text();
+      const newCount = text.split('\n').filter(l => l.includes('=')).length;
+      setState(prev => prev ? mergeGlossaryText(prev, text) : null);
+      setLastSaved(`📖 تم دمج قاموس المواقع والشخصيات (${newCount} مصطلح)`);
+      setTimeout(() => setLastSaved(""), 3000);
+    } catch { alert('خطأ في تحميل قاموس المواقع والشخصيات'); }
+  };
+
   const handleLoadAllGlossaries = async () => {
     try {
-      const [r1, r2, r3, r4, r5] = await Promise.all([
+      const [r1, r2, r3, r4, r5, r6] = await Promise.all([
         fetch('/zelda-glossary.txt'),
         fetch('/zelda-totk-glossary.txt'),
         fetch('/zelda-totk-items-glossary.txt'),
         fetch('/zelda-materials-glossary.txt'),
         fetch('/zelda-ui-glossary.txt'),
+        fetch('/zelda-locations-characters-glossary.txt'),
       ]);
-      if (!r1.ok || !r2.ok || !r3.ok || !r4.ok || !r5.ok) throw new Error('فشل تحميل أحد القواميس');
-      const [t1, t2, t3, t4, t5] = await Promise.all([r1.text(), r2.text(), r3.text(), r4.text(), r5.text()]);
-      const combined = t1 + '\n' + t2 + '\n' + t3 + '\n' + t4 + '\n' + t5;
+      if (!r1.ok || !r2.ok || !r3.ok || !r4.ok || !r5.ok || !r6.ok) throw new Error('فشل تحميل أحد القواميس');
+      const [t1, t2, t3, t4, t5, t6] = await Promise.all([r1.text(), r2.text(), r3.text(), r4.text(), r5.text(), r6.text()]);
+      const combined = t1 + '\n' + t2 + '\n' + t3 + '\n' + t4 + '\n' + t5 + '\n' + t6;
       setState(prev => prev ? mergeGlossaryText(prev, combined) : null);
       const totalTerms = combined.split('\n').filter(l => l.includes('=')).length;
       setLastSaved(`📖 تم تحميل جميع القواميس (${totalTerms} مصطلح)`);
@@ -1351,7 +1364,7 @@ export function useEditorState() {
     handleSuggestShorterTranslations, handleApplyShorterTranslation, handleApplyAllShorterTranslations,
     handleFixAllStuckCharacters, handleFixMixedLanguage,
     handleExportTranslations, handleImportTranslations, handleExportCSV, handleImportCSV,
-    handleImportGlossary, handleLoadDefaultGlossary, handleLoadTOTKGlossary, handleLoadTOTKItemsGlossary, handleLoadMaterialsGlossary, handleLoadUIGlossary, handleLoadAllGlossaries,
+    handleImportGlossary, handleLoadDefaultGlossary, handleLoadTOTKGlossary, handleLoadTOTKItemsGlossary, handleLoadMaterialsGlossary, handleLoadUIGlossary, handleLoadLocationsGlossary, handleLoadAllGlossaries,
     handleSaveGlossaryToCloud, handleLoadGlossaryFromCloud,
     handleImproveTranslations, handleApplyImprovement, handleApplyAllImprovements,
     handleImproveSingleTranslation,
