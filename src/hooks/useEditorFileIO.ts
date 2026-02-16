@@ -94,35 +94,58 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
 
   const handleExportEnglishOnly = () => {
     if (!state) return;
-    const englishOnly: Record<string, string> = {};
     const entriesToExport = isFilterActive ? filteredEntries : state.entries;
 
+    // جمع النصوص غير المترجمة مجمّعة حسب الملف
+    const groupedByFile: Record<string, { index: number; original: string; label: string }[]> = {};
     for (const entry of entriesToExport) {
       const key = `${entry.msbtFile}:${entry.index}`;
       const translation = state.translations[key]?.trim();
-      // تصدير فقط النصوص غير المترجمة (فارغة أو مطابقة للأصل)
       if (!translation || translation === entry.original || translation === entry.original.trim()) {
-        englishOnly[key] = entry.original;
+        if (!groupedByFile[entry.msbtFile]) groupedByFile[entry.msbtFile] = [];
+        groupedByFile[entry.msbtFile].push({
+          index: entry.index,
+          original: entry.original,
+          label: entry.label || '',
+        });
       }
     }
 
-    if (Object.keys(englishOnly).length === 0) {
+    const totalCount = Object.values(groupedByFile).reduce((sum, arr) => sum + arr.length, 0);
+    if (totalCount === 0) {
       setLastSaved("ℹ️ لا توجد نصوص غير مترجمة للتصدير");
       setTimeout(() => setLastSaved(""), 3000);
       return;
     }
 
-    const data = JSON.stringify(englishOnly, null, 2);
-    const blob = new Blob([data], { type: 'application/json' });
+    // بناء CSV مرتب ومرقم مع BOM للتوافق مع Excel
+    const BOM = '\uFEFF';
+    const csvLines: string[] = [];
+    csvLines.push('#,file,index,label,english_text,translation');
+
+    let rowNum = 1;
+    const sortedFiles = Object.keys(groupedByFile).sort();
+    for (const file of sortedFiles) {
+      const entries = groupedByFile[file].sort((a, b) => a.index - b.index);
+      for (const entry of entries) {
+        csvLines.push(
+          `${rowNum},${escapeCSV(file)},${entry.index},${escapeCSV(entry.label)},${escapeCSV(entry.original)},`
+        );
+        rowNum++;
+      }
+    }
+
+    const csvContent = BOM + csvLines.join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
     const suffix = isFilterActive ? `_${filterLabel}` : '';
-    a.download = `english-only${suffix}_${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `english-only${suffix}_${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
 
-    setLastSaved(`✅ تم تصدير ${Object.keys(englishOnly).length} نص إنجليزي غير مترجم`);
+    setLastSaved(`✅ تم تصدير ${totalCount} نص إنجليزي (${sortedFiles.length} ملف) كجدول CSV مرقم`);
     setTimeout(() => setLastSaved(""), 3000);
   };
 
