@@ -37,13 +37,27 @@ export const TAG_TYPES: Record<string, { label: string; color: string; tooltip: 
 export const TAG_FALLBACK = { label: '…', color: 'bg-muted text-muted-foreground', tooltip: 'رمز تقني خاص بمحرك اللعبة' };
 
 export const FILE_CATEGORIES: FileCategory[] = [
-  { id: "inventory", label: "الأسلحة والأدوات والمواد", emoji: "🎒" },
-  { id: "ui", label: "القوائم والواجهة", emoji: "🖥️" },
+  // قوائم اللعبة
+  { id: "main-menu", label: "القائمة الرئيسية", emoji: "🏠" },
+  { id: "settings", label: "الإعدادات", emoji: "⚙️" },
+  { id: "hud", label: "واجهة اللعب (HUD)", emoji: "🖥️" },
+  { id: "pause-menu", label: "قائمة الإيقاف", emoji: "⏸️" },
+  // الأسلحة والمعدات
+  { id: "swords", label: "السيوف", emoji: "⚔️" },
+  { id: "bows", label: "الأقواس", emoji: "🏹" },
+  { id: "shields", label: "الدروع", emoji: "🛡️" },
+  { id: "armor", label: "الملابس والدروع", emoji: "👕" },
+  // العناصر والمواد
+  { id: "materials", label: "المواد والموارد", emoji: "🧪" },
+  { id: "food", label: "الطعام والطبخ", emoji: "🍖" },
+  { id: "key-items", label: "الأدوات المهمة", emoji: "🔑" },
+  // المحتوى
+  { id: "story", label: "حوارات القصة", emoji: "📖" },
   { id: "challenge", label: "المهام والتحديات", emoji: "📜" },
-  { id: "story", label: "حوارات القصة والمهام", emoji: "📖" },
   { id: "map", label: "المواقع والخرائط", emoji: "🗺️" },
   { id: "tips", label: "النصائح والتعليمات", emoji: "💡" },
-  { id: "character", label: "أسماء الشخصيات والأعداء", emoji: "🎭" },
+  { id: "character", label: "الشخصيات والأعداء", emoji: "🎭" },
+  { id: "npc", label: "حوارات الشخصيات", emoji: "💬" },
 ];
 
 // Sanitize original text: replace binary tag markers with color-coded, tooltipped badges
@@ -74,13 +88,32 @@ export function displayOriginal(text: string): React.ReactNode {
 }
 
 export function categorizeFile(filePath: string): string {
-  if (/ActorMsg\/PouchContent\.msbt/i.test(filePath)) return "inventory";
-  if (/LayoutMsg\//i.test(filePath)) return "ui";
-  if (/ChallengeMsg\//i.test(filePath)) return "challenge";
+  // === قوائم اللعبة ===
+  if (/LayoutMsg\/(Title|Boot|Save|Load|GameOver|Opening|Ending)/i.test(filePath)) return "main-menu";
+  if (/LayoutMsg\/(Option|Config|Setting|System|Language|Control|Camera|Sound)/i.test(filePath)) return "settings";
+  if (/LayoutMsg\/(Pause|Menu|Pouch|Inventory|Equipment|Status)/i.test(filePath)) return "pause-menu";
+  if (/LayoutMsg\//i.test(filePath)) return "hud";
+  
+  // === الأسلحة والمعدات ===
+  if (/ActorMsg\/(Weapon_Sword|Weapon_Lsword|Weapon_SmallSword)/i.test(filePath)) return "swords";
+  if (/ActorMsg\/Weapon_Bow/i.test(filePath)) return "bows";
+  if (/ActorMsg\/Weapon_Shield/i.test(filePath)) return "shields";
+  if (/ActorMsg\/Armor/i.test(filePath)) return "armor";
+  
+  // === العناصر والمواد ===
+  if (/ActorMsg\/Item_Material/i.test(filePath)) return "materials";
+  if (/ActorMsg\/(Item_Cook|Item_Fruit|Item_Mushroom|Item_Fish|Item_Meat|Item_Plant)/i.test(filePath)) return "food";
+  if (/ActorMsg\/(PouchContent|Item_Key|Item_Ore|Item_Enemy|Item_Insect|Item_)/i.test(filePath)) return "key-items";
+  
+  // === المحتوى ===
+  if (/EventFlowMsg\/(Npc|Demo_Npc)/i.test(filePath)) return "npc";
   if (/EventFlowMsg\//i.test(filePath)) return "story";
+  if (/ChallengeMsg\//i.test(filePath)) return "challenge";
   if (/LocationMsg\//i.test(filePath)) return "map";
   if (/StaticMsg\/(Tips|GuideKeyIcon)\.msbt/i.test(filePath)) return "tips";
+  if (/ActorMsg\/Enemy/i.test(filePath)) return "character";
   if (/ActorMsg\//i.test(filePath)) return "character";
+  
   return "other";
 }
 
