@@ -8,6 +8,18 @@ import {
   categorizeFile, hasArabicChars, unReverseBidi, isTechnicalText,
 } from "@/components/editor/types";
 
+export interface BuildStats {
+  modifiedCount: number;
+  expandedCount: number;
+  fileSize: number;
+  compressedSize?: number;
+  avgBytePercent: number;
+  maxBytePercent: number;
+  longest: { key: string; bytes: number } | null;
+  shortest: { key: string; bytes: number } | null;
+  categories: Record<string, { total: number; modified: number }>;
+}
+
 export function useEditorState() {
   const [state, setState] = useState<EditorState | null>(null);
   const [search, setSearch] = useState("");
@@ -46,6 +58,7 @@ export function useEditorState() {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [showFindReplace, setShowFindReplace] = useState(false);
   const [glossaryEnabled, setGlossaryEnabled] = useState(true);
+  const [buildStats, setBuildStats] = useState<BuildStats | null>(null);
 
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -1296,12 +1309,27 @@ export function useEditorState() {
       const blobUrl = URL.createObjectURL(blob);
       const modifiedCount = parseInt(response.headers.get('X-Modified-Count') || '0');
       const expandedCount = parseInt(response.headers.get('X-Expanded-Count') || '0');
+      const fileSize = parseInt(response.headers.get('X-File-Size') || '0');
+      const compressedSize = response.headers.get('X-Compressed-Size');
+      let buildStatsData: any = null;
+      try { buildStatsData = JSON.parse(decodeURIComponent(response.headers.get('X-Build-Stats') || '{}')); } catch {}
       const a = document.createElement("a");
       a.href = blobUrl;
       a.download = `arabized_${langFileName}`;
       a.click();
       const expandedMsg = expandedCount > 0 ? ` (${expandedCount} تم توسيعها 📐)` : '';
       setBuildProgress(`✅ تم بنجاح! تم تعديل ${modifiedCount} نص${expandedMsg}`);
+      setBuildStats({
+        modifiedCount,
+        expandedCount,
+        fileSize,
+        compressedSize: compressedSize ? parseInt(compressedSize) : undefined,
+        avgBytePercent: buildStatsData?.avgBytePercent || 0,
+        maxBytePercent: buildStatsData?.maxBytePercent || 0,
+        longest: buildStatsData?.longest || null,
+        shortest: buildStatsData?.shortest || null,
+        categories: buildStatsData?.categories || {},
+      });
       setTimeout(() => { setBuilding(false); setBuildProgress(""); }, 3000);
     } catch (err) {
       setBuildProgress(`❌ ${err instanceof Error ? err.message : 'خطأ غير معروف'}`);
@@ -1344,7 +1372,7 @@ export function useEditorState() {
     previousTranslations, currentPage,
     showRetranslateConfirm, arabicNumerals, mirrorPunctuation,
     applyingArabic, improvingTranslations, improveResults,
-    fixingMixed, filtersOpen,
+    fixingMixed, filtersOpen, buildStats,
     categoryProgress, qualityStats, needsImproveCount, translatedCount,
     glossaryTermCount, glossaryEnabled,
     msbtFiles, filteredEntries, paginatedEntries, totalPages,
@@ -1356,7 +1384,7 @@ export function useEditorState() {
     setGlossaryEnabled,
     setCurrentPage, setShowRetranslateConfirm, setShowPreview, setPreviewKey,
     setArabicNumerals, setMirrorPunctuation,
-    setReviewResults, setShortSuggestions, setImproveResults,
+    setReviewResults, setShortSuggestions, setImproveResults, setBuildStats,
 
     // Handlers
     toggleProtection, toggleTechnicalBypass,

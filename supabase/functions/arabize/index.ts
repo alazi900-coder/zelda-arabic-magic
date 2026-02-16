@@ -816,6 +816,11 @@ Deno.serve(async (req) => {
     let skippedOversize = 0;
     let skippedAlreadyArabized = 0;
     let expandedCount = 0;
+    let totalByteRatio = 0;
+    let maxByteRatio = 0;
+    let longestEntry = { key: '', bytes: 0 };
+    let shortestEntry = { key: '', bytes: Infinity };
+    const categoryStats: Record<string, { total: number; modified: number }> = {};
 
     const processedFiles = files.map(file => {
       if (file.name.endsWith('.msbt')) {
@@ -856,6 +861,17 @@ Deno.serve(async (req) => {
                 // Check if translation is larger than original slot
                 const encoded = encodeEntryToBytes(entries[i]);
                 if (encoded.length > entries[i].size) expandedCount++;
+                // Collect detailed stats
+                const ratio = entries[i].size > 0 ? encoded.length / entries[i].size : 0;
+                totalByteRatio += ratio;
+                if (ratio > maxByteRatio) maxByteRatio = ratio;
+                if (encoded.length > longestEntry.bytes) longestEntry = { key, bytes: encoded.length };
+                if (encoded.length < shortestEntry.bytes) shortestEntry = { key, bytes: encoded.length };
+                // Category stats
+                const catParts = file.name.split('/');
+                const cat = catParts.length > 1 ? catParts[0] : 'Other';
+                if (!categoryStats[cat]) categoryStats[cat] = { total: 0, modified: 0 };
+                categoryStats[cat].modified++;
               }
               // Entries WITHOUT translations are NOT modified at all
             }
@@ -885,6 +901,17 @@ Deno.serve(async (req) => {
     });
 
     console.log(`Modified ${modifiedCount} entries (${expandedCount} expanded), skipped already-arabized: ${skippedAlreadyArabized}`);
+
+    // Build stats JSON
+    const avgRatio = modifiedCount > 0 ? Math.round((totalByteRatio / modifiedCount) * 100) : 0;
+    const buildStats = {
+      expanded: expandedCount,
+      avgBytePercent: avgRatio,
+      maxBytePercent: Math.round(maxByteRatio * 100),
+      longest: longestEntry.key ? longestEntry : null,
+      shortest: shortestEntry.bytes < Infinity ? shortestEntry : null,
+      categories: categoryStats,
+    };
 
     const repackedData = rebuildSARC(processedFiles, sarcData);
 
@@ -933,6 +960,7 @@ Deno.serve(async (req) => {
         'X-Compressed-Size': isCompressed ? String(outputData.length) : '',
         'X-Is-Compressed': String(isCompressed),
         'X-Entries-Preview': encodeURIComponent(JSON.stringify(entriesPreview)),
+        'X-Build-Stats': encodeURIComponent(JSON.stringify(buildStats)),
       },
     });
   } catch (error) {
