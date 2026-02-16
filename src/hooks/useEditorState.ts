@@ -1061,16 +1061,29 @@ export function useEditorState() {
     } catch { alert('خطأ في تحميل قاموس العناصر'); }
   };
 
+  const handleLoadMaterialsGlossary = async () => {
+    try {
+      const response = await fetch('/zelda-materials-glossary.txt');
+      if (!response.ok) throw new Error('فشل تحميل القاموس');
+      const text = await response.text();
+      const newCount = text.split('\n').filter(l => l.includes('=')).length;
+      setState(prev => prev ? mergeGlossaryText(prev, text) : null);
+      setLastSaved(`📖 تم دمج قاموس المواد والأسلحة (${newCount} مصطلح)`);
+      setTimeout(() => setLastSaved(""), 3000);
+    } catch { alert('خطأ في تحميل قاموس المواد والأسلحة'); }
+  };
+
   const handleLoadAllGlossaries = async () => {
     try {
-      const [r1, r2, r3] = await Promise.all([
+      const [r1, r2, r3, r4] = await Promise.all([
         fetch('/zelda-glossary.txt'),
         fetch('/zelda-totk-glossary.txt'),
         fetch('/zelda-totk-items-glossary.txt'),
+        fetch('/zelda-materials-glossary.txt'),
       ]);
-      if (!r1.ok || !r2.ok || !r3.ok) throw new Error('فشل تحميل أحد القواميس');
-      const [t1, t2, t3] = await Promise.all([r1.text(), r2.text(), r3.text()]);
-      const combined = t1 + '\n' + t2 + '\n' + t3;
+      if (!r1.ok || !r2.ok || !r3.ok || !r4.ok) throw new Error('فشل تحميل أحد القواميس');
+      const [t1, t2, t3, t4] = await Promise.all([r1.text(), r2.text(), r3.text(), r4.text()]);
+      const combined = t1 + '\n' + t2 + '\n' + t3 + '\n' + t4;
       setState(prev => prev ? mergeGlossaryText(prev, combined) : null);
       const totalTerms = combined.split('\n').filter(l => l.includes('=')).length;
       setLastSaved(`📖 تم تحميل جميع القواميس (${totalTerms} مصطلح)`);
@@ -1325,7 +1338,7 @@ export function useEditorState() {
     handleSuggestShorterTranslations, handleApplyShorterTranslation, handleApplyAllShorterTranslations,
     handleFixAllStuckCharacters, handleFixMixedLanguage,
     handleExportTranslations, handleImportTranslations, handleExportCSV, handleImportCSV,
-    handleImportGlossary, handleLoadDefaultGlossary, handleLoadTOTKGlossary, handleLoadTOTKItemsGlossary, handleLoadAllGlossaries,
+    handleImportGlossary, handleLoadDefaultGlossary, handleLoadTOTKGlossary, handleLoadTOTKItemsGlossary, handleLoadMaterialsGlossary, handleLoadAllGlossaries,
     handleSaveGlossaryToCloud, handleLoadGlossaryFromCloud,
     handleImproveTranslations, handleApplyImprovement, handleApplyAllImprovements,
     handleImproveSingleTranslation,
