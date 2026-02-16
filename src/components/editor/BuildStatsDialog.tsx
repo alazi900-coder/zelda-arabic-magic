@@ -4,7 +4,7 @@ import {
 } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import { BarChart3, Maximize2, Minimize2, FileText, Layers } from "lucide-react";
-import { BuildStats } from "@/hooks/useEditorState";
+import { BuildStats } from "@/hooks/useEditorBuild";
 
 interface BuildStatsDialogProps {
   stats: BuildStats | null;
