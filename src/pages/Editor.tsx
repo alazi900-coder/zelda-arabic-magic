@@ -46,6 +46,17 @@ const Editor = () => {
   const isMobile = useIsMobile();
   const [showDiffView, setShowDiffView] = React.useState(false);
 
+  // حساب عدد النصوص غير المترجمة (يحترم الفلتر النشط)
+  const untranslatedCount = React.useMemo(() => {
+    if (!editor.state) return 0;
+    const entries = editor.isFilterActive ? editor.filteredEntries : editor.state.entries;
+    return entries.filter(e => {
+      const key = `${e.msbtFile}:${e.index}`;
+      const t = editor.state!.translations[key]?.trim();
+      return !t || t === e.original || t === e.original.trim();
+    }).length;
+  }, [editor.state, editor.filteredEntries, editor.isFilterActive]);
+
   if (!editor.state) {
     return (
       <div className="min-h-screen py-8 px-4">
@@ -328,7 +339,7 @@ const Editor = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="bg-card border-border z-50">
                   <DropdownMenuItem onClick={editor.handleExportTranslations}><Download className="w-4 h-4" /> تصدير JSON{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
-                  <DropdownMenuItem onClick={editor.handleExportEnglishOnly}><FileText className="w-4 h-4" /> تصدير الإنجليزية فقط ({editor.state.entries.length - editor.translatedCount}) 🇬🇧</DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleExportEnglishOnly}><FileText className="w-4 h-4" /> تصدير الإنجليزية فقط ({untranslatedCount}) 🇬🇧{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleImportTranslations}><Upload className="w-4 h-4" /> استيراد JSON{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={editor.handleExportCSV}><FileDown className="w-4 h-4" /> تصدير CSV{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
@@ -378,7 +389,7 @@ const Editor = () => {
           ) : (
             <div className="mb-6 flex gap-3 flex-wrap">
               <Button variant="outline" onClick={editor.handleExportTranslations} className="font-body"><Download className="w-4 h-4" /> تصدير JSON{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</Button>
-              <Button variant="outline" onClick={editor.handleExportEnglishOnly} className="font-body"><FileText className="w-4 h-4" /> تصدير الإنجليزية فقط ({editor.state.entries.length - editor.translatedCount}) 🇬🇧</Button>
+              <Button variant="outline" onClick={editor.handleExportEnglishOnly} className="font-body"><FileText className="w-4 h-4" /> تصدير الإنجليزية فقط ({untranslatedCount}) 🇬🇧{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</Button>
               <Button variant="outline" onClick={editor.handleImportTranslations} className="font-body"><Upload className="w-4 h-4" /> استيراد JSON{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</Button>
               <Button variant="outline" onClick={editor.handleExportCSV} className="font-body"><FileDown className="w-4 h-4" /> تصدير CSV{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</Button>
               <Button variant="outline" onClick={editor.handleImportCSV} className="font-body"><Upload className="w-4 h-4" /> استيراد CSV{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</Button>
