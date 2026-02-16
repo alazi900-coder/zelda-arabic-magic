@@ -1,86 +1,72 @@
 
 
-# اضافة تصدير/استيراد حسب الفلتر + اصلاح انعكاس النصوص
+# إصلاح مشكلة البناء + تشخيص تفصيلي
 
-## ملخص
-سيتم تنفيذ التغييرين معاً في نفس الوقت:
-1. **اصلاح مشكلة الانعكاس** - منع الحماية التلقائية للنصوص الخارجة من بناء سابق
-2. **تصدير/استيراد مفلتر** - عند وجود فلتر نشط، التصدير والاستيراد يعملان فقط على النصوص المفلترة
+## المشاكل المكتشفة
 
-## كيف يحل مشكلتك
-- الاصلاح يمنع تكرار المشكلة مستقبلاً
-- التصدير/الاستيراد المفلتر يتيح لك اصلاح النصوص المعكوسة الحالية: تصدّر ترجمات "القوائم" من مشروع سليم، ثم تستوردها في المشروع الحالي وهي تُطبّق فقط على القوائم
+### 1. إحصائيات البناء تظهر 0 دائماً (خلل مؤكد)
+الخادم يرسل رؤوس HTTP مخصصة (`X-Modified-Count`, `X-Build-Stats`) لكن بدون `Access-Control-Expose-Headers`, المتصفح يحظر الوصول لها. لذلك `response.headers.get('X-Modified-Count')` يعيد `null` دائماً → يظهر 0.
 
----
+هذا يعني أنك لم تكن تعرف العدد الحقيقي للنصوص المعدلة في أي بناء سابق.
 
-## التفاصيل التقنية
+### 2. الترجمات الجديدة لا تظهر في البناء (يحتاج تشخيص)
+عند رفع ملف مبني سابقاً وإضافة ترجمات جديدة ثم البناء، الجديدة لا تظهر. السبب المحتمل: مشكلة في مطابقة المفاتيح أو في حالة الترجمات.
 
-### 1. اصلاح الحماية التلقائية - `useEditorState.ts` (سطر 179-188)
+## الحل
 
-اضافة شرط `hasArabicPresentationForms` لتخطي حماية النصوص من بناء سابق:
+### الخطوة 1: إصلاح رؤوس CORS في Edge Function
+ملف: `supabase/functions/arabize/index.ts`
 
+إضافة `Access-Control-Expose-Headers` للاستجابة:
 ```text
-for (const entry of stored.entries) {
-  const key = `${entry.msbtFile}:${entry.index}`;
-  if (arabicRegex.test(entry.original)) {
-    // تخطي الحماية اذا كان الاصل من بناء سابق (يحتوي presentation forms)
-    if (hasArabicPresentationForms(entry.original)) continue;
-    const existingTranslation = mergedTranslations[key]?.trim();
-    if (existingTranslation && existingTranslation !== entry.original && existingTranslation !== entry.original.trim()) {
-      protectedSet.add(key);
-    }
-  }
-}
+'Access-Control-Expose-Headers': 'X-Modified-Count, X-Expanded-Count, X-File-Size, X-Compressed-Size, X-Build-Stats, X-Entries-Preview, X-Skipped-Already-Arabized, X-Is-Compressed',
+```
+هذا يصلح عرض الإحصائيات فوراً.
+
+### الخطوة 2: إضافة تسجيل تشخيصي في البناء
+ملف: `src/hooks/useEditorBuild.ts`
+
+قبل إرسال FormData, إضافة console.log تفصيلي:
+```text
+console.log('[BUILD] Total translations:', Object.keys(nonEmptyTranslations).length);
+console.log('[BUILD] Protected entries:', Array.from(state.protectedEntries || []).length);
+console.log('[BUILD] Sample keys:', Object.keys(nonEmptyTranslations).slice(0, 10));
 ```
 
-`hasArabicPresentationForms` مستوردة بالفعل في الملف (سطر 3).
+### الخطوة 3: إضافة نافذة تأكيد قبل البناء
+ملف جديد: `src/components/editor/BuildConfirmDialog.tsx`
+ملف: `src/pages/Editor.tsx`
 
-### 2. تعديل `useEditorFileIO.ts` - اضافة دعم الفلتر
+نافذة تظهر قبل البناء تعرض:
+- عدد الترجمات الإجمالي التي ستُرسل
+- توزيعها حسب الفئة (واجهة: X, إعدادات: Y, حوارات: Z)
+- عدد المحمية
+- زر "بناء" و"إلغاء"
 
-**تغيير الواجهة (Interface):**
-```text
-interface UseEditorFileIOProps {
-  state: EditorState | null;
-  setState: ...;
-  setLastSaved: ...;
-  filteredEntries: ExtractedEntry[];  // جديد
-  filterLabel: string;               // جديد - اسم الفلتر النشط
-}
-```
+هذا يتيح لك التأكد أن كل ترجماتك مشمولة قبل البناء.
 
-**تصدير JSON مفلتر (`handleExportTranslations`):**
-- اذا `filteredEntries` اقل من كل الـ entries (يعني فلتر نشط)، يصدّر فقط مفاتيح النصوص المفلترة
-- اسم الملف يتضمن اسم الفلتر: `translations_menus_2026-02-16.json`
+### الخطوة 4: إضافة تسجيل على الخادم
+ملف: `supabase/functions/arabize/index.ts`
 
-**استيراد JSON مفلتر (`handleImportTranslations`):**
-- اذا فلتر نشط، يطبّق فقط الترجمات التي مفاتيحها تنتمي للنصوص المفلترة
-
-**تصدير CSV مفلتر (`handleExportCSV`):**
-- يستخدم `filteredEntries` بدل `state.entries` عند وجود فلتر
-
-**استيراد CSV مفلتر (`handleImportCSV`):**
-- نفس منطق JSON - يفلتر التحديثات حسب المفاتيح المسموحة
-
-### 3. تعديل `useEditorState.ts` - تمرير المعاملات الجديدة
+إضافة console.log في وضع البناء لعرض:
+- عدد الترجمات المستلمة
+- عدد المفاتيح المطابقة
+- أمثلة على المفاتيح المرسلة vs المفاتيح في الملف
 
 ```text
-const fileIO = useEditorFileIO({
-  state, setState, setLastSaved,
-  filteredEntries,
-  filterLabel: filterCategory !== "all" ? filterCategory
-             : filterFile !== "all" ? filterFile
-             : "",
-});
+console.log(`[BUILD] Received ${Object.keys(translations).length} translations`);
+console.log(`[BUILD] Sample translation keys: ${Object.keys(translations).slice(0,5).join(', ')}`);
+console.log(`[BUILD] MSBT file: ${file.name}, entries: ${entries.length}`);
 ```
 
-### 4. تعديل `Editor.tsx` - تحديث نصوص الازرار
+## الملفات المعدلة
+- `supabase/functions/arabize/index.ts` - إصلاح CORS headers + تسجيل تشخيصي
+- `src/hooks/useEditorBuild.ts` - تسجيل تشخيصي + منطق التأكيد
+- `src/components/editor/BuildConfirmDialog.tsx` - ملف جديد (نافذة التأكيد)
+- `src/pages/Editor.tsx` - ربط النافذة
 
-عند وجود فلتر نشط، الازرار تعرض اسم الفلتر:
-- "تصدير JSON (القوائم)" بدل "تصدير JSON"
-- "استيراد JSON (القوائم)" بدل "استيراد JSON"
-
-### الملفات المعدلة
-- `src/hooks/useEditorState.ts` - اصلاح الحماية + تمرير filteredEntries
-- `src/hooks/useEditorFileIO.ts` - منطق الفلترة في التصدير/الاستيراد
-- `src/pages/Editor.tsx` - تحديث نصوص الازرار
+## النتيجة المتوقعة
+1. إحصائيات البناء تظهر الأعداد الصحيحة (بدلاً من 0)
+2. نافذة تأكيد تساعدك على التحقق قبل كل بناء
+3. سجلات تشخيصية تساعد في تحديد سبب عدم ظهور الترجمات الجديدة
 
