@@ -95,7 +95,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
   const handleExportEnglishOnly = () => {
     if (!state) return;
     const englishOnly: Record<string, string> = {};
-    const entriesToExport = (isFilterActive && filteredEntries.length < state.entries.length) ? filteredEntries : state.entries;
+    const entriesToExport = isFilterActive ? filteredEntries : state.entries;
 
     for (const entry of entriesToExport) {
       const key = `${entry.msbtFile}:${entry.index}`;
