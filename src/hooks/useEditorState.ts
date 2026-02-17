@@ -222,6 +222,11 @@ export function useEditorState() {
           { msbtFile: "EventFlowMsg/NPC_Dialog.msbt", index: 1, label: "Warning", original: "Be careful! The monsters in the forest are very dangerous at night.", maxBytes: 396 },
           { msbtFile: "ChallengeMsg/Shrine.msbt", index: 0, label: "Shrine_Name", original: "Trial of Power", maxBytes: 90 },
           { msbtFile: "ChallengeMsg/Shrine.msbt", index: 1, label: "Shrine_Desc", original: "Defeat all enemies within the time limit to prove your strength.", maxBytes: 378 },
+          // Demo entries with technical control characters (U+FFF9, U+FFFA, U+FFFB, PUA)
+          { msbtFile: "EventFlowMsg/Npc_Impa.msbt", index: 0, label: "Impa_Greet", original: "\uFFF9Press \uE000\uE001\uFFFA to talk to \uFFFBImpa\uFFFC", maxBytes: 300 },
+          { msbtFile: "EventFlowMsg/Npc_Impa.msbt", index: 1, label: "Impa_Quest", original: "You need \uFFF9\uE002 3 items\uFFFA to complete this quest\uFFFB.", maxBytes: 350 },
+          { msbtFile: "LayoutMsg/ButtonGuide.msbt", index: 0, label: "Btn_A", original: "\uFFF9\uE000\uFFFA Confirm", maxBytes: 100 },
+          { msbtFile: "LayoutMsg/ButtonGuide.msbt", index: 1, label: "Btn_B", original: "\uFFF9\uE001\uFFFA Cancel", maxBytes: 100 },
         ];
         const demoTranslations: Record<string, string> = {
           "ActorMsg/Link.msbt:0": "لينك",
@@ -234,6 +239,12 @@ export function useEditorState() {
           "EventFlowMsg/NPC_Dialog.msbt:1": "احذر جيداً! الوحوش الموجودة في الغابة المظلمة خطيرة للغاية خاصةً في الليل عندما يحل الظلام الدامس",
           "ChallengeMsg/Shrine.msbt:0": "تحدي القوة والشجاعة الأسطورية",
           "ChallengeMsg/Shrine.msbt:1": "اهزم جميع الأعداء والوحوش الخطيرة خلال الوقت المحدد لإثبات قوتك وشجاعتك في المعركة",
+          // Damaged translations — tags were stripped by AI
+          "EventFlowMsg/Npc_Impa.msbt:0": "اضغط للتحدث مع إمبا",
+          "EventFlowMsg/Npc_Impa.msbt:1": "تحتاج 3 عناصر لإكمال هذه المهمة.",
+          // Intact translations — tags preserved
+          "LayoutMsg/ButtonGuide.msbt:0": "\uFFF9\uE000\uFFFA تأكيد",
+          "LayoutMsg/ButtonGuide.msbt:1": "\uFFF9\uE001\uFFFA إلغاء",
         };
         setState({
           entries: demoEntries,
