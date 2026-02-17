@@ -172,7 +172,10 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       const file = (e.target as HTMLInputElement).files?.[0];
       if (!file) return;
       try {
-        const text = await file.text();
+        let text = (await file.text()).trim();
+        // إصلاح تلقائي للأقواس الناقصة
+        if (!text.startsWith('{')) text = '{' + text;
+        if (!text.endsWith('}')) text = text + '}';
         const imported = JSON.parse(text) as Record<string, string>;
         let cleanedImported: Record<string, string> = {};
 
