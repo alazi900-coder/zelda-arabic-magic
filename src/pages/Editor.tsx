@@ -18,7 +18,7 @@ import {
   ArrowRight, Download, FileText, Loader2, Filter, Sparkles, Save, Tag,
   Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle,
   Eye, EyeOff, RotateCcw, CheckCircle2, ShieldCheck, ChevronLeft, ChevronRight,
-  BarChart3, Menu, MoreVertical, Replace, Columns,
+  BarChart3, Menu, MoreVertical, Replace, Columns, Key,
 } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -483,7 +483,7 @@ const Editor = () => {
 
           {/* Build Options */}
           <Card className="mb-4 border-border">
-            <CardContent className="p-4">
+            <CardContent className="p-4 space-y-3">
               <h3 className="font-display font-bold mb-3 text-sm">⚙️ خيارات البناء</h3>
               <div className="flex flex-wrap gap-4">
                 <label className="flex items-center gap-2 cursor-pointer text-sm font-body">
@@ -494,6 +494,37 @@ const Editor = () => {
                   <input type="checkbox" checked={editor.mirrorPunctuation} onChange={(e) => editor.setMirrorPunctuation(e.target.checked)} className="rounded border-border" />
                   عكس علامات الترقيم (؟ ، ؛)
                 </label>
+              </div>
+              <div className="border-t border-border pt-3">
+                <div className="flex items-center gap-2 mb-2">
+                  <Key className="w-4 h-4 text-primary" />
+                  <span className="text-sm font-display font-bold">🔑 مفتاح Gemini API (مجاني)</span>
+                </div>
+                <p className="text-xs text-muted-foreground mb-2 font-body">
+                  احصل على مفتاح مجاني من{' '}
+                  <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80">
+                    Google AI Studio
+                  </a>
+                  {' '}للترجمة بدون حدود
+                </p>
+                <div className="flex gap-2">
+                  <input
+                    type="password"
+                    placeholder="الصق مفتاح API هنا..."
+                    value={editor.userGeminiKey}
+                    onChange={(e) => editor.setUserGeminiKey(e.target.value)}
+                    className="flex-1 px-3 py-2 rounded bg-background border border-border font-body text-sm"
+                    dir="ltr"
+                  />
+                  {editor.userGeminiKey && (
+                    <Button variant="ghost" size="sm" onClick={() => editor.setUserGeminiKey('')} className="text-xs text-destructive">
+                      مسح
+                    </Button>
+                  )}
+                </div>
+                {editor.userGeminiKey && (
+                  <p className="text-xs text-secondary mt-1 font-body">✅ سيتم استخدام مفتاحك الشخصي للترجمة</p>
+                )}
               </div>
             </CardContent>
           </Card>
