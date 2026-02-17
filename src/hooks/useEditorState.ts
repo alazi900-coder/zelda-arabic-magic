@@ -45,7 +45,14 @@ export function useEditorState() {
   const [fixingMixed, setFixingMixed] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [showFindReplace, setShowFindReplace] = useState(false);
-  
+  const [userGeminiKey, _setUserGeminiKey] = useState(() => {
+    try { return localStorage.getItem('userGeminiKey') || ''; } catch { return ''; }
+  });
+  const setUserGeminiKey = useCallback((key: string) => {
+    _setUserGeminiKey(key);
+    try { if (key) localStorage.setItem('userGeminiKey', key); else localStorage.removeItem('userGeminiKey'); } catch {}
+  }, []);
+
 
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const { user } = useAuth();
@@ -333,7 +340,7 @@ export function useEditorState() {
 
   const translation = useEditorTranslation({
     state, setState, setLastSaved, setTranslateProgress, setPreviousTranslations, updateTranslation,
-    filterCategory, activeGlossary, parseGlossaryMap, paginatedEntries,
+    filterCategory, activeGlossary, parseGlossaryMap, paginatedEntries, userGeminiKey,
   });
   const { translating, translatingSingle, tmStats, handleTranslateSingle, handleAutoTranslate, handleStopTranslate, handleRetranslatePage } = translation;
 
@@ -581,7 +588,7 @@ export function useEditorState() {
 
   return {
     // State
-    state, search, filterFile, filterCategory, filterStatus, filterTechnical, showFindReplace,
+    state, search, filterFile, filterCategory, filterStatus, filterTechnical, showFindReplace, userGeminiKey,
     building, buildProgress, translating, translateProgress,
     lastSaved, cloudSyncing, cloudStatus,
     technicalEditingMode, showPreview, previewKey,
@@ -602,7 +609,7 @@ export function useEditorState() {
     setSearch, setFilterFile, setFilterCategory, setFilterStatus, setFilterTechnical,
     setFiltersOpen, setShowQualityStats, setQuickReviewMode, setQuickReviewIndex, setShowFindReplace,
     setCurrentPage, setShowRetranslateConfirm, setShowPreview, setPreviewKey,
-    setArabicNumerals, setMirrorPunctuation,
+    setArabicNumerals, setMirrorPunctuation, setUserGeminiKey,
     setReviewResults, setShortSuggestions, setImproveResults, setBuildStats, setShowBuildConfirm,
 
     // Handlers

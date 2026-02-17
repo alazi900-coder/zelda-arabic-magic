@@ -31,10 +31,11 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { entries, glossary, context } = await req.json() as {
+    const { entries, glossary, context, userApiKey } = await req.json() as {
       entries: { key: string; original: string }[];
       glossary?: string;
       context?: { key: string; original: string; translation?: string }[];
+      userApiKey?: string;
     };
 
     if (!entries || entries.length === 0) {
@@ -94,54 +95,109 @@ CRITICAL RULES:
 Texts:
 ${textsBlock}`;
 
-    const apiKey = Deno.env.get('LOVABLE_API_KEY');
-    if (!apiKey) throw new Error('Missing LOVABLE_API_KEY');
+    let data: any;
 
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
-        messages: [
-          { role: 'system', content: 'You are a game text translator. Output only valid JSON arrays.' },
-          { role: 'user', content: prompt },
-        ],
-        temperature: 0.3,
-      }),
-    });
+    if (userApiKey && userApiKey.trim()) {
+      // Use user's own Gemini API key directly
+      const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${userApiKey.trim()}`;
+      
+      const geminiResponse = await fetch(geminiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [
+            { role: 'user', parts: [{ text: prompt }] }
+          ],
+          systemInstruction: {
+            parts: [{ text: 'You are a game text translator. Output only valid JSON arrays.' }]
+          },
+          generationConfig: {
+            temperature: 0.3,
+          },
+        }),
+      });
 
-    if (!response.ok) {
-      const err = await response.text();
-      console.error('AI gateway error:', err);
-      throw new Error(`AI error: ${response.status}`);
-    }
-
-    const data = await response.json();
-    const content = data.choices?.[0]?.message?.content || '';
-
-    // Extract JSON array from response
-    const jsonMatch = content.match(/\[[\s\S]*\]/);
-    if (!jsonMatch) throw new Error('Failed to parse AI response');
-
-    // Replace ALL control characters with spaces (safe for both JSON whitespace and string values)
-    const sanitized = jsonMatch[0].replace(/[\x00-\x1F\x7F]/g, ' ');
-
-    const translations: string[] = JSON.parse(sanitized);
-
-    // Map back to keys and restore protected tags
-    const result: Record<string, string> = {};
-    for (let i = 0; i < Math.min(protectedEntries.length, translations.length); i++) {
-      if (translations[i] && translations[i].trim()) {
-        result[protectedEntries[i].key] = restoreTags(translations[i], protectedEntries[i].tags);
+      if (!geminiResponse.ok) {
+        const errText = await geminiResponse.text();
+        console.error('Gemini API error:', errText);
+        if (geminiResponse.status === 400 || geminiResponse.status === 403) {
+          throw new Error('مفتاح API غير صالح أو منتهي الصلاحية');
+        }
+        if (geminiResponse.status === 429) {
+          throw new Error('تم تجاوز حد الطلبات، حاول لاحقاً');
+        }
+        throw new Error(`خطأ Gemini: ${geminiResponse.status}`);
       }
-    }
 
-    return new Response(JSON.stringify({ translations: result }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+      const geminiData = await geminiResponse.json();
+      const content = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      
+      // Extract JSON array from response
+      const jsonMatch = content.match(/\[[\s\S]*\]/);
+      if (!jsonMatch) throw new Error('فشل في تحليل استجابة Gemini');
+      
+      const sanitized = jsonMatch[0].replace(/[\x00-\x1F\x7F]/g, ' ');
+      const translations: string[] = JSON.parse(sanitized);
+      
+      const result: Record<string, string> = {};
+      for (let i = 0; i < Math.min(protectedEntries.length, translations.length); i++) {
+        if (translations[i] && translations[i].trim()) {
+          result[protectedEntries[i].key] = restoreTags(translations[i], protectedEntries[i].tags);
+        }
+      }
+      
+      return new Response(JSON.stringify({ translations: result }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    } else {
+      // Use Lovable AI gateway (default)
+      const apiKey = Deno.env.get('LOVABLE_API_KEY');
+      if (!apiKey) throw new Error('Missing LOVABLE_API_KEY');
+
+      const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'google/gemini-2.5-flash',
+          messages: [
+            { role: 'system', content: 'You are a game text translator. Output only valid JSON arrays.' },
+            { role: 'user', content: prompt },
+          ],
+          temperature: 0.3,
+        }),
+      });
+
+      if (!response.ok) {
+        const err = await response.text();
+        console.error('AI gateway error:', err);
+        if (response.status === 402) throw new Error('انتهت نقاط الذكاء الاصطناعي — استخدم مفتاح Gemini الشخصي');
+        if (response.status === 429) throw new Error('تم تجاوز حد الطلبات، حاول لاحقاً');
+        throw new Error(`AI error: ${response.status}`);
+      }
+
+      data = await response.json();
+      const content = data.choices?.[0]?.message?.content || '';
+
+      const jsonMatch = content.match(/\[[\s\S]*\]/);
+      if (!jsonMatch) throw new Error('Failed to parse AI response');
+
+      const sanitized = jsonMatch[0].replace(/[\x00-\x1F\x7F]/g, ' ');
+      const translations: string[] = JSON.parse(sanitized);
+
+      const result: Record<string, string> = {};
+      for (let i = 0; i < Math.min(protectedEntries.length, translations.length); i++) {
+        if (translations[i] && translations[i].trim()) {
+          result[protectedEntries[i].key] = restoreTags(translations[i], protectedEntries[i].tags);
+        }
+      }
+
+      return new Response(JSON.stringify({ translations: result }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
   } catch (error) {
     console.error('Error:', error);
     return new Response(
