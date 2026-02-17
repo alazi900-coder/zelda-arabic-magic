@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { toast } from "@/hooks/use-toast";
 import {
   ExtractedEntry, EditorState, AI_BATCH_SIZE,
   categorizeFile, isTechnicalText,
@@ -316,10 +317,13 @@ export function useEditorTranslation({
         }
       }
       setTranslateProgress(`✅ تم إصلاح ${fixedCount} نص تالف بنجاح`);
+      toast({ title: "✅ تم الإصلاح", description: `تم إصلاح ${fixedCount} نص تالف وإعادة ترجمته بنجاح` });
       setTimeout(() => setTranslateProgress(""), 5000);
     } catch (err) {
       if ((err as Error).name !== 'AbortError') {
-        setTranslateProgress(`❌ خطأ: ${err instanceof Error ? err.message : 'غير معروف'}`);
+        const msg = err instanceof Error ? err.message : 'غير معروف';
+        setTranslateProgress(`❌ خطأ: ${msg}`);
+        toast({ title: "❌ فشل الإصلاح", description: msg, variant: "destructive" });
         setTimeout(() => setTranslateProgress(""), 4000);
       }
     } finally { setTranslating(false); }
