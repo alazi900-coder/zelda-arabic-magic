@@ -37,15 +37,15 @@ function repairSingleChunk(raw: string): Record<string, string> | null {
 }
 
 /** إصلاح تلقائي لملفات JSON التالفة أو المقطوعة — يدعم كائنات متعددة متتالية */
-function repairJson(raw: string): { text: string; wasTruncated: boolean; skippedCount: number } {
+function repairJson(raw: string): { parsed: Record<string, string>; wasTruncated: boolean; skippedCount: number } {
   let text = raw.trim();
   // إزالة أغلفة markdown
   text = text.replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
 
   // محاولة أولى مباشرة
   try {
-    JSON.parse(text);
-    return { text, wasTruncated: false, skippedCount: 0 };
+    const result = JSON.parse(text);
+    return { parsed: result, wasTruncated: false, skippedCount: 0 };
   } catch {}
 
   // تقسيم عند }{ وتحليل كل جزء على حدة
@@ -55,7 +55,6 @@ function repairJson(raw: string): { text: string; wasTruncated: boolean; skipped
     let failedChunks = 0;
     for (let i = 0; i < chunks.length; i++) {
       let chunk = chunks[i].trim();
-      // أضف الأقواس المحذوفة بسبب التقسيم
       if (i > 0) chunk = '{' + chunk;
       if (i < chunks.length - 1) chunk = chunk + '}';
       const parsed = repairSingleChunk(chunk);
@@ -66,15 +65,14 @@ function repairJson(raw: string): { text: string; wasTruncated: boolean; skipped
       }
     }
     if (Object.keys(merged).length > 0) {
-      const result = JSON.stringify(merged);
-      return { text: result, wasTruncated: failedChunks > 0, skippedCount: failedChunks };
+      return { parsed: merged, wasTruncated: failedChunks > 0, skippedCount: failedChunks };
     }
   }
 
   // محاولة إصلاح ككائن واحد
   const single = repairSingleChunk(text);
   if (single) {
-    return { text: JSON.stringify(single), wasTruncated: false, skippedCount: 0 };
+    return { parsed: single, wasTruncated: false, skippedCount: 0 };
   }
 
   // آخر محاولة: استخراج المدخلات يدوياً بالـ regex
@@ -85,7 +83,7 @@ function repairJson(raw: string): { text: string; wasTruncated: boolean; skipped
     manual[m[1]] = m[2];
   }
   if (Object.keys(manual).length > 0) {
-    return { text: JSON.stringify(manual), wasTruncated: true, skippedCount: 0 };
+    return { parsed: manual, wasTruncated: true, skippedCount: 0 };
   }
 
   throw new Error('تعذر إصلاح ملف JSON');
@@ -293,7 +291,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
   /** Core logic: process raw JSON text into translations */
   const processJsonImport = useCallback(async (rawText: string, sourceName?: string) => {
     const repaired = repairJson(rawText);
-    const imported = JSON.parse(repaired.text) as Record<string, string>;
+    const imported = repaired.parsed;
     let cleanedImported: Record<string, string> = {};
 
     if (isFilterActive && filteredEntries.length < (state?.entries.length || 0)) {
