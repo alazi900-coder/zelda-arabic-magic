@@ -105,6 +105,65 @@ export function hasTechnicalTags(text: string): boolean {
   return /[\uFFF9\uFFFA\uFFFB\uFFFC\uE000-\uF8FF]/.test(text);
 }
 
+// Locally restore missing control characters from original into translation
+// without using AI — just copies the tag sequences back at proportional positions
+export function restoreTagsLocally(original: string, translation: string): string {
+  const tagRegex = /[\uFFF9-\uFFFC\uE000-\uF8FF]+/g;
+  
+  // Extract tag sequences with their positions from original
+  const origTags: { match: string; relPos: number }[] = [];
+  let m: RegExpExecArray | null;
+  while ((m = tagRegex.exec(original)) !== null) {
+    origTags.push({ match: m[0], relPos: m.index / Math.max(original.length, 1) });
+  }
+  if (origTags.length === 0) return translation;
+  
+  // Extract existing tags from translation
+  const transTagRegex = /[\uFFF9-\uFFFC\uE000-\uF8FF]+/g;
+  const existingTransTags: string[] = [];
+  let tm: RegExpExecArray | null;
+  while ((tm = transTagRegex.exec(translation)) !== null) {
+    existingTransTags.push(tm[0]);
+  }
+  
+  // Find missing tags (compare counts)
+  const origTagStrings = origTags.map(t => t.match);
+  const missingTags: { match: string; relPos: number }[] = [];
+  const usedTransTags = [...existingTransTags];
+  
+  for (const tag of origTags) {
+    const idx = usedTransTags.indexOf(tag.match);
+    if (idx !== -1) {
+      usedTransTags.splice(idx, 1); // already exists
+    } else {
+      missingTags.push(tag);
+    }
+  }
+  
+  if (missingTags.length === 0) return translation;
+  
+  // Strip existing tags from translation to get clean text
+  const cleanTranslation = translation.replace(/[\uFFF9-\uFFFC\uE000-\uF8FF]+/g, '');
+  
+  // Build result: insert all tags (existing + missing) at proportional positions
+  // Re-insert ALL original tags at proportional positions in the clean translation
+  const allTags = origTags.map(t => ({
+    match: t.match,
+    insertAt: Math.round(t.relPos * cleanTranslation.length),
+  }));
+  
+  // Sort by position descending to insert from end (avoids shifting)
+  allTags.sort((a, b) => b.insertAt - a.insertAt);
+  
+  let result = cleanTranslation;
+  for (const tag of allTags) {
+    const pos = Math.min(tag.insertAt, result.length);
+    result = result.slice(0, pos) + tag.match + result.slice(pos);
+  }
+  
+  return result;
+}
+
 // Sanitize original text: replace binary tag markers with color-coded, tooltipped badges
 export function displayOriginal(text: string): React.ReactNode {
   const regex = /([\uFFF9\uFFFA\uFFFB\uFFFC\uE000-\uF8FF\u0000-\u0008\u000E-\u001F]+)/g;
