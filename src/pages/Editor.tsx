@@ -218,6 +218,7 @@ const Editor = () => {
             onFilterDamagedTags={() => editor.setFilterStatus(editor.filterStatus === "damaged-tags" ? "all" : "damaged-tags")}
             isDamagedTagsActive={editor.filterStatus === "damaged-tags"}
             onFixDamagedTags={() => editor.handleFixDamagedTags(editor.qualityStats.damagedTagKeys)}
+            onLocalFixDamagedTags={() => editor.handleLocalFixAllDamagedTags(editor.qualityStats.damagedTagKeys)}
             isFixing={editor.translating}
           />
 
@@ -629,6 +630,7 @@ const Editor = () => {
                     handleImproveSingleTranslation={editor.handleImproveSingleTranslation}
                     handleUndoTranslation={editor.handleUndoTranslation}
                     handleFixReversed={editor.handleFixReversed}
+                    handleLocalFixDamagedTag={editor.handleLocalFixDamagedTag}
                   />
                 );
               })

@@ -1,7 +1,7 @@
 import React from "react";
 import { Progress } from "@/components/ui/progress";
 import { FILE_CATEGORIES, categorizeFile } from "./types";
-import { AlertTriangle, Wrench, Loader2 } from "lucide-react";
+import { AlertTriangle, Wrench, Loader2, Sparkles } from "lucide-react";
 
 interface CategoryProgressProps {
   categoryProgress: Record<string, { total: number; translated: number }>;
@@ -12,9 +12,10 @@ interface CategoryProgressProps {
   isDamagedTagsActive?: boolean;
   onFixDamagedTags?: () => void;
   isFixing?: boolean;
+  onLocalFixDamagedTags?: () => void;
 }
 
-const CategoryProgress: React.FC<CategoryProgressProps> = ({ categoryProgress, filterCategory, setFilterCategory, damagedTagsCount = 0, onFilterDamagedTags, isDamagedTagsActive, onFixDamagedTags, isFixing }) => {
+const CategoryProgress: React.FC<CategoryProgressProps> = ({ categoryProgress, filterCategory, setFilterCategory, damagedTagsCount = 0, onFilterDamagedTags, isDamagedTagsActive, onFixDamagedTags, isFixing, onLocalFixDamagedTags }) => {
   const activeCats = FILE_CATEGORIES.filter(cat => categoryProgress[cat.id]);
   if (activeCats.length === 0 && !categoryProgress['other']) return null;
 
@@ -37,12 +38,19 @@ const CategoryProgress: React.FC<CategoryProgressProps> = ({ categoryProgress, f
             <p className="font-display font-bold truncate text-destructive">رموز تالفة ⚠️</p>
           </button>
           <button
+            onClick={(e) => { e.stopPropagation(); onLocalFixDamagedTags?.(); }}
+            className="mt-1.5 w-full flex items-center justify-center gap-1 px-2 py-1 rounded bg-destructive/20 hover:bg-destructive/30 text-destructive font-bold text-[11px] transition-colors"
+          >
+            <Wrench className="w-3 h-3" />
+            🔧 إصلاح محلي (بدون AI)
+          </button>
+          <button
             onClick={(e) => { e.stopPropagation(); onFixDamagedTags?.(); }}
             disabled={isFixing}
-            className="mt-1.5 w-full flex items-center justify-center gap-1 px-2 py-1 rounded bg-destructive/20 hover:bg-destructive/30 text-destructive font-bold text-[11px] transition-colors disabled:opacity-50"
+            className="mt-1 w-full flex items-center justify-center gap-1 px-2 py-1 rounded bg-muted hover:bg-muted/80 text-muted-foreground text-[10px] transition-colors disabled:opacity-50"
           >
-            {isFixing ? <Loader2 className="w-3 h-3 animate-spin" /> : <Wrench className="w-3 h-3" />}
-            {isFixing ? 'جارٍ الإصلاح...' : '🔧 إصلاح تلقائي'}
+            {isFixing ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
+            {isFixing ? 'جارٍ الإصلاح...' : 'إعادة ترجمة بالـ AI'}
           </button>
         </div>
       )}

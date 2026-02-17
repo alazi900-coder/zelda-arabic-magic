@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { toast } from "@/hooks/use-toast";
 import { idbSet, idbGet } from "@/lib/idb-storage";
 import { processArabicText, hasArabicChars as hasArabicCharsProcessing, hasArabicPresentationForms, removeArabicPresentationForms } from "@/lib/arabic-processing";
 import { useAuth } from "@/contexts/AuthContext";
@@ -13,6 +14,7 @@ import {
   ExtractedEntry, EditorState, AUTOSAVE_DELAY, AI_BATCH_SIZE, PAGE_SIZE,
   categorizeFile, hasArabicChars, unReverseBidi, isTechnicalText, hasTechnicalTags,
   ReviewIssue, ReviewSummary, ReviewResults, ShortSuggestion, ImproveResult,
+  restoreTagsLocally,
 } from "@/components/editor/types";
 export function useEditorState() {
   const [state, setState] = useState<EditorState | null>(null);
@@ -351,6 +353,47 @@ export function useEditorState() {
   });
   const { translating, translatingSingle, tmStats, handleTranslateSingle, handleAutoTranslate, handleStopTranslate, handleRetranslatePage, handleFixDamagedTags } = translation;
 
+  // === Local (offline) fix for damaged tags — no AI needed ===
+  const handleLocalFixDamagedTag = useCallback((entry: ExtractedEntry) => {
+    if (!state) return;
+    const key = `${entry.msbtFile}:${entry.index}`;
+    const translation = state.translations[key] || '';
+    if (!translation.trim()) return;
+    const fixed = restoreTagsLocally(entry.original, translation);
+    if (fixed !== translation) {
+      setPreviousTranslations(old => ({ ...old, [key]: translation }));
+      setState(prev => prev ? { ...prev, translations: { ...prev.translations, [key]: fixed } } : null);
+    }
+  }, [state, setState, setPreviousTranslations]);
+
+  const handleLocalFixAllDamagedTags = useCallback((damagedTagKeys: Set<string>) => {
+    if (!state || damagedTagKeys.size === 0) return;
+    const updates: Record<string, string> = {};
+    const prevTrans: Record<string, string> = {};
+    for (const entry of state.entries) {
+      const key = `${entry.msbtFile}:${entry.index}`;
+      if (!damagedTagKeys.has(key)) continue;
+      const translation = state.translations[key] || '';
+      if (!translation.trim()) continue;
+      const fixed = restoreTagsLocally(entry.original, translation);
+      if (fixed !== translation) {
+        prevTrans[key] = translation;
+        updates[key] = fixed;
+      }
+    }
+    const fixedCount = Object.keys(updates).length;
+    if (fixedCount === 0) {
+      setLastSaved("لا توجد رموز تالفة يمكن إصلاحها محلياً");
+      setTimeout(() => setLastSaved(""), 3000);
+      return;
+    }
+    setPreviousTranslations(old => ({ ...old, ...prevTrans }));
+    setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...updates } } : null);
+    toast({ title: "✅ تم الإصلاح المحلي", description: `تم استعادة الرموز في ${fixedCount} نص بدون ذكاء اصطناعي` });
+    setLastSaved(`✅ تم إصلاح ${fixedCount} نص محلياً`);
+    setTimeout(() => setLastSaved(""), 4000);
+  }, [state, setState, setPreviousTranslations, setLastSaved]);
+
   // === Review handlers ===
   const handleReviewTranslations = async () => {
     if (!state) return;
@@ -624,7 +667,7 @@ export function useEditorState() {
     handleProtectAllArabic, handleFixReversed, handleFixAllReversed,
     updateTranslation, handleUndoTranslation,
     handleTranslateSingle, handleAutoTranslate, handleStopTranslate,
-    handleRetranslatePage, handleFixDamagedTags, handleReviewTranslations,
+    handleRetranslatePage, handleFixDamagedTags, handleLocalFixDamagedTag, handleLocalFixAllDamagedTags, handleReviewTranslations,
     handleSuggestShorterTranslations, handleApplyShorterTranslation, handleApplyAllShorterTranslations,
     handleFixAllStuckCharacters, handleFixMixedLanguage,
     ...fileIO,

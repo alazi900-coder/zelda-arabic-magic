@@ -26,6 +26,7 @@ interface EntryCardProps {
   handleImproveSingleTranslation: (entry: ExtractedEntry) => void;
   handleUndoTranslation: (key: string) => void;
   handleFixReversed: (entry: ExtractedEntry) => void;
+  handleLocalFixDamagedTag?: (entry: ExtractedEntry) => void;
 }
 
 function findGlossaryMatches(original: string, glossary?: string): { term: string; translation: string }[] {
@@ -56,7 +57,7 @@ const EntryCard: React.FC<EntryCardProps> = ({
   translatingSingle, improvingTranslations, previousTranslations, glossary,
   isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage,
   updateTranslation, handleTranslateSingle, handleImproveSingleTranslation,
-  handleUndoTranslation, handleFixReversed,
+  handleUndoTranslation, handleFixReversed, handleLocalFixDamagedTag,
 }) => {
   const key = `${entry.msbtFile}:${entry.index}`;
   const isTech = isTechnicalText(entry.original);
@@ -132,9 +133,14 @@ const EntryCard: React.FC<EntryCardProps> = ({
               <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => handleImproveSingleTranslation(entry)} disabled={improvingTranslations || !translation?.trim()} title="تحسين هذه الترجمة">
                 {improvingTranslations ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4 text-secondary" />}
               </Button>
+              {isDamagedTag && handleLocalFixDamagedTag && (
+                <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => handleLocalFixDamagedTag(entry)} title="🔧 إصلاح الرموز محلياً (بدون AI)">
+                  <Wrench className="w-4 h-4 text-destructive" />
+                </Button>
+              )}
               {isDamagedTag && (
-                <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => handleTranslateSingle(entry)} disabled={translatingSingle === key} title="🔧 إصلاح الرموز التالفة">
-                  {translatingSingle === key ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wrench className="w-4 h-4 text-destructive" />}
+                <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => handleTranslateSingle(entry)} disabled={translatingSingle === key} title="🤖 إعادة ترجمة بالـ AI">
+                  {translatingSingle === key ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4 text-destructive" />}
                 </Button>
               )}
               {previousTranslations[key] !== undefined && (
