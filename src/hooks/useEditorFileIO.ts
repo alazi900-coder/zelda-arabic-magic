@@ -156,77 +156,115 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     setTimeout(() => setLastSaved(""), 3000);
   };
 
-  const handleExportEnglishOnly = () => {
-    if (!state) return;
+  /** Build the list of untranslated entries grouped by file */
+  const getUntranslatedGrouped = () => {
+    if (!state) return { groupedByFile: {} as Record<string, { index: number; original: string; label: string }[]>, totalCount: 0 };
     const entriesToExport = isFilterActive ? filteredEntries : state.entries;
-
-    // جمع النصوص غير المترجمة مجمّعة حسب الملف
     const groupedByFile: Record<string, { index: number; original: string; label: string }[]> = {};
     for (const entry of entriesToExport) {
       const key = `${entry.msbtFile}:${entry.index}`;
       const translation = state.translations[key]?.trim();
       if (!translation || translation === entry.original || translation === entry.original.trim()) {
         if (!groupedByFile[entry.msbtFile]) groupedByFile[entry.msbtFile] = [];
-        groupedByFile[entry.msbtFile].push({
-          index: entry.index,
-          original: entry.original,
-          label: entry.label || '',
-        });
+        groupedByFile[entry.msbtFile].push({ index: entry.index, original: entry.original, label: entry.label || '' });
       }
     }
-
     const totalCount = Object.values(groupedByFile).reduce((sum, arr) => sum + arr.length, 0);
+    return { groupedByFile, totalCount };
+  };
+
+  /** Build text content for a flat list of entries */
+  const buildEnglishTxt = (
+    flatEntries: { file: string; index: number; original: string; label: string }[],
+    partLabel: string,
+    totalParts: number,
+    partNum: number,
+  ): string => {
+    const lines: string[] = [];
+    lines.push('='.repeat(60));
+    lines.push(`  English Texts for Translation — ${new Date().toISOString().slice(0, 10)}`);
+    lines.push(`  Total: ${flatEntries.length} texts`);
+    if (totalParts > 1) lines.push(`  Part: ${partNum} / ${totalParts}`);
+    if (isFilterActive) lines.push(`  Filter: ${filterLabel}`);
+    lines.push('='.repeat(60));
+    lines.push('');
+
+    let currentFile = '';
+    let rowNum = 1;
+    for (const entry of flatEntries) {
+      if (entry.file !== currentFile) {
+        currentFile = entry.file;
+        lines.push('─'.repeat(60));
+        lines.push(`📁 ${entry.file}`);
+        lines.push('─'.repeat(60));
+        lines.push('');
+      }
+      lines.push(`[${rowNum}] (${entry.file}:${entry.index})`);
+      if (entry.label) lines.push(`Label: ${entry.label}`);
+      lines.push('');
+      lines.push(entry.original);
+      lines.push('');
+      lines.push('▶ Translation:');
+      lines.push('');
+      lines.push('═'.repeat(60));
+      lines.push('');
+      rowNum++;
+    }
+    return lines.join('\n');
+  };
+
+  /** Download a single text blob */
+  const downloadTxt = (content: string, filename: string) => {
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleExportEnglishOnly = (chunkSize?: number) => {
+    if (!state) return;
+    const { groupedByFile, totalCount } = getUntranslatedGrouped();
     if (totalCount === 0) {
       setLastSaved("ℹ️ لا توجد نصوص غير مترجمة للتصدير");
       setTimeout(() => setLastSaved(""), 3000);
       return;
     }
 
-    // بناء ملف نصي مرتب ومرقم وواضح لسهولة الترجمة الخارجية
-    const lines: string[] = [];
-    lines.push('='.repeat(60));
-    lines.push(`  English Texts for Translation — ${new Date().toISOString().slice(0, 10)}`);
-    lines.push(`  Total: ${totalCount} texts`);
-    if (isFilterActive) lines.push(`  Filter: ${filterLabel}`);
-    lines.push('='.repeat(60));
-    lines.push('');
-
-    let rowNum = 1;
+    // Flatten all entries in file order
     const sortedFiles = Object.keys(groupedByFile).sort();
+    const flatEntries: { file: string; index: number; original: string; label: string }[] = [];
     for (const file of sortedFiles) {
-      lines.push('─'.repeat(60));
-      lines.push(`📁 ${file}`);
-      lines.push('─'.repeat(60));
-      lines.push('');
-
-      const entries = groupedByFile[file].sort((a, b) => a.index - b.index);
-      for (const entry of entries) {
-        lines.push(`[${rowNum}] (${file}:${entry.index})`);
-        if (entry.label) lines.push(`Label: ${entry.label}`);
-        lines.push('');
-        lines.push(entry.original);
-        lines.push('');
-        lines.push('▶ Translation:');
-        lines.push('');
-        lines.push('═'.repeat(60));
-        lines.push('');
-        rowNum++;
+      for (const entry of groupedByFile[file].sort((a, b) => a.index - b.index)) {
+        flatEntries.push({ file, ...entry });
       }
     }
 
-    const textContent = lines.join('\n');
-    const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
     const suffix = isFilterActive ? `_${filterLabel}` : '';
-    a.download = `english-only${suffix}_${new Date().toISOString().slice(0, 10)}.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
+    const date = new Date().toISOString().slice(0, 10);
 
-    setLastSaved(`✅ تم تصدير ${totalCount} نص إنجليزي (${sortedFiles.length} ملف) كجدول CSV مرقم`);
-    setTimeout(() => setLastSaved(""), 3000);
+    if (!chunkSize || chunkSize >= totalCount) {
+      // تصدير كامل
+      const content = buildEnglishTxt(flatEntries, '', 1, 1);
+      downloadTxt(content, `english-only${suffix}_${date}.txt`);
+      setLastSaved(`✅ تم تصدير ${totalCount} نص إنجليزي (${sortedFiles.length} ملف)`);
+    } else {
+      // تقسيم إلى أجزاء
+      const totalParts = Math.ceil(totalCount / chunkSize);
+      for (let i = 0; i < totalParts; i++) {
+        const chunk = flatEntries.slice(i * chunkSize, (i + 1) * chunkSize);
+        const content = buildEnglishTxt(chunk, '', totalParts, i + 1);
+        downloadTxt(content, `english-only${suffix}_part${i + 1}_of_${totalParts}_${date}.txt`);
+      }
+      setLastSaved(`✅ تم تصدير ${totalCount} نص في ${totalParts} ملفات (${chunkSize} لكل ملف)`);
+    }
+    setTimeout(() => setLastSaved(""), 4000);
   };
+
+  /** Get untranslated count for UI display */
+  const getUntranslatedCount = () => getUntranslatedGrouped().totalCount;
 
   const handleImportTranslations = () => {
     const input = document.createElement('input');
@@ -392,5 +430,6 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     normalizeArabicPresentationForms,
     isFilterActive,
     filterLabel,
+    getUntranslatedCount,
   };
 }
