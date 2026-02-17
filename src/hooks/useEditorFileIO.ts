@@ -4,14 +4,15 @@ import type { EditorState } from "@/components/editor/types";
 import { ExtractedEntry, hasArabicChars, unReverseBidi } from "@/components/editor/types";
 
 /** إصلاح تلقائي لملفات JSON التالفة أو المقطوعة */
-function repairJson(raw: string): string {
+function repairJson(raw: string): { text: string; wasTruncated: boolean; linesBeforeRepair: number; linesAfterRepair: number } {
   let text = raw.trim();
   text = text.replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
   if (!text.startsWith('{') && !text.startsWith('[')) text = '{' + text;
   text = text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
   text = text.replace(/,\s*([}\]])/g, '$1');
   text = text.replace(/(")\s*\n\s*(")/g, '$1,\n$2');
-  try { JSON.parse(text); return text; } catch {}
+  const originalKeyCount = (text.match(/"[^"]+"\s*:/g) || []).length;
+  try { JSON.parse(text); return { text, wasTruncated: false, linesBeforeRepair: originalKeyCount, linesAfterRepair: originalKeyCount }; } catch {}
   // إصلاح النص المقطوع: حذف آخر مدخل غير مكتمل
   const lastComplete = text.lastIndexOf('",');
   if (lastComplete > 0) text = text.substring(0, lastComplete + 1);
@@ -20,7 +21,8 @@ function repairJson(raw: string): string {
   for (let i = 0; i < opens; i++) text += '}';
   const openB = (text.match(/\[/g) || []).length - (text.match(/\]/g) || []).length;
   for (let i = 0; i < openB; i++) text += ']';
-  return text;
+  const repairedKeyCount = (text.match(/"[^"]+"\s*:/g) || []).length;
+  return { text, wasTruncated: true, linesBeforeRepair: originalKeyCount, linesAfterRepair: repairedKeyCount };
 }
 
 interface UseEditorFileIOProps {
@@ -192,10 +194,10 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       const file = (e.target as HTMLInputElement).files?.[0];
       if (!file) return;
       try {
-        let text = (await file.text()).trim();
+        const rawText = (await file.text()).trim();
         // إصلاح تلقائي شامل لملفات JSON التالفة أو المقطوعة
-        text = repairJson(text);
-        const imported = JSON.parse(text) as Record<string, string>;
+        const repaired = repairJson(rawText);
+        const imported = JSON.parse(repaired.text) as Record<string, string>;
         let cleanedImported: Record<string, string> = {};
 
         if (isFilterActive && filteredEntries.length < (state?.entries.length || 0)) {
@@ -216,9 +218,13 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
 
         const totalImported = Object.keys(imported).length;
         const appliedCount = Object.keys(cleanedImported).length;
-        const msg = isFilterActive
+        const skipped = repaired.linesBeforeRepair - repaired.linesAfterRepair;
+        let msg = isFilterActive
           ? `✅ تم استيراد ${appliedCount} من ${totalImported} ترجمة (${filterLabel})`
           : `✅ تم استيراد ${appliedCount} ترجمة وتنظيفها`;
+        if (repaired.wasTruncated) {
+          msg += ` ⚠️ الملف كان مقطوعاً — تم تخطي ${skipped} مدخل غير مكتمل`;
+        }
         setLastSaved(msg);
 
         setTimeout(() => {
