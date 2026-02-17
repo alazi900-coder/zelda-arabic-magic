@@ -615,6 +615,7 @@ const Editor = () => {
                     glossary={editor.state?.glossary}
                     isProtected={editor.state?.protectedEntries?.has(key) || false}
                     hasProblem={editor.qualityStats.problemKeys.has(key)}
+                    isDamagedTag={editor.qualityStats.damagedTagKeys.has(key)}
                     isMobile={isMobile}
                     translatingSingle={editor.translatingSingle}
                     improvingTranslations={editor.improvingTranslations}
