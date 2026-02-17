@@ -22,9 +22,11 @@ function repairJson(raw: string): { text: string; wasTruncated: boolean; skipped
   try { JSON.parse(text); return { text, wasTruncated: false, skippedCount: 0 }; } catch {}
 
   // الملف مقطوع أو تالف — نستخرج المدخلات الصالحة يدوياً
-  // نعيد من البداية
+  // نعيد من البداية مع تطبيق نفس الإصلاحات الأساسية
   text = raw.trim();
   text = text.replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
+  // دمج كائنات JSON المتتالية هنا أيضاً
+  text = text.replace(/\}\s*\{/g, ',');
   if (!text.startsWith('{')) text = '{' + text;
 
   // نبحث عن آخر مدخل مكتمل: ينتهي بـ ",  أو "  (آخر مدخل قبل })
