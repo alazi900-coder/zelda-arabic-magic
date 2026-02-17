@@ -266,6 +266,92 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
   /** Get untranslated count for UI display */
   const getUntranslatedCount = () => getUntranslatedGrouped().totalCount;
 
+  /** Core logic: process raw JSON text into translations */
+  const processJsonImport = useCallback(async (rawText: string, sourceName?: string) => {
+    const repaired = repairJson(rawText);
+    const imported = JSON.parse(repaired.text) as Record<string, string>;
+    let cleanedImported: Record<string, string> = {};
+
+    if (isFilterActive && filteredEntries.length < (state?.entries.length || 0)) {
+      const allowedKeys = new Set(filteredEntries.map(e => `${e.msbtFile}:${e.index}`));
+      for (const [key, value] of Object.entries(imported)) {
+        if (allowedKeys.has(key)) {
+          cleanedImported[key] = normalizeArabicPresentationForms(value);
+        }
+      }
+    } else {
+      for (const [key, value] of Object.entries(imported)) {
+        cleanedImported[key] = normalizeArabicPresentationForms(value);
+      }
+    }
+
+    setState(prev => { if (!prev) return null; return { ...prev, translations: { ...prev.translations, ...cleanedImported } }; });
+
+    const totalImported = Object.keys(imported).length;
+    const appliedCount = Object.keys(cleanedImported).length;
+    let msg = isFilterActive
+      ? `✅ تم استيراد ${appliedCount} من ${totalImported} ترجمة (${filterLabel})`
+      : `✅ تم استيراد ${appliedCount} ترجمة وتنظيفها`;
+    if (sourceName) msg += ` — ${sourceName}`;
+    if (repaired.wasTruncated) {
+      msg += ` ⚠️ الملف كان مقطوعاً — تم تخطي ${repaired.skippedCount} سطر غير مكتمل`;
+    }
+    setLastSaved(msg);
+
+    setTimeout(() => {
+      setState(prevState => {
+        if (!prevState) return null;
+        const newTranslations = { ...prevState.translations };
+        const newProtected = new Set(prevState.protectedEntries || []);
+        let count = 0;
+        for (const entry of prevState.entries) {
+          const key = `${entry.msbtFile}:${entry.index}`;
+          if (hasArabicChars(entry.original)) {
+            if (newProtected.has(key)) continue;
+            const existing = newTranslations[key]?.trim();
+            const isAutoDetected = !existing || existing === entry.original || existing === entry.original.trim();
+            if (isAutoDetected) {
+              const corrected = unReverseBidi(entry.original);
+              if (corrected !== entry.original) {
+                newTranslations[key] = corrected;
+                newProtected.add(key);
+                count++;
+              }
+            }
+          }
+        }
+        if (count > 0) setLastSaved(prev => prev + ` + تصحيح ${count} نص معكوس`);
+        return { ...prevState, translations: newTranslations, protectedEntries: newProtected };
+      });
+    }, 0);
+  }, [state, setState, setLastSaved, isFilterActive, filteredEntries, filterLabel]);
+
+  /** Handle drop/paste of JSON file or text */
+  const handleDropImport = useCallback(async (dataTransfer: DataTransfer) => {
+    // Try files first
+    if (dataTransfer.files && dataTransfer.files.length > 0) {
+      const file = dataTransfer.files[0];
+      try {
+        const rawText = (await file.text()).trim();
+        await processJsonImport(rawText, file.name);
+      } catch (err) {
+        console.error('Drop import error:', err);
+        alert(`ملف JSON غير صالح\n\nالخطأ: ${err instanceof Error ? err.message : err}`);
+      }
+      return;
+    }
+    // Try text
+    const text = dataTransfer.getData('text/plain')?.trim();
+    if (text) {
+      try {
+        await processJsonImport(text, 'لصق من الحافظة');
+      } catch (err) {
+        console.error('Paste import error:', err);
+        alert(`نص JSON غير صالح\n\nالخطأ: ${err instanceof Error ? err.message : err}`);
+      }
+    }
+  }, [processJsonImport]);
+
   const handleImportTranslations = () => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -273,70 +359,13 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     input.onchange = async (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (!file) return;
-      let rawText = '';
       try {
-        rawText = (await file.text()).trim();
-        // إصلاح تلقائي شامل لملفات JSON التالفة أو المقطوعة
-        const repaired = repairJson(rawText);
-        const imported = JSON.parse(repaired.text) as Record<string, string>;
-        let cleanedImported: Record<string, string> = {};
-
-        if (isFilterActive && filteredEntries.length < (state?.entries.length || 0)) {
-          // استيراد مفلتر - فقط مفاتيح النصوص المفلترة
-          const allowedKeys = new Set(filteredEntries.map(e => `${e.msbtFile}:${e.index}`));
-          for (const [key, value] of Object.entries(imported)) {
-            if (allowedKeys.has(key)) {
-              cleanedImported[key] = normalizeArabicPresentationForms(value);
-            }
-          }
-        } else {
-          for (const [key, value] of Object.entries(imported)) {
-            cleanedImported[key] = normalizeArabicPresentationForms(value);
-          }
-        }
-
-        setState(prev => { if (!prev) return null; return { ...prev, translations: { ...prev.translations, ...cleanedImported } }; });
-
-        const totalImported = Object.keys(imported).length;
-        const appliedCount = Object.keys(cleanedImported).length;
-        let msg = isFilterActive
-          ? `✅ تم استيراد ${appliedCount} من ${totalImported} ترجمة (${filterLabel})`
-          : `✅ تم استيراد ${appliedCount} ترجمة وتنظيفها`;
-        if (repaired.wasTruncated) {
-          msg += ` ⚠️ الملف كان مقطوعاً — تم تخطي ${repaired.skippedCount} سطر غير مكتمل`;
-        }
-        setLastSaved(msg);
-
-        setTimeout(() => {
-          setState(prevState => {
-            if (!prevState) return null;
-            const newTranslations = { ...prevState.translations };
-            const newProtected = new Set(prevState.protectedEntries || []);
-            let count = 0;
-            for (const entry of prevState.entries) {
-              const key = `${entry.msbtFile}:${entry.index}`;
-              if (hasArabicChars(entry.original)) {
-                if (newProtected.has(key)) continue;
-                const existing = newTranslations[key]?.trim();
-                const isAutoDetected = !existing || existing === entry.original || existing === entry.original.trim();
-                if (isAutoDetected) {
-                  const corrected = unReverseBidi(entry.original);
-                  if (corrected !== entry.original) {
-                    newTranslations[key] = corrected;
-                    newProtected.add(key);
-                    count++;
-                  }
-                }
-              }
-            }
-            if (count > 0) setLastSaved(prev => prev + ` + تصحيح ${count} نص معكوس`);
-            return { ...prevState, translations: newTranslations, protectedEntries: newProtected };
-          });
-        }, 0);
+        const rawText = (await file.text()).trim();
+        await processJsonImport(rawText, file.name);
       } catch (err) {
-          console.error('JSON import error:', err, 'Raw text (first 500 chars):', rawText?.substring(0, 500));
-          alert(`ملف JSON غير صالح\n\nالخطأ: ${err instanceof Error ? err.message : err}`);
-        }
+        console.error('JSON import error:', err);
+        alert(`ملف JSON غير صالح\n\nالخطأ: ${err instanceof Error ? err.message : err}`);
+      }
     };
     input.click();
   };
@@ -425,6 +454,8 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     handleExportTranslations,
     handleExportEnglishOnly,
     handleImportTranslations,
+    handleDropImport,
+    processJsonImport,
     handleExportCSV,
     handleImportCSV,
     normalizeArabicPresentationForms,

@@ -45,7 +45,29 @@ const Editor = () => {
   const editor = useEditorState();
   const isMobile = useIsMobile();
   const [showDiffView, setShowDiffView] = React.useState(false);
+  const [isDragging, setIsDragging] = React.useState(false);
 
+  // Drag & Drop handlers
+  const handleDragOver = React.useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  }, []);
+
+  const handleDragLeave = React.useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  }, []);
+
+  const handleDrop = React.useCallback(async (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    if (e.dataTransfer) {
+      await editor.handleDropImport(e.dataTransfer);
+    }
+  }, [editor.handleDropImport]);
   // حساب عدد النصوص غير المترجمة (يحترم الفلتر النشط)
   const untranslatedCount = React.useMemo(() => {
     if (!editor.state) return 0;
@@ -70,7 +92,22 @@ const Editor = () => {
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen py-4 md:py-8 px-3 md:px-4">
+      <div
+        className="min-h-screen py-4 md:py-8 px-3 md:px-4 relative"
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
+        {/* Drop overlay */}
+        {isDragging && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm border-4 border-dashed border-primary/50 pointer-events-none">
+            <div className="text-center space-y-3">
+              <Upload className="w-16 h-16 text-primary mx-auto animate-bounce" />
+              <p className="text-2xl font-display font-bold text-primary">أفلت ملف JSON هنا</p>
+              <p className="text-sm text-muted-foreground font-body">سيتم استيراد الترجمات تلقائياً</p>
+            </div>
+          </div>
+        )}
         <div className="max-w-6xl mx-auto">
           <Link to="/process" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-4 md:mb-6 font-body text-sm">
             <ArrowRight className="w-4 h-4" /> العودة للمعالجة
