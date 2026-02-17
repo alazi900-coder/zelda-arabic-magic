@@ -9,7 +9,8 @@ const corsHeaders = {
 function protectTags(text: string): { cleaned: string; tags: Map<string, string> } {
   const tags = new Map<string, string>();
   let counter = 0;
-  const cleaned = text.replace(/\[[^\]]*\]/g, (match) => {
+  // Protect both [bracket tags] AND Unicode control markers (U+FFF9-FFFC, PUA U+E000-E0FF)
+  const cleaned = text.replace(/\[[^\]]*\]|[\uFFF9-\uFFFC\uE000-\uE0FF]+/g, (match) => {
     const placeholder = `TAG_${counter++}`;
     tags.set(placeholder, match);
     return placeholder;
