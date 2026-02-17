@@ -274,6 +274,57 @@ export function useEditorTranslation({
     } finally { setTranslating(false); }
   };
 
+  const handleFixDamagedTags = async (damagedTagKeys: Set<string>) => {
+    if (!state || damagedTagKeys.size === 0) return;
+    const entriesToFix = state.entries.filter(e => {
+      const key = `${e.msbtFile}:${e.index}`;
+      return damagedTagKeys.has(key);
+    });
+    if (entriesToFix.length === 0) return;
+
+    // Save previous translations for undo
+    const prevTrans: Record<string, string> = {};
+    for (const e of entriesToFix) {
+      const key = `${e.msbtFile}:${e.index}`;
+      prevTrans[key] = state.translations[key] || '';
+    }
+    setPreviousTranslations(old => ({ ...old, ...prevTrans }));
+
+    setTranslating(true);
+    abortControllerRef.current = new AbortController();
+    let fixedCount = 0;
+    try {
+      const totalBatches = Math.ceil(entriesToFix.length / AI_BATCH_SIZE);
+      for (let b = 0; b < totalBatches; b++) {
+        if (abortControllerRef.current.signal.aborted) break;
+        const batch = entriesToFix.slice(b * AI_BATCH_SIZE, (b + 1) * AI_BATCH_SIZE);
+        setTranslateProgress(`🔧 إصلاح الرموز التالفة ${b + 1}/${totalBatches} (${batch.length} نص)...`);
+        const entries = batch.map(e => ({ key: `${e.msbtFile}:${e.index}`, original: e.original }));
+        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+        const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+        const response = await fetch(`${supabaseUrl}/functions/v1/translate-entries`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
+          signal: abortControllerRef.current.signal,
+          body: JSON.stringify({ entries, glossary: activeGlossary, userApiKey: userGeminiKey || undefined }),
+        });
+        if (!response.ok) throw new Error(`خطأ ${response.status}`);
+        const data = await response.json();
+        if (data.translations) {
+          fixedCount += Object.keys(data.translations).length;
+          setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...data.translations } } : null);
+        }
+      }
+      setTranslateProgress(`✅ تم إصلاح ${fixedCount} نص تالف بنجاح`);
+      setTimeout(() => setTranslateProgress(""), 5000);
+    } catch (err) {
+      if ((err as Error).name !== 'AbortError') {
+        setTranslateProgress(`❌ خطأ: ${err instanceof Error ? err.message : 'غير معروف'}`);
+        setTimeout(() => setTranslateProgress(""), 4000);
+      }
+    } finally { setTranslating(false); }
+  };
+
   return {
     translating,
     translatingSingle,
@@ -282,5 +333,6 @@ export function useEditorTranslation({
     handleAutoTranslate,
     handleStopTranslate,
     handleRetranslatePage,
+    handleFixDamagedTags,
   };
 }
