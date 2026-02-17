@@ -9,6 +9,9 @@ function repairJson(raw: string): { text: string; wasTruncated: boolean; skipped
   // إزالة أغلفة markdown
   text = text.replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
 
+  // دمج كائنات JSON المتتالية: }{ → ,
+  text = text.replace(/\}\s*\{/g, ',');
+
   // إضافة الأقواس الناقصة
   if (!text.startsWith('{') && !text.startsWith('[')) text = '{' + text;
 
