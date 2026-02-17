@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag, BookOpen } from "lucide-react";
+import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag, BookOpen, Wrench } from "lucide-react";
 import DebouncedInput from "./DebouncedInput";
 import { ExtractedEntry, displayOriginal, hasArabicChars, isTechnicalText, hasTechnicalTags } from "./types";
 import { utf16leByteLength } from "@/lib/byte-utils";
@@ -11,6 +11,7 @@ interface EntryCardProps {
   translation: string;
   isProtected: boolean;
   hasProblem: boolean;
+  isDamagedTag?: boolean;
   isMobile: boolean;
   translatingSingle: string | null;
   improvingTranslations: boolean;
@@ -51,7 +52,7 @@ function findGlossaryMatches(original: string, glossary?: string): { term: strin
 }
 
 const EntryCard: React.FC<EntryCardProps> = ({
-  entry, translation, isProtected, hasProblem, isMobile,
+  entry, translation, isProtected, hasProblem, isDamagedTag, isMobile,
   translatingSingle, improvingTranslations, previousTranslations, glossary,
   isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage,
   updateTranslation, handleTranslateSingle, handleImproveSingleTranslation,
@@ -107,6 +108,9 @@ const EntryCard: React.FC<EntryCardProps> = ({
               {isMixedLanguage(translation) && (
                 <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">🌐 عربي + إنجليزي</span>
               )}
+              {isDamagedTag && (
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-destructive/10 text-destructive border border-destructive/20">⚠️ رموز تالفة</span>
+              )}
             </div>
           )}
           {hasArabicChars(entry.original) && (!translation || translation === entry.original) && (
@@ -128,6 +132,11 @@ const EntryCard: React.FC<EntryCardProps> = ({
               <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => handleImproveSingleTranslation(entry)} disabled={improvingTranslations || !translation?.trim()} title="تحسين هذه الترجمة">
                 {improvingTranslations ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4 text-secondary" />}
               </Button>
+              {isDamagedTag && (
+                <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => handleTranslateSingle(entry)} disabled={translatingSingle === key} title="🔧 إصلاح الرموز التالفة">
+                  {translatingSingle === key ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wrench className="w-4 h-4 text-destructive" />}
+                </Button>
+              )}
               {previousTranslations[key] !== undefined && (
                 <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => handleUndoTranslation(key)} title="تراجع عن التعديل">
                   <RotateCcw className="w-4 h-4 text-muted-foreground" />
