@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag, BookOpen } from "lucide-react";
 import DebouncedInput from "./DebouncedInput";
-import { ExtractedEntry, displayOriginal, hasArabicChars, isTechnicalText } from "./types";
+import { ExtractedEntry, displayOriginal, hasArabicChars, isTechnicalText, hasTechnicalTags } from "./types";
 import { utf16leByteLength } from "@/lib/byte-utils";
 
 interface EntryCardProps {
@@ -71,6 +71,11 @@ const EntryCard: React.FC<EntryCardProps> = ({
         <div className="flex-1 min-w-0">
           <p className="text-xs text-muted-foreground mb-1 truncate">{entry.msbtFile} • {entry.label}</p>
           <p className="font-body text-sm mb-2 break-words">{displayOriginal(entry.original)}</p>
+          {hasTechnicalTags(entry.original) && (
+            <p className="text-[10px] text-muted-foreground mb-2 leading-relaxed">
+              💡 الرموز الملونة (⚙ تحكم • 🎨 تنسيق • 📌 متغير) أكواد خاصة بمحرك اللعبة — <span className="font-semibold text-accent">لا تحذفها من الترجمة</span>
+            </p>
+          )}
           {isTech && <p className="text-xs text-accent mb-2">⚠️ نص تقني - تحتاج حذر في الترجمة</p>}
           {hasProblem && (
             <p className="text-xs text-destructive mb-2 flex items-center gap-1">
