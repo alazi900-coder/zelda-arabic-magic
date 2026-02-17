@@ -3,6 +3,26 @@ import { removeArabicPresentationForms } from "@/lib/arabic-processing";
 import type { EditorState } from "@/components/editor/types";
 import { ExtractedEntry, hasArabicChars, unReverseBidi } from "@/components/editor/types";
 
+/** إصلاح تلقائي لملفات JSON التالفة أو المقطوعة */
+function repairJson(raw: string): string {
+  let text = raw.trim();
+  text = text.replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
+  if (!text.startsWith('{') && !text.startsWith('[')) text = '{' + text;
+  text = text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+  text = text.replace(/,\s*([}\]])/g, '$1');
+  text = text.replace(/(")\s*\n\s*(")/g, '$1,\n$2');
+  try { JSON.parse(text); return text; } catch {}
+  // إصلاح النص المقطوع: حذف آخر مدخل غير مكتمل
+  const lastComplete = text.lastIndexOf('",');
+  if (lastComplete > 0) text = text.substring(0, lastComplete + 1);
+  text = text.replace(/,\s*$/, '');
+  const opens = (text.match(/{/g) || []).length - (text.match(/}/g) || []).length;
+  for (let i = 0; i < opens; i++) text += '}';
+  const openB = (text.match(/\[/g) || []).length - (text.match(/\]/g) || []).length;
+  for (let i = 0; i < openB; i++) text += ']';
+  return text;
+}
+
 interface UseEditorFileIOProps {
   state: EditorState | null;
   setState: React.Dispatch<React.SetStateAction<EditorState | null>>;
@@ -173,13 +193,8 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       if (!file) return;
       try {
         let text = (await file.text()).trim();
-        // إصلاح تلقائي للأقواس الناقصة
-        if (!text.startsWith('{')) text = '{' + text;
-        if (!text.endsWith('}')) text = text + '}';
-        // إصلاح الفواصل الزائدة (trailing commas قبل } أو ])
-        text = text.replace(/,\s*([}\]])/g, '$1');
-        // إصلاح الفواصل الناقصة بين الحقول ("value"\n"key" → "value",\n"key")
-        text = text.replace(/(")\s*\n\s*(")/g, '$1,\n$2');
+        // إصلاح تلقائي شامل لملفات JSON التالفة أو المقطوعة
+        text = repairJson(text);
         const imported = JSON.parse(text) as Record<string, string>;
         let cleanedImported: Record<string, string> = {};
 
