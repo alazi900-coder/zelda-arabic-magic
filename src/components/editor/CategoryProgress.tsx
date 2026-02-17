@@ -1,19 +1,41 @@
 import React from "react";
 import { Progress } from "@/components/ui/progress";
 import { FILE_CATEGORIES, categorizeFile } from "./types";
+import { AlertTriangle } from "lucide-react";
 
 interface CategoryProgressProps {
   categoryProgress: Record<string, { total: number; translated: number }>;
   filterCategory: string;
   setFilterCategory: (cat: string) => void;
+  damagedTagsCount?: number;
+  onFilterDamagedTags?: () => void;
+  isDamagedTagsActive?: boolean;
 }
 
-const CategoryProgress: React.FC<CategoryProgressProps> = ({ categoryProgress, filterCategory, setFilterCategory }) => {
+const CategoryProgress: React.FC<CategoryProgressProps> = ({ categoryProgress, filterCategory, setFilterCategory, damagedTagsCount = 0, onFilterDamagedTags, isDamagedTagsActive }) => {
   const activeCats = FILE_CATEGORIES.filter(cat => categoryProgress[cat.id]);
   if (activeCats.length === 0 && !categoryProgress['other']) return null;
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 mb-6">
+      {/* Damaged tags warning card */}
+      {damagedTagsCount > 0 && (
+        <button
+          onClick={onFilterDamagedTags}
+          className={`p-2 rounded-lg border text-xs text-right transition-colors ${
+            isDamagedTagsActive
+              ? 'border-destructive bg-destructive/10'
+              : 'border-destructive/40 bg-destructive/5 hover:border-destructive/60'
+          }`}
+        >
+          <div className="flex items-center justify-between mb-1">
+            <AlertTriangle className="w-4 h-4 text-destructive" />
+            <span className="font-mono text-destructive font-bold">{damagedTagsCount}</span>
+          </div>
+          <p className="font-display font-bold truncate text-destructive">رموز تالفة ⚠️</p>
+          <p className="text-muted-foreground mt-1 text-[10px]">أيقونات فُقدت من الترجمة</p>
+        </button>
+      )}
       {FILE_CATEGORIES.filter(cat => categoryProgress[cat.id]).map(cat => {
         const prog = categoryProgress[cat.id];
         const pct = prog.total > 0 ? Math.round((prog.translated / prog.total) * 100) : 0;

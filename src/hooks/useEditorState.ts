@@ -19,7 +19,7 @@ export function useEditorState() {
   const [search, setSearch] = useState("");
   const [filterFile, setFilterFile] = useState<string>("all");
   const [filterCategory, setFilterCategory] = useState<string>("all");
-  const [filterStatus, setFilterStatus] = useState<"all" | "translated" | "untranslated" | "problems" | "needs-improve" | "too-short" | "too-long" | "stuck-chars" | "mixed-lang" | "has-tags">("all");
+  const [filterStatus, setFilterStatus] = useState<"all" | "translated" | "untranslated" | "problems" | "needs-improve" | "too-short" | "too-long" | "stuck-chars" | "mixed-lang" | "has-tags" | "damaged-tags">("all");
   const [filterTechnical, setFilterTechnical] = useState<"all" | "only" | "exclude">("all");
   const [translateProgress, setTranslateProgress] = useState("");
   const [lastSaved, setLastSaved] = useState<string>("");
@@ -309,7 +309,8 @@ export function useEditorState() {
         (filterStatus === "too-long" && isTranslated && isTranslationTooLong(e, translation)) ||
         (filterStatus === "stuck-chars" && isTranslated && hasStuckChars(translation)) ||
         (filterStatus === "mixed-lang" && isTranslated && isMixedLanguage(translation)) ||
-        (filterStatus === "has-tags" && hasTechnicalTags(e.original));
+        (filterStatus === "has-tags" && hasTechnicalTags(e.original)) ||
+        (filterStatus === "damaged-tags" && qualityStats.damagedTagKeys.has(key));
       const matchTechnical = 
         filterTechnical === "all" ||
         (filterTechnical === "only" && isTechnical) ||

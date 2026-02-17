@@ -214,6 +214,9 @@ const Editor = () => {
             categoryProgress={editor.categoryProgress}
             filterCategory={editor.filterCategory}
             setFilterCategory={editor.setFilterCategory}
+            damagedTagsCount={editor.qualityStats.damagedTags}
+            onFilterDamagedTags={() => editor.setFilterStatus(editor.filterStatus === "damaged-tags" ? "all" : "damaged-tags")}
+            isDamagedTagsActive={editor.filterStatus === "damaged-tags"}
           />
 
           {/* Progress Bar */}
