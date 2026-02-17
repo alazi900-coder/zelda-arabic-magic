@@ -6,23 +6,67 @@ import { ExtractedEntry, hasArabicChars, unReverseBidi } from "@/components/edit
 /** إصلاح تلقائي لملفات JSON التالفة أو المقطوعة */
 function repairJson(raw: string): { text: string; wasTruncated: boolean; linesBeforeRepair: number; linesAfterRepair: number } {
   let text = raw.trim();
+  // إزالة أغلفة markdown
   text = text.replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
-  if (!text.startsWith('{') && !text.startsWith('[')) text = '{' + text;
+  // إزالة أحرف التحكم (ما عدا \n \r \t)
   text = text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
-  text = text.replace(/,\s*([}\]])/g, '$1');
-  text = text.replace(/(")\s*\n\s*(")/g, '$1,\n$2');
-  const originalKeyCount = (text.match(/"[^"]+"\s*:/g) || []).length;
-  try { JSON.parse(text); return { text, wasTruncated: false, linesBeforeRepair: originalKeyCount, linesAfterRepair: originalKeyCount }; } catch {}
-  // إصلاح النص المقطوع: حذف آخر مدخل غير مكتمل
-  const lastComplete = text.lastIndexOf('",');
-  if (lastComplete > 0) text = text.substring(0, lastComplete + 1);
-  text = text.replace(/,\s*$/, '');
-  const opens = (text.match(/{/g) || []).length - (text.match(/}/g) || []).length;
-  for (let i = 0; i < opens; i++) text += '}';
-  const openB = (text.match(/\[/g) || []).length - (text.match(/\]/g) || []).length;
-  for (let i = 0; i < openB; i++) text += ']';
-  const repairedKeyCount = (text.match(/"[^"]+"\s*:/g) || []).length;
-  return { text, wasTruncated: true, linesBeforeRepair: originalKeyCount, linesAfterRepair: repairedKeyCount };
+
+  // استراتيجية: تحويل النص سطراً بسطر إلى مدخلات JSON صالحة
+  // لأن الملف قد يحتوي أسطر جديدة حقيقية داخل القيم (وليست \n مهرّبة)
+  const entries: [string, string][] = [];
+  // نمط لمطابقة سطر يبدأ بمفتاح JSON: "key": "value..." 
+  const keyPattern = /^\s*"([^"]+)"\s*:\s*"(.*)/;
+  const lines = text.replace(/^\{?\s*/, '').replace(/\s*\}?\s*$/, '').split('\n');
+
+  let currentKey = '';
+  let currentValue = '';
+  let inEntry = false;
+  const originalKeyCount = lines.filter(l => keyPattern.test(l)).length;
+
+  for (const line of lines) {
+    const match = line.match(keyPattern);
+    if (match) {
+      // حفظ المدخل السابق
+      if (inEntry && currentKey) {
+        entries.push([currentKey, currentValue]);
+      }
+      currentKey = match[1];
+      const rest = match[2];
+      // هل القيمة تنتهي بإغلاق؟
+      const cleaned = rest.replace(/",?\s*$/, '');
+      if (rest.match(/",?\s*$/)) {
+        currentValue = cleaned;
+        inEntry = true;
+        entries.push([currentKey, currentValue]);
+        currentKey = '';
+        inEntry = false;
+      } else {
+        currentValue = cleaned;
+        inEntry = true;
+      }
+    } else if (inEntry) {
+      // سطر استمرار للقيمة الحالية
+      const trimmed = line.replace(/",?\s*$/, '');
+      if (line.match(/",?\s*$/)) {
+        currentValue += '\\n' + trimmed;
+        entries.push([currentKey, currentValue]);
+        currentKey = '';
+        inEntry = false;
+      } else {
+        currentValue += '\\n' + line;
+      }
+    }
+  }
+  // آخر مدخل مفتوح (ملف مقطوع) — نتخطاه
+  const wasTruncated = inEntry && currentKey !== '';
+
+  // بناء JSON صالح
+  const jsonObj: Record<string, string> = {};
+  for (const [k, v] of entries) {
+    jsonObj[k] = v.replace(/\\n/g, '\n');
+  }
+  const result = JSON.stringify(jsonObj);
+  return { text: result, wasTruncated, linesBeforeRepair: originalKeyCount, linesAfterRepair: entries.length };
 }
 
 interface UseEditorFileIOProps {
@@ -193,8 +237,9 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     input.onchange = async (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (!file) return;
+      let rawText = '';
       try {
-        const rawText = (await file.text()).trim();
+        rawText = (await file.text()).trim();
         // إصلاح تلقائي شامل لملفات JSON التالفة أو المقطوعة
         const repaired = repairJson(rawText);
         const imported = JSON.parse(repaired.text) as Record<string, string>;
@@ -253,7 +298,10 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
             return { ...prevState, translations: newTranslations, protectedEntries: newProtected };
           });
         }, 0);
-      } catch { alert('ملف JSON غير صالح'); }
+      } catch (err) {
+          console.error('JSON import error:', err, 'Raw text (first 500 chars):', rawText?.substring(0, 500));
+          alert(`ملف JSON غير صالح\n\nالخطأ: ${err instanceof Error ? err.message : err}`);
+        }
     };
     input.click();
   };
