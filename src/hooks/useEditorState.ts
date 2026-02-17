@@ -11,7 +11,7 @@ import { useEditorBuild } from "@/hooks/useEditorBuild";
 import { useEditorTranslation } from "@/hooks/useEditorTranslation";
 import {
   ExtractedEntry, EditorState, AUTOSAVE_DELAY, AI_BATCH_SIZE, PAGE_SIZE,
-  categorizeFile, hasArabicChars, unReverseBidi, isTechnicalText,
+  categorizeFile, hasArabicChars, unReverseBidi, isTechnicalText, hasTechnicalTags,
   ReviewIssue, ReviewSummary, ReviewResults, ShortSuggestion, ImproveResult,
 } from "@/components/editor/types";
 export function useEditorState() {
@@ -19,7 +19,7 @@ export function useEditorState() {
   const [search, setSearch] = useState("");
   const [filterFile, setFilterFile] = useState<string>("all");
   const [filterCategory, setFilterCategory] = useState<string>("all");
-  const [filterStatus, setFilterStatus] = useState<"all" | "translated" | "untranslated" | "problems" | "needs-improve" | "too-short" | "too-long" | "stuck-chars" | "mixed-lang">("all");
+  const [filterStatus, setFilterStatus] = useState<"all" | "translated" | "untranslated" | "problems" | "needs-improve" | "too-short" | "too-long" | "stuck-chars" | "mixed-lang" | "has-tags">("all");
   const [filterTechnical, setFilterTechnical] = useState<"all" | "only" | "exclude">("all");
   const [translateProgress, setTranslateProgress] = useState("");
   const [lastSaved, setLastSaved] = useState<string>("");
@@ -279,6 +279,11 @@ export function useEditorState() {
     return counts;
   }, [state?.entries]);
 
+  // === Count entries with technical tags ===
+  const tagsCount = useMemo(() => {
+    if (!state) return 0;
+    return state.entries.filter(e => hasTechnicalTags(e.original)).length;
+  }, [state?.entries]);
 
   // === Filtered entries ===
   const filteredEntries = useMemo(() => {
@@ -303,7 +308,8 @@ export function useEditorState() {
         (filterStatus === "too-short" && isTranslated && isTranslationTooShort(e, translation)) ||
         (filterStatus === "too-long" && isTranslated && isTranslationTooLong(e, translation)) ||
         (filterStatus === "stuck-chars" && isTranslated && hasStuckChars(translation)) ||
-        (filterStatus === "mixed-lang" && isTranslated && isMixedLanguage(translation));
+        (filterStatus === "mixed-lang" && isTranslated && isMixedLanguage(translation)) ||
+        (filterStatus === "has-tags" && hasTechnicalTags(e.original));
       const matchTechnical = 
         filterTechnical === "all" ||
         (filterTechnical === "only" && isTechnical) ||
@@ -600,7 +606,7 @@ export function useEditorState() {
     showRetranslateConfirm, arabicNumerals, mirrorPunctuation,
     applyingArabic, improvingTranslations, improveResults,
     fixingMixed, filtersOpen, buildStats, buildPreview, showBuildConfirm,
-    categoryProgress, qualityStats, needsImproveCount, translatedCount,
+    categoryProgress, qualityStats, needsImproveCount, translatedCount, tagsCount,
     ...glossary,
     msbtFiles, filteredEntries, paginatedEntries, totalPages,
     user,

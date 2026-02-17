@@ -304,6 +304,7 @@ const Editor = () => {
                     <option value="too-long">📐 طويل ({editor.needsImproveCount.tooLong})</option>
                     <option value="stuck-chars">🔤 ملتصق ({editor.needsImproveCount.stuck})</option>
                     <option value="mixed-lang">🌐 مختلط ({editor.needsImproveCount.mixed})</option>
+                    <option value="has-tags">🔧 يحتوي رموز تقنية ({editor.tagsCount})</option>
                   </select>
                   <select value={editor.filterFile} onChange={e => editor.setFilterFile(e.target.value)} className="px-3 py-2 rounded bg-background border border-border font-body text-sm max-w-[200px]">
                     <option value="all">كل الملفات</option>
@@ -335,7 +336,8 @@ const Editor = () => {
                   <option value="problems">🚨 مشاكل</option>
                   <option value="needs-improve">⚠️ يحتاج تحسين</option>
                   <option value="stuck-chars">🔤 ملتصق</option>
-                  <option value="mixed-lang">🌐 مختلط</option>
+                    <option value="mixed-lang">🌐 مختلط</option>
+                    <option value="has-tags">🔧 رموز تقنية</option>
                 </select>
                 <select value={editor.filterFile} onChange={e => editor.setFilterFile(e.target.value)} className="w-full px-3 py-2 rounded bg-background border border-border font-body text-sm">
                   <option value="all">كل الملفات</option>
