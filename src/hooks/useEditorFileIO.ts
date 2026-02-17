@@ -4,69 +4,67 @@ import type { EditorState } from "@/components/editor/types";
 import { ExtractedEntry, hasArabicChars, unReverseBidi } from "@/components/editor/types";
 
 /** إصلاح تلقائي لملفات JSON التالفة أو المقطوعة */
-function repairJson(raw: string): { text: string; wasTruncated: boolean; linesBeforeRepair: number; linesAfterRepair: number } {
+function repairJson(raw: string): { text: string; wasTruncated: boolean; skippedCount: number } {
   let text = raw.trim();
   // إزالة أغلفة markdown
   text = text.replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
-  // إزالة أحرف التحكم (ما عدا \n \r \t)
-  text = text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
 
-  // استراتيجية: تحويل النص سطراً بسطر إلى مدخلات JSON صالحة
-  // لأن الملف قد يحتوي أسطر جديدة حقيقية داخل القيم (وليست \n مهرّبة)
-  const entries: [string, string][] = [];
-  // نمط لمطابقة سطر يبدأ بمفتاح JSON: "key": "value..." 
-  const keyPattern = /^\s*"([^"]+)"\s*:\s*"(.*)/;
-  const lines = text.replace(/^\{?\s*/, '').replace(/\s*\}?\s*$/, '').split('\n');
+  // إضافة الأقواس الناقصة
+  if (!text.startsWith('{') && !text.startsWith('[')) text = '{' + text;
 
-  let currentKey = '';
-  let currentValue = '';
-  let inEntry = false;
-  const originalKeyCount = lines.filter(l => keyPattern.test(l)).length;
+  // محاولة أولى مباشرة
+  if (!text.endsWith('}') && !text.endsWith(']')) text += '}';
+  // إصلاح الفواصل الزائدة
+  text = text.replace(/,\s*([}\]])/g, '$1');
+  try { JSON.parse(text); return { text, wasTruncated: false, skippedCount: 0 }; } catch {}
 
-  for (const line of lines) {
-    const match = line.match(keyPattern);
-    if (match) {
-      // حفظ المدخل السابق
-      if (inEntry && currentKey) {
-        entries.push([currentKey, currentValue]);
-      }
-      currentKey = match[1];
-      const rest = match[2];
-      // هل القيمة تنتهي بإغلاق؟
-      const cleaned = rest.replace(/",?\s*$/, '');
-      if (rest.match(/",?\s*$/)) {
-        currentValue = cleaned;
-        inEntry = true;
-        entries.push([currentKey, currentValue]);
-        currentKey = '';
-        inEntry = false;
-      } else {
-        currentValue = cleaned;
-        inEntry = true;
-      }
-    } else if (inEntry) {
-      // سطر استمرار للقيمة الحالية
-      const trimmed = line.replace(/",?\s*$/, '');
-      if (line.match(/",?\s*$/)) {
-        currentValue += '\\n' + trimmed;
-        entries.push([currentKey, currentValue]);
-        currentKey = '';
-        inEntry = false;
-      } else {
-        currentValue += '\\n' + line;
-      }
+  // الملف مقطوع أو تالف — نستخرج المدخلات الصالحة يدوياً
+  // نعيد من البداية
+  text = raw.trim();
+  text = text.replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
+  if (!text.startsWith('{')) text = '{' + text;
+
+  // نبحث عن آخر مدخل مكتمل: ينتهي بـ ",  أو "  (آخر مدخل قبل })
+  // نمط المدخل المكتمل: "key": "value",  أو "key": "value"
+  const entryEndPattern = /",?\s*$/gm;
+  let lastGoodEnd = -1;
+  let match: RegExpExecArray | null;
+  // نبحث عن كل سطر ينتهي بـ " أو ", 
+  const allLines = text.split('\n');
+  let goodLineCount = 0;
+  const totalLines = allLines.length;
+
+  for (let i = allLines.length - 1; i >= 0; i--) {
+    const line = allLines[i].trim();
+    // سطر مدخل مكتمل يحتوي على "key": "value"
+    if (line.match(/^"[^"]+"\s*:\s*".*",?\s*$/) && line.includes('": "')) {
+      // وجدنا آخر سطر مكتمل
+      lastGoodEnd = i;
+      break;
     }
   }
-  // آخر مدخل مفتوح (ملف مقطوع) — نتخطاه
-  const wasTruncated = inEntry && currentKey !== '';
 
-  // بناء JSON صالح
-  const jsonObj: Record<string, string> = {};
-  for (const [k, v] of entries) {
-    jsonObj[k] = v.replace(/\\n/g, '\n');
+  if (lastGoodEnd > 0) {
+    const goodLines = allLines.slice(0, lastGoodEnd + 1);
+    // إزالة الفاصلة من آخر سطر
+    goodLines[goodLines.length - 1] = goodLines[goodLines.length - 1].replace(/,\s*$/, '');
+    goodLineCount = goodLines.filter(l => l.trim().match(/^"[^"]+"\s*:/)).length;
+    text = goodLines.join('\n');
+    if (!text.startsWith('{')) text = '{' + text;
+    text += '\n}';
   }
-  const result = JSON.stringify(jsonObj);
-  return { text: result, wasTruncated, linesBeforeRepair: originalKeyCount, linesAfterRepair: entries.length };
+
+  const skipped = totalLines - lastGoodEnd - 1;
+
+  try {
+    JSON.parse(text);
+    return { text, wasTruncated: skipped > 0, skippedCount: Math.max(0, skipped) };
+  } catch (e) {
+    // آخر محاولة: إصلاح الفواصل
+    text = text.replace(/,\s*([}\]])/g, '$1');
+    JSON.parse(text); // إذا فشل هنا، نترك الخطأ يظهر للمستخدم
+    return { text, wasTruncated: skipped > 0, skippedCount: Math.max(0, skipped) };
+  }
 }
 
 interface UseEditorFileIOProps {
@@ -263,12 +261,11 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
 
         const totalImported = Object.keys(imported).length;
         const appliedCount = Object.keys(cleanedImported).length;
-        const skipped = repaired.linesBeforeRepair - repaired.linesAfterRepair;
         let msg = isFilterActive
           ? `✅ تم استيراد ${appliedCount} من ${totalImported} ترجمة (${filterLabel})`
           : `✅ تم استيراد ${appliedCount} ترجمة وتنظيفها`;
         if (repaired.wasTruncated) {
-          msg += ` ⚠️ الملف كان مقطوعاً — تم تخطي ${skipped} مدخل غير مكتمل`;
+          msg += ` ⚠️ الملف كان مقطوعاً — تم تخطي ${repaired.skippedCount} سطر غير مكتمل`;
         }
         setLastSaved(msg);
 
