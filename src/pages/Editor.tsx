@@ -217,6 +217,8 @@ const Editor = () => {
             damagedTagsCount={editor.qualityStats.damagedTags}
             onFilterDamagedTags={() => editor.setFilterStatus(editor.filterStatus === "damaged-tags" ? "all" : "damaged-tags")}
             isDamagedTagsActive={editor.filterStatus === "damaged-tags"}
+            onFixDamagedTags={() => editor.handleFixDamagedTags(editor.qualityStats.damagedTagKeys)}
+            isFixing={editor.translating}
           />
 
           {/* Progress Bar */}
