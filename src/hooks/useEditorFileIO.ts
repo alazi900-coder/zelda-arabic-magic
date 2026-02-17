@@ -176,6 +176,10 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
         // إصلاح تلقائي للأقواس الناقصة
         if (!text.startsWith('{')) text = '{' + text;
         if (!text.endsWith('}')) text = text + '}';
+        // إصلاح الفواصل الزائدة (trailing commas قبل } أو ])
+        text = text.replace(/,\s*([}\]])/g, '$1');
+        // إصلاح الفواصل الناقصة بين الحقول ("value"\n"key" → "value",\n"key")
+        text = text.replace(/(")\s*\n\s*(")/g, '$1,\n$2');
         const imported = JSON.parse(text) as Record<string, string>;
         let cleanedImported: Record<string, string> = {};
 
