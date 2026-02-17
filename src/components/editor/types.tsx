@@ -100,6 +100,11 @@ export const FILE_CATEGORIES: FileCategory[] = [
   { id: "npc", label: "حوارات الشخصيات", emoji: "💬" },
 ];
 
+// Check if text contains technical tag markers
+export function hasTechnicalTags(text: string): boolean {
+  return /[\uFFF9\uFFFA\uFFFB\uFFFC\uE000-\uF8FF]/.test(text);
+}
+
 // Sanitize original text: replace binary tag markers with color-coded, tooltipped badges
 export function displayOriginal(text: string): React.ReactNode {
   const regex = /([\uFFF9\uFFFA\uFFFB\uFFFC\uE000-\uF8FF\u0000-\u0008\u000E-\u001F]+)/g;
