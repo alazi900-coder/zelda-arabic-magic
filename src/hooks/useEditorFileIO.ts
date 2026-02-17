@@ -3,73 +3,92 @@ import { removeArabicPresentationForms } from "@/lib/arabic-processing";
 import type { EditorState } from "@/components/editor/types";
 import { ExtractedEntry, hasArabicChars, unReverseBidi } from "@/components/editor/types";
 
-/** إصلاح تلقائي لملفات JSON التالفة أو المقطوعة */
+/** Parse a single JSON object chunk, repairing common issues */
+function repairSingleChunk(raw: string): Record<string, string> | null {
+  let text = raw.trim();
+  if (!text) return null;
+  // إضافة الأقواس الناقصة
+  if (!text.startsWith('{')) text = '{' + text;
+  if (!text.endsWith('}')) {
+    // ابحث عن آخر سطر مكتمل
+    const lines = text.split('\n');
+    const goodLines: string[] = [];
+    for (const line of lines) {
+      goodLines.push(line);
+    }
+    // أزل الأسطر غير المكتملة من النهاية
+    while (goodLines.length > 1) {
+      const last = goodLines[goodLines.length - 1].trim();
+      if (last === '' || last === '{' || last.match(/^"[^"]*"\s*:\s*".*",?\s*$/)) break;
+      goodLines.pop();
+    }
+    text = goodLines.join('\n');
+    if (!text.endsWith('}')) text += '\n}';
+  }
+  // إصلاح الفواصل الزائدة
+  text = text.replace(/,\s*}/g, '}');
+  // إصلاح الفواصل المفقودة بين المدخلات: "value"\n"key" → "value",\n"key"
+  text = text.replace(/"\s*\n(\s*")/g, '",\n$1');
+  try {
+    return JSON.parse(text) as Record<string, string>;
+  } catch {
+    return null;
+  }
+}
+
+/** إصلاح تلقائي لملفات JSON التالفة أو المقطوعة — يدعم كائنات متعددة متتالية */
 function repairJson(raw: string): { text: string; wasTruncated: boolean; skippedCount: number } {
   let text = raw.trim();
   // إزالة أغلفة markdown
   text = text.replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
 
-  // دمج كائنات JSON المتتالية: }{ → ,
-  text = text.replace(/\}\s*\{/g, ',');
-
-  // إضافة الأقواس الناقصة
-  if (!text.startsWith('{') && !text.startsWith('[')) text = '{' + text;
-
   // محاولة أولى مباشرة
-  if (!text.endsWith('}') && !text.endsWith(']')) text += '}';
-  // إصلاح الفواصل الزائدة
-  text = text.replace(/,\s*([}\]])/g, '$1');
-  try { JSON.parse(text); return { text, wasTruncated: false, skippedCount: 0 }; } catch {}
+  try {
+    JSON.parse(text);
+    return { text, wasTruncated: false, skippedCount: 0 };
+  } catch {}
 
-  // الملف مقطوع أو تالف — نستخرج المدخلات الصالحة يدوياً
-  // نعيد من البداية مع تطبيق نفس الإصلاحات الأساسية
-  text = raw.trim();
-  text = text.replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
-  // دمج كائنات JSON المتتالية هنا أيضاً
-  text = text.replace(/\}\s*\{/g, ',');
-  if (!text.startsWith('{')) text = '{' + text;
-
-  // نبحث عن آخر مدخل مكتمل: ينتهي بـ ",  أو "  (آخر مدخل قبل })
-  // نمط المدخل المكتمل: "key": "value",  أو "key": "value"
-  const entryEndPattern = /",?\s*$/gm;
-  let lastGoodEnd = -1;
-  let match: RegExpExecArray | null;
-  // نبحث عن كل سطر ينتهي بـ " أو ", 
-  const allLines = text.split('\n');
-  let goodLineCount = 0;
-  const totalLines = allLines.length;
-
-  for (let i = allLines.length - 1; i >= 0; i--) {
-    const line = allLines[i].trim();
-    // سطر مدخل مكتمل يحتوي على "key": "value"
-    if (line.match(/^"[^"]+"\s*:\s*".*",?\s*$/) && line.includes('": "')) {
-      // وجدنا آخر سطر مكتمل
-      lastGoodEnd = i;
-      break;
+  // تقسيم عند }{ وتحليل كل جزء على حدة
+  const chunks = text.split(/\}\s*\{/);
+  if (chunks.length > 1) {
+    const merged: Record<string, string> = {};
+    let failedChunks = 0;
+    for (let i = 0; i < chunks.length; i++) {
+      let chunk = chunks[i].trim();
+      // أضف الأقواس المحذوفة بسبب التقسيم
+      if (i > 0) chunk = '{' + chunk;
+      if (i < chunks.length - 1) chunk = chunk + '}';
+      const parsed = repairSingleChunk(chunk);
+      if (parsed) {
+        Object.assign(merged, parsed);
+      } else {
+        failedChunks++;
+      }
+    }
+    if (Object.keys(merged).length > 0) {
+      const result = JSON.stringify(merged);
+      return { text: result, wasTruncated: failedChunks > 0, skippedCount: failedChunks };
     }
   }
 
-  if (lastGoodEnd > 0) {
-    const goodLines = allLines.slice(0, lastGoodEnd + 1);
-    // إزالة الفاصلة من آخر سطر
-    goodLines[goodLines.length - 1] = goodLines[goodLines.length - 1].replace(/,\s*$/, '');
-    goodLineCount = goodLines.filter(l => l.trim().match(/^"[^"]+"\s*:/)).length;
-    text = goodLines.join('\n');
-    if (!text.startsWith('{')) text = '{' + text;
-    text += '\n}';
+  // محاولة إصلاح ككائن واحد
+  const single = repairSingleChunk(text);
+  if (single) {
+    return { text: JSON.stringify(single), wasTruncated: false, skippedCount: 0 };
   }
 
-  const skipped = totalLines - lastGoodEnd - 1;
-
-  try {
-    JSON.parse(text);
-    return { text, wasTruncated: skipped > 0, skippedCount: Math.max(0, skipped) };
-  } catch (e) {
-    // آخر محاولة: إصلاح الفواصل
-    text = text.replace(/,\s*([}\]])/g, '$1');
-    JSON.parse(text); // إذا فشل هنا، نترك الخطأ يظهر للمستخدم
-    return { text, wasTruncated: skipped > 0, skippedCount: Math.max(0, skipped) };
+  // آخر محاولة: استخراج المدخلات يدوياً بالـ regex
+  const entryRegex = /"([^"]+)"\s*:\s*"((?:[^"\\]|\\.)*)"/g;
+  const manual: Record<string, string> = {};
+  let m: RegExpExecArray | null;
+  while ((m = entryRegex.exec(text)) !== null) {
+    manual[m[1]] = m[2];
   }
+  if (Object.keys(manual).length > 0) {
+    return { text: JSON.stringify(manual), wasTruncated: true, skippedCount: 0 };
+  }
+
+  throw new Error('تعذر إصلاح ملف JSON');
 }
 
 interface UseEditorFileIOProps {
