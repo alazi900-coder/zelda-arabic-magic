@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag, BookOpen, Wrench, Copy, Eye, Check, X } from "lucide-react";
+import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag, BookOpen, Wrench, Copy, Eye, Check, X, Table2, Columns3 } from "lucide-react";
 import DebouncedInput from "./DebouncedInput";
 import { ExtractedEntry, displayOriginal, hasArabicChars, isTechnicalText, hasTechnicalTags, previewTagRestore } from "./types";
 import { utf16leByteLength } from "@/lib/byte-utils";
@@ -88,7 +88,25 @@ const EntryCard: React.FC<EntryCardProps> = ({
     <Card className={`p-3 md:p-4 border-border/50 hover:border-border transition-colors ${hasProblem ? 'border-destructive/30 bg-destructive/5' : ''}`}>
       <div className={`flex ${isMobile ? 'flex-col' : 'items-start'} gap-3 md:gap-4`}>
         <div className="flex-1 min-w-0">
-          <p className="text-xs text-muted-foreground mb-1 truncate">{entry.msbtFile} • {entry.label}</p>
+          {/* Table & column context for BDAT entries */}
+          {(() => {
+            const match = entry.label.match(/^(.+?)\[(\d+)\]\.(.+)$/);
+            if (match) {
+              const [, tblName, rowIdx, colName] = match;
+              return (
+                <div className="flex flex-wrap items-center gap-1.5 mb-1 text-xs text-muted-foreground">
+                  <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-secondary/15 text-secondary border border-secondary/20">
+                    <Table2 className="w-3 h-3" /> {tblName}
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-accent/15 text-accent border border-accent/20">
+                    <Columns3 className="w-3 h-3" /> {colName}
+                  </span>
+                  <span className="text-muted-foreground/60">صف {rowIdx}</span>
+                </div>
+              );
+            }
+            return <p className="text-xs text-muted-foreground mb-1 truncate">{entry.msbtFile} • {entry.label}</p>;
+          })()}
           <p className="font-body text-sm mb-2 break-words">{displayOriginal(entry.original)}</p>
           {hasTechnicalTags(entry.original) && (
             <p className="text-[10px] text-muted-foreground mb-2 leading-relaxed">

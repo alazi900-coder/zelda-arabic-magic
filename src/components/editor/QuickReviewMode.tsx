@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Eye, AlertTriangle, ChevronRight, Check, X } from "lucide-react";
+import { Eye, AlertTriangle, ChevronRight, Check, X, Table2, Columns3 } from "lucide-react";
 import DebouncedInput from "./DebouncedInput";
 import { ExtractedEntry, displayOriginal } from "./types";
 
@@ -43,7 +43,24 @@ const QuickReviewMode: React.FC<QuickReviewModeProps> = ({
         </div>
         <Progress value={((quickReviewIndex + 1) / filteredEntries.length) * 100} className="h-1.5 mb-4" />
 
-        <p className="text-xs text-muted-foreground mb-2">{entry.msbtFile} • {entry.label}</p>
+        {(() => {
+          const match = entry.label.match(/^(.+?)\[(\d+)\]\.(.+)$/);
+          if (match) {
+            const [, tblName, rowIdx, colName] = match;
+            return (
+              <div className="flex flex-wrap items-center gap-1.5 mb-2 text-xs text-muted-foreground">
+                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-secondary/15 text-secondary border border-secondary/20">
+                  <Table2 className="w-3 h-3" /> {tblName}
+                </span>
+                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-accent/15 text-accent border border-accent/20">
+                  <Columns3 className="w-3 h-3" /> {colName}
+                </span>
+                <span className="text-muted-foreground/60">صف {rowIdx}</span>
+              </div>
+            );
+          }
+          return <p className="text-xs text-muted-foreground mb-2">{entry.msbtFile} • {entry.label}</p>;
+        })()}
         <div className="p-3 rounded border border-border/50 bg-muted/30 mb-3">
           <p className="text-xs text-muted-foreground mb-1">النص الأصلي:</p>
           <p className="font-body text-sm">{displayOriginal(entry.original)}</p>
