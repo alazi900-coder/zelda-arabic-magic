@@ -24,6 +24,8 @@ export function useEditorState() {
   const [filterCategory, setFilterCategory] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<"all" | "translated" | "untranslated" | "problems" | "needs-improve" | "too-short" | "too-long" | "stuck-chars" | "mixed-lang" | "has-tags" | "damaged-tags">("all");
   const [filterTechnical, setFilterTechnical] = useState<"all" | "only" | "exclude">("all");
+  const [filterTable, setFilterTable] = useState<string>("all");
+  const [filterColumn, setFilterColumn] = useState<string>("all");
   const [translateProgress, setTranslateProgress] = useState("");
   const [lastSaved, setLastSaved] = useState<string>("");
   const [cloudSyncing, setCloudSyncing] = useState(false);
@@ -331,6 +333,32 @@ export function useEditorState() {
     return state.entries.filter(e => hasTechnicalTags(e.original)).length;
   }, [state?.entries]);
 
+  // === Extract unique BDAT table and column names from labels ===
+  const bdatTableNames = useMemo(() => {
+    if (!state) return [];
+    const set = new Set<string>();
+    for (const e of state.entries) {
+      const match = e.label.match(/^(.+?)\[\d+\]\./);
+      if (match) set.add(match[1]);
+    }
+    return Array.from(set).sort();
+  }, [state?.entries]);
+
+  const bdatColumnNames = useMemo(() => {
+    if (!state) return [];
+    const set = new Set<string>();
+    for (const e of state.entries) {
+      const match = e.label.match(/\.([^.]+)$/);
+      const tblMatch = e.label.match(/^(.+?)\[\d+\]\./);
+      if (match && tblMatch) {
+        if (filterTable === "all" || tblMatch[1] === filterTable) {
+          set.add(match[1]);
+        }
+      }
+    }
+    return Array.from(set).sort();
+  }, [state?.entries, filterTable]);
+
   // === Filtered entries ===
   const filteredEntries = useMemo(() => {
     if (!state) return [];
@@ -361,11 +389,15 @@ export function useEditorState() {
         filterTechnical === "all" ||
         (filterTechnical === "only" && isTechnical) ||
         (filterTechnical === "exclude" && !isTechnical);
-      return matchSearch && matchFile && matchCategory && matchStatus && matchTechnical;
+      // BDAT table/column filters
+      const labelMatch = e.label.match(/^(.+?)\[(\d+)\]\.(.+)$/);
+      const matchTable = filterTable === "all" || (labelMatch && labelMatch[1] === filterTable);
+      const matchColumn = filterColumn === "all" || (labelMatch && labelMatch[3] === filterColumn);
+      return matchSearch && matchFile && matchCategory && matchStatus && matchTechnical && matchTable && matchColumn;
     });
-  }, [state, search, filterFile, filterCategory, filterStatus, filterTechnical, qualityStats.problemKeys, needsImprovement, isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage]);
+  }, [state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, qualityStats.problemKeys, needsImprovement, isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage]);
 
-  useEffect(() => { setCurrentPage(0); }, [search, filterFile, filterCategory, filterStatus, filterTechnical]);
+  useEffect(() => { setCurrentPage(0); }, [search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn]);
 
   const totalPages = Math.ceil(filteredEntries.length / PAGE_SIZE);
   const paginatedEntries = useMemo(() => {
@@ -715,7 +747,7 @@ export function useEditorState() {
 
   return {
     // State
-    state, search, filterFile, filterCategory, filterStatus, filterTechnical, showFindReplace, userGeminiKey, gameType,
+    state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, showFindReplace, userGeminiKey, gameType,
     building, buildProgress, translating, translateProgress,
     lastSaved, cloudSyncing, cloudStatus,
     technicalEditingMode, showPreview, previewKey,
@@ -728,12 +760,13 @@ export function useEditorState() {
     applyingArabic, improvingTranslations, improveResults,
     fixingMixed, filtersOpen, buildStats, buildPreview, showBuildConfirm,
     categoryProgress, qualityStats, needsImproveCount, translatedCount, tagsCount,
+    bdatTableNames, bdatColumnNames,
     ...glossary,
     msbtFiles, filteredEntries, paginatedEntries, totalPages,
     user,
 
     // Setters
-    setSearch, setFilterFile, setFilterCategory, setFilterStatus, setFilterTechnical,
+    setSearch, setFilterFile, setFilterCategory, setFilterStatus, setFilterTechnical, setFilterTable, setFilterColumn,
     setFiltersOpen, setShowQualityStats, setQuickReviewMode, setQuickReviewIndex, setShowFindReplace,
     setCurrentPage, setShowRetranslateConfirm, setShowPreview, setPreviewKey,
     setArabicNumerals, setMirrorPunctuation, setUserGeminiKey,
