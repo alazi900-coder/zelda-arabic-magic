@@ -784,24 +784,13 @@ Deno.serve(async (req) => {
           try {
             const { entries } = parseMSBT(file.data);
             for (let i = 0; i < entries.length; i++) {
-              // Convert PUA markers to typed markers for color-coded display in the editor
-              // \uFFF9 = control (group 0), \uFFFA = formatting (group 1), \uFFFB = variable (group 2+)
-              let displayText = entries[i].originalText;
-              for (const tag of entries[i].tags) {
-                const group = tag.bytes.length >= 3 ? tag.bytes[2] : 0;
-                let marker: string;
-                if (group === 0) marker = '\uFFF9';      // control (pauses, waits)
-                else if (group === 1) marker = '\uFFFA';  // formatting (color, font, ruby)
-                else marker = '\uFFFB';                   // variable (player name, items)
-                displayText = displayText.replace(String.fromCharCode(tag.markerCode), marker);
-              }
-              // Replace any remaining PUA markers
-              displayText = displayText.replace(/[\uE000-\uE0FF]/g, '\uFFFC');
+              // Keep original PUA markers (E000, E001, ...) — lossless 1:1 mapping
+              // No conversion to FFF9/FFFA/FFFB — each PUA marker is unique per entry
               allEntries.push({
                 msbtFile: file.name,
                 index: i,
                 label: entries[i].label,
-                original: displayText,
+                original: entries[i].originalText,
                 maxBytes: entries[i].size * 3,
               });
             }
@@ -894,13 +883,19 @@ Deno.serve(async (req) => {
                   }
                 }
                 
-                let tagIdx = 0;
-                translationText = translationText.replace(/[\uFFF9\uFFFA\uFFFB\uFFFC]/g, () => {
-                  if (tagIdx < entries[i].tags.length) {
-                    return String.fromCharCode(entries[i].tags[tagIdx++].markerCode);
-                  }
-                  return ''; // no corresponding tag, remove marker
-                });
+                // Handle both PUA-native (new) and legacy FFF9-FFFC (old) marker formats
+                const hasLegacyMarkers = /[\uFFF9-\uFFFC]/.test(translationText);
+                if (hasLegacyMarkers && entries[i].tags.length > 0) {
+                  // Legacy format: sequentially replace FFF9-FFFC with PUA markers
+                  let tagIdx = 0;
+                  translationText = translationText.replace(/[\uFFF9\uFFFA\uFFFB\uFFFC]/g, () => {
+                    if (tagIdx < entries[i].tags.length) {
+                      return String.fromCharCode(entries[i].tags[tagIdx++].markerCode);
+                    }
+                    return ''; // no corresponding tag, remove marker
+                  });
+                }
+                // PUA markers (E000+) are already correct — encodeEntryToBytes maps them directly
                 
                 // DIAGNOSTIC: Verify after replacement
                 const markersAfter = (translationText.match(/[\uFFF9-\uFFFC]/g) || []).length;
