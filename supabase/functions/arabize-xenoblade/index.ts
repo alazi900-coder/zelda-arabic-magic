@@ -417,6 +417,115 @@ function buildZip(files: { name: string; data: Uint8Array }[]): Uint8Array {
   return result;
 }
 
+// ============= BDAT JSON helpers =============
+// bdat-toolset extracts BDAT tables to JSON. Each JSON file contains one table
+// with an array of rows. Text fields are strings we can translate.
+// Structure: { "rows": [ { "col1": "value", "col2": 123, ... }, ... ] }
+// or: [ { "col1": "value", ... }, ... ]
+
+interface BdatJsonEntry {
+  bdatFile: string;    // source JSON filename
+  tableName: string;   // table name (from filename)
+  rowIndex: number;
+  columnName: string;
+  original: string;
+}
+
+function extractBdatJsonEntries(fileName: string, jsonText: string): BdatJsonEntry[] {
+  const entries: BdatJsonEntry[] = [];
+  const tableName = fileName.replace(/\.json$/i, '');
+
+  try {
+    const parsed = JSON.parse(jsonText);
+    // Support both { rows: [...] } and direct array formats
+    const rows: Record<string, unknown>[] = Array.isArray(parsed)
+      ? parsed
+      : (parsed.rows && Array.isArray(parsed.rows))
+        ? parsed.rows
+        : Object.values(parsed).find(v => Array.isArray(v)) as Record<string, unknown>[] || [];
+
+    for (let ri = 0; ri < rows.length; ri++) {
+      const row = rows[ri];
+      if (!row || typeof row !== 'object') continue;
+      for (const [col, val] of Object.entries(row)) {
+        if (typeof val === 'string' && val.trim().length > 0) {
+          // Skip pure numeric or hex hash strings
+          if (/^[0-9a-fA-Fx<>]+$/.test(val.trim())) continue;
+          entries.push({
+            bdatFile: fileName,
+            tableName,
+            rowIndex: ri,
+            columnName: col,
+            original: val,
+          });
+        }
+      }
+    }
+  } catch (e) {
+    console.warn(`Failed to parse BDAT JSON ${fileName}: ${e}`);
+  }
+
+  return entries;
+}
+
+function applyBdatJsonTranslations(
+  fileName: string,
+  jsonText: string,
+  translations: Record<string, string>,
+  protectedEntries: Set<string>,
+  processOptions: { arabicNumerals: boolean; mirrorPunct: boolean },
+): { json: string; modifiedCount: number } {
+  const parsed = JSON.parse(jsonText);
+  const rows: Record<string, unknown>[] = Array.isArray(parsed)
+    ? parsed
+    : (parsed.rows && Array.isArray(parsed.rows))
+      ? parsed.rows
+      : Object.values(parsed).find(v => Array.isArray(v)) as Record<string, unknown>[] || [];
+
+  let modifiedCount = 0;
+
+  for (let ri = 0; ri < rows.length; ri++) {
+    const row = rows[ri];
+    if (!row || typeof row !== 'object') continue;
+    for (const col of Object.keys(row)) {
+      if (typeof row[col] !== 'string') continue;
+      const key = `bdat:${fileName}:${ri}:${col}`;
+      const trans = translations[key];
+      if (trans !== undefined && trans !== '') {
+        if (protectedEntries.has(key)) {
+          let processed = reshapeArabic(trans);
+          if (processOptions.arabicNumerals) processed = convertToArabicNumerals(processed);
+          if (processOptions.mirrorPunct) processed = mirrorPunctuation(processed);
+          row[col] = processed;
+        } else if (hasArabicPresentationForms(trans)) {
+          row[col] = trans;
+        } else {
+          row[col] = processArabicText(trans, processOptions);
+        }
+        modifiedCount++;
+      }
+    }
+  }
+
+  // Reconstruct the JSON preserving original structure
+  let result: unknown;
+  if (Array.isArray(parsed)) {
+    result = rows;
+  } else if (parsed.rows) {
+    result = { ...parsed, rows };
+  } else {
+    // Find which key held the array
+    const arrayKey = Object.entries(parsed).find(([, v]) => Array.isArray(v));
+    if (arrayKey) {
+      result = { ...parsed, [arrayKey[0]]: rows };
+    } else {
+      result = parsed;
+    }
+  }
+
+  return { json: JSON.stringify(result, null, 2), modifiedCount };
+}
+
 // ============= Main Handler =============
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -428,28 +537,37 @@ Deno.serve(async (req) => {
     const mode = url.searchParams.get('mode') || 'extract';
     const formData = await req.formData();
 
-    // Collect all MSBT files from FormData
+    // Collect all files from FormData
     const msbtFiles: { name: string; data: Uint8Array }[] = [];
+    const bdatJsonFiles: { name: string; text: string }[] = [];
+
     for (const [key, value] of formData.entries()) {
-      if (key.startsWith('msbt_') && value instanceof File) {
-        const data = new Uint8Array(await value.arrayBuffer());
-        msbtFiles.push({ name: value.name, data });
+      if (value instanceof File) {
+        if (key.startsWith('msbt_')) {
+          const data = new Uint8Array(await value.arrayBuffer());
+          msbtFiles.push({ name: value.name, data });
+        } else if (key.startsWith('bdat_')) {
+          const text = await value.text();
+          bdatJsonFiles.push({ name: value.name, text });
+        }
       }
     }
 
-    if (msbtFiles.length === 0) {
+    const totalFiles = msbtFiles.length + bdatJsonFiles.length;
+    if (totalFiles === 0) {
       return new Response(
-        JSON.stringify({ error: 'يجب رفع ملف MSBT واحد على الأقل' }),
+        JSON.stringify({ error: 'يجب رفع ملف MSBT أو BDAT JSON واحد على الأقل' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    console.log(`[${mode.toUpperCase()}] Received ${msbtFiles.length} MSBT files`);
+    console.log(`[${mode.toUpperCase()}] Received ${msbtFiles.length} MSBT + ${bdatJsonFiles.length} BDAT JSON files`);
 
     // ===== EXTRACT MODE =====
     if (mode === 'extract') {
-      const allEntries: { msbtFile: string; index: number; label: string; original: string; maxBytes: number }[] = [];
+      const allEntries: { msbtFile: string; index: number; label: string; original: string; maxBytes: number; type: string; columnName?: string }[] = [];
 
+      // Extract MSBT entries
       for (const file of msbtFiles) {
         try {
           const { entries } = parseMSBT(file.data);
@@ -460,20 +578,40 @@ Deno.serve(async (req) => {
               label: entries[i].label,
               original: entries[i].originalText,
               maxBytes: entries[i].size * 3,
+              type: 'msbt',
             });
           }
-          console.log(`Parsed ${file.name}: ${entries.length} entries`);
+          console.log(`Parsed MSBT ${file.name}: ${entries.length} entries`);
         } catch (e) {
           console.warn(`Failed to parse MSBT ${file.name}: ${e instanceof Error ? e.message : 'unknown'}`);
         }
       }
 
-      console.log(`Extract mode: found ${allEntries.length} entries across ${msbtFiles.length} MSBT files`);
+      // Extract BDAT JSON entries
+      for (const file of bdatJsonFiles) {
+        const bdatEntries = extractBdatJsonEntries(file.name, file.text);
+        for (let i = 0; i < bdatEntries.length; i++) {
+          const e = bdatEntries[i];
+          allEntries.push({
+            msbtFile: `bdat:${e.bdatFile}`,
+            index: i,
+            label: `${e.tableName}[${e.rowIndex}].${e.columnName}`,
+            original: e.original,
+            maxBytes: 9999, // JSON has no byte limit
+            type: 'bdat',
+            columnName: e.columnName,
+          });
+        }
+        console.log(`Parsed BDAT JSON ${file.name}: ${bdatEntries.length} text entries`);
+      }
+
+      console.log(`Extract mode: found ${allEntries.length} entries total`);
 
       return new Response(JSON.stringify({
         entries: allEntries,
-        fileCount: msbtFiles.length,
+        fileCount: totalFiles,
         msbtCount: msbtFiles.length,
+        bdatCount: bdatJsonFiles.length,
       }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -486,7 +624,7 @@ Deno.serve(async (req) => {
     const mirrorPunct = formData.get('mirrorPunctuation') === 'true';
     const processOptions = { arabicNumerals, mirrorPunct };
     const translations: Record<string, string> = translationsRaw ? JSON.parse(translationsRaw) : {};
-    const protectedEntries = new Set(protectedRaw ? JSON.parse(protectedRaw) : []);
+    const protectedEntries = new Set<string>(protectedRaw ? JSON.parse(protectedRaw) : []);
     const hasCustomTranslations = Object.keys(translations).length > 0;
 
     console.log(`[BUILD] Received ${Object.keys(translations).length} translations, ${protectedEntries.size} protected`);
@@ -496,6 +634,7 @@ Deno.serve(async (req) => {
 
     const processedFiles: { name: string; data: Uint8Array }[] = [];
 
+    // Process MSBT files
     for (const file of msbtFiles) {
       try {
         const { entries, raw } = parseMSBT(file.data);
@@ -507,7 +646,6 @@ Deno.serve(async (req) => {
             if (translations[key] !== undefined && translations[key] !== '') {
               let translationText = translations[key];
 
-              // Handle legacy markers
               const hasLegacyMarkers = /[\uFFF9-\uFFFC]/.test(translationText);
               let tagIdx = 0;
               if (hasLegacyMarkers && entries[i].tags.length > 0) {
@@ -546,13 +684,27 @@ Deno.serve(async (req) => {
         processedFiles.push({ name: file.name, data: injected });
       } catch (e) {
         console.warn(`Failed to process MSBT ${file.name}: ${e instanceof Error ? e.message : 'unknown'}`);
-        processedFiles.push(file); // keep original on failure
+        processedFiles.push(file);
+      }
+    }
+
+    // Process BDAT JSON files
+    for (const file of bdatJsonFiles) {
+      try {
+        const { json, modifiedCount: mc } = applyBdatJsonTranslations(
+          file.name, file.text, translations, protectedEntries, processOptions
+        );
+        modifiedCount += mc;
+        const jsonBytes = new TextEncoder().encode(json);
+        processedFiles.push({ name: file.name, data: jsonBytes });
+      } catch (e) {
+        console.warn(`Failed to process BDAT JSON ${file.name}: ${e instanceof Error ? e.message : 'unknown'}`);
+        processedFiles.push({ name: file.name, data: new TextEncoder().encode(file.text) });
       }
     }
 
     console.log(`Modified ${modifiedCount} entries (${expandedCount} expanded)`);
 
-    // Build ZIP of all processed MSBT files
     const zipData = buildZip(processedFiles);
 
     return new Response(zipData, {

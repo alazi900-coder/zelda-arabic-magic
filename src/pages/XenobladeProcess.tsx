@@ -3,14 +3,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Upload, FileText, ArrowRight, Loader2, CheckCircle2, Clock, Pencil } from "lucide-react";
+import { Upload, FileText, ArrowRight, Loader2, CheckCircle2, Clock, Pencil, Database } from "lucide-react";
 
 type ProcessingStage = "idle" | "uploading" | "extracting" | "done" | "error";
 
 const stageLabels: Record<ProcessingStage, string> = {
   idle: "في انتظار رفع الملفات",
   uploading: "إرسال الملفات...",
-  extracting: "استخراج النصوص من MSBT...",
+  extracting: "استخراج النصوص...",
   done: "اكتمل بنجاح! ✨",
   error: "حدث خطأ",
 };
@@ -21,6 +21,7 @@ const stageProgress: Record<ProcessingStage, number> = {
 
 const XenobladeProcess = () => {
   const [msbtFiles, setMsbtFiles] = useState<File[]>([]);
+  const [bdatFiles, setBdatFiles] = useState<File[]>([]);
   const [stage, setStage] = useState<ProcessingStage>("idle");
   const [logs, setLogs] = useState<string[]>([]);
   const [extracting, setExtracting] = useState(false);
@@ -42,12 +43,16 @@ const XenobladeProcess = () => {
 
   const handleFileSelect = useCallback((files: FileList | null) => {
     if (!files) return;
-    const msbtArr: File[] = [];
+    const newMsbt: File[] = [];
+    const newBdat: File[] = [];
     for (let i = 0; i < files.length; i++) {
       const f = files[i];
-      if (f.name.toLowerCase().endsWith('.msbt')) msbtArr.push(f);
+      const name = f.name.toLowerCase();
+      if (name.endsWith('.msbt')) newMsbt.push(f);
+      else if (name.endsWith('.json')) newBdat.push(f);
     }
-    setMsbtFiles(prev => [...prev, ...msbtArr]);
+    if (newMsbt.length > 0) setMsbtFiles(prev => [...prev, ...newMsbt]);
+    if (newBdat.length > 0) setBdatFiles(prev => [...prev, ...newBdat]);
   }, []);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
@@ -55,22 +60,27 @@ const XenobladeProcess = () => {
     handleFileSelect(e.dataTransfer.files);
   }, [handleFileSelect]);
 
-  const removeFile = (index: number) => {
-    setMsbtFiles(prev => prev.filter((_, i) => i !== index));
+  const removeFile = (type: "msbt" | "bdat", index: number) => {
+    if (type === "msbt") setMsbtFiles(prev => prev.filter((_, i) => i !== index));
+    else setBdatFiles(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleExtract = async () => {
-    if (msbtFiles.length === 0) return;
+    const totalFiles = msbtFiles.length + bdatFiles.length;
+    if (totalFiles === 0) return;
     setExtracting(true);
     setStage("uploading");
     setLogs([]);
     addLog("🚀 بدء استخراج النصوص...");
-    addLog(`📄 عدد الملفات: ${msbtFiles.length}`);
+    addLog(`📄 ملفات MSBT: ${msbtFiles.length} | ملفات BDAT JSON: ${bdatFiles.length}`);
 
     try {
       const formData = new FormData();
       for (let i = 0; i < msbtFiles.length; i++) {
         formData.append(`msbt_${i}`, msbtFiles[i]);
+      }
+      for (let i = 0; i < bdatFiles.length; i++) {
+        formData.append(`bdat_${i}`, bdatFiles[i]);
       }
 
       setStage("extracting");
@@ -95,7 +105,9 @@ const XenobladeProcess = () => {
       }
 
       const data = await response.json();
-      addLog(`✅ تم استخراج ${data.entries.length} نص من ${data.msbtCount} ملف MSBT`);
+      const msbtCount = data.msbtCount || 0;
+      const bdatCount = data.bdatCount || 0;
+      addLog(`✅ تم استخراج ${data.entries.length} نص (${msbtCount} MSBT + ${bdatCount} BDAT)`);
 
       // Store files in IndexedDB
       const { idbSet, idbGet, idbClear } = await import("@/lib/idb-storage");
@@ -104,6 +116,12 @@ const XenobladeProcess = () => {
       const fileBuffers: Record<string, ArrayBuffer> = {};
       for (const file of msbtFiles) {
         fileBuffers[file.name] = await file.arrayBuffer();
+      }
+
+      // Store BDAT JSON texts
+      const bdatTexts: Record<string, string> = {};
+      for (const file of bdatFiles) {
+        bdatTexts[file.name] = await file.text();
       }
 
       // Auto-detect Arabic entries
@@ -151,9 +169,10 @@ const XenobladeProcess = () => {
       }
 
       await idbClear();
-      // Store file buffers
       await idbSet("editorMsbtFiles", fileBuffers);
       await idbSet("editorMsbtFileNames", msbtFiles.map(f => f.name));
+      await idbSet("editorBdatFiles", bdatTexts);
+      await idbSet("editorBdatFileNames", bdatFiles.map(f => f.name));
       await idbSet("editorGame", "xenoblade");
       await idbSet("editorState", {
         entries: data.entries,
@@ -173,6 +192,7 @@ const XenobladeProcess = () => {
   };
 
   const isProcessing = !["idle", "done", "error"].includes(stage);
+  const totalFiles = msbtFiles.length + bdatFiles.length;
 
   return (
     <div className="min-h-screen py-8 px-4">
@@ -184,23 +204,34 @@ const XenobladeProcess = () => {
 
         <h1 className="text-3xl font-display font-bold mb-2">رفع ملفات زينوبليد 🔮</h1>
         <p className="text-muted-foreground mb-8 font-body">
-          ارفع ملفات MSBT المستخرجة من romFS — يمكنك رفع عدة ملفات دفعة واحدة
+          ارفع ملفات MSBT و/أو BDAT JSON المستخرجة — يمكنك رفع عدة ملفات دفعة واحدة
         </p>
 
-        {/* File Upload */}
+        {/* MSBT Upload */}
         <div
           onDrop={handleDrop}
           onDragOver={e => e.preventDefault()}
-          className={`relative flex flex-col items-center justify-center p-10 rounded-xl border-2 border-dashed transition-colors cursor-pointer mb-6
-            ${msbtFiles.length > 0 ? "border-[hsl(200,70%,45%)]/50 bg-[hsl(200,70%,45%)]/5" : "border-border hover:border-[hsl(200,70%,45%)]/30 bg-card"}
+          className={`relative flex flex-col items-center justify-center p-10 rounded-xl border-2 border-dashed transition-colors cursor-pointer mb-4
+            ${totalFiles > 0 ? "border-[hsl(200,70%,45%)]/50 bg-[hsl(200,70%,45%)]/5" : "border-border hover:border-[hsl(200,70%,45%)]/30 bg-card"}
             ${isProcessing ? "opacity-50 pointer-events-none" : ""}`}
         >
-          <FileText className="w-10 h-10 text-[hsl(200,70%,45%)] mb-3" />
-          <p className="font-display font-semibold mb-1">ملفات MSBT</p>
-          <p className="text-sm text-muted-foreground">اسحب وأفلت أو اختر ملفات .msbt</p>
+          <div className="flex items-center gap-6">
+            <div className="text-center">
+              <FileText className="w-8 h-8 text-[hsl(200,70%,45%)] mb-2 mx-auto" />
+              <p className="font-display font-semibold text-sm">MSBT</p>
+              <p className="text-xs text-muted-foreground">ملفات الحوارات</p>
+            </div>
+            <div className="h-12 w-px bg-border" />
+            <div className="text-center">
+              <Database className="w-8 h-8 text-[hsl(280,70%,55%)] mb-2 mx-auto" />
+              <p className="font-display font-semibold text-sm">BDAT JSON</p>
+              <p className="text-xs text-muted-foreground">جداول البيانات</p>
+            </div>
+          </div>
+          <p className="text-sm text-muted-foreground mt-4">اسحب وأفلت أو اختر ملفات .msbt و .json</p>
           <input
             type="file"
-            accept=".msbt"
+            accept=".msbt,.json"
             multiple
             className="absolute inset-0 opacity-0 cursor-pointer"
             onChange={e => handleFileSelect(e.target.files)}
@@ -208,19 +239,51 @@ const XenobladeProcess = () => {
           />
         </div>
 
-        {/* File List */}
+        {/* BDAT Instructions */}
+        <Card className="mb-6 border-[hsl(280,70%,55%)]/20 bg-[hsl(280,70%,55%)]/5">
+          <CardContent className="p-4">
+            <p className="text-sm font-display font-bold mb-2">📋 كيف تحصل على ملفات BDAT JSON؟</p>
+            <ol className="text-xs text-muted-foreground space-y-1 font-body list-decimal pr-5" dir="rtl">
+              <li>استخرج ملفات BDAT من romFS باستخدام <code className="bg-background px-1 rounded" dir="ltr">XbTool</code></li>
+              <li>حوّلها إلى JSON باستخدام <code className="bg-background px-1 rounded" dir="ltr">bdat-toolset extract path/to/bdats -o path/to/json -f json --pretty</code></li>
+              <li>ارفع ملفات JSON هنا للترجمة</li>
+              <li>بعد التصدير، أعد تحويلها إلى BDAT: <code className="bg-background px-1 rounded" dir="ltr">bdat-toolset pack path/to/json -f json -o path/to/new_bdats</code></li>
+            </ol>
+          </CardContent>
+        </Card>
+
+        {/* File Lists */}
         {msbtFiles.length > 0 && (
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle className="font-display text-lg">📂 الملفات المرفوعة ({msbtFiles.length})</CardTitle>
+          <Card className="mb-4">
+            <CardHeader className="pb-2">
+              <CardTitle className="font-display text-lg">📄 ملفات MSBT ({msbtFiles.length})</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2 max-h-48 overflow-y-auto">
+              <div className="space-y-1.5 max-h-36 overflow-y-auto">
                 {msbtFiles.map((f, i) => (
-                  <div key={i} className="flex items-center justify-between px-3 py-2 rounded bg-background border border-border text-sm">
+                  <div key={i} className="flex items-center justify-between px-3 py-1.5 rounded bg-background border border-border text-sm">
                     <span className="font-mono text-xs truncate flex-1" dir="ltr">{f.name}</span>
                     <span className="text-muted-foreground text-xs mx-3">{(f.size / 1024).toFixed(1)} KB</span>
-                    <button onClick={() => removeFile(i)} className="text-destructive text-xs hover:underline" disabled={isProcessing}>حذف</button>
+                    <button onClick={() => removeFile("msbt", i)} className="text-destructive text-xs hover:underline" disabled={isProcessing}>حذف</button>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {bdatFiles.length > 0 && (
+          <Card className="mb-4">
+            <CardHeader className="pb-2">
+              <CardTitle className="font-display text-lg">🗃️ ملفات BDAT JSON ({bdatFiles.length})</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-1.5 max-h-36 overflow-y-auto">
+                {bdatFiles.map((f, i) => (
+                  <div key={i} className="flex items-center justify-between px-3 py-1.5 rounded bg-background border border-border text-sm">
+                    <span className="font-mono text-xs truncate flex-1" dir="ltr">{f.name}</span>
+                    <span className="text-muted-foreground text-xs mx-3">{(f.size / 1024).toFixed(1)} KB</span>
+                    <button onClick={() => removeFile("bdat", i)} className="text-destructive text-xs hover:underline" disabled={isProcessing}>حذف</button>
                   </div>
                 ))}
               </div>
@@ -252,7 +315,7 @@ const XenobladeProcess = () => {
           <Button
             size="lg"
             onClick={handleExtract}
-            disabled={msbtFiles.length === 0 || isProcessing || extracting}
+            disabled={totalFiles === 0 || isProcessing || extracting}
             className="font-display font-bold text-lg px-10 py-6 bg-[hsl(200,70%,45%)] hover:bg-[hsl(200,70%,45%)]/90 text-white"
           >
             {extracting ? (
