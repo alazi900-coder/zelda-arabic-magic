@@ -100,6 +100,57 @@ export const FILE_CATEGORIES: FileCategory[] = [
   { id: "npc", label: "حوارات الشخصيات", emoji: "💬" },
 ];
 
+// === BDAT (Xenoblade) Game Categories ===
+export const BDAT_CATEGORIES: FileCategory[] = [
+  { id: "bdat-menu", label: "القوائم والواجهة", emoji: "🖥️" },
+  { id: "bdat-battle", label: "نظام القتال", emoji: "⚔️" },
+  { id: "bdat-character", label: "الشخصيات والأبطال", emoji: "🧑‍🤝‍🧑" },
+  { id: "bdat-enemy", label: "الأعداء والوحوش", emoji: "👹" },
+  { id: "bdat-item", label: "الأدوات والمعدات", emoji: "🎒" },
+  { id: "bdat-quest", label: "المهام والتحديات", emoji: "📜" },
+  { id: "bdat-field", label: "المواقع والخرائط", emoji: "🗺️" },
+  { id: "bdat-story", label: "حوارات القصة", emoji: "📖" },
+  { id: "bdat-skill", label: "المهارات والفنون", emoji: "✨" },
+  { id: "bdat-gem", label: "الجواهر والإكسسوارات", emoji: "💎" },
+  { id: "bdat-class", label: "الفصائل والأدوار", emoji: "🛡️" },
+  { id: "bdat-tips", label: "النصائح والشروحات", emoji: "💡" },
+];
+
+export function categorizeBdatTable(label: string): string {
+  const match = label.match(/^(.+?)\[\d+\]/);
+  if (!match) return "other";
+  const tbl = match[1];
+
+  // القوائم والواجهة
+  if (/^MNU_/i.test(tbl)) return "bdat-menu";
+  // نظام القتال
+  if (/^BTL_/i.test(tbl) || /^(RSC_|WPN_)/i.test(tbl)) return "bdat-battle";
+  // الشخصيات
+  if (/^CHR_/i.test(tbl) || /^(FLD_Npc|ma\d)/i.test(tbl)) return "bdat-character";
+  // الأعداء
+  if (/^(ENE_|EMT_|FLD_Enemy)/i.test(tbl)) return "bdat-enemy";
+  // الأدوات والمعدات
+  if (/^(ITM_|FLD_Collect)/i.test(tbl)) return "bdat-item";
+  // المهام
+  if (/^(QST_|EVT_|TSK_)/i.test(tbl)) return "bdat-quest";
+  // المواقع
+  if (/^(FLD_Map|FLD_Land|FLD_Location|SYS_Map|GMK_)/i.test(tbl)) return "bdat-field";
+  // القصة
+  if (/^(MSG_|TLK_|FLD_Talk)/i.test(tbl)) return "bdat-story";
+  // المهارات
+  if (/^(SKL_|ART_|SPC_)/i.test(tbl)) return "bdat-skill";
+  // الجواهر
+  if (/^(GEM_|ACC_|ORB_)/i.test(tbl)) return "bdat-gem";
+  // الفصائل
+  if (/^(JOB_|ROL_|CLS_)/i.test(tbl)) return "bdat-class";
+  // النصائح
+  if (/^(TIP_|HLP_|TUT_)/i.test(tbl)) return "bdat-tips";
+  // FLD_ عام
+  if (/^FLD_/i.test(tbl)) return "bdat-field";
+
+  return "other";
+}
+
 // Check if text contains technical tag markers
 export function hasTechnicalTags(text: string): boolean {
   return /[\uFFF9\uFFFA\uFFFB\uFFFC\uE000-\uE0FF]/.test(text);

@@ -248,6 +248,7 @@ const Editor = () => {
             isFixing={editor.translating}
             onRedistributeTags={editor.handleRedistributeTags}
             tagsCount={editor.tagsCount}
+            isBdat={editor.bdatTableNames.length > 0}
           />
 
           {/* Progress Bar */}

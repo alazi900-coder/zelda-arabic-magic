@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { utf16leByteLength } from "@/lib/byte-utils";
 import { hasArabicPresentationForms } from "@/lib/arabic-processing";
-import { ExtractedEntry, EditorState, categorizeFile, hasTechnicalTags } from "@/components/editor/types";
+import { ExtractedEntry, EditorState, categorizeFile, categorizeBdatTable, hasTechnicalTags } from "@/components/editor/types";
 
 export interface QualityStats {
   tooLong: number;
@@ -86,7 +86,7 @@ export function useEditorQuality({ state }: UseEditorQualityProps) {
         const translation = state.translations[key] || '';
         const trimmed = translation.trim();
         const isTranslated = trimmed !== '';
-        const cat = categorizeFile(entry.msbtFile);
+        const cat = entry.msbtFile === "bdat" ? categorizeBdatTable(entry.label) : categorizeFile(entry.msbtFile);
 
         if (!progress[cat]) progress[cat] = { total: 0, translated: 0 };
         progress[cat].total++;
