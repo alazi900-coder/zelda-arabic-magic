@@ -29,7 +29,7 @@ const Index = () => {
           <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-lg mx-auto font-body">
             ارفع ملفات اللعبة واحصل على نسخة معرّبة بالكامل مع ربط الحروف وعكس الاتجاه تلقائياً
           </p>
-          <Link to="/process">
+          <Link to="/zelda/process">
             <Button size="lg" className="font-display font-bold text-lg px-10 py-6 bg-primary hover:bg-primary/90">
               ابدأ التعريب 🎮
             </Button>

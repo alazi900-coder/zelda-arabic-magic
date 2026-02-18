@@ -84,7 +84,7 @@ const Editor = () => {
       <div className="min-h-screen py-8 px-4">
         <div className="max-w-5xl mx-auto text-center">
           <p className="text-muted-foreground mb-4">لا توجد بيانات للتحرير. يرجى استخراج النصوص أولاً.</p>
-          <Link to="/process"><Button className="font-display">اذهب لصفحة المعالجة</Button></Link>
+          <Link to="/zelda/process"><Button className="font-display">اذهب لصفحة المعالجة</Button></Link>
         </div>
       </div>
     );
@@ -109,7 +109,7 @@ const Editor = () => {
           </div>
         )}
         <div className="max-w-6xl mx-auto">
-          <Link to="/process" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-4 md:mb-6 font-body text-sm">
+          <Link to="/zelda/process" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-4 md:mb-6 font-body text-sm">
             <ArrowRight className="w-4 h-4" /> العودة للمعالجة
           </Link>
 
