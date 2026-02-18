@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { toast } from "@/hooks/use-toast";
 import {
   ExtractedEntry, EditorState, AI_BATCH_SIZE,
-  categorizeFile, isTechnicalText,
+  categorizeFile, isTechnicalText, hasTechnicalTags, restoreTagsLocally,
 } from "@/components/editor/types";
 
 interface UseEditorTranslationProps {
@@ -27,6 +27,21 @@ export function useEditorTranslation({
   const [translatingSingle, setTranslatingSingle] = useState<string | null>(null);
   const [tmStats, setTmStats] = useState<{ reused: number; sent: number } | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
+
+  /** Auto-fix: restore any tags the AI dropped from translations */
+  const autoFixTags = (translations: Record<string, string>): Record<string, string> => {
+    if (!state) return translations;
+    const fixed: Record<string, string> = {};
+    for (const [key, trans] of Object.entries(translations)) {
+      const entry = state.entries.find(e => `${e.msbtFile}:${e.index}` === key);
+      if (entry && hasTechnicalTags(entry.original)) {
+        fixed[key] = restoreTagsLocally(entry.original, trans);
+      } else {
+        fixed[key] = trans;
+      }
+    }
+    return fixed;
+  };
 
   const handleTranslateSingle = async (entry: ExtractedEntry) => {
     if (!state) return;
@@ -58,7 +73,14 @@ export function useEditorTranslation({
       });
       if (!response.ok) throw new Error(`خطأ ${response.status}`);
       const data = await response.json();
-      if (data.translations && data.translations[key]) updateTranslation(key, data.translations[key]);
+      if (data.translations && data.translations[key]) {
+        // Auto-fix tags if AI dropped them
+        let translated = data.translations[key];
+        if (hasTechnicalTags(entry.original)) {
+          translated = restoreTagsLocally(entry.original, translated);
+        }
+        updateTranslation(key, translated);
+      }
     } catch (err) { console.error('Single translate error:', err); }
     finally { setTranslatingSingle(null); }
   };
@@ -179,8 +201,9 @@ export function useEditorTranslation({
         if (!response.ok) throw new Error(`خطأ ${response.status}`);
         const data = await response.json();
         if (data.translations) {
-          allTranslations = { ...allTranslations, ...data.translations };
-          setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...data.translations } } : null);
+          const fixedTranslations = autoFixTags(data.translations);
+          allTranslations = { ...allTranslations, ...fixedTranslations };
+          setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...fixedTranslations } } : null);
         }
       }
       if (!abortControllerRef.current?.signal.aborted) {
@@ -262,7 +285,8 @@ export function useEditorTranslation({
         if (!response.ok) throw new Error(`خطأ ${response.status}`);
         const data = await response.json();
         if (data.translations) {
-          setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...data.translations } } : null);
+          const fixedTranslations = autoFixTags(data.translations);
+          setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...fixedTranslations } } : null);
         }
       }
       setTranslateProgress(`✅ تم إعادة ترجمة ${entriesToRetranslate.length} نص في هذه الصفحة`);
@@ -312,8 +336,9 @@ export function useEditorTranslation({
         if (!response.ok) throw new Error(`خطأ ${response.status}`);
         const data = await response.json();
         if (data.translations) {
-          fixedCount += Object.keys(data.translations).length;
-          setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...data.translations } } : null);
+          const fixedTranslations = autoFixTags(data.translations);
+          fixedCount += Object.keys(fixedTranslations).length;
+          setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...fixedTranslations } } : null);
         }
       }
       setTranslateProgress(`✅ تم إصلاح ${fixedCount} نص تالف بنجاح`);
