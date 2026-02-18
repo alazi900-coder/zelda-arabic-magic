@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { reshapeArabic, reverseBidi, processArabicText, hasArabicPresentationForms } from '@/lib/arabic-processing';
+import { reshapeArabic, reverseBidi, processArabicText, hasArabicPresentationForms, convertToArabicNumerals, mirrorPunctuation } from '@/lib/arabic-processing';
 
 describe('Arabic Processing', () => {
   it('reshapeArabic should produce presentation forms', () => {
@@ -164,6 +164,76 @@ describe('Arabic Processing', () => {
       const puaStart = chars.findIndex(c => c.charCodeAt(0) === 0xE000);
       expect(puaStart).toBeGreaterThanOrEqual(0);
       expect(chars[puaStart + 1].charCodeAt(0)).toBe(0xE001);
+    });
+  });
+
+  describe('processArabicText with arabicNumerals and mirrorPunct options', () => {
+    it('should convert Western numerals to Arabic-Indic but not touch PUA markers', () => {
+      const input = 'عدد 123\uE000\uE001';
+      const result = processArabicText(input, { arabicNumerals: true });
+      const chars = [...result];
+
+      // PUA markers preserved in order
+      const puaStart = chars.findIndex(c => c.charCodeAt(0) === 0xE000);
+      expect(puaStart).toBeGreaterThanOrEqual(0);
+      expect(chars[puaStart + 1].charCodeAt(0)).toBe(0xE001);
+
+      // Arabic-Indic numerals should be present
+      const hasArabicNumerals = chars.some(c => c === '١' || c === '٢' || c === '٣');
+      expect(hasArabicNumerals).toBe(true);
+
+      // No Western numerals should remain
+      const hasWestern = chars.some(c => /[0-9]/.test(c));
+      expect(hasWestern).toBe(false);
+    });
+
+    it('should mirror punctuation but not touch PUA markers', () => {
+      const input = 'سؤال?\uE000\uE001';
+      const result = processArabicText(input, { mirrorPunct: true });
+      const chars = [...result];
+
+      // PUA preserved
+      const puaStart = chars.findIndex(c => c.charCodeAt(0) === 0xE000);
+      expect(puaStart).toBeGreaterThanOrEqual(0);
+      expect(chars[puaStart + 1].charCodeAt(0)).toBe(0xE001);
+
+      // ? should become ؟
+      const hasArabicQuestion = chars.some(c => c === '؟');
+      expect(hasArabicQuestion).toBe(true);
+      const hasLatinQuestion = chars.some(c => c === '?');
+      expect(hasLatinQuestion).toBe(false);
+    });
+
+    it('should apply both options together without breaking PUA groups', () => {
+      const input = 'رقم 5, سؤال?\uE000\uE001\uE002';
+      const result = processArabicText(input, { arabicNumerals: true, mirrorPunct: true });
+      const chars = [...result];
+
+      // PUA group intact
+      const puaStart = chars.findIndex(c => c.charCodeAt(0) === 0xE000);
+      expect(puaStart).toBeGreaterThanOrEqual(0);
+      expect(chars[puaStart + 1].charCodeAt(0)).toBe(0xE001);
+      expect(chars[puaStart + 2].charCodeAt(0)).toBe(0xE002);
+
+      // Numerals converted
+      expect(chars.some(c => c === '٥')).toBe(true);
+      expect(chars.some(c => /[0-9]/.test(c))).toBe(false);
+
+      // Punctuation mirrored
+      expect(chars.some(c => c === '،')).toBe(true);
+      expect(chars.some(c => c === '؟')).toBe(true);
+    });
+
+    it('convertToArabicNumerals should skip PUA range', () => {
+      const input = '9\uE000\uE0013';
+      const result = convertToArabicNumerals(input);
+      expect(result).toBe('٩\uE000\uE001٣');
+    });
+
+    it('mirrorPunctuation should skip PUA range', () => {
+      const input = '?\uE000,';
+      const result = mirrorPunctuation(input);
+      expect(result).toBe('؟\uE000،');
     });
   });
 });
