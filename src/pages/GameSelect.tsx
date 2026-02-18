@@ -58,6 +58,42 @@ const games: GameCard[] = [
     ready: false,
     color: "from-[hsl(220,60%,50%)] to-[hsl(250,50%,60%)]",
   },
+  {
+    id: "xenoblade",
+    name: "زينوبليد كرونيكلز 3",
+    nameEn: "Xenoblade Chronicles 3",
+    emoji: "🔮",
+    path: "/xenoblade",
+    ready: false,
+    color: "from-[hsl(200,70%,45%)] to-[hsl(180,60%,40%)]",
+  },
+  {
+    id: "pokemon",
+    name: "بوكيمون سكارلت/فايوليت",
+    nameEn: "Pokémon Scarlet/Violet",
+    emoji: "⚡",
+    path: "/pokemon",
+    ready: false,
+    color: "from-[hsl(350,70%,50%)] to-[hsl(270,60%,50%)]",
+  },
+  {
+    id: "kirby",
+    name: "كيربي والأرض المنسية",
+    nameEn: "Kirby and the Forgotten Land",
+    emoji: "⭐",
+    path: "/kirby",
+    ready: false,
+    color: "from-[hsl(330,70%,60%)] to-[hsl(300,50%,55%)]",
+  },
+  {
+    id: "metroid",
+    name: "ميترويد دريد",
+    nameEn: "Metroid Dread",
+    emoji: "🚀",
+    path: "/metroid",
+    ready: false,
+    color: "from-[hsl(40,80%,50%)] to-[hsl(20,70%,45%)]",
+  },
 ];
 
 const GameSelect = () => {
