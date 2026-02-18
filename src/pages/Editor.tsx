@@ -480,6 +480,11 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleImportTranslations}><Upload className="w-4 h-4" /> استيراد JSON{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleImportExternalJson}><Upload className="w-4 h-4" /> استيراد ترجمة خارجية JSON 🌍</DropdownMenuItem>
                   <DropdownMenuSeparator />
+                  <DropdownMenuLabel className="text-xs">📤 تصدير احترافي</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={editor.handleExportXLIFF}><FileDown className="w-4 h-4" /> تصدير XLIFF (memoQ/Trados){editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleExportTMX}><FileDown className="w-4 h-4" /> تصدير TMX (ذاكرة ترجمة){editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleImportXLIFF}><Upload className="w-4 h-4" /> استيراد XLIFF 📥</DropdownMenuItem>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={editor.handleExportCSV}><FileDown className="w-4 h-4" /> تصدير CSV{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleImportCSV}><Upload className="w-4 h-4" /> استيراد CSV{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -545,6 +550,9 @@ const Editor = () => {
               <Button variant="outline" onClick={editor.handleImportExternalJson} className="font-body border-primary/30 text-primary hover:text-primary"><Upload className="w-4 h-4" /> استيراد ترجمة خارجية 🌍</Button>
               <Button variant="outline" onClick={editor.handleExportCSV} className="font-body"><FileDown className="w-4 h-4" /> تصدير CSV{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</Button>
               <Button variant="outline" onClick={editor.handleImportCSV} className="font-body"><Upload className="w-4 h-4" /> استيراد CSV{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</Button>
+              <Button variant="outline" onClick={editor.handleExportXLIFF} className="font-body border-accent/30 text-accent hover:text-accent"><FileDown className="w-4 h-4" /> تصدير XLIFF{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</Button>
+              <Button variant="outline" onClick={editor.handleExportTMX} className="font-body border-accent/30 text-accent hover:text-accent"><FileDown className="w-4 h-4" /> تصدير TMX{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</Button>
+              <Button variant="outline" onClick={editor.handleImportXLIFF} className="font-body border-accent/30 text-accent hover:text-accent"><Upload className="w-4 h-4" /> استيراد XLIFF</Button>
               <Button variant="outline" onClick={editor.handleImportGlossary} className="font-body"><BookOpen className="w-4 h-4" /> تحميل قاموس مخصص</Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
