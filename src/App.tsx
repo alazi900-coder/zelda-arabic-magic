@@ -15,6 +15,9 @@ import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import Install from "./pages/Install";
 import Xenoblade from "./pages/Xenoblade";
+import Pokemon from "./pages/Pokemon";
+import Kirby from "./pages/Kirby";
+import Metroid from "./pages/Metroid";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +37,9 @@ const App = () => (
               <Route path="/zelda/results" element={<ErrorBoundary fallbackTitle="خطأ في النتائج"><Results /></ErrorBoundary>} />
               <Route path="/zelda/editor" element={<ErrorBoundary fallbackTitle="خطأ في المحرر"><Editor /></ErrorBoundary>} />
               <Route path="/xenoblade" element={<Xenoblade />} />
+              <Route path="/pokemon" element={<Pokemon />} />
+              <Route path="/kirby" element={<Kirby />} />
+              <Route path="/metroid" element={<Metroid />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/install" element={<Install />} />
               <Route path="*" element={<NotFound />} />
