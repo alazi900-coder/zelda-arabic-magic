@@ -197,24 +197,6 @@ export function useEditorState() {
             }
           }
         }
-        // === Auto-fix damaged tags on load ===
-        let autoFixedCount = 0;
-        for (const entry of stored.entries) {
-          if (!hasTechnicalTags(entry.original)) continue;
-          const key = `${entry.msbtFile}:${entry.index}`;
-          const trans = mergedTranslations[key]?.trim();
-          if (!trans) continue;
-          const origTagCount = (entry.original.match(/[\uFFF9-\uFFFC\uE000-\uF8FF]/g) || []).length;
-          const transTagCount = (trans.match(/[\uFFF9-\uFFFC\uE000-\uF8FF]/g) || []).length;
-          if (transTagCount < origTagCount) {
-            const fixed = restoreTagsLocally(entry.original, trans);
-            if (fixed !== trans) {
-              mergedTranslations[key] = fixed;
-              autoFixedCount++;
-            }
-          }
-        }
-
         setState({
           entries: stored.entries,
           translations: mergedTranslations,
@@ -222,11 +204,10 @@ export function useEditorState() {
           technicalBypass: bypassSet,
         });
         const autoCount = Object.keys(autoTranslations).length;
-        let loadMsg = autoCount > 0 
+        setLastSaved(autoCount > 0 
           ? `تم التحميل + اكتشاف ${autoCount} نص معرّب مسبقاً`
-          : "تم التحميل من الحفظ السابق";
-        if (autoFixedCount > 0) loadMsg += ` + إصلاح تلقائي لـ ${autoFixedCount} رمز تالف`;
-        setLastSaved(loadMsg);
+          : "تم التحميل من الحفظ السابق"
+        );
       } else {
         // Demo data
         const demoEntries: ExtractedEntry[] = [
