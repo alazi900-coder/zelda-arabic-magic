@@ -46,8 +46,8 @@ const Editor = () => {
   const isMobile = useIsMobile();
   const [showDiffView, setShowDiffView] = React.useState(false);
   const [isDragging, setIsDragging] = React.useState(false);
-  const gameType = editor.gameType || "zelda";
-  const processPath = gameType === "xenoblade" ? "/xenoblade/process" : "/zelda/process";
+  const gameType = editor.gameType || "xenoblade";
+  const processPath = "/process";
 
   // Drag & Drop handlers
   const handleDragOver = React.useCallback((e: React.DragEvent) => {

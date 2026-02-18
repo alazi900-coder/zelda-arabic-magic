@@ -238,7 +238,7 @@ const XenobladeProcess = () => {
       setStage("done");
       addLog("✨ جاهز للتحرير!");
 
-      setTimeout(() => navigate("/xenoblade/editor"), 500);
+      setTimeout(() => navigate("/editor"), 500);
     } catch (err) {
       setStage("error");
       addLog(`❌ ${err instanceof Error ? err.message : "خطأ غير معروف"}`);
