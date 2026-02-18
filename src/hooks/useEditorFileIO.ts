@@ -533,6 +533,133 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     input.click();
   };
 
+  /** Build XLIFF 1.2 XML string */
+  const buildXliff = (entries: ExtractedEntry[], translations: Record<string, string>): string => {
+    const escXml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    const units: string[] = [];
+    for (const entry of entries) {
+      const key = `${entry.msbtFile}:${entry.index}`;
+      const target = translations[key]?.trim() || '';
+      const state = target && target !== entry.original ? ' state="translated"' : ' state="new"';
+      units.push(
+        `      <trans-unit id="${escXml(key)}" resname="${escXml(entry.label || key)}">\n` +
+        `        <source xml:lang="en">${escXml(entry.original)}</source>\n` +
+        `        <target xml:lang="ar"${state}>${escXml(target)}</target>\n` +
+        (entry.maxBytes ? `        <note>maxBytes:${entry.maxBytes}</note>\n` : '') +
+        `      </trans-unit>`
+      );
+    }
+    return `<?xml version="1.0" encoding="UTF-8"?>\n` +
+      `<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">\n` +
+      `  <file source-language="en" target-language="ar" datatype="plaintext" original="translation-project">\n` +
+      `    <body>\n` +
+      units.join('\n') + '\n' +
+      `    </body>\n` +
+      `  </file>\n` +
+      `</xliff>`;
+  };
+
+  /** Build TMX XML string */
+  const buildTmx = (entries: ExtractedEntry[], translations: Record<string, string>): string => {
+    const escXml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    const tus: string[] = [];
+    for (const entry of entries) {
+      const key = `${entry.msbtFile}:${entry.index}`;
+      const target = translations[key]?.trim() || '';
+      if (!target || target === entry.original) continue; // TMX only includes translated pairs
+      tus.push(
+        `    <tu tuid="${escXml(key)}">\n` +
+        `      <tuv xml:lang="en"><seg>${escXml(entry.original)}</seg></tuv>\n` +
+        `      <tuv xml:lang="ar"><seg>${escXml(target)}</seg></tuv>\n` +
+        `    </tu>`
+      );
+    }
+    return `<?xml version="1.0" encoding="UTF-8"?>\n` +
+      `<tmx version="1.4">\n` +
+      `  <header creationtool="Lovable Translation Editor" creationtoolversion="1.0" datatype="plaintext" segtype="sentence" adminlang="en" srclang="en" o-tmf="undefined"/>\n` +
+      `  <body>\n` +
+      tus.join('\n') + '\n' +
+      `  </body>\n` +
+      `</tmx>`;
+  };
+
+  const handleExportXLIFF = () => {
+    if (!state) return;
+    const entriesToExport = isFilterActive ? filteredEntries : state.entries;
+    const xliff = buildXliff(entriesToExport, state.translations);
+    const blob = new Blob([xliff], { type: 'application/xliff+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const suffix = isFilterActive ? `_${filterLabel}` : '';
+    a.download = `translations${suffix}_${new Date().toISOString().slice(0, 10)}.xlf`;
+    a.click();
+    URL.revokeObjectURL(url);
+    setLastSaved(`✅ تم تصدير ${entriesToExport.length} نص كملف XLIFF`);
+    setTimeout(() => setLastSaved(""), 4000);
+  };
+
+  const handleExportTMX = () => {
+    if (!state) return;
+    const entriesToExport = isFilterActive ? filteredEntries : state.entries;
+    const tmx = buildTmx(entriesToExport, state.translations);
+    const translatedCount = entriesToExport.filter(e => {
+      const t = state.translations[`${e.msbtFile}:${e.index}`]?.trim();
+      return t && t !== e.original;
+    }).length;
+    const blob = new Blob([tmx], { type: 'application/x-tmx+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const suffix = isFilterActive ? `_${filterLabel}` : '';
+    a.download = `translation-memory${suffix}_${new Date().toISOString().slice(0, 10)}.tmx`;
+    a.click();
+    URL.revokeObjectURL(url);
+    setLastSaved(`✅ تم تصدير ${translatedCount} زوج ترجمة كملف TMX`);
+    setTimeout(() => setLastSaved(""), 4000);
+  };
+
+  /** Import XLIFF file and extract target translations */
+  const handleImportXLIFF = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.xlf,.xliff,.sdlxliff,application/xliff+xml';
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+      try {
+        const text = await file.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(text, 'text/xml');
+        const parseError = doc.querySelector('parsererror');
+        if (parseError) { alert('ملف XLIFF غير صالح'); return; }
+
+        const units = doc.querySelectorAll('trans-unit');
+        const updates: Record<string, string> = {};
+        const allowedKeys = isFilterActive && filteredEntries.length < (state?.entries.length || 0)
+          ? new Set(filteredEntries.map(e => `${e.msbtFile}:${e.index}`))
+          : null;
+
+        units.forEach(unit => {
+          const id = unit.getAttribute('id') || '';
+          const target = unit.querySelector('target');
+          if (!id || !target?.textContent?.trim()) return;
+          if (allowedKeys && !allowedKeys.has(id)) return;
+          updates[id] = normalizeArabicPresentationForms(target.textContent.trim());
+        });
+
+        if (Object.keys(updates).length === 0) { alert('لم يتم العثور على ترجمات في ملف XLIFF'); return; }
+        setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...updates } } : null);
+        setLastSaved(`✅ تم استيراد ${Object.keys(updates).length} ترجمة من XLIFF — ${file.name}`);
+        setTimeout(() => setLastSaved(""), 4000);
+      } catch (err) {
+        console.error('XLIFF import error:', err);
+        alert(`خطأ في قراءة ملف XLIFF\n\n${err instanceof Error ? err.message : err}`);
+      }
+    };
+    input.click();
+  };
+
   return {
     handleExportTranslations,
     handleExportEnglishOnly,
@@ -543,6 +670,9 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     handleImportCSV,
     handleExportAllEnglishJson,
     handleImportExternalJson,
+    handleExportXLIFF,
+    handleExportTMX,
+    handleImportXLIFF,
     normalizeArabicPresentationForms,
     isFilterActive,
     filterLabel,
