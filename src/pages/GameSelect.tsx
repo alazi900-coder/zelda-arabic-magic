@@ -64,7 +64,7 @@ const games: GameCard[] = [
     nameEn: "Xenoblade Chronicles 3",
     emoji: "🔮",
     path: "/xenoblade",
-    ready: false,
+    ready: true,
     color: "from-[hsl(200,70%,45%)] to-[hsl(180,60%,40%)]",
   },
   {
