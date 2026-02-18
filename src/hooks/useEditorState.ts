@@ -405,6 +405,36 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 4000);
   }, [state, setState, setPreviousTranslations, setLastSaved]);
 
+  // === Redistribute tags at word boundaries for already-fixed translations ===
+  const handleRedistributeTags = useCallback(() => {
+    if (!state) return;
+    const charRegex = /[\uFFF9-\uFFFC\uE000-\uF8FF]/;
+    const updates: Record<string, string> = {};
+    const prevTrans: Record<string, string> = {};
+    for (const entry of state.entries) {
+      if (!hasTechnicalTags(entry.original)) continue;
+      const key = `${entry.msbtFile}:${entry.index}`;
+      const trans = state.translations[key] || '';
+      if (!trans.trim() || !charRegex.test(trans)) continue;
+      // Re-run restoreTagsLocally which strips all tags and reinserts at word boundaries
+      const fixed = restoreTagsLocally(entry.original, trans);
+      if (fixed !== trans) {
+        prevTrans[key] = trans;
+        updates[key] = fixed;
+      }
+    }
+    const count = Object.keys(updates).length;
+    if (count === 0) {
+      toast({ title: "ℹ️ لا تغيير", description: "جميع الرموز موزعة بشكل صحيح بالفعل" });
+      return;
+    }
+    setPreviousTranslations(old => ({ ...old, ...prevTrans }));
+    setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...updates } } : null);
+    toast({ title: "✅ تم إعادة التوزيع", description: `تم إعادة توزيع الرموز في ${count} نص عند حدود الكلمات` });
+    setLastSaved(`✅ إعادة توزيع ${count} نص`);
+    setTimeout(() => setLastSaved(""), 4000);
+  }, [state, setState, setPreviousTranslations, setLastSaved]);
+
   // === Review handlers ===
   const handleReviewTranslations = async () => {
     if (!state) return;
@@ -678,7 +708,7 @@ export function useEditorState() {
     handleProtectAllArabic, handleFixReversed, handleFixAllReversed,
     updateTranslation, handleUndoTranslation,
     handleTranslateSingle, handleAutoTranslate, handleStopTranslate,
-    handleRetranslatePage, handleFixDamagedTags, handleLocalFixDamagedTag, handleLocalFixAllDamagedTags, handleReviewTranslations,
+    handleRetranslatePage, handleFixDamagedTags, handleLocalFixDamagedTag, handleLocalFixAllDamagedTags, handleRedistributeTags, handleReviewTranslations,
     handleSuggestShorterTranslations, handleApplyShorterTranslation, handleApplyAllShorterTranslations,
     handleFixAllStuckCharacters, handleFixMixedLanguage,
     ...fileIO,

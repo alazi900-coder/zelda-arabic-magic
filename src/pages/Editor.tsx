@@ -220,6 +220,8 @@ const Editor = () => {
             onFixDamagedTags={() => editor.handleFixDamagedTags(editor.qualityStats.damagedTagKeys)}
             onLocalFixDamagedTags={() => editor.handleLocalFixAllDamagedTags(editor.qualityStats.damagedTagKeys)}
             isFixing={editor.translating}
+            onRedistributeTags={editor.handleRedistributeTags}
+            tagsCount={editor.tagsCount}
           />
 
           {/* Progress Bar */}
