@@ -5,8 +5,8 @@ import { AlertTriangle, Wrench, Loader2, Sparkles, RefreshCw } from "lucide-reac
 
 interface CategoryProgressProps {
   categoryProgress: Record<string, { total: number; translated: number }>;
-  filterCategory: string;
-  setFilterCategory: (cat: string) => void;
+  filterCategory: string[];
+  setFilterCategory: (cat: string[]) => void;
   damagedTagsCount?: number;
   onFilterDamagedTags?: () => void;
   isDamagedTagsActive?: boolean;
@@ -24,7 +24,21 @@ const CategoryProgress: React.FC<CategoryProgressProps> = ({ categoryProgress, f
   if (activeCats.length === 0 && !categoryProgress['other']) return null;
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 mb-6">
+    <div>
+      {filterCategory.length > 0 && (
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-xs text-muted-foreground font-body">
+            {filterCategory.length} فئة محددة
+          </span>
+          <button
+            onClick={() => setFilterCategory([])}
+            className="text-xs text-destructive hover:text-destructive/80 font-display"
+          >
+            مسح الكل ✕
+          </button>
+        </div>
+      )}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 mb-6">
       {/* Damaged tags warning card */}
       {damagedTagsCount > 0 && (
         <div
@@ -88,9 +102,13 @@ const CategoryProgress: React.FC<CategoryProgressProps> = ({ categoryProgress, f
         return (
           <button
             key={cat.id}
-            onClick={() => setFilterCategory(filterCategory === cat.id ? "all" : cat.id)}
+            onClick={() => setFilterCategory(
+              filterCategory.includes(cat.id)
+                ? filterCategory.filter(c => c !== cat.id)
+                : [...filterCategory, cat.id]
+            )}
             className={`p-2 rounded-lg border text-xs text-right transition-colors ${
-              filterCategory === cat.id
+              filterCategory.includes(cat.id)
                 ? 'border-primary bg-primary/10'
                 : 'border-border/50 bg-card/50 hover:border-primary/30'
             }`}
@@ -107,9 +125,13 @@ const CategoryProgress: React.FC<CategoryProgressProps> = ({ categoryProgress, f
       })}
       {categoryProgress['other'] && (
         <button
-          onClick={() => setFilterCategory(filterCategory === "other" ? "all" : "other")}
+          onClick={() => setFilterCategory(
+            filterCategory.includes("other")
+              ? filterCategory.filter(c => c !== "other")
+              : [...filterCategory, "other"]
+          )}
           className={`p-2 rounded-lg border text-xs text-right transition-colors ${
-            filterCategory === "other"
+            filterCategory.includes("other")
               ? 'border-primary bg-primary/10'
               : 'border-border/50 bg-card/50 hover:border-primary/30'
           }`}
@@ -125,6 +147,7 @@ const CategoryProgress: React.FC<CategoryProgressProps> = ({ categoryProgress, f
           <p className="text-muted-foreground mt-1">{categoryProgress['other'].translated}/{categoryProgress['other'].total}</p>
         </button>
       )}
+      </div>
     </div>
   );
 };

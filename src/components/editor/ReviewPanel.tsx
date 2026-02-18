@@ -9,7 +9,7 @@ interface ReviewPanelProps {
   shortSuggestions: any[] | null;
   improveResults: any[] | null;
   suggestingShort: boolean;
-  filterCategory: string;
+  filterCategory: string[];
   filterFile: string;
   filterStatus: string;
   search: string;
@@ -44,9 +44,11 @@ const ReviewPanel: React.FC<ReviewPanelProps> = ({
               <p>
                 {(() => {
                   const filters: string[] = [];
-                  if (filterCategory !== "all") {
-                    const category = FILE_CATEGORIES.find(c => c.id === filterCategory);
-                    if (category) filters.push(`${category.emoji} ${category.label}`);
+                  if (filterCategory.length > 0) {
+                    for (const catId of filterCategory) {
+                      const category = FILE_CATEGORIES.find(c => c.id === catId);
+                      if (category) filters.push(`${category.emoji} ${category.label}`);
+                    }
                   } else { filters.push("📚 جميع الفئات"); }
                   if (filterFile !== "all") filters.push(`📄 ملف محدد`);
                   if (filterStatus !== "all") {

@@ -21,7 +21,7 @@ export function useEditorState() {
   const [gameType, setGameType] = useState<string>("zelda");
   const [search, setSearch] = useState("");
   const [filterFile, setFilterFile] = useState<string>("all");
-  const [filterCategory, setFilterCategory] = useState<string>("all");
+  const [filterCategory, setFilterCategory] = useState<string[]>([]);
   const [filterStatus, setFilterStatus] = useState<"all" | "translated" | "untranslated" | "problems" | "needs-improve" | "too-short" | "too-long" | "stuck-chars" | "mixed-lang" | "has-tags" | "damaged-tags">("all");
   const [filterTechnical, setFilterTechnical] = useState<"all" | "only" | "exclude">("all");
   const [filterTable, setFilterTable] = useState<string>("all");
@@ -398,7 +398,7 @@ export function useEditorState() {
         e.label.includes(search) ||
         translation.includes(search);
       const matchFile = filterFile === "all" || e.msbtFile === filterFile;
-      const matchCategory = filterCategory === "all" || (e.msbtFile === "bdat" ? categorizeBdatTable(e.label) : categorizeFile(e.msbtFile)) === filterCategory;
+      const matchCategory = filterCategory.length === 0 || filterCategory.includes(e.msbtFile === "bdat" ? categorizeBdatTable(e.label) : categorizeFile(e.msbtFile));
       const matchStatus = 
         filterStatus === "all" || 
         (filterStatus === "translated" && isTranslated) ||
@@ -652,7 +652,7 @@ export function useEditorState() {
   };
 
   // === File IO (extracted to useEditorFileIO) ===
-  const filterLabel = filterCategory !== "all" ? filterCategory
+  const filterLabel = filterCategory.length > 0 ? filterCategory.join('+')
     : filterFile !== "all" ? filterFile
     : "";
   const fileIO = useEditorFileIO({ state, setState, setLastSaved, filteredEntries, filterLabel });
