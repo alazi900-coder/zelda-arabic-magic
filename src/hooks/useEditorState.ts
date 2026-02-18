@@ -408,16 +408,19 @@ export function useEditorState() {
   // === Redistribute tags at word boundaries for already-fixed translations ===
   const handleRedistributeTags = useCallback(() => {
     if (!state) return;
-    const charRegex = /[\uFFF9-\uFFFC\uE000-\uF8FF]/;
+    const charRegexG = /[\uFFF9-\uFFFC\uE000-\uF8FF]/g;
     const updates: Record<string, string> = {};
     const prevTrans: Record<string, string> = {};
     for (const entry of state.entries) {
       if (!hasTechnicalTags(entry.original)) continue;
       const key = `${entry.msbtFile}:${entry.index}`;
       const trans = state.translations[key] || '';
-      if (!trans.trim() || !charRegex.test(trans)) continue;
-      // Re-run restoreTagsLocally which strips all tags and reinserts at word boundaries
-      const fixed = restoreTagsLocally(entry.original, trans);
+      if (!trans.trim()) continue;
+      // Strip ALL tags from translation first, then let restoreTagsLocally
+      // reinsert them at correct word boundaries from scratch
+      const strippedTrans = trans.replace(charRegexG, '');
+      if (!strippedTrans.trim()) continue;
+      const fixed = restoreTagsLocally(entry.original, strippedTrans);
       if (fixed !== trans) {
         prevTrans[key] = trans;
         updates[key] = fixed;
