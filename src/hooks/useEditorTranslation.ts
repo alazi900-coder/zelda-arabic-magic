@@ -2,8 +2,10 @@ import { useState, useRef } from "react";
 import { toast } from "@/hooks/use-toast";
 import {
   ExtractedEntry, EditorState, AI_BATCH_SIZE,
-  categorizeFile, isTechnicalText, hasTechnicalTags, restoreTagsLocally,
+  categorizeFile, isTechnicalText, hasTechnicalTags,
 } from "@/components/editor/types";
+import { restoreTagsLocally } from "@/lib/xc3-tag-restoration";
+import { protectTags, restoreTags } from "@/lib/xc3-tag-protection";
 
 interface UseEditorTranslationProps {
   state: EditorState | null;
@@ -28,17 +30,23 @@ export function useEditorTranslation({
   const [tmStats, setTmStats] = useState<{ reused: number; sent: number } | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  /** Auto-fix: restore any tags the AI dropped from translations */
-  const autoFixTags = (translations: Record<string, string>): Record<string, string> => {
+  /** Auto-fix: restore protected tags then restore any remaining missing tags */
+  const autoFixTags = (translations: Record<string, string>, protectedMap?: Map<string, ReturnType<typeof protectTags>>): Record<string, string> => {
     if (!state) return translations;
     const fixed: Record<string, string> = {};
     for (const [key, trans] of Object.entries(translations)) {
+      let result = trans;
+      // First restore protected tag placeholders
+      const p = protectedMap?.get(key);
+      if (p && p.tags.length > 0) {
+        result = restoreTags(result, p.tags);
+      }
+      // Then restore any remaining missing tags
       const entry = state.entries.find(e => `${e.msbtFile}:${e.index}` === key);
       if (entry && hasTechnicalTags(entry.original)) {
-        fixed[key] = restoreTagsLocally(entry.original, trans);
-      } else {
-        fixed[key] = trans;
+        result = restoreTagsLocally(entry.original, result);
       }
+      fixed[key] = result;
     }
     return fixed;
   };
@@ -66,16 +74,23 @@ export function useEditorTranslation({
         .filter(n => n && state.translations[`${n.msbtFile}:${n.index}`]?.trim())
         .map(n => ({ key: `${n.msbtFile}:${n.index}`, original: n.original, translation: state.translations[`${n.msbtFile}:${n.index}`] }));
 
+      // Protect tags before sending to AI
+      const protected_ = protectTags(entry.original);
+      const textToSend = protected_.tags.length > 0 ? protected_.cleanText : entry.original;
+
       const response = await fetch(`${supabaseUrl}/functions/v1/translate-entries`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ entries: [{ key, original: entry.original }], glossary: activeGlossary, context: contextEntries.length > 0 ? contextEntries : undefined, userApiKey: userGeminiKey || undefined }),
+        body: JSON.stringify({ entries: [{ key, original: textToSend }], glossary: activeGlossary, context: contextEntries.length > 0 ? contextEntries : undefined, userApiKey: userGeminiKey || undefined }),
       });
       if (!response.ok) throw new Error(`خطأ ${response.status}`);
       const data = await response.json();
       if (data.translations && data.translations[key]) {
-        // Auto-fix tags if AI dropped them
+        // Restore protected tags first, then auto-fix any remaining
         let translated = data.translations[key];
+        if (protected_.tags.length > 0) {
+          translated = restoreTags(translated, protected_.tags);
+        }
         if (hasTechnicalTags(entry.original)) {
           translated = restoreTagsLocally(entry.original, translated);
         }
@@ -173,7 +188,14 @@ export function useEditorTranslation({
         const batch = needsAI.slice(b * AI_BATCH_SIZE, (b + 1) * AI_BATCH_SIZE);
         setTranslateProgress(`🔄 ترجمة الدفعة ${b + 1}/${totalBatches} (${batch.length} نص)...`);
 
-        const entries = batch.map(e => ({ key: `${e.msbtFile}:${e.index}`, original: e.original }));
+        // Protect tags before sending to AI
+        const protectedMap = new Map<string, ReturnType<typeof protectTags>>();
+        const entries = batch.map(e => {
+          const key = `${e.msbtFile}:${e.index}`;
+          const p = protectTags(e.original);
+          protectedMap.set(key, p);
+          return { key, original: p.tags.length > 0 ? p.cleanText : e.original };
+        });
         const contextEntries: { key: string; original: string; translation?: string }[] = [];
         const contextKeys = new Set<string>();
         for (const e of batch) {
@@ -201,7 +223,7 @@ export function useEditorTranslation({
         if (!response.ok) throw new Error(`خطأ ${response.status}`);
         const data = await response.json();
         if (data.translations) {
-          const fixedTranslations = autoFixTags(data.translations);
+          const fixedTranslations = autoFixTags(data.translations, protectedMap);
           allTranslations = { ...allTranslations, ...fixedTranslations };
           setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...fixedTranslations } } : null);
         }

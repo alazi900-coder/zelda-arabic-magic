@@ -606,6 +606,7 @@ const Editor = () => {
           {editor.showQualityStats && (
             <QualityStatsPanel
               qualityStats={editor.qualityStats}
+              needsImproveCount={editor.needsImproveCount}
               translatedCount={editor.translatedCount}
               setFilterStatus={editor.setFilterStatus}
               setShowQualityStats={editor.setShowQualityStats}
