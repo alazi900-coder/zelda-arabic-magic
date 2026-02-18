@@ -344,6 +344,18 @@ const Editor = () => {
                     <option value="exclude">بدون تقني</option>
                     <option value="only">تقني فقط</option>
                   </select>
+                  {editor.bdatTableNames.length > 0 && (
+                    <select value={editor.filterTable} onChange={e => { editor.setFilterTable(e.target.value); editor.setFilterColumn("all"); }} className="px-3 py-2 rounded bg-background border border-border font-body text-sm max-w-[180px]">
+                      <option value="all">كل الجداول</option>
+                      {editor.bdatTableNames.map(t => <option key={t} value={t}>{t}</option>)}
+                    </select>
+                  )}
+                  {editor.bdatColumnNames.length > 0 && editor.filterTable !== "all" && (
+                    <select value={editor.filterColumn} onChange={e => editor.setFilterColumn(e.target.value)} className="px-3 py-2 rounded bg-background border border-border font-body text-sm max-w-[160px]">
+                      <option value="all">كل الأعمدة</option>
+                      {editor.bdatColumnNames.map(c => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                  )}
                   <Button variant={editor.quickReviewMode ? "secondary" : "outline"} size="sm" onClick={() => { editor.setQuickReviewMode(!editor.quickReviewMode); editor.setQuickReviewIndex(0); }} className="font-body text-xs">
                     <Eye className="w-3 h-3" /> مراجعة سريعة
                   </Button>
@@ -372,6 +384,18 @@ const Editor = () => {
                   <option value="all">كل الملفات</option>
                   {editor.msbtFiles.map(f => <option key={f} value={f}>{f}</option>)}
                 </select>
+                {editor.bdatTableNames.length > 0 && (
+                  <select value={editor.filterTable} onChange={e => { editor.setFilterTable(e.target.value); editor.setFilterColumn("all"); }} className="w-full px-3 py-2 rounded bg-background border border-border font-body text-sm">
+                    <option value="all">كل الجداول</option>
+                    {editor.bdatTableNames.map(t => <option key={t} value={t}>{t}</option>)}
+                  </select>
+                )}
+                {editor.bdatColumnNames.length > 0 && editor.filterTable !== "all" && (
+                  <select value={editor.filterColumn} onChange={e => editor.setFilterColumn(e.target.value)} className="w-full px-3 py-2 rounded bg-background border border-border font-body text-sm">
+                    <option value="all">كل الأعمدة</option>
+                    {editor.bdatColumnNames.map(c => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                )}
               </div>
             )}
           </div>
