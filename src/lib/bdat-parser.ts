@@ -107,33 +107,37 @@ function parseTableHeader(data: Uint8Array, tableOffset: number): BdatTable['_ra
     return { valid: false } as any;
   }
 
-  // Table header layout (modern/XC3):
-  // 0x00: Magic "BDAT" (4)
-  // 0x04: Version u16 (2) — typically 0x3004
-  // 0x06: padding (2)
-  // 0x08: Column count u16 (2)
-  // 0x0A: padding (2)
-  // 0x0C: Row count u16 (2)
-  // 0x0E: padding (2)
-  // 0x10: Base ID u16 (2)
-  // 0x12: padding (2)
-  // 0x14: Unknown u32 (4) — always 0
-  // 0x18: Column defs offset u16 (2)
-  // 0x1A: Hash table offset u16 (2)
-  // 0x1C: Row data offset u16 (2)
-  // 0x1E: Row length u16 (2)
-  // 0x20: String table offset u32 (4)
-  // 0x24: String table length u32 (4)
-
+  // Common fields (always at same position)
   const columnCount = view.getUint16(0x08, true);
   const rowCount = view.getUint16(0x0C, true);
   const baseId = view.getUint16(0x10, true);
-  const columnDefsOffset = view.getUint16(0x18, true);
-  const hashTableOffset = view.getUint16(0x1A, true);
-  const rowDataOffset = view.getUint16(0x1C, true);
-  const rowLength = view.getUint16(0x1E, true);
-  const stringTableOffset = view.getUint32(0x20, true);
-  const stringTableLength = view.getUint32(0x24, true);
+
+  // Detect header layout: u32 offsets (48-byte header) vs u16 offsets (40-byte header).
+  // If u16 at 0x1E (rowLength in u16 layout) is 0 but u32 at 0x18 is a reasonable value,
+  // it's the u32 layout used in newer XC3 BDAT files.
+  const testRowLength16 = view.getUint16(0x1E, true);
+  const testColDefsOffset32 = view.getUint32(0x18, true);
+  const isU32Layout = testRowLength16 === 0 && testColDefsOffset32 > 0 && testColDefsOffset32 < 0x10000;
+
+  let columnDefsOffset: number, hashTableOffset: number, rowDataOffset: number, rowLength: number, stringTableOffset: number, stringTableLength: number;
+
+  if (isU32Layout) {
+    // u32 layout (48-byte header)
+    columnDefsOffset = view.getUint32(0x18, true);
+    hashTableOffset = view.getUint32(0x1C, true);
+    rowDataOffset = view.getUint32(0x20, true);
+    rowLength = view.getUint32(0x24, true);
+    stringTableOffset = view.getUint32(0x28, true);
+    stringTableLength = view.getUint32(0x2C, true);
+  } else {
+    // u16 layout (40-byte header)
+    columnDefsOffset = view.getUint16(0x18, true);
+    hashTableOffset = view.getUint16(0x1A, true);
+    rowDataOffset = view.getUint16(0x1C, true);
+    rowLength = view.getUint16(0x1E, true);
+    stringTableOffset = view.getUint32(0x20, true);
+    stringTableLength = view.getUint32(0x24, true);
+  }
 
   // Calculate table size
   const tableSize = stringTableOffset + stringTableLength;
@@ -163,8 +167,8 @@ function parseColumns(tableData: Uint8Array, raw: BdatTable['_raw'], unhashFn: (
   const columns: BdatColumn[] = [];
   const view = new DataView(tableData.buffer, tableData.byteOffset);
   
-  let currentOffset = 0; // track byte offset within each row
-
+  // First pass: collect types and names
+  const colDefs: { valueType: BdatValueType; name: string; nameRef: number; size: number }[] = [];
   for (let i = 0; i < raw.columnCount; i++) {
     const defOffset = raw.columnDefsOffset + i * 3;
     const valueType: BdatValueType = tableData[defOffset];
@@ -172,10 +176,7 @@ function parseColumns(tableData: Uint8Array, raw: BdatTable['_raw'], unhashFn: (
 
     let name: string;
     if (raw.hashedNames) {
-      // nameRef is index into a hash table at stringTableOffset
-      // Each hash entry is 4 bytes (u32 murmur3 hash)
-      // The hash is stored after the flag byte
-      const hashOffset = raw.stringTableOffset + 1 + nameRef * 4;
+      const hashOffset = raw.hashTableOffset + nameRef * 4;
       if (hashOffset + 4 <= tableData.length) {
         const hash = view.getUint32(hashOffset, true);
         name = unhashFn(hash);
@@ -183,15 +184,53 @@ function parseColumns(tableData: Uint8Array, raw: BdatTable['_raw'], unhashFn: (
         name = `col_${i}`;
       }
     } else {
-      // nameRef is offset into string table (after flag byte)
       const strOffset = raw.stringTableOffset + 1 + nameRef;
       name = readNullTerminatedString(tableData, strOffset);
       if (!name) name = `col_${i}`;
     }
 
     const size = VALUE_TYPE_SIZE[valueType] || 0;
-    columns.push({ valueType, nameOffset: nameRef, name, offset: currentOffset });
-    currentOffset += size;
+    colDefs.push({ valueType, name, nameRef, size });
+  }
+
+  // Calculate offsets using rowLength to determine layout
+  let simpleTotal = colDefs.reduce((sum, c) => sum + c.size, 0);
+  
+  // If simple cumulative sizes don't match rowLength, the format uses
+  // padded storage where small types (1-byte) are stored in wider slots.
+  // Try progressively wider padding until total matches rowLength.
+  if (simpleTotal !== raw.rowLength && raw.rowLength > 0) {
+    // Strategy: pad 1-byte types to 2, then to 4 if needed
+    for (const padSize of [2, 4]) {
+      const paddedDefs = colDefs.map(d => ({ ...d, size: d.size === 1 ? padSize : d.size }));
+      const paddedTotal = paddedDefs.reduce((sum, c) => sum + c.size, 0);
+      if (paddedTotal === raw.rowLength) {
+        let off = 0;
+        for (const def of paddedDefs) {
+          columns.push({ valueType: def.valueType, nameOffset: def.nameRef, name: def.name, offset: off });
+          off += def.size;
+        }
+        return columns;
+      }
+    }
+    // Fallback: try natural alignment (align each field to its own size)
+    let off = 0;
+    for (const def of colDefs) {
+      if (def.size > 1) {
+        const align = Math.min(def.size, 4);
+        off = Math.ceil(off / align) * align;
+      }
+      columns.push({ valueType: def.valueType, nameOffset: def.nameRef, name: def.name, offset: off });
+      off += def.size;
+    }
+    return columns;
+  }
+  
+  // Simple cumulative layout (no padding needed)
+  let currentOffset = 0;
+  for (const def of colDefs) {
+    columns.push({ valueType: def.valueType, nameOffset: def.nameRef, name: def.name, offset: currentOffset });
+    currentOffset += def.size;
   }
 
   return columns;
