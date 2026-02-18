@@ -14,6 +14,7 @@ import Editor from "./pages/Editor";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import Install from "./pages/Install";
+import Xenoblade from "./pages/Xenoblade";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ const App = () => (
               <Route path="/zelda/process" element={<ErrorBoundary fallbackTitle="خطأ في المعالجة"><Process /></ErrorBoundary>} />
               <Route path="/zelda/results" element={<ErrorBoundary fallbackTitle="خطأ في النتائج"><Results /></ErrorBoundary>} />
               <Route path="/zelda/editor" element={<ErrorBoundary fallbackTitle="خطأ في المحرر"><Editor /></ErrorBoundary>} />
+              <Route path="/xenoblade" element={<Xenoblade />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/install" element={<Install />} />
               <Route path="*" element={<NotFound />} />
