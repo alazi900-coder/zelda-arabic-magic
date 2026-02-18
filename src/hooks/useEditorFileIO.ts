@@ -805,7 +805,11 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
           return;
         }
 
-        setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...updates } } : null);
+        setState(prev => {
+          if (!prev) return null;
+          const newFuzzy = { ...(prev.fuzzyScores || {}), ...fuzzyMatches };
+          return { ...prev, translations: { ...prev.translations, ...updates }, fuzzyScores: newFuzzy };
+        });
         const totalPairs = tuidToArabic.size + sourceToArabic.size;
         const fuzzyNote = fuzzyCount > 0 ? ` (${fuzzyCount} جزئية)` : '';
         setLastSaved(`✅ تم استيراد ${Object.keys(updates).length} ترجمة من TMX${fuzzyNote} (${totalPairs} زوج في الملف) — ${file.name}`);

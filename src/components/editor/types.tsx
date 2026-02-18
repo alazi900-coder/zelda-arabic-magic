@@ -15,6 +15,7 @@ export interface EditorState {
   protectedEntries?: Set<string>;
   glossary?: string;
   technicalBypass?: Set<string>;
+  fuzzyScores?: Record<string, number>;
 }
 
 export interface ReviewIssue {
