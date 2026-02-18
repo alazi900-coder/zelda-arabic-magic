@@ -95,10 +95,21 @@ const XenobladeProcess = () => {
             const buffer = await file.arrayBuffer();
             bdatBinaryBuffers[file.name] = buffer;
             const data = new Uint8Array(buffer);
+            addLog(`📂 حجم الملف: ${(data.length / 1024).toFixed(1)} KB — أول 4 بايت: ${String.fromCharCode(...data.slice(0, 4))}`);
             const bdatFile = parseBdatFile(data, unhashLabel);
             const strings = extractBdatStrings(bdatFile, file.name);
             
-            addLog(`📦 ${file.name}: ${bdatFile.tables.length} جدول، ${strings.length} نص`);
+            // تفاصيل إضافية للتشخيص
+            const totalStringCols = bdatFile.tables.reduce((sum, t) => sum + t.columns.filter(c => c.valueType === 7 || c.valueType === 11).length, 0);
+            const totalRows = bdatFile.tables.reduce((sum, t) => sum + t.rows.length, 0);
+            addLog(`📦 ${file.name}: ${bdatFile.tables.length} جدول، ${totalRows} صف، ${totalStringCols} عمود نصي، ${strings.length} نص مستخرج`);
+            
+            if (strings.length === 0 && bdatFile.tables.length > 0) {
+              // عرض أسماء الجداول للتشخيص
+              const tableNames = bdatFile.tables.slice(0, 5).map(t => t.name).join(', ');
+              addLog(`ℹ️ أسماء الجداول: ${tableNames}${bdatFile.tables.length > 5 ? '...' : ''}`);
+              addLog(`⚠️ لا توجد نصوص في هذا الملف — قد يحتوي فقط على بيانات رقمية`);
+            }
             
             for (let i = 0; i < strings.length; i++) {
               const s = strings[i];
@@ -114,6 +125,9 @@ const XenobladeProcess = () => {
             }
           } catch (e) {
             addLog(`⚠️ فشل تحليل ${file.name}: ${e instanceof Error ? e.message : 'خطأ'}`);
+            if (e instanceof Error && e.message.includes('Invalid BDAT')) {
+              addLog(`💡 الملف ليس بصيغة BDAT صالحة. تأكد أنه ملف .bdat من Xenoblade Chronicles 3.`);
+            }
           }
         }
       }
@@ -163,6 +177,17 @@ const XenobladeProcess = () => {
       // Merge server entries with local binary BDAT entries
       const allEntries = [...serverEntries, ...bdatBinaryEntries];
       addLog(`✅ تم استخراج ${allEntries.length} نص (${msbtCount} MSBT + ${bdatJsonCount} BDAT JSON + ${bdatBinaryEntries.length} BDAT ثنائي)`);
+
+      if (allEntries.length === 0) {
+        setStage("error");
+        addLog("⚠️ لم يتم العثور على نصوص قابلة للترجمة في الملفات المرفوعة.");
+        addLog("💡 تأكد أن الملف يحتوي على جداول بها أعمدة نصية (String columns).");
+        if (bdatBinaryFiles.length > 0) {
+          addLog("💡 هذا المحلل يدعم صيغة BDAT الحديثة (XC3). إذا كان الملف من XC1/XC2 فقد يكون بصيغة مختلفة.");
+        }
+        setExtracting(false);
+        return;
+      }
 
       // Store files in IndexedDB
       const { idbSet, idbGet, idbClear } = await import("@/lib/idb-storage");
