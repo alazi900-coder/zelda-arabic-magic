@@ -6,19 +6,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
-import GameSelect from "./pages/GameSelect";
-import Index from "./pages/Index";
-import Process from "./pages/Process";
-import Results from "./pages/Results";
+import Xenoblade from "./pages/Xenoblade";
+import XenobladeProcess from "./pages/XenobladeProcess";
 import Editor from "./pages/Editor";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import Install from "./pages/Install";
-import Xenoblade from "./pages/Xenoblade";
-import XenobladeProcess from "./pages/XenobladeProcess";
-import Pokemon from "./pages/Pokemon";
-import Kirby from "./pages/Kirby";
-import Metroid from "./pages/Metroid";
 
 const queryClient = new QueryClient();
 
@@ -32,17 +25,9 @@ const App = () => (
         <BrowserRouter>
           <ErrorBoundary fallbackTitle="حدث خطأ في التطبيق">
             <Routes>
-              <Route path="/" element={<GameSelect />} />
-              <Route path="/zelda" element={<Index />} />
-              <Route path="/zelda/process" element={<ErrorBoundary fallbackTitle="خطأ في المعالجة"><Process /></ErrorBoundary>} />
-              <Route path="/zelda/results" element={<ErrorBoundary fallbackTitle="خطأ في النتائج"><Results /></ErrorBoundary>} />
-              <Route path="/zelda/editor" element={<ErrorBoundary fallbackTitle="خطأ في المحرر"><Editor /></ErrorBoundary>} />
-              <Route path="/xenoblade" element={<Xenoblade />} />
-              <Route path="/xenoblade/process" element={<ErrorBoundary fallbackTitle="خطأ في المعالجة"><XenobladeProcess /></ErrorBoundary>} />
-              <Route path="/xenoblade/editor" element={<ErrorBoundary fallbackTitle="خطأ في المحرر"><Editor /></ErrorBoundary>} />
-              <Route path="/pokemon" element={<Pokemon />} />
-              <Route path="/kirby" element={<Kirby />} />
-              <Route path="/metroid" element={<Metroid />} />
+              <Route path="/" element={<Xenoblade />} />
+              <Route path="/process" element={<ErrorBoundary fallbackTitle="خطأ في المعالجة"><XenobladeProcess /></ErrorBoundary>} />
+              <Route path="/editor" element={<ErrorBoundary fallbackTitle="خطأ في المحرر"><Editor /></ErrorBoundary>} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/install" element={<Install />} />
               <Route path="*" element={<NotFound />} />
