@@ -93,13 +93,32 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
     try {
       const msbtFiles = await idbGet<Record<string, ArrayBuffer>>("editorMsbtFiles");
       const msbtFileNames = await idbGet<string[]>("editorMsbtFileNames");
-      if (!msbtFiles || !msbtFileNames) { setBuildProgress("❌ ملفات MSBT غير موجودة. يرجى العودة لصفحة المعالجة وإعادة رفع الملفات."); setTimeout(() => setBuildProgress(""), 5000); return; }
+      const bdatFiles = await idbGet<Record<string, string>>("editorBdatFiles");
+      const bdatFileNames = await idbGet<string[]>("editorBdatFileNames");
+
+      const hasMsbt = msbtFiles && msbtFileNames && msbtFileNames.length > 0;
+      const hasBdat = bdatFiles && bdatFileNames && bdatFileNames.length > 0;
+
+      if (!hasMsbt && !hasBdat) {
+        setBuildProgress("❌ لا توجد ملفات. يرجى العودة لصفحة المعالجة وإعادة رفع الملفات.");
+        setTimeout(() => setBuildProgress(""), 5000);
+        return;
+      }
       
       const formData = new FormData();
-      for (let i = 0; i < msbtFileNames.length; i++) {
-        const name = msbtFileNames[i];
-        const buf = msbtFiles[name];
-        if (buf) formData.append(`msbt_${i}`, new File([new Uint8Array(buf)], name));
+      if (hasMsbt) {
+        for (let i = 0; i < msbtFileNames!.length; i++) {
+          const name = msbtFileNames![i];
+          const buf = msbtFiles![name];
+          if (buf) formData.append(`msbt_${i}`, new File([new Uint8Array(buf)], name));
+        }
+      }
+      if (hasBdat) {
+        for (let i = 0; i < bdatFileNames!.length; i++) {
+          const name = bdatFileNames![i];
+          const text = bdatFiles![name];
+          if (text) formData.append(`bdat_${i}`, new File([text], name, { type: 'application/json' }));
+        }
       }
       
       const nonEmptyTranslations: Record<string, string> = {};
