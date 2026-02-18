@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { idbGet } from "@/lib/idb-storage";
 import { processArabicText, hasArabicChars as hasArabicCharsProcessing, hasArabicPresentationForms } from "@/lib/arabic-processing";
-import { EditorState } from "@/components/editor/types";
+import { EditorState, hasTechnicalTags, restoreTagsLocally } from "@/components/editor/types";
 import { BuildPreview } from "@/components/editor/BuildConfirmDialog";
 
 export interface BuildStats {
@@ -100,6 +100,19 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
       if (dictBuf) formData.append("dictFile", new File([new Uint8Array(dictBuf)], (await idbGet<string>("editorDictFileName")) || "ZsDic.pack.zs"));
       const nonEmptyTranslations: Record<string, string> = {};
       for (const [k, v] of Object.entries(state.translations)) { if (v.trim()) nonEmptyTranslations[k] = v; }
+
+      // Auto-fix damaged tags before build
+      for (const entry of state.entries) {
+        if (!hasTechnicalTags(entry.original)) continue;
+        const key = `${entry.msbtFile}:${entry.index}`;
+        const trans = nonEmptyTranslations[key];
+        if (!trans) continue;
+        const origTagCount = (entry.original.match(/[\uFFF9-\uFFFC\uE000-\uF8FF]/g) || []).length;
+        const transTagCount = (trans.match(/[\uFFF9-\uFFFC\uE000-\uF8FF]/g) || []).length;
+        if (transTagCount < origTagCount) {
+          nonEmptyTranslations[key] = restoreTagsLocally(entry.original, trans);
+        }
+      }
       
       console.log('[BUILD] Total translations being sent:', Object.keys(nonEmptyTranslations).length);
       console.log('[BUILD] Protected entries:', Array.from(state.protectedEntries || []).length);
