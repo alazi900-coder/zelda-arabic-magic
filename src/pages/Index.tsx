@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Shield, FileText, Download, Sparkles, ArrowRight } from "lucide-react";
+import GameInfoSection from "@/components/GameInfoSection";
 
 const steps = [
   { icon: FileText, title: "ارفع الملفات", desc: "ارفع ملف اللغة (.zs) وملف القاموس" },
@@ -72,6 +73,25 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Game Info */}
+      <GameInfoSection
+        accentColor="hsl(142, 70%, 45%)"
+        secondaryColor="hsl(47, 100%, 50%)"
+        fileFormat=".msbt (مضغوط بـ Zstandard → .zs)"
+        fileFormatDesc="ملفات MSBT (Message Studio Binary Text) هي صيغة نينتندو لتخزين النصوص في الألعاب. في زيلدا TotK تكون مضغوطة بصيغة Zstandard."
+        requiredFiles={[
+          { name: "Msg_USen.Product.sarc.zs", desc: "أرشيف النصوص الإنجليزية الرئيسي — يحتوي جميع ملفات MSBT مضغوطة" },
+          { name: "ملف القاموس (glossary.txt)", desc: "قاموس المصطلحات العربية لترجمة أسماء الشخصيات والأماكن والأسلحة" },
+        ]}
+        tools={[
+          { name: "Zstandard (zstd)", desc: "لفك ضغط ملفات .zs واستخراج أرشيف SARC" },
+          { name: "MSBT Editor / MsbtLib", desc: "لقراءة وتعديل ملفات MSBT الثنائية" },
+          { name: "SARC Tool", desc: "لاستخراج وإعادة حزم أرشيفات SARC" },
+        ]}
+        method="يتم استخراج ملفات MSBT من أرشيف SARC المضغوط بـ Zstandard. كل ملف MSBT يحتوي على مفاتيح نصية وقيمها. تقوم الأداة بفك الضغط، استخراج النصوص، تطبيق القاموس العربي، عكس اتجاه النص للعربية (RTL)، ربط الحروف العربية (Arabic shaping)، ثم إعادة حزم الملفات."
+        notes="يجب استخراج ملفات romFS من اللعبة باستخدام سويتش معدّل أو محاكي. الملفات المعدّلة توضع في مجلد atmosphere/contents على بطاقة SD."
+      />
 
       {/* Footer */}
       <footer className="mt-auto py-6 text-center text-sm text-muted-foreground border-t border-border">
