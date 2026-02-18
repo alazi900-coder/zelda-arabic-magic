@@ -197,17 +197,47 @@ export function useEditorState() {
             }
           }
         }
-        setState({
+        // === One-time auto-repair: fix ONLY entries where translation has FEWER tags than original ===
+        let autoFixCount = 0;
+        for (const entry of stored.entries) {
+          if (!hasTechnicalTags(entry.original)) continue;
+          const key = `${entry.msbtFile}:${entry.index}`;
+          const trans = mergedTranslations[key] || '';
+          if (!trans.trim()) continue;
+          const origTags = entry.original.match(/[\uFFF9-\uFFFC\uE000-\uF8FF]/g) || [];
+          const transTags = trans.match(/[\uFFF9-\uFFFC\uE000-\uF8FF]/g) || [];
+          if (transTags.length < origTags.length) {
+            const fixed = restoreTagsLocally(entry.original, trans);
+            if (fixed !== trans) {
+              mergedTranslations[key] = fixed;
+              autoFixCount++;
+            }
+          }
+        }
+
+        const finalState: EditorState = {
           entries: stored.entries,
           translations: mergedTranslations,
           protectedEntries: protectedSet,
           technicalBypass: bypassSet,
-        });
+        };
+        setState(finalState);
+
+        // Save immediately if we auto-fixed anything
+        if (autoFixCount > 0) {
+          await idbSet("editorState", {
+            entries: finalState.entries,
+            translations: finalState.translations,
+            protectedEntries: Array.from(finalState.protectedEntries || []),
+            technicalBypass: Array.from(finalState.technicalBypass || []),
+          });
+        }
+
         const autoCount = Object.keys(autoTranslations).length;
-        setLastSaved(autoCount > 0 
-          ? `تم التحميل + اكتشاف ${autoCount} نص معرّب مسبقاً`
-          : "تم التحميل من الحفظ السابق"
-        );
+        const parts: string[] = [];
+        if (autoCount > 0) parts.push(`اكتشاف ${autoCount} نص معرّب مسبقاً`);
+        if (autoFixCount > 0) parts.push(`🔧 إصلاح تلقائي لـ ${autoFixCount} رمز تالف`);
+        setLastSaved(parts.length > 0 ? `تم التحميل + ${parts.join(' + ')}` : "تم التحميل من الحفظ السابق");
       } else {
         // Demo data
         const demoEntries: ExtractedEntry[] = [
