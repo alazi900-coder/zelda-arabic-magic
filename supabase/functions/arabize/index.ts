@@ -820,6 +820,12 @@ Deno.serve(async (req) => {
     console.log(`[BUILD] Received ${Object.keys(translations).length} translations, ${protectedEntries.size} protected`);
     console.log(`[BUILD] Sample translation keys: ${Object.keys(translations).slice(0, 5).join(', ')}`);
 
+    // ===== DIAGNOSTIC: Validate tag roundtrip =====
+    let diagTagEntries = 0;
+    let diagTagMismatch = 0;
+    let diagTagOk = 0;
+    let diagSampleLogged = 0;
+
     let modifiedCount = 0;
     let skippedOversize = 0;
     let skippedAlreadyArabized = 0;
@@ -853,6 +859,26 @@ Deno.serve(async (req) => {
               if (translations[key] !== undefined && translations[key] !== '') {
                 // Convert \uFFFC in translation back to PUA markers from original entry
                 let translationText = translations[key];
+                
+                // DIAGNOSTIC: Count markers before replacement
+                const markersBefore = (translationText.match(/[\uFFF9-\uFFFC]/g) || []).length;
+                const puaBefore = (translationText.match(/[\uE000-\uE0FF]/g) || []).length;
+                const tagCount = entries[i].tags.length;
+                
+                if (tagCount > 0 || markersBefore > 0 || puaBefore > 0) {
+                  diagTagEntries++;
+                  if (diagSampleLogged < 10) {
+                    console.log(`[DIAG-TAG] Key: ${key}, tags: ${tagCount}, markers(FFF9-FFFC): ${markersBefore}, PUA(E000+): ${puaBefore}`);
+                    if (tagCount > 0) {
+                      const tagHex = entries[i].tags.map(t => `E${(t.markerCode-0xE000).toString(16).padStart(3,'0')}=[${[...t.bytes].map(b=>b.toString(16).padStart(2,'0')).join(' ')}]`).join(', ');
+                      console.log(`[DIAG-TAG] Tag bytes: ${tagHex}`);
+                    }
+                    // Show first 80 chars of translation as hex codes
+                    const transHex = [...translationText.substring(0, 40)].map(c => c.charCodeAt(0).toString(16).padStart(4, '0')).join(' ');
+                    console.log(`[DIAG-TAG] Trans hex: ${transHex}`);
+                  }
+                }
+                
                 let tagIdx = 0;
                 translationText = translationText.replace(/[\uFFF9\uFFFA\uFFFB\uFFFC]/g, () => {
                   if (tagIdx < entries[i].tags.length) {
@@ -860,6 +886,21 @@ Deno.serve(async (req) => {
                   }
                   return ''; // no corresponding tag, remove marker
                 });
+                
+                // DIAGNOSTIC: Verify after replacement
+                const markersAfter = (translationText.match(/[\uFFF9-\uFFFC]/g) || []).length;
+                const puaAfter = (translationText.match(/[\uE000-\uE0FF]/g) || []).length;
+                
+                if (tagCount > 0 && diagSampleLogged < 10) {
+                  console.log(`[DIAG-TAG] After replace: markers(FFF9-FFFC): ${markersAfter}, PUA(E000+): ${puaAfter}, tagIdx used: ${tagIdx}`);
+                  if (markersBefore !== tagCount) {
+                    console.log(`[DIAG-TAG] ⚠️ MISMATCH: translation had ${markersBefore} markers but entry has ${tagCount} tags`);
+                    diagTagMismatch++;
+                  } else {
+                    diagTagOk++;
+                  }
+                  diagSampleLogged++;
+                }
 
                 if (protectedEntries.has(key)) {
                   // Protected entry: apply reshaping only (NO BiDi reversal)
@@ -879,6 +920,29 @@ Deno.serve(async (req) => {
                 // Check if translation is larger than original slot
                 const encoded = encodeEntryToBytes(entries[i]);
                 if (encoded.length > entries[i].size) expandedCount++;
+                
+                // DIAGNOSTIC: Roundtrip validation for entries with tags
+                if (tagCount > 0 && diagSampleLogged <= 10) {
+                  // Check that tag bytes appear correctly in encoded output
+                  const encodedHex = [...encoded.slice(0, Math.min(60, encoded.length))].map(b => b.toString(16).padStart(2, '0')).join(' ');
+                  console.log(`[DIAG-TAG] Encoded first 60 bytes: ${encodedHex}`);
+                  // Verify each tag's bytes appear in the encoded output
+                  for (const tag of entries[i].tags) {
+                    const tagSig = tag.bytes.slice(0, 4); // first 4 bytes: 0E 00 GG 00
+                    let found = false;
+                    for (let bi = 0; bi < encoded.length - tagSig.length; bi++) {
+                      if (encoded[bi] === tagSig[0] && encoded[bi+1] === tagSig[1] && 
+                          encoded[bi+2] === tagSig[2] && encoded[bi+3] === tagSig[3]) {
+                        found = true;
+                        break;
+                      }
+                    }
+                    if (!found) {
+                      console.log(`[DIAG-TAG] ❌ Tag E${(tag.markerCode-0xE000).toString(16)} NOT found in encoded output!`);
+                    }
+                  }
+                }
+                
                 // Collect detailed stats
                 const ratio = entries[i].size > 0 ? encoded.length / entries[i].size : 0;
                 totalByteRatio += ratio;
@@ -919,6 +983,7 @@ Deno.serve(async (req) => {
     });
 
     console.log(`Modified ${modifiedCount} entries (${expandedCount} expanded), skipped already-arabized: ${skippedAlreadyArabized}`);
+    console.log(`[DIAG-SUMMARY] Tagged entries: ${diagTagEntries}, OK: ${diagTagOk}, MISMATCH: ${diagTagMismatch}`);
 
     // Build stats JSON
     const avgRatio = modifiedCount > 0 ? Math.round((totalByteRatio / modifiedCount) * 100) : 0;
