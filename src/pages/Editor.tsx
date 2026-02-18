@@ -469,11 +469,16 @@ const Editor = () => {
                   <Button variant="outline" size="sm" className="font-body text-xs"><Download className="w-3 h-3" /> ملفات</Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="bg-card border-border z-50">
+                  <DropdownMenuLabel className="text-xs">📤 تصدير</DropdownMenuLabel>
                   <DropdownMenuItem onClick={editor.handleExportTranslations}><Download className="w-4 h-4" /> تصدير JSON{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => editor.handleExportEnglishOnly()}><FileText className="w-4 h-4" /> تصدير الإنجليزية كاملاً ({untranslatedCount}) 🇬🇧</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => editor.handleExportEnglishOnly()}><FileText className="w-4 h-4" /> تصدير غير المترجم ({untranslatedCount}) 🇬🇧</DropdownMenuItem>
                   <DropdownMenuItem onClick={() => editor.handleExportEnglishOnly(1000)}><FileText className="w-4 h-4" /> تصدير مقسّم (1000/ملف) 🇬🇧</DropdownMenuItem>
                   <DropdownMenuItem onClick={() => editor.handleExportEnglishOnly(500)}><FileText className="w-4 h-4" /> تصدير مقسّم (500/ملف) 🇬🇧</DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleExportAllEnglishJson}><FileDown className="w-4 h-4" /> تصدير الكل JSON للترجمة الخارجية 🌍{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuLabel className="text-xs">📥 استيراد</DropdownMenuLabel>
                   <DropdownMenuItem onClick={editor.handleImportTranslations}><Upload className="w-4 h-4" /> استيراد JSON{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleImportExternalJson}><Upload className="w-4 h-4" /> استيراد ترجمة خارجية JSON 🌍</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={editor.handleExportCSV}><FileDown className="w-4 h-4" /> تصدير CSV{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleImportCSV}><Upload className="w-4 h-4" /> استيراد CSV{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
@@ -527,7 +532,7 @@ const Editor = () => {
                   <Button variant="outline" className="font-body"><FileText className="w-4 h-4" /> تصدير الإنجليزية ({untranslatedCount}) 🇬🇧{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="bg-card border-border z-50">
-                  <DropdownMenuItem onClick={() => editor.handleExportEnglishOnly()}>📄 تصدير كامل في ملف واحد</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => editor.handleExportEnglishOnly()}>📄 تصدير غير المترجم في ملف واحد</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuLabel className="text-xs">📦 تصدير مقسّم</DropdownMenuLabel>
                   <DropdownMenuItem onClick={() => editor.handleExportEnglishOnly(1000)}>1000 نص لكل ملف</DropdownMenuItem>
@@ -535,7 +540,9 @@ const Editor = () => {
                   <DropdownMenuItem onClick={() => editor.handleExportEnglishOnly(200)}>200 نص لكل ملف</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+              <Button variant="outline" onClick={editor.handleExportAllEnglishJson} className="font-body border-primary/30 text-primary hover:text-primary"><FileDown className="w-4 h-4" /> تصدير الكل JSON للترجمة الخارجية 🌍{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</Button>
               <Button variant="outline" onClick={editor.handleImportTranslations} className="font-body"><Upload className="w-4 h-4" /> استيراد JSON{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</Button>
+              <Button variant="outline" onClick={editor.handleImportExternalJson} className="font-body border-primary/30 text-primary hover:text-primary"><Upload className="w-4 h-4" /> استيراد ترجمة خارجية 🌍</Button>
               <Button variant="outline" onClick={editor.handleExportCSV} className="font-body"><FileDown className="w-4 h-4" /> تصدير CSV{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</Button>
               <Button variant="outline" onClick={editor.handleImportCSV} className="font-body"><Upload className="w-4 h-4" /> استيراد CSV{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</Button>
               <Button variant="outline" onClick={editor.handleImportGlossary} className="font-body"><BookOpen className="w-4 h-4" /> تحميل قاموس مخصص</Button>
