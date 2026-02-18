@@ -110,15 +110,15 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
         const key = `${entry.msbtFile}:${entry.index}`;
         const trans = nonEmptyTranslations[key];
         if (!trans) continue;
-        const origTagCount = (entry.original.match(/[\uFFF9-\uFFFC\uE000-\uF8FF]/g) || []).length;
-        const transTagCount = (trans.match(/[\uFFF9-\uFFFC\uE000-\uF8FF]/g) || []).length;
+        const origTagCount = (entry.original.match(/[\uFFF9-\uFFFC\uE000-\uE0FF]/g) || []).length;
+        const transTagCount = (trans.match(/[\uFFF9-\uFFFC\uE000-\uE0FF]/g) || []).length;
         if (transTagCount < origTagCount) {
           const fixed = restoreTagsLocally(entry.original, trans);
           nonEmptyTranslations[key] = fixed;
           tagFixCount++;
           // Log DoCommand/LayoutMsg entries for debugging
           if (entry.msbtFile.includes('DoCommand') || entry.msbtFile.includes('Pouch')) {
-            const fixedTagCount = (fixed.match(/[\uFFF9-\uFFFC\uE000-\uF8FF]/g) || []).length;
+            const fixedTagCount = (fixed.match(/[\uFFF9-\uFFFC\uE000-\uE0FF]/g) || []).length;
             console.log(`[TAG-FIX] ${key}: orig=${origTagCount} tags, trans=${transTagCount} tags, fixed=${fixedTagCount} tags`);
             console.log(`[TAG-FIX] Original: ${[...entry.original.substring(0, 30)].map(c => c.charCodeAt(0).toString(16).padStart(4,'0')).join(' ')}`);
             console.log(`[TAG-FIX] Fixed: ${[...fixed.substring(0, 30)].map(c => c.charCodeAt(0).toString(16).padStart(4,'0')).join(' ')}`);
@@ -127,11 +127,19 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
           tagOkCount++;
         }
       }
-      console.log(`[BUILD-TAGS] Fixed: ${tagFixCount}, Already OK: ${tagOkCount}, Total entries with tags: ${tagFixCount + tagOkCount}`);
+      console.log(`[BUILD-TAGS] Fixed: ${tagFixCount}, Already OK: ${tagOkCount}, Skipped(no tags): ${tagSkipCount}`);
       
-      console.log('[BUILD] Total translations being sent:', Object.keys(nonEmptyTranslations).length);
+      // Validate translations size
+      const translationsJson = JSON.stringify(nonEmptyTranslations);
+      const translationsSizeKB = Math.round(translationsJson.length / 1024);
+      console.log(`[BUILD] Total translations being sent: ${Object.keys(nonEmptyTranslations).length}`);
+      console.log(`[BUILD] Translations JSON size: ${translationsSizeKB} KB`);
       console.log('[BUILD] Protected entries:', Array.from(state.protectedEntries || []).length);
       console.log('[BUILD] Sample keys:', Object.keys(nonEmptyTranslations).slice(0, 10));
+      
+      if (translationsSizeKB > 5000) {
+        console.warn(`[BUILD] ⚠️ Translations JSON is very large (${translationsSizeKB} KB). This may cause issues.`);
+      }
       
       formData.append("translations", JSON.stringify(nonEmptyTranslations));
       formData.append("protectedEntries", JSON.stringify(Array.from(state.protectedEntries || [])));

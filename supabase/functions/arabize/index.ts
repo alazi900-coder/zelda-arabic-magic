@@ -823,6 +823,7 @@ Deno.serve(async (req) => {
 
     console.log(`[BUILD] Received ${Object.keys(translations).length} translations, ${protectedEntries.size} protected`);
     console.log(`[BUILD] Sample translation keys: ${Object.keys(translations).slice(0, 5).join(', ')}`);
+    console.log(`[BUILD] Total MSBT files in SARC: ${files.filter(f => f.name.endsWith('.msbt')).length}`);
 
     // ===== DIAGNOSTIC: Validate tag roundtrip =====
     let diagTagEntries = 0;
@@ -992,7 +993,18 @@ Deno.serve(async (req) => {
       return file;
     });
 
+    let totalMatchedTranslations = 0;
+    for (const file of files) {
+      if (!file.name.endsWith('.msbt')) continue;
+      for (let i = 0; i < 999; i++) {
+        const key = `${file.name}:${i}`;
+        if (translations[key] !== undefined && translations[key] !== '') totalMatchedTranslations++;
+        else if (translations[key] === undefined) break;
+      }
+    }
+
     console.log(`Modified ${modifiedCount} entries (${expandedCount} expanded), skipped already-arabized: ${skippedAlreadyArabized}`);
+    console.log(`[BUILD-SUMMARY] Translations received: ${Object.keys(translations).length}, matched to MSBT: ${totalMatchedTranslations}, modified: ${modifiedCount}`);
     console.log(`[DIAG-SUMMARY] Tagged entries: ${diagTagEntries}, OK: ${diagTagOk}, MISMATCH: ${diagTagMismatch}`);
 
     // Build stats JSON
