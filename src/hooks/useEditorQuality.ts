@@ -55,7 +55,18 @@ export function useEditorQuality({ state }: UseEditorQualityProps) {
     if (!stripped) return false;
     const hasArabic = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/.test(stripped);
     const englishWords = stripped.match(/[a-zA-Z]{2,}/g) || [];
-    const whitelist = new Set(['HP', 'MP', 'ATK', 'DEF', 'NPC', 'HUD', 'FPS', 'XP', 'DLC', 'UI', 'OK']);
+    const whitelist = new Set([
+      // Technical
+      'HP', 'MP', 'AP', 'TP', 'EXP', 'ATK', 'DEF', 'NPC', 'HUD', 'FPS', 'XP', 'DLC', 'UI', 'OK', 'NG',
+      // Characters
+      'NOAH', 'MIO', 'LANZ', 'SENA', 'TAION', 'EUNIE', 'RIKU', 'MANANA',
+      // Locations
+      'AIONIOS', 'KEVES', 'AGNUS', 'COLONY',
+      // Game terms
+      'ARTS', 'TALENT', 'CHAIN', 'ATTACK', 'OUROBOROS', 'INTERLINK', 'BLADE', 'BLADES',
+      // Controller
+      'ZL', 'ZR', 'PLUS', 'MINUS',
+    ]);
     const realEnglish = englishWords.filter(w => !whitelist.has(w.toUpperCase()));
     return hasArabic && realEnglish.length > 0;
   }, []);
