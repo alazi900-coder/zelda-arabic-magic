@@ -756,6 +756,50 @@ export function useEditorState() {
   };
 
 
+  const loadDemoBdatData = useCallback(() => {
+    const tables = ["CHR_Dr", "FLD_NpcList", "MNU_Msg"];
+    const columns: Record<string, string[]> = {
+      "CHR_Dr": ["Name", "Title", "Description"],
+      "FLD_NpcList": ["Name", "Location"],
+      "MNU_Msg": ["Label", "Help", "Error"],
+    };
+    const sampleTexts: Record<string, string[]> = {
+      "Name": ["Rex", "Pyra", "Mythra", "Nia", "Zeke", "Morag", "Tora", "Shulk", "Melia", "Dunban"],
+      "Title": ["Driver of the Aegis", "Blade of Fire", "Blade of Light", "Gormotti Driver", "Thunderbolt Zeke"],
+      "Description": ["A young salvager from Leftheria.", "The legendary Aegis blade.", "Another form of the Aegis."],
+      "Location": ["Argentum Trade Guild", "Gormott Province", "Uraya", "Mor Ardain", "Tantal", "Leftheria"],
+      "Label": ["Confirm", "Cancel", "OK", "Back", "Next", "Save", "Load"],
+      "Help": ["Press A to confirm.", "Press B to cancel.", "Select an option."],
+      "Error": ["File not found.", "Invalid input.", "Connection failed."],
+    };
+    const entries: ExtractedEntry[] = [];
+    let idx = 0;
+    for (const tbl of tables) {
+      const cols = columns[tbl];
+      const rowCount = tbl === "CHR_Dr" ? 10 : tbl === "FLD_NpcList" ? 6 : 7;
+      for (let row = 0; row < rowCount; row++) {
+        for (const col of cols) {
+          const texts = sampleTexts[col] || ["Sample text"];
+          entries.push({
+            msbtFile: "bdat",
+            index: idx++,
+            label: `${tbl}[${row}].${col}`,
+            original: texts[row % texts.length],
+            maxBytes: 0,
+          });
+        }
+      }
+    }
+    setState({
+      entries,
+      translations: {},
+      protectedEntries: new Set(),
+    });
+    setGameType("xenoblade");
+    setLastSaved("✅ تم تحميل بيانات BDAT تجريبية");
+    setTimeout(() => setLastSaved(""), 3000);
+  }, []);
+
   const handleBulkReplace = useCallback((replacements: Record<string, string>) => {
     if (!state) return;
     const prev: Record<string, string> = {};
@@ -810,7 +854,7 @@ export function useEditorState() {
     handleImproveTranslations, handleApplyImprovement, handleApplyAllImprovements,
     handleImproveSingleTranslation,
     handleCloudSave, handleCloudLoad,
-    handleApplyArabicProcessing, handlePreBuild, handleBuild, handleBulkReplace,
+    handleApplyArabicProcessing, handlePreBuild, handleBuild, handleBulkReplace, loadDemoBdatData,
 
     // Quality helpers
     isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage, needsImprovement,
