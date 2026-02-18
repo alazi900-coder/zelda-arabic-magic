@@ -353,7 +353,7 @@ const Editor = () => {
                   {editor.bdatColumnNames.length > 0 && editor.filterTable !== "all" && (
                     <select value={editor.filterColumn} onChange={e => editor.setFilterColumn(e.target.value)} className="px-3 py-2 rounded bg-background border border-border font-body text-sm max-w-[160px]">
                       <option value="all">كل الأعمدة</option>
-                      {editor.bdatColumnNames.map(c => <option key={c} value={c}>{c}</option>)}
+                      {editor.bdatColumnNames.map(c => <option key={c} value={c}>{c} ({editor.bdatColumnCounts?.[c] || 0})</option>)}
                     </select>
                   )}
                   <Button variant={editor.quickReviewMode ? "secondary" : "outline"} size="sm" onClick={() => { editor.setQuickReviewMode(!editor.quickReviewMode); editor.setQuickReviewIndex(0); }} className="font-body text-xs">
@@ -393,7 +393,7 @@ const Editor = () => {
                 {editor.bdatColumnNames.length > 0 && editor.filterTable !== "all" && (
                   <select value={editor.filterColumn} onChange={e => editor.setFilterColumn(e.target.value)} className="w-full px-3 py-2 rounded bg-background border border-border font-body text-sm">
                     <option value="all">كل الأعمدة</option>
-                    {editor.bdatColumnNames.map(c => <option key={c} value={c}>{c}</option>)}
+                    {editor.bdatColumnNames.map(c => <option key={c} value={c}>{c} ({editor.bdatColumnCounts?.[c] || 0})</option>)}
                   </select>
                 )}
               </div>

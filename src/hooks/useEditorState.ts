@@ -371,6 +371,20 @@ export function useEditorState() {
     return Array.from(set).sort();
   }, [state?.entries, filterTable]);
 
+  const bdatColumnCounts = useMemo(() => {
+    if (!state) return {} as Record<string, number>;
+    const counts: Record<string, number> = {};
+    for (const e of state.entries) {
+      const match = e.label.match(/^(.+?)\[\d+\]\.(.+)$/);
+      if (match) {
+        if (filterTable === "all" || match[1] === filterTable) {
+          counts[match[2]] = (counts[match[2]] || 0) + 1;
+        }
+      }
+    }
+    return counts;
+  }, [state?.entries, filterTable]);
+
   // === Filtered entries ===
   const filteredEntries = useMemo(() => {
     if (!state) return [];
@@ -772,7 +786,7 @@ export function useEditorState() {
     applyingArabic, improvingTranslations, improveResults,
     fixingMixed, filtersOpen, buildStats, buildPreview, showBuildConfirm,
     categoryProgress, qualityStats, needsImproveCount, translatedCount, tagsCount,
-    bdatTableNames, bdatColumnNames, bdatTableCounts,
+    bdatTableNames, bdatColumnNames, bdatTableCounts, bdatColumnCounts,
     ...glossary,
     msbtFiles, filteredEntries, paginatedEntries, totalPages,
     user,
