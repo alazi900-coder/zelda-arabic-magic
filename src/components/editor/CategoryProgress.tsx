@@ -37,8 +37,30 @@ const CategoryProgress: React.FC<CategoryProgressProps> = ({ categoryProgress, f
   const activeCats = categories.filter(cat => categoryProgress[cat.id]);
   if (activeCats.length === 0 && !categoryProgress['other']) return null;
 
+  // Overall stats
+  const allKeys = [...activeCats.map(c => c.id), ...(categoryProgress['other'] ? ['other'] : [])];
+  const totalAll = allKeys.reduce((s, k) => s + (categoryProgress[k]?.total || 0), 0);
+  const translatedAll = allKeys.reduce((s, k) => s + (categoryProgress[k]?.translated || 0), 0);
+  const overallPct = totalAll > 0 ? Math.round((translatedAll / totalAll) * 100) : 0;
+
+  const pctColor = (pct: number) =>
+    pct === 100 ? 'text-emerald-400' : pct >= 75 ? 'text-sky-400' : pct >= 50 ? 'text-amber-400' : pct >= 25 ? 'text-orange-400' : 'text-red-400';
+  const barColor = (pct: number) =>
+    pct === 100 ? 'bg-emerald-500' : pct >= 75 ? 'bg-sky-500' : pct >= 50 ? 'bg-amber-500' : pct >= 25 ? 'bg-orange-500' : 'bg-red-500';
+
   return (
     <div>
+      {/* Overall progress summary */}
+      <div className="mb-4 p-3 rounded-lg border border-border/50 bg-card/50">
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-sm font-display font-bold">إجمالي التقدم</span>
+          <span className={`text-lg font-mono font-bold ${pctColor(overallPct)}`}>{overallPct}%</span>
+        </div>
+        <div className="w-full h-2.5 rounded-full bg-secondary overflow-hidden">
+          <div className={`h-full rounded-full transition-all duration-500 ${barColor(overallPct)}`} style={{ width: `${overallPct}%` }} />
+        </div>
+        <p className="text-xs text-muted-foreground mt-1.5 text-left font-mono" dir="ltr">{translatedAll.toLocaleString()} / {totalAll.toLocaleString()}</p>
+      </div>
       {filterCategory.length > 0 && (
         <div className="flex items-center justify-between mb-2">
           <span className="text-xs text-muted-foreground font-body">
@@ -133,11 +155,13 @@ const CategoryProgress: React.FC<CategoryProgressProps> = ({ categoryProgress, f
               ) : (
                 <span>{cat.emoji}</span>
               )}
-              <span className="font-mono text-muted-foreground">{pct}%</span>
+              <span className={`font-mono font-bold text-xs ${pctColor(pct)}`}>{pct}%</span>
             </div>
-            <p className="font-display font-bold truncate">{cat.label}</p>
-            <Progress value={pct} className="h-1 mt-1" />
-            <p className="text-muted-foreground mt-1">{prog.translated}/{prog.total}</p>
+            <p className="font-display font-bold truncate text-[11px]">{cat.label}</p>
+            <div className="w-full h-1.5 rounded-full bg-secondary overflow-hidden mt-1">
+              <div className={`h-full rounded-full transition-all duration-500 ${barColor(pct)}`} style={{ width: `${pct}%` }} />
+            </div>
+            <p className="text-muted-foreground mt-1 font-mono text-[10px]">{prog.translated}/{prog.total}</p>
           </button>
         );
       })}
@@ -156,13 +180,15 @@ const CategoryProgress: React.FC<CategoryProgressProps> = ({ categoryProgress, f
         >
           <div className="flex items-center justify-between mb-1">
             <FolderOpen className="w-4 h-4 text-muted-foreground" />
-            <span className="font-mono text-muted-foreground">
+            <span className={`font-mono font-bold text-xs ${pctColor(categoryProgress['other'].total > 0 ? Math.round((categoryProgress['other'].translated / categoryProgress['other'].total) * 100) : 0)}`}>
               {categoryProgress['other'].total > 0 ? Math.round((categoryProgress['other'].translated / categoryProgress['other'].total) * 100) : 0}%
             </span>
           </div>
-          <p className="font-display font-bold truncate">أخرى</p>
-          <Progress value={categoryProgress['other'].total > 0 ? (categoryProgress['other'].translated / categoryProgress['other'].total) * 100 : 0} className="h-1 mt-1" />
-          <p className="text-muted-foreground mt-1">{categoryProgress['other'].translated}/{categoryProgress['other'].total}</p>
+          <p className="font-display font-bold truncate text-[11px]">أخرى</p>
+          <div className="w-full h-1.5 rounded-full bg-secondary overflow-hidden mt-1">
+            <div className={`h-full rounded-full transition-all duration-500 ${barColor(categoryProgress['other'].total > 0 ? Math.round((categoryProgress['other'].translated / categoryProgress['other'].total) * 100) : 0)}`} style={{ width: `${categoryProgress['other'].total > 0 ? (categoryProgress['other'].translated / categoryProgress['other'].total) * 100 : 0}%` }} />
+          </div>
+          <p className="text-muted-foreground mt-1 font-mono text-[10px]">{categoryProgress['other'].translated}/{categoryProgress['other'].total}</p>
         </button>
       )}
       </div>
