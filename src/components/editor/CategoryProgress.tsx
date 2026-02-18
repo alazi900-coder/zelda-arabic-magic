@@ -1,7 +1,7 @@
 import React from "react";
 import { Progress } from "@/components/ui/progress";
 import { FILE_CATEGORIES, categorizeFile } from "./types";
-import { AlertTriangle, Wrench, Loader2, Sparkles } from "lucide-react";
+import { AlertTriangle, Wrench, Loader2, Sparkles, RefreshCw } from "lucide-react";
 
 interface CategoryProgressProps {
   categoryProgress: Record<string, { total: number; translated: number }>;
@@ -13,9 +13,11 @@ interface CategoryProgressProps {
   onFixDamagedTags?: () => void;
   isFixing?: boolean;
   onLocalFixDamagedTags?: () => void;
+  onRedistributeTags?: () => void;
+  tagsCount?: number;
 }
 
-const CategoryProgress: React.FC<CategoryProgressProps> = ({ categoryProgress, filterCategory, setFilterCategory, damagedTagsCount = 0, onFilterDamagedTags, isDamagedTagsActive, onFixDamagedTags, isFixing, onLocalFixDamagedTags }) => {
+const CategoryProgress: React.FC<CategoryProgressProps> = ({ categoryProgress, filterCategory, setFilterCategory, damagedTagsCount = 0, onFilterDamagedTags, isDamagedTagsActive, onFixDamagedTags, isFixing, onLocalFixDamagedTags, onRedistributeTags, tagsCount = 0 }) => {
   const activeCats = FILE_CATEGORIES.filter(cat => categoryProgress[cat.id]);
   if (activeCats.length === 0 && !categoryProgress['other']) return null;
 
@@ -51,6 +53,30 @@ const CategoryProgress: React.FC<CategoryProgressProps> = ({ categoryProgress, f
           >
             {isFixing ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
             {isFixing ? 'جارٍ الإصلاح...' : 'إعادة ترجمة بالـ AI'}
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); onRedistributeTags?.(); }}
+            className="mt-1 w-full flex items-center justify-center gap-1 px-2 py-1 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 font-bold text-[10px] transition-colors"
+          >
+            <RefreshCw className="w-3 h-3" />
+            إعادة توزيع الرموز
+          </button>
+        </div>
+      )}
+      {/* Redistribute tags card — shows when tags exist but no damaged ones */}
+      {damagedTagsCount === 0 && tagsCount > 0 && (
+        <div className="p-2 rounded-lg border border-amber-500/40 bg-amber-500/5 text-xs text-right">
+          <div className="flex items-center justify-between mb-1">
+            <RefreshCw className="w-4 h-4 text-amber-400" />
+            <span className="font-mono text-amber-400 font-bold">{tagsCount}</span>
+          </div>
+          <p className="font-display font-bold truncate text-amber-400">نصوص برموز تقنية</p>
+          <button
+            onClick={onRedistributeTags}
+            className="mt-1.5 w-full flex items-center justify-center gap-1 px-2 py-1 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 font-bold text-[11px] transition-colors"
+          >
+            <RefreshCw className="w-3 h-3" />
+            إعادة توزيع الرموز
           </button>
         </div>
       )}
