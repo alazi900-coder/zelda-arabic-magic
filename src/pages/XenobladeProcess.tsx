@@ -1,0 +1,305 @@
+import { useState, useCallback, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Upload, FileText, ArrowRight, Loader2, CheckCircle2, Clock, Pencil } from "lucide-react";
+
+type ProcessingStage = "idle" | "uploading" | "extracting" | "done" | "error";
+
+const stageLabels: Record<ProcessingStage, string> = {
+  idle: "في انتظار رفع الملفات",
+  uploading: "إرسال الملفات...",
+  extracting: "استخراج النصوص من MSBT...",
+  done: "اكتمل بنجاح! ✨",
+  error: "حدث خطأ",
+};
+
+const stageProgress: Record<ProcessingStage, number> = {
+  idle: 0, uploading: 30, extracting: 70, done: 100, error: 0,
+};
+
+const XenobladeProcess = () => {
+  const [msbtFiles, setMsbtFiles] = useState<File[]>([]);
+  const [stage, setStage] = useState<ProcessingStage>("idle");
+  const [logs, setLogs] = useState<string[]>([]);
+  const [extracting, setExtracting] = useState(false);
+  const [autoDetectedCount, setAutoDetectedCount] = useState(0);
+  const [mergeMode, setMergeMode] = useState<"fresh" | "merge">("fresh");
+  const [hasPreviousSession, setHasPreviousSession] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    (async () => {
+      const { idbGet } = await import("@/lib/idb-storage");
+      const existing = await idbGet<{ translations?: Record<string, string> }>("editorState");
+      const game = await idbGet<string>("editorGame");
+      setHasPreviousSession(!!(game === "xenoblade" && existing?.translations && Object.keys(existing.translations).length > 0));
+    })();
+  }, []);
+
+  const addLog = (msg: string) => setLogs(prev => [...prev, `[${new Date().toLocaleTimeString("ar-SA")}] ${msg}`]);
+
+  const handleFileSelect = useCallback((files: FileList | null) => {
+    if (!files) return;
+    const msbtArr: File[] = [];
+    for (let i = 0; i < files.length; i++) {
+      const f = files[i];
+      if (f.name.toLowerCase().endsWith('.msbt')) msbtArr.push(f);
+    }
+    setMsbtFiles(prev => [...prev, ...msbtArr]);
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    handleFileSelect(e.dataTransfer.files);
+  }, [handleFileSelect]);
+
+  const removeFile = (index: number) => {
+    setMsbtFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleExtract = async () => {
+    if (msbtFiles.length === 0) return;
+    setExtracting(true);
+    setStage("uploading");
+    setLogs([]);
+    addLog("🚀 بدء استخراج النصوص...");
+    addLog(`📄 عدد الملفات: ${msbtFiles.length}`);
+
+    try {
+      const formData = new FormData();
+      for (let i = 0; i < msbtFiles.length; i++) {
+        formData.append(`msbt_${i}`, msbtFiles[i]);
+      }
+
+      setStage("extracting");
+      addLog("📤 إرسال الملفات للمعالجة...");
+
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+      const response = await fetch(`${supabaseUrl}/functions/v1/arabize-xenoblade?mode=extract`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const ct = response.headers.get('content-type') || '';
+        if (ct.includes('json')) {
+          const err = await response.json();
+          throw new Error(err.error || `خطأ ${response.status}`);
+        }
+        throw new Error(`خطأ ${response.status}`);
+      }
+
+      const data = await response.json();
+      addLog(`✅ تم استخراج ${data.entries.length} نص من ${data.msbtCount} ملف MSBT`);
+
+      // Store files in IndexedDB
+      const { idbSet, idbGet, idbClear } = await import("@/lib/idb-storage");
+
+      // Store each MSBT file's buffer
+      const fileBuffers: Record<string, ArrayBuffer> = {};
+      for (const file of msbtFiles) {
+        fileBuffers[file.name] = await file.arrayBuffer();
+      }
+
+      // Auto-detect Arabic entries
+      const autoTranslations: Record<string, string> = {};
+      const arabicLetterRegex = /[\u0621-\u064A\u0671-\u06D3\uFB50-\uFDFF\uFE70-\uFEFF]/g;
+      for (const entry of data.entries) {
+        const stripped = entry.original.replace(/[\uE000-\uF8FF\uFFF9-\uFFFC\u0000-\u001F]/g, '').trim();
+        const arabicMatches = stripped.match(arabicLetterRegex);
+        if (arabicMatches && arabicMatches.length >= 2) {
+          const key = `${entry.msbtFile}:${entry.index}`;
+          let cleaned = stripped.normalize("NFKD");
+          cleaned = cleaned.split('\n').map((line: string) => {
+            const segments: { text: string; isLTR: boolean }[] = [];
+            let current = '';
+            let currentIsLTR: boolean | null = null;
+            for (const ch of line) {
+              const code = ch.charCodeAt(0);
+              const charIsArabic = (code >= 0x0600 && code <= 0x06FF) || (code >= 0xFB50 && code <= 0xFDFF) || (code >= 0xFE70 && code <= 0xFEFF);
+              const charIsLTR = /[a-zA-Z0-9]/.test(ch);
+              if (charIsArabic) {
+                if (currentIsLTR === true && current) { segments.push({ text: current, isLTR: true }); current = ''; }
+                currentIsLTR = false; current += ch;
+              } else if (charIsLTR) {
+                if (currentIsLTR === false && current) { segments.push({ text: current, isLTR: false }); current = ''; }
+                currentIsLTR = true; current += ch;
+              } else { current += ch; }
+            }
+            if (current) segments.push({ text: current, isLTR: currentIsLTR === true });
+            return segments.reverse().map(seg => seg.isLTR ? seg.text : [...seg.text].reverse().join('')).join('');
+          }).join('\n');
+          autoTranslations[key] = cleaned;
+        }
+      }
+      setAutoDetectedCount(Object.keys(autoTranslations).length);
+
+      let finalTranslations: Record<string, string> = { ...autoTranslations };
+
+      if (mergeMode === "merge") {
+        const existing = await idbGet<{ translations?: Record<string, string> }>("editorState");
+        const existingTranslations = existing?.translations || {};
+        const validKeys = new Set(data.entries.map((e: any) => `${e.msbtFile}:${e.index}`));
+        for (const [k, v] of Object.entries(existingTranslations)) {
+          if (validKeys.has(k) && v && !finalTranslations[k]) finalTranslations[k] = v as string;
+        }
+      }
+
+      await idbClear();
+      // Store file buffers
+      await idbSet("editorMsbtFiles", fileBuffers);
+      await idbSet("editorMsbtFileNames", msbtFiles.map(f => f.name));
+      await idbSet("editorGame", "xenoblade");
+      await idbSet("editorState", {
+        entries: data.entries,
+        translations: finalTranslations,
+      });
+
+      setStage("done");
+      addLog("✨ جاهز للتحرير!");
+
+      setTimeout(() => navigate("/xenoblade/editor"), 500);
+    } catch (err) {
+      setStage("error");
+      addLog(`❌ ${err instanceof Error ? err.message : "خطأ غير معروف"}`);
+    } finally {
+      setExtracting(false);
+    }
+  };
+
+  const isProcessing = !["idle", "done", "error"].includes(stage);
+
+  return (
+    <div className="min-h-screen py-8 px-4">
+      <div className="max-w-3xl mx-auto">
+        <Link to="/xenoblade" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 font-body">
+          <ArrowRight className="w-4 h-4" />
+          العودة للرئيسية
+        </Link>
+
+        <h1 className="text-3xl font-display font-bold mb-2">رفع ملفات زينوبليد 🔮</h1>
+        <p className="text-muted-foreground mb-8 font-body">
+          ارفع ملفات MSBT المستخرجة من romFS — يمكنك رفع عدة ملفات دفعة واحدة
+        </p>
+
+        {/* File Upload */}
+        <div
+          onDrop={handleDrop}
+          onDragOver={e => e.preventDefault()}
+          className={`relative flex flex-col items-center justify-center p-10 rounded-xl border-2 border-dashed transition-colors cursor-pointer mb-6
+            ${msbtFiles.length > 0 ? "border-[hsl(200,70%,45%)]/50 bg-[hsl(200,70%,45%)]/5" : "border-border hover:border-[hsl(200,70%,45%)]/30 bg-card"}
+            ${isProcessing ? "opacity-50 pointer-events-none" : ""}`}
+        >
+          <FileText className="w-10 h-10 text-[hsl(200,70%,45%)] mb-3" />
+          <p className="font-display font-semibold mb-1">ملفات MSBT</p>
+          <p className="text-sm text-muted-foreground">اسحب وأفلت أو اختر ملفات .msbt</p>
+          <input
+            type="file"
+            accept=".msbt"
+            multiple
+            className="absolute inset-0 opacity-0 cursor-pointer"
+            onChange={e => handleFileSelect(e.target.files)}
+            disabled={isProcessing}
+          />
+        </div>
+
+        {/* File List */}
+        {msbtFiles.length > 0 && (
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="font-display text-lg">📂 الملفات المرفوعة ({msbtFiles.length})</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2 max-h-48 overflow-y-auto">
+                {msbtFiles.map((f, i) => (
+                  <div key={i} className="flex items-center justify-between px-3 py-2 rounded bg-background border border-border text-sm">
+                    <span className="font-mono text-xs truncate flex-1" dir="ltr">{f.name}</span>
+                    <span className="text-muted-foreground text-xs mx-3">{(f.size / 1024).toFixed(1)} KB</span>
+                    <button onClick={() => removeFile(i)} className="text-destructive text-xs hover:underline" disabled={isProcessing}>حذف</button>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Merge Mode */}
+        {hasPreviousSession && (
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <button onClick={() => setMergeMode("fresh")}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border text-sm font-display font-bold transition-all ${
+                mergeMode === "fresh" ? "border-[hsl(200,70%,45%)] bg-[hsl(200,70%,45%)]/10 text-[hsl(200,70%,45%)]" : "border-border text-muted-foreground"
+              }`}>
+              بدء مشروع جديد
+            </button>
+            <button onClick={() => setMergeMode("merge")}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border text-sm font-display font-bold transition-all ${
+                mergeMode === "merge" ? "border-[hsl(200,70%,45%)] bg-[hsl(200,70%,45%)]/10 text-[hsl(200,70%,45%)]" : "border-border text-muted-foreground"
+              }`}>
+              <CheckCircle2 className="w-4 h-4" />
+              دمج مع الترجمات السابقة
+            </button>
+          </div>
+        )}
+
+        {/* Extract Button */}
+        <div className="flex flex-col items-center gap-4 mb-8">
+          <Button
+            size="lg"
+            onClick={handleExtract}
+            disabled={msbtFiles.length === 0 || isProcessing || extracting}
+            className="font-display font-bold text-lg px-10 py-6 bg-[hsl(200,70%,45%)] hover:bg-[hsl(200,70%,45%)]/90 text-white"
+          >
+            {extracting ? (
+              <><Loader2 className="w-5 h-5 animate-spin" /> جاري الاستخراج...</>
+            ) : (
+              <><Pencil className="w-5 h-5" /> استخراج وتحرير ✍️</>
+            )}
+          </Button>
+          {autoDetectedCount > 0 && (
+            <p className="text-sm text-muted-foreground">
+              تم اكتشاف <span className="font-bold text-[hsl(200,70%,45%)]">{autoDetectedCount}</span> نص معرّب تلقائياً 🎯
+            </p>
+          )}
+        </div>
+
+        {/* Progress */}
+        {stage !== "idle" && (
+          <Card className={`mb-6 ${stage === "error" ? "border-destructive/50 bg-destructive/5" : stage === "done" ? "border-green-500/50 bg-green-500/5" : ""}`}>
+            <CardHeader>
+              <CardTitle className="font-display text-lg">{stageLabels[stage]}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Progress value={stageProgress[stage]} className="h-3" />
+              <div className="flex justify-between items-center text-xs text-muted-foreground mt-1">
+                <span>{stageProgress[stage]}%</span>
+                {isProcessing && <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> جاري المعالجة...</span>}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Logs */}
+        {logs.length > 0 && (
+          <Card className="mb-6">
+            <CardHeader><CardTitle className="font-display text-lg">📋 سجل العمليات</CardTitle></CardHeader>
+            <CardContent>
+              <div className="bg-background rounded-lg p-4 max-h-48 overflow-y-auto font-mono text-xs space-y-1 border border-border/40">
+                {logs.map((log, i) => (
+                  <div key={i} className="text-muted-foreground whitespace-pre-wrap">{log}</div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default XenobladeProcess;

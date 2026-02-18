@@ -332,6 +332,7 @@ const Process = () => {
       await idbSet("editorDictFile", dictBuf);
       await idbSet("editorLangFileName", langFile.name);
       await idbSet("editorDictFileName", dictFile.name);
+      await idbSet("editorGame", "zelda");
       await idbSet("editorState", {
         entries: data.entries,
         translations: finalTranslations,

@@ -38,9 +38,11 @@ const Xenoblade = () => {
           <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-lg mx-auto font-body">
             ارفع ملفات اللعبة واحصل على نسخة معرّبة بالكامل مع ربط الحروف وعكس الاتجاه تلقائياً
           </p>
-          <Button size="lg" disabled className="font-display font-bold text-lg px-10 py-6 opacity-60 cursor-not-allowed">
-            قريباً 🔮
-          </Button>
+          <Link to="/xenoblade/process">
+            <Button size="lg" className="font-display font-bold text-lg px-10 py-6 bg-[hsl(200,70%,45%)] hover:bg-[hsl(200,70%,45%)]/90 text-white">
+              ابدأ التعريب 🔮
+            </Button>
+          </Link>
         </div>
       </header>
 
