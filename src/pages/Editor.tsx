@@ -93,7 +93,12 @@ const Editor = () => {
           <div className="relative z-10">
             <p className="text-muted-foreground mb-4 bg-background/40 backdrop-blur-sm rounded-lg px-4 py-2 inline-block">لا توجد بيانات للتحرير. يرجى استخراج النصوص أولاً.</p>
             <br />
-            <Link to={processPath}><Button className="font-display mt-4">اذهب لصفحة المعالجة</Button></Link>
+            <div className="flex flex-wrap items-center gap-3 mt-4 justify-center">
+              <Link to={processPath}><Button className="font-display">اذهب لصفحة المعالجة</Button></Link>
+              <Button variant="outline" className="font-display" onClick={editor.loadDemoBdatData}>
+                تحميل بيانات BDAT تجريبية
+              </Button>
+            </div>
           </div>
         </div>
       </div>
