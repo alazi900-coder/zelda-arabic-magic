@@ -124,7 +124,7 @@ export function categorizeBdatTable(label: string): string {
   const tbl = match[1];
 
   // القوائم والواجهة
-  if (/^MNU_/i.test(tbl)) return "bdat-menu";
+  if (/^MNU_/i.test(tbl) || /^menu$/i.test(tbl)) return "bdat-menu";
   // نظام القتال
   if (/^BTL_/i.test(tbl) || /^(RSC_|WPN_)/i.test(tbl)) return "bdat-battle";
   // الشخصيات
