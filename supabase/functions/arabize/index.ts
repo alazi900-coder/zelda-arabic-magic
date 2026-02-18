@@ -885,9 +885,9 @@ Deno.serve(async (req) => {
                 
                 // Handle both PUA-native (new) and legacy FFF9-FFFC (old) marker formats
                 const hasLegacyMarkers = /[\uFFF9-\uFFFC]/.test(translationText);
+                let tagIdx = 0;
                 if (hasLegacyMarkers && entries[i].tags.length > 0) {
                   // Legacy format: sequentially replace FFF9-FFFC with PUA markers
-                  let tagIdx = 0;
                   translationText = translationText.replace(/[\uFFF9\uFFFA\uFFFB\uFFFC]/g, () => {
                     if (tagIdx < entries[i].tags.length) {
                       return String.fromCharCode(entries[i].tags[tagIdx++].markerCode);
