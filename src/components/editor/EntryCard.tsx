@@ -29,6 +29,8 @@ interface EntryCardProps {
   handleUndoTranslation: (key: string) => void;
   handleFixReversed: (entry: ExtractedEntry) => void;
   handleLocalFixDamagedTag?: (entry: ExtractedEntry) => void;
+  onAcceptFuzzy?: (key: string) => void;
+  onRejectFuzzy?: (key: string) => void;
 }
 
 function findGlossaryMatches(original: string, glossary?: string): { term: string; translation: string }[] {
@@ -60,6 +62,7 @@ const EntryCard: React.FC<EntryCardProps> = ({
   isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage,
   updateTranslation, handleTranslateSingle, handleImproveSingleTranslation,
   handleUndoTranslation, handleFixReversed, handleLocalFixDamagedTag,
+  onAcceptFuzzy, onRejectFuzzy,
 }) => {
   const key = `${entry.msbtFile}:${entry.index}`;
   const isTech = isTechnicalText(entry.original);
@@ -152,6 +155,16 @@ const EntryCard: React.FC<EntryCardProps> = ({
                 <span className={`text-[10px] px-1.5 py-0.5 rounded border ${fuzzyScore >= 80 ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' : fuzzyScore >= 70 ? 'bg-amber-500/10 text-amber-600 border-amber-500/20' : 'bg-orange-500/10 text-orange-600 border-orange-500/20'}`}>
                   🔍 مطابقة جزئية {fuzzyScore}%
                 </span>
+              )}
+              {fuzzyScore != null && onAcceptFuzzy && onRejectFuzzy && (
+                <>
+                  <Button variant="ghost" size="sm" className="h-5 px-1.5 text-[10px] text-emerald-600 hover:bg-emerald-500/10" onClick={() => onAcceptFuzzy(key)}>
+                    <Check className="w-3 h-3" /> قبول
+                  </Button>
+                  <Button variant="ghost" size="sm" className="h-5 px-1.5 text-[10px] text-destructive hover:bg-destructive/10" onClick={() => onRejectFuzzy(key)}>
+                    <X className="w-3 h-3" /> رفض
+                  </Button>
+                </>
               )}
             </div>
           )}
