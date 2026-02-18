@@ -20,6 +20,7 @@ import {
   Eye, EyeOff, RotateCcw, CheckCircle2, ShieldCheck, ChevronLeft, ChevronRight,
   BarChart3, Menu, MoreVertical, Replace, Columns, Key,
 } from "lucide-react";
+import heroBg from "@/assets/xc3-hero-bg.jpg";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
@@ -83,10 +84,17 @@ const Editor = () => {
 
   if (!editor.state) {
     return (
-      <div className="min-h-screen py-8 px-4">
-        <div className="max-w-5xl mx-auto text-center">
-          <p className="text-muted-foreground mb-4">لا توجد بيانات للتحرير. يرجى استخراج النصوص أولاً.</p>
-          <Link to={processPath}><Button className="font-display">اذهب لصفحة المعالجة</Button></Link>
+      <div className="min-h-screen flex flex-col">
+        <div className="relative flex flex-col items-center justify-center py-20 px-4 text-center overflow-hidden">
+          <div className="absolute inset-0">
+            <img src={heroBg} alt="" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
+          </div>
+          <div className="relative z-10">
+            <p className="text-muted-foreground mb-4 bg-background/40 backdrop-blur-sm rounded-lg px-4 py-2 inline-block">لا توجد بيانات للتحرير. يرجى استخراج النصوص أولاً.</p>
+            <br />
+            <Link to={processPath}><Button className="font-display mt-4">اذهب لصفحة المعالجة</Button></Link>
+          </div>
         </div>
       </div>
     );
@@ -95,7 +103,7 @@ const Editor = () => {
   return (
     <TooltipProvider>
       <div
-        className="min-h-screen py-4 md:py-8 px-3 md:px-4 relative"
+        className="min-h-screen flex flex-col relative"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -110,13 +118,24 @@ const Editor = () => {
             </div>
           </div>
         )}
-        <div className="max-w-6xl mx-auto">
-          <Link to={processPath} className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-4 md:mb-6 font-body text-sm">
-            <ArrowRight className="w-4 h-4" /> العودة للمعالجة
-          </Link>
 
-          <h1 className="text-2xl md:text-3xl font-display font-bold mb-1 md:mb-2">محرر الترجمة ✍️</h1>
-          <p className="text-sm md:text-base text-muted-foreground mb-4 md:mb-6 font-body">عدّل النصوص العربية يدوياً أو استخدم الترجمة التلقائية</p>
+        {/* Hero header */}
+        <header className="relative flex flex-col items-center justify-center py-8 md:py-12 px-4 text-center overflow-hidden">
+          <div className="absolute inset-0">
+            <img src={heroBg} alt="" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/70 to-background" />
+          </div>
+          <div className="relative z-10 w-full max-w-6xl mx-auto">
+            <Link to={processPath} className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-3 font-body text-sm">
+              <ArrowRight className="w-4 h-4" /> العودة للمعالجة
+            </Link>
+            <h1 className="text-2xl md:text-3xl font-display font-black mb-1 drop-shadow-lg">محرر الترجمة ✍️</h1>
+            <p className="text-sm text-muted-foreground font-body">عدّل النصوص العربية يدوياً أو استخدم الترجمة التلقائية</p>
+          </div>
+        </header>
+
+        <div className="flex-1 py-4 md:py-6 px-3 md:px-4">
+        <div className="max-w-6xl mx-auto">
 
           {/* Stats Cards */}
           <div className="flex flex-wrap items-center gap-3 md:gap-4 mb-6">
@@ -362,7 +381,7 @@ const Editor = () => {
             <div className="flex flex-wrap gap-2 mb-4">
               <span className="text-xs font-display text-muted-foreground">⚠️ تحتاج تحسين:</span>
               {editor.needsImproveCount.tooShort > 0 && (
-                <Button variant="outline" size="sm" onClick={() => editor.setFilterStatus("too-short")} className="text-xs h-6 px-2 border-amber-500/30 text-amber-600">
+                <Button variant="outline" size="sm" onClick={() => editor.setFilterStatus("too-short")} className="text-xs h-6 px-2 border-secondary/30 text-secondary">
                   📏 قصيرة: {editor.needsImproveCount.tooShort}
                 </Button>
               )}
@@ -514,7 +533,7 @@ const Editor = () => {
               <Button variant="outline" onClick={editor.handleFixAllReversed} className="font-body border-accent/30 text-accent hover:text-accent">
                 <RotateCcw className="w-4 h-4" /> تصحيح الكل (عربي معكوس)
               </Button>
-              <Button variant="outline" onClick={editor.handleReviewTranslations} disabled={editor.reviewing || editor.translatedCount === 0} className="font-body border-green-500/30 text-green-600 hover:text-green-700">
+              <Button variant="outline" onClick={editor.handleReviewTranslations} disabled={editor.reviewing || editor.translatedCount === 0} className="font-body border-primary/30 text-primary hover:text-primary">
                 {editor.reviewing ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />} مراجعة ذكية 🔍
               </Button>
               <Button variant="outline" onClick={editor.handleImproveTranslations} disabled={editor.improvingTranslations || editor.translatedCount === 0} className="font-body border-secondary/30 text-secondary hover:text-secondary">
@@ -643,6 +662,7 @@ const Editor = () => {
 
           {/* Pagination Footer */}
           <PaginationControls currentPage={editor.currentPage} totalPages={editor.totalPages} totalItems={editor.filteredEntries.length} pageSize={PAGE_SIZE} setCurrentPage={editor.setCurrentPage} />
+        </div>
         </div>
 
         <AlertDialog open={editor.showRetranslateConfirm} onOpenChange={editor.setShowRetranslateConfirm}>
