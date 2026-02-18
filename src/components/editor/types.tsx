@@ -102,32 +102,40 @@ export const FILE_CATEGORIES: FileCategory[] = [
 
 // Check if text contains technical tag markers
 export function hasTechnicalTags(text: string): boolean {
-  return /[\uFFF9\uFFFA\uFFFB\uFFFC\uE000-\uF8FF]/.test(text);
+  return /[\uFFF9\uFFFA\uFFFB\uFFFC\uE000-\uE0FF]/.test(text);
 }
 
 // Locally restore missing control characters from original into translation
-// without using AI — preserves consecutive tag GROUPS (e.g. FFF9+E000+FFFA)
+// without using AI — only inserts MISSING markers, preserving existing correct ones
+// Keeps consecutive tag groups together (e.g. E000+E001+E002)
 export function restoreTagsLocally(original: string, translation: string): string {
-  const charRegexG = /[\uFFF9-\uFFFC\uE000-\uF8FF]/g;
-  const charTest = /[\uFFF9-\uFFFC\uE000-\uF8FF]/;
-  const origChars = original.match(charRegexG) || [];
-  if (origChars.length === 0) return translation;
+  const TAG_REGEX = /[\uFFF9-\uFFFC\uE000-\uE0FF]/g;
+  const TAG_TEST = /[\uFFF9-\uFFFC\uE000-\uE0FF]/;
   
-  const transChars = translation.match(charRegexG) || [];
-  if (transChars.length >= origChars.length) return translation;
-
+  const origMarkers = original.match(TAG_REGEX) || [];
+  if (origMarkers.length === 0) return translation;
+  
+  const transMarkers = translation.match(TAG_REGEX) || [];
+  if (transMarkers.length >= origMarkers.length) return translation;
+  
+  // Find which specific markers are present in translation
+  const transMarkerSet = new Set(transMarkers);
+  
+  // Check if ANY markers are missing
+  const someMissing = origMarkers.some(m => !transMarkerSet.has(m));
+  if (!someMissing) return translation;
+  
   // Extract consecutive tag GROUPS from original with their relative positions
   const origGroups: { chars: string; relPos: number }[] = [];
   let i = 0;
   while (i < original.length) {
-    if (charTest.test(original[i])) {
+    if (TAG_TEST.test(original[i])) {
       const start = i;
       let group = '';
-      while (i < original.length && charTest.test(original[i])) {
+      while (i < original.length && TAG_TEST.test(original[i])) {
         group += original[i];
         i++;
       }
-      // Position = midpoint of the group in the original
       const midpoint = (start + i) / 2;
       origGroups.push({ chars: group, relPos: midpoint / Math.max(original.length, 1) });
     } else {
@@ -135,22 +143,42 @@ export function restoreTagsLocally(original: string, translation: string): strin
     }
   }
 
-  // Strip all control chars from translation to get clean text
-  const cleanTranslation = translation.replace(charRegexG, '');
+  // For each group, check if ALL its chars are present. If any char is missing, the whole group needs re-insertion.
+  const groupsToInsert: { chars: string; relPos: number }[] = [];
+  for (const group of origGroups) {
+    const groupChars = [...group.chars];
+    const anyMissing = groupChars.some(c => !transMarkerSet.has(c));
+    if (anyMissing) {
+      groupsToInsert.push(group);
+      // Remove any partial markers of this group from translation
+      for (const c of groupChars) transMarkerSet.delete(c);
+    }
+  }
+  
+  if (groupsToInsert.length === 0) return translation;
 
-  // Find word boundary positions in clean translation
+  // Strip markers that belong to groups being re-inserted
+  const charsToStrip = new Set(groupsToInsert.flatMap(g => [...g.chars]));
+  let cleanTranslation = '';
+  for (let j = 0; j < translation.length; j++) {
+    if (charsToStrip.has(translation[j])) continue;
+    cleanTranslation += translation[j];
+  }
+
+  // Find word boundary positions
+  const plainText = cleanTranslation.replace(TAG_REGEX, '');
   const wordBoundaries = [0];
-  for (let j = 0; j < cleanTranslation.length; j++) {
-    if (cleanTranslation[j] === ' ' || cleanTranslation[j] === '\n') {
+  for (let j = 0; j < plainText.length; j++) {
+    if (plainText[j] === ' ' || plainText[j] === '\n') {
       wordBoundaries.push(j + 1);
     }
   }
-  wordBoundaries.push(cleanTranslation.length);
+  wordBoundaries.push(plainText.length);
 
-  // Map each GROUP to nearest word boundary (keeping group chars together)
+  // Map each group to nearest word boundary
   const insertions: { pos: number; chars: string }[] = [];
-  for (const group of origGroups) {
-    const rawPos = Math.round(group.relPos * cleanTranslation.length);
+  for (const group of groupsToInsert) {
+    const rawPos = Math.round(group.relPos * plainText.length);
     let bestPos = rawPos;
     let bestDist = Infinity;
     for (const wb of wordBoundaries) {
@@ -160,13 +188,28 @@ export function restoreTagsLocally(original: string, translation: string): strin
     insertions.push({ pos: bestPos, chars: group.chars });
   }
 
-  // Sort by position descending to insert from end (avoids offset shifts)
+  // Sort by position descending to insert from end
   insertions.sort((a, b) => b.pos - a.pos);
+
+  // Build position map from plain text to cleanTranslation (which may have surviving markers)
+  const plainToClean: number[] = [];
+  let pi = 0;
+  for (let ci = 0; ci <= cleanTranslation.length; ci++) {
+    if (ci === cleanTranslation.length || !TAG_TEST.test(cleanTranslation[ci])) {
+      plainToClean.push(ci);
+      pi++;
+    }
+  }
 
   let result = cleanTranslation;
   for (const ins of insertions) {
-    const pos = Math.min(ins.pos, result.length);
+    const cleanPos = ins.pos < plainToClean.length ? plainToClean[ins.pos] : result.length;
+    const pos = Math.min(cleanPos, result.length);
     result = result.slice(0, pos) + ins.chars + result.slice(pos);
+    // Rebuild mapping after insertion (shift subsequent positions)
+    for (let k = 0; k < plainToClean.length; k++) {
+      if (plainToClean[k] >= pos) plainToClean[k] += ins.chars.length;
+    }
   }
 
   return result;
@@ -180,7 +223,7 @@ export function previewTagRestore(original: string, translation: string): { befo
 
 // Sanitize original text: replace binary tag markers with color-coded, tooltipped badges
 export function displayOriginal(text: string): React.ReactNode {
-  const regex = /([\uFFF9\uFFFA\uFFFB\uFFFC\uE000-\uF8FF\u0000-\u0008\u000E-\u001F]+)/g;
+  const regex = /([\uFFF9\uFFFA\uFFFB\uFFFC\uE000-\uE0FF\u0000-\u0008\u000E-\u001F]+)/g;
   const parts = text.split(regex);
   if (parts.length === 1 && !regex.test(text)) return text;
   const elements: React.ReactNode[] = [];
