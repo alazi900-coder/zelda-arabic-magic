@@ -73,7 +73,7 @@ const games: GameCard[] = [
     nameEn: "Pokémon Scarlet/Violet",
     emoji: "⚡",
     path: "/pokemon",
-    ready: false,
+    ready: true,
     color: "from-[hsl(350,70%,50%)] to-[hsl(270,60%,50%)]",
   },
   {
@@ -82,7 +82,7 @@ const games: GameCard[] = [
     nameEn: "Kirby and the Forgotten Land",
     emoji: "⭐",
     path: "/kirby",
-    ready: false,
+    ready: true,
     color: "from-[hsl(330,70%,60%)] to-[hsl(300,50%,55%)]",
   },
   {
@@ -91,7 +91,7 @@ const games: GameCard[] = [
     nameEn: "Metroid Dread",
     emoji: "🚀",
     path: "/metroid",
-    ready: false,
+    ready: true,
     color: "from-[hsl(40,80%,50%)] to-[hsl(20,70%,45%)]",
   },
 ];
