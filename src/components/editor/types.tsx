@@ -183,13 +183,38 @@ export function displayOriginal(text: string): React.ReactNode {
   const regex = /([\uFFF9\uFFFA\uFFFB\uFFFC\uE000-\uF8FF\u0000-\u0008\u000E-\u001F]+)/g;
   const parts = text.split(regex);
   if (parts.length === 1 && !regex.test(text)) return text;
-  return parts.map((part, i) => {
-    if (!part) return null;
-    const firstChar = part[0];
-    const tagType = TAG_TYPES[firstChar] || (part.match(/[\uFFF9\uFFFA\uFFFB\uFFFC\uE000-\uF8FF\u0000-\u0008\u000E-\u001F]/) ? TAG_FALLBACK : null);
+  const elements: React.ReactNode[] = [];
+  let keyIdx = 0;
+  for (const part of parts) {
+    if (!part) continue;
+    const firstCode = part.charCodeAt(0);
+    // PUA markers (E000-E0FF) — render each one as an individual numbered badge
+    if (firstCode >= 0xE000 && firstCode <= 0xE0FF) {
+      for (let ci = 0; ci < part.length; ci++) {
+        const code = part.charCodeAt(ci);
+        if (code >= 0xE000 && code <= 0xE0FF) {
+          const tagNum = code - 0xE000 + 1;
+          elements.push(
+            <Tooltip key={keyIdx++}>
+              <TooltipTrigger asChild>
+                <span className="inline-block px-1 rounded border text-xs cursor-help mx-0.5 bg-blue-500/20 text-blue-400 border-blue-500/30">
+                  🏷{tagNum}
+                </span>
+              </TooltipTrigger>
+              <TooltipContent side="top" className="max-w-xs text-xs">
+                رمز تحكم #{tagNum} — أيقونة زر أو تنسيق (لا تحذفه)
+              </TooltipContent>
+            </Tooltip>
+          );
+        }
+      }
+      continue;
+    }
+    // Legacy FFF9-FFFC markers or other control chars
+    const tagType = TAG_TYPES[part[0]] || (part.match(/[\uFFF9\uFFFA\uFFFB\uFFFC\u0000-\u0008\u000E-\u001F]/) ? TAG_FALLBACK : null);
     if (tagType) {
-      return (
-        <Tooltip key={i}>
+      elements.push(
+        <Tooltip key={keyIdx++}>
           <TooltipTrigger asChild>
             <span className={`inline-block px-1 rounded border text-xs cursor-help mx-0.5 ${tagType.color}`}>
               {tagType.label}
@@ -200,9 +225,11 @@ export function displayOriginal(text: string): React.ReactNode {
           </TooltipContent>
         </Tooltip>
       );
+      continue;
     }
-    return <React.Fragment key={i}>{part}</React.Fragment>;
-  });
+    elements.push(<React.Fragment key={keyIdx++}>{part}</React.Fragment>);
+  }
+  return elements;
 }
 
 export function categorizeFile(filePath: string): string {

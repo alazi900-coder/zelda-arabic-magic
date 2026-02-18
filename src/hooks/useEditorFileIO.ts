@@ -307,6 +307,26 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       }
     }
 
+    // Backward compat: convert legacy FFF9-FFFC markers in imported translations to PUA markers
+    if (state?.entries) {
+      const entryMap = new Map(state.entries.map(e => [`${e.msbtFile}:${e.index}`, e]));
+      for (const [key, value] of Object.entries(cleanedImported)) {
+        if (/[\uFFF9-\uFFFC]/.test(value)) {
+          const entry = entryMap.get(key);
+          if (entry) {
+            const puaMarkers = entry.original.match(/[\uE000-\uE0FF]/g) || [];
+            if (puaMarkers.length > 0) {
+              let idx = 0;
+              cleanedImported[key] = value.replace(/[\uFFF9-\uFFFC]/g, () => {
+                if (idx < puaMarkers.length) return puaMarkers[idx++];
+                return '';
+              });
+            }
+          }
+        }
+      }
+    }
+
     setState(prev => { if (!prev) return null; return { ...prev, translations: { ...prev.translations, ...cleanedImported } }; });
 
     const totalImported = Object.keys(imported).length;
