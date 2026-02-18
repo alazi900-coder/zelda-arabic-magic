@@ -61,6 +61,8 @@ export interface FileCategory {
   id: string;
   label: string;
   emoji: string;
+  icon?: string; // Lucide icon name
+  color?: string; // Tailwind color class for icon
 }
 
 export const AUTOSAVE_DELAY = 1500;
@@ -78,42 +80,42 @@ export const TAG_FALLBACK = { label: '…', color: 'bg-muted text-muted-foregrou
 
 export const FILE_CATEGORIES: FileCategory[] = [
   // قوائم اللعبة
-  { id: "main-menu", label: "القائمة الرئيسية", emoji: "🏠" },
-  { id: "settings", label: "الإعدادات", emoji: "⚙️" },
-  { id: "hud", label: "واجهة اللعب (HUD)", emoji: "🖥️" },
-  { id: "pause-menu", label: "قائمة الإيقاف", emoji: "⏸️" },
+  { id: "main-menu", label: "القائمة الرئيسية", emoji: "🏠", icon: "Home", color: "text-emerald-400" },
+  { id: "settings", label: "الإعدادات", emoji: "⚙️", icon: "Settings", color: "text-slate-400" },
+  { id: "hud", label: "واجهة اللعب (HUD)", emoji: "🖥️", icon: "MonitorSmartphone", color: "text-sky-400" },
+  { id: "pause-menu", label: "قائمة الإيقاف", emoji: "⏸️", icon: "Pause", color: "text-orange-400" },
   // الأسلحة والمعدات
-  { id: "swords", label: "السيوف", emoji: "⚔️" },
-  { id: "bows", label: "الأقواس", emoji: "🏹" },
-  { id: "shields", label: "الدروع", emoji: "🛡️" },
-  { id: "armor", label: "الملابس والدروع", emoji: "👕" },
+  { id: "swords", label: "السيوف", emoji: "⚔️", icon: "Sword", color: "text-red-400" },
+  { id: "bows", label: "الأقواس", emoji: "🏹", icon: "Target", color: "text-lime-400" },
+  { id: "shields", label: "الدروع", emoji: "🛡️", icon: "ShieldCheck", color: "text-blue-400" },
+  { id: "armor", label: "الملابس والدروع", emoji: "👕", icon: "Shirt", color: "text-violet-400" },
   // العناصر والمواد
-  { id: "materials", label: "المواد والموارد", emoji: "🧪" },
-  { id: "food", label: "الطعام والطبخ", emoji: "🍖" },
-  { id: "key-items", label: "الأدوات المهمة", emoji: "🔑" },
+  { id: "materials", label: "المواد والموارد", emoji: "🧪", icon: "FlaskConical", color: "text-teal-400" },
+  { id: "food", label: "الطعام والطبخ", emoji: "🍖", icon: "Utensils", color: "text-amber-400" },
+  { id: "key-items", label: "الأدوات المهمة", emoji: "🔑", icon: "Key", color: "text-yellow-400" },
   // المحتوى
-  { id: "story", label: "حوارات القصة", emoji: "📖" },
-  { id: "challenge", label: "المهام والتحديات", emoji: "📜" },
-  { id: "map", label: "المواقع والخرائط", emoji: "🗺️" },
-  { id: "tips", label: "النصائح والتعليمات", emoji: "💡" },
-  { id: "character", label: "الشخصيات والأعداء", emoji: "🎭" },
-  { id: "npc", label: "حوارات الشخصيات", emoji: "💬" },
+  { id: "story", label: "حوارات القصة", emoji: "📖", icon: "BookOpen", color: "text-violet-400" },
+  { id: "challenge", label: "المهام والتحديات", emoji: "📜", icon: "ScrollText", color: "text-orange-400" },
+  { id: "map", label: "المواقع والخرائط", emoji: "🗺️", icon: "Map", color: "text-emerald-400" },
+  { id: "tips", label: "النصائح والتعليمات", emoji: "💡", icon: "Lightbulb", color: "text-yellow-400" },
+  { id: "character", label: "الشخصيات والأعداء", emoji: "🎭", icon: "Drama", color: "text-rose-400" },
+  { id: "npc", label: "حوارات الشخصيات", emoji: "💬", icon: "MessageCircle", color: "text-cyan-400" },
 ];
 
 // === BDAT (Xenoblade) Game Categories ===
 export const BDAT_CATEGORIES: FileCategory[] = [
-  { id: "bdat-menu", label: "القوائم والواجهة", emoji: "🖥️" },
-  { id: "bdat-battle", label: "نظام القتال", emoji: "⚔️" },
-  { id: "bdat-character", label: "الشخصيات والأبطال", emoji: "🧑‍🤝‍🧑" },
-  { id: "bdat-enemy", label: "الأعداء والوحوش", emoji: "👹" },
-  { id: "bdat-item", label: "الأدوات والمعدات", emoji: "🎒" },
-  { id: "bdat-quest", label: "المهام والتحديات", emoji: "📜" },
-  { id: "bdat-field", label: "المواقع والخرائط", emoji: "🗺️" },
-  { id: "bdat-story", label: "حوارات القصة", emoji: "📖" },
-  { id: "bdat-skill", label: "المهارات والفنون", emoji: "✨" },
-  { id: "bdat-gem", label: "الجواهر والإكسسوارات", emoji: "💎" },
-  { id: "bdat-class", label: "الفصائل والأدوار", emoji: "🛡️" },
-  { id: "bdat-tips", label: "النصائح والشروحات", emoji: "💡" },
+  { id: "bdat-menu", label: "القوائم والواجهة", emoji: "🖥️", icon: "Monitor", color: "text-sky-400" },
+  { id: "bdat-battle", label: "نظام القتال", emoji: "⚔️", icon: "Swords", color: "text-red-400" },
+  { id: "bdat-character", label: "الشخصيات والأبطال", emoji: "🧑‍🤝‍🧑", icon: "Users", color: "text-blue-400" },
+  { id: "bdat-enemy", label: "الأعداء والوحوش", emoji: "👹", icon: "Skull", color: "text-rose-500" },
+  { id: "bdat-item", label: "الأدوات والمعدات", emoji: "🎒", icon: "Backpack", color: "text-amber-400" },
+  { id: "bdat-quest", label: "المهام والتحديات", emoji: "📜", icon: "ScrollText", color: "text-orange-400" },
+  { id: "bdat-field", label: "المواقع والخرائط", emoji: "🗺️", icon: "MapPin", color: "text-emerald-400" },
+  { id: "bdat-story", label: "حوارات القصة", emoji: "📖", icon: "BookOpen", color: "text-violet-400" },
+  { id: "bdat-skill", label: "المهارات والفنون", emoji: "✨", icon: "Sparkles", color: "text-yellow-400" },
+  { id: "bdat-gem", label: "الجواهر والإكسسوارات", emoji: "💎", icon: "Gem", color: "text-cyan-400" },
+  { id: "bdat-class", label: "الفصائل والأدوار", emoji: "🛡️", icon: "Shield", color: "text-indigo-400" },
+  { id: "bdat-tips", label: "النصائح والشروحات", emoji: "💡", icon: "Lightbulb", color: "text-lime-400" },
 ];
 
 export function categorizeBdatTable(label: string): string {
