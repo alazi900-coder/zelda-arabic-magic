@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Shield, FileText, Download, Sparkles } from "lucide-react";
+import { Shield, FileText, Download, Sparkles, ArrowRight } from "lucide-react";
 
 const steps = [
   { icon: FileText, title: "ارفع الملفات", desc: "ارفع ملف اللغة (.zs) وملف القاموس" },
@@ -11,6 +11,16 @@ const steps = [
 const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
+      {/* Back to game select */}
+      <div className="absolute top-4 right-4 z-20">
+        <Link to="/">
+          <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground">
+            كل الألعاب
+            <ArrowRight className="w-4 h-4" />
+          </Button>
+        </Link>
+      </div>
+
       {/* Hero */}
       <header className="relative flex flex-col items-center justify-center min-h-[70vh] px-4 text-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-transparent to-transparent" />
