@@ -48,6 +48,8 @@ export function useEditorState() {
   const [improvingTranslations, setImprovingTranslations] = useState(false);
   const [improveResults, setImproveResults] = useState<ImproveResult[] | null>(null);
   const [fixingMixed, setFixingMixed] = useState(false);
+  const [checkingConsistency, setCheckingConsistency] = useState(false);
+  const [consistencyResults, setConsistencyResults] = useState<{ groups: any[]; aiSuggestions: { best: string; reason: string }[] } | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [showFindReplace, setShowFindReplace] = useState(false);
   const [userGeminiKey, _setUserGeminiKey] = useState(() => {
@@ -724,6 +726,64 @@ export function useEditorState() {
     finally { setImprovingTranslations(false); }
   };
 
+  // === Consistency check ===
+  const handleCheckConsistency = async () => {
+    if (!state) return;
+    setCheckingConsistency(true); setConsistencyResults(null);
+    try {
+      const translatedEntries = state.entries
+        .filter(e => { const key = `${e.msbtFile}:${e.index}`; return state.translations[key]?.trim(); })
+        .map(e => ({ key: `${e.msbtFile}:${e.index}`, original: e.original, translation: state.translations[`${e.msbtFile}:${e.index}`], file: e.msbtFile }));
+      if (translatedEntries.length === 0) { setTranslateProgress("⚠️ لا توجد ترجمات للفحص"); setTimeout(() => setTranslateProgress(""), 3000); return; }
+      setTranslateProgress(`جاري فحص اتساق ${translatedEntries.length} ترجمة...`);
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+      const response = await fetch(`${supabaseUrl}/functions/v1/check-consistency`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ entries: translatedEntries, glossary: activeGlossary }),
+      });
+      if (!response.ok) throw new Error(`خطأ ${response.status}`);
+      const data = await response.json();
+      if (data.groups?.length === 0) { setTranslateProgress("✅ جميع المصطلحات متسقة — لا توجد تناقضات!"); }
+      else { setTranslateProgress(`⚠️ تم اكتشاف ${data.groups?.length || 0} مصطلح غير متسق`); setConsistencyResults(data); }
+      setTimeout(() => setTranslateProgress(""), 4000);
+    } catch (err) { setTranslateProgress(`❌ خطأ في فحص الاتساق: ${err instanceof Error ? err.message : 'غير معروف'}`); setTimeout(() => setTranslateProgress(""), 4000); }
+    finally { setCheckingConsistency(false); }
+  };
+
+  const handleApplyConsistencyFix = (groupIndex: number, bestTranslation: string) => {
+    if (!consistencyResults || !state) return;
+    const group = consistencyResults.groups[groupIndex];
+    if (!group) return;
+    const updates: Record<string, string> = {};
+    for (const v of group.variants) { updates[v.key] = bestTranslation; }
+    setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...updates } } : null);
+    // Remove this group from results
+    const newGroups = consistencyResults.groups.filter((_, i) => i !== groupIndex);
+    const newSuggestions = consistencyResults.aiSuggestions.filter((_, i) => i !== groupIndex);
+    setConsistencyResults({ groups: newGroups, aiSuggestions: newSuggestions });
+    setLastSaved(`✅ تم توحيد ترجمة "${group.term}" في ${group.variants.length} موضع`);
+    setTimeout(() => setLastSaved(""), 3000);
+  };
+
+  const handleApplyAllConsistencyFixes = () => {
+    if (!consistencyResults || !state) return;
+    const updates: Record<string, string> = {};
+    let count = 0;
+    consistencyResults.groups.forEach((group, i) => {
+      const best = consistencyResults.aiSuggestions[i]?.best;
+      if (best) {
+        for (const v of group.variants) { updates[v.key] = best; }
+        count++;
+      }
+    });
+    setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...updates } } : null);
+    setConsistencyResults(null);
+    setLastSaved(`✅ تم توحيد ${count} مصطلح تلقائياً`);
+    setTimeout(() => setLastSaved(""), 3000);
+  };
+
   // === Cloud save/load ===
   const handleCloudSave = async () => {
     if (!state || !user) return;
@@ -854,6 +914,7 @@ export function useEditorState() {
     showRetranslateConfirm, arabicNumerals, mirrorPunctuation,
     applyingArabic, improvingTranslations, improveResults,
     fixingMixed, filtersOpen, buildStats, buildPreview, showBuildConfirm,
+    checkingConsistency, consistencyResults,
     categoryProgress, qualityStats, needsImproveCount, translatedCount, tagsCount,
     bdatTableNames, bdatColumnNames, bdatTableCounts, bdatColumnCounts,
     ...glossary,
@@ -866,6 +927,7 @@ export function useEditorState() {
     setCurrentPage, setShowRetranslateConfirm, setShowPreview, setPreviewKey,
     setArabicNumerals, setMirrorPunctuation, setUserGeminiKey,
     setReviewResults, setShortSuggestions, setImproveResults, setBuildStats, setShowBuildConfirm,
+    setConsistencyResults,
 
     // Handlers
     toggleProtection, toggleTechnicalBypass,
@@ -878,6 +940,7 @@ export function useEditorState() {
     ...fileIO,
     handleImproveTranslations, handleApplyImprovement, handleApplyAllImprovements,
     handleImproveSingleTranslation,
+    handleCheckConsistency, handleApplyConsistencyFix, handleApplyAllConsistencyFixes,
     handleCloudSave, handleCloudLoad,
     handleApplyArabicProcessing, handlePreBuild, handleBuild, handleBulkReplace, loadDemoBdatData,
 
