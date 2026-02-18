@@ -46,6 +46,8 @@ const Editor = () => {
   const isMobile = useIsMobile();
   const [showDiffView, setShowDiffView] = React.useState(false);
   const [isDragging, setIsDragging] = React.useState(false);
+  const gameType = editor.gameType || "zelda";
+  const processPath = gameType === "xenoblade" ? "/xenoblade/process" : "/zelda/process";
 
   // Drag & Drop handlers
   const handleDragOver = React.useCallback((e: React.DragEvent) => {
@@ -84,7 +86,7 @@ const Editor = () => {
       <div className="min-h-screen py-8 px-4">
         <div className="max-w-5xl mx-auto text-center">
           <p className="text-muted-foreground mb-4">لا توجد بيانات للتحرير. يرجى استخراج النصوص أولاً.</p>
-          <Link to="/zelda/process"><Button className="font-display">اذهب لصفحة المعالجة</Button></Link>
+          <Link to={processPath}><Button className="font-display">اذهب لصفحة المعالجة</Button></Link>
         </div>
       </div>
     );
@@ -109,7 +111,7 @@ const Editor = () => {
           </div>
         )}
         <div className="max-w-6xl mx-auto">
-          <Link to="/zelda/process" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-4 md:mb-6 font-body text-sm">
+          <Link to={processPath} className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-4 md:mb-6 font-body text-sm">
             <ArrowRight className="w-4 h-4" /> العودة للمعالجة
           </Link>
 

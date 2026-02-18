@@ -18,6 +18,7 @@ import {
 } from "@/components/editor/types";
 export function useEditorState() {
   const [state, setState] = useState<EditorState | null>(null);
+  const [gameType, setGameType] = useState<string>("zelda");
   const [search, setSearch] = useState("");
   const [filterFile, setFilterFile] = useState<string>("all");
   const [filterCategory, setFilterCategory] = useState<string>("all");
@@ -67,7 +68,7 @@ export function useEditorState() {
   const quality = useEditorQuality({ state });
   const { isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage, needsImprovement, qualityStats, needsImproveCount, categoryProgress, translatedCount } = quality;
 
-  const build = useEditorBuild({ state, setState, setLastSaved, arabicNumerals, mirrorPunctuation });
+  const build = useEditorBuild({ state, setState, setLastSaved, arabicNumerals, mirrorPunctuation, gameType });
   const { building, buildProgress, applyingArabic, buildStats, setBuildStats, buildPreview, showBuildConfirm, setShowBuildConfirm, handleApplyArabicProcessing, handlePreBuild, handleBuild } = build;
 
 
@@ -166,6 +167,8 @@ export function useEditorState() {
 
   useEffect(() => {
     const loadState = async () => {
+      const game = await idbGet<string>("editorGame");
+      if (game) setGameType(game);
       const stored = await idbGet<EditorState>("editorState");
       if (stored) {
         const validKeys = new Set(stored.entries.map(e => `${e.msbtFile}:${e.index}`));
@@ -712,7 +715,7 @@ export function useEditorState() {
 
   return {
     // State
-    state, search, filterFile, filterCategory, filterStatus, filterTechnical, showFindReplace, userGeminiKey,
+    state, search, filterFile, filterCategory, filterStatus, filterTechnical, showFindReplace, userGeminiKey, gameType,
     building, buildProgress, translating, translateProgress,
     lastSaved, cloudSyncing, cloudStatus,
     technicalEditingMode, showPreview, previewKey,
