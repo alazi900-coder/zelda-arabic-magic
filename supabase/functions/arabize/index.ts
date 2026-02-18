@@ -206,6 +206,11 @@ function reverseBidi(text: string): string {
         current += ch;
         continue;
       }
+      // Unicode tag markers (FFF9-FFFC) also neutral
+      if (code >= 0xFFF9 && code <= 0xFFFC) {
+        current += ch;
+        continue;
+      }
       
       const charIsArabic = isArabicCode(code);
       const charIsLTR = (code >= 0x30 && code <= 0x39) || (code >= 0x41 && code <= 0x5A) || (code >= 0x61 && code <= 0x7A);

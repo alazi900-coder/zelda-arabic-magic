@@ -189,6 +189,7 @@ export function reverseBidi(text: string): string {
     for (const ch of line) {
       const code = ch.charCodeAt(0);
       if (code >= 0xE000 && code <= 0xE0FF) { current += ch; continue; }
+      if (code >= 0xFFF9 && code <= 0xFFFC) { current += ch; continue; }
       
       const charIsArabic = isArabicChar(ch);
       const charIsLTR = /[a-zA-Z0-9]/.test(ch);
