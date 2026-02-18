@@ -484,6 +484,7 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleExportXLIFF}><FileDown className="w-4 h-4" /> تصدير XLIFF (memoQ/Trados){editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleExportTMX}><FileDown className="w-4 h-4" /> تصدير TMX (ذاكرة ترجمة){editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleImportXLIFF}><Upload className="w-4 h-4" /> استيراد XLIFF 📥</DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleImportTMX}><Upload className="w-4 h-4" /> استيراد TMX 📥</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={editor.handleExportCSV}><FileDown className="w-4 h-4" /> تصدير CSV{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleImportCSV}><Upload className="w-4 h-4" /> استيراد CSV{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
@@ -553,6 +554,7 @@ const Editor = () => {
               <Button variant="outline" onClick={editor.handleExportXLIFF} className="font-body border-accent/30 text-accent hover:text-accent"><FileDown className="w-4 h-4" /> تصدير XLIFF{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</Button>
               <Button variant="outline" onClick={editor.handleExportTMX} className="font-body border-accent/30 text-accent hover:text-accent"><FileDown className="w-4 h-4" /> تصدير TMX{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</Button>
               <Button variant="outline" onClick={editor.handleImportXLIFF} className="font-body border-accent/30 text-accent hover:text-accent"><Upload className="w-4 h-4" /> استيراد XLIFF</Button>
+              <Button variant="outline" onClick={editor.handleImportTMX} className="font-body border-accent/30 text-accent hover:text-accent"><Upload className="w-4 h-4" /> استيراد TMX</Button>
               <Button variant="outline" onClick={editor.handleImportGlossary} className="font-body"><BookOpen className="w-4 h-4" /> تحميل قاموس مخصص</Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
