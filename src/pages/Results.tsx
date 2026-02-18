@@ -32,7 +32,7 @@ const Results = () => {
   return (
     <div className="min-h-screen py-8 px-4">
       <div className="max-w-3xl mx-auto">
-        <Link to="/process" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 font-body">
+        <Link to="/zelda/process" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 font-body">
           <ArrowRight className="w-4 h-4" />
           العودة للمعالجة
         </Link>
@@ -43,7 +43,7 @@ const Results = () => {
           <Card>
             <CardContent className="p-12 text-center text-muted-foreground">
               <p>لا توجد نتائج بعد. يرجى معالجة ملف أولاً.</p>
-              <Link to="/process">
+              <Link to="/zelda/process">
                 <Button className="mt-4 font-display">اذهب لصفحة المعالجة</Button>
               </Link>
             </CardContent>

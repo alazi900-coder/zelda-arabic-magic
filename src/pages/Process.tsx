@@ -337,7 +337,7 @@ const Process = () => {
         translations: finalTranslations,
       });
 
-      navigate("/editor");
+      navigate("/zelda/editor");
     } catch (err) {
       alert(err instanceof Error ? err.message : "خطأ غير معروف");
     } finally {
@@ -348,7 +348,7 @@ const Process = () => {
   return (
     <div className="min-h-screen py-8 px-4">
       <div className="max-w-3xl mx-auto">
-        <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 font-body">
+        <Link to="/zelda" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 font-body">
           <ArrowRight className="w-4 h-4" />
           العودة للرئيسية
         </Link>
@@ -505,7 +505,7 @@ const Process = () => {
               <Download className="w-5 h-5" />
               تحميل الملف المعرّب (.zs)
             </Button>
-            <Link to="/results">
+            <Link to="/zelda/results">
               <Button variant="outline" size="lg" className="font-display font-bold">
                 عرض تفاصيل النتائج
               </Button>

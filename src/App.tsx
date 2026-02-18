@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
+import GameSelect from "./pages/GameSelect";
 import Index from "./pages/Index";
 import Process from "./pages/Process";
 import Results from "./pages/Results";
@@ -26,10 +27,11 @@ const App = () => (
         <BrowserRouter>
           <ErrorBoundary fallbackTitle="حدث خطأ في التطبيق">
             <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/process" element={<ErrorBoundary fallbackTitle="خطأ في المعالجة"><Process /></ErrorBoundary>} />
-              <Route path="/results" element={<ErrorBoundary fallbackTitle="خطأ في النتائج"><Results /></ErrorBoundary>} />
-              <Route path="/editor" element={<ErrorBoundary fallbackTitle="خطأ في المحرر"><Editor /></ErrorBoundary>} />
+              <Route path="/" element={<GameSelect />} />
+              <Route path="/zelda" element={<Index />} />
+              <Route path="/zelda/process" element={<ErrorBoundary fallbackTitle="خطأ في المعالجة"><Process /></ErrorBoundary>} />
+              <Route path="/zelda/results" element={<ErrorBoundary fallbackTitle="خطأ في النتائج"><Results /></ErrorBoundary>} />
+              <Route path="/zelda/editor" element={<ErrorBoundary fallbackTitle="خطأ في المحرر"><Editor /></ErrorBoundary>} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/install" element={<Install />} />
               <Route path="*" element={<NotFound />} />
