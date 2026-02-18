@@ -1,10 +1,11 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag, BookOpen, Wrench } from "lucide-react";
+import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag, BookOpen, Wrench, Copy, Eye, Check, X } from "lucide-react";
 import DebouncedInput from "./DebouncedInput";
-import { ExtractedEntry, displayOriginal, hasArabicChars, isTechnicalText, hasTechnicalTags } from "./types";
+import { ExtractedEntry, displayOriginal, hasArabicChars, isTechnicalText, hasTechnicalTags, previewTagRestore } from "./types";
 import { utf16leByteLength } from "@/lib/byte-utils";
+import { toast } from "@/hooks/use-toast";
 
 interface EntryCardProps {
   entry: ExtractedEntry;
@@ -61,6 +62,22 @@ const EntryCard: React.FC<EntryCardProps> = ({
 }) => {
   const key = `${entry.msbtFile}:${entry.index}`;
   const isTech = isTechnicalText(entry.original);
+  const [showTagPreview, setShowTagPreview] = useState(false);
+
+  const tagPreview = useMemo(() => {
+    if (!isDamagedTag || !translation?.trim()) return null;
+    return previewTagRestore(entry.original, translation);
+  }, [isDamagedTag, entry.original, translation]);
+
+  const handleCopyTags = () => {
+    const charRegex = /[\uFFF9-\uFFFC\uE000-\uF8FF]/g;
+    const tags = entry.original.match(charRegex);
+    if (tags) {
+      navigator.clipboard.writeText(tags.join('')).then(() => {
+        toast({ title: "📋 تم النسخ", description: `تم نسخ ${tags.length} رمز تقني — الصقها في الترجمة يدوياً` });
+      });
+    }
+  };
 
   const glossaryMatches = useMemo(
     () => findGlossaryMatches(entry.original, glossary),
@@ -134,8 +151,18 @@ const EntryCard: React.FC<EntryCardProps> = ({
                 {improvingTranslations ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4 text-secondary" />}
               </Button>
               {isDamagedTag && handleLocalFixDamagedTag && (
+                <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => setShowTagPreview(prev => !prev)} title="👁 معاينة الإصلاح قبل التطبيق">
+                  <Eye className="w-4 h-4 text-accent" />
+                </Button>
+              )}
+              {isDamagedTag && handleLocalFixDamagedTag && (
                 <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => handleLocalFixDamagedTag(entry)} title="🔧 إصلاح الرموز محلياً (بدون AI)">
                   <Wrench className="w-4 h-4 text-destructive" />
+                </Button>
+              )}
+              {isDamagedTag && (
+                <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={handleCopyTags} title="📋 نسخ الرموز التقنية من الأصل">
+                  <Copy className="w-4 h-4 text-muted-foreground" />
                 </Button>
               )}
               {isDamagedTag && (
@@ -150,6 +177,30 @@ const EntryCard: React.FC<EntryCardProps> = ({
               )}
             </div>
           </div>
+          {/* Tag restore preview */}
+          {showTagPreview && tagPreview?.hasDiff && (
+            <div className="mt-2 p-2 rounded border border-accent/30 bg-accent/5 text-xs space-y-1.5">
+              <p className="font-semibold text-accent">👁 معاينة الإصلاح:</p>
+              <div className="space-y-1">
+                <div className="flex gap-2 items-start">
+                  <span className="text-destructive shrink-0">قبل:</span>
+                  <span dir="rtl" className="break-words">{displayOriginal(tagPreview.before)}</span>
+                </div>
+                <div className="flex gap-2 items-start">
+                  <span className="text-primary shrink-0">بعد:</span>
+                  <span dir="rtl" className="break-words">{displayOriginal(tagPreview.after)}</span>
+                </div>
+              </div>
+              <div className="flex gap-1.5">
+                <Button size="sm" variant="default" className="h-6 text-[10px] px-2" onClick={() => { handleLocalFixDamagedTag?.(entry); setShowTagPreview(false); }}>
+                  <Check className="w-3 h-3 ml-1" /> تطبيق
+                </Button>
+                <Button size="sm" variant="ghost" className="h-6 text-[10px] px-2" onClick={() => setShowTagPreview(false)}>
+                  <X className="w-3 h-3 ml-1" /> إغلاق
+                </Button>
+              </div>
+            </div>
+          )}
           {/* Byte usage progress bar */}
           {entry.maxBytes > 0 && translation && (() => {
             const byteUsed = utf16leByteLength(translation);

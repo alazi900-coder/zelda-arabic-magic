@@ -106,62 +106,85 @@ export function hasTechnicalTags(text: string): boolean {
 }
 
 // Locally restore missing control characters from original into translation
-// without using AI — just copies the tag sequences back at proportional positions
+// without using AI — matches individual characters to align with quality detector
 export function restoreTagsLocally(original: string, translation: string): string {
-  const tagRegex = /[\uFFF9-\uFFFC\uE000-\uF8FF]+/g;
+  const charRegexG = /[\uFFF9-\uFFFC\uE000-\uF8FF]/g;
+  const charTest = /[\uFFF9-\uFFFC\uE000-\uF8FF]/;
+  const origChars = original.match(charRegexG) || [];
+  if (origChars.length === 0) return translation;
   
-  // Extract tag sequences with their positions from original
-  const origTags: { match: string; relPos: number }[] = [];
-  let m: RegExpExecArray | null;
-  while ((m = tagRegex.exec(original)) !== null) {
-    origTags.push({ match: m[0], relPos: m.index / Math.max(original.length, 1) });
-  }
-  if (origTags.length === 0) return translation;
+  const transChars = translation.match(charRegexG) || [];
+  if (transChars.length >= origChars.length) return translation;
   
-  // Extract existing tags from translation
-  const transTagRegex = /[\uFFF9-\uFFFC\uE000-\uF8FF]+/g;
-  const existingTransTags: string[] = [];
-  let tm: RegExpExecArray | null;
-  while ((tm = transTagRegex.exec(translation)) !== null) {
-    existingTransTags.push(tm[0]);
-  }
+  // Count chars in translation to find which are missing
+  const remaining = new Map<string, number>();
+  for (const c of transChars) remaining.set(c, (remaining.get(c) || 0) + 1);
   
-  // Find missing tags (compare counts)
-  const origTagStrings = origTags.map(t => t.match);
-  const missingTags: { match: string; relPos: number }[] = [];
-  const usedTransTags = [...existingTransTags];
-  
-  for (const tag of origTags) {
-    const idx = usedTransTags.indexOf(tag.match);
-    if (idx !== -1) {
-      usedTransTags.splice(idx, 1); // already exists
+  // Build list of missing characters with positions from original
+  const missingChars: { char: string; relPos: number }[] = [];
+  const tempRemaining = new Map(remaining);
+  for (let i = 0; i < original.length; i++) {
+    const c = original[i];
+    if (!charTest.test(c)) continue;
+    const rem = tempRemaining.get(c) || 0;
+    if (rem > 0) {
+      tempRemaining.set(c, rem - 1);
     } else {
-      missingTags.push(tag);
+      missingChars.push({ char: c, relPos: i / Math.max(original.length, 1) });
     }
   }
   
-  if (missingTags.length === 0) return translation;
+  if (missingChars.length === 0) return translation;
   
-  // Strip existing tags from translation to get clean text
-  const cleanTranslation = translation.replace(/[\uFFF9-\uFFFC\uE000-\uF8FF]+/g, '');
+  // Strip existing control chars to get clean text
+  const cleanTranslation = translation.replace(charRegexG, '');
   
-  // Build result: insert all tags (existing + missing) at proportional positions
-  // Re-insert ALL original tags at proportional positions in the clean translation
-  const allTags = origTags.map(t => ({
-    match: t.match,
-    insertAt: Math.round(t.relPos * cleanTranslation.length),
-  }));
+  // Collect ALL original chars with positions for reinsertion
+  const allChars: { char: string; relPos: number }[] = [];
+  for (let i = 0; i < original.length; i++) {
+    if (charTest.test(original[i])) {
+      allChars.push({ char: original[i], relPos: i / Math.max(original.length, 1) });
+    }
+  }
   
-  // Sort by position descending to insert from end (avoids shifting)
-  allTags.sort((a, b) => b.insertAt - a.insertAt);
+  // Find word boundary positions in clean translation
+  const wordBoundaries = [0];
+  for (let i = 0; i < cleanTranslation.length; i++) {
+    if (cleanTranslation[i] === ' ' || cleanTranslation[i] === '\n') {
+      wordBoundaries.push(i + 1);
+    }
+  }
+  wordBoundaries.push(cleanTranslation.length);
+  
+  // Map each char to nearest word boundary
+  const insertions: { pos: number; char: string }[] = [];
+  for (const tag of allChars) {
+    const rawPos = Math.round(tag.relPos * cleanTranslation.length);
+    let bestPos = rawPos;
+    let bestDist = Infinity;
+    for (const wb of wordBoundaries) {
+      const dist = Math.abs(wb - rawPos);
+      if (dist < bestDist) { bestDist = dist; bestPos = wb; }
+    }
+    insertions.push({ pos: bestPos, char: tag.char });
+  }
+  
+  // Sort by position descending to insert from end
+  insertions.sort((a, b) => b.pos - a.pos);
   
   let result = cleanTranslation;
-  for (const tag of allTags) {
-    const pos = Math.min(tag.insertAt, result.length);
-    result = result.slice(0, pos) + tag.match + result.slice(pos);
+  for (const ins of insertions) {
+    const pos = Math.min(ins.pos, result.length);
+    result = result.slice(0, pos) + ins.char + result.slice(pos);
   }
   
   return result;
+}
+
+// Preview tag restoration without applying — returns before/after
+export function previewTagRestore(original: string, translation: string): { before: string; after: string; hasDiff: boolean } {
+  const after = restoreTagsLocally(original, translation);
+  return { before: translation, after, hasDiff: after !== translation };
 }
 
 // Sanitize original text: replace binary tag markers with color-coded, tooltipped badges
