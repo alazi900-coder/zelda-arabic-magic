@@ -344,6 +344,18 @@ export function useEditorState() {
     return Array.from(set).sort();
   }, [state?.entries]);
 
+  const bdatTableCounts = useMemo(() => {
+    if (!state) return {} as Record<string, number>;
+    const counts: Record<string, number> = {};
+    for (const e of state.entries) {
+      const match = e.label.match(/^(.+?)\[\d+\]\./);
+      if (match) {
+        counts[match[1]] = (counts[match[1]] || 0) + 1;
+      }
+    }
+    return counts;
+  }, [state?.entries]);
+
   const bdatColumnNames = useMemo(() => {
     if (!state) return [];
     const set = new Set<string>();
@@ -760,7 +772,7 @@ export function useEditorState() {
     applyingArabic, improvingTranslations, improveResults,
     fixingMixed, filtersOpen, buildStats, buildPreview, showBuildConfirm,
     categoryProgress, qualityStats, needsImproveCount, translatedCount, tagsCount,
-    bdatTableNames, bdatColumnNames,
+    bdatTableNames, bdatColumnNames, bdatTableCounts,
     ...glossary,
     msbtFiles, filteredEntries, paginatedEntries, totalPages,
     user,

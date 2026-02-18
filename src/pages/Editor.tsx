@@ -346,8 +346,8 @@ const Editor = () => {
                   </select>
                   {editor.bdatTableNames.length > 0 && (
                     <select value={editor.filterTable} onChange={e => { editor.setFilterTable(e.target.value); editor.setFilterColumn("all"); }} className="px-3 py-2 rounded bg-background border border-border font-body text-sm max-w-[180px]">
-                      <option value="all">كل الجداول</option>
-                      {editor.bdatTableNames.map(t => <option key={t} value={t}>{t}</option>)}
+                      <option value="all">كل الجداول ({editor.state.entries.length})</option>
+                      {editor.bdatTableNames.map(t => <option key={t} value={t}>{t} ({editor.bdatTableCounts?.[t] || 0})</option>)}
                     </select>
                   )}
                   {editor.bdatColumnNames.length > 0 && editor.filterTable !== "all" && (
@@ -386,8 +386,8 @@ const Editor = () => {
                 </select>
                 {editor.bdatTableNames.length > 0 && (
                   <select value={editor.filterTable} onChange={e => { editor.setFilterTable(e.target.value); editor.setFilterColumn("all"); }} className="w-full px-3 py-2 rounded bg-background border border-border font-body text-sm">
-                    <option value="all">كل الجداول</option>
-                    {editor.bdatTableNames.map(t => <option key={t} value={t}>{t}</option>)}
+                    <option value="all">كل الجداول ({editor.state.entries.length})</option>
+                    {editor.bdatTableNames.map(t => <option key={t} value={t}>{t} ({editor.bdatTableCounts?.[t] || 0})</option>)}
                   </select>
                 )}
                 {editor.bdatColumnNames.length > 0 && editor.filterTable !== "all" && (
