@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Upload, FileText, ArrowRight, Loader2, CheckCircle2, Clock, Pencil, Database, Binary } from "lucide-react";
+import { Upload, FileText, ArrowRight, Loader2, CheckCircle2, Clock, Pencil, Database, Binary, Sparkles } from "lucide-react";
+import heroBg from "@/assets/xc3-hero-bg.jpg";
 
 type ProcessingStage = "idle" | "uploading" | "extracting" | "done" | "error";
 
@@ -251,41 +252,55 @@ const XenobladeProcess = () => {
   const totalFiles = msbtFiles.length + bdatFiles.length + bdatBinaryFiles.length;
 
   return (
-    <div className="min-h-screen py-8 px-4">
-      <div className="max-w-3xl mx-auto">
-        <Link to="/xenoblade" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 font-body">
-          <ArrowRight className="w-4 h-4" />
-          العودة للرئيسية
-        </Link>
+    <div className="min-h-screen flex flex-col">
+      {/* Hero header */}
+      <header className="relative flex flex-col items-center justify-center py-16 px-4 text-center overflow-hidden">
+        <div className="absolute inset-0">
+          <img src={heroBg} alt="" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
+        </div>
+        <div className="relative z-10 max-w-2xl mx-auto">
+          <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 font-body text-sm">
+            <ArrowRight className="w-4 h-4" />
+            العودة للرئيسية
+          </Link>
+          <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full bg-background/60 backdrop-blur-md border border-primary/30">
+            <Sparkles className="w-4 h-4 text-primary" />
+            <span className="text-sm text-primary font-display font-semibold">رفع ومعالجة الملفات</span>
+          </div>
+          <h1 className="text-3xl md:text-4xl font-display font-black mb-3 drop-shadow-lg">رفع ملفات زينوبليد 🔮</h1>
+          <p className="text-muted-foreground font-body bg-background/40 backdrop-blur-sm rounded-lg px-4 py-2 inline-block">
+            ارفع ملفات MSBT و/أو BDAT — يمكنك رفع عدة ملفات دفعة واحدة
+          </p>
+        </div>
+      </header>
 
-        <h1 className="text-3xl font-display font-bold mb-2">رفع ملفات زينوبليد 🔮</h1>
-        <p className="text-muted-foreground mb-8 font-body">
-          ارفع ملفات MSBT و/أو BDAT (ثنائي أو JSON) — يمكنك رفع عدة ملفات دفعة واحدة
-        </p>
+      <div className="flex-1 py-8 px-4">
+      <div className="max-w-3xl mx-auto">
 
         {/* MSBT Upload */}
         <div
           onDrop={handleDrop}
           onDragOver={e => e.preventDefault()}
           className={`relative flex flex-col items-center justify-center p-10 rounded-xl border-2 border-dashed transition-colors cursor-pointer mb-4
-            ${totalFiles > 0 ? "border-[hsl(200,70%,45%)]/50 bg-[hsl(200,70%,45%)]/5" : "border-border hover:border-[hsl(200,70%,45%)]/30 bg-card"}
+            ${totalFiles > 0 ? "border-primary/50 bg-primary/5" : "border-border hover:border-primary/30 bg-card"}
             ${isProcessing ? "opacity-50 pointer-events-none" : ""}`}
         >
           <div className="flex items-center gap-6">
             <div className="text-center">
-              <FileText className="w-8 h-8 text-[hsl(200,70%,45%)] mb-2 mx-auto" />
+              <FileText className="w-8 h-8 text-primary mb-2 mx-auto" />
               <p className="font-display font-semibold text-sm">MSBT</p>
               <p className="text-xs text-muted-foreground">ملفات الحوارات</p>
             </div>
             <div className="h-12 w-px bg-border" />
             <div className="text-center">
-              <Binary className="w-8 h-8 text-[hsl(140,60%,40%)] mb-2 mx-auto" />
+              <Binary className="w-8 h-8 text-secondary mb-2 mx-auto" />
               <p className="font-display font-semibold text-sm">BDAT</p>
               <p className="text-xs text-muted-foreground">ثنائي مباشر</p>
             </div>
             <div className="h-12 w-px bg-border" />
             <div className="text-center">
-              <Database className="w-8 h-8 text-[hsl(280,70%,55%)] mb-2 mx-auto" />
+              <Database className="w-8 h-8 text-accent mb-2 mx-auto" />
               <p className="font-display font-semibold text-sm">JSON</p>
               <p className="text-xs text-muted-foreground">جداول محوّلة</p>
             </div>
@@ -302,7 +317,7 @@ const XenobladeProcess = () => {
         </div>
 
         {/* BDAT Info */}
-        <Card className="mb-6 border-[hsl(140,60%,40%)]/20 bg-[hsl(140,60%,40%)]/5">
+        <Card className="mb-6 border-primary/20 bg-primary/5">
           <CardContent className="p-4">
             <p className="text-sm font-display font-bold mb-2">📦 دعم BDAT الثنائي المباشر</p>
             <p className="text-xs text-muted-foreground font-body" dir="rtl">
@@ -376,13 +391,13 @@ const XenobladeProcess = () => {
           <div className="flex items-center justify-center gap-3 mb-6">
             <button onClick={() => setMergeMode("fresh")}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border text-sm font-display font-bold transition-all ${
-                mergeMode === "fresh" ? "border-[hsl(200,70%,45%)] bg-[hsl(200,70%,45%)]/10 text-[hsl(200,70%,45%)]" : "border-border text-muted-foreground"
+                mergeMode === "fresh" ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"
               }`}>
               بدء مشروع جديد
             </button>
             <button onClick={() => setMergeMode("merge")}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border text-sm font-display font-bold transition-all ${
-                mergeMode === "merge" ? "border-[hsl(200,70%,45%)] bg-[hsl(200,70%,45%)]/10 text-[hsl(200,70%,45%)]" : "border-border text-muted-foreground"
+                mergeMode === "merge" ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"
               }`}>
               <CheckCircle2 className="w-4 h-4" />
               دمج مع الترجمات السابقة
@@ -396,7 +411,7 @@ const XenobladeProcess = () => {
             size="lg"
             onClick={handleExtract}
             disabled={totalFiles === 0 || isProcessing || extracting}
-            className="font-display font-bold text-lg px-10 py-6 bg-[hsl(200,70%,45%)] hover:bg-[hsl(200,70%,45%)]/90 text-white"
+            className="font-display font-bold text-lg px-10 py-6 bg-primary hover:bg-primary/90 text-primary-foreground shadow-xl shadow-primary/30"
           >
             {extracting ? (
               <><Loader2 className="w-5 h-5 animate-spin" /> جاري الاستخراج...</>
@@ -406,7 +421,7 @@ const XenobladeProcess = () => {
           </Button>
           {autoDetectedCount > 0 && (
             <p className="text-sm text-muted-foreground">
-              تم اكتشاف <span className="font-bold text-[hsl(200,70%,45%)]">{autoDetectedCount}</span> نص معرّب تلقائياً 🎯
+              تم اكتشاف <span className="font-bold text-primary">{autoDetectedCount}</span> نص معرّب تلقائياً 🎯
             </p>
           )}
         </div>
@@ -440,6 +455,7 @@ const XenobladeProcess = () => {
             </CardContent>
           </Card>
         )}
+      </div>
       </div>
     </div>
   );
