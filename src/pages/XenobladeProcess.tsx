@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Upload, FileText, ArrowRight, Loader2, CheckCircle2, Clock, Pencil, Database } from "lucide-react";
+import { Upload, FileText, ArrowRight, Loader2, CheckCircle2, Clock, Pencil, Database, Binary } from "lucide-react";
 
 type ProcessingStage = "idle" | "uploading" | "extracting" | "done" | "error";
 
@@ -22,6 +22,7 @@ const stageProgress: Record<ProcessingStage, number> = {
 const XenobladeProcess = () => {
   const [msbtFiles, setMsbtFiles] = useState<File[]>([]);
   const [bdatFiles, setBdatFiles] = useState<File[]>([]);
+  const [bdatBinaryFiles, setBdatBinaryFiles] = useState<File[]>([]);
   const [stage, setStage] = useState<ProcessingStage>("idle");
   const [logs, setLogs] = useState<string[]>([]);
   const [extracting, setExtracting] = useState(false);
@@ -45,14 +46,17 @@ const XenobladeProcess = () => {
     if (!files) return;
     const newMsbt: File[] = [];
     const newBdat: File[] = [];
+    const newBdatBin: File[] = [];
     for (let i = 0; i < files.length; i++) {
       const f = files[i];
       const name = f.name.toLowerCase();
       if (name.endsWith('.msbt')) newMsbt.push(f);
       else if (name.endsWith('.json')) newBdat.push(f);
+      else if (name.endsWith('.bdat')) newBdatBin.push(f);
     }
     if (newMsbt.length > 0) setMsbtFiles(prev => [...prev, ...newMsbt]);
     if (newBdat.length > 0) setBdatFiles(prev => [...prev, ...newBdat]);
+    if (newBdatBin.length > 0) setBdatBinaryFiles(prev => [...prev, ...newBdatBin]);
   }, []);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
@@ -60,21 +64,59 @@ const XenobladeProcess = () => {
     handleFileSelect(e.dataTransfer.files);
   }, [handleFileSelect]);
 
-  const removeFile = (type: "msbt" | "bdat", index: number) => {
+  const removeFile = (type: "msbt" | "bdat" | "bdat-bin", index: number) => {
     if (type === "msbt") setMsbtFiles(prev => prev.filter((_, i) => i !== index));
-    else setBdatFiles(prev => prev.filter((_, i) => i !== index));
+    else if (type === "bdat") setBdatFiles(prev => prev.filter((_, i) => i !== index));
+    else setBdatBinaryFiles(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleExtract = async () => {
-    const totalFiles = msbtFiles.length + bdatFiles.length;
+    const totalFiles = msbtFiles.length + bdatFiles.length + bdatBinaryFiles.length;
     if (totalFiles === 0) return;
     setExtracting(true);
     setStage("uploading");
     setLogs([]);
     addLog("🚀 بدء استخراج النصوص...");
-    addLog(`📄 ملفات MSBT: ${msbtFiles.length} | ملفات BDAT JSON: ${bdatFiles.length}`);
+    addLog(`📄 MSBT: ${msbtFiles.length} | BDAT JSON: ${bdatFiles.length} | BDAT ثنائي: ${bdatBinaryFiles.length}`);
 
     try {
+      // Process binary BDAT files locally in the browser
+      let bdatBinaryEntries: { msbtFile: string; index: number; label: string; original: string; maxBytes: number; type: string; columnName?: string }[] = [];
+      const bdatBinaryBuffers: Record<string, ArrayBuffer> = {};
+      
+      if (bdatBinaryFiles.length > 0) {
+        addLog("🔧 معالجة ملفات BDAT الثنائية محلياً...");
+        const { parseBdatFile, extractBdatStrings } = await import("@/lib/bdat-parser");
+        const { unhashLabel } = await import("@/lib/bdat-hash-dictionary");
+        
+        for (const file of bdatBinaryFiles) {
+          try {
+            const buffer = await file.arrayBuffer();
+            bdatBinaryBuffers[file.name] = buffer;
+            const data = new Uint8Array(buffer);
+            const bdatFile = parseBdatFile(data, unhashLabel);
+            const strings = extractBdatStrings(bdatFile, file.name);
+            
+            addLog(`📦 ${file.name}: ${bdatFile.tables.length} جدول، ${strings.length} نص`);
+            
+            for (let i = 0; i < strings.length; i++) {
+              const s = strings[i];
+              bdatBinaryEntries.push({
+                msbtFile: s.key.split(':').slice(0, 2).join(':'), // bdat-bin:filename
+                index: i,
+                label: `${s.tableName}[${s.rowIndex}].${s.columnName}`,
+                original: s.original,
+                maxBytes: 9999,
+                type: 'bdat-bin',
+                columnName: s.columnName,
+              });
+            }
+          } catch (e) {
+            addLog(`⚠️ فشل تحليل ${file.name}: ${e instanceof Error ? e.message : 'خطأ'}`);
+          }
+        }
+      }
+
       const formData = new FormData();
       for (let i = 0; i < msbtFiles.length; i++) {
         formData.append(`msbt_${i}`, msbtFiles[i]);
@@ -83,31 +125,43 @@ const XenobladeProcess = () => {
         formData.append(`bdat_${i}`, bdatFiles[i]);
       }
 
-      setStage("extracting");
-      addLog("📤 إرسال الملفات للمعالجة...");
+      // Only call server if we have MSBT or JSON BDAT files
+      let serverEntries: any[] = [];
+      let msbtCount = 0, bdatJsonCount = 0;
 
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+      if (msbtFiles.length > 0 || bdatFiles.length > 0) {
+        setStage("extracting");
+        addLog("📤 إرسال ملفات MSBT/JSON للمعالجة...");
 
-      const response = await fetch(`${supabaseUrl}/functions/v1/arabize-xenoblade?mode=extract`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey },
-        body: formData,
-      });
+        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+        const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
-      if (!response.ok) {
-        const ct = response.headers.get('content-type') || '';
-        if (ct.includes('json')) {
-          const err = await response.json();
-          throw new Error(err.error || `خطأ ${response.status}`);
+        const response = await fetch(`${supabaseUrl}/functions/v1/arabize-xenoblade?mode=extract`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey },
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const ct = response.headers.get('content-type') || '';
+          if (ct.includes('json')) {
+            const err = await response.json();
+            throw new Error(err.error || `خطأ ${response.status}`);
+          }
+          throw new Error(`خطأ ${response.status}`);
         }
-        throw new Error(`خطأ ${response.status}`);
+
+        const data = await response.json();
+        serverEntries = data.entries || [];
+        msbtCount = data.msbtCount || 0;
+        bdatJsonCount = data.bdatCount || 0;
+      } else {
+        setStage("extracting");
       }
 
-      const data = await response.json();
-      const msbtCount = data.msbtCount || 0;
-      const bdatCount = data.bdatCount || 0;
-      addLog(`✅ تم استخراج ${data.entries.length} نص (${msbtCount} MSBT + ${bdatCount} BDAT)`);
+      // Merge server entries with local binary BDAT entries
+      const allEntries = [...serverEntries, ...bdatBinaryEntries];
+      addLog(`✅ تم استخراج ${allEntries.length} نص (${msbtCount} MSBT + ${bdatJsonCount} BDAT JSON + ${bdatBinaryEntries.length} BDAT ثنائي)`);
 
       // Store files in IndexedDB
       const { idbSet, idbGet, idbClear } = await import("@/lib/idb-storage");
@@ -127,7 +181,7 @@ const XenobladeProcess = () => {
       // Auto-detect Arabic entries
       const autoTranslations: Record<string, string> = {};
       const arabicLetterRegex = /[\u0621-\u064A\u0671-\u06D3\uFB50-\uFDFF\uFE70-\uFEFF]/g;
-      for (const entry of data.entries) {
+      for (const entry of allEntries) {
         const stripped = entry.original.replace(/[\uE000-\uF8FF\uFFF9-\uFFFC\u0000-\u001F]/g, '').trim();
         const arabicMatches = stripped.match(arabicLetterRegex);
         if (arabicMatches && arabicMatches.length >= 2) {
@@ -162,7 +216,7 @@ const XenobladeProcess = () => {
       if (mergeMode === "merge") {
         const existing = await idbGet<{ translations?: Record<string, string> }>("editorState");
         const existingTranslations = existing?.translations || {};
-        const validKeys = new Set(data.entries.map((e: any) => `${e.msbtFile}:${e.index}`));
+        const validKeys = new Set(allEntries.map((e: any) => `${e.msbtFile}:${e.index}`));
         for (const [k, v] of Object.entries(existingTranslations)) {
           if (validKeys.has(k) && v && !finalTranslations[k]) finalTranslations[k] = v as string;
         }
@@ -173,9 +227,11 @@ const XenobladeProcess = () => {
       await idbSet("editorMsbtFileNames", msbtFiles.map(f => f.name));
       await idbSet("editorBdatFiles", bdatTexts);
       await idbSet("editorBdatFileNames", bdatFiles.map(f => f.name));
+      await idbSet("editorBdatBinaryFiles", bdatBinaryBuffers);
+      await idbSet("editorBdatBinaryFileNames", bdatBinaryFiles.map(f => f.name));
       await idbSet("editorGame", "xenoblade");
       await idbSet("editorState", {
-        entries: data.entries,
+        entries: allEntries,
         translations: finalTranslations,
       });
 
@@ -192,7 +248,7 @@ const XenobladeProcess = () => {
   };
 
   const isProcessing = !["idle", "done", "error"].includes(stage);
-  const totalFiles = msbtFiles.length + bdatFiles.length;
+  const totalFiles = msbtFiles.length + bdatFiles.length + bdatBinaryFiles.length;
 
   return (
     <div className="min-h-screen py-8 px-4">
@@ -204,7 +260,7 @@ const XenobladeProcess = () => {
 
         <h1 className="text-3xl font-display font-bold mb-2">رفع ملفات زينوبليد 🔮</h1>
         <p className="text-muted-foreground mb-8 font-body">
-          ارفع ملفات MSBT و/أو BDAT JSON المستخرجة — يمكنك رفع عدة ملفات دفعة واحدة
+          ارفع ملفات MSBT و/أو BDAT (ثنائي أو JSON) — يمكنك رفع عدة ملفات دفعة واحدة
         </p>
 
         {/* MSBT Upload */}
@@ -223,15 +279,21 @@ const XenobladeProcess = () => {
             </div>
             <div className="h-12 w-px bg-border" />
             <div className="text-center">
+              <Binary className="w-8 h-8 text-[hsl(140,60%,40%)] mb-2 mx-auto" />
+              <p className="font-display font-semibold text-sm">BDAT</p>
+              <p className="text-xs text-muted-foreground">ثنائي مباشر</p>
+            </div>
+            <div className="h-12 w-px bg-border" />
+            <div className="text-center">
               <Database className="w-8 h-8 text-[hsl(280,70%,55%)] mb-2 mx-auto" />
-              <p className="font-display font-semibold text-sm">BDAT JSON</p>
-              <p className="text-xs text-muted-foreground">جداول البيانات</p>
+              <p className="font-display font-semibold text-sm">JSON</p>
+              <p className="text-xs text-muted-foreground">جداول محوّلة</p>
             </div>
           </div>
-          <p className="text-sm text-muted-foreground mt-4">اسحب وأفلت أو اختر ملفات .msbt و .json</p>
+          <p className="text-sm text-muted-foreground mt-4">اسحب وأفلت أو اختر ملفات .msbt و .bdat و .json</p>
           <input
             type="file"
-            accept=".msbt,.json"
+            accept=".msbt,.json,.bdat"
             multiple
             className="absolute inset-0 opacity-0 cursor-pointer"
             onChange={e => handleFileSelect(e.target.files)}
@@ -239,16 +301,15 @@ const XenobladeProcess = () => {
           />
         </div>
 
-        {/* BDAT Instructions */}
-        <Card className="mb-6 border-[hsl(280,70%,55%)]/20 bg-[hsl(280,70%,55%)]/5">
+        {/* BDAT Info */}
+        <Card className="mb-6 border-[hsl(140,60%,40%)]/20 bg-[hsl(140,60%,40%)]/5">
           <CardContent className="p-4">
-            <p className="text-sm font-display font-bold mb-2">📋 كيف تحصل على ملفات BDAT JSON؟</p>
-            <ol className="text-xs text-muted-foreground space-y-1 font-body list-decimal pr-5" dir="rtl">
-              <li>استخرج ملفات BDAT من romFS باستخدام <code className="bg-background px-1 rounded" dir="ltr">XbTool</code></li>
-              <li>حوّلها إلى JSON باستخدام <code className="bg-background px-1 rounded" dir="ltr">bdat-toolset extract path/to/bdats -o path/to/json -f json --pretty</code></li>
-              <li>ارفع ملفات JSON هنا للترجمة</li>
-              <li>بعد التصدير، أعد تحويلها إلى BDAT: <code className="bg-background px-1 rounded" dir="ltr">bdat-toolset pack path/to/json -f json -o path/to/new_bdats</code></li>
-            </ol>
+            <p className="text-sm font-display font-bold mb-2">📦 دعم BDAT الثنائي المباشر</p>
+            <p className="text-xs text-muted-foreground font-body" dir="rtl">
+              يمكنك الآن رفع ملفات <code className="bg-background px-1 rounded" dir="ltr">.bdat</code> مباشرة! المحلل الثنائي يستخرج النصوص تلقائياً بدون الحاجة لتحويلها إلى JSON.
+              <br />
+              كما يمكنك أيضاً رفع ملفات JSON المحوّلة عبر <code className="bg-background px-1 rounded" dir="ltr">bdat-toolset</code>.
+            </p>
           </CardContent>
         </Card>
 
@@ -291,7 +352,26 @@ const XenobladeProcess = () => {
           </Card>
         )}
 
-        {/* Merge Mode */}
+        {bdatBinaryFiles.length > 0 && (
+          <Card className="mb-4">
+            <CardHeader className="pb-2">
+              <CardTitle className="font-display text-lg">📦 ملفات BDAT ثنائية ({bdatBinaryFiles.length})</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-1.5 max-h-36 overflow-y-auto">
+                {bdatBinaryFiles.map((f, i) => (
+                  <div key={i} className="flex items-center justify-between px-3 py-1.5 rounded bg-background border border-border text-sm">
+                    <span className="font-mono text-xs truncate flex-1" dir="ltr">{f.name}</span>
+                    <span className="text-muted-foreground text-xs mx-3">{(f.size / 1024).toFixed(1)} KB</span>
+                    <button onClick={() => removeFile("bdat-bin", i)} className="text-destructive text-xs hover:underline" disabled={isProcessing}>حذف</button>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+
         {hasPreviousSession && (
           <div className="flex items-center justify-center gap-3 mb-6">
             <button onClick={() => setMergeMode("fresh")}
