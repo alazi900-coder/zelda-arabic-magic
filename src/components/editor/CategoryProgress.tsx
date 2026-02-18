@@ -1,7 +1,21 @@
 import React from "react";
 import { Progress } from "@/components/ui/progress";
 import { FILE_CATEGORIES, BDAT_CATEGORIES, categorizeFile } from "./types";
-import { AlertTriangle, Wrench, Loader2, Sparkles, RefreshCw } from "lucide-react";
+import {
+  AlertTriangle, Wrench, Loader2, Sparkles, RefreshCw,
+  Monitor, Swords, Users, Skull, ScrollText, MapPin, BookOpen,
+  Gem, Shield, Lightbulb, Backpack, FolderOpen,
+  Home, Settings, MonitorSmartphone, Pause, Sword, Target, ShieldCheck,
+  Shirt, FlaskConical, Utensils, Key, BookText, Map, Drama, MessageCircle,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+
+const ICON_MAP: Record<string, LucideIcon> = {
+  Monitor, Swords, Users, Skull, ScrollText, MapPin, BookOpen,
+  Sparkles, Gem, Shield, Lightbulb, Backpack, FolderOpen,
+  Home, Settings, MonitorSmartphone, Pause, Sword, Target, ShieldCheck,
+  Shirt, FlaskConical, Utensils, Key, BookText, Map, Drama, MessageCircle,
+};
 
 interface CategoryProgressProps {
   categoryProgress: Record<string, { total: number; translated: number }>;
@@ -96,7 +110,7 @@ const CategoryProgress: React.FC<CategoryProgressProps> = ({ categoryProgress, f
           </button>
         </div>
       )}
-      {FILE_CATEGORIES.filter(cat => categoryProgress[cat.id]).map(cat => {
+      {categories.filter(cat => categoryProgress[cat.id]).map(cat => {
         const prog = categoryProgress[cat.id];
         const pct = prog.total > 0 ? Math.round((prog.translated / prog.total) * 100) : 0;
         return (
@@ -114,7 +128,11 @@ const CategoryProgress: React.FC<CategoryProgressProps> = ({ categoryProgress, f
             }`}
           >
             <div className="flex items-center justify-between mb-1">
-              <span>{cat.emoji}</span>
+              {cat.icon && ICON_MAP[cat.icon] ? (
+                React.createElement(ICON_MAP[cat.icon], { className: `w-4 h-4 ${cat.color || 'text-muted-foreground'}` })
+              ) : (
+                <span>{cat.emoji}</span>
+              )}
               <span className="font-mono text-muted-foreground">{pct}%</span>
             </div>
             <p className="font-display font-bold truncate">{cat.label}</p>
@@ -137,7 +155,7 @@ const CategoryProgress: React.FC<CategoryProgressProps> = ({ categoryProgress, f
           }`}
         >
           <div className="flex items-center justify-between mb-1">
-            <span>📁</span>
+            <FolderOpen className="w-4 h-4 text-muted-foreground" />
             <span className="font-mono text-muted-foreground">
               {categoryProgress['other'].total > 0 ? Math.round((categoryProgress['other'].translated / categoryProgress['other'].total) * 100) : 0}%
             </span>
