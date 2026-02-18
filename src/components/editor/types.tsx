@@ -106,7 +106,7 @@ export function hasTechnicalTags(text: string): boolean {
 }
 
 // Locally restore missing control characters from original into translation
-// without using AI — matches individual characters to align with quality detector
+// without using AI — preserves consecutive tag GROUPS (e.g. FFF9+E000+FFFA)
 export function restoreTagsLocally(original: string, translation: string): string {
   const charRegexG = /[\uFFF9-\uFFFC\uE000-\uF8FF]/g;
   const charTest = /[\uFFF9-\uFFFC\uE000-\uF8FF]/;
@@ -115,69 +115,60 @@ export function restoreTagsLocally(original: string, translation: string): strin
   
   const transChars = translation.match(charRegexG) || [];
   if (transChars.length >= origChars.length) return translation;
-  
-  // Count chars in translation to find which are missing
-  const remaining = new Map<string, number>();
-  for (const c of transChars) remaining.set(c, (remaining.get(c) || 0) + 1);
-  
-  // Build list of missing characters with positions from original
-  const missingChars: { char: string; relPos: number }[] = [];
-  const tempRemaining = new Map(remaining);
-  for (let i = 0; i < original.length; i++) {
-    const c = original[i];
-    if (!charTest.test(c)) continue;
-    const rem = tempRemaining.get(c) || 0;
-    if (rem > 0) {
-      tempRemaining.set(c, rem - 1);
-    } else {
-      missingChars.push({ char: c, relPos: i / Math.max(original.length, 1) });
-    }
-  }
-  
-  if (missingChars.length === 0) return translation;
-  
-  // Strip existing control chars to get clean text
-  const cleanTranslation = translation.replace(charRegexG, '');
-  
-  // Collect ALL original chars with positions for reinsertion
-  const allChars: { char: string; relPos: number }[] = [];
-  for (let i = 0; i < original.length; i++) {
+
+  // Extract consecutive tag GROUPS from original with their relative positions
+  const origGroups: { chars: string; relPos: number }[] = [];
+  let i = 0;
+  while (i < original.length) {
     if (charTest.test(original[i])) {
-      allChars.push({ char: original[i], relPos: i / Math.max(original.length, 1) });
+      const start = i;
+      let group = '';
+      while (i < original.length && charTest.test(original[i])) {
+        group += original[i];
+        i++;
+      }
+      // Position = midpoint of the group in the original
+      const midpoint = (start + i) / 2;
+      origGroups.push({ chars: group, relPos: midpoint / Math.max(original.length, 1) });
+    } else {
+      i++;
     }
   }
-  
+
+  // Strip all control chars from translation to get clean text
+  const cleanTranslation = translation.replace(charRegexG, '');
+
   // Find word boundary positions in clean translation
   const wordBoundaries = [0];
-  for (let i = 0; i < cleanTranslation.length; i++) {
-    if (cleanTranslation[i] === ' ' || cleanTranslation[i] === '\n') {
-      wordBoundaries.push(i + 1);
+  for (let j = 0; j < cleanTranslation.length; j++) {
+    if (cleanTranslation[j] === ' ' || cleanTranslation[j] === '\n') {
+      wordBoundaries.push(j + 1);
     }
   }
   wordBoundaries.push(cleanTranslation.length);
-  
-  // Map each char to nearest word boundary
-  const insertions: { pos: number; char: string }[] = [];
-  for (const tag of allChars) {
-    const rawPos = Math.round(tag.relPos * cleanTranslation.length);
+
+  // Map each GROUP to nearest word boundary (keeping group chars together)
+  const insertions: { pos: number; chars: string }[] = [];
+  for (const group of origGroups) {
+    const rawPos = Math.round(group.relPos * cleanTranslation.length);
     let bestPos = rawPos;
     let bestDist = Infinity;
     for (const wb of wordBoundaries) {
       const dist = Math.abs(wb - rawPos);
       if (dist < bestDist) { bestDist = dist; bestPos = wb; }
     }
-    insertions.push({ pos: bestPos, char: tag.char });
+    insertions.push({ pos: bestPos, chars: group.chars });
   }
-  
-  // Sort by position descending to insert from end
+
+  // Sort by position descending to insert from end (avoids offset shifts)
   insertions.sort((a, b) => b.pos - a.pos);
-  
+
   let result = cleanTranslation;
   for (const ins of insertions) {
     const pos = Math.min(ins.pos, result.length);
-    result = result.slice(0, pos) + ins.char + result.slice(pos);
+    result = result.slice(0, pos) + ins.chars + result.slice(pos);
   }
-  
+
   return result;
 }
 
