@@ -102,6 +102,9 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
       for (const [k, v] of Object.entries(state.translations)) { if (v.trim()) nonEmptyTranslations[k] = v; }
 
       // Auto-fix damaged tags before build
+      let tagFixCount = 0;
+      let tagSkipCount = 0;
+      let tagOkCount = 0;
       for (const entry of state.entries) {
         if (!hasTechnicalTags(entry.original)) continue;
         const key = `${entry.msbtFile}:${entry.index}`;
@@ -110,9 +113,21 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
         const origTagCount = (entry.original.match(/[\uFFF9-\uFFFC\uE000-\uF8FF]/g) || []).length;
         const transTagCount = (trans.match(/[\uFFF9-\uFFFC\uE000-\uF8FF]/g) || []).length;
         if (transTagCount < origTagCount) {
-          nonEmptyTranslations[key] = restoreTagsLocally(entry.original, trans);
+          const fixed = restoreTagsLocally(entry.original, trans);
+          nonEmptyTranslations[key] = fixed;
+          tagFixCount++;
+          // Log DoCommand/LayoutMsg entries for debugging
+          if (entry.msbtFile.includes('DoCommand') || entry.msbtFile.includes('Pouch')) {
+            const fixedTagCount = (fixed.match(/[\uFFF9-\uFFFC\uE000-\uF8FF]/g) || []).length;
+            console.log(`[TAG-FIX] ${key}: orig=${origTagCount} tags, trans=${transTagCount} tags, fixed=${fixedTagCount} tags`);
+            console.log(`[TAG-FIX] Original: ${[...entry.original.substring(0, 30)].map(c => c.charCodeAt(0).toString(16).padStart(4,'0')).join(' ')}`);
+            console.log(`[TAG-FIX] Fixed: ${[...fixed.substring(0, 30)].map(c => c.charCodeAt(0).toString(16).padStart(4,'0')).join(' ')}`);
+          }
+        } else {
+          tagOkCount++;
         }
       }
+      console.log(`[BUILD-TAGS] Fixed: ${tagFixCount}, Already OK: ${tagOkCount}, Total entries with tags: ${tagFixCount + tagOkCount}`);
       
       console.log('[BUILD] Total translations being sent:', Object.keys(nonEmptyTranslations).length);
       console.log('[BUILD] Protected entries:', Array.from(state.protectedEntries || []).length);
