@@ -492,6 +492,47 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     input.click();
   };
 
+  /** Export ALL English originals as JSON {key: original} for external translation */
+  const handleExportAllEnglishJson = () => {
+    if (!state) return;
+    const entriesToExport = isFilterActive ? filteredEntries : state.entries;
+    const exportObj: Record<string, string> = {};
+    for (const entry of entriesToExport) {
+      const key = `${entry.msbtFile}:${entry.index}`;
+      exportObj[key] = entry.original;
+    }
+    const data = JSON.stringify(exportObj, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const suffix = isFilterActive ? `_${filterLabel}` : '';
+    a.download = `english-all${suffix}_${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    setLastSaved(`✅ تم تصدير ${Object.keys(exportObj).length} نص إنجليزي كـ JSON للترجمة الخارجية`);
+    setTimeout(() => setLastSaved(""), 4000);
+  };
+
+  /** Import external translations JSON {key: translation} back */
+  const handleImportExternalJson = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json,application/json';
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+      try {
+        const rawText = (await file.text()).trim();
+        await processJsonImport(rawText, file.name);
+      } catch (err) {
+        console.error('External JSON import error:', err);
+        alert(`ملف JSON غير صالح\n\nالخطأ: ${err instanceof Error ? err.message : err}`);
+      }
+    };
+    input.click();
+  };
+
   return {
     handleExportTranslations,
     handleExportEnglishOnly,
@@ -500,6 +541,8 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     processJsonImport,
     handleExportCSV,
     handleImportCSV,
+    handleExportAllEnglishJson,
+    handleImportExternalJson,
     normalizeArabicPresentationForms,
     isFilterActive,
     filterLabel,
