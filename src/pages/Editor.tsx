@@ -41,6 +41,7 @@ import FindReplacePanel from "@/components/editor/FindReplacePanel";
 import DiffView from "@/components/editor/DiffView";
 import BuildStatsDialog from "@/components/editor/BuildStatsDialog";
 import BuildConfirmDialog from "@/components/editor/BuildConfirmDialog";
+import ConsistencyResultsPanel from "@/components/editor/ConsistencyResultsPanel";
 
 const Editor = () => {
   const editor = useEditorState();
@@ -308,6 +309,16 @@ const Editor = () => {
             setImproveResults={editor.setImproveResults}
           />
 
+          {/* Consistency Results */}
+          {editor.consistencyResults && editor.consistencyResults.groups.length > 0 && (
+            <ConsistencyResultsPanel
+              results={editor.consistencyResults}
+              onApplyFix={editor.handleApplyConsistencyFix}
+              onApplyAll={editor.handleApplyAllConsistencyFixes}
+              onClose={() => editor.setConsistencyResults(null)}
+            />
+          )}
+
           {!editor.user && (
             <Card className="mb-4 border-primary/30 bg-primary/5">
               <CardContent className="flex items-center gap-3 p-4"><LogIn className="w-4 h-4" /> سجّل دخولك للمزامنة</CardContent>
@@ -524,9 +535,13 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleImproveTranslations} disabled={editor.improvingTranslations || editor.translatedCount === 0}><Sparkles className="w-4 h-4" /> تحسين الترجمات ✨</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={editor.handleFixAllStuckCharacters} disabled={editor.needsImproveCount.stuck === 0}><AlertTriangle className="w-4 h-4" /> إصلاح الأحرف الملتصقة 🔤</DropdownMenuItem>
-                  <DropdownMenuItem onClick={editor.handleFixMixedLanguage} disabled={editor.fixingMixed || editor.needsImproveCount.mixed === 0}>
-                    {editor.fixingMixed ? <Loader2 className="w-4 h-4 animate-spin" /> : <Filter className="w-4 h-4" />} إصلاح النصوص المختلطة 🌐
-                  </DropdownMenuItem>
+                   <DropdownMenuItem onClick={editor.handleFixMixedLanguage} disabled={editor.fixingMixed || editor.needsImproveCount.mixed === 0}>
+                     {editor.fixingMixed ? <Loader2 className="w-4 h-4 animate-spin" /> : <Filter className="w-4 h-4" />} إصلاح النصوص المختلطة 🌐
+                   </DropdownMenuItem>
+                   <DropdownMenuSeparator />
+                   <DropdownMenuItem onClick={editor.handleCheckConsistency} disabled={editor.checkingConsistency || editor.translatedCount === 0}>
+                     {editor.checkingConsistency ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />} فحص اتساق المصطلحات 🔍
+                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -588,6 +603,9 @@ const Editor = () => {
               </Button>
               <Button variant="outline" onClick={editor.handleFixMixedLanguage} disabled={editor.fixingMixed || editor.needsImproveCount.mixed === 0} className="font-body border-primary/30 text-primary hover:text-primary">
                 {editor.fixingMixed ? <Loader2 className="w-4 h-4 animate-spin" /> : <Filter className="w-4 h-4" />} إصلاح النصوص المختلطة 🌐
+              </Button>
+              <Button variant="outline" onClick={editor.handleCheckConsistency} disabled={editor.checkingConsistency || editor.translatedCount === 0} className="font-body border-amber-500/30 text-amber-500 hover:text-amber-400">
+                {editor.checkingConsistency ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />} فحص اتساق المصطلحات 🔍
               </Button>
             </div>
           )}
