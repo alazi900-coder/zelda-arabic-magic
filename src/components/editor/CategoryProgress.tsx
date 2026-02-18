@@ -1,6 +1,6 @@
 import React from "react";
 import { Progress } from "@/components/ui/progress";
-import { FILE_CATEGORIES, categorizeFile } from "./types";
+import { FILE_CATEGORIES, BDAT_CATEGORIES, categorizeFile } from "./types";
 import { AlertTriangle, Wrench, Loader2, Sparkles, RefreshCw } from "lucide-react";
 
 interface CategoryProgressProps {
@@ -15,10 +15,12 @@ interface CategoryProgressProps {
   onLocalFixDamagedTags?: () => void;
   onRedistributeTags?: () => void;
   tagsCount?: number;
+  isBdat?: boolean;
 }
 
-const CategoryProgress: React.FC<CategoryProgressProps> = ({ categoryProgress, filterCategory, setFilterCategory, damagedTagsCount = 0, onFilterDamagedTags, isDamagedTagsActive, onFixDamagedTags, isFixing, onLocalFixDamagedTags, onRedistributeTags, tagsCount = 0 }) => {
-  const activeCats = FILE_CATEGORIES.filter(cat => categoryProgress[cat.id]);
+const CategoryProgress: React.FC<CategoryProgressProps> = ({ categoryProgress, filterCategory, setFilterCategory, damagedTagsCount = 0, onFilterDamagedTags, isDamagedTagsActive, onFixDamagedTags, isFixing, onLocalFixDamagedTags, onRedistributeTags, tagsCount = 0, isBdat = false }) => {
+  const categories = isBdat ? BDAT_CATEGORIES : FILE_CATEGORIES;
+  const activeCats = categories.filter(cat => categoryProgress[cat.id]);
   if (activeCats.length === 0 && !categoryProgress['other']) return null;
 
   return (

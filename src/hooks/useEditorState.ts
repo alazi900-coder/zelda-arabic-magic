@@ -12,7 +12,7 @@ import { useEditorBuild } from "@/hooks/useEditorBuild";
 import { useEditorTranslation } from "@/hooks/useEditorTranslation";
 import {
   ExtractedEntry, EditorState, AUTOSAVE_DELAY, AI_BATCH_SIZE, PAGE_SIZE,
-  categorizeFile, hasArabicChars, unReverseBidi, isTechnicalText, hasTechnicalTags,
+  categorizeFile, categorizeBdatTable, hasArabicChars, unReverseBidi, isTechnicalText, hasTechnicalTags,
   ReviewIssue, ReviewSummary, ReviewResults, ShortSuggestion, ImproveResult,
   restoreTagsLocally,
 } from "@/components/editor/types";
@@ -398,7 +398,7 @@ export function useEditorState() {
         e.label.includes(search) ||
         translation.includes(search);
       const matchFile = filterFile === "all" || e.msbtFile === filterFile;
-      const matchCategory = filterCategory === "all" || categorizeFile(e.msbtFile) === filterCategory;
+      const matchCategory = filterCategory === "all" || (e.msbtFile === "bdat" ? categorizeBdatTable(e.label) : categorizeFile(e.msbtFile)) === filterCategory;
       const matchStatus = 
         filterStatus === "all" || 
         (filterStatus === "translated" && isTranslated) ||
@@ -757,44 +757,69 @@ export function useEditorState() {
 
 
   const loadDemoBdatData = useCallback(() => {
-    const tables = ["CHR_Dr", "FLD_NpcList", "MNU_Msg"];
-    const columns: Record<string, string[]> = {
-      "CHR_Dr": ["Name", "Title", "Description"],
-      "FLD_NpcList": ["Name", "Location"],
-      "MNU_Msg": ["Label", "Help", "Error"],
-    };
-    const sampleTexts: Record<string, string[]> = {
-      "Name": ["Rex", "Pyra", "Mythra", "Nia", "Zeke", "Morag", "Tora", "Shulk", "Melia", "Dunban"],
-      "Title": ["Driver of the Aegis", "Blade of Fire", "Blade of Light", "Gormotti Driver", "Thunderbolt Zeke"],
-      "Description": ["A young salvager from Leftheria.", "The legendary Aegis blade.", "Another form of the Aegis."],
-      "Location": ["Argentum Trade Guild", "Gormott Province", "Uraya", "Mor Ardain", "Tantal", "Leftheria"],
-      "Label": ["Confirm", "Cancel", "OK", "Back", "Next", "Save", "Load"],
-      "Help": ["Press A to confirm.", "Press B to cancel.", "Select an option."],
-      "Error": ["File not found.", "Invalid input.", "Connection failed."],
-    };
+    const tableData: { table: string; cols: string[]; rows: number; texts: Record<string, string[]> }[] = [
+      { table: "MNU_Msg", cols: ["Label", "Help"], rows: 12, texts: {
+        Label: ["Confirm", "Cancel", "OK", "Back", "Next", "Save", "Load", "Options", "Quit", "Resume", "Retry", "Settings"],
+        Help: ["Press A to confirm.", "Press B to cancel.", "Select an option.", "Open the menu.", "Change settings."],
+      }},
+      { table: "CHR_Dr", cols: ["Name", "Title", "Description"], rows: 10, texts: {
+        Name: ["Noah", "Mio", "Eunie", "Taion", "Lanz", "Sena", "Riku", "Manana", "Ashera", "Zeon"],
+        Title: ["Off-Seer of Keves", "Off-Seer of Agnus", "Healer of Colony 9", "Tactician of Agnus", "Defender of Colony 9"],
+        Description: ["A soldier from Keves who plays the flute.", "A soldier from Agnus who plays the flute.", "Noah's childhood friend."],
+      }},
+      { table: "BTL_Arts", cols: ["Name", "Description"], rows: 15, texts: {
+        Name: ["Sword Strike", "Air Slash", "Edge Thrust", "Shadow Eye", "Starfall", "Ground Beat", "Mega Spinning Edge", "Wide Slash", "Power Smash", "Butterfly Blade"],
+        Description: ["A basic attack dealing physical damage.", "A wide-range slash hitting multiple enemies.", "An accurate thrust with high critical rate."],
+      }},
+      { table: "ENE_Monster", cols: ["Name", "Location"], rows: 8, texts: {
+        Name: ["Territorial Rotbart", "Gogol", "Krabble", "Bunnit", "Feris", "Tirkin", "Sauros", "Igna"],
+        Location: ["Aetia Region", "Fornis Region", "Pentelas Region", "Cadensia Region"],
+      }},
+      { table: "ITM_Equipment", cols: ["Name", "Effect"], rows: 10, texts: {
+        Name: ["Steel Blade", "Silver Shield", "Power Ring", "Speed Boots", "Guard Crest", "Attack Charm", "HP Bangle", "Evasion Gem", "Critical Scope", "Auto-Heal Ring"],
+        Effect: ["Increases attack power by 10%.", "Reduces damage taken by 15%.", "Boosts movement speed.", "Restores HP gradually."],
+      }},
+      { table: "QST_MainStory", cols: ["Title", "Objective"], rows: 8, texts: {
+        Title: ["The Vanishing Flame", "Path to Swordmarch", "Colony 4 Liberation", "The Cloudkeep", "Origin", "The Last Chapter", "Bonds of Friendship", "A New Future"],
+        Objective: ["Head to the battlefield.", "Defeat the enemy commander.", "Liberate Colony 4.", "Reach the top of Cloudkeep."],
+      }},
+      { table: "FLD_MapList", cols: ["Name", "Region"], rows: 8, texts: {
+        Name: ["Colony 9", "Millick Meadows", "Alfeto Valley", "Great Cotte Falls", "Maktha Wildwood", "Erythia Sea", "Keves Castle", "Origin"],
+        Region: ["Aetia Region", "Fornis Region", "Pentelas Region", "Cadensia Region"],
+      }},
+      { table: "SKL_Skill", cols: ["Name", "Description"], rows: 8, texts: {
+        Name: ["HP Up", "Strength Up", "Agility Up", "Critical Up", "Ether Defense Up", "Arts Heal", "Power Charge", "Quick Step"],
+        Description: ["Increases max HP by 10%.", "Increases physical attack.", "Increases agility.", "Increases critical hit rate."],
+      }},
+      { table: "GEM_Gem", cols: ["Name", "Effect"], rows: 6, texts: {
+        Name: ["Steel Protection", "Steady Striker", "Swelling Scourge", "Disperse Bloodlust", "Lifebearer", "Ultimate Counter"],
+        Effect: ["Reduces damage taken.", "Increases auto-attack speed.", "Boosts damage over time.", "Distributes aggro."],
+      }},
+      { table: "JOB_Class", cols: ["Name", "Role", "Description"], rows: 6, texts: {
+        Name: ["Swordfighter", "Zephyr", "Medic Gunner", "Tactician", "Heavy Guard", "Martial Artist"],
+        Role: ["Attacker", "Defender", "Healer", "Attacker", "Defender", "Attacker"],
+        Description: ["A balanced attacker class.", "An agile defender class.", "A healing specialist.", "A tactical support class."],
+      }},
+      { table: "TIP_Tutorial", cols: ["Title", "Content"], rows: 6, texts: {
+        Title: ["Basic Controls", "Combat Basics", "Chain Attacks", "Interlinks", "Gem Crafting", "Class Change"],
+        Content: ["Use the left stick to move.", "Press A to auto-attack.", "Fill the chain gauge to unleash.", "Press up on D-pad to interlink."],
+      }},
+      { table: "MSG_NpcTalk", cols: ["Speaker", "Dialogue"], rows: 10, texts: {
+        Speaker: ["Village Elder", "Merchant", "Guard", "Child", "Traveler", "Blacksmith", "Innkeeper", "Scholar", "Farmer", "Soldier"],
+        Dialogue: ["Welcome, traveler.", "Care to see my wares?", "Halt! State your business.", "Wanna play?", "The road ahead is dangerous."],
+      }},
+    ];
     const entries: ExtractedEntry[] = [];
     let idx = 0;
-    for (const tbl of tables) {
-      const cols = columns[tbl];
-      const rowCount = tbl === "CHR_Dr" ? 10 : tbl === "FLD_NpcList" ? 6 : 7;
-      for (let row = 0; row < rowCount; row++) {
+    for (const { table, cols, rows, texts } of tableData) {
+      for (let row = 0; row < rows; row++) {
         for (const col of cols) {
-          const texts = sampleTexts[col] || ["Sample text"];
-          entries.push({
-            msbtFile: "bdat",
-            index: idx++,
-            label: `${tbl}[${row}].${col}`,
-            original: texts[row % texts.length],
-            maxBytes: 0,
-          });
+          const t = texts[col] || ["Sample text"];
+          entries.push({ msbtFile: "bdat", index: idx++, label: `${table}[${row}].${col}`, original: t[row % t.length], maxBytes: 0 });
         }
       }
     }
-    setState({
-      entries,
-      translations: {},
-      protectedEntries: new Set(),
-    });
+    setState({ entries, translations: {}, protectedEntries: new Set() });
     setGameType("xenoblade");
     setLastSaved("✅ تم تحميل بيانات BDAT تجريبية");
     setTimeout(() => setLastSaved(""), 3000);
