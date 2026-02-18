@@ -13,6 +13,7 @@ interface EntryCardProps {
   isProtected: boolean;
   hasProblem: boolean;
   isDamagedTag?: boolean;
+  fuzzyScore?: number;
   isMobile: boolean;
   translatingSingle: string | null;
   improvingTranslations: boolean;
@@ -54,7 +55,7 @@ function findGlossaryMatches(original: string, glossary?: string): { term: strin
 }
 
 const EntryCard: React.FC<EntryCardProps> = ({
-  entry, translation, isProtected, hasProblem, isDamagedTag, isMobile,
+  entry, translation, isProtected, hasProblem, isDamagedTag, fuzzyScore, isMobile,
   translatingSingle, improvingTranslations, previousTranslations, glossary,
   isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage,
   updateTranslation, handleTranslateSingle, handleImproveSingleTranslation,
@@ -146,6 +147,11 @@ const EntryCard: React.FC<EntryCardProps> = ({
               )}
               {isDamagedTag && (
                 <span className="text-[10px] px-1.5 py-0.5 rounded bg-destructive/10 text-destructive border border-destructive/20">⚠️ رموز تالفة</span>
+              )}
+              {fuzzyScore != null && (
+                <span className={`text-[10px] px-1.5 py-0.5 rounded border ${fuzzyScore >= 80 ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' : fuzzyScore >= 70 ? 'bg-amber-500/10 text-amber-600 border-amber-500/20' : 'bg-orange-500/10 text-orange-600 border-orange-500/20'}`}>
+                  🔍 مطابقة جزئية {fuzzyScore}%
+                </span>
               )}
             </div>
           )}

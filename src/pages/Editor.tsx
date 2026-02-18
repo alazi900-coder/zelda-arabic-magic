@@ -688,6 +688,7 @@ const Editor = () => {
                     isProtected={editor.state?.protectedEntries?.has(key) || false}
                     hasProblem={editor.qualityStats.problemKeys.has(key)}
                     isDamagedTag={editor.qualityStats.damagedTagKeys.has(key)}
+                    fuzzyScore={editor.state?.fuzzyScores?.[key]}
                     isMobile={isMobile}
                     translatingSingle={editor.translatingSingle}
                     improvingTranslations={editor.improvingTranslations}
