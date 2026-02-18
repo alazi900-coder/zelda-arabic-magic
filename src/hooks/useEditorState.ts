@@ -22,7 +22,7 @@ export function useEditorState() {
   const [search, setSearch] = useState("");
   const [filterFile, setFilterFile] = useState<string>("all");
   const [filterCategory, setFilterCategory] = useState<string[]>([]);
-  const [filterStatus, setFilterStatus] = useState<"all" | "translated" | "untranslated" | "problems" | "needs-improve" | "too-short" | "too-long" | "stuck-chars" | "mixed-lang" | "has-tags" | "damaged-tags">("all");
+  const [filterStatus, setFilterStatus] = useState<"all" | "translated" | "untranslated" | "problems" | "needs-improve" | "too-short" | "too-long" | "stuck-chars" | "mixed-lang" | "has-tags" | "damaged-tags" | "fuzzy">("all");
   const [filterTechnical, setFilterTechnical] = useState<"all" | "only" | "exclude">("all");
   const [filterTable, setFilterTable] = useState<string>("all");
   const [filterColumn, setFilterColumn] = useState<string>("all");
@@ -335,6 +335,12 @@ export function useEditorState() {
     return state.entries.filter(e => hasTechnicalTags(e.original)).length;
   }, [state?.entries]);
 
+  // === Count fuzzy-matched entries ===
+  const fuzzyCount = useMemo(() => {
+    if (!state?.fuzzyScores) return 0;
+    return Object.keys(state.fuzzyScores).length;
+  }, [state?.fuzzyScores]);
+
   // === Extract unique BDAT table and column names from labels ===
   const bdatTableNames = useMemo(() => {
     if (!state) return [];
@@ -412,7 +418,8 @@ export function useEditorState() {
         (filterStatus === "stuck-chars" && isTranslated && hasStuckChars(translation)) ||
         (filterStatus === "mixed-lang" && isTranslated && isMixedLanguage(translation)) ||
         (filterStatus === "has-tags" && hasTechnicalTags(e.original)) ||
-        (filterStatus === "damaged-tags" && qualityStats.damagedTagKeys.has(key));
+        (filterStatus === "damaged-tags" && qualityStats.damagedTagKeys.has(key)) ||
+        (filterStatus === "fuzzy" && !!(state.fuzzyScores?.[key]));
       const matchTechnical = 
         filterTechnical === "all" ||
         (filterTechnical === "only" && isTechnical) ||
@@ -497,6 +504,47 @@ export function useEditorState() {
     setLastSaved(`✅ تم إصلاح ${fixedCount} نص محلياً`);
     setTimeout(() => setLastSaved(""), 4000);
   }, [state, setState, setPreviousTranslations, setLastSaved]);
+
+  // === Accept/Reject fuzzy match handlers ===
+  const handleAcceptFuzzy = useCallback((key: string) => {
+    if (!state?.fuzzyScores?.[key]) return;
+    const newScores = { ...state.fuzzyScores };
+    delete newScores[key];
+    setState(prev => prev ? { ...prev, fuzzyScores: newScores } : null);
+    toast({ title: "✅ تم القبول", description: "تم اعتماد الترجمة المستوردة" });
+  }, [state, setState]);
+
+  const handleRejectFuzzy = useCallback((key: string) => {
+    if (!state?.fuzzyScores?.[key]) return;
+    const newScores = { ...state.fuzzyScores };
+    delete newScores[key];
+    const newTranslations = { ...state.translations };
+    setPreviousTranslations(old => ({ ...old, [key]: newTranslations[key] || '' }));
+    delete newTranslations[key];
+    setState(prev => prev ? { ...prev, fuzzyScores: newScores, translations: newTranslations } : null);
+    toast({ title: "❌ تم الرفض", description: "تم حذف الترجمة المستوردة" });
+  }, [state, setState, setPreviousTranslations]);
+
+  const handleAcceptAllFuzzy = useCallback(() => {
+    if (!state?.fuzzyScores || Object.keys(state.fuzzyScores).length === 0) return;
+    const count = Object.keys(state.fuzzyScores).length;
+    setState(prev => prev ? { ...prev, fuzzyScores: {} } : null);
+    toast({ title: "✅ تم قبول الكل", description: `تم اعتماد ${count} ترجمة مستوردة` });
+  }, [state, setState]);
+
+  const handleRejectAllFuzzy = useCallback(() => {
+    if (!state?.fuzzyScores || Object.keys(state.fuzzyScores).length === 0) return;
+    const keys = Object.keys(state.fuzzyScores);
+    const newTranslations = { ...state.translations };
+    const prev: Record<string, string> = {};
+    for (const key of keys) {
+      prev[key] = newTranslations[key] || '';
+      delete newTranslations[key];
+    }
+    setPreviousTranslations(old => ({ ...old, ...prev }));
+    setState(s => s ? { ...s, fuzzyScores: {}, translations: newTranslations } : null);
+    toast({ title: "❌ تم رفض الكل", description: `تم حذف ${keys.length} ترجمة مستوردة` });
+  }, [state, setState, setPreviousTranslations]);
 
   // === Redistribute tags at word boundaries for already-fixed translations ===
   const handleRedistributeTags = useCallback(() => {
@@ -915,7 +963,7 @@ export function useEditorState() {
     applyingArabic, improvingTranslations, improveResults,
     fixingMixed, filtersOpen, buildStats, buildPreview, showBuildConfirm,
     checkingConsistency, consistencyResults,
-    categoryProgress, qualityStats, needsImproveCount, translatedCount, tagsCount,
+    categoryProgress, qualityStats, needsImproveCount, translatedCount, tagsCount, fuzzyCount,
     bdatTableNames, bdatColumnNames, bdatTableCounts, bdatColumnCounts,
     ...glossary,
     msbtFiles, filteredEntries, paginatedEntries, totalPages,
@@ -941,6 +989,7 @@ export function useEditorState() {
     handleImproveTranslations, handleApplyImprovement, handleApplyAllImprovements,
     handleImproveSingleTranslation,
     handleCheckConsistency, handleApplyConsistencyFix, handleApplyAllConsistencyFixes,
+    handleAcceptFuzzy, handleRejectFuzzy, handleAcceptAllFuzzy, handleRejectAllFuzzy,
     handleCloudSave, handleCloudLoad,
     handleApplyArabicProcessing, handlePreBuild, handleBuild, handleBulkReplace, loadDemoBdatData,
 

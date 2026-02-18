@@ -351,6 +351,7 @@ const Editor = () => {
                     <option value="stuck-chars">🔤 ملتصق ({editor.needsImproveCount.stuck})</option>
                     <option value="mixed-lang">🌐 مختلط ({editor.needsImproveCount.mixed})</option>
                     <option value="has-tags">🔧 يحتوي رموز تقنية ({editor.tagsCount})</option>
+                    {editor.fuzzyCount > 0 && <option value="fuzzy">🔍 مطابقة جزئية ({editor.fuzzyCount})</option>}
                   </select>
                   <select value={editor.filterFile} onChange={e => editor.setFilterFile(e.target.value)} className="px-3 py-2 rounded bg-background border border-border font-body text-sm max-w-[200px]">
                     <option value="all">كل الملفات</option>
@@ -396,6 +397,7 @@ const Editor = () => {
                   <option value="stuck-chars">🔤 ملتصق</option>
                     <option value="mixed-lang">🌐 مختلط</option>
                     <option value="has-tags">🔧 رموز تقنية</option>
+                    {editor.fuzzyCount > 0 && <option value="fuzzy">🔍 مطابقة جزئية ({editor.fuzzyCount})</option>}
                 </select>
                 <select value={editor.filterFile} onChange={e => editor.setFilterFile(e.target.value)} className="w-full px-3 py-2 rounded bg-background border border-border font-body text-sm">
                   <option value="all">كل الملفات</option>
@@ -444,7 +446,22 @@ const Editor = () => {
             </div>
           )}
 
-          {/* Glossary indicator */}
+          {/* Fuzzy Match Batch Actions */}
+          {editor.fuzzyCount > 0 && (
+            <div className="flex flex-wrap items-center gap-2 mb-4 px-3 py-2 rounded-lg bg-amber-500/5 border border-amber-500/15">
+              <span className="text-xs font-display text-amber-600">🔍 {editor.fuzzyCount} ترجمة بمطابقة جزئية:</span>
+              <Button variant="outline" size="sm" onClick={() => editor.setFilterStatus("fuzzy")} className="text-xs h-6 px-2 border-amber-500/30 text-amber-600">
+                عرض الكل
+              </Button>
+              <Button variant="outline" size="sm" onClick={editor.handleAcceptAllFuzzy} className="text-xs h-6 px-2 border-emerald-500/30 text-emerald-600">
+                ✅ قبول الكل
+              </Button>
+              <Button variant="outline" size="sm" onClick={editor.handleRejectAllFuzzy} className="text-xs h-6 px-2 border-destructive/30 text-destructive">
+                ❌ رفض الكل
+              </Button>
+            </div>
+          )}
+
           {editor.glossaryTermCount > 0 && (
             <div className="flex items-center gap-2 mb-4 px-3 py-1.5 rounded-lg bg-primary/5 border border-primary/15">
               <BookOpen className="w-3.5 h-3.5 text-primary/70" />
@@ -721,6 +738,8 @@ const Editor = () => {
                     handleUndoTranslation={editor.handleUndoTranslation}
                     handleFixReversed={editor.handleFixReversed}
                     handleLocalFixDamagedTag={editor.handleLocalFixDamagedTag}
+                    onAcceptFuzzy={editor.handleAcceptFuzzy}
+                    onRejectFuzzy={editor.handleRejectFuzzy}
                   />
                 );
               })
