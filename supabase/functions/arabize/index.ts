@@ -237,10 +237,25 @@ function reverseBidi(text: string): string {
 
     return segments.reverse().map(seg => {
       if (seg.isLTR) return seg.text;
-      // Reverse string without spread operator
-      let rev = '';
-      for (let ri = seg.text.length - 1; ri >= 0; ri--) rev += seg.text[ri];
-      return rev;
+      // Reverse RTL segment using chunks: consecutive PUA/tag markers stay as atomic blocks
+      const chunks: string[] = [];
+      let ci = 0;
+      while (ci < seg.text.length) {
+        const cc = seg.text.charCodeAt(ci);
+        if ((cc >= 0xE000 && cc <= 0xE0FF) || (cc >= 0xFFF9 && cc <= 0xFFFC)) {
+          let group = '';
+          while (ci < seg.text.length) {
+            const gc = seg.text.charCodeAt(ci);
+            if ((gc >= 0xE000 && gc <= 0xE0FF) || (gc >= 0xFFF9 && gc <= 0xFFFC)) {
+              group += seg.text[ci]; ci++;
+            } else break;
+          }
+          chunks.push(group);
+        } else {
+          chunks.push(seg.text[ci]); ci++;
+        }
+      }
+      return chunks.reverse().join('');
     }).join('');
   }).join('\n');
 }

@@ -210,7 +210,26 @@ export function reverseBidi(text: string): string {
 
     return segments.reverse().map(seg => {
       if (seg.isLTR) return seg.text;
-      return [...seg.text].reverse().join('');
+      // Reverse RTL segment using chunks: consecutive PUA/tag markers stay as atomic blocks
+      const chunks: string[] = [];
+      let ci = 0;
+      const chars = [...seg.text];
+      while (ci < chars.length) {
+        const cc = chars[ci].charCodeAt(0);
+        if ((cc >= 0xE000 && cc <= 0xE0FF) || (cc >= 0xFFF9 && cc <= 0xFFFC)) {
+          let group = '';
+          while (ci < chars.length) {
+            const gc = chars[ci].charCodeAt(0);
+            if ((gc >= 0xE000 && gc <= 0xE0FF) || (gc >= 0xFFF9 && gc <= 0xFFFC)) {
+              group += chars[ci]; ci++;
+            } else break;
+          }
+          chunks.push(group);
+        } else {
+          chunks.push(chars[ci]); ci++;
+        }
+      }
+      return chunks.reverse().join('');
     }).join('');
   }).join('\n');
 }
