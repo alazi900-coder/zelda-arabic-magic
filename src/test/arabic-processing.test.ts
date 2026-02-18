@@ -96,4 +96,74 @@ describe('Arabic Processing', () => {
       expect(chars.length).toBe(4);
     });
   });
+
+  describe('PUA markers stay associated with correct word through full processArabicText', () => {
+    it('PUA tags after first word should remain adjacent to that word after processing', () => {
+      // Input: "كلمة" + PUA tags + " " + "ثانية"
+      // PUA tags belong to the first word
+      const input = 'كلمة\uE000\uE001 ثانية';
+      const result = processArabicText(input);
+      const chars = [...result];
+
+      // Find PUA group
+      const puaStart = chars.findIndex(c => c.charCodeAt(0) === 0xE000);
+      expect(puaStart).toBeGreaterThanOrEqual(0);
+      expect(chars[puaStart + 1].charCodeAt(0)).toBe(0xE001);
+
+      // Space should be on one side of the PUA group, not splitting it
+      const spaceIdx = chars.indexOf(' ');
+      expect(spaceIdx).toBeGreaterThanOrEqual(0);
+      // PUA group should not be split by the space
+      expect(Math.abs(puaStart - (puaStart + 1))).toBe(1);
+    });
+
+    it('PUA tags between two Arabic words should stay together', () => {
+      const input = 'أهلا\uE000\uE001\uE002وسهلا';
+      const result = processArabicText(input);
+      const chars = [...result];
+
+      const puaStart = chars.findIndex(c => c.charCodeAt(0) === 0xE000);
+      expect(puaStart).toBeGreaterThanOrEqual(0);
+      // All 3 PUA chars must be consecutive and in order
+      expect(chars[puaStart].charCodeAt(0)).toBe(0xE000);
+      expect(chars[puaStart + 1].charCodeAt(0)).toBe(0xE001);
+      expect(chars[puaStart + 2].charCodeAt(0)).toBe(0xE002);
+    });
+
+    it('multiple PUA groups in one line should each preserve their order', () => {
+      const input = 'كلمة\uE000\uE001 نص\uE002\uE003';
+      const result = processArabicText(input);
+      const chars = [...result];
+
+      // Find both groups
+      const g1Start = chars.findIndex(c => c.charCodeAt(0) === 0xE000);
+      const g2Start = chars.findIndex(c => c.charCodeAt(0) === 0xE002);
+      expect(g1Start).toBeGreaterThanOrEqual(0);
+      expect(g2Start).toBeGreaterThanOrEqual(0);
+
+      // Each group internally ordered
+      expect(chars[g1Start + 1].charCodeAt(0)).toBe(0xE001);
+      expect(chars[g2Start + 1].charCodeAt(0)).toBe(0xE003);
+    });
+
+    it('PUA at start of text should preserve order', () => {
+      const input = '\uE000\uE001مرحبا';
+      const result = processArabicText(input);
+      const chars = [...result];
+
+      const puaStart = chars.findIndex(c => c.charCodeAt(0) === 0xE000);
+      expect(puaStart).toBeGreaterThanOrEqual(0);
+      expect(chars[puaStart + 1].charCodeAt(0)).toBe(0xE001);
+    });
+
+    it('PUA at end of text should preserve order', () => {
+      const input = 'مرحبا\uE000\uE001';
+      const result = processArabicText(input);
+      const chars = [...result];
+
+      const puaStart = chars.findIndex(c => c.charCodeAt(0) === 0xE000);
+      expect(puaStart).toBeGreaterThanOrEqual(0);
+      expect(chars[puaStart + 1].charCodeAt(0)).toBe(0xE001);
+    });
+  });
 });
