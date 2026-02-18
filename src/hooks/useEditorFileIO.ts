@@ -660,6 +660,88 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     input.click();
   };
 
+  /** Import TMX file and match translations by tuid or source text */
+  const handleImportTMX = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.tmx,application/x-tmx+xml';
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+      try {
+        const text = await file.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(text, 'text/xml');
+        const parseError = doc.querySelector('parsererror');
+        if (parseError) { alert('ملف TMX غير صالح'); return; }
+
+        // Build a lookup from source text → arabic translation for fuzzy matching
+        const sourceToArabic = new Map<string, string>();
+        const tuidToArabic = new Map<string, string>();
+        const tus = doc.querySelectorAll('tu');
+
+        tus.forEach(tu => {
+          const tuid = tu.getAttribute('tuid') || '';
+          const tuvs = tu.querySelectorAll('tuv');
+          let srcText = '';
+          let arText = '';
+          tuvs.forEach(tuv => {
+            const lang = (tuv.getAttribute('xml:lang') || tuv.getAttribute('lang') || '').toLowerCase();
+            const seg = tuv.querySelector('seg');
+            if (!seg?.textContent) return;
+            if (lang.startsWith('en')) srcText = seg.textContent.trim();
+            if (lang.startsWith('ar')) arText = seg.textContent.trim();
+          });
+          if (arText) {
+            if (tuid) tuidToArabic.set(tuid, arText);
+            if (srcText) sourceToArabic.set(srcText, arText);
+          }
+        });
+
+        if (tuidToArabic.size === 0 && sourceToArabic.size === 0) {
+          alert('لم يتم العثور على ترجمات عربية في ملف TMX');
+          return;
+        }
+
+        const allowedKeys = isFilterActive && filteredEntries.length < (state?.entries.length || 0)
+          ? new Set(filteredEntries.map(e => `${e.msbtFile}:${e.index}`))
+          : null;
+
+        const updates: Record<string, string> = {};
+        const entriesToCheck = isFilterActive ? filteredEntries : (state?.entries || []);
+
+        for (const entry of entriesToCheck) {
+          const key = `${entry.msbtFile}:${entry.index}`;
+          if (allowedKeys && !allowedKeys.has(key)) continue;
+
+          // Priority 1: match by tuid (exact key match)
+          if (tuidToArabic.has(key)) {
+            updates[key] = normalizeArabicPresentationForms(tuidToArabic.get(key)!);
+            continue;
+          }
+          // Priority 2: match by source text
+          if (sourceToArabic.has(entry.original)) {
+            updates[key] = normalizeArabicPresentationForms(sourceToArabic.get(entry.original)!);
+          }
+        }
+
+        if (Object.keys(updates).length === 0) {
+          alert(`لم يتم مطابقة أي ترجمة.\n\nالملف يحتوي ${tuidToArabic.size + sourceToArabic.size} زوج ترجمة لكن لم يتطابق أي منها مع النصوص الحالية.`);
+          return;
+        }
+
+        setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...updates } } : null);
+        const totalPairs = tuidToArabic.size + sourceToArabic.size;
+        setLastSaved(`✅ تم استيراد ${Object.keys(updates).length} ترجمة من TMX (${totalPairs} زوج في الملف) — ${file.name}`);
+        setTimeout(() => setLastSaved(""), 5000);
+      } catch (err) {
+        console.error('TMX import error:', err);
+        alert(`خطأ في قراءة ملف TMX\n\n${err instanceof Error ? err.message : err}`);
+      }
+    };
+    input.click();
+  };
+
   return {
     handleExportTranslations,
     handleExportEnglishOnly,
@@ -673,6 +755,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     handleExportXLIFF,
     handleExportTMX,
     handleImportXLIFF,
+    handleImportTMX,
     normalizeArabicPresentationForms,
     isFilterActive,
     filterLabel,
