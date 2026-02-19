@@ -521,6 +521,7 @@ const Editor = () => {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={editor.handleImportGlossary}><BookOpen className="w-4 h-4" /> تحميل قاموس مخصص</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleLoadXC3Glossary}>🎮 قاموس Xenoblade المدمج</DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleLoadUIMenusGlossary}>📋 قاموس القوائم والواجهة</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
               <DropdownMenu>
@@ -582,6 +583,7 @@ const Editor = () => {
               <Button variant="outline" onClick={editor.handleImportTMX} className="font-body border-accent/30 text-accent hover:text-accent"><Upload className="w-4 h-4" /> استيراد TMX</Button>
               <Button variant="outline" onClick={editor.handleImportGlossary} className="font-body"><BookOpen className="w-4 h-4" /> تحميل قاموس مخصص</Button>
               <Button variant="outline" onClick={editor.handleLoadXC3Glossary} className="font-body border-primary/30 text-primary hover:text-primary">🎮 قاموس Xenoblade المدمج</Button>
+              <Button variant="outline" onClick={editor.handleLoadUIMenusGlossary} className="font-body border-primary/30 text-primary hover:text-primary">📋 قاموس القوائم والواجهة</Button>
               <Button variant="outline" onClick={editor.handleSaveGlossaryToCloud} disabled={!editor.user || editor.cloudSyncing} className="font-body border-secondary/30 text-secondary hover:text-secondary">
                 {editor.cloudSyncing ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <CloudUpload className="w-4 h-4 mr-2" />} حفظ القاموس ☁️
               </Button>
