@@ -15,6 +15,21 @@ export interface ProtectedText {
   tags: ProtectedTag[];
 }
 
+// Game-specific abbreviations that must NOT be translated
+const PROTECTED_ABBREVIATIONS = [
+  'EXP', 'PST', 'CP', 'SP', 'HP', 'AP', 'TP', 'WP', 'DP',
+  'ATK', 'DEF', 'AGI', 'DEX', 'LUK', 'CRI', 'BLK',
+  'DPS', 'DOT', 'AOE', 'HoT', 'MPH',
+  'Lv', 'LV', 'MAX', 'DLC', 'NPC', 'QTE', 'UI', 'HUD',
+  'KO', 'NG', 'NG\\+',
+];
+
+// Build regex: match abbreviations as whole words (case-sensitive)
+const ABBREV_PATTERN = new RegExp(
+  `\\b(${PROTECTED_ABBREVIATIONS.join('|')})\\b`,
+  'g'
+);
+
 // Patterns to match technical tags in order of priority
 const TAG_PATTERNS: RegExp[] = [
   /[\uE000-\uE0FF]+/g,                     // PUA icons (consecutive = atomic block)
@@ -22,6 +37,7 @@ const TAG_PATTERNS: RegExp[] = [
   /\{[\w]+\}/g,                             // {variable} placeholders
   /[\uFFF9-\uFFFC]/g,                       // Unicode special markers
   /<[\w\/][^>]*>/g,                         // HTML-like tags
+  ABBREV_PATTERN,                           // Game abbreviations (EXP, CP, SP, etc.)
 ];
 
 /**
