@@ -115,8 +115,7 @@ export function useEditorGlossary({
     } catch { alert(`خطأ في تحميل ${name}`); }
   }, [setState, setLastSaved]);
 
-  // Zelda glossaries removed — app is now Xenoblade-only
-  // Users can load custom glossaries via handleImportGlossary or cloud
+  const handleLoadXC3Glossary = useCallback(() => loadGlossary('/xc3-glossary.txt', 'قاموس Xenoblade Chronicles 3', true), [loadGlossary]);
 
   // === Cloud glossary ===
   const handleSaveGlossaryToCloud = async () => {
@@ -149,7 +148,7 @@ export function useEditorGlossary({
     glossaryEnabled, setGlossaryEnabled,
     glossaryTermCount, activeGlossary,
     parseGlossaryMap,
-    handleImportGlossary,
+    handleImportGlossary, handleLoadXC3Glossary,
     handleSaveGlossaryToCloud, handleLoadGlossaryFromCloud,
   };
 }
