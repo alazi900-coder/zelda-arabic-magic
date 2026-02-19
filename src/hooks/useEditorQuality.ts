@@ -97,7 +97,8 @@ export function useEditorQuality({ state }: UseEditorQualityProps) {
         const translation = state.translations[key] || '';
         const trimmed = translation.trim();
         const isTranslated = trimmed !== '';
-        const cat = entry.msbtFile === "bdat" ? categorizeBdatTable(entry.label) : categorizeFile(entry.msbtFile);
+        const isBdat = /^.+?\[\d+\]\./.test(entry.label);
+        const cat = isBdat ? categorizeBdatTable(entry.label) : categorizeFile(entry.msbtFile);
 
         if (!progress[cat]) progress[cat] = { total: 0, translated: 0 };
         progress[cat].total++;
