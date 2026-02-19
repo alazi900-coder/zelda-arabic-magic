@@ -323,7 +323,7 @@ export function useEditorState() {
     if (!state) return {};
     const counts: Record<string, number> = {};
     for (const e of state.entries) {
-      const cat = categorizeFile(e.msbtFile);
+      const cat = e.msbtFile === "bdat" ? categorizeBdatTable(e.label) : categorizeFile(e.msbtFile);
       counts[cat] = (counts[cat] || 0) + 1;
     }
     return counts;
