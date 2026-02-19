@@ -5,7 +5,6 @@ import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag, BookOpen, Wrench, Cop
 import type { TMSuggestion } from "@/hooks/useTranslationMemory";
 import DebouncedInput from "./DebouncedInput";
 import { ExtractedEntry, displayOriginal, hasArabicChars, isTechnicalText, hasTechnicalTags, previewTagRestore } from "./types";
-import { utf16leByteLength } from "@/lib/byte-utils";
 import { toast } from "@/hooks/use-toast";
 
 interface EntryCardProps {
@@ -269,25 +268,52 @@ const EntryCard: React.FC<EntryCardProps> = ({
               ))}
             </div>
           )}
-          {/* Byte usage progress bar */}
+          {/* Byte usage progress bar — uses UTF-8 to match max_utf8_bytes from parser/inspector */}
           {entry.maxBytes > 0 && translation && (() => {
-            const byteUsed = utf16leByteLength(translation);
+            const byteUsed = new TextEncoder().encode(translation).length;
             const ratio = byteUsed / entry.maxBytes;
-            const percent = Math.min(ratio * 100, 100);
-            const colorClass = ratio > 1 ? 'bg-destructive' : ratio > 0.85 ? 'bg-amber-500' : 'bg-primary';
-            const warningLabel = ratio > 1 ? '⛔ تجاوز الحد!' : ratio > 0.85 ? '⚠️ اقتربت من الحد' : null;
+            const pct = Math.round(ratio * 100);
+            const barWidth = Math.min(ratio * 100, 100);
+            const isOver = ratio > 1;
+            const isWarn = !isOver && ratio > 0.85;
+            const barColor = isOver
+              ? 'bg-destructive'
+              : isWarn
+              ? 'bg-amber-500'
+              : ratio > 0.6
+              ? 'bg-primary'
+              : 'bg-emerald-500';
             return (
-              <div className="mt-1.5">
-                <div className="flex justify-between items-center text-[10px] text-muted-foreground mb-0.5">
-                  <span>{byteUsed}/{entry.maxBytes} بايت</span>
+              <div className={`mt-1.5 rounded p-1.5 transition-colors ${isOver ? 'bg-destructive/10 border border-destructive/30' : isWarn ? 'bg-amber-500/10 border border-amber-500/20' : ''}`}>
+                <div className="flex justify-between items-center text-[10px] mb-1 gap-2">
+                  <span className="text-muted-foreground font-mono">{byteUsed}/{entry.maxBytes} بايت</span>
                   <div className="flex items-center gap-1.5">
-                    {warningLabel && <span className={`font-bold ${ratio > 1 ? 'text-destructive' : 'text-amber-600'}`}>{warningLabel}</span>}
-                    <span className={ratio > 1 ? 'text-destructive font-bold' : ''}>{Math.round(ratio * 100)}%</span>
+                    {isOver && (
+                      <span className="flex items-center gap-0.5 font-bold text-destructive animate-pulse">
+                        <AlertTriangle className="w-3 h-3" /> تجاوز الحد!
+                      </span>
+                    )}
+                    {isWarn && !isOver && (
+                      <span className="flex items-center gap-0.5 font-bold text-amber-600">
+                        <AlertTriangle className="w-3 h-3" /> اقتربت من الحد
+                      </span>
+                    )}
+                    <span className={`font-bold tabular-nums ${isOver ? 'text-destructive' : isWarn ? 'text-amber-600' : 'text-muted-foreground'}`}>
+                      {pct}%
+                    </span>
                   </div>
                 </div>
-                <div className="h-1 w-full bg-secondary rounded-full overflow-hidden">
-                  <div className={`h-full ${colorClass} rounded-full transition-all`} style={{ width: `${percent}%` }} />
+                <div className="h-1.5 w-full bg-secondary/50 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full ${barColor} rounded-full transition-all duration-300 ${isOver ? 'animate-pulse' : ''}`}
+                    style={{ width: `${barWidth}%` }}
+                  />
                 </div>
+                {isOver && (
+                  <p className="text-[10px] text-destructive mt-1">
+                    تجاوز بـ {byteUsed - entry.maxBytes} بايت — قصّر الترجمة لتجنب تلف اللعبة
+                  </p>
+                )}
               </div>
             );
           })()}
