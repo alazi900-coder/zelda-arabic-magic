@@ -750,9 +750,18 @@ const XenobladeProcess = () => {
                                 <table className="w-full text-xs">
                                   <thead>
                                     <tr className="border-b border-border bg-muted/30">
-                                      {["الحقل", "النوع", "ترجمة", "max_chars", "max_bytes", "صفوف", "multiline", "وسوم"].map(h => (
-                                        <th key={h} className="px-3 py-2 text-right font-display font-semibold text-muted-foreground whitespace-nowrap">{h}</th>
-                                      ))}
+                                       {[
+                                         { key: "الحقل", title: undefined },
+                                         { key: "النوع", title: undefined },
+                                         { key: "ترجمة", title: undefined },
+                                         { key: "max_chars", title: "الحد الأقصى لعدد الحروف في النص الأصلي" },
+                                         { key: "max_utf8_bytes ⚠", title: "الحد الأقصى بالبايت — العربي يحتاج 2× بايت، قد يتجاوز الحد (⚠)" },
+                                         { key: "صفوف", title: undefined },
+                                         { key: "multiline", title: undefined },
+                                         { key: "وسوم", title: undefined },
+                                       ].map(h => (
+                                         <th key={h.key} title={h.title} className={`px-3 py-2 text-right font-display font-semibold whitespace-nowrap ${h.title ? "text-foreground cursor-help underline decoration-dotted" : "text-muted-foreground"}`}>{h.key}</th>
+                                       ))}
                                       {samplesEnabled && <th className="px-3 py-2 text-right font-display font-semibold text-muted-foreground">عينة</th>}
                                     </tr>
                                   </thead>
@@ -768,8 +777,23 @@ const XenobladeProcess = () => {
                                             {field.translate ? "✓ نعم" : "✗ لا"}
                                           </span>
                                         </td>
-                                        <td className="px-3 py-2 text-center font-mono">{field.max_chars}</td>
-                                        <td className="px-3 py-2 text-center font-mono">{field.max_utf8_bytes}</td>
+                                         <td className="px-3 py-2 text-center font-mono">{field.max_chars}</td>
+                                         <td className="px-3 py-2 text-center font-mono">
+                                           {(() => {
+                                             // Arabic text needs ~2x bytes vs latin. Warn if Arabic translation would overflow.
+                                             const arabicEstimate = field.max_chars * 2;
+                                             const willOverflow = field.translate && arabicEstimate > field.max_utf8_bytes;
+                                             return (
+                                               <span
+                                                 className={`inline-flex items-center gap-1 ${willOverflow ? "text-orange-500 dark:text-orange-400 font-semibold" : ""}`}
+                                                 title={willOverflow ? `⚠ النص العربي قد يصل ~${arabicEstimate} بايت > الحد ${field.max_utf8_bytes}` : undefined}
+                                               >
+                                                 {field.max_utf8_bytes}
+                                                 {willOverflow && <span className="text-[10px]">⚠</span>}
+                                               </span>
+                                             );
+                                           })()}
+                                         </td>
                                         <td className="px-3 py-2 text-center font-mono">{field.record_count}</td>
                                         <td className="px-3 py-2 text-center">
                                           <span className={`text-[10px] ${field.multiline ? "text-blue-500" : "text-muted-foreground"}`}>
