@@ -2,12 +2,15 @@ import { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, AlertTriangle, Info, Download, Loader2 } from "lucide-react";
+import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, AlertTriangle, Info, Download, Loader2, ShieldCheck, ShieldAlert } from "lucide-react";
+import { validateFontForArabic, type FontValidationResult } from "@/lib/font-validator";
+import { isBfttf, bfttfToTtf } from "@/lib/bfttf-converter";
 
 interface FontFile {
   name: string;
   data: ArrayBuffer;
   size: number;
+  validation?: FontValidationResult;
 }
 
 interface BdatFile {
@@ -26,6 +29,16 @@ export default function ModPackager() {
   const NOTO_SANS_ARABIC_URL = "https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansArabic/NotoSansArabic-Regular.ttf";
   const NOTO_SANS_ARABIC_FALLBACK_URL = "https://cdn.jsdelivr.net/gh/googlefonts/noto-fonts@main/hinted/ttf/NotoSansArabic/NotoSansArabic-Regular.ttf";
 
+  const validateAndSetFont = useCallback((name: string, data: ArrayBuffer) => {
+    // For BFTTF files, decrypt first to validate the inner TTF
+    let dataToValidate = data;
+    if (isBfttf(data)) {
+      try { dataToValidate = bfttfToTtf(data); } catch { /* validate raw */ }
+    }
+    const validation = validateFontForArabic(dataToValidate);
+    setFontFile({ name, data, size: data.byteLength, validation });
+  }, []);
+
   const handleDownloadNotoFont = useCallback(async () => {
     setDownloadingFont(true);
     try {
@@ -35,24 +48,24 @@ export default function ModPackager() {
       }
       if (!response.ok) throw new Error("فشل تحميل الخط");
       const data = await response.arrayBuffer();
-      setFontFile({ name: "NotoSansArabic-Regular.ttf", data, size: data.byteLength });
+      validateAndSetFont("NotoSansArabic-Regular.ttf", data);
     } catch {
       setStatus("❌ فشل تحميل خط Noto Sans Arabic — تحقق من اتصالك بالإنترنت");
       setTimeout(() => setStatus(""), 5000);
     } finally {
       setDownloadingFont(false);
     }
-  }, []);
+  }, [validateAndSetFont]);
 
   const handleFontUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
-      setFontFile({ name: file.name, data: reader.result as ArrayBuffer, size: file.size });
+      validateAndSetFont(file.name, reader.result as ArrayBuffer);
     };
     reader.readAsArrayBuffer(file);
-  }, []);
+  }, [validateAndSetFont]);
 
   const handleBdatUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -178,17 +191,52 @@ export default function ModPackager() {
             </div>
 
             {fontFile ? (
-              <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-500" />
-                  <span className="text-sm font-medium truncate max-w-[180px]">{fontFile.name}</span>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-green-500" />
+                    <span className="text-sm font-medium truncate max-w-[180px]">{fontFile.name}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-muted-foreground">{formatSize(fontFile.size)}</span>
+                    <Button variant="ghost" size="sm" onClick={() => setFontFile(null)} className="text-destructive h-7 px-2">
+                      حذف
+                    </Button>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-muted-foreground">{formatSize(fontFile.size)}</span>
-                  <Button variant="ghost" size="sm" onClick={() => setFontFile(null)} className="text-destructive h-7 px-2">
-                    حذف
-                  </Button>
-                </div>
+
+                {/* Font validation result */}
+                {fontFile.validation && (
+                  <div className={`p-3 rounded-lg border text-sm space-y-1.5 ${
+                    fontFile.validation.coveragePercent >= 80 
+                      ? "bg-primary/5 border-primary/20" 
+                      : fontFile.validation.coveragePercent > 0 
+                      ? "bg-accent/50 border-accent" 
+                      : "bg-destructive/5 border-destructive/20"
+                  }`}>
+                    <div className="flex items-center gap-2 font-bold">
+                      {fontFile.validation.coveragePercent >= 80 ? (
+                        <ShieldCheck className="w-4 h-4 text-primary" />
+                      ) : (
+                        <ShieldAlert className="w-4 h-4 text-destructive" />
+                      )}
+                      <span>{fontFile.validation.details}</span>
+                    </div>
+                    {fontFile.validation.warnings.length > 0 && (
+                      <ul className="text-xs text-muted-foreground space-y-0.5 pr-6">
+                        {fontFile.validation.warnings.map((w, i) => (
+                          <li key={i}>⚠ {w}</li>
+                        ))}
+                      </ul>
+                    )}
+                    {fontFile.validation.totalGlyphs > 0 && (
+                      <div className="flex gap-3 text-xs text-muted-foreground pt-1">
+                        <span>إجمالي الحروف: {fontFile.validation.totalGlyphs.toLocaleString()}</span>
+                        <span>عربي PF-B: {fontFile.validation.arabicPresentationFormsB}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             ) : (
               <div className="space-y-3">
