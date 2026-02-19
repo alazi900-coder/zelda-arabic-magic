@@ -3,10 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Upload, FileText, ArrowRight, Loader2, CheckCircle2, Clock, Pencil, Database, Binary, Sparkles, Download, ChevronDown, ChevronRight, Shield, Tag } from "lucide-react";
+import { Upload, FileText, ArrowRight, Loader2, CheckCircle2, Clock, Pencil, Database, Binary, Sparkles, Download, ChevronDown, ChevronRight, Shield, Tag, Settings2 } from "lucide-react";
 import heroBg from "@/assets/xc3-hero-bg.jpg";
 import { categorizeBdatTable, categorizeByTableName, categorizeByColumnName, categorizeByFilename } from "@/components/editor/types";
 import type { BdatSchemaReport } from "@/lib/bdat-schema-inspector";
+import { loadBdatSettings, saveBdatSettings, formatMarginPct } from "@/lib/bdat-settings";
 
 type ProcessingStage = "idle" | "uploading" | "extracting" | "done" | "error";
 
@@ -38,6 +39,8 @@ const XenobladeProcess = () => {
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
   const [samplesEnabled, setSamplesEnabled] = useState(false);
   const [dangerFilter, setDangerFilter] = useState<"all" | "critical" | "limited">("all");
+  const [safetyMargin, setSafetyMargin] = useState<number>(() => loadBdatSettings().safetyMargin);
+  const [showSettings, setShowSettings] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -115,11 +118,12 @@ const XenobladeProcess = () => {
               sample_mask_mode: samplesEnabled ? "prefix5" : "statsOnly",
               max_records_for_full_scan: 5000,
               sample_record_cap: 1000,
+              safety_margin: safetyMargin,
             });
             schemaReportsAccumulator.push(schema);
             addLog(`📊 Schema: ${schema.table_count} جدول | ${schema.translatable_tables} قابلة للترجمة | ${schema.all_discovered_tags.length} وسم`);
 
-            const strings = extractBdatStrings(bdatFile, file.name);
+            const strings = extractBdatStrings(bdatFile, file.name, safetyMargin);
             
             // تفاصيل إضافية للتشخيص
             const totalStringCols = bdatFile.tables.reduce((sum, t) => sum + t.columns.filter(c => c.valueType === 7 || c.valueType === 11).length, 0);
@@ -434,6 +438,84 @@ const XenobladeProcess = () => {
               <br />
               كما يمكنك أيضاً رفع ملفات JSON المحوّلة عبر <code className="bg-background px-1 rounded" dir="ltr">bdat-toolset</code>.
             </p>
+          </CardContent>
+        </Card>
+
+        {/* Project Settings */}
+        <Card className="mb-6 border-secondary/20 bg-secondary/5">
+          <CardContent className="p-4">
+            <button
+              className="flex items-center gap-2 w-full text-right"
+              onClick={() => setShowSettings(v => !v)}
+            >
+              <Settings2 className="w-4 h-4 text-secondary" />
+              <span className="text-sm font-display font-bold flex-1 text-right">⚙️ إعدادات المشروع</span>
+              <span className="text-xs text-muted-foreground">
+                هامش الأمان الحالي: <strong>{formatMarginPct(safetyMargin)}</strong>
+              </span>
+              <span className="text-muted-foreground text-xs">{showSettings ? "▲" : "▼"}</span>
+            </button>
+
+            {showSettings && (
+              <div className="mt-4 space-y-4 border-t border-border pt-4">
+                <div>
+                  <label className="block text-xs font-display font-semibold mb-1 text-foreground">
+                    هامش أمان البايتات
+                    <span className="mr-2 text-secondary font-mono">{formatMarginPct(safetyMargin)}</span>
+                  </label>
+                  <p className="text-xs text-muted-foreground mb-3">
+                    يُضاف فوق أطول نص أصلي في كل عمود BDAT. القيمة الأعلى تمنح مرونة أكبر للمترجم لكن تزيد خطر تجاوز سعة العمود.
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="range"
+                      min={0}
+                      max={100}
+                      step={5}
+                      value={Math.round((safetyMargin - 1) * 100)}
+                      onChange={e => {
+                        const pct = Number(e.target.value);
+                        const newMargin = 1 + pct / 100;
+                        setSafetyMargin(newMargin);
+                        saveBdatSettings({ safetyMargin: newMargin });
+                      }}
+                      className="flex-1 accent-secondary cursor-pointer"
+                    />
+                    <span className="text-xs font-mono text-secondary w-10 text-center">{formatMarginPct(safetyMargin)}</span>
+                  </div>
+                  <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                    <span>0% (بدون هامش)</span>
+                    <span>50%</span>
+                    <span>100% (ضعف الحجم)</span>
+                  </div>
+                  {/* Quick presets */}
+                  <div className="flex gap-2 mt-3 flex-wrap">
+                    {[
+                      { label: "0% (صارم)", value: 1.0 },
+                      { label: "10%", value: 1.1 },
+                      { label: "20% (افتراضي)", value: 1.2 },
+                      { label: "30%", value: 1.3 },
+                      { label: "50%", value: 1.5 },
+                    ].map(p => (
+                      <button
+                        key={p.value}
+                        onClick={() => {
+                          setSafetyMargin(p.value);
+                          saveBdatSettings({ safetyMargin: p.value });
+                        }}
+                        className={`px-2 py-1 rounded text-xs font-mono transition-all ${
+                          Math.abs(safetyMargin - p.value) < 0.005
+                            ? "bg-secondary text-secondary-foreground"
+                            : "bg-muted text-muted-foreground hover:bg-muted/80"
+                        }`}
+                      >
+                        {p.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
 

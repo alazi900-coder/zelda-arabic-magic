@@ -17,6 +17,8 @@ export interface InspectorOptions {
   sample_mask_mode?: "prefix5" | "statsOnly";
   max_records_for_full_scan?: number; // default: 5000
   sample_record_cap?: number;         // default: 1000
+  /** Safety margin multiplier for max_utf8_bytes (e.g. 1.2 = 20%). Default: read from settings or 1.2 */
+  safety_margin?: number;
 }
 
 // ============= Output Interfaces =============
@@ -307,7 +309,7 @@ function inspectField(
     non_empty_count: nonEmpty,
     max_chars: maxChars,
     avg_chars: Math.round(avgChars * 10) / 10,
-    max_utf8_bytes: Math.ceil(maxBytes * 1.2),
+    max_utf8_bytes: Math.ceil(maxBytes * opts.safety_margin),
     avg_utf8_bytes: Math.round(avgBytes * 10) / 10,
     multiline,
     duplicate_ratio: Math.round(dupRatio * 100) / 100,
@@ -325,12 +327,26 @@ export function inspectBdatSchema(
   fileName: string,
   options?: InspectorOptions,
 ): BdatSchemaReport {
+  // Resolve safety margin: caller wins, otherwise fall back to persisted settings
+  const resolvedMargin = (() => {
+    if (options?.safety_margin !== undefined) return Math.max(options.safety_margin, 1.0);
+    try {
+      const raw = localStorage.getItem("bdat-settings-v1");
+      if (raw) {
+        const parsed = JSON.parse(raw) as { safetyMargin?: number };
+        if (typeof parsed.safetyMargin === "number") return Math.max(parsed.safetyMargin, 1.0);
+      }
+    } catch { /* ignore */ }
+    return 1.2;
+  })();
+
   const opts: Required<InspectorOptions> = {
     include_samples: options?.include_samples ?? false,
     sample_per_field: Math.min(10, Math.max(1, options?.sample_per_field ?? 3)),
     sample_mask_mode: options?.sample_mask_mode ?? "prefix5",
     max_records_for_full_scan: options?.max_records_for_full_scan ?? 5000,
     sample_record_cap: options?.sample_record_cap ?? 1000,
+    safety_margin: resolvedMargin,
   };
 
   const tables: BdatTableSchema[] = [];

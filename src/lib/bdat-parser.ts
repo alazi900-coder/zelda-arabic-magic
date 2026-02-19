@@ -378,8 +378,13 @@ export function parseBdatFile(data: Uint8Array, unhashFn?: (hash: number) => str
 /**
  * Extract all translatable string entries from a parsed BDAT file.
  * Returns entries in the format compatible with the editor.
+ * @param safetyMargin multiplier for the byte budget (e.g. 1.2 = 20% headroom). Defaults to reading from settings.
  */
-export function extractBdatStrings(bdatFile: BdatFile, fileName: string): {
+export function extractBdatStrings(
+  bdatFile: BdatFile,
+  fileName: string,
+  safetyMargin?: number,
+): {
   key: string;
   original: string;
   tableName: string;
@@ -387,6 +392,19 @@ export function extractBdatStrings(bdatFile: BdatFile, fileName: string): {
   columnName: string;
   maxBytes: number;
 }[] {
+  // Resolve margin: caller wins, otherwise fall back to persisted settings
+  const resolvedMargin = (() => {
+    if (safetyMargin !== undefined) return Math.max(safetyMargin, 1.0);
+    try {
+      const raw = localStorage.getItem("bdat-settings-v1");
+      if (raw) {
+        const parsed = JSON.parse(raw) as { safetyMargin?: number };
+        if (typeof parsed.safetyMargin === "number") return Math.max(parsed.safetyMargin, 1.0);
+      }
+    } catch { /* ignore */ }
+    return 1.2; // default
+  })();
+
   const entries: { key: string; original: string; tableName: string; rowIndex: number; columnName: string; maxBytes: number }[] = [];
 
   for (const table of bdatFile.tables) {
@@ -405,9 +423,9 @@ export function extractBdatStrings(bdatFile: BdatFile, fileName: string): {
           if (byteLen > max) max = byteLen;
         }
       }
-      // Use observed max + 20% safety margin as the field's byte budget.
+      // Use observed max + configurable safety margin as the field's byte budget.
       // Minimum of 4 to handle empty/near-empty columns.
-      colMaxBytes[col.name] = Math.max(Math.ceil(max * 1.2), 4);
+      colMaxBytes[col.name] = Math.max(Math.ceil(max * resolvedMargin), 4);
     }
 
     for (let r = 0; r < table.rows.length; r++) {
