@@ -12,6 +12,7 @@ import Editor from "./pages/Editor";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import Install from "./pages/Install";
+import ModPackager from "./pages/ModPackager";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
               <Route path="/editor" element={<ErrorBoundary fallbackTitle="خطأ في المحرر"><Editor /></ErrorBoundary>} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/install" element={<Install />} />
+              <Route path="/mod-packager" element={<ModPackager />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </ErrorBoundary>
