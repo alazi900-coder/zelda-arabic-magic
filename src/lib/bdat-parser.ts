@@ -385,13 +385,30 @@ export function extractBdatStrings(bdatFile: BdatFile, fileName: string): {
   tableName: string;
   rowIndex: number;
   columnName: string;
+  maxBytes: number;
 }[] {
-  const entries: { key: string; original: string; tableName: string; rowIndex: number; columnName: string }[] = [];
+  const entries: { key: string; original: string; tableName: string; rowIndex: number; columnName: string; maxBytes: number }[] = [];
 
   for (const table of bdatFile.tables) {
     const stringColumns = table.columns.filter(
       c => c.valueType === BdatValueType.String || c.valueType === BdatValueType.DebugString
     );
+
+    // Pre-compute max UTF-8 byte length per column from all non-empty values
+    const colMaxBytes: Record<string, number> = {};
+    for (const col of stringColumns) {
+      let max = 0;
+      for (const row of table.rows) {
+        const val = row.values[col.name];
+        if (typeof val === 'string' && val.trim().length > 0) {
+          const byteLen = new TextEncoder().encode(val).length;
+          if (byteLen > max) max = byteLen;
+        }
+      }
+      // Use the observed max as the field's byte budget.
+      // Minimum of 64 so very short fields still have a visible limit.
+      colMaxBytes[col.name] = Math.max(max, 4);
+    }
 
     for (let r = 0; r < table.rows.length; r++) {
       const row = table.rows[r];
@@ -408,6 +425,7 @@ export function extractBdatStrings(bdatFile: BdatFile, fileName: string): {
             tableName: table.name,
             rowIndex: r,
             columnName: col.name,
+            maxBytes: colMaxBytes[col.name],
           });
         }
       }
