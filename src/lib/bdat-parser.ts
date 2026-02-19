@@ -405,9 +405,9 @@ export function extractBdatStrings(bdatFile: BdatFile, fileName: string): {
           if (byteLen > max) max = byteLen;
         }
       }
-      // Use the observed max as the field's byte budget.
-      // Minimum of 64 so very short fields still have a visible limit.
-      colMaxBytes[col.name] = Math.max(max, 4);
+      // Use observed max + 20% safety margin as the field's byte budget.
+      // Minimum of 4 to handle empty/near-empty columns.
+      colMaxBytes[col.name] = Math.max(Math.ceil(max * 1.2), 4);
     }
 
     for (let r = 0; r < table.rows.length; r++) {
