@@ -540,7 +540,7 @@ const Editor = () => {
               {/* Glossary — منفصلة */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="font-body text-xs text-primary border-primary/30"><BookOpen className="w-3 h-3" /> القواميس</Button>
+                  <Button variant="outline" size="sm" className="font-body text-xs text-primary border-primary/30 gap-1.5"><BookOpen className="w-3 h-3" /> القواميس{editor.glossaryTermCount > 0 && <span className="bg-primary text-primary-foreground rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none">{editor.glossaryTermCount}</span>}</Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="bg-card border-border z-[100] min-w-[200px]">
                   <DropdownMenuLabel className="text-xs">📖 تحميل قاموس</DropdownMenuLabel>
@@ -608,7 +608,7 @@ const Editor = () => {
               {/* ── Glossary ── */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="font-body border-primary/30 text-primary hover:text-primary"><BookOpen className="w-4 h-4" /> القواميس</Button>
+                  <Button variant="outline" className="font-body border-primary/30 text-primary hover:text-primary gap-1.5"><BookOpen className="w-4 h-4" /> القواميس{editor.glossaryTermCount > 0 && <span className="bg-primary text-primary-foreground rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none">{editor.glossaryTermCount}</span>}</Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="bg-card border-border z-50 min-w-[220px]">
                   <DropdownMenuLabel className="text-xs">📖 تحميل قاموس</DropdownMenuLabel>
