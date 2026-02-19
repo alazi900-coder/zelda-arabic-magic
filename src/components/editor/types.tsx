@@ -168,7 +168,13 @@ function categorizeByTableName(tbl: string): string | null {
 
   // === الأحداث والقصة ===
   if (/^(evt_|tlk_|fld_talk|fld_event)/i.test(tbl)) return "bdat-story";
-  // msg_ tables (message archives) - but NOT MNU_Msg
+  // msg_ sub-categories (check specific prefixes before generic msg_)
+  if (/^msg_mnu_/i.test(tbl)) return "bdat-menu";
+  if (/^msg_btl_/i.test(tbl)) return "bdat-battle";
+  if (/^msg_fld_/i.test(tbl)) return "bdat-character";
+  if (/^msg_qst_/i.test(tbl)) return "bdat-quest";
+  if (/^msg_item_/i.test(tbl)) return "bdat-item";
+  if (/^msg_enemy_/i.test(tbl)) return "bdat-enemy";
   if (/^msg_/i.test(tbl)) return "bdat-message";
 
   // === المحتوى الإضافي ===

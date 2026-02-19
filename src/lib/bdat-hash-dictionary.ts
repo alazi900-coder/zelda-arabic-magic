@@ -243,14 +243,96 @@ const KNOWN_NAMES: string[] = [
   // ===== GMK (Gem/Gimmick) tables =====
   'GMK_Data', 'GMK_List', 'GMK_Param', 'GMK_Setup', 'GMK_ComSpot',
 
-  // ===== Message tables =====
+  // ===== Message tables (msg_*) =====
+  // Auto-talk
+  'msg_autotalk', 'msg_autotalk_enemy',
+  // Battle messages
+  'msg_btl_achievement', 'msg_btl_arts_caption', 'msg_btl_arts_en_name',
+  'msg_btl_arts_name', 'msg_btl_buffdebuff_caption', 'msg_btl_buffdebuff_name',
+  'msg_btl_chainorder_name', 'msg_btl_combo_name', 'msg_btl_enhance_cap',
+  'msg_btl_enhance_name', 'msg_btl_roleact_caption', 'msg_btl_roleact_cat',
+  'msg_btl_skill_name', 'msg_btl_stance_name', 'msg_btl_subtitling',
+  'msg_btl_talent_caption', 'msg_btl_talent_name', 'msg_btl_weapon_type',
   'msg_btl_ChSU_gate_message', 'msg_btl_ChSU_event_caption',
   'msg_btl_ChSU_shop_caption', 'msg_btl_ChSU_gate_caption',
   'msg_btl_ChSU_gate_name', 'msg_btl_ChSU_emblem_name',
-  'msg_extra_accessory', 'msg_mnu_dlc_collepedia',
+  // Field messages
+  'msg_fld_door_dialog', 'msg_fld_door_name', 'msg_fld_elevator_dialog',
+  'msg_fld_field_lock', 'msg_fld_footprint', 'msg_fld_perk_name',
+  'msg_fld_searchpoint',
+  // Menu messages
+  'msg_mnu_action_hud', 'msg_mnu_amiibo', 'msg_mnu_battle_ms',
+  'msg_mnu_char_ms', 'msg_mnu_cloudgem', 'msg_mnu_common_ms',
+  'msg_mnu_comspot_ms', 'msg_mnu_diary_mono_ms', 'msg_mnu_dlc_info',
+  'msg_mnu_equip_detail', 'msg_mnu_event_name', 'msg_mnu_event_theater_ms',
+  'msg_mnu_filter', 'msg_mnu_generic_window_ms', 'msg_mnu_hero_book',
+  'msg_mnu_hero_hint', 'msg_mnu_hero_nickname', 'msg_mnu_item_ms',
+  'msg_mnu_key_explanation', 'msg_mnu_keyassign_ms', 'msg_mnu_mainmenu',
+  'msg_mnu_map_ms', 'msg_mnu_minimap_areaname', 'msg_mnu_obj_info_name',
+  'msg_mnu_op_credits', 'msg_mnu_op_credits_en', 'msg_mnu_operation_guide',
+  'msg_mnu_option', 'msg_mnu_other_ms', 'msg_mnu_patch_info',
+  'msg_mnu_pupilnet_ms', 'msg_mnu_qst_ms', 'msg_mnu_saveload',
+  'msg_mnu_sort', 'msg_mnu_style_standard_ms', 'msg_mnu_system_ms',
+  'msg_mnu_title', 'msg_mnu_trail_name', 'msg_mnu_tutorial_tips',
+  'msg_mnu_update_ms', 'msg_mnu_dlc_collepedia',
+  // Quest messages
+  'msg_qst_RequestItemSet', 'msg_qst_overwrite', 'msg_qst_task',
+  // World/NPC messages
+  'msg_colony_name', 'msg_colony_text', 'msg_comspot_name', 'msg_comspot_text',
+  'msg_enemy_group_name', 'msg_enemy_name', 'msg_enemy_type_name',
+  'msg_item_accessory', 'msg_item_collection', 'msg_item_cylinder',
+  'msg_item_exchange', 'msg_item_extra', 'msg_item_gem', 'msg_item_precious',
+  'msg_item_recipe', 'msg_kizuna_name', 'msg_loading_tips',
+  'msg_location_name', 'msg_npc_name', 'msg_npc_tag_name',
+  'msg_player_name', 'msg_shop_name', 'msg_sys_access_message',
+  'msg_system_popup', 'msg_tutorial_ui', 'msg_weather_name',
+  'msg_extra_accessory',
 
   // ===== Other tables =====
   'bgmlist',
+  // AMB (Ambient/Loot) tables
+  'AMB_BasicLot', 'AMB_BonusExpLot', 'AMB_ClassExpLot', 'AMB_CoinLot',
+  'AMB_CollectionLot', 'AMB_GoldCoinLot', 'AMB_TradValueLot',
+  'AMB_SpecialAmiibo',
+  // Additional MNU tables
+  'MNU_VoiceList', 'MNU_UroSkillList', 'MNU_Attachment',
+  'MNU_formation_list', 'MNU_HeroDictionary', 'MNU_QuestNotSell',
+  'MNU_MapSlide', 'MNU_QuestFollow', 'MNU_DLCVolInfo',
+  'MNU_DLCContentsInfo', 'MNU_DlcGift', 'MNU_PatchInfo',
+  'MNU_PatchDetailA', 'MNU_PatchDetailB',
+  // Additional BTL tables
+  'BTL_Ai', 'BTL_AutoSetAccessory', 'BTL_AutoSetArts',
+  'BTL_AutoSetGem', 'BTL_AutoSetSkill', 'BTL_SystemBalance',
+  'BTL_GemCraft',
+  // Additional FLD tables
+  'FLD_EnemyAff', 'FLD_WarReward',
+  // Additional SYS tables
+  'SYS_PopupAnnounce', 'SYS_TutorialSummary', 'SYS_TutorialArrow',
+  'SYS_FlowEventFade', 'SYS_TutorialMessage',
+  // Additional RSC tables
+  'RSC_PcCostumeOpen',
+  // Additional QST tables
+  'QST_QuestImageList', 'QST_OverWriteMap',
+  // BTL_FA_Prm numbered tables
+  'BTL_FA_Prm01', 'BTL_FA_Prm02', 'BTL_FA_Prm03', 'BTL_FA_Prm04',
+  'BTL_FA_Prm05', 'BTL_FA_Prm06', 'BTL_FA_Prm07', 'BTL_FA_Prm08',
+  'BTL_FA_Prm09', 'BTL_FA_Prm10', 'BTL_FA_Prm11', 'BTL_FA_Prm12',
+  'BTL_FA_Prm13', 'BTL_FA_Prm14', 'BTL_FA_Prm15', 'BTL_FA_Prm16',
+  'BTL_FA_Prm17', 'BTL_FA_Prm18', 'BTL_FA_Prm19', 'BTL_FA_Prm20',
+  'BTL_FA_Prm21', 'BTL_FA_Prm22', 'BTL_FA_Prm23', 'BTL_FA_Prm24',
+  'BTL_FA_Prm25', 'BTL_FA_Prm26', 'BTL_FA_Prm27', 'BTL_FA_Prm28',
+  'BTL_FA_Prm29',
+  // BTL_TL_PrmRev numbered tables
+  'BTL_TL_PrmRev01', 'BTL_TL_PrmRev02', 'BTL_TL_PrmRev03', 'BTL_TL_PrmRev04',
+  'BTL_TL_PrmRev05', 'BTL_TL_PrmRev06', 'BTL_TL_PrmRev07', 'BTL_TL_PrmRev08',
+  'BTL_TL_PrmRev09', 'BTL_TL_PrmRev10', 'BTL_TL_PrmRev11', 'BTL_TL_PrmRev12',
+  'BTL_TL_PrmRev13', 'BTL_TL_PrmRev14', 'BTL_TL_PrmRev15', 'BTL_TL_PrmRev16',
+  'BTL_TL_PrmRev17', 'BTL_TL_PrmRev18', 'BTL_TL_PrmRev19', 'BTL_TL_PrmRev20',
+  'BTL_TL_PrmRev21', 'BTL_TL_PrmRev22', 'BTL_TL_PrmRev23', 'BTL_TL_PrmRev24',
+  'BTL_TL_PrmRev25', 'BTL_TL_PrmRev26', 'BTL_TL_PrmRev27', 'BTL_TL_PrmRev28',
+  'BTL_TL_PrmRev29', 'BTL_TL_PrmRev30', 'BTL_TL_PrmRev31', 'BTL_TL_PrmRev32',
+  // SYS_LoadingTips
+  'SYS_LoadingTips',
 
   // ===== Numeric column indices (used as names in some tables) =====
   '1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
