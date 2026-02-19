@@ -37,6 +37,7 @@ const XenobladeProcess = () => {
   const [schemaTab, setSchemaTab] = useState<"summary" | "tables">("summary");
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
   const [samplesEnabled, setSamplesEnabled] = useState(false);
+  const [dangerFilter, setDangerFilter] = useState<"all" | "critical" | "limited">("all");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -692,20 +693,47 @@ const XenobladeProcess = () => {
               </div>
 
               {/* Tab selector */}
-              <div className="flex gap-1 mt-3">
-                {(["summary", "tables"] as const).map(tab => (
-                  <button
-                    key={tab}
-                    onClick={() => setSchemaTab(tab)}
-                    className={`px-4 py-1.5 rounded-lg text-sm font-display font-semibold transition-all ${
-                      schemaTab === tab
-                        ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    {tab === "summary" ? "📋 ملخص" : "📁 الجداول"}
-                  </button>
-                ))}
+              <div className="flex items-center gap-2 mt-3 flex-wrap">
+                <div className="flex gap-1">
+                  {(["summary", "tables"] as const).map(tab => (
+                    <button
+                      key={tab}
+                      onClick={() => setSchemaTab(tab)}
+                      className={`px-4 py-1.5 rounded-lg text-sm font-display font-semibold transition-all ${
+                        schemaTab === tab
+                          ? "bg-primary text-primary-foreground"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      {tab === "summary" ? "📋 ملخص" : "📁 الجداول"}
+                    </button>
+                  ))}
+                </div>
+                {schemaTab === "tables" && (
+                  <div className="flex gap-1 mr-auto">
+                    {([
+                      { key: "all",      label: "الكل",        cls: "bg-muted text-muted-foreground hover:text-foreground" },
+                      { key: "critical", label: "🔴 خطرة",     cls: "bg-red-500/15 text-red-600 dark:text-red-400 border border-red-500/30 hover:bg-red-500/25" },
+                      { key: "limited",  label: "🟡 محدودة",   cls: "bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 hover:bg-amber-500/25" },
+                    ] as const).map(f => (
+                      <button
+                        key={f.key}
+                        onClick={() => setDangerFilter(f.key)}
+                        className={`px-3 py-1 rounded-lg text-xs font-display font-semibold transition-all ${
+                          dangerFilter === f.key
+                            ? f.key === "critical"
+                              ? "bg-red-500 text-white"
+                              : f.key === "limited"
+                              ? "bg-amber-500 text-white"
+                              : "bg-foreground text-background"
+                            : f.cls
+                        }`}
+                      >
+                        {f.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </CardHeader>
 
@@ -768,14 +796,36 @@ const XenobladeProcess = () => {
               ))}
 
               {/* ── Tables Tab ── */}
-              {schemaTab === "tables" && schemaReports.map((report, ri) => (
+              {schemaTab === "tables" && schemaReports.map((report, ri) => {
+                // Pre-compute danger level for each field
+                const getFieldDanger = (maxBytes: number, translate: boolean): "critical" | "limited" | "safe" | "none" => {
+                  if (!translate || maxBytes <= 0) return "none";
+                  const chars = Math.floor(maxBytes / 2);
+                  return chars <= 10 ? "critical" : chars <= 30 ? "limited" : "safe";
+                };
+
+                // Filter tables: only show tables that have at least one field matching the filter
+                const filteredTables = report.tables.filter(tbl => {
+                  if (dangerFilter === "all") return true;
+                  return tbl.fields.some(f => getFieldDanger(f.max_utf8_bytes, f.translate) === dangerFilter);
+                });
+
+                const hiddenCount = report.tables.length - filteredTables.length;
+
+                return (
                 <div key={ri} className="mb-6 last:mb-0">
                   {schemaReports.length > 1 && (
                     <p className="font-mono text-xs text-muted-foreground mb-3" dir="ltr">{report.file}</p>
                   )}
+                  {dangerFilter !== "all" && hiddenCount > 0 && (
+                    <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1.5">
+                      <span>{dangerFilter === "critical" ? "🔴" : "🟡"}</span>
+                      يُعرض {filteredTables.length} جدول يحتوي على حقول {dangerFilter === "critical" ? "خطرة" : "محدودة"} — {hiddenCount} جدول مخفي
+                    </p>
+                  )}
 
                   <div className="space-y-2">
-                    {report.tables.map(tbl => {
+                    {filteredTables.map(tbl => {
                       const isOpen = selectedTable === `${ri}:${tbl.table}`;
                       return (
                         <div key={tbl.table} className="rounded-lg border border-border overflow-hidden">
@@ -825,7 +875,12 @@ const XenobladeProcess = () => {
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    {tbl.fields.map(field => {
+                                    {tbl.fields.filter(field => {
+                                      if (dangerFilter === "all") return true;
+                                      const chars = field.max_utf8_bytes > 0 ? Math.floor(field.max_utf8_bytes / 2) : 0;
+                                      const d = !field.translate || field.max_utf8_bytes <= 0 ? "none" : chars <= 10 ? "critical" : chars <= 30 ? "limited" : "safe";
+                                      return d === dangerFilter;
+                                    }).map(field => {
                                       // Arabic chars available = floor(max_utf8_bytes / 2)
                                       const arabicChars = field.max_utf8_bytes > 0 ? Math.floor(field.max_utf8_bytes / 2) : 0;
                                       const danger: "critical" | "limited" | "safe" | "none" = !field.translate || field.max_utf8_bytes <= 0
@@ -908,7 +963,8 @@ const XenobladeProcess = () => {
                     })}
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </CardContent>
           </Card>
         )}
