@@ -1,85 +1,84 @@
 
 
-## Plan: Comprehensive Protection and Quality System for XC3
+# خطة تحديث نظام التصنيف الذكي بناءً على أسماء الأعمدة
 
-### Current State Analysis
+## ملخص التغييرات
 
-After thorough codebase exploration, much of the requested functionality **already exists** but is scattered or incomplete:
-
-- **Tag restoration** (`restoreTagsLocally`) exists in `types.tsx` and is used after AI translation
-- **Quality checks** exist in `useEditorQuality.ts` (tooShort, mixedLanguage, stuckChars) but the **UI panel only shows 4 of 8 stats**
-- **Protection system** (protectedEntries, presentation forms detection) is fully functional
-- **Auto-repair on load** already restores missing tags
-
-### What Will Be Added/Changed
+سيتم تطوير نظام التصنيف ليعتمد على **أسماء الأعمدة** (Column Names) بالإضافة إلى بادئات الجداول، مع إضافة ميزة البحث داخل فئة محددة وإخفاء الجداول التي لا تحتوي على نصوص قابلة للترجمة.
 
 ---
 
-### 1. New file: `src/lib/xc3-tag-protection.ts`
+## التغييرات المطلوبة
 
-Dedicated tag protection module for AI translation workflow:
-- `protectTags(text)` -- Replace PUA icons, `[Tag:Value]`, `{variable}`, and control chars with numbered placeholders (`TAG_0`, `TAG_1`...) before sending to AI
-- `restoreTags(translatedText, tags)` -- Re-insert original tags after AI returns translation
-- Treat consecutive PUA sequences as atomic blocks
-- This improves AI translation quality by preventing the AI from corrupting/dropping tags
+### 1. تحديث دالة التصنيف (`src/components/editor/types.tsx`)
 
-### 2. Expand `QualityStatsPanel.tsx`
+تعديل `categorizeBdatTable` لتفحص اسم العمود (الجزء بعد النقطة في Label) كخطوة ثانية إذا لم يتطابق اسم الجدول مع أي بادئة معروفة:
 
-Add the missing stat cards to the UI:
-- Too short translations (orange)
-- Mixed language warnings (yellow)
-- Damaged tags (red)
-- Total now shows 7 categories in a responsive grid
-- Each stat card is clickable to filter
+**قواعد الكلمات المفتاحية للأعمدة:**
 
-### 3. Update `useEditorQuality.ts` -- XC3 whitelist
+| الفئة | كلمات مفتاحية في اسم العمود |
+|---|---|
+| القوائم والواجهة | Window, Btn, Caption, Title, Dialog, Label, Layout, Menu |
+| المهام والقصص | Task, Purpose, Summary, Quest, Event, Scenario, After, Client, Talk |
+| المواقع والمستعمرات | Landmark, Spot, Colony, Area, Map, Place, Field |
+| الأدوات والقتال | Skill, Price, Armor, Weapon, Description, Pouch, Gem, Art |
+| الإعدادات | Voice, Audio, Config, Option, Setting, Display |
 
-Expand the mixed language whitelist with XC3-specific terms:
-- Character names: Noah, Mio, Lanz, Sena, Taion, Eunie, Riku, Manana
-- Locations: Aionios, Keves, Agnus, Colony
-- Game terms: Arts, Talent, Chain Attack, Ouroboros, Interlink
-- Controller: A, B, X, Y, L, R, ZL, ZR
-- Technical: UI, NPC, DLC, NG+, HP, MP, AP, TP, EXP
+**المنطق:** يتم فحص اسم الجدول اولاً (النظام الحالي)، وإذا كانت النتيجة "other"، يتم فحص اسم العمود بالكلمات المفتاحية أعلاه.
 
-### 4. Integrate `protectTags` into AI translation flow
+### 2. إضافة فئة "إعدادات الصوت والعرض" (`src/components/editor/types.tsx`)
 
-Update `useEditorTranslation.ts`:
-- Before sending to edge function: strip tags with `protectTags()`
-- After receiving translation: restore tags with `restoreTags()`
-- Keep existing `restoreTagsLocally` as fallback safety net
+اضافة فئة جديدة `bdat-settings` لتغطية أعمدة الإعدادات (Voice, Audio, Config, Option, Setting, Display) مع أيقونة `SlidersHorizontal`.
 
-### 5. Move `restoreTagsLocally` to `src/lib/xc3-tag-restoration.ts`
+### 3. ميزة البحث داخل فئة محددة (`src/hooks/useEditorState.ts`)
 
-Extract from `types.tsx` to a dedicated module for cleaner architecture. Re-export from `types.tsx` for backward compatibility.
+هذه الميزة **موجودة بالفعل** -- عند اختيار فئة من شريط الفلاتر ثم كتابة نص في خانة البحث، يتم تصفية النتائج داخل تلك الفئة فقط. لا حاجة لتغيير إضافي هنا، لكن سأتأكد من وضوح التكامل بين فلتر الفئة وخانة البحث.
 
-### 6. New file: `src/test/xc3-protection.test.ts`
+### 4. إخفاء الجداول بدون نصوص قابلة للقراءة
 
-Comprehensive tests covering:
-- PUA icon protection and restoration
-- Atomic block handling for consecutive PUA sequences
-- `[Format:Value]` tag protection
-- `{variable}` placeholder protection
-- Missing tag detection
-- Placeholder count mismatch detection
-- XC3 whitelist not flagging game terms as mixed language
-- Actual untranslated English flagged correctly
-- Presentation Forms skip protection
-- Standard Arabic entries get protected
-- Double-reversal prevention
-- Missing PUA restoration at word boundaries
+هذا يحدث تلقائياً في المحلل (Parser) -- فقط الأعمدة من نوع `String` أو `DebugString` يتم استخراجها كمدخلات. الجداول التي تحتوي فقط على بيانات رقمية لا تظهر أصلاً في المحرر.
 
 ---
 
-### Technical Details
+## التفاصيل التقنية
 
-**Files to create:**
-- `src/lib/xc3-tag-protection.ts` (protectTags/restoreTags)
-- `src/lib/xc3-tag-restoration.ts` (moved from types.tsx)
-- `src/test/xc3-protection.test.ts`
+### الملف: `src/components/editor/types.tsx`
 
-**Files to modify:**
-- `src/components/editor/QualityStatsPanel.tsx` -- expand to 7 stat cards
-- `src/hooks/useEditorQuality.ts` -- XC3 whitelist expansion
-- `src/hooks/useEditorTranslation.ts` -- integrate protectTags before AI call
-- `src/components/editor/types.tsx` -- re-export from new module
+```text
+التغييرات:
+1. إضافة فئة bdat-settings إلى BDAT_CATEGORIES
+2. تعديل categorizeBdatTable لتستقبل label كاملاً بدل اسم الجدول فقط
+3. إضافة دالة categorizeByColumnName كخطوة ثانية
+```
+
+**الدالة المحدثة:**
+
+```typescript
+function categorizeByColumnName(columnName: string): string | null {
+  const col = columnName.toLowerCase();
+  // القوائم والواجهة
+  if (/window|btn|caption|title|dialog|label|layout|menu/i.test(col)) return "bdat-menu";
+  // المهام والقصص
+  if (/task|purpose|summary|quest|event|scenario|after|client|talk/i.test(col)) return "bdat-quest";
+  // المواقع
+  if (/landmark|spot|colony|area|map|place|field/i.test(col)) return "bdat-field";
+  // الأدوات والقتال
+  if (/skill|price|armor|weapon|description|pouch|gem|art/i.test(col)) return "bdat-item";
+  // الإعدادات
+  if (/voice|audio|config|option|setting|display/i.test(col)) return "bdat-settings";
+  return null;
+}
+```
+
+### الملف: `src/components/editor/CategoryProgress.tsx`
+
+```text
+إضافة أيقونة SlidersHorizontal للفئة الجديدة bdat-settings
+```
+
+### ملفات لا تحتاج تعديل
+
+- `src/hooks/useEditorState.ts` -- البحث داخل الفئات يعمل بالفعل
+- `src/lib/bdat-parser.ts` -- إخفاء الجداول الثنائية يحدث تلقائياً
+- `src/lib/arabic-processing.ts` -- معالجة النصوص العربية (reshaping + bidi) تعمل بالفعل على كل النصوص بما فيها متعددة الأسطر
 
