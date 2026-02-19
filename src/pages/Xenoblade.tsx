@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Shield, FileText, Download, Sparkles } from "lucide-react";
@@ -10,9 +11,9 @@ const steps = [
   { icon: Download, title: "حمّل النتيجة", desc: "حمّل الملف المعرّب جاهزاً للعبة" },
 ];
 
-const Xenoblade = () => {
+const Xenoblade = forwardRef<HTMLDivElement>((_, ref) => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div ref={ref} className="min-h-screen flex flex-col">
       {/* Hero with background */}
       <header className="relative flex flex-col items-center justify-center min-h-[80vh] px-4 text-center overflow-hidden">
         {/* Background image */}
@@ -92,6 +93,8 @@ const Xenoblade = () => {
       </footer>
     </div>
   );
-};
+});
+
+Xenoblade.displayName = "Xenoblade";
 
 export default Xenoblade;
