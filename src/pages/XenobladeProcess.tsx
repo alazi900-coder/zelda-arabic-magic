@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Upload, FileText, ArrowRight, Loader2, CheckCircle2, Clock, Pencil, Database, Binary, Sparkles, Download } from "lucide-react";
 import heroBg from "@/assets/xc3-hero-bg.jpg";
-import { categorizeBdatTable } from "@/components/editor/types";
+import { categorizeBdatTable, categorizeByTableName, categorizeByColumnName } from "@/components/editor/types";
 
 type ProcessingStage = "idle" | "uploading" | "extracting" | "done" | "error";
 
@@ -115,20 +115,43 @@ const XenobladeProcess = () => {
             if (strings.length > 0) {
               const categoryMap: Record<string, number> = {};
               const sampleLabels: string[] = [];
+              let stage1Count = 0;
+              let stage2Count = 0;
+              let otherCount = 0;
               for (let i = 0; i < Math.min(strings.length, 500); i++) {
                 const s = strings[i];
                 const label = `${s.tableName}[${s.rowIndex}].${s.columnName}`;
                 const cat = categorizeBdatTable(label);
                 categoryMap[cat] = (categoryMap[cat] || 0) + 1;
+
+                // Track which stage classified this entry
+                const tblMatch = label.match(/^(.+?)\[\d+\]/);
+                const tbl = tblMatch ? tblMatch[1] : "";
+                const colMatch = label.match(/\]\s*\.?\s*(.+)/);
+                const col = colMatch ? colMatch[1] : "";
+                if (categorizeByTableName(tbl)) {
+                  stage1Count++;
+                } else if (categorizeByColumnName(col)) {
+                  stage2Count++;
+                } else {
+                  otherCount++;
+                }
+
                 if (sampleLabels.length < 15 && cat === "other") {
                   sampleLabels.push(label);
                 }
               }
+              const sampled = Math.min(strings.length, 500);
               const catSummary = Object.entries(categoryMap)
                 .sort((a, b) => b[1] - a[1])
                 .map(([k, v]) => `${k}: ${v}`)
                 .join(' | ');
               addLog(`📊 تصنيف ${file.name}: ${catSummary}`);
+              addLog(`🏷️ مرحلة التصنيف (من ${sampled} نص): المرحلة ١ (اسم الجدول): ${stage1Count} | المرحلة ٢ (اسم العمود): ${stage2Count} | غير مصنّف: ${otherCount}`);
+              const s1Pct = ((stage1Count / sampled) * 100).toFixed(1);
+              const s2Pct = ((stage2Count / sampled) * 100).toFixed(1);
+              const otherPct = ((otherCount / sampled) * 100).toFixed(1);
+              addLog(`📈 النسب: المرحلة ١: ${s1Pct}% | المرحلة ٢: ${s2Pct}% | أخرى: ${otherPct}%`);
               if (sampleLabels.length > 0) {
                 addLog(`🔍 عيّنات "أخرى" (${sampleLabels.length}):`);
                 for (const lbl of sampleLabels) {
