@@ -122,6 +122,20 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
         const nonEmptyTranslations: Record<string, string> = {};
         for (const [k, v] of Object.entries(state.translations)) { if (v.trim()) nonEmptyTranslations[k] = v; }
 
+        // Auto Arabic processing before build
+        let autoProcessedCountBin = 0;
+        for (const [key, value] of Object.entries(nonEmptyTranslations)) {
+          if (!value?.trim()) continue;
+          if (hasArabicPresentationForms(value)) continue;
+          if (!hasArabicCharsProcessing(value)) continue;
+          nonEmptyTranslations[key] = processArabicText(value, { arabicNumerals, mirrorPunct: mirrorPunctuation });
+          autoProcessedCountBin++;
+        }
+        if (autoProcessedCountBin > 0) {
+          setBuildProgress(`✅ تمت معالجة ${autoProcessedCountBin} نص عربي تلقائياً...`);
+          await new Promise(r => setTimeout(r, 800));
+        }
+
         for (const fileName of bdatBinaryFileNames!) {
           const buf = bdatBinaryFiles![fileName];
           if (!buf) continue;
@@ -200,6 +214,20 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
         
         const nonEmptyTranslations: Record<string, string> = {};
         for (const [k, v] of Object.entries(state.translations)) { if (v.trim()) nonEmptyTranslations[k] = v; }
+
+        // Auto Arabic processing before build
+        let autoProcessedCountMsbt = 0;
+        for (const [key, value] of Object.entries(nonEmptyTranslations)) {
+          if (!value?.trim()) continue;
+          if (hasArabicPresentationForms(value)) continue;
+          if (!hasArabicCharsProcessing(value)) continue;
+          nonEmptyTranslations[key] = processArabicText(value, { arabicNumerals, mirrorPunct: mirrorPunctuation });
+          autoProcessedCountMsbt++;
+        }
+        if (autoProcessedCountMsbt > 0) {
+          setBuildProgress(`✅ تمت معالجة ${autoProcessedCountMsbt} نص عربي تلقائياً...`);
+          await new Promise(r => setTimeout(r, 800));
+        }
         
         // Auto-fix damaged tags before build
         for (const entry of state.entries) {
