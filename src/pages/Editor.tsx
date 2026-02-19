@@ -368,6 +368,7 @@ const Editor = () => {
                     <option value="mixed-lang">🌐 مختلط ({editor.needsImproveCount.mixed})</option>
                     <option value="has-tags">🔧 يحتوي رموز تقنية ({editor.tagsCount})</option>
                     {editor.fuzzyCount > 0 && <option value="fuzzy">🔍 مطابقة جزئية ({editor.fuzzyCount})</option>}
+                    {editor.byteOverflowCount > 0 && <option value="byte-overflow">⛔ تجاوز البايتات ({editor.byteOverflowCount})</option>}
                   </select>
                   <select value={editor.filterFile} onChange={e => editor.setFilterFile(e.target.value)} className="px-3 py-2 rounded bg-background border border-border font-body text-sm max-w-[200px]">
                     <option value="all">كل الملفات</option>
@@ -411,9 +412,10 @@ const Editor = () => {
                   <option value="problems">🚨 مشاكل</option>
                   <option value="needs-improve">⚠️ يحتاج تحسين</option>
                   <option value="stuck-chars">🔤 ملتصق</option>
-                    <option value="mixed-lang">🌐 مختلط</option>
-                    <option value="has-tags">🔧 رموز تقنية</option>
-                    {editor.fuzzyCount > 0 && <option value="fuzzy">🔍 مطابقة جزئية ({editor.fuzzyCount})</option>}
+                  <option value="mixed-lang">🌐 مختلط</option>
+                  <option value="has-tags">🔧 رموز تقنية</option>
+                  {editor.fuzzyCount > 0 && <option value="fuzzy">🔍 مطابقة جزئية ({editor.fuzzyCount})</option>}
+                  {editor.byteOverflowCount > 0 && <option value="byte-overflow">⛔ تجاوز البايتات ({editor.byteOverflowCount})</option>}
                 </select>
                 <select value={editor.filterFile} onChange={e => editor.setFilterFile(e.target.value)} className="w-full px-3 py-2 rounded bg-background border border-border font-body text-sm">
                   <option value="all">كل الملفات</option>
@@ -436,7 +438,7 @@ const Editor = () => {
           </div>
 
           {/* Needs Improvement Badges */}
-          {editor.needsImproveCount.total > 0 && !isMobile && (
+          {(editor.needsImproveCount.total > 0 || editor.byteOverflowCount > 0) && !isMobile && (
             <div className="flex flex-wrap gap-2 mb-4">
               <span className="text-xs font-display text-muted-foreground">⚠️ تحتاج تحسين:</span>
               {editor.needsImproveCount.tooShort > 0 && (
@@ -457,6 +459,16 @@ const Editor = () => {
               {editor.needsImproveCount.mixed > 0 && (
                 <Button variant="outline" size="sm" onClick={() => editor.setFilterStatus("mixed-lang")} className="text-xs h-6 px-2 border-primary/30 text-primary">
                   🌐 مختلطة: {editor.needsImproveCount.mixed}
+                </Button>
+              )}
+              {editor.byteOverflowCount > 0 && (
+                <Button
+                  variant={editor.filterStatus === "byte-overflow" ? "destructive" : "outline"}
+                  size="sm"
+                  onClick={() => editor.setFilterStatus(editor.filterStatus === "byte-overflow" ? "all" : "byte-overflow")}
+                  className="text-xs h-6 px-2 border-destructive/50 text-destructive font-bold"
+                >
+                  ⛔ تجاوز البايتات: {editor.byteOverflowCount}
                 </Button>
               )}
             </div>

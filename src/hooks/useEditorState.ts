@@ -22,7 +22,7 @@ export function useEditorState() {
   const [search, setSearch] = useState("");
   const [filterFile, setFilterFile] = useState<string>("all");
   const [filterCategory, setFilterCategory] = useState<string[]>([]);
-  const [filterStatus, setFilterStatus] = useState<"all" | "translated" | "untranslated" | "problems" | "needs-improve" | "too-short" | "too-long" | "stuck-chars" | "mixed-lang" | "has-tags" | "damaged-tags" | "fuzzy">("all");
+  const [filterStatus, setFilterStatus] = useState<"all" | "translated" | "untranslated" | "problems" | "needs-improve" | "too-short" | "too-long" | "stuck-chars" | "mixed-lang" | "has-tags" | "damaged-tags" | "fuzzy" | "byte-overflow">("all");
   const [filterTechnical, setFilterTechnical] = useState<"all" | "only" | "exclude">("all");
   const [filterTable, setFilterTable] = useState<string>("all");
   const [filterColumn, setFilterColumn] = useState<string>("all");
@@ -343,6 +343,21 @@ export function useEditorState() {
     return Object.keys(state.fuzzyScores).length;
   }, [state?.fuzzyScores]);
 
+  // === Count entries where translation exceeds max_utf8_bytes ===
+  const byteOverflowCount = useMemo(() => {
+    if (!state) return 0;
+    let count = 0;
+    for (const e of state.entries) {
+      if (e.maxBytes <= 0) continue;
+      const key = `${e.msbtFile}:${e.index}`;
+      const translation = state.translations[key] || '';
+      if (!translation.trim()) continue;
+      const byteUsed = new TextEncoder().encode(translation).length;
+      if (byteUsed > e.maxBytes) count++;
+    }
+    return count;
+  }, [state?.entries, state?.translations]);
+
   // === Extract unique BDAT table and column names from labels ===
   const bdatTableNames = useMemo(() => {
     if (!state) return [];
@@ -423,7 +438,8 @@ export function useEditorState() {
         (filterStatus === "mixed-lang" && isTranslated && isMixedLanguage(translation)) ||
         (filterStatus === "has-tags" && hasTechnicalTags(e.original)) ||
         (filterStatus === "damaged-tags" && qualityStats.damagedTagKeys.has(key)) ||
-        (filterStatus === "fuzzy" && !!(state.fuzzyScores?.[key]));
+        (filterStatus === "fuzzy" && !!(state.fuzzyScores?.[key])) ||
+        (filterStatus === "byte-overflow" && e.maxBytes > 0 && isTranslated && new TextEncoder().encode(translation).length > e.maxBytes);
       const matchTechnical = 
         filterTechnical === "all" ||
         (filterTechnical === "only" && isTechnical) ||
@@ -984,7 +1000,7 @@ export function useEditorState() {
     applyingArabic, improvingTranslations, improveResults,
     fixingMixed, filtersOpen, buildStats, buildPreview, showBuildConfirm,
     checkingConsistency, consistencyResults,
-    categoryProgress, qualityStats, needsImproveCount, translatedCount, tagsCount, fuzzyCount,
+    categoryProgress, qualityStats, needsImproveCount, translatedCount, tagsCount, fuzzyCount, byteOverflowCount,
     bdatTableNames, bdatColumnNames, bdatTableCounts, bdatColumnCounts,
     ...glossary,
     msbtFiles, filteredEntries, paginatedEntries, totalPages,
