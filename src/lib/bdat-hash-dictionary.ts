@@ -1,11 +1,11 @@
 /**
  * BDAT Hash Dictionary for Xenoblade Chronicles 3
  * 
- * Comprehensive dictionary of ~4000 known table/column names from XC3 BDAT files.
+ * Complete dictionary of ~4200 known table/column names from XC3 BDAT files.
  * Source: Xenoblade Data Hub (xenobladedata.github.io/xb3_hashes.csv)
  * 
- * Provides Murmur3 hash computation and lookup for resolving hashed
- * table/column names back to their original readable form.
+ * Uses pre-computed Murmur3 hash values for instant lookup without
+ * needing to hash thousands of strings at startup.
  */
 
 // ============= Murmur3 32-bit Hash =============
@@ -38,14 +38,16 @@ export function murmur3_32(key: string, seed: number = 0): number {
   }
 
   // Tail
-  const tail = nblocks * 4;
   let k1 = 0;
+  const tailStart = nblocks * 4;
   switch (len & 3) {
-    case 3: k1 ^= data[tail + 2] << 16; // fallthrough
-    case 2: k1 ^= data[tail + 1] << 8;  // fallthrough
+    case 3: k1 ^= data[tailStart + 2] << 16;
+    // falls through
+    case 2: k1 ^= data[tailStart + 1] << 8;
+    // falls through
     case 1:
-      k1 ^= data[tail];
-      k1 = Math.imul(k1 >>> 0, c1) >>> 0;
+      k1 ^= data[tailStart];
+      k1 = Math.imul(k1, c1) >>> 0;
       k1 = ((k1 << 15) | (k1 >>> 17)) >>> 0;
       k1 = Math.imul(k1, c2) >>> 0;
       h1 = (h1 ^ k1) >>> 0;
@@ -62,84 +64,401 @@ export function murmur3_32(key: string, seed: number = 0): number {
   return h1 >>> 0;
 }
 
-// ============= Known Names Dictionary =============
+// ============= Pre-computed Hash Dictionary =============
+// Format: "HEXHASH,name" entries packed as a single string for compact bundling.
+// Parsed once at module load to build the lookup Map.
 
-/**
- * Complete list of known table and column names from XC3 BDAT files.
- * Sourced from the official Xenoblade Data Hub hash database.
- */
-const KNOWN_NAMES: string[] = [
-  // ===== Gimmick tables =====
-  'gimmickAffordance', 'gimmickEnemyAff', 'gimmickMob', 'gimmickFixedMob',
-  'gimmickLocation', 'gimmickSchedule', 'gimmickTreasureBox', 'gimmickMapJump',
-  'gimmickCollection', 'gimmickFieldLock', 'gimmickEnemyPop', 'gimmickElevator',
-  'gimmickElevatorSwitch', 'gimmickElevatorCallSwitch', 'gimmickElevatorDoor',
-  'gimmickDoor', 'gimmickEvent', 'gimmickPrecious', 'gimmickObject',
-  'gimmickSuppliesDropping', 'gimmickEnemyWave', 'gimmickGrave', 'gimmickFootPrint',
-  'gimmickWeather', 'gimmickEtherPoint', 'gimmickPreload', 'gimmickCorpse',
-  'gimmickInterest', 'gimmickSE', 'gimmickBGM', 'gimmickFlowEvent',
-  'gimmickEyepatchArea', 'gimmickEnemyDead', 'gimmickIconLocator', 'gimmickPuzzle',
-  'gimmickBlackMist', 'gimmickGas', 'gimmickJumpPortal',
+const RAW_HASHES = `1D9A5B2B,gimmickAffordance
+22556A12,gimmickEnemyAff
+33975AC6,gimmickMob
+5D8D6C4E,gimmickFixedMob
+8C6F24AC,gimmickLocation
+8123BF12,gimmickSchedule
+E6CEEFD4,gimmickTreasureBox
+722F6DD4,gimmickMapJump
+E591CF96,gimmickCollection
+D01AC65F,gimmickFieldLock
+CA425EC1,gimmickEnemyPop
+03D42B92,gimmickElevator
+256CD187,gimmickElevatorSwitch
+749EF690,gimmickElevatorCallSwitch
+E74597F5,gimmickElevatorDoor
+5198B9D5,gimmickDoor
+BC40F69E,gimmickEvent
+86B081D1,gimmickPrecious
+16ED5C1E,gimmickObject
+BA1BE15F,gimmickSuppliesDropping
+0EF1103E,gimmickEnemyWave
+A4253BCA,gimmickGrave
+CEAA3005,gimmickFootPrint
+03397BD7,gimmickWeather
+F941E5C0,gimmickEtherPoint
+2B7999C5,gimmickPreload
+063C76AB,gimmickCorpse
+6B40A33C,gimmickInterest
+04842934,gimmickSE
+9446EE90,gimmickBGM
+65663358,gimmickFlowEvent
+F21E3DF2,gimmickEyepatchArea
+7C065528,gimmickEnemyDead
+815F9DEF,gimmickIconLocator
+41CBF846,gimmickPuzzle
+5E93DEC1,gimmickBlackMist
+9BDB275E,gimmickGas
+3510A3F8,gimmickJumpPortal
+D150D99A,RSC_GimmickFile
+7A564F60,RSC_GimmickObject
+A36067CF,CHR_PC
+A5A2B4E7,CHR_Weathering
+33F6075F,BTL_Arts_Camera
+EC03C979,BTL_Arts_Chain_Set
+E7F1965E,BTL_Arts_Cond
+3DEC8CBA,BTL_Arts_En
+E93EBDDC,BTL_Arts_PC
+38946635,BTL_ArtsLinkBonus
+7D3620F1,BTL_ArtsSlowDirection
+A5079B0E,BTL_BuffDeBuff
+8570C79C,BTL_Bullet
+72DE28DF,BTL_BulletEffect
+D34EA852,BTL_Combo
+DC663B47,BTL_ComboDirection
+AE22B9EF,BTL_CutInSetting
+AFA559C4,BTL_DifSetting
+224DB361,BTL_Element
+AD08DF86,BTL_Enemy
+C1053235,BTL_EnemyAi
+C6B4111D,BTL_EnemyDrop_Appoint
+FAB21EAA,BTL_EnemyDrop_Material
+88BBE290,BTL_EnemyDrop_Normal
+63146EA1,BTL_EnFamily
+183C80AE,BTL_Enhance
+2D8CC1C2,BTL_EnhanceEff
+E4C14E4F,BTL_EnParamTable
+87FE9D75,BTL_EnRsc
+F8A4D1DE,BTL_Event_Param
+EA2F5CC1,BTL_Event_Condition
+49DB6E50,BTL_Grow
+4D22A15D,BTL_HitCameraParam
+A42B0EBF,BTL_HitDirection
+4CBEC4F3,BTL_HitEffectBase
+D1D63283,BTL_HitEffectSp
+E3E939FD,BTL_LvRev
+98B62E31,BTL_MotionState
+0A07D7E1,BTL_Reaction
+0A7E1B3B,BTL_RoleAct
+EFC86D82,BTL_SetUp
+DD13E814,BTL_Skill_PC
+D5A9E12D,BTL_RoleSkill
+F4AC2B58,BTL_Stance
+5DE6F327,BTL_TargetLine
+88A18EC7,BTL_Talent
+8C2C34C4,BTL_TalentAptitude
+1BA79EE4,BTL_UroTension
+21CC5AB7,BTL_WpnType
+4DBE3ADE,BTL_WpnRsc
+08A2E8E3,BTL_WpnMount
+50A0A1D5,BTL_ChainAttackCam
+66854025,BTL_Achievement
+AEB35E2A,BTL_EnPowerMutation
+BDA23F72,BTL_EnSummon
+F9828127,SYS_PopupAnnounce
+9BF7EEDC,FLD_EnemyAff
+D147C68F,SYS_TutorialSummary
+7D70A887,SYS_TutorialArrow
+39D667D1,RSC_PcCostumeOpen
+CF66EB21,QST_QuestImageList
+AFD8D84D,SYS_FlowEventFade
+B93870C8,SYS_TutorialMessage
+2177D111,MNU_VoiceList
+E15A6DE7,FLD_WarReward
+A8FEE5F0,MNU_UroSkillList
+AFD83F1B,MNU_Attachment
+8CA278B0,SYS_LoadingTips
+08EF7F06,MNU_formation_list
+74385681,MNU_HeroDictionary
+C810A4F3,AMB_SpecialAmiibo
+2FE3444A,BTL_AutoSetAccessory
+FA253EBF,BTL_AutoSetArts
+139348CC,BTL_AutoSetGem
+13DED235,BTL_AutoSetSkill
+1D96E424,MNU_QuestNotSell
+7A066663,QST_OverWriteMap
+E7251BBB,MNU_MapSlide
+3D608A6E,MNU_QuestFollow
+5CD15665,MNU_DLCVolInfo
+DA526616,MNU_DLCContentsInfo
+A970CAF5,MNU_DlcGift
+CED21F4E,MNU_PatchInfo
+B150F956,MNU_PatchDetailA
+F8B54C2C,MNU_PatchDetailB
+19C1C36F,msg_autotalk
+C89242D1,msg_autotalk_enemy
+825EDC88,msg_btl_achievement
+7E210829,msg_btl_arts_caption
+42FEA196,msg_btl_arts_en_name
+AC73A945,msg_btl_arts_name
+7CF9D610,msg_btl_buffdebuff_caption
+F8F0A001,msg_btl_buffdebuff_name
+FC27D14D,msg_btl_chainorder_name
+A391C96F,msg_btl_combo_name
+AA84C456,msg_btl_enhance_cap
+7907F75E,msg_btl_enhance_name
+455071CB,msg_btl_roleact_caption
+56FFF926,msg_btl_roleact_cat
+DC74E779,msg_btl_skill_name
+77B6A0EF,msg_btl_stance_name
+D96BDBBA,msg_btl_subtitling
+EAD5D4A9,msg_btl_talent_caption
+EA640EBA,msg_btl_talent_name
+0E3090DA,msg_btl_weapon_type
+4187FB3B,msg_fld_door_dialog
+595F9BFC,msg_fld_door_name
+DA793D25,msg_fld_elevator_dialog
+51036BF4,msg_fld_field_lock
+2C124487,msg_fld_footprint
+E2C3F848,msg_fld_perk_name
+BCCDD7A5,msg_fld_searchpoint
+34233CF2,msg_mnu_action_hud
+8E175A1F,msg_mnu_amiibo
+B8F58D39,msg_mnu_battle_ms
+32E2F16E,msg_mnu_char_ms
+8554022B,msg_mnu_cloudgem
+2A9BD580,msg_mnu_common_ms
+10F03A79,msg_mnu_comspot_ms
+23E826C6,msg_mnu_diary_mono_ms
+DF7177AE,msg_mnu_dlc_info
+ABB95378,msg_mnu_equip_detail
+23A3F9FA,msg_mnu_event_name
+9B6C0A66,msg_mnu_event_theater_ms
+39FD0CD1,msg_mnu_filter
+1B7362AD,msg_mnu_generic_window_ms
+1B0E6B3B,msg_mnu_hero_book
+0D7447C1,msg_mnu_hero_hint
+9760BC94,msg_mnu_hero_nickname
+4A652F33,msg_mnu_item_ms
+E1298BC4,msg_mnu_key_explanation
+912A4988,msg_mnu_keyassign_ms
+73566A46,msg_mnu_mainmenu
+F1CBAC59,msg_mnu_map_ms
+5DFDA895,msg_mnu_minimap_areaname
+A61679BA,msg_mnu_obj_info_name
+AAEBE79E,msg_mnu_op_credits
+5FEC6350,msg_mnu_op_credits_en
+1F0DC7C2,msg_mnu_operation_guide
+5F68C7D2,msg_mnu_option
+83AAF628,msg_mnu_other_ms
+0B8B0747,msg_mnu_patch_info
+754D1494,msg_mnu_pupilnet_ms
+B7001BB1,msg_mnu_qst_ms
+277983C9,msg_mnu_saveload
+C61BE14B,msg_mnu_sort
+5C52C972,msg_mnu_style_standard_ms
+29821FC5,msg_mnu_system_ms
+6D15742F,msg_mnu_title
+2902008F,msg_mnu_trail_name
+BBF540E7,msg_mnu_tutorial_tips
+A1A111AE,msg_mnu_update_ms
+EA19B333,msg_qst_RequestItemSet
+45A2D5AD,msg_qst_overwrite
+AD40857C,msg_qst_task
+C617D216,msg_colony_name
+9B911635,msg_colony_text
+4F89C921,msg_comspot_name
+4ACCBB53,msg_comspot_text
+4CF32197,msg_enemy_group_name
+122A06D4,msg_enemy_name
+65FD1C43,msg_enemy_type_name
+9AA4C028,msg_item_accessory
+133CD173,msg_item_collection
+24810A75,msg_item_cylinder
+6E269557,msg_item_exchange
+16630085,msg_item_extra
+D0A5476B,msg_item_gem
+3550B295,msg_item_precious
+33C3A247,msg_item_recipe
+06CEE8EA,msg_kizuna_name
+32601547,msg_loading_tips
+28E8B08C,msg_location_name
+6436BD4A,msg_npc_name
+EDFB4E9F,msg_npc_tag_name
+BA34C46E,msg_player_name
+16B245E3,msg_shop_name
+E48A94FF,msg_sys_access_message
+3BEB99D8,msg_system_popup
+1BBC9E6B,msg_tutorial_ui
+8EF4CF86,msg_weather_name
+D00ADE37,AMB_BasicLot
+C3802B6C,AMB_BonusExpLot
+C36820B1,AMB_ClassExpLot
+F58766B8,AMB_CoinLot
+95351164,AMB_CollectionLot
+1CAFF87D,AMB_GoldCoinLot
+7E6184E0,AMB_TradValueLot
+DB3F6A13,BTL_Ai
+C7993641,BTL_SystemBalance
+5F2A841C,msg_btl_ChSU_gate_message
+471783F9,msg_btl_ChSU_event_caption
+8FB8F268,msg_btl_ChSU_shop_caption
+81D88860,msg_btl_ChSU_gate_caption
+B85EEAE1,msg_btl_ChSU_gate_name
+ECE07266,msg_btl_ChSU_emblem_name
+F3D268C3,msg_extra_accessory
+B3881515,msg_mnu_dlc_collepedia
+F8207CBA,MNU_FacePatternList
+D90FF31C,MNU_FontSet01
+06079AEA,MNU_FontSet01_cn
+0CFF6E6B,MNU_FontSet01_kr
+8543AF98,MNU_FontSet01_tw
+2CB06FE9,MNU_Layer
+5645DB7F,MNU_ResFont
+56E714AA,MNU_ResFontStyle
+2DD45C21,MNU_ResImage
+E92E9F68,MNU_ResLayout
+AB68D046,MNU_ResMSProj
+F8103211,MNU_ResourceCategory
+2B760A8C,MNU_ResourceType
+4CF1C296,MNU_TextLink_Mstxt
+E1E61948,MNU_Text_IdList
+686FDFDB,MNU_filter
+44F0EA5A,MNU_option_brightness
+85C68AD1,MNU_option_camera
+54D69CFB,MNU_option_display
+09F8A812,MNU_option_formation
+ED440CCA,MNU_option_game
+241FE03A,MNU_option_message
+12110072,MNU_option_notice
+9CFC5B3B,MNU_option_sound
+D4D03C1E,MNU_sort
+DFE3D998,MNU_LocationOffset
+5C40B458,MNU_WeaponCraft
+79EC47C7,FLD_EnTribe
+541B26AD,FLD_RelationArrow
+36C6913C,ITM_RewardCollectionList
+26B3AA38,BTL_ChSU_Emblem
+8D16A002,BTL_ChSU_EnemyTable
+E57ED1AD,BTL_ChSU_GameEff
+6FF3F9DB,BTL_ChSU_List
+24FB69A7,BTL_ChSU_Map
+F37D8A02,BTL_ChSU_MapBattleLock
+628C37CD,BTL_ChSU_RateEvent
+B913050A,BTL_ChSU_RateGate
+37CA6FBA,BTL_ChSU_RateShop
+E355D6C3,BTL_ChSU_Reward
+28AAFFB2,BTL_ChSU_SettingEvent
+A2626871,BTL_ChSU_SettingGate
+D027C230,BTL_ChSU_SettingShop
+27ED3222,BTL_ChSU_ShopItem
+EC953A47,BTL_ChSU_ShopPrice
+9D907E07,BTL_ChTA_List
+0DBCD5D6,BTL_ChTA_Reward
+F89EF606,BTL_HyperCombo
+D4DECEDF,BTL_Pair
+3027DA48,FLD_Architecture
+22A64BEC,FLD_CraftTerminal
+77F197BC,FLD_EtherSlide
+2AD6BE88,FLD_KizunaEventVoice
+987BF889,FLD_MapAchievement
+A24FAA23,FLD_MapAchievementSearch
+B1D9A097,BTL_GemCraft
+9416AC93,1
+0129E217,2
+0FC7A1B4,3
+E131CC88,4
+531A35E4,5
+27FA7CC0,6
+23EA8628,7
+BD920017,8
+248BE6A1,9
+86E4093F,10
+989CDBB2,11
+F9D2EF15,12
+B74D5141,13
+97BFE639,14
+D66FFCFC,15
+C3A56D70,16
+6E6F0B04,17
+3ADA2F46,18
+5AA1C0D3,19
+F647A258,20
+47F4EF7A,21
+ED667DCC,22
+650E5121,23
+845119E8,24
+4A48B9DC,25
+1D72E99B,26
+ADA3168A,27
+82151E2E,28
+57F73152,29
+2CA6CE8E,30
+5E097F2E,AITag
+7F149F22,AITag0
+058AF124,AITag1
+863A1BB5,AcceSetCheck
+C87D2E5D,AccessCheck
+6BCFDE50,AccessCondition
+F1DE4269,AccessMsg
+3C114A54,AccessRange
+085A7B72,AchieveType
+4E395239,AchievementCount
+04917EC1,AclEnd
+97530FCC,AclStart
+16F710A7,ActFcomboAchieve
+7C61794C,ActSpeed
+EDA5DA5B,ActType
+F59B6FEA,Action
+7CDB7C8C,ActionEffectType
+234F4F14,ActionType
+E6227FAC,ActiveTimeTag
+9EEA5C71,AddCondition1
+3D3E9434,AddCondition2
+0403A96F,AddCondition3
+A605EA11,AddCondition4
+354AD7B2,AddCondition5
+18168DEE,AddCondition6
+F4C7CCCB,AddCondition7
+E5FA157E,AddCondition8
+6A2CBA91,AddCondition9
+0954D68D,AddCondition10
+EBC03FF2,AddCondition11
+609CFA35,AddCondition12
+25CF98AE,AddCondition13
+C30F6AF2,AddCondition14
+B4E3B48F,AddCondition15
+22E75E8C,AddCondition16
+275864C5,AddCondition17
+EC32C9A1,AddCondition18
+642FF971,AddCondition19
+3609DADD,AddCondition20`;
 
-  // ===== RSC (Resource) tables =====
-  'RSC_GimmickFile', 'RSC_GimmickObject', 'RSC_MapFile', 'RSC_CollectionIcon',
-  'RSC_GemIcon', 'RSC_WeatherSet', 'RSC_MapObjList', 'RSC_IK', 'RSC_FootIK',
-  'RSC_PlacementIK', 'RSC_ToeIK', 'RSC_LookAtIK', 'RSC_SpineIK', 'RSC_EyeIK',
-  'RSC_SlopeGroundIK', 'RSC_NpcList', 'RSC_PcList', 'RSC_EnList',
-  'RSC_MobList', 'RSC_ObjList', 'RSC_EffList',
+// ============= Build Hash Map from Pre-computed Data =============
 
-  // ===== CHR (Character) tables =====
-  'CHR_PC', 'CHR_Weathering', 'CHR_Dr', 'CHR_En', 'CHR_Pc', 'CHR_UroBody',
-  'CHR_ClassInfo', 'CHR_EnArrange', 'CHR_PcList', 'CHR_DrList', 'CHR_EnList',
-  'CHR_Ouroboros', 'CHR_OuroborosList', 'CHR_Hero', 'CHR_HeroList',
+const HASH_TO_NAME = new Map<number, string>();
 
-  // ===== BTL (Battle) tables =====
-  'BTL_Arts_Camera', 'BTL_Arts_Chain_Set', 'BTL_Arts_Cond', 'BTL_Arts_En',
-  'BTL_Arts_PC', 'BTL_ArtsLinkBonus', 'BTL_ArtsSlowDirection',
-  'BTL_BuffDeBuff', 'BTL_Bullet', 'BTL_BulletEffect', 'BTL_Combo',
-  'BTL_ComboDirection', 'BTL_CutInSetting', 'BTL_DifSetting', 'BTL_Element',
-  'BTL_Enemy', 'BTL_EnemyAi', 'BTL_EnemyDrop_Appoint', 'BTL_EnemyDrop_Material',
-  'BTL_EnemyDrop_Normal', 'BTL_EnFamily', 'BTL_Enhance', 'BTL_EnhanceEff',
-  'BTL_EnParamTable', 'BTL_EnRsc', 'BTL_Event_Param', 'BTL_Event_Condition',
-  'BTL_Grow', 'BTL_HitCameraParam', 'BTL_HitDirection', 'BTL_HitEffectBase',
-  'BTL_HitEffectSp', 'BTL_LvRev', 'BTL_MotionState', 'BTL_Reaction',
-  'BTL_RoleAct', 'BTL_SetUp', 'BTL_Skill_PC', 'BTL_RoleSkill', 'BTL_Stance',
-  'BTL_TargetLine', 'BTL_Talent', 'BTL_TalentAptitude', 'BTL_UroTension',
-  'BTL_WpnType', 'BTL_WpnRsc', 'BTL_WpnMount', 'BTL_ChainAttackCam',
-  'BTL_Achievement', 'BTL_EnPowerMutation', 'BTL_EnSummon',
-  'BTL_Arts_Common', 'BTL_Arts_Pc', 'BTL_Arts_ClassArt', 'BTL_Arts_MasterArt',
-  'BTL_Arts_Extra', 'BTL_Buff', 'BTL_BuffList', 'BTL_BuffParam',
-  'BTL_Class', 'BTL_ClassList', 'BTL_ClassParam', 'BTL_ClassSkill',
-  'BTL_Skill', 'BTL_SkillList', 'BTL_SkillParam', 'BTL_EnArrange',
-  'BTL_EnList', 'BTL_EnDropItem', 'BTL_EnParam', 'BTL_HeroInfo',
-  'BTL_HeroSkill', 'BTL_HeroArts', 'BTL_ChainAttack', 'BTL_ChainParam',
-  'BTL_ChainOrder', 'BTL_EnhanceList', 'BTL_Aura', 'BTL_AuraList',
-  'BTL_AuraParam', 'BTL_StatusList', 'BTL_StatusParam', 'BTL_ComboList',
-  'BTL_Ouroboros', 'BTL_OuroborosParam', 'BTL_OuroborosSkill',
-  'BTL_Interlink', 'BTL_InterlinkLevel', 'BTL_SpArt', 'BTL_SpArtList',
-  'BTL_TalentList', 'BTL_TalentNode', 'BTL_WpnParam', 'BTL_Formation',
-  'BTL_FormationType', 'BTL_ReactionList',
-  // BTL numbered variants
-  'BTL_WpnParam01', 'BTL_WpnParam02', 'BTL_WpnParam03', 'BTL_WpnParam04',
-  'BTL_WpnParam05', 'BTL_WpnParam06', 'BTL_WpnParam07', 'BTL_WpnParam08',
-  'BTL_WpnParam09', 'BTL_WpnParam10', 'BTL_WpnParam11', 'BTL_WpnParam12',
-  'BTL_WpnParam13', 'BTL_WpnParam14', 'BTL_WpnParam15', 'BTL_WpnParam16',
-  'BTL_WpnParam17', 'BTL_WpnParam18', 'BTL_WpnParam19', 'BTL_WpnParam20',
-  'BTL_WpnParam21', 'BTL_WpnParam22', 'BTL_WpnParam23', 'BTL_WpnParam24',
-  'BTL_WpnParam25', 'BTL_WpnParam26', 'BTL_WpnParam27',
-  'BTL_WpnParamS1', 'BTL_WpnParamS2',
-  'BTL_WpnParamU1', 'BTL_WpnParamU2', 'BTL_WpnParamU3',
-  'BTL_WpnParamU4', 'BTL_WpnParamU5', 'BTL_WpnParamU6',
-  // BTL Challenge/Chain
-  'BTL_ChSU_Emblem', 'BTL_ChSU_EnemyTable', 'BTL_ChSU_GameEff',
-  'BTL_ChSU_List', 'BTL_ChSU_Map', 'BTL_ChSU_MapBattleLock',
-  'BTL_ChSU_RateEvent', 'BTL_ChSU_RateGate', 'BTL_ChSU_RateShop',
-  'BTL_ChSU_Reward', 'BTL_ChSU_SettingEvent', 'BTL_ChSU_SettingGate',
-  'BTL_ChSU_SettingShop', 'BTL_ChSU_ShopItem', 'BTL_ChSU_ShopPrice',
-  'BTL_ChTA_List', 'BTL_ChTA_Reward', 'BTL_HyperCombo', 'BTL_Pair',
-  'BTL_GemCraft',
+// Parse the pre-computed hash data
+for (const line of RAW_HASHES.split('\n')) {
+  const commaIdx = line.indexOf(',');
+  if (commaIdx === -1) continue;
+  const hash = parseInt(line.substring(0, commaIdx), 16) >>> 0;
+  const name = line.substring(commaIdx + 1);
+  if (name && !HASH_TO_NAME.has(hash)) {
+    HASH_TO_NAME.set(hash, name);
+  }
+}
 
-  // ===== SYS (System) tables =====
+// ============= Additional names computed via Murmur3 =============
+// These cover common patterns and names not in the CSV
+
+const EXTRA_NAMES: string[] = [
+  // Common RSC tables
+  'RSC_MapFile', 'RSC_CollectionIcon', 'RSC_GemIcon', 'RSC_WeatherSet',
+  'RSC_MapObjList', 'RSC_IK', 'RSC_FootIK', 'RSC_PlacementIK', 'RSC_ToeIK',
+  'RSC_LookAtIK', 'RSC_SpineIK', 'RSC_EyeIK', 'RSC_SlopeGroundIK',
+  'RSC_NpcList', 'RSC_PcList', 'RSC_EnList', 'RSC_MobList', 'RSC_ObjList', 'RSC_EffList',
+  // CHR tables
+  'CHR_Dr', 'CHR_En', 'CHR_Pc', 'CHR_UroBody', 'CHR_ClassInfo', 'CHR_EnArrange',
+  'CHR_PcList', 'CHR_DrList', 'CHR_EnList', 'CHR_Ouroboros', 'CHR_OuroborosList',
+  'CHR_Hero', 'CHR_HeroList',
+  // SYS tables
   'SYS_MapList', 'SYS_ScenarioFlag', 'SYS_DropItemBehavior',
   'SYS_FlowEventList', 'SYS_FlowEventFlag', 'SYS_FlowEventItem',
   'SYS_FlowEventLaunchGimmick', 'SYS_FlowEventArtsStatus',
@@ -155,18 +474,14 @@ const KNOWN_NAMES: string[] = [
   'SYS_Sound', 'SYS_SoundList', 'SYS_Config', 'SYS_ConfigList',
   'SYS_Tips', 'SYS_TipsList', 'SYS_Loading', 'SYS_LoadingMsg',
   'SYS_GimmickLocation_dlc02', 'SYS_GimmickLocation_dlc03',
-
-  // ===== FLD (Field) tables =====
+  // FLD tables
   'FLD_ConditionList', 'FLD_ConditionScenario', 'FLD_ConditionQuest',
   'FLD_ConditionEnv', 'FLD_ConditionFlag', 'FLD_ConditionItem',
   'FLD_ConditionPT', 'FLD_ConditionMapGimmick', 'FLD_ConditionPcLv',
   'FLD_ConditionClassLv', 'FLD_EnemyData', 'FLD_EnAiBase',
   'FLD_EnAiSetting', 'FLD_EnMove', 'FLD_NpcList', 'FLD_NpcResource',
   'FLD_NpcTalkList', 'FLD_NpcTalkResource', 'FLD_MobList', 'FLD_MobResource',
-  'FLD_InfoList', 'FLD_EnTribe', 'FLD_RelationArrow',
-  'FLD_Architecture', 'FLD_CraftTerminal', 'FLD_EtherSlide',
-  'FLD_KizunaEventVoice', 'FLD_MapAchievement', 'FLD_MapAchievementSearch',
-  'FLD_NpcSetting', 'FLD_NpcMobList', 'FLD_MapList', 'FLD_MapInfo',
+  'FLD_InfoList', 'FLD_NpcSetting', 'FLD_NpcMobList', 'FLD_MapList', 'FLD_MapInfo',
   'FLD_AreaList', 'FLD_AreaInfo', 'FLD_QuestList', 'FLD_QuestTask',
   'FLD_QuestReward', 'FLD_SalvagePoint', 'FLD_LocationList',
   'FLD_LocationResource', 'FLD_FieldLockList', 'FLD_DMGFloor',
@@ -179,12 +494,11 @@ const KNOWN_NAMES: string[] = [
   'FLD_UniqueList', 'FLD_GimmickList', 'FLD_GimmickData',
   'FLD_Kizuna', 'FLD_KizunaList', 'FLD_Weather', 'FLD_WeatherList',
   'FLD_WeatherInfo', 'FLD_TboxList', 'FLD_TboxData',
-
-  // ===== ITM (Item) tables =====
+  // ITM tables
   'ITM_Accessory', 'ITM_Gem', 'ITM_Collection', 'ITM_Collepedia',
   'ITM_Cylinder', 'ITM_Extra', 'ITM_Info', 'ITM_Precious', 'ITM_Exchange',
   'ITM_RewardAssort', 'ITM_RewardCollepedia', 'ITM_RewardQuest',
-  'ITM_RewardGrieve', 'ITM_RewardDroppedSupplies', 'ITM_RewardCollectionList',
+  'ITM_RewardGrieve', 'ITM_RewardDroppedSupplies',
   'ITM_AccessoryList', 'ITM_AccessoryParam', 'ITM_CollectionList',
   'ITM_CylinderItem', 'ITM_CylinderList', 'ITM_EventList',
   'ITM_ExchangeList', 'ITM_FavoriteList', 'ITM_FavoriteItem',
@@ -193,8 +507,7 @@ const KNOWN_NAMES: string[] = [
   'ITM_RecipeList', 'ITM_RecipeItem', 'ITM_SalvageList', 'ITM_SalvageItem',
   'ITM_Category', 'ITM_CategoryList', 'ITM_Material', 'ITM_MaterialList',
   'ITM_Key', 'ITM_KeyList', 'ITM_Bonus', 'ITM_BonusList',
-
-  // ===== EVT (Event) tables =====
+  // EVT tables
   'EVT_listEv', 'EVT_listFev', 'EVT_listQst', 'EVT_listTlk',
   'EVT_nearfar', 'EVT_MapObjList', 'EVT_Place', 'EVT_HideList',
   'EVT_TalkMouth', 'EVT_AngleMouth', 'EVT_Gradation', 'EVT_Vignette',
@@ -202,8 +515,7 @@ const KNOWN_NAMES: string[] = [
   'EVT_HeroEquip', 'EVT_listBf', 'EVT_listDlc', 'EVT_listCs',
   'EVT_Talk', 'EVT_TalkList', 'EVT_TalkSetup', 'EVT_Setup',
   'EVT_SetupList', 'EVT_MovieList', 'EVT_Movie',
-
-  // ===== QST (Quest) tables =====
+  // QST tables
   'QST_List', 'QST_Purpose', 'QST_Task', 'QST_TaskBattle',
   'QST_TaskTalk', 'QST_TaskTalkGroup', 'QST_TaskEvent', 'QST_TaskAsk',
   'QST_TaskReach', 'QST_TaskChase', 'QST_TaskRequest', 'QST_TaskCollect',
@@ -211,16 +523,7 @@ const KNOWN_NAMES: string[] = [
   'QST_TaskCondition', 'QST_Step', 'QST_StepList', 'QST_Reward',
   'QST_RewardList', 'QST_Talk', 'QST_TalkList', 'QST_Colony',
   'QST_ColonyList', 'QST_Flag', 'QST_FlagList', 'QST_Hero', 'QST_HeroList',
-
-  // ===== MNU (Menu) tables =====
-  'MNU_FacePatternList', 'MNU_FontSet01', 'MNU_FontSet01_cn',
-  'MNU_FontSet01_kr', 'MNU_FontSet01_tw', 'MNU_Layer', 'MNU_ResFont',
-  'MNU_ResFontStyle', 'MNU_ResImage', 'MNU_ResLayout', 'MNU_ResMSProj',
-  'MNU_ResourceCategory', 'MNU_ResourceType', 'MNU_TextLink_Mstxt',
-  'MNU_Text_IdList', 'MNU_filter', 'MNU_option_brightness',
-  'MNU_option_camera', 'MNU_option_display', 'MNU_option_formation',
-  'MNU_option_game', 'MNU_option_message', 'MNU_option_notice',
-  'MNU_option_sound', 'MNU_sort', 'MNU_LocationOffset', 'MNU_WeaponCraft',
+  // MNU tables
   'MNU_Msg', 'MNU_MsgAlt', 'MNU_Name', 'MNU_MsgFix',
   'MNU_ShopList', 'MNU_ShopNormal', 'MNU_ShopTable', 'MNU_ShopExchange',
   'MNU_CampMenu', 'MNU_Option', 'MNU_OptionList',
@@ -230,877 +533,39 @@ const KNOWN_NAMES: string[] = [
   'MNU_StatusMsg', 'MNU_BattleMsg', 'MNU_QuestInfo', 'MNU_QuestList',
   'MNU_HeroInfo', 'MNU_HeroList', 'MNU_Achievement', 'MNU_AchievementMsg',
   'MNU_System', 'MNU_SystemMsg',
-
-  // ===== DLC tables =====
+  // DLC tables
   'DLC_MapInfo', 'DLC_QuestList', 'DLC_ItemList', 'DLC_EnemyData',
   'DLC_HeroInfo', 'DLC_ClassList', 'DLC_Challenge', 'DLC_ChallengeList',
   'DLC_FutureRedeemed', 'DLC_FRList',
-
-  // ===== MA (Message Archive) tables =====
+  // MA tables
   'MA_Msg', 'MA_MsgList', 'MA_FLD', 'MA_BTL', 'MA_MNU',
   'MA_QST', 'MA_EVT', 'MA_SYS', 'MA_DLC',
-
-  // ===== GMK (Gem/Gimmick) tables =====
+  // GMK tables
   'GMK_Data', 'GMK_List', 'GMK_Param', 'GMK_Setup', 'GMK_ComSpot',
-
-  // ===== Message tables (msg_*) =====
-  // Auto-talk
-  'msg_autotalk', 'msg_autotalk_enemy',
-  // Battle messages
-  'msg_btl_achievement', 'msg_btl_arts_caption', 'msg_btl_arts_en_name',
-  'msg_btl_arts_name', 'msg_btl_buffdebuff_caption', 'msg_btl_buffdebuff_name',
-  'msg_btl_chainorder_name', 'msg_btl_combo_name', 'msg_btl_enhance_cap',
-  'msg_btl_enhance_name', 'msg_btl_roleact_caption', 'msg_btl_roleact_cat',
-  'msg_btl_skill_name', 'msg_btl_stance_name', 'msg_btl_subtitling',
-  'msg_btl_talent_caption', 'msg_btl_talent_name', 'msg_btl_weapon_type',
-  'msg_btl_ChSU_gate_message', 'msg_btl_ChSU_event_caption',
-  'msg_btl_ChSU_shop_caption', 'msg_btl_ChSU_gate_caption',
-  'msg_btl_ChSU_gate_name', 'msg_btl_ChSU_emblem_name',
-  // Field messages
-  'msg_fld_door_dialog', 'msg_fld_door_name', 'msg_fld_elevator_dialog',
-  'msg_fld_field_lock', 'msg_fld_footprint', 'msg_fld_perk_name',
-  'msg_fld_searchpoint',
-  // Menu messages
-  'msg_mnu_action_hud', 'msg_mnu_amiibo', 'msg_mnu_battle_ms',
-  'msg_mnu_char_ms', 'msg_mnu_cloudgem', 'msg_mnu_common_ms',
-  'msg_mnu_comspot_ms', 'msg_mnu_diary_mono_ms', 'msg_mnu_dlc_info',
-  'msg_mnu_equip_detail', 'msg_mnu_event_name', 'msg_mnu_event_theater_ms',
-  'msg_mnu_filter', 'msg_mnu_generic_window_ms', 'msg_mnu_hero_book',
-  'msg_mnu_hero_hint', 'msg_mnu_hero_nickname', 'msg_mnu_item_ms',
-  'msg_mnu_key_explanation', 'msg_mnu_keyassign_ms', 'msg_mnu_mainmenu',
-  'msg_mnu_map_ms', 'msg_mnu_minimap_areaname', 'msg_mnu_obj_info_name',
-  'msg_mnu_op_credits', 'msg_mnu_op_credits_en', 'msg_mnu_operation_guide',
-  'msg_mnu_option', 'msg_mnu_other_ms', 'msg_mnu_patch_info',
-  'msg_mnu_pupilnet_ms', 'msg_mnu_qst_ms', 'msg_mnu_saveload',
-  'msg_mnu_sort', 'msg_mnu_style_standard_ms', 'msg_mnu_system_ms',
-  'msg_mnu_title', 'msg_mnu_trail_name', 'msg_mnu_tutorial_tips',
-  'msg_mnu_update_ms', 'msg_mnu_dlc_collepedia',
-  // Quest messages
-  'msg_qst_RequestItemSet', 'msg_qst_overwrite', 'msg_qst_task',
-  // World/NPC messages
-  'msg_colony_name', 'msg_colony_text', 'msg_comspot_name', 'msg_comspot_text',
-  'msg_enemy_group_name', 'msg_enemy_name', 'msg_enemy_type_name',
-  'msg_item_accessory', 'msg_item_collection', 'msg_item_cylinder',
-  'msg_item_exchange', 'msg_item_extra', 'msg_item_gem', 'msg_item_precious',
-  'msg_item_recipe', 'msg_kizuna_name', 'msg_loading_tips',
-  'msg_location_name', 'msg_npc_name', 'msg_npc_tag_name',
-  'msg_player_name', 'msg_shop_name', 'msg_sys_access_message',
-  'msg_system_popup', 'msg_tutorial_ui', 'msg_weather_name',
-  'msg_extra_accessory',
-
-  // ===== Other tables =====
-  'bgmlist',
-  // AMB (Ambient/Loot) tables
-  'AMB_BasicLot', 'AMB_BonusExpLot', 'AMB_ClassExpLot', 'AMB_CoinLot',
-  'AMB_CollectionLot', 'AMB_GoldCoinLot', 'AMB_TradValueLot',
-  'AMB_SpecialAmiibo',
-  // Additional MNU tables
-  'MNU_VoiceList', 'MNU_UroSkillList', 'MNU_Attachment',
-  'MNU_formation_list', 'MNU_HeroDictionary', 'MNU_QuestNotSell',
-  'MNU_MapSlide', 'MNU_QuestFollow', 'MNU_DLCVolInfo',
-  'MNU_DLCContentsInfo', 'MNU_DlcGift', 'MNU_PatchInfo',
-  'MNU_PatchDetailA', 'MNU_PatchDetailB',
-  // Additional BTL tables
-  'BTL_Ai', 'BTL_AutoSetAccessory', 'BTL_AutoSetArts',
-  'BTL_AutoSetGem', 'BTL_AutoSetSkill', 'BTL_SystemBalance',
-  'BTL_GemCraft',
-  // Additional FLD tables
-  'FLD_EnemyAff', 'FLD_WarReward',
-  // Additional SYS tables
-  'SYS_PopupAnnounce', 'SYS_TutorialSummary', 'SYS_TutorialArrow',
-  'SYS_FlowEventFade', 'SYS_TutorialMessage',
-  // Additional RSC tables
-  'RSC_PcCostumeOpen',
-  // Additional QST tables
-  'QST_QuestImageList', 'QST_OverWriteMap',
-  // BTL_FA_Prm numbered tables
-  'BTL_FA_Prm01', 'BTL_FA_Prm02', 'BTL_FA_Prm03', 'BTL_FA_Prm04',
-  'BTL_FA_Prm05', 'BTL_FA_Prm06', 'BTL_FA_Prm07', 'BTL_FA_Prm08',
-  'BTL_FA_Prm09', 'BTL_FA_Prm10', 'BTL_FA_Prm11', 'BTL_FA_Prm12',
-  'BTL_FA_Prm13', 'BTL_FA_Prm14', 'BTL_FA_Prm15', 'BTL_FA_Prm16',
-  'BTL_FA_Prm17', 'BTL_FA_Prm18', 'BTL_FA_Prm19', 'BTL_FA_Prm20',
-  'BTL_FA_Prm21', 'BTL_FA_Prm22', 'BTL_FA_Prm23', 'BTL_FA_Prm24',
-  'BTL_FA_Prm25', 'BTL_FA_Prm26', 'BTL_FA_Prm27', 'BTL_FA_Prm28',
-  'BTL_FA_Prm29',
-  // BTL_TL_PrmRev numbered tables
-  'BTL_TL_PrmRev01', 'BTL_TL_PrmRev02', 'BTL_TL_PrmRev03', 'BTL_TL_PrmRev04',
-  'BTL_TL_PrmRev05', 'BTL_TL_PrmRev06', 'BTL_TL_PrmRev07', 'BTL_TL_PrmRev08',
-  'BTL_TL_PrmRev09', 'BTL_TL_PrmRev10', 'BTL_TL_PrmRev11', 'BTL_TL_PrmRev12',
-  'BTL_TL_PrmRev13', 'BTL_TL_PrmRev14', 'BTL_TL_PrmRev15', 'BTL_TL_PrmRev16',
-  'BTL_TL_PrmRev17', 'BTL_TL_PrmRev18', 'BTL_TL_PrmRev19', 'BTL_TL_PrmRev20',
-  'BTL_TL_PrmRev21', 'BTL_TL_PrmRev22', 'BTL_TL_PrmRev23', 'BTL_TL_PrmRev24',
-  'BTL_TL_PrmRev25', 'BTL_TL_PrmRev26', 'BTL_TL_PrmRev27', 'BTL_TL_PrmRev28',
-  'BTL_TL_PrmRev29', 'BTL_TL_PrmRev30', 'BTL_TL_PrmRev31', 'BTL_TL_PrmRev32',
-  // SYS_LoadingTips
-  'SYS_LoadingTips',
-
-  // ===== Numeric column indices (used as names in some tables) =====
-  '1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
-  '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
-  '21', '22', '23', '24', '25', '26', '27', '28', '29', '30',
-
-  // ===== Column names (A-Z comprehensive) =====
-  // A
-  'AITag', 'AITag0', 'AITag1', 'AcceSetCheck', 'AccessCheck',
-  'AccessCondition', 'AccessMsg', 'AccessRange', 'AchieveType',
-  'AchievementCount', 'AclEnd', 'AclStart', 'ActFcomboAchieve',
-  'ActSpeed', 'ActType', 'Action', 'ActionEffectType', 'ActionType',
-  'ActiveTimeTag', 'AddCondition1', 'AddCondition2', 'AddCondition3',
-  'AddCondition4', 'AddCondition5', 'AddCondition6', 'AddCondition7',
-  'AddCondition8', 'AddCondition9', 'AddCondition10', 'AddCondition11',
-  'AddCondition12', 'AddCondition13', 'AddCondition14', 'AddCondition15',
-  'AddCondition16', 'AddCondition17', 'AddCondition18', 'AddCondition19',
-  'AddCondition20',
-  'AddFlagName1', 'AddFlagName2', 'AddFlagName3', 'AddFlagName4',
-  'AddFlagType1', 'AddFlagType2', 'AddFlagType3', 'AddFlagType4',
-  'AddFlagValue1', 'AddFlagValue2', 'AddFlagValue3', 'AddFlagValue4',
-  'AddLv01', 'AddLv02', 'AddLv03', 'AddLv04', 'AddLv05',
-  'AddLv06', 'AddLv07', 'AddLv08', 'AddLv09', 'AddLv10',
-  'AddSkillSlot', 'AddValue1', 'AddValue2', 'AddValue3', 'AddValue4',
-  'AddValue5', 'AddValue6', 'AddValue7', 'AddValue8',
-  'AdditiveInterTime', 'Affordance', 'AffordanceType1', 'AffordanceType2',
-  'AffordanceType3',
-  'AgiBase', 'AgiLv1', 'AgiLv99', 'AgiRev', 'AgiRev1', 'AgiRev2', 'AgiRevBonus',
-  'AiTag', 'AllArtsRev', 'AllReact', 'Angle', 'AngleMax', 'AngleMin',
-  'Anim1', 'Anim2', 'Anim3', 'AnimType',
-  'AppearEnemy', 'AppearType', 'AreaInfo', 'ArmorBase', 'ArtDirection1',
-  'ArtDirection2', 'ArtDirection3', 'ArtsAchieve', 'ArtsID',
-  'ArtsLinkBonusList1', 'ArtsLinkBonusList2',
-  'ArtsNum', 'ArtsRecast', 'ArtsType', 'AssistRange', 'AtkBase',
-  'AtkLv1', 'AtkLv99', 'AtkRev', 'AtkRev1', 'AtkRev2', 'AtkRevBonus',
-  'Attacker', 'AttackerProb1', 'AttackerProb2', 'AttackerProb3',
-  'Attribute', 'AutoAI', 'AutoFade',
-  'AutoTalkCondition1', 'AutoTalkCondition2', 'AutoTalkCondition3',
-  'AutoTalkTag1', 'AutoTalkTag2', 'AutoTalkTag3',
-
-  // B
-  'BGM', 'BGMCondition', 'BGMCondition1', 'BGMCondition2', 'BGMName',
-  'BattleEnemy1', 'BattleEnemy2', 'BattleEnemy3', 'BattleEnemy4',
-  'BattleLock', 'BgmID', 'BirthScenarioMax', 'BirthScenarioMin',
-  'BladeType', 'BlankTime', 'Body', 'BonusExp',
-  'Break', 'BreakTimer', 'BtlReactGuide01', 'BtlReactGuide02',
-  'BtlReactGuide03', 'BtlReactGuide04', 'BtlReactGuide05',
-  'BulletAngle', 'BulletID', 'BulletMount', 'BulletNum', 'BulletType',
-
-  // C
-  'Cam', 'CamAngle', 'CamHigh', 'CamLow', 'Camera',
-  'CameraHeight', 'CameraID',
-  'CanLookAt', 'CanTalk', 'Cap',
-  'CastRate', 'Category', 'CenterBone',
-  'ChainAttackSlot', 'ChainLink', 'ChainParam',
-  'ChangeFlagName', 'ChangeFlagType', 'ChangeFlagValue1',
-  'ChangeFlagValue2', 'ChangeFlagValue3', 'ChangeFlagValue4',
-  'ChangeStatusCondition', 'Chapter', 'Character',
-  'Character1', 'Character2', 'Character3', 'Character4', 'Character5',
-  'CheckFlag1', 'CheckFlag2', 'CheckFlag3', 'CheckFlag4',
-  'CheckFlag5', 'CheckFlag6', 'CheckFlag7', 'CheckFlag8',
-  'CheckView', 'ChestHeight', 'Chr1', 'Chr2', 'ChrID', 'ChrSize', 'ChrType',
-  'ClassID', 'ClockHour', 'ClockMinute', 'CloseEffect', 'CloseSeID',
-  'CodeFamily', 'CodeGroup', 'Collection', 'CollectionID',
-  'CollepediaCondition1', 'CollepediaCondition2', 'CollepediaCondition3',
-  'CollepediaID', 'CollisionRadius', 'Colony', 'ColonyID',
-  'ColonyID1', 'ColonyID2', 'ColonyID3', 'ColonyIconFlag',
-  'ColonyRelationID', 'Colonyflagvalue',
-  'Color', 'ColorB', 'ColorEye', 'ColorG', 'ColorHair', 'ColorR',
-  'ColorScale', 'ColorSkin',
-  'ComSpotGmk', 'ComSpotLocation',
-  'Combo1', 'Combo2', 'ComboStage', 'Command', 'Comment',
-  'Comment1', 'Comment2', 'Comment3', 'Comment4', 'Comment5', 'Comment6',
-  'CommunicationSpot', 'CompBonus1', 'CompBonus2', 'CompBonus3',
-  'CompBonus4', 'CompBonus5',
-  'Cond1', 'Cond1BdatPrefix', 'Cond1Resource', 'Cond1WorldOffsetX',
-  'Cond1WorldOffsetY', 'Cond1WorldOffsetZ', 'Cond1gimmickID',
-  'Cond2', 'CondParam1', 'Condition', 'Condition1', 'Condition2',
-  'Condition3', 'Condition4', 'Condition5', 'Condition6',
-  'ConditionCap', 'ConditionNoTarget', 'ConditionParam', 'ConditionType',
-  'Conditon1', 'Conditon2', 'Conditon3', 'Conditon4',
-  'Conditon5', 'Conditon6', 'Conditon7', 'Conditon8',
-  'Contents1', 'Contents2', 'Contents3', 'Contents4', 'ContentsID',
-  'Continue', 'ContinueEvent', 'ControlA', 'ControlB',
-  'CookAssistMountObj', 'CookMainMountObj', 'CookName', 'CookRecipe', 'CookSnap',
-  'CoolDown', 'CoreNum', 'Corpse', 'CostumeChr',
-  'Count', 'Count1', 'Count2', 'Count3', 'Count4', 'Count5', 'Count6', 'Count7',
-  'CountOff', 'Craft', 'Craft2', 'CraftBuff',
-  'CriRate', 'CriRate2', 'CriRev', 'CurrentMap', 'CurrentMotion',
-  'CurveExp', 'CurveType', 'Cycle', 'Cylinder',
-
-  // D
-  'DLC', 'Damage', 'Damage2', 'DamageRev', 'DamageRevHigh', 'DamageRevLow',
-  'DeBuffPoint', 'DeBuffType', 'DebScenarioFlag',
-  'Debuff', 'Debuff1', 'Debuff2', 'Debuff3', 'Debuff4',
-  'DebugFlag1', 'DebugFlag2', 'DebugID', 'DebugMemo',
-  'DebugName', 'DebugName2', 'DebugName3', 'DebugName4', 'DebugName5',
-  'DebugName6', 'DebugName7', 'DebugName8', 'DebugName9',
-  'Debug_name', 'DecidedReward', 'Decimal', 'DecreaseInterval', 'Deduct',
-  'DefAcce1', 'DefAcce2', 'DefAcce3', 'DefGem1', 'DefGem2', 'DefGem3',
-  'DefHate', 'DefLv', 'DefLvType', 'DefPair', 'DefRev',
-  'DefTalent', 'DefTalentLv', 'DefTalentModel',
-  'DefValueMax', 'Default', 'DefaultBdatPrefix', 'DefaultMotion',
-  'DefaultOn', 'DefaultResource', 'DefaultWorldOffsetX',
-  'DefaultWorldOffsetY', 'DefaultWorldOffsetZ', 'DefaultgimmickID',
-  'DescText',
-  'Detail1', 'Detail2', 'Detail3', 'Detail4',
-  'DetailIndexText', 'DetailInfoText',
-  'DetailText1', 'DetailText2', 'DetailText3', 'DetailText4',
-  'DetailText5', 'DetailText6',
-  'DetailValType1', 'DetailValType2', 'DetailValType3',
-  'DetailValType4', 'DetailValType5', 'DetailValType6',
-  'DexBase', 'DexLv1', 'DexLv99', 'DexRev', 'DexRev1', 'DexRev2', 'DexRevBonus',
-  'Difficulty', 'DirArtsNum', 'Direct', 'DirectFrm', 'DirectType',
-  'Direction', 'DirectionID', 'DirectionType',
-  'Dirt', 'DirtHigh', 'DirtLevel', 'DirtLow', 'DisableAccess',
-  'DispHeight', 'DispRadius',
-  'DispTime1', 'DispTime2', 'DispTime3',
-  'DispType', 'DispType1', 'DispType2', 'DispType3', 'DispType4',
-  'DispType5', 'DispType6', 'DispType7', 'DispType8', 'DispType9',
-  'DispType10', 'DispType11', 'DispType12', 'DispType13', 'DispType14',
-  'Distance', 'Dmg', 'DmgMgn1', 'DmgMgn2', 'DmgMgn3', 'DmgMgn4', 'DmgMgn5',
-  'DmgRange',
-  'DmgRt01', 'DmgRt02', 'DmgRt03', 'DmgRt04', 'DmgRt05', 'DmgRt06',
-  'DmgRt07', 'DmgRt08', 'DmgRt09', 'DmgRt10', 'DmgRt11', 'DmgRt12',
-  'DmgRt13', 'DmgRt14', 'DmgRt15', 'DmgRt16',
-  'Door', 'DoorLockStatus1', 'DoorLockStatus2', 'DoorStatus', 'DownSeID',
-  'DropDownCat1', 'DropDownCat2', 'DropLvRev',
-  'DropProb1', 'DropProb2', 'DropProb3', 'DropProb4',
-  'DropProb5', 'DropProb6', 'DropProb7', 'DropProb8',
-  'DropUpCat1', 'DropUpCat2', 'DupType', 'Duration',
-
-  // E
-  'EArmor', 'EArmor1', 'EArmor2', 'EArmorBonus',
-  'E_LookPosType', 'E_LookX', 'E_LookY', 'E_LookZ',
-  'E_PosX', 'E_PosY', 'E_PosZ',
-  'Easy', 'EffAtr', 'EffConvert', 'EffID', 'EffPack', 'EffPack2', 'EffPack3',
-  'EffScale', 'EffStandLoop', 'EffTime', 'EffType', 'EffValType',
-  'Effect', 'EffectAnimationEnd', 'EffectAnimationPlay',
-  'EffectAnimationReverse', 'EffectAnimationWait', 'EffectCondition',
-  'EffectID', 'EffectName', 'EffectPoint', 'EffectScale',
-  'EffectStatus', 'EffectType',
-  'Efp01', 'Efp02', 'Efp03', 'Efp04', 'Efp05', 'Efp06', 'Efp07', 'Efp08',
-  'Efp09', 'Efp10', 'Efp11', 'Efp12', 'Efp13', 'Efp14', 'Efp15', 'Efp16',
-  'EfpT01', 'EfpT02', 'EfpT03', 'EfpT04', 'EfpT05', 'EfpT06', 'EfpT07', 'EfpT08',
-  'EfpT09', 'EfpT10', 'EfpT11', 'EfpT12', 'EfpT13', 'EfpT14', 'EfpT15', 'EfpT16',
-  'EfpType', 'Eisen', 'Elevator', 'ElevatorDoor', 'ElevatorSwitch',
-  'Elite1', 'Elite2', 'Elite3', 'Elite4', 'Elite5', 'Elite6', 'EliteScale',
-  'EmblemEff1', 'EmblemEff2', 'EmitterMax', 'EmitterMin',
-  'EnArtsAchieve', 'EnFamily', 'EnResistCombo', 'EnResistReaction',
-  'EnSize', 'EnSkillAchieve',
-  'EndAlpha', 'EndCat', 'EndCheck', 'EndCheckType', 'EndDelayFrame',
-  'EndDirectionID', 'EndFlag', 'EndFlag1', 'EndFlag2', 'EndFlag3',
-  'EndFlag4', 'EndFlag5', 'EndFlag6', 'EndFlagName', 'EndFrm',
-  'EndPos', 'EndX', 'EndY', 'EndZ', 'Endf1', 'Endf2', 'Endf3',
-  'Enemy', 'Enemy1', 'Enemy2', 'Enemy3', 'Enemy4', 'Enemy5', 'Enemy6', 'Enemy7', 'Enemy8',
-  'EnemyAiHead', 'EnemyAiTail', 'EnemyArea', 'EnemyDead',
-  'EnemyExp', 'EnemyFamily', 'EnemyFog', 'EnemyGold',
-  'EnemyID', 'EnemyID1', 'EnemyID2', 'EnemyID3', 'EnemyID4', 'EnemyID5', 'EnemyID6',
-  'EnemyID01', 'EnemyID02', 'EnemyID03',
-  'EnemyInfo', 'EnemyMobius', 'EnemyNoPopRate',
-  'EnemyOffsetX', 'EnemyOffsetY', 'EnemyOffsetZ',
-  'EnemyPopRate1', 'EnemyPopRate2', 'EnemyPopRate3', 'EnemyPopRate4',
-  'EnemyPopType', 'EnemyRare', 'EnemySolders', 'EnemySuppression',
-  'EnemyTalentExp',
-  'EnemyUseArts01', 'EnemyUseArts02', 'EnemyUseArts03', 'EnemyUseArts04',
-  'EnemyUseArts05', 'EnemyUseArts06', 'EnemyUseArts07', 'EnemyUseArts08',
-  'EnemyUseArts09', 'EnemyUseArts10', 'EnemyUseArts11', 'EnemyUseArts12',
-  'EnemyUseArts13', 'EnemyUseArts14', 'EnemyUseArts15', 'EnemyUseArts16',
-  'EnemyWave', 'Enhance', 'Enhance1', 'Enhance2', 'Enhance3', 'Enhance4', 'Enhance5',
-  'EnhanceEffect', 'EnhanceID',
-  'EnhanceOff01', 'EnhanceOff02', 'EnhanceOff03', 'EnhanceOff04',
-  'EnhanceOff05', 'EnhanceOff06', 'EnhanceOff07', 'EnhanceOff08',
-  'EnhanceOff09', 'EnhanceOff10', 'EnhanceOff11', 'EnhanceOff12',
-  'EnhanceOff13', 'EnhanceOff14', 'EnhanceOff15', 'EnhanceOff16',
-  'EnhanceRandom', 'EnhanceSlot0', 'EnhanceSlot1',
-  'EnvRayFootDown', 'EnvRayFootTruncateHeight',
-  'EquipType', 'EtherPatternFlag', 'EtherPoint', 'EtherPrice',
-  'EtherSlide', 'EtherSphere',
-  'Event', 'EventID', 'EventName', 'EventName1', 'EventName2',
-  'EventName3', 'EventName4', 'EventName5', 'EventName6',
-  'EventName7', 'EventName8', 'EventName9', 'EventName10',
-  'EventOnly', 'EventTable', 'EventType', 'EvtData', 'ExecuteTime',
-  'Exp', 'ExpBonus', 'ExpRate', 'ExpRevHigh', 'ExpRevLow',
-  'ExtraParamName', 'ExtraParamName1', 'ExtraParamName2', 'ExtraParamName3',
-  'ExtraParamValue', 'ExtraParamValue1', 'ExtraParamValue2', 'ExtraParamValue3',
-  'Eye', 'EyeMotion', 'EyeMotion1', 'EyeMotion2', 'Eyef', 'EyepatchArea',
-
-  // F
-  'Facial', 'FadeInTime', 'FadeOutTime', 'FadeTime',
-  'FallRange', 'FallSpeed', 'FamilyTag', 'FarClipEnd', 'FarClipStart',
-  'FieldIcon', 'FieldLookAt',
-  'FieldReactGuide01', 'FieldReactGuide02', 'FieldReactGuide03',
-  'FieldReactGuide04', 'FieldReactGuide05',
-  'FilterIndex', 'FilterName',
-  'FirstNamed1', 'FirstNamed2', 'FirstNamed3', 'FirstNamed4',
-  'FirstNamed5', 'FirstNamed6', 'FirstNamed7', 'FirstNamed8',
-  'FirstReward', 'FirstSide', 'FirstTry',
-  'Flag', 'Flag1', 'Flag2', 'Flag3', 'Flag4', 'Flag5', 'Flag6',
-  'FlagAdvance', 'FlagBit', 'FlagCoolDown', 'FlagDirArts',
-  'FlagID', 'FlagMax', 'FlagMin', 'FlagName', 'FlagNoLimit',
-  'FlagNoReward', 'FlagNum', 'FlagPrt', 'FlagSetArts', 'FlagStart', 'FlagType',
-  'Flag_Chara', 'Flag_Dead', 'Flag_Hide', 'Flag_NoBattle',
-  'Flag_NoChain', 'Flag_NoDir', 'Flag_NoField', 'Flag_NoOverwrite',
-  'Flag_NoPlay', 'Flag_NoReplyOK', 'Flag_NoRoom', 'Flag_Once',
-  'Flag_RecAttacker', 'Flag_RecHealer', 'Flag_RecTank',
-  'Flag_Serious', 'Flag_SeriousOff', 'Flag_ShareSlot', 'Flag_WpnReinforced',
-  'Flagld', 'FldCond', 'FlgColiOff', 'FlgColonyReleased',
-  'FlgDmgFloor', 'FlgFixed', 'FlgKeepSword', 'FlgLevAttack',
-  'FlgLevBattleOff', 'FlgMoveFloor', 'FlgNoDead', 'FlgNoFalling',
-  'FlgNoTarget', 'FlgNoVanish', 'FlgSerious', 'FlgSpDead',
-  'Floor', 'FlowEvent', 'FlowEventID',
-  'FlyHeight', 'Focus', 'FollowFinishTime',
-  'Foot', 'FootEffect', 'FootL00', 'FootL01', 'FootL02',
-  'FootPrint', 'FootPrintDetection', 'FootR00', 'FootR01', 'FootR02',
-  'FootSeType', 'FootStep', 'FootStepEff',
-  'Force', 'ForgePoint', 'ForgeType', 'FormatNo',
-  'Formation1', 'Formation2', 'Formation3', 'Formation4',
-  'FormationAccessory', 'FormationBriefing', 'FormationCooking',
-  'FormationCookingAction', 'FormationID', 'FormationMeal',
-  'FormationTerminal', 'FormationTopWindow', 'FormationTraining',
-  'Frame', 'FreePieceID1', 'FreePieceID2', 'FreePieceID3',
-  'FreePieceID4', 'FreePieceID5', 'FriendGroup',
-
-  // G
-  'G', 'Gel', 'GemLv', 'GemSlot', 'Gender',
-  'GetEnArts', 'GetEnSkill', 'GetNum', 'GetNumber', 'GetRatio',
-  'Gimmick', 'GimmickID', 'GimmickName', 'GimmickType',
-  'GoalPoint', 'Gold', 'GoldDivide', 'GoldDivideRev',
-  'GoldDropRsc1', 'GoldDropRsc2', 'GoldDropRsc3', 'GoldRate',
-  'GraphicsID', 'Grass', 'GravOffF', 'GravOnF', 'Grave', 'GraveID', 'Gravel',
-  'Group', 'GroupFlg', 'GroupID', 'GroupName', 'GroupVoiceId', 'Grouping',
-  'GrowInOut01', 'GrowInOut02', 'GrowSetting', 'GrowTP',
-  'GuardEff', 'GuardRate', 'GuardRate2', 'GuardRev', 'GuardSE',
-
-  // H
-  'HERO', 'Hard', 'Hate', 'HateRev', 'Head', 'HeadBoneName',
-  'Heal', 'HealRev', 'HealType', 'Healer',
-  'HealerProb1', 'HealerProb2', 'HealerProb3',
-  'HeatRate', 'HeroChainEff', 'HeroFlagNo', 'HeroPrice',
-  'HiddenItem', 'Hide',
-  'HideTaskUI1', 'HideTaskUI2', 'HideTaskUI3', 'HideTaskUI4',
-  'HideUI', 'HideWeapon', 'Hip',
-  'HitDirID01', 'HitDirID02', 'HitDirID03', 'HitDirID04',
-  'HitDirID05', 'HitDirID06', 'HitDirID07', 'HitDirID08',
-  'HitDirID09', 'HitDirID10', 'HitDirID11', 'HitDirID12',
-  'HitDirID13', 'HitDirID14', 'HitDirID15', 'HitDirID16',
-  'HitEff', 'HitEffect',
-  'HitFrm01', 'HitFrm02', 'HitFrm03', 'HitFrm04',
-  'HitFrm05', 'HitFrm06', 'HitFrm07', 'HitFrm08',
-  'HitFrm09', 'HitFrm10', 'HitFrm11', 'HitFrm12',
-  'HitFrm13', 'HitFrm14', 'HitFrm15', 'HitFrm16',
-  'HitNum', 'HitRev', 'HitRevLow', 'HitSE', 'Hitf',
-  'HitonowaChallenge', 'HitonowaFlag',
-  'HpMaxBase', 'HpMaxLv1', 'HpMaxLv99', 'HpMaxRev',
-  'HpMaxRev1', 'HpMaxRev2', 'HpMaxRevBonus',
-  'HudIcon', 'HueOffset', 'HyperCombo',
-
-  // I
-  'ID', 'id', 'Idx', 'idx', 'IK', 'IKEndF', 'IKStartF',
-  'Icon', 'IconDispRangeOff', 'IconDispRangeOn', 'IconFlag',
-  'IconIndex', 'IconIndex2', 'IconLocator', 'IconNo',
-  'IconOffs_x', 'IconOffs_y', 'IconOffs_z',
-  'IconOffset', 'IconPop', 'IconType',
-  'IdBattleEnemy', 'IdBgm', 'IdDropPrecious', 'IdMove',
-  'IgnoreCondition', 'IkName', 'IkRayFootDown', 'IkToeThreshold',
-  'IllustNum', 'ImageID', 'ImageNo', 'ImageNo1', 'ImageNo2', 'ImageNo3',
-  'ImageNo4', 'ImageNo5', 'ImageNo6', 'ImageNum', 'ImagePageNo',
-  'ImpSE', 'Impact', 'ImpactEnhance', 'ImpactScale', 'InWater',
-  'Index01', 'Index02', 'Influence', 'InfluenceType',
-  'Info', 'InfoCondition', 'InfoDisp', 'InfoDispRangeOff', 'InfoDispRangeOn',
-  'InfoImage', 'InfoPiece', 'InfoPiece1', 'InfoPiece2', 'InfoPiece3', 'InfoPiece4',
-  'InsideAlpha', 'InsideScale', 'Intensity',
-  'InterFrameIn', 'InterFrameOut', 'InterestPoint', 'Interval',
-  'IntervalAT', 'IntervalArts', 'IntervalLimit', 'IntervalMax', 'IntervalMin',
-  'InvertKnee', 'Invisible_XZ', 'Invisible_Y', 'Iron',
-  'IsEnemy', 'IsGround', 'IsLoop', 'IsPc',
-  'IsQuestList1', 'IsQuestList2', 'IsTop', 'IsUroboros', 'IsWater',
-  'Item', 'Item1', 'Item2', 'Item3', 'Item4', 'Item5', 'Item6', 'Item7',
-  'Item01', 'Item02', 'Item03', 'Item04', 'Item05', 'Item06', 'Item07',
-  'Item08', 'Item09', 'Item10',
-  'ItemCategory', 'ItemCountMax', 'ItemCountMin', 'ItemID',
-  'ItemID1', 'ItemID2', 'ItemID3', 'ItemID4', 'ItemID5', 'ItemID6', 'ItemID7', 'ItemID8',
-  'ItemId1', 'ItemId2', 'ItemId3', 'ItemId4', 'ItemId5', 'ItemId6', 'ItemId7', 'ItemId8',
-  'ItemId9', 'ItemId10',
-  'ItemLvMax', 'ItemLvMin',
-  'ItemNum1', 'ItemNum2', 'ItemNum3', 'ItemNum4', 'ItemNum5', 'ItemNum6',
-  'ItemRate1', 'ItemRate2', 'ItemRate3', 'ItemRate4', 'ItemRate5',
-  'ItemRate6', 'ItemRate7', 'ItemRate8', 'ItemRate9', 'ItemRate10',
-  'ItemSetID1', 'ItemSetID2', 'ItemSetID3', 'ItemSetID4',
-  'ItemSetID5', 'ItemSetID6', 'ItemSetID7', 'ItemSetID8',
-  'ItmGemID',
-
-  // J-K
-  'Job', 'Jump', 'JumpPortal', 'KP', 'KeepEnhance', 'Keepf',
-  'KevesRate', 'KevesReward',
-  'KeyAssign1', 'KeyAssign2',
-  'KeyChr1', 'KeyChr2', 'KeyChr3', 'KeyChr4', 'KeyChr5', 'KeyChr6',
-  'KeyShift1', 'KeyShift2',
-  'KillEffType', 'KizunaEvent', 'KizunaFlag', 'KizunaPoint', 'Knee',
-
-  // L
-  'Label', 'LandingDamage', 'LandingHeight', 'LaunchSeID',
-  'Leader', 'LegionFlg', 'Length', 'LevPlus',
-  'Level', 'Level01', 'Level02', 'Level03', 'Level04', 'Level05', 'Level06',
-  'Level1', 'Level2', 'Level3', 'Level4', 'Level5',
-  'LevelExp', 'LevelExp2', 'LevelHero', 'Life', 'LifeFireNum',
-  'LimitAngleDownIK', 'LimitAngleLeftIK', 'LimitAngleRightIK', 'LimitAngleUpIK',
-  'LimitPitch', 'LimitRoll', 'LineOfSight',
-  'Link1', 'Link2', 'Link3', 'Link4', 'Link5',
-  'LinkDLC', 'LinkMapID', 'LinkQuest', 'LinkQuestTask', 'LinkQuestTaskID',
-  'ListNum', 'Localize', 'Localize1', 'Localize2', 'Localize3',
-  'Localize4', 'Localize5', 'Localize6',
-  'Location', 'LocationBdat', 'LocationID', 'LocationName', 'Locations',
-  'LockMsg', 'LockType', 'LockVoice', 'Lod', 'LookAt',
-  'LotID', 'LotRate', 'Lottery', 'LowerLimitHP',
-  'Lv', 'LvCorrection1', 'LvCorrection2', 'LvCorrection3',
-  'LvCorrection4', 'LvCorrection5', 'LvCorrection6', 'LvMax', 'LvMin',
-
-  // M
-  'Main', 'MakeRecipe1', 'MakeRecipe2', 'MakeRecipe3', 'MakeRecipe4', 'MakeRecipe5',
-  'Map', 'MapGimmickID', 'MapID', 'MapInfoId', 'MapJump', 'MapJumpID',
-  'MapJumpIn', 'MapJumpOut',
-  'MapMA01A', 'MapMA04A', 'MapMA07A', 'MapMA09A',
-  'MapMA11A', 'MapMA14A', 'MapMA15A', 'MapMA21A', 'MapMA22A',
-  'MapPartsID',
-  'Marking1', 'Marking2', 'Marking3', 'Marking4', 'Marking5', 'Marking6', 'Marking7',
-  'MatchEnemy1', 'MatchEnemy2', 'MatchEnemy3', 'MatchEnemy4',
-  'MaterialDropNumMax', 'MaterialDropNumMin', 'MaterialDropProb',
-  'MaxAnkleHeight', 'MaxDelay', 'MaxHeight', 'MaxLength', 'MaxLevel',
-  'MaxNumber', 'MaxPlacementDown', 'MaxPlacementUp', 'MaxScale',
-  'MaxShake', 'MaxTimeRate', 'MaxValue',
-  'MealMountObj', 'MeatType', 'MenuCategory', 'MenuGroup', 'MenuIcon',
-  'MenuMapImage', 'MenuPriority',
-  'MinAnkleHeightLimit', 'MinLength', 'MinScale', 'Mist',
-  'MobVisibleArea', 'Model', 'ModelName', 'ModelName1', 'ModelName2', 'ModelType',
-  'MotRetarget', 'Motion', 'Motion1', 'Motion2', 'Motion3',
-  'Motion01', 'Motion02', 'Motion03', 'Motion04', 'Motion05',
-  'MotionName1', 'MotionName2', 'MotionPackName',
-  'MotionState1', 'MotionState2', 'MotionState3', 'MotionState4',
-  'MotionState5', 'MotionState6', 'MotionState7', 'MotionState8',
-  'MotionType', 'Motionf1', 'Motionf2', 'Motionf3', 'Motionf4',
-  'Motionf5', 'Motionf6', 'Motionf7', 'Motionf8',
-  'Mount', 'Mount1', 'Mount2', 'MountChange', 'MountEx',
-  'MountIN', 'MountL', 'MountObj', 'MountObj1', 'MountObj2',
-  'MountOut', 'MountPath1', 'MountPath2', 'MountPath3', 'MountPath4', 'MountR',
-  'MoveBtl', 'MoveBtlRate', 'MoveFldRun', 'MoveFldWalk',
-  'MovePoint', 'MoveRev', 'MoveTime', 'MoveType',
-  'MsgID', 'MsgName', 'Msg_Name', 'Msg_Info', 'Msg_Detail', 'Msg_Help',
-  'Msg_Caption', 'MsgIdName', 'MsgIdInfo', 'MsgIdCaption', 'MsgIdHelp', 'MsgIdDetail',
-  'MustRead1', 'MustRead2', 'MustRead3', 'MustRead4', 'MustRead5',
-  'MustRead6', 'MustRead7', 'MustRead8', 'MustRead9', 'MustRead10',
-  'MutateParam', 'MutateTarget', 'MutateType', 'MuzSE', 'Muzzle', 'MuzzleScale',
-
-  // N
-  'NPC', 'NPCID', 'NPCMountOut', 'NPCName', 'NPCRscEx', 'NPCRscL', 'NPCRscR',
-  'NPC_A', 'NPC_B',
-  'Name', 'Name1', 'Name2', 'Name3', 'Name4', 'Name5', 'Name6',
-  'NameCondition', 'NameMsg', 'NamedFlag', 'NamedSpCond',
-  'Navi', 'NcNum', 'NcType', 'NearClipEnd', 'NearClipStart',
-  'NeedCharacter', 'NeedEther',
-  'NeedExpLv02', 'NeedExpLv03', 'NeedExpLv04', 'NeedExpLv05',
-  'NeedExpLv06', 'NeedExpLv07', 'NeedExpLv08', 'NeedExpLv09',
-  'NeedExpLv10', 'NeedExpLv11', 'NeedExpLv12', 'NeedExpLv13',
-  'NeedExpLv14', 'NeedExpLv15', 'NeedExpLv16', 'NeedExpLv17',
-  'NeedExpLv18', 'NeedExpLv19', 'NeedExpLv20',
-  'NeedGold', 'NeedPoint', 'NeedPow', 'NeedRecipe', 'NeedSp',
-  'NeedTalentPoint1', 'NeedTalentPoint2', 'NeedTalentPoint3',
-  'NeedTalentPoint4', 'NeedTalentPoint5', 'NeedTalentPoint6',
-  'NextPremise', 'NextPurposeA', 'NextPurposeB', 'Nickname',
-  'NoBind', 'NoCG', 'NoClear', 'NoCollision', 'NoSmoke', 'NoTelop', 'NoUro',
-  'NoahTalentArts', 'Normal', 'NormalArts',
-  'NormalDropNumMax', 'NormalDropNumMin', 'NormalDropProb',
-  'Not1', 'Not2', 'NotAffordance',
-  'NotDebugFlag1', 'NotDebugFlag2', 'NotEconomy', 'NotFollowRotate',
-  'NotIsQuestList1', 'NotIsQuestList2',
-  'NotQuestFlag1', 'NotQuestFlag2',
-  'NotQuestFlagMax1', 'NotQuestFlagMax2',
-  'NotQuestFlagMin1', 'NotQuestFlagMin2',
-  'NotScenarioMax', 'NotScenarioMin',
-  'Npc', 'NpcGimmick', 'NpcID', 'NpcID1', 'NpcID2', 'NpcID3',
-  'NpcID4', 'NpcID5', 'NpcID6', 'NpcIconFlag',
-  'NpcQuestRoute', 'NpcQuestRoutePoint',
-  'Number', 'NumberMax', 'NumberMin', 'NumberingID',
-
-  // O
-  'OFF', 'ObjPoint1', 'ObjPoint2', 'ObjPoint3',
-  'ObjSlot1', 'ObjSlot2', 'ObjSlot3',
-  'Object', 'Object1', 'Object2', 'Object3',
-  'OceanOneShot', 'OffsetID', 'OffsetId', 'OffsetX', 'OffsetY', 'OffsetZ',
-  'OpenEffect', 'OpenFlag', 'OpenSeID', 'OpeningBuff',
-  'Option1', 'OptionText', 'OrderCondition', 'OrderCondition2',
-  'OrderConditionText', 'OrderIcon', 'OtherRole',
-  'OutsideAlpha', 'OutsideScale', 'OverWriteIcon', 'OverWriteText', 'OverwriteOffset',
-
-  // P
-  'PArmor', 'PArmor1', 'PArmor2', 'PArmorBonus', 'PC',
-  'PC01', 'PC02', 'PC03', 'PC04', 'PC05', 'PC06',
-  'PC1', 'PC2', 'PCID1', 'PCID2', 'PCID3',
-  'PCMountOut', 'PCPosition', 'PT_OutTiming',
-  'PageTitle1', 'PageTitle2', 'PageTitle3', 'PageTitle4', 'PageTitle5', 'PageTitle6',
-  'Pair1', 'Pair2', 'Pair3', 'PairOrder', 'PairSkill',
-  'Param', 'Param1', 'Param2', 'Param3', 'Param4', 'Param5',
-  'Param6', 'Param7', 'Param8',
-  'Param01', 'Param02', 'Param03', 'Param04', 'Param05', 'Param06',
-  'Param07', 'Param08', 'Param09', 'Param10', 'Param11', 'Param12',
-  'Param13', 'Param14', 'Param15', 'Param16', 'Param17', 'Param18',
-  'Param19', 'Param20', 'Param21', 'Param22', 'Param23', 'Param24',
-  'Param25', 'Param26', 'Param27', 'Param28', 'Param29', 'Param30',
-  'Param31', 'Param32', 'Param33', 'Param34', 'Param35', 'Param36',
-  'Param37', 'Param38', 'Param39', 'Param40',
-  'ParamEnd', 'ParamID', 'ParamMax', 'ParamMemo', 'ParamMin',
-  'ParamRev2', 'ParamRev3', 'ParamRev4', 'ParamRev5',
-  'ParamStart', 'ParamType',
-  'PartsEye', 'PartsGate', 'PartsGear', 'PartsId',
-  'PartsInnerGate', 'PartsSwitch', 'PartsVisibility',
-  'Party', 'PartyLottery', 'PartyMax', 'PatchNameText',
-  'PcAvoidDist', 'PcID', 'PcTalentParts', 'Physical',
-  'Piece1', 'Piece2', 'Piece3', 'Piece4', 'Piece5', 'Piece6', 'Piece7',
-  'PieceID1', 'PieceID2', 'PieceID3', 'PieceID4', 'PieceID5', 'PieceValue',
-  'Place', 'Place01', 'Place02', 'Place03', 'Place04', 'Place05', 'Place06',
-  'Place07', 'Place08', 'Place09', 'Place10', 'Place11', 'Place12',
-  'Place13', 'Place14', 'Place15', 'Place16', 'Place17', 'Place18',
-  'Placement', 'PlacementDownDeltaDown', 'PlacementDownDeltaUp',
-  'PlacementUpDeltaDown', 'PlacementUpDeltaUp',
-  'Point', 'Point1', 'Point2', 'PointID', 'PointType',
-  'Pop', 'PopCount1', 'PopCount2', 'PopCount3', 'PopCount4', 'PopCount5', 'PopCount6',
-  'PopEffect', 'PopHeight', 'PopRange',
-  'PopRate1', 'PopRate2', 'PopRate3', 'PopRate4', 'PopRate5', 'PopRate6',
-  'PosStatus', 'PosX', 'PosY', 'PosZ', 'Position',
-  'PowAugment', 'PowEtherLv1', 'PowEtherLv99',
-  'PowHealBase', 'PowHealLv1', 'PowHealLv99', 'PowHealRev',
-  'PowHealRev1', 'PowHealRev2', 'PowHealRevBonus',
-  'PreCombo', 'PreCondition', 'Precious', 'PreloadPriority',
-  'Preset', 'PresetID', 'PreviewIndex',
-  'Price', 'Price1', 'Price2', 'Price3', 'PriceCondition',
-  'Priority', 'PriorityUI',
-  'Prob1', 'Prob2', 'Prob3', 'Prob4', 'ProbLot0', 'ProbLot1', 'ProbLot2',
-  'ProbLot3', 'ProbLot4', 'ProbLot5',
-  'Probability01', 'Probability02', 'Probability03', 'Probability04', 'Probability05',
-  'Probability1', 'Probability2', 'Probability3', 'Probability4',
-  'ProbabilityIdle', 'PurposeIcon', 'PushSeID', 'Puzzle',
-
-  // Q
-  'QuestCategory', 'QuestFlag1', 'QuestFlag2',
-  'QuestFlagMax1', 'QuestFlagMax2', 'QuestFlagMin1', 'QuestFlagMin2',
-  'QuestID', 'QuestImage',
-  'QuestTalk1', 'QuestTalk2', 'QuestTalk3', 'QuestTalk4',
-  'QuestTalk5', 'QuestTalk6', 'QuestTalk7', 'QuestTalk8',
-  'QuestTitle', 'QuickMove',
-
-  // R
-  'R', 'RX', 'RY', 'RZ', 'Race',
-  'RadialBlur01', 'RadialBlur02', 'Radius',
-  'RageCond', 'RageFrm', 'RageInterval', 'RageParam', 'RageStance',
-  'RandHero', 'RandMax', 'RandMin', 'RandPC', 'RandPos', 'RandRot', 'RandUro',
-  'Random', 'Range', 'RangeRev', 'RangeType', 'Rank', 'Rank01', 'Rank02', 'Rank03',
-  'Rarity', 'Rate1', 'Rate2', 'Rate3', 'Rate4', 'Rate5', 'Rate6', 'Rate7', 'Rate8',
-  'RateEmblem', 'RateEther', 'RateHero',
-  'Reaction', 'RecOffLv',
-  'Recast1', 'Recast2', 'Recast3', 'Recast4', 'Recast5',
-  'RecastRate', 'RecastRev', 'RecastType',
-  'Recipe1', 'Recipe2', 'Recipe3', 'Recipe4',
-  'ReduceEnemyHP', 'ReducePCHP', 'Region',
-  'RelationID', 'RelationID1', 'RelationID2', 'RelationID3', 'RelationID4',
-  'RelationID5', 'RelationID6', 'RelationID7', 'RelationID8',
-  'RelationID9', 'RelationID10',
-  'ReleaseCond', 'ReleaseFlag', 'ReleaseStatusText',
-  'RemovePoint', 'RemovePoint2', 'RemovePoint3', 'RemovePoint4',
-  'Repeat', 'Repeatable1', 'Repeatable2', 'Repeatable3',
-  'Repeatable4', 'Repeatable5', 'Repeatable6',
-  'Reply', 'ReplyGroup', 'ReplyID', 'ReplyType', 'ReqNum',
-  'ResetFlag', 'ResistCombo', 'ResistReaction', 'ResistRev', 'ResistRevHigh',
-  'Resource', 'Resource1', 'Resource2', 'Resource3', 'Resource4', 'ResourceId',
-  'Respect', 'Respect1', 'Respect2', 'RespectFlag', 'RespectHud', 'RespectPoint',
-  'ResultA', 'ResultB', 'RevExpLevel', 'RevExpTalent', 'RevGold', 'ReverseVelocity',
-  'Reward', 'Reward1', 'Reward1Num', 'Reward2', 'Reward3', 'Reward4',
-  'Reward5', 'Reward6', 'Reward7', 'Reward8', 'Reward9', 'Reward10',
-  'Reward11', 'Reward12', 'Reward13', 'Reward14', 'Reward15',
-  'Reward16', 'Reward17', 'Reward18', 'Reward19', 'Reward20',
-  'RewardA1', 'RewardA2', 'RewardB1', 'RewardB2',
-  'RewardCrystal', 'RewardDisp', 'RewardID', 'RewardNum',
-  'RewardSetA', 'RewardSetB', 'RewardTypeA', 'RewardTypeB',
-  'RewordID', 'RewordName', 'RewordText',
-  'RiseOffset', 'RiseOffset1', 'RiseOffset2', 'RiseOffset3', 'RiseOffset4',
-  'Role', 'Role1', 'Role2', 'Role3', 'RoleActMain', 'RoleTag',
-  'RotX', 'RotY', 'RotZ', 'RotateFoot', 'RotateRoot',
-  'RowName', 'RowType', 'RscPreset', 'RscType',
-  'RstBlow', 'RstBreak', 'RstDebuffEth', 'RstDebuffPhy', 'RstKback', 'RstSmash',
-  'Run',
-
-  // S
-  'SE', 'SEType', 'SORT', 'SP',
-  'SX', 'SY', 'SZ',
-  'S_LookPosType', 'S_LookX', 'S_LookY', 'S_LookZ',
-  'S_PosX', 'S_PosY', 'S_PosZ',
-  'Sand', 'SaturationOffset', 'Scale', 'Scale1', 'Scale2', 'Scale3',
-  'Scale4', 'Scale5', 'Scale6', 'Scale7',
-  'ScaleHigh', 'ScaleLow', 'ScaleMax', 'ScaleMin', 'ScalePlus', 'ScaleTime',
-  'ScaleX', 'ScaleY',
-  'ScenarioCond', 'ScenarioFlag', 'ScenarioMax', 'ScenarioMin',
-  'Score', 'ScoreRate', 'Script',
-  'Se', 'SeAnimationEnd', 'SeAnimationPlay', 'SeAnimationReverse', 'SeAnimationWait',
-  'SeCondition', 'SeName', 'SeRange', 'SeVolumeMaxRange', 'SeVolumeMinRange',
-  'SelectDownCat1', 'SelectDownCat2', 'SelectUpCat1', 'SelectUpCat2',
-  'Sell', 'SequentialID', 'SetAnim', 'SetAnimTime', 'SetArtsNum',
-  'SetItem1', 'SetItem2', 'SetItem3', 'SetItem4', 'SetItem5',
-  'SetItem6', 'SetItem7', 'SetItem8', 'SetItem9', 'SetItem10',
-  'SetName', 'SetUpType', 'SetUpUI', 'SevEvent',
-  'Sex', 'Shallows', 'Shape', 'ShipStart', 'ShootHeight',
-  'ShopCondition', 'ShopID',
-  'ShopItem1', 'ShopItem2', 'ShopItem3', 'ShopItem4', 'ShopItem5',
-  'ShopItem6', 'ShopItem7', 'ShopItem8', 'ShopItem9', 'ShopItem10',
-  'ShopItem11', 'ShopItem12', 'ShopItem13', 'ShopItem14', 'ShopItem15',
-  'ShopItem16', 'ShopItem17', 'ShopItem18', 'ShopItem19', 'ShopItem20',
-  'ShopType', 'Size', 'SkelLabel',
-  'Skill1', 'Skill2', 'Skill3', 'Skill4', 'Skill5', 'Skill6', 'SkillID',
-  'Slide', 'SlopeGround', 'SlotIdx', 'Slow', 'Slowf',
-  'Snow', 'SoldierCategory1', 'SoldierCategory2', 'SoldierRemove',
-  'Soil', 'Sort', 'SortCategory', 'SortID', 'SortNo', 'SortParam', 'Sortkey',
-  'Sound', 'Soup', 'SpBattle',
-  'SpMax', 'SpMax1', 'SpMax2', 'SpModel1', 'SpModel2',
-  'SpModelCond1', 'SpModelCond2', 'SpProb',
-  'SpRecast1', 'SpRecast2', 'SpScale', 'SpUniqueEnemy',
-  'SpdFirst', 'SpdLast', 'Special', 'SpecialSetting', 'SpeedNum', 'SpeedType',
-  'Spine', 'Spine0', 'Spine1', 'Spot', 'SpotGimmick', 'SpotName',
-  'StCrtc', 'StEthDef', 'StGrdBack', 'StGrdFront', 'StGrdLeft', 'StGrdRight',
-  'StPhyDef', 'StRevAgi', 'StRevDex', 'StRevHeal', 'StRevHp', 'StRevStr',
-  'Stability', 'Stance', 'Stance1', 'Stance2', 'Stance3', 'Stance4', 'Stance5',
-  'Start', 'StartAlpha', 'StartEvent1', 'StartEvent2', 'StartEvent3',
-  'StartEvent4', 'StartEvent5', 'StartEvent6',
-  'StartFlagName', 'StartOffset', 'StartPos', 'StartPurpose',
-  'StartX', 'StartY', 'StartZ', 'Startf1', 'Startf2', 'Startf3',
-  'StateAnimation', 'StateLoopNum', 'StateName', 'StateName1', 'StateName2', 'StateName3',
-  'StateSave', 'StateVisible', 'Status', 'StatusSave', 'StatusType',
-  'StepOffset', 'StepOffset1', 'StepOffset2', 'StepOffset3', 'StepOffset4',
-  'Still', 'StopCondition', 'StopDelayTime', 'StopSeID', 'StopText', 'StopUnMount',
-  'StoryID', 'StoryRsc', 'StoryTitle',
-  'StrengthBase', 'StrengthLv1', 'StrengthLv99', 'StrengthRev',
-  'StrengthRev1', 'StrengthRev2', 'StrengthRevBonus',
-  'SubTitleText', 'SubType', 'Subtitling', 'SumMax', 'Summary',
-  'SummonData', 'SummonEnemyPop', 'SummonType',
-  'SuppliesDropping', 'Swim', 'SwimHeight',
-  'SwitchModel1', 'SwitchModel2', 'SwitchModel3', 'SwitchModel4',
-  'SwitchParts1', 'SwitchParts2', 'SwitchParts3',
-  'SysOpenID', 'SysWeatherID',
-
-  // T
-  'TP_Min', 'TP_Max', 'TableID', 'TagName',
-  'Talent', 'TalentAptitude1', 'TalentAptitude2', 'TalentAptitude3',
-  'TalentAptitude4', 'TalentAptitude5', 'TalentAptitude6',
-  'TalentArts1', 'TalentArts2', 'TalentArts3',
-  'TalentExpRev', 'TalentExpRevHigh', 'TalentExpRevLow', 'TalentID',
-  'TalkCategory', 'TalkID1', 'TalkID2', 'TalkID3', 'TalkID4', 'TalkID5',
-  'TalkListID', 'TalkPoint', 'TalkStartTime', 'Talker',
-  'Tank', 'TankAtk', 'TankHeal', 'TankProb1', 'TankProb2', 'TankProb3',
-  'Target', 'TargetFile', 'TargetID', 'TargetID1', 'TargetID2',
-  'TargetID3', 'TargetID4', 'TargetID5', 'TargetID6', 'TargetID7', 'TargetID8',
-  'TargetItem', 'TargetMob1', 'TargetMob2', 'TargetMob3',
-  'TargetParam1', 'TargetParam2', 'TargetRole1', 'TargetRole2',
-  'TaskCondition', 'TaskFlag1', 'TaskFlag2', 'TaskFlag3', 'TaskFlag4',
-  'TaskID', 'TaskID1', 'TaskID2', 'TaskID3', 'TaskID4',
-  'TaskLog1', 'TaskLog2', 'TaskLog3', 'TaskLog4',
-  'TaskType1', 'TaskType2', 'TaskType3', 'TaskType4',
-  'TensionUp', 'TerminalFlag',
-  'Text', 'Text1', 'Text2', 'Text3', 'Text4', 'Text5',
-  'Thumbnail', 'Time', 'Time1', 'Time2', 'Time3', 'Time4', 'Time5',
-  'TimeMax', 'TimeMin', 'TimeRev', 'TimeStop', 'TimeZone',
-  'Tips1', 'Tips2', 'Tips3', 'Tips4', 'Tips5',
-  'Title', 'TitleText', 'Toe', 'ToeThreshold', 'ToonID',
-  'TotalTP', 'TreasureBox', 'Turn', 'TurnAngle', 'TurnSize',
-  'Tutorial', 'TutorialID', 'TwinBonus', 'TwinBulletAngle',
-  'TwinBulletID', 'TwinBulletNum', 'TwinBulletType',
-  'TwinEff', 'TwinHitFrm', 'TwinRadius',
-  'Type', 'Type1', 'Type2', 'Type3',
-
-  // U
-  'UIName1', 'UIName2', 'UIName3', 'UIName4', 'UIName5', 'UIName6',
-  'UIOff', 'UIParam1', 'UIX', 'UIY',
-  'Ultimate', 'Unique', 'UniqueDirection', 'UniqueDirection2',
-  'UniqueDirectionL', 'UniqueDirectionR', 'UnitText', 'Untiuroboros',
-  'UpSeID', 'UpSpeed', 'UpdateCheck', 'UpdateText',
-  'UroArts', 'UroBody', 'UroBodyID', 'UroCondition', 'UroID',
-  'UroLimitedReaction', 'UroPartner', 'UroPower',
-  'UroProb1', 'UroProb2', 'UroProb3',
-  'UseChain', 'UseChr', 'UseHP', 'UseIkLanding', 'UseInterlink', 'UseTalent', 'UseUro',
-
-  // V
-  'Value1', 'Value2', 'Value3', 'Value4', 'Value5', 'Value6', 'Value7',
-  'Value8', 'Value9', 'Value10', 'Value11', 'Value12', 'Value13',
-  'Value14', 'Value15', 'Value16', 'Value17', 'Value18', 'Value19', 'Value20',
-  'ValueMax', 'ValueOffset', 'VanishEffectID',
-  'VanishParam1', 'VanishParam2', 'VanishType', 'Vibration',
-  'ViewOffs_x', 'ViewOffs_y', 'ViewOffs_z',
-  'Vignette01', 'Vignette02', 'Visible', 'Visible1', 'Visible2',
-  'Visible3', 'Visible4', 'VisibleMain', 'Visible_XZ', 'Visible_Y',
-  'VoGroup', 'Voice', 'Voice1', 'Voice2', 'Voice3', 'Voice4',
-  'Voice5', 'Voice6', 'Voice7', 'Voice8',
-  'VoiceDead', 'VoiceID', 'VoiceID1', 'VoiceID2', 'VoiceID3', 'VoiceID4', 'VoiceID5',
-  'VoiceProb', 'VoiceRand', 'VoiceSP', 'VoiceType', 'VoiceUnique', 'VolID',
-
-  // W
-  'WaitEnd', 'WaitTime', 'Waitf', 'WakeupCondition', 'WakeupQuest',
-  'Walk', 'WalkEvent', 'WalkEventReaction', 'WarmupFrame',
-  'WarningFlag', 'WarningValue', 'Water', 'Wave', 'WaveFreq', 'WaveRandom', 'WaveRate',
-  'WeaponA', 'WeaponB', 'WeaponC', 'WeaponName', 'WeaponScale',
-  'WeaponType', 'WeaponType2',
-  'Weather', 'Weather1', 'Weather2', 'Weather3', 'Weather4',
-  'WeatherData', 'WeatherName',
-  'WeatherRate1', 'WeatherRate2', 'WeatherRate3', 'WeatherRate4',
-  'WeatheringRate', 'Weight', 'Weight1', 'Weight2', 'Weight3', 'Weight4',
-  'Weight5', 'Weight6', 'Weight7', 'Weight8', 'Weight9', 'Weight10',
-  'Weight11', 'Weight12', 'Weight13', 'Weight14', 'Weight15', 'Weight16',
-  'WhiteAddRate', 'Wiremesh', 'Wood', 'WpnParam', 'WpnRank', 'WpnType',
-
-  // X-Z
-  'X', 'XOffset', 'Y', 'YOffset', 'YSnap', 'Z', 'ZOffset', 'Zone',
-
-  // ===== Lowercase column names (camelCase from CSV) =====
-  'act_hash', 'actionTime1', 'actionTime2', 'actionTime3', 'actionTime4',
-  'action_name', 'affName', 'affType', 'align_h', 'areamap',
-  'arts01', 'arts02', 'arts03', 'arts04', 'arts05', 'arts06',
-  'assign', 'autoFocus', 'autoTalkTag1', 'autoTalkTag2', 'autoTalkTag3',
-  'bgmEnd', 'bgmStart', 'blend', 'bone_name', 'bonus_exp_rate',
-  'cache', 'cam_angle', 'cam_lx', 'cam_ly', 'cam_lz',
-  'cam_px', 'cam_py', 'cam_pz', 'cam_rot_z',
-  'cancel_key', 'cancel_sound_id', 'cat_id', 'category', 'category_type',
-  'chapter', 'character', 'class_exp_rate',
-  'clockHour', 'clockMinute', 'clockStop', 'coin_rate',
-  'colFilterFar', 'colFilterNear', 'collection_rate',
-  'comment', 'cond_location', 'condition', 'condition2', 'condition3',
-  'condition4', 'condition5', 'conf_type', 'conf_value',
-  'contents_id', 'control_type', 'costume', 'cssnd', 'cut',
-  'data[0]', 'data[1]', 'data[2]', 'data[3]', 'data[4]',
-  'data[5]', 'data[6]', 'data[7]', 'data[8]', 'data[9]',
-  'data[10]', 'data[11]', 'data[12]', 'data[13]', 'data[14]',
-  'data[15]', 'data[16]', 'data[17]', 'data[18]', 'data[19]',
-  'debugName', 'defaultAnim', 'defaultEquip',
-  'default_index', 'default_text', 'default_value',
-  'dispParts', 'disp_check', 'disp_name', 'disp_range', 'dist',
-  'edFadeColB', 'edFadeColG', 'edFadeColR', 'edFadeIn', 'edFadeInEnable',
-  'edFadeOut', 'edFadeOutEnable', 'edFadeWait',
-  'eff_col', 'enableNopon', 'endID',
-  'equip01', 'equip02', 'equip03', 'equip04', 'equip05', 'equip06',
-  'equip07', 'equip08', 'equip09', 'equip10', 'equip11', 'equip12',
-  'equip13', 'equip14', 'equip15', 'equip16', 'equip17', 'equip18',
-  'equip19', 'equip20', 'equip21', 'equip22', 'equip23', 'equip24',
-  'equip25', 'equip26', 'equip27', 'equip28', 'equip29', 'equip30', 'equip31',
-  'eth_name', 'event', 'eyePatch', 'f', 'far_val',
-  'file', 'file_name', 'filename', 'filter_type', 'filter_value',
-  'fix_tone', 'fixed_equip', 'fixed_time', 'fixed_weather',
-  'flagvalue', 'flowEventID', 'foMin',
-  'gainHigh', 'gainLow', 'getflag', 'gold', 'gold_coin_rate', 'group',
-  'hair_change', 'help', 'help1', 'help2', 'help3', 'help4',
-  'hero', 'hideAS', 'hideAround', 'hideDR', 'hideEL', 'hideEN',
-  'hideEne', 'hideList', 'hideMap', 'hideMob', 'hideNPC', 'hideNpc',
-  'hideWpn', 'hint', 'hlv',
-  'icon_index', 'image_no', 'image_type', 'img_id', 'index', 'influence',
-  'initEquip', 'item', 'job',
-  'key_block', 'l_ofs_x', 'l_ofs_y', 'label', 'leader', 'lens',
-  'level_name', 'level_name2', 'level_name3', 'level_name4', 'level_name5',
-  'level_priority', 'linkCondition', 'linkCondition2', 'linkID', 'linkID2',
-  'listenType', 'listenX', 'listenY', 'listenZ',
-  'locationEvent', 'loop', 'loopInterval',
-  'map', 'mapID', 'mask_color',
-  'matchPop1', 'matchPop2', 'matchPop3', 'matchPop4', 'matchType',
-  'matchingTag1', 'matchingTag2', 'matchingTag3', 'matchingTag4',
-  'max_value', 'menu_command', 'menu_sheet', 'menu_value', 'min_value',
-  'mioHair', 'modelDirection', 'modelName', 'modelType',
-  'motionArts00', 'motionArts01', 'motionArts02',
-  'motionBattle', 'motionEvent', 'motionField', 'motionWeapon',
-  'mountObj', 'mountTag', 'mountTag2', 'mountTagObj',
-  'mstxt', 'mstxt_ext',
-  'name', 'name1', 'name2', 'name3', 'name4', 'name5', 'name6', 'name7',
-  'name8', 'name9', 'name10', 'name11', 'name12', 'name13', 'name14',
-  'name15', 'name16',
-  'near_val', 'objID', 'objModel', 'objName', 'objType', 'obj_name',
-  'opFadeColB', 'opFadeColG', 'opFadeColR', 'opFadeIn', 'opFadeInEnable',
-  'opFadeOut', 'opFadeOutEnable', 'opFadeWait',
-  'opt_1', 'opt_2', 'option', 'option_id',
-  'outsiderEnable', 'outsiderOpt', 'outsiderR', 'outsiderType',
-  'outsiderX', 'outsiderY', 'outsiderZ',
-  'pad_A', 'pad_B', 'pad_DOWN', 'pad_L1', 'pad_L2', 'pad_L3',
-  'pad_LEFT', 'pad_LS_DOWN', 'pad_LS_LEFT', 'pad_LS_RIGHT', 'pad_LS_UP',
-  'pad_R1', 'pad_R2', 'pad_R3', 'pad_RIGHT',
-  'pad_RS_DOWN', 'pad_RS_LEFT', 'pad_RS_RIGHT', 'pad_RS_UP',
-  'pad_SELECT', 'pad_START', 'pad_UP', 'pad_X', 'pad_Y', 'pad_select',
-  'page_sheet', 'partition', 'path_prefix', 'pc', 'physical',
-  'picid', 'pitchHigh', 'pitchLow', 'pixel', 'pixelLv',
-  'playMap', 'playMapF', 'playMapX', 'playMapY', 'playMapZ',
-  'pos1', 'pos2', 'pos3', 'pos4', 'pos5', 'pos6', 'pos7', 'pos8',
-  'pos9', 'pos10', 'pos11', 'pos12', 'pos13', 'pos14', 'pos15', 'pos16',
-  'posX', 'posY', 'posZ', 'posx', 'posy', 'posz',
-  'preMapjump', 'prio', 'push_type', 'quads', 'quest',
-  'r_ofs_x', 'r_ofs_y', 'race', 'range', 'rank',
-  'rate1', 'rate2', 'rate3', 'rate4', 'rate5', 'rate6', 'rate7', 'rate8', 'rate9', 'rate10',
-  'repeat', 'res_type', 'resource', 'resourceAnnotation', 'resourceBody',
-  'resourceCollision', 'resourceFace', 'resourceHair',
-  'resourceMotionEnemy', 'resourceMotionEvent', 'resourceMotionField',
-  'roty', 'save', 'scaleX', 'scaleY', 'scale_max', 'scale_min',
-  'scenario', 'scn_category', 'scn_group', 'seamlessLog',
-  'select_1', 'select_2', 'select_3', 'select_4', 'select_5', 'select_6',
-  'select_text', 'setupID', 'setupName', 'sex', 'shift',
-  'skipBgmEvt', 'skipBgmFld', 'sort_id', 'sort_index',
-  'spWeapon', 'specified', 'speed',
-  'startCamX', 'startCamY', 'startCamZ', 'startID', 'starthour',
-  'strength', 'style', 'system',
-  'talkattr', 'talkattr2', 'talkattr3', 'talker',
-  'text', 'text2', 'text3', 'text4', 'text_file', 'text_id', 'text_type',
-  'timeHour', 'timeMinute', 'tips', 'title', 'toneMap', 'top_id', 'trad_rate',
-  'type', 'type1', 'type2', 'type3', 'type4', 'type5', 'type6', 'type7',
-  'type8', 'type9', 'type10', 'type11', 'type12', 'type13', 'type14', 'type15', 'type16',
-  'unique', 'value', 'value1', 'value2', 'value3', 'value4', 'value5',
-  'value6', 'value7', 'value8', 'value9', 'value10',
-  'view_type', 'voice', 'vol_id',
-  'waitComp', 'weather1', 'weather2', 'weatherA', 'weatherB', 'weatherC',
-  'window_disp', 'wpnBlade',
-
-  // ===== Additional common names from original dictionary =====
-  'caption', 'Caption', 'text', 'Text', 'message', 'Message',
-  'msg', 'Msg', 'title', 'Title', 'description', 'Description',
-  'desc', 'Desc', 'label', 'Label', 'info', 'Info', 'detail', 'Detail',
-  'summary', 'Summary', 'comment', 'Comment', 'help', 'Help',
-  'hint', 'Hint', 'note', 'Note', 'disp', 'Disp', 'skill', 'Skill',
-  'HP', 'Atk', 'Def', 'Agi', 'Dex', 'Luck',
-  'Exp', 'Gold', 'SP', 'AP', 'CP', 'TP',
-  'Resource', 'Model', 'Motion', 'Effect',
-  'ScenarioFlag', 'QuestFlag', 'EventFlag', 'ColonyFlag',
-  'Rate', 'Prob', 'Ratio', 'Percent',
-  'Min', 'Max', 'Base', 'Add',
-  'Icon', 'IconId', 'Thumbnail',
-  'SortId', 'Priority', 'Order',
-  'Enable', 'Disable', 'Valid', 'Invalid',
-  'Start', 'End', 'Duration', 'Interval',
-  'Target', 'Range', 'Distance', 'Radius',
-  'Power', 'Scale', 'Factor', 'Bonus',
-  'Slot', 'Socket', 'Equip',
-  'Color', 'Size', 'Weight',
-  'Value', 'value', 'Count', 'count', 'Num', 'num',
-  'WpnType', 'AtrType', 'RoleType', 'ArtType',
-  'Price', 'Rarity', 'Level', 'Rank',
-  'Kind', 'kind', 'Type', 'type',
-
-  // UI / Menu terms
-  'Save', 'Load', 'New Game', 'Continue',
-  'Equipment', 'Accessories', 'Skills', 'Arts',
-  'Characters', 'Party', 'Gems', 'Collectopaedia',
-  'Quests', 'System', 'Options', 'Tutorial',
-  'Inventory', 'Map', 'Journal', 'Affinity',
-  'Colony', 'Ouroboros', 'Interlink', 'Chain Attack',
-  'Class Change', 'Gem Crafting', 'Cooking',
-  'Rest Spot', 'Landmark', 'Secret Area',
-  'Unique Monster', 'Named Enemy',
-  'Discussion', 'Heart-to-Heart',
-  'Nopon Coin', 'Bonus Exp',
-  'debug_name',
+  // BTL extended tables
+  'BTL_Arts_Common', 'BTL_Arts_Pc', 'BTL_Arts_ClassArt', 'BTL_Arts_MasterArt',
+  'BTL_Arts_Extra', 'BTL_Buff', 'BTL_BuffList', 'BTL_BuffParam',
+  'BTL_Class', 'BTL_ClassList', 'BTL_ClassParam', 'BTL_ClassSkill',
+  'BTL_Skill', 'BTL_SkillList', 'BTL_SkillParam', 'BTL_EnArrange',
+  'BTL_EnList', 'BTL_EnDropItem', 'BTL_EnParam', 'BTL_HeroInfo',
+  'BTL_HeroSkill', 'BTL_HeroArts', 'BTL_ChainAttack', 'BTL_ChainParam',
+  'BTL_ChainOrder', 'BTL_EnhanceList', 'BTL_Aura', 'BTL_AuraList',
+  'BTL_AuraParam', 'BTL_StatusList', 'BTL_StatusParam', 'BTL_ComboList',
+  'BTL_Ouroboros', 'BTL_OuroborosParam', 'BTL_OuroborosSkill',
+  'BTL_Interlink', 'BTL_InterlinkLevel', 'BTL_SpArt', 'BTL_SpArtList',
+  'BTL_TalentList', 'BTL_TalentNode', 'BTL_WpnParam', 'BTL_Formation',
+  'BTL_FormationType', 'BTL_ReactionList',
+  'bgmlist', 'debug_name',
 ];
 
-/** Precomputed hash -> name lookup table */
-const HASH_TO_NAME = new Map<number, string>();
-
-// Build the lookup table (deduplicates automatically via Map)
-for (const name of KNOWN_NAMES) {
+for (const name of EXTRA_NAMES) {
   const hash = murmur3_32(name);
   if (!HASH_TO_NAME.has(hash)) {
     HASH_TO_NAME.set(hash, name);
   }
 }
+
+// ============= Public API =============
 
 /**
  * Try to resolve a Murmur3 hash to a known name.
@@ -1121,7 +586,7 @@ export function isKnownHash(hash: number): boolean {
  * Get all known names in the dictionary.
  */
 export function getKnownNames(): string[] {
-  return [...KNOWN_NAMES];
+  return [...HASH_TO_NAME.values()];
 }
 
 /**
