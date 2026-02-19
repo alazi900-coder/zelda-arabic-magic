@@ -117,6 +117,10 @@ export const BDAT_CATEGORIES: FileCategory[] = [
   { id: "bdat-gem", label: "الجواهر والإكسسوارات", emoji: "💎", icon: "Gem", color: "text-cyan-400" },
   { id: "bdat-class", label: "الفصائل والأدوار", emoji: "🛡️", icon: "Shield", color: "text-indigo-400" },
   { id: "bdat-tips", label: "النصائح والشروحات", emoji: "💡", icon: "Lightbulb", color: "text-lime-400" },
+  { id: "bdat-dlc", label: "المحتوى الإضافي (DLC)", emoji: "🎮", icon: "Gamepad2", color: "text-pink-400" },
+  { id: "bdat-system", label: "إعدادات النظام", emoji: "⚙️", icon: "Settings", color: "text-slate-400" },
+  { id: "bdat-message", label: "أرشيف الرسائل", emoji: "💬", icon: "MessageSquare", color: "text-teal-400" },
+  { id: "bdat-gimmick", label: "الآليات والألغاز", emoji: "🔧", icon: "Wrench", color: "text-gray-400" },
 ];
 
 export function categorizeBdatTable(label: string): string {
@@ -129,17 +133,25 @@ export function categorizeBdatTable(label: string): string {
   // نظام القتال
   if (/^BTL_/i.test(tbl) || /^(RSC_|WPN_)/i.test(tbl)) return "bdat-battle";
   // الشخصيات
-  if (/^CHR_/i.test(tbl) || /^(FLD_Npc|ma\d)/i.test(tbl)) return "bdat-character";
+  if (/^CHR_/i.test(tbl) || /^(FLD_Npc|FLD_Mob|FLD_Kizuna)/i.test(tbl)) return "bdat-character";
   // الأعداء
-  if (/^(ENE_|EMT_|FLD_Enemy)/i.test(tbl)) return "bdat-enemy";
+  if (/^(ENE_|EMT_|FLD_Enemy|FLD_Unique|BTL_En)/i.test(tbl)) return "bdat-enemy";
   // الأدوات والمعدات
-  if (/^(ITM_|FLD_Collect)/i.test(tbl)) return "bdat-item";
+  if (/^(ITM_|FLD_Collect|FLD_Tbox|FLD_Salvage)/i.test(tbl)) return "bdat-item";
   // المهام
-  if (/^(QST_|EVT_|TSK_)/i.test(tbl)) return "bdat-quest";
-  // المواقع
-  if (/^(FLD_Map|FLD_Land|FLD_Location|SYS_Map|GMK_)/i.test(tbl)) return "bdat-field";
-  // القصة
-  if (/^(MSG_|TLK_|FLD_Talk)/i.test(tbl)) return "bdat-story";
+  if (/^(QST_|TSK_)/i.test(tbl)) return "bdat-quest";
+  // الأحداث والقصة
+  if (/^(EVT_|MSG_|TLK_|FLD_Talk|FLD_Event)/i.test(tbl)) return "bdat-story";
+  // المحتوى الإضافي
+  if (/^DLC_/i.test(tbl)) return "bdat-dlc";
+  // أرشيف الرسائل
+  if (/^(MA_|msg_)/i.test(tbl)) return "bdat-message";
+  // إعدادات النظام
+  if (/^SYS_/i.test(tbl)) return "bdat-system";
+  // الآليات
+  if (/^(gimmick|GMK_)/i.test(tbl)) return "bdat-gimmick";
+  // المواقع والخرائط
+  if (/^(FLD_Map|FLD_Land|FLD_Location|FLD_Area|FLD_Camp|FLD_Colony|FLD_Weather)/i.test(tbl)) return "bdat-field";
   // المهارات
   if (/^(SKL_|ART_|SPC_)/i.test(tbl)) return "bdat-skill";
   // الجواهر
@@ -147,9 +159,11 @@ export function categorizeBdatTable(label: string): string {
   // الفصائل
   if (/^(JOB_|ROL_|CLS_)/i.test(tbl)) return "bdat-class";
   // النصائح
-  if (/^(TIP_|HLP_|TUT_)/i.test(tbl)) return "bdat-tips";
+  if (/^(TIP_|HLP_|TUT_|SYS_Tips|SYS_Loading)/i.test(tbl)) return "bdat-tips";
   // FLD_ عام
   if (/^FLD_/i.test(tbl)) return "bdat-field";
+  // bgmlist وغيرها
+  if (/^bgm/i.test(tbl)) return "bdat-system";
 
   return "other";
 }
