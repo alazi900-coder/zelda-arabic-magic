@@ -26,8 +26,10 @@ export default function ModPackager() {
   const [status, setStatus] = useState("");
   const [downloadingFont, setDownloadingFont] = useState(false);
 
-  const NOTO_SANS_ARABIC_URL = "https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansArabic/NotoSansArabic-Regular.ttf";
-  const NOTO_SANS_ARABIC_FALLBACK_URL = "https://cdn.jsdelivr.net/gh/googlefonts/noto-fonts@main/hinted/ttf/NotoSansArabic/NotoSansArabic-Regular.ttf";
+  const NOTO_FONT_URLS = [
+    "https://cdn.jsdelivr.net/gh/googlefonts/noto-fonts@main/hinted/ttf/NotoSansArabic/NotoSansArabic-Regular.ttf",
+    "https://raw.githubusercontent.com/googlefonts/noto-fonts/main/hinted/ttf/NotoSansArabic/NotoSansArabic-Regular.ttf",
+  ];
 
   const validateAndSetFont = useCallback((name: string, data: ArrayBuffer) => {
     // For BFTTF files, decrypt first to validate the inner TTF
@@ -42,12 +44,17 @@ export default function ModPackager() {
   const handleDownloadNotoFont = useCallback(async () => {
     setDownloadingFont(true);
     try {
-      let response = await fetch(NOTO_SANS_ARABIC_URL);
-      if (!response.ok) {
-        response = await fetch(NOTO_SANS_ARABIC_FALLBACK_URL);
+      let data: ArrayBuffer | null = null;
+      for (const url of NOTO_FONT_URLS) {
+        try {
+          const response = await fetch(url);
+          if (response.ok) {
+            data = await response.arrayBuffer();
+            break;
+          }
+        } catch { /* try next */ }
       }
-      if (!response.ok) throw new Error("فشل تحميل الخط");
-      const data = await response.arrayBuffer();
+      if (!data) throw new Error("فشل تحميل الخط");
       validateAndSetFont("NotoSansArabic-Regular.ttf", data);
     } catch {
       setStatus("❌ فشل تحميل خط Noto Sans Arabic — تحقق من اتصالك بالإنترنت");
