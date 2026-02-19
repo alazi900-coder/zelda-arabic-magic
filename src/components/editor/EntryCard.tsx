@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag, BookOpen, Wrench, Copy, Eye, Check, X, Table2, Columns3 } from "lucide-react";
+import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag, BookOpen, Wrench, Copy, Eye, Check, X, Table2, Columns3, History } from "lucide-react";
+import type { TMSuggestion } from "@/hooks/useTranslationMemory";
 import DebouncedInput from "./DebouncedInput";
 import { ExtractedEntry, displayOriginal, hasArabicChars, isTechnicalText, hasTechnicalTags, previewTagRestore } from "./types";
 import { utf16leByteLength } from "@/lib/byte-utils";
@@ -31,6 +32,7 @@ interface EntryCardProps {
   handleLocalFixDamagedTag?: (entry: ExtractedEntry) => void;
   onAcceptFuzzy?: (key: string) => void;
   onRejectFuzzy?: (key: string) => void;
+  tmSuggestions?: TMSuggestion[];
 }
 
 function findGlossaryMatches(original: string, glossary?: string): { term: string; translation: string }[] {
@@ -62,7 +64,7 @@ const EntryCard: React.FC<EntryCardProps> = ({
   isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage,
   updateTranslation, handleTranslateSingle, handleImproveSingleTranslation,
   handleUndoTranslation, handleFixReversed, handleLocalFixDamagedTag,
-  onAcceptFuzzy, onRejectFuzzy,
+  onAcceptFuzzy, onRejectFuzzy, tmSuggestions,
 }) => {
   const key = `${entry.msbtFile}:${entry.index}`;
   const isTech = isTechnicalText(entry.original);
@@ -236,6 +238,35 @@ const EntryCard: React.FC<EntryCardProps> = ({
                   <X className="w-3 h-3 ml-1" /> إغلاق
                 </Button>
               </div>
+            </div>
+          )}
+          {/* Translation Memory Suggestions */}
+          {tmSuggestions && tmSuggestions.length > 0 && (
+            <div className="mt-2 p-2 rounded border border-secondary/20 bg-secondary/5 space-y-1.5">
+              <div className="flex items-center gap-1.5 text-xs text-secondary font-semibold">
+                <History className="w-3.5 h-3.5" />
+                <span>اقتراحات من ذاكرة الترجمة</span>
+              </div>
+              {tmSuggestions.map((s, i) => (
+                <div key={i} className="flex items-start gap-2 text-[11px] group">
+                  <span className="shrink-0 px-1 py-0.5 rounded bg-secondary/15 text-secondary border border-secondary/20 text-[10px]">
+                    {s.similarity}%
+                  </span>
+                  <div className="flex-1 min-w-0 space-y-0.5">
+                    <p className="text-muted-foreground truncate" title={s.original}>{s.original}</p>
+                    <p className="text-foreground font-body truncate" dir="rtl" title={s.translation}>{s.translation}</p>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-5 px-1.5 text-[10px] opacity-0 group-hover:opacity-100 transition-opacity text-secondary hover:bg-secondary/10 shrink-0"
+                    onClick={() => updateTranslation(key, s.translation)}
+                    title="استخدام هذه الترجمة"
+                  >
+                    استخدام
+                  </Button>
+                </div>
+              ))}
             </div>
           )}
           {/* Byte usage progress bar */}
