@@ -17,8 +17,8 @@ describe("categorizeBdatTable - table name prefixes", () => {
   it("classifies ITM_ tables as item", () => {
     expect(categorizeBdatTable("ITM_Weapon[3].Name")).toBe("bdat-item");
   });
-  it("classifies msg_mnu_ as menu", () => {
-    expect(categorizeBdatTable("msg_mnu_option[0].caption")).toBe("bdat-menu");
+  it("classifies msg_mnu_option as title-menu", () => {
+    expect(categorizeBdatTable("msg_mnu_option[0].caption")).toBe("bdat-title-menu");
   });
   it("classifies EVT_ as story", () => {
     expect(categorizeBdatTable("EVT_Scene[1].Text")).toBe("bdat-story");
