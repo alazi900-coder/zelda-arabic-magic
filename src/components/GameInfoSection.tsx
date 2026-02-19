@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { FileText, Wrench, FolderOpen, Info } from "lucide-react";
 
 interface GameInfoProps {
@@ -11,7 +12,7 @@ interface GameInfoProps {
   notes?: string;
 }
 
-const GameInfoSection = ({
+const GameInfoSection = forwardRef<HTMLElement, GameInfoProps>(({
   accentColor,
   secondaryColor,
   fileFormat,
@@ -20,9 +21,9 @@ const GameInfoSection = ({
   tools,
   method,
   notes,
-}: GameInfoProps) => {
+}, ref) => {
   return (
-    <section className="py-16 px-4" dir="rtl">
+    <section ref={ref} className="py-16 px-4" dir="rtl">
       <div className="max-w-4xl mx-auto space-y-10">
         <h2 className="text-2xl md:text-3xl font-display font-bold text-center mb-8">
           معلومات التعريب
@@ -129,6 +130,8 @@ const GameInfoSection = ({
       </div>
     </section>
   );
-};
+});
+
+GameInfoSection.displayName = "GameInfoSection";
 
 export default GameInfoSection;
