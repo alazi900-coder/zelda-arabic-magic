@@ -89,4 +89,29 @@ describe("XC3 Tag Protection", () => {
     expect(restored).toContain("{name}");
     expect(restored).toContain("\uFFF9");
   });
+
+  it("should protect game abbreviations like EXP, CP, SP", () => {
+    const text = "You gained 500 EXP and 30 SP";
+    const { cleanText, tags } = protectTags(text);
+    expect(cleanText).not.toContain("EXP");
+    expect(cleanText).not.toContain(" SP");
+    expect(tags.length).toBeGreaterThanOrEqual(2);
+    const restored = restoreTags(cleanText.replace("500", "٥٠٠").replace("30", "٣٠"), tags);
+    expect(restored).toContain("EXP");
+    expect(restored).toContain("SP");
+  });
+
+  it("should protect HP and CP abbreviations", () => {
+    const text = "HP: 1000 CP: 50";
+    const { cleanText, tags } = protectTags(text);
+    expect(cleanText).not.toContain("HP");
+    expect(cleanText).not.toContain("CP");
+  });
+
+  it("should not protect abbreviations inside words", () => {
+    const text = "experience points";
+    const { cleanText, tags } = protectTags(text);
+    expect(cleanText).toBe(text);
+    expect(tags).toHaveLength(0);
+  });
 });
