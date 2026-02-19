@@ -129,67 +129,119 @@ export function categorizeBdatTable(label: string): string {
   if (!match) return "other";
   const tbl = match[1];
 
-  // القوائم والواجهة
-  if (/^MNU_/i.test(tbl) || /^menu$/i.test(tbl)) return "bdat-menu";
-  // نظام القتال
-  if (/^BTL_/i.test(tbl) || /^(RSC_|WPN_)/i.test(tbl)) return "bdat-battle";
-  // الشخصيات
-  if (/^CHR_/i.test(tbl) || /^(FLD_Npc|FLD_Mob|FLD_Kizuna)/i.test(tbl)) return "bdat-character";
-  // الأعداء
-  if (/^(ENE_|EMT_|FLD_Enemy|FLD_Unique|BTL_En)/i.test(tbl)) return "bdat-enemy";
-  // الأدوات والمعدات
-  if (/^(ITM_|FLD_Collect|FLD_Tbox|FLD_Salvage)/i.test(tbl)) return "bdat-item";
-  // المهام
-  if (/^(QST_|TSK_)/i.test(tbl)) return "bdat-quest";
-  // الأحداث والقصة
-  if (/^(EVT_|MSG_|TLK_|FLD_Talk|FLD_Event)/i.test(tbl)) return "bdat-story";
-  // المحتوى الإضافي
-  if (/^DLC_/i.test(tbl)) return "bdat-dlc";
-  // أرشيف الرسائل
-  if (/^(MA_|msg_)/i.test(tbl)) return "bdat-message";
-  // إعدادات النظام
-  if (/^SYS_/i.test(tbl)) return "bdat-system";
-  // الآليات
-  if (/^(gimmick|GMK_)/i.test(tbl)) return "bdat-gimmick";
-  // المواقع والخرائط
-  if (/^(FLD_Map|FLD_Land|FLD_Location|FLD_Area|FLD_Camp|FLD_Colony|FLD_Weather)/i.test(tbl)) return "bdat-field";
-  // المهارات
-  if (/^(SKL_|ART_|SPC_)/i.test(tbl)) return "bdat-skill";
-  // الجواهر
-  if (/^(GEM_|ACC_|ORB_)/i.test(tbl)) return "bdat-gem";
-  // الفصائل
-  if (/^(JOB_|ROL_|CLS_)/i.test(tbl)) return "bdat-class";
-  // النصائح
-  if (/^(TIP_|HLP_|TUT_|SYS_Tips|SYS_Loading)/i.test(tbl)) return "bdat-tips";
-  // FLD_ عام
-  if (/^FLD_/i.test(tbl)) return "bdat-field";
-  // bgmlist وغيرها
-  if (/^bgm/i.test(tbl)) return "bdat-system";
-
-  // Column-name based categorization as fallback
-  const dotIdx = tbl.indexOf('.');
-  if (dotIdx >= 0) {
-    const colName = tbl.substring(dotIdx + 1);
-    const colResult = categorizeByColumnName(colName);
-    if (colResult) return colResult;
-  }
-  // Also check the full label for column info after the table bracket
+  // Extract column name from label (part after "].")
   const colMatch = label.match(/\]\s*\.?\s*(.+)/);
-  if (colMatch) {
-    const colResult = categorizeByColumnName(colMatch[1]);
-    if (colResult) return colResult;
-  }
+  const col = colMatch ? colMatch[1] : "";
+
+  // Step 1: Categorize by table name (prefix + full-name patterns)
+  const tblCat = categorizeByTableName(tbl);
+  if (tblCat) return tblCat;
+
+  // Step 2: Categorize by column name keywords
+  const colCat = categorizeByColumnName(col);
+  if (colCat) return colCat;
 
   return "other";
 }
 
+function categorizeByTableName(tbl: string): string | null {
+  const t = tbl.toLowerCase();
+
+  // === القوائم والواجهة ===
+  if (/^mnu_/i.test(tbl) || /^menu$/i.test(tbl)) return "bdat-menu";
+  if (/mnu_option|mnu_msg|mnu_name|mnu_shop|mnu_camp|mnu_tutorial|mnu_map|mnu_status|mnu_battle|mnu_quest|mnu_hero|mnu_system|mnu_achievement|mnu_class|mnu_collect|mnu_item|mnu_gem|mnu_filter|mnu_sort|mnu_font|mnu_res|mnu_layer|mnu_text|mnu_weapon/i.test(tbl)) return "bdat-menu";
+
+  // === نظام القتال ===
+  if (/^btl_/i.test(tbl) || /^(rsc_|wpn_)/i.test(tbl)) return "bdat-battle";
+
+  // === الشخصيات ===
+  if (/^chr_/i.test(tbl) || /^(fld_npc|fld_mob|fld_kizuna)/i.test(tbl)) return "bdat-character";
+
+  // === الأعداء ===
+  if (/^(ene_|emt_|fld_enemy|fld_unique|btl_en)/i.test(tbl)) return "bdat-enemy";
+
+  // === الأدوات والمعدات ===
+  if (/^(itm_|fld_collect|fld_tbox|fld_salvage)/i.test(tbl)) return "bdat-item";
+
+  // === المهام ===
+  if (/^(qst_|tsk_)/i.test(tbl)) return "bdat-quest";
+
+  // === الأحداث والقصة ===
+  if (/^(evt_|tlk_|fld_talk|fld_event)/i.test(tbl)) return "bdat-story";
+  // msg_ tables (message archives) - but NOT MNU_Msg
+  if (/^msg_/i.test(tbl)) return "bdat-message";
+
+  // === المحتوى الإضافي ===
+  if (/^dlc_/i.test(tbl)) return "bdat-dlc";
+
+  // === أرشيف الرسائل ===
+  if (/^(ma_)/i.test(tbl)) return "bdat-message";
+
+  // === إعدادات النظام ===
+  if (/^sys_/i.test(tbl)) return "bdat-system";
+
+  // === الآليات (gimmick tables - lowercase without prefix) ===
+  if (/^(gimmick|gmk_)/i.test(tbl)) return "bdat-gimmick";
+
+  // === المواقع والخرائط ===
+  if (/^(fld_map|fld_land|fld_location|fld_area|fld_camp|fld_colony|fld_weather)/i.test(tbl)) return "bdat-field";
+
+  // === المهارات ===
+  if (/^(skl_|art_|spc_)/i.test(tbl)) return "bdat-skill";
+
+  // === الجواهر ===
+  if (/^(gem_|acc_|orb_)/i.test(tbl)) return "bdat-gem";
+
+  // === الفصائل ===
+  if (/^(job_|rol_|cls_)/i.test(tbl)) return "bdat-class";
+
+  // === النصائح ===
+  if (/^(tip_|hlp_|tut_)/i.test(tbl)) return "bdat-tips";
+  if (/^sys_(tips|loading)/i.test(tbl)) return "bdat-tips";
+
+  // === FLD_ عام (catch-all for remaining FLD_ tables) ===
+  if (/^fld_/i.test(tbl)) return "bdat-field";
+
+  // === BGM ===
+  if (/^bgm/i.test(tbl)) return "bdat-system";
+
+  // === RSC_ (Resource tables - typically system/menu) ===
+  if (/^rsc_/i.test(tbl)) return "bdat-system";
+
+  // === Hex hash names (unresolved) - try to classify by context ===
+  // These are like "0xABC123" - can't categorize by table name
+  if (/^0x[0-9a-f]+$/i.test(tbl)) return null; // fall through to column check
+
+  return null;
+}
+
 function categorizeByColumnName(columnName: string): string | null {
+  if (!columnName || /^0x[0-9a-f]+$/i.test(columnName)) return null;
   const col = columnName.toLowerCase();
-  if (/window|btn|caption|title|dialog|label|layout|menu/i.test(col)) return "bdat-menu";
-  if (/task|purpose|summary|quest|event|scenario|after|client|talk/i.test(col)) return "bdat-quest";
-  if (/landmark|spot|colony|area|map|place|field/i.test(col)) return "bdat-field";
-  if (/skill|price|armor|weapon|description|pouch|gem|art/i.test(col)) return "bdat-item";
-  if (/voice|audio|config|option|setting|display/i.test(col)) return "bdat-settings";
+
+  // القوائم والواجهة - UI column patterns
+  if (/^(msg_caption|msgidcaption|caption|windowtitle|btncaption|menucategory|menugroup|menuicon|menupriority|optiontext|overwritetext|pagetitle|filtern|sortn)/i.test(columnName)) return "bdat-menu";
+  if (/window|btn|layout|menu(?!mapimage)/i.test(col) && !/enemy|battle/i.test(col)) return "bdat-menu";
+
+  // المهام والقصص - Quest/Story column patterns
+  if (/^(msg_info|msgidinfo|questcategory|questflag|questid|questimage|purposeicon|nextpurpose|taskui|linqquest)/i.test(columnName)) return "bdat-quest";
+  if (/task|purpose|summary|quest|scenario/i.test(col)) return "bdat-quest";
+
+  // المواقع - Location column patterns
+  if (/^(locationname|locationid|locationbdat|colonyid|mapid|mapinfo|mapjump|areainfo|arealist|landmark)/i.test(columnName)) return "bdat-field";
+  if (/landmark|colony(?!flag)|area(?!ffect)/i.test(col) && !/enemy/i.test(col)) return "bdat-field";
+
+  // الأدوات والقتال - Items & Battle column patterns
+  if (/^(itm|gem|weapon|armor|accessory|pouch|material|recipe|price|equiptype)/i.test(columnName)) return "bdat-item";
+  if (/skill|weapon|armor|gem(?!ini)/i.test(col) && col.length > 3) return "bdat-item";
+
+  // الإعدادات - Settings column patterns
+  if (/^(voice|audio|config|option(?!text)|setting|display|brightness|camera|sound|formation|notice|message$)/i.test(columnName)) return "bdat-settings";
+
+  // أسماء/أوصاف عامة - try to infer from common text columns
+  // Msg_Name, Msg_Detail, Msg_Help, Name, DebugName, DescText, DetailText, etc.
+  // These are too generic to categorize - leave as "other"
+
   return null;
 }
 

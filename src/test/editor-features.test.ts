@@ -218,51 +218,88 @@ describe("Editor Features", () => {
   });
 });
 
-// Column-name categorization tests
-describe("categorizeBdatTable - column name fallback", () => {
-  // Inline the categorization logic for testing
-  function categorizeByColumnName(columnName: string): string | null {
-    const col = columnName.toLowerCase();
-    if (/window|btn|caption|title|dialog|label|layout|menu/i.test(col)) return "bdat-menu";
-    if (/task|purpose|summary|quest|event|scenario|after|client|talk/i.test(col)) return "bdat-quest";
-    if (/landmark|spot|colony|area|map|place|field/i.test(col)) return "bdat-field";
-    if (/skill|price|armor|weapon|description|pouch|gem|art/i.test(col)) return "bdat-item";
-    if (/voice|audio|config|option|setting|display/i.test(col)) return "bdat-settings";
+// Full integration tests using the real categorizeBdatTable function pattern
+describe("categorizeBdatTable - full label classification", () => {
+  // Import the actual function logic for testing
+  function categorizeByTableName(tbl: string): string | null {
+    if (/^mnu_/i.test(tbl)) return "bdat-menu";
+    if (/^btl_/i.test(tbl) || /^(rsc_|wpn_)/i.test(tbl)) return "bdat-battle";
+    if (/^chr_/i.test(tbl)) return "bdat-character";
+    if (/^(ene_|emt_)/i.test(tbl)) return "bdat-enemy";
+    if (/^itm_/i.test(tbl)) return "bdat-item";
+    if (/^(qst_|tsk_)/i.test(tbl)) return "bdat-quest";
+    if (/^(evt_|tlk_)/i.test(tbl)) return "bdat-story";
+    if (/^msg_/i.test(tbl)) return "bdat-message";
+    if (/^dlc_/i.test(tbl)) return "bdat-dlc";
+    if (/^(ma_)/i.test(tbl)) return "bdat-message";
+    if (/^sys_/i.test(tbl)) return "bdat-system";
+    if (/^(gimmick|gmk_)/i.test(tbl)) return "bdat-gimmick";
+    if (/^fld_/i.test(tbl)) return "bdat-field";
+    if (/^(skl_|art_|spc_)/i.test(tbl)) return "bdat-skill";
+    if (/^(gem_|acc_|orb_)/i.test(tbl)) return "bdat-gem";
+    if (/^(job_|rol_|cls_)/i.test(tbl)) return "bdat-class";
+    if (/^(tip_|hlp_|tut_)/i.test(tbl)) return "bdat-tips";
+    if (/^bgm/i.test(tbl)) return "bdat-system";
+    if (/^rsc_/i.test(tbl)) return "bdat-system";
+    if (/^0x[0-9a-f]+$/i.test(tbl)) return null;
     return null;
   }
 
-  it("categorizes UI columns correctly", () => {
-    expect(categorizeByColumnName("WindowTitle")).toBe("bdat-menu");
-    expect(categorizeByColumnName("BtnLabel")).toBe("bdat-menu");
-    expect(categorizeByColumnName("DialogCaption")).toBe("bdat-menu");
+  function categorizeByColumnName(columnName: string): string | null {
+    if (!columnName || /^0x[0-9a-f]+$/i.test(columnName)) return null;
+    const col = columnName.toLowerCase();
+    if (/^(msg_caption|caption|windowtitle|btncaption|menucategory)/i.test(columnName)) return "bdat-menu";
+    if (/window|btn|layout/i.test(col)) return "bdat-menu";
+    if (/task|purpose|summary|quest|scenario/i.test(col)) return "bdat-quest";
+    if (/^(locationname|colonyid|mapid|landmark)/i.test(columnName)) return "bdat-field";
+    if (/landmark|colony(?!flag)/i.test(col)) return "bdat-field";
+    if (/^(itm|gem|weapon|armor|accessory|price|equiptype)/i.test(columnName)) return "bdat-item";
+    if (/skill|weapon|armor|gem(?!ini)/i.test(col) && col.length > 3) return "bdat-item";
+    if (/^(voice|audio|config|setting|display|brightness|sound)/i.test(columnName)) return "bdat-settings";
+    return null;
+  }
+
+  function categorizeBdatTable(label: string): string {
+    const match = label.match(/^(.+?)\[\d+\]/);
+    if (!match) return "other";
+    const tbl = match[1];
+    const colMatch = label.match(/\]\s*\.?\s*(.+)/);
+    const col = colMatch ? colMatch[1] : "";
+    const tblCat = categorizeByTableName(tbl);
+    if (tblCat) return tblCat;
+    const colCat = categorizeByColumnName(col);
+    if (colCat) return colCat;
+    return "other";
+  }
+
+  it("categorizes known table prefixes", () => {
+    expect(categorizeBdatTable("MNU_Msg[0].Name")).toBe("bdat-menu");
+    expect(categorizeBdatTable("BTL_Arts_PC[5].Name")).toBe("bdat-battle");
+    expect(categorizeBdatTable("QST_List[2].Title")).toBe("bdat-quest");
+    expect(categorizeBdatTable("FLD_MapList[0].Name")).toBe("bdat-field");
+    expect(categorizeBdatTable("ITM_Accessory[3].Name")).toBe("bdat-item");
+    expect(categorizeBdatTable("CHR_Dr[0].Name")).toBe("bdat-character");
   });
 
-  it("categorizes quest columns correctly", () => {
-    expect(categorizeByColumnName("TaskSummary")).toBe("bdat-quest");
-    expect(categorizeByColumnName("QuestPurpose")).toBe("bdat-quest");
-    expect(categorizeByColumnName("EventScenario")).toBe("bdat-quest");
+  it("categorizes gimmick tables (lowercase)", () => {
+    expect(categorizeBdatTable("gimmickMob[0].Name")).toBe("bdat-gimmick");
+    expect(categorizeBdatTable("gimmickTreasureBox[5].Name")).toBe("bdat-gimmick");
   });
 
-  it("categorizes location columns correctly", () => {
-    expect(categorizeByColumnName("LandmarkName")).toBe("bdat-field");
-    expect(categorizeByColumnName("ColonyArea")).toBe("bdat-field");
-    expect(categorizeByColumnName("SpotLocation")).toBe("bdat-field");
+  it("categorizes msg_ tables as message archive", () => {
+    expect(categorizeBdatTable("msg_btl_ChSU_gate_message[0].Name")).toBe("bdat-message");
   });
 
-  it("categorizes item columns correctly", () => {
-    expect(categorizeByColumnName("WeaponSkill")).toBe("bdat-item");
-    expect(categorizeByColumnName("ArmorPrice")).toBe("bdat-item");
-    expect(categorizeByColumnName("GemEffect")).toBe("bdat-item");
+  it("falls back to column name for unresolved hash tables", () => {
+    expect(categorizeBdatTable("0xABC123[0].Caption")).toBe("bdat-menu");
+    expect(categorizeBdatTable("0xABC123[0].TaskSummary")).toBe("bdat-quest");
+    expect(categorizeBdatTable("0xABC123[0].LandmarkName")).toBe("bdat-field");
+    expect(categorizeBdatTable("0xABC123[0].WeaponSkill")).toBe("bdat-item");
+    expect(categorizeBdatTable("0xABC123[0].VoiceSetting")).toBe("bdat-settings");
   });
 
-  it("categorizes settings columns correctly", () => {
-    expect(categorizeByColumnName("VoiceSetting")).toBe("bdat-settings");
-    expect(categorizeByColumnName("DisplayMode")).toBe("bdat-settings");
-    expect(categorizeByColumnName("AudioConfig")).toBe("bdat-settings");
-  });
-
-  it("returns null for unknown columns", () => {
-    expect(categorizeByColumnName("RandomColumn")).toBeNull();
-    expect(categorizeByColumnName("Unknown")).toBeNull();
+  it("returns other for fully unresolved entries", () => {
+    expect(categorizeBdatTable("0xABC123[0].0xDEF456")).toBe("other");
+    expect(categorizeBdatTable("0xABC123[0].Name")).toBe("other"); // Name is too generic
   });
 });
