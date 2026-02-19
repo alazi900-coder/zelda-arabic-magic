@@ -74,6 +74,20 @@ const Editor = () => {
       await editor.handleDropImport(e.dataTransfer);
     }
   }, [editor.handleDropImport]);
+  // حساب عدد النصوص العربية التي تحتاج معالجة (Reshaping/BiDi)
+  const unprocessedArabicCount = React.useMemo(() => {
+    if (!editor.state) return 0;
+    let count = 0;
+    for (const [key, value] of Object.entries(editor.state.translations)) {
+      if (!value?.trim()) continue;
+      // يحتوي حروف عربية عادية (Unicode blocks) لكن بدون Presentation Forms
+      const hasArabic = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/.test(value);
+      const hasForms = /[\uFB50-\uFDFF\uFE70-\uFEFF]/.test(value);
+      if (hasArabic && !hasForms) count++;
+    }
+    return count;
+  }, [editor.state?.translations]);
+
   // حساب عدد النصوص غير المترجمة (يحترم الفلتر النشط)
   const untranslatedCount = React.useMemo(() => {
     if (!editor.state) return 0;
@@ -624,6 +638,31 @@ const Editor = () => {
               </div>
             </CardContent>
           </Card>
+
+          {/* Arabic Unprocessed Warning Banner */}
+          {unprocessedArabicCount > 0 && (
+            <div className="mb-4 flex items-start gap-3 p-3 rounded-lg border border-secondary/40 bg-secondary/8">
+              <AlertTriangle className="w-5 h-5 text-secondary shrink-0 mt-0.5" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-display font-bold text-secondary">
+                  ⚠️ {unprocessedArabicCount} نص عربي لم يُعالَج بعد
+                </p>
+                <p className="text-xs text-muted-foreground font-body mt-0.5">
+                  هذه النصوص تحتوي عربية غير مُشكَّلة (بدون Reshaping). سيتم معالجتها تلقائياً عند البناء، أو اضغط الزر أدناه للمعاينة أولاً.
+                </p>
+              </div>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={editor.handleApplyArabicProcessing}
+                disabled={editor.applyingArabic}
+                className="shrink-0 text-xs font-body border-secondary/40 text-secondary hover:border-secondary/60"
+              >
+                {editor.applyingArabic ? <Loader2 className="w-3 h-3 animate-spin ml-1" /> : <Sparkles className="w-3 h-3 ml-1" />}
+                معالجة الآن
+              </Button>
+            </div>
+          )}
 
           {/* Arabic Processing + Build Buttons */}
           <div className="flex gap-3 mb-6">
