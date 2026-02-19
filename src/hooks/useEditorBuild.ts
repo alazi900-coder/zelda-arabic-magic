@@ -276,12 +276,15 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
           
           // Then download local BDAT files
           for (const result of localBdatResults) {
-            const bdatBlob = new Blob([new Uint8Array(result.data) as any]);
+            const bdatBlob = new Blob([new Uint8Array(result.data) as any], { type: "application/octet-stream" });
             const bdatUrl = URL.createObjectURL(bdatBlob);
             const bdatA = document.createElement("a");
             bdatA.href = bdatUrl;
-            bdatA.download = result.name;
+            // Ensure filename ends with .bdat (strip any extra extension added by the upload)
+            const cleanName = result.name.replace(/\.(txt|bin)$/i, "");
+            bdatA.download = cleanName.endsWith(".bdat") ? cleanName : cleanName + ".bdat";
             bdatA.click();
+            URL.revokeObjectURL(bdatUrl);
           }
           setBuildProgress(`✅ تم بنجاح! تم تعديل ${modifiedCount} نص`);
         } else {
@@ -296,12 +299,14 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
         // Only binary BDAT files, download them directly
         setBuildProgress("تحميل ملفات BDAT المعرّبة...");
         for (const result of localBdatResults) {
-          const bdatBlob = new Blob([new Uint8Array(result.data) as any]);
+          const bdatBlob = new Blob([new Uint8Array(result.data) as any], { type: "application/octet-stream" });
           const bdatUrl = URL.createObjectURL(bdatBlob);
           const bdatA = document.createElement("a");
           bdatA.href = bdatUrl;
-          bdatA.download = result.name;
+          const cleanName = result.name.replace(/\.(txt|bin)$/i, "");
+          bdatA.download = cleanName.endsWith(".bdat") ? cleanName : cleanName + ".bdat";
           bdatA.click();
+          URL.revokeObjectURL(bdatUrl);
         }
         setBuildProgress(`✅ تم بنجاح! تم تعديل ${localModifiedCount} نص في ملفات BDAT`);
       }
