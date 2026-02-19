@@ -806,14 +806,15 @@ const XenobladeProcess = () => {
                             <div className="border-t border-border bg-background/60">
                               <div className="overflow-x-auto">
                                 <table className="w-full text-xs">
-                                  <thead>
+                                   <thead>
                                     <tr className="border-b border-border bg-muted/30">
                                        {[
                                          { key: "الحقل", title: undefined },
                                          { key: "النوع", title: undefined },
                                          { key: "ترجمة", title: undefined },
-                                         { key: "max_chars", title: "الحد الأقصى لعدد الحروف في النص الأصلي" },
-                                         { key: "max_utf8_bytes ⚠", title: "الحد الأقصى بالبايت — العربي يحتاج 2× بايت، قد يتجاوز الحد (⚠)" },
+                                         { key: "max_bytes", title: "الحد الأقصى بالبايت المخزن في BDAT" },
+                                         { key: "أحرف عربية", title: "عدد الأحرف العربية المتاحة (كل حرف = 2 بايت)" },
+                                         { key: "خطورة الطول", title: "مؤشر خطورة الطول: 🔴 خطرة جداً (≤10) | 🟡 محدودة (11-30) | 🟢 مريحة (>30)" },
                                          { key: "صفوف", title: undefined },
                                          { key: "multiline", title: undefined },
                                          { key: "وسوم", title: undefined },
@@ -824,8 +825,24 @@ const XenobladeProcess = () => {
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    {tbl.fields.map(field => (
-                                      <tr key={field.field_name} className="border-b border-border/50 hover:bg-muted/20 transition-colors">
+                                    {tbl.fields.map(field => {
+                                      // Arabic chars available = floor(max_utf8_bytes / 2)
+                                      const arabicChars = field.max_utf8_bytes > 0 ? Math.floor(field.max_utf8_bytes / 2) : 0;
+                                      const danger: "critical" | "limited" | "safe" | "none" = !field.translate || field.max_utf8_bytes <= 0
+                                        ? "none"
+                                        : arabicChars <= 10
+                                        ? "critical"
+                                        : arabicChars <= 30
+                                        ? "limited"
+                                        : "safe";
+                                      const dangerConfig = {
+                                        critical: { emoji: "🔴", label: "خطرة", cls: "bg-red-500/15 text-red-600 dark:text-red-400 border-red-500/30" },
+                                        limited:  { emoji: "🟡", label: "محدودة", cls: "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30" },
+                                        safe:     { emoji: "🟢", label: "مريحة", cls: "bg-green-500/15 text-green-600 dark:text-green-400 border-green-500/30" },
+                                        none:     { emoji: "–", label: "–", cls: "text-muted-foreground" },
+                                      }[danger];
+                                      return (
+                                      <tr key={field.field_name} className={`border-b border-border/50 hover:bg-muted/20 transition-colors ${danger === "critical" ? "bg-red-500/5" : ""}`}>
                                         <td className="px-3 py-2 font-mono font-semibold whitespace-nowrap" dir="ltr">{field.field_name}</td>
                                         <td className="px-3 py-2">
                                           <span className="px-1.5 py-0.5 rounded bg-secondary/20 font-mono text-[10px]">{field.data_type}</span>
@@ -835,22 +852,27 @@ const XenobladeProcess = () => {
                                             {field.translate ? "✓ نعم" : "✗ لا"}
                                           </span>
                                         </td>
-                                         <td className="px-3 py-2 text-center font-mono">{field.max_chars}</td>
+                                         <td className="px-3 py-2 text-center font-mono text-xs">{field.max_utf8_bytes > 0 ? field.max_utf8_bytes : "–"}</td>
                                          <td className="px-3 py-2 text-center font-mono">
-                                           {(() => {
-                                             // Arabic text needs ~2x bytes vs latin. Warn if Arabic translation would overflow.
-                                             const arabicEstimate = field.max_chars * 2;
-                                             const willOverflow = field.translate && arabicEstimate > field.max_utf8_bytes;
-                                             return (
-                                               <span
-                                                 className={`inline-flex items-center gap-1 ${willOverflow ? "text-orange-500 dark:text-orange-400 font-semibold" : ""}`}
-                                                 title={willOverflow ? `⚠ النص العربي قد يصل ~${arabicEstimate} بايت > الحد ${field.max_utf8_bytes}` : undefined}
-                                               >
-                                                 {field.max_utf8_bytes}
-                                                 {willOverflow && <span className="text-[10px]">⚠</span>}
-                                               </span>
-                                             );
-                                           })()}
+                                           {field.translate && arabicChars > 0 ? (
+                                             <span className={`font-bold text-sm ${danger === "critical" ? "text-red-500 dark:text-red-400" : danger === "limited" ? "text-amber-500 dark:text-amber-400" : "text-green-600 dark:text-green-400"}`}>
+                                               {arabicChars}
+                                             </span>
+                                           ) : (
+                                             <span className="text-muted-foreground">–</span>
+                                           )}
+                                         </td>
+                                         <td className="px-3 py-2 text-center">
+                                           {danger !== "none" ? (
+                                             <span
+                                               className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border ${dangerConfig.cls}`}
+                                               title={`${arabicChars} حرف عربي متاح (${field.max_utf8_bytes} بايت)`}
+                                             >
+                                               {dangerConfig.emoji} {dangerConfig.label}
+                                             </span>
+                                           ) : (
+                                             <span className="text-muted-foreground text-[10px]">–</span>
+                                           )}
                                          </td>
                                         <td className="px-3 py-2 text-center font-mono">{field.record_count}</td>
                                         <td className="px-3 py-2 text-center">
@@ -868,13 +890,14 @@ const XenobladeProcess = () => {
                                             )}
                                           </div>
                                         </td>
-                                        {samplesEnabled && (
-                                          <td className="px-3 py-2 font-mono text-[10px] text-muted-foreground max-w-[120px] truncate" dir="ltr">
-                                            {field.samples?.[0] ?? "–"}
-                                          </td>
-                                        )}
-                                      </tr>
-                                    ))}
+                                         {samplesEnabled && (
+                                           <td className="px-3 py-2 font-mono text-[10px] text-muted-foreground max-w-[120px] truncate" dir="ltr">
+                                             {field.samples?.[0] ?? "–"}
+                                           </td>
+                                         )}
+                                       </tr>
+                                     );
+                                    })}
                                   </tbody>
                                 </table>
                               </div>
