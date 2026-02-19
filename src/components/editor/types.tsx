@@ -121,6 +121,7 @@ export const BDAT_CATEGORIES: FileCategory[] = [
   { id: "bdat-system", label: "إعدادات النظام", emoji: "⚙️", icon: "Settings", color: "text-slate-400" },
   { id: "bdat-message", label: "أرشيف الرسائل", emoji: "💬", icon: "MessageSquare", color: "text-teal-400" },
   { id: "bdat-gimmick", label: "الآليات والألغاز", emoji: "🔧", icon: "Wrench", color: "text-gray-400" },
+  { id: "bdat-settings", label: "إعدادات الصوت والعرض", emoji: "🎚️", icon: "SlidersHorizontal", color: "text-fuchsia-400" },
 ];
 
 export function categorizeBdatTable(label: string): string {
@@ -165,7 +166,31 @@ export function categorizeBdatTable(label: string): string {
   // bgmlist وغيرها
   if (/^bgm/i.test(tbl)) return "bdat-system";
 
+  // Column-name based categorization as fallback
+  const dotIdx = tbl.indexOf('.');
+  if (dotIdx >= 0) {
+    const colName = tbl.substring(dotIdx + 1);
+    const colResult = categorizeByColumnName(colName);
+    if (colResult) return colResult;
+  }
+  // Also check the full label for column info after the table bracket
+  const colMatch = label.match(/\]\s*\.?\s*(.+)/);
+  if (colMatch) {
+    const colResult = categorizeByColumnName(colMatch[1]);
+    if (colResult) return colResult;
+  }
+
   return "other";
+}
+
+function categorizeByColumnName(columnName: string): string | null {
+  const col = columnName.toLowerCase();
+  if (/window|btn|caption|title|dialog|label|layout|menu/i.test(col)) return "bdat-menu";
+  if (/task|purpose|summary|quest|event|scenario|after|client|talk/i.test(col)) return "bdat-quest";
+  if (/landmark|spot|colony|area|map|place|field/i.test(col)) return "bdat-field";
+  if (/skill|price|armor|weapon|description|pouch|gem|art/i.test(col)) return "bdat-item";
+  if (/voice|audio|config|option|setting|display/i.test(col)) return "bdat-settings";
+  return null;
 }
 
 // Check if text contains technical tag markers
