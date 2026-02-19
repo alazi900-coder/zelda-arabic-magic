@@ -125,7 +125,22 @@ export const BDAT_CATEGORIES: FileCategory[] = [
   { id: "bdat-settings", label: "إعدادات الصوت والعرض", emoji: "🎚️", icon: "SlidersHorizontal", color: "text-fuchsia-400" },
 ];
 
-export function categorizeBdatTable(label: string, sourceFilename?: string): string {
+// Keywords that identify title screen / main menu text
+const TITLE_MENU_KEYWORDS = /^(new game|continue|load game|save game|options|settings|quit|exit|title screen|press any button|difficulty|controls|brightness|language|audio|vibration|game over|retry|return to title)$/i;
+
+export function isMainMenuText(englishText: string): boolean {
+  if (!englishText) return false;
+  const trimmed = englishText.trim();
+  // Exact match on common title-screen strings
+  if (TITLE_MENU_KEYWORDS.test(trimmed)) return true;
+  // Short text (≤5 words) containing key phrases
+  if (trimmed.split(/\s+/).length <= 5) {
+    if (/\b(new game|continue|load|save|quit|exit|title screen|options|settings|controls|brightness|difficulty)\b/i.test(trimmed)) return true;
+  }
+  return false;
+}
+
+export function categorizeBdatTable(label: string, sourceFilename?: string, englishText?: string): string {
   const match = label.match(/^(.+?)\[\d+\]/);
   if (!match) return "other";
   const tbl = match[1];
@@ -147,6 +162,9 @@ export function categorizeBdatTable(label: string, sourceFilename?: string): str
     const fileCat = categorizeByFilename(sourceFilename);
     if (fileCat) return fileCat;
   }
+
+  // Step 4: Content-based detection — check English text for title-menu keywords
+  if (englishText && isMainMenuText(englishText)) return "bdat-title-menu";
 
   return "other";
 }

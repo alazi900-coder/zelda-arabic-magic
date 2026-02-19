@@ -325,7 +325,7 @@ export function useEditorState() {
     for (const e of state.entries) {
       const isBdat = /^.+?\[\d+\]\./.test(e.label);
       const sourceFile = e.msbtFile.startsWith('bdat:') ? e.msbtFile.slice(5) : undefined;
-      const cat = isBdat ? categorizeBdatTable(e.label, sourceFile) : categorizeFile(e.msbtFile);
+      const cat = isBdat ? categorizeBdatTable(e.label, sourceFile, e.original) : categorizeFile(e.msbtFile);
       counts[cat] = (counts[cat] || 0) + 1;
     }
     return counts;
@@ -410,7 +410,7 @@ export function useEditorState() {
       const matchFile = filterFile === "all" || e.msbtFile === filterFile;
       const isBdat = /^.+?\[\d+\]\./.test(e.label);
       const sourceFile = e.msbtFile.startsWith('bdat:') ? e.msbtFile.slice(5) : undefined;
-      const matchCategory = filterCategory.length === 0 || filterCategory.includes(isBdat ? categorizeBdatTable(e.label, sourceFile) : categorizeFile(e.msbtFile));
+      const matchCategory = filterCategory.length === 0 || filterCategory.includes(isBdat ? categorizeBdatTable(e.label, sourceFile, e.original) : categorizeFile(e.msbtFile));
       const matchStatus = 
         filterStatus === "all" || 
         (filterStatus === "translated" && isTranslated) ||
