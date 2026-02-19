@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, AlertTriangle, Info } from "lucide-react";
+import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, AlertTriangle, Info, Download, Loader2 } from "lucide-react";
 
 interface FontFile {
   name: string;
@@ -21,6 +21,28 @@ export default function ModPackager() {
   const [bdatFiles, setBdatFiles] = useState<BdatFile[]>([]);
   const [building, setBuilding] = useState(false);
   const [status, setStatus] = useState("");
+  const [downloadingFont, setDownloadingFont] = useState(false);
+
+  const NOTO_SANS_ARABIC_URL = "https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansArabic/NotoSansArabic-Regular.ttf";
+  const NOTO_SANS_ARABIC_FALLBACK_URL = "https://cdn.jsdelivr.net/gh/googlefonts/noto-fonts@main/hinted/ttf/NotoSansArabic/NotoSansArabic-Regular.ttf";
+
+  const handleDownloadNotoFont = useCallback(async () => {
+    setDownloadingFont(true);
+    try {
+      let response = await fetch(NOTO_SANS_ARABIC_URL);
+      if (!response.ok) {
+        response = await fetch(NOTO_SANS_ARABIC_FALLBACK_URL);
+      }
+      if (!response.ok) throw new Error("فشل تحميل الخط");
+      const data = await response.arrayBuffer();
+      setFontFile({ name: "NotoSansArabic-Regular.ttf", data, size: data.byteLength });
+    } catch {
+      setStatus("❌ فشل تحميل خط Noto Sans Arabic — تحقق من اتصالك بالإنترنت");
+      setTimeout(() => setStatus(""), 5000);
+    } finally {
+      setDownloadingFont(false);
+    }
+  }, []);
 
   const handleFontUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -169,13 +191,27 @@ export default function ModPackager() {
                 </div>
               </div>
             ) : (
-              <label className="flex flex-col items-center gap-3 p-8 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
-                <Upload className="w-8 h-8 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">اسحب الخط هنا أو اضغط للرفع</span>
-                <input type="file" accept=".ttf,.otf,.bfttf,.woff,.woff2" onChange={handleFontUpload} className="hidden" />
-              </label>
+              <div className="space-y-3">
+                <Button
+                  variant="outline"
+                  className="w-full gap-2 border-primary/30 hover:bg-primary/5"
+                  onClick={handleDownloadNotoFont}
+                  disabled={downloadingFont}
+                >
+                  {downloadingFont ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Download className="w-4 h-4" />
+                  )}
+                  {downloadingFont ? "جارٍ التحميل..." : "تحميل Noto Sans Arabic تلقائياً"}
+                </Button>
+                <label className="flex flex-col items-center gap-3 p-6 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
+                  <Upload className="w-6 h-6 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground">أو ارفع خطاً يدوياً</span>
+                  <input type="file" accept=".ttf,.otf,.bfttf,.woff,.woff2" onChange={handleFontUpload} className="hidden" />
+                </label>
+              </div>
             )}
-
             <div className="text-xs text-muted-foreground bg-muted/30 rounded p-3 space-y-1">
               <p className="font-semibold">💡 خطوط مقترحة:</p>
               <p>• Noto Sans Arabic — شامل ومستقر</p>
