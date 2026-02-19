@@ -144,7 +144,7 @@ export function categorizeBdatTable(label: string): string {
   return "other";
 }
 
-function categorizeByTableName(tbl: string): string | null {
+export function categorizeByTableName(tbl: string): string | null {
   const t = tbl.toLowerCase();
 
   // === القوائم والواجهة ===
@@ -221,7 +221,7 @@ function categorizeByTableName(tbl: string): string | null {
   return null;
 }
 
-function categorizeByColumnName(columnName: string): string | null {
+export function categorizeByColumnName(columnName: string): string | null {
   if (!columnName || /^0x[0-9a-f]+$/i.test(columnName)) return null;
   const col = columnName.toLowerCase();
 
