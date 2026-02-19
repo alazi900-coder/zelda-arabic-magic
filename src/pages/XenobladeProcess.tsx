@@ -201,7 +201,7 @@ const XenobladeProcess = () => {
                 index: i,
                 label: `${s.tableName}[${s.rowIndex}].${s.columnName}`,
                 original: s.original,
-                maxBytes: 9999,
+                maxBytes: s.maxBytes,
                 type: 'bdat-bin',
                 columnName: s.columnName,
               });
