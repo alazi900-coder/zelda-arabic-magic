@@ -556,6 +556,18 @@ const EXTRA_NAMES: string[] = [
   'BTL_TalentList', 'BTL_TalentNode', 'BTL_WpnParam', 'BTL_Formation',
   'BTL_FormationType', 'BTL_ReactionList',
   'bgmlist', 'debug_name',
+  // Common column names
+  'name', 'Name', 'caption', 'text', 'message', 'msg', 'label', 'Label',
+  'ID', 'id', 'HP', 'Atk', 'Def', 'Level', 'Price', 'Value', 'Rate', 'Count',
+  'Msg_Name', 'MsgIdInfo', 'DebugName', 'Description', 'Title', 'Comment',
+  'Flag', 'Type', 'Category', 'Group', 'Index', 'Param', 'Result',
+  'Condition', 'Target', 'Effect', 'Range', 'Time', 'Speed', 'Power',
+  'Radius', 'Duration', 'Interval', 'Damage', 'Heal', 'Cost', 'Num',
+  'Max', 'Min', 'Base', 'Add', 'Scale', 'Ratio', 'Weight', 'Size',
+  'Start', 'End', 'Next', 'Prev', 'Parent', 'Child',
+  'Reward', 'Drop', 'Lot', 'Table', 'List', 'Info', 'Data', 'Setup',
+  'Resource', 'Model', 'Motion', 'Anim', 'Sound', 'Voice', 'SE', 'BGM',
+  'Icon', 'Image', 'Color', 'Alpha', 'Offset', 'Pos', 'Rot', 'Scl',
 ];
 
 for (const name of EXTRA_NAMES) {
