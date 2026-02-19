@@ -241,7 +241,7 @@ function inspectField(
 
   for (const ri of rowIndices) {
     const val = table.rows[ri]?.values[col.name];
-    if (typeof val === "string" && val.length > 0) {
+    if (typeof val === "string" && val.trim().length > 0) {
       texts.push(val);
     }
   }
@@ -309,7 +309,7 @@ function inspectField(
     non_empty_count: nonEmpty,
     max_chars: maxChars,
     avg_chars: Math.round(avgChars * 10) / 10,
-    max_utf8_bytes: Math.ceil(maxBytes * opts.safety_margin),
+    max_utf8_bytes: Math.max(Math.ceil(maxBytes * opts.safety_margin), 4),
     avg_utf8_bytes: Math.round(avgBytes * 10) / 10,
     multiline,
     duplicate_ratio: Math.round(dupRatio * 100) / 100,
