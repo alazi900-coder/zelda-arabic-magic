@@ -57,7 +57,7 @@ const Install = () => {
           </div>
           <h1 className="text-3xl font-display font-bold mb-2">تثبيت التطبيق 📱</h1>
           <p className="text-muted-foreground font-body">
-            ثبّت أداة تعريب زيلدا على جهازك للوصول السريع
+            ثبّت أداة تعريب Xenoblade على جهازك للوصول السريع
           </p>
         </div>
 
