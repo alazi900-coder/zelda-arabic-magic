@@ -916,6 +916,23 @@ export function useEditorState() {
         Speaker: ["Village Elder", "Merchant", "Guard", "Child", "Traveler", "Blacksmith", "Innkeeper", "Scholar", "Farmer", "Soldier"],
         Dialogue: ["Welcome, traveler.", "Care to see my wares?", "Halt! State your business.", "Wanna play?", "The road ahead is dangerous."],
       }},
+      // Column-name categorization test entries (generic table prefixes)
+      { table: "RSC_Data", cols: ["WindowTitle", "BtnLabel"], rows: 3, texts: {
+        WindowTitle: ["Inventory Window", "Status Window", "Map Window"],
+        BtnLabel: ["Open", "Close", "Toggle"],
+      }},
+      { table: "DAT_Info", cols: ["TaskSummary", "QuestPurpose"], rows: 3, texts: {
+        TaskSummary: ["Defeat 5 monsters", "Collect 3 herbs", "Escort the NPC"],
+        QuestPurpose: ["Help the colony", "Gather supplies", "Defend the camp"],
+      }},
+      { table: "WLD_Geo", cols: ["LandmarkName", "ColonyArea"], rows: 3, texts: {
+        LandmarkName: ["Great Cotte Falls", "Alfeto Valley", "Maktha Wildwood"],
+        ColonyArea: ["Colony 9 Area", "Colony 4 Area", "Colony Gamma Area"],
+      }},
+      { table: "CFG_Option", cols: ["VoiceSetting", "DisplayMode"], rows: 3, texts: {
+        VoiceSetting: ["Japanese Voice", "English Voice", "No Voice"],
+        DisplayMode: ["Full Screen", "Windowed", "Borderless"],
+      }},
     ];
     const entries: ExtractedEntry[] = [];
     let idx = 0;
