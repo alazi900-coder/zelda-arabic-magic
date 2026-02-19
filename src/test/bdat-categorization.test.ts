@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { categorizeBdatTable, categorizeByFilename } from "@/components/editor/types";
+import { categorizeBdatTable, categorizeByFilename, isMainMenuText } from "@/components/editor/types";
 
 describe("categorizeBdatTable - table name prefixes", () => {
   it("classifies MNU_ tables as menu", () => {
@@ -73,5 +73,53 @@ describe("categorizeBdatTable - Stage 3: filename fallback", () => {
   });
   it("returns other for unrecognizable labels", () => {
     expect(categorizeBdatTable("Unknown[0].SomeRandomCol")).toBe("other");
+  });
+});
+
+describe("categorizeBdatTable - Stage 4: content-based detection", () => {
+  it("classifies 'New Game' text as title-menu", () => {
+    expect(categorizeBdatTable("Unknown[0].SomeCol", undefined, "New Game")).toBe("bdat-title-menu");
+  });
+  it("classifies 'Continue' text as title-menu", () => {
+    expect(categorizeBdatTable("Unknown[0].SomeCol", undefined, "Continue")).toBe("bdat-title-menu");
+  });
+  it("classifies 'Settings' text as title-menu", () => {
+    expect(categorizeBdatTable("Unknown[0].SomeCol", undefined, "Settings")).toBe("bdat-title-menu");
+  });
+  it("classifies 'Options' text as title-menu", () => {
+    expect(categorizeBdatTable("Unknown[0].SomeCol", undefined, "Options")).toBe("bdat-title-menu");
+  });
+  it("classifies 'Quit' as title-menu", () => {
+    expect(categorizeBdatTable("Unknown[0].SomeCol", undefined, "Quit")).toBe("bdat-title-menu");
+  });
+  it("classifies 'Load Game' as title-menu", () => {
+    expect(categorizeBdatTable("Unknown[0].SomeCol", undefined, "Load Game")).toBe("bdat-title-menu");
+  });
+  it("does NOT classify long text with 'continue' as title-menu", () => {
+    expect(categorizeBdatTable("Unknown[0].SomeCol", undefined, "Please continue walking down the path to find the treasure")).toBe("other");
+  });
+  it("does NOT override table-name classification", () => {
+    expect(categorizeBdatTable("BTL_Arts[0].Name", undefined, "New Game")).toBe("bdat-battle");
+  });
+});
+
+describe("isMainMenuText", () => {
+  it("matches exact title-screen strings", () => {
+    expect(isMainMenuText("New Game")).toBe(true);
+    expect(isMainMenuText("Continue")).toBe(true);
+    expect(isMainMenuText("Options")).toBe(true);
+    expect(isMainMenuText("Quit")).toBe(true);
+    expect(isMainMenuText("Title Screen")).toBe(true);
+  });
+  it("matches short phrases with keywords", () => {
+    expect(isMainMenuText("Save Data")).toBe(true);
+    expect(isMainMenuText("Load Save")).toBe(true);
+  });
+  it("rejects long sentences", () => {
+    expect(isMainMenuText("You can continue your journey by talking to the elder")).toBe(false);
+  });
+  it("rejects unrelated short text", () => {
+    expect(isMainMenuText("Hello")).toBe(false);
+    expect(isMainMenuText("Attack")).toBe(false);
   });
 });
