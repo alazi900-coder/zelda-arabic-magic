@@ -124,7 +124,7 @@ export const BDAT_CATEGORIES: FileCategory[] = [
   { id: "bdat-settings", label: "إعدادات الصوت والعرض", emoji: "🎚️", icon: "SlidersHorizontal", color: "text-fuchsia-400" },
 ];
 
-export function categorizeBdatTable(label: string): string {
+export function categorizeBdatTable(label: string, sourceFilename?: string): string {
   const match = label.match(/^(.+?)\[\d+\]/);
   if (!match) return "other";
   const tbl = match[1];
@@ -141,7 +141,66 @@ export function categorizeBdatTable(label: string): string {
   const colCat = categorizeByColumnName(col);
   if (colCat) return colCat;
 
+  // Step 3: Fallback to source BDAT filename
+  if (sourceFilename) {
+    const fileCat = categorizeByFilename(sourceFilename);
+    if (fileCat) return fileCat;
+  }
+
   return "other";
+}
+
+export function categorizeByFilename(filename: string): string | null {
+  const f = filename.toLowerCase().replace(/\.bdat$/i, '');
+  
+  const filenameMap: Record<string, string> = {
+    'battle': 'bdat-battle',
+    'btl': 'bdat-battle',
+    'field': 'bdat-field',
+    'fld': 'bdat-field',
+    'menu': 'bdat-menu',
+    'mnu': 'bdat-menu',
+    'quest': 'bdat-quest',
+    'qst': 'bdat-quest',
+    'system': 'bdat-system',
+    'sys': 'bdat-system',
+    'dlc': 'bdat-dlc',
+    'enemy': 'bdat-enemy',
+    'ene': 'bdat-enemy',
+    'item': 'bdat-item',
+    'itm': 'bdat-item',
+    'story': 'bdat-story',
+    'event': 'bdat-story',
+    'evt': 'bdat-story',
+    'character': 'bdat-character',
+    'chr': 'bdat-character',
+    'skill': 'bdat-skill',
+    'art': 'bdat-skill',
+    'gem': 'bdat-gem',
+    'class': 'bdat-class',
+    'job': 'bdat-class',
+    'tips': 'bdat-tips',
+    'tutorial': 'bdat-tips',
+    'message': 'bdat-message',
+    'msg': 'bdat-message',
+    'autotalk': 'bdat-message',
+    'talk': 'bdat-story',
+    'gimmick': 'bdat-gimmick',
+    'gmk': 'bdat-gimmick',
+    'common': 'bdat-menu',
+    'ui': 'bdat-menu',
+    'npc': 'bdat-character',
+  };
+  
+  // Exact match
+  if (filenameMap[f]) return filenameMap[f];
+  
+  // Partial match - check if filename contains any key
+  for (const [key, cat] of Object.entries(filenameMap)) {
+    if (f.includes(key)) return cat;
+  }
+  
+  return null;
 }
 
 export function categorizeByTableName(tbl: string): string | null {
