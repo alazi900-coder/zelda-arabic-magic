@@ -122,7 +122,7 @@ export default function ModPackager() {
           fontName = fontName.replace(/\.(ttf|otf)$/i, ".bfttf");
         }
         zipParts.push({
-          path: `romfs/menu/font/${fontName}`,
+          path: `romfs/skyline/font/font_main.bfttf`,
           data: new Uint8Array(fontData),
         });
       }
@@ -186,6 +186,9 @@ export default function ModPackager() {
             <p>
               ارفع خط عربي بصيغة <code className="bg-muted px-1 rounded">.ttf</code> أو <code className="bg-muted px-1 rounded">.bfttf</code> 
               وملفات BDAT المترجمة، وستقوم الأداة بتجميعها في هيكل مجلدات جاهز للتثبيت على المحاكي أو الجهاز.
+            </p>
+            <p className="mt-2 text-xs font-semibold text-primary">
+              ⚙️ هذه الأداة مُصممة للمودات المعتمدة على <strong>Skyline plugin</strong> — الخط يُوضع في <code className="bg-muted px-1 rounded">romfs/skyline/font/font_main.bfttf</code>
             </p>
           </div>
         </Card>
@@ -327,9 +330,9 @@ export default function ModPackager() {
               <p className="pr-4">└── romfs/</p>
               {fontFile && (
                 <>
-                  <p className="pr-12">├── menu/</p>
+                  <p className="pr-12">├── skyline/</p>
                   <p className="pr-20">└── font/</p>
-                  <p className="pr-28 text-primary">└── {fontFile.name.endsWith(".bfttf") ? fontFile.name : fontFile.name.replace(/\.(ttf|otf)$/i, ".bfttf")}</p>
+                  <p className="pr-28 text-primary">└── font_main.bfttf</p>
                 </>
               )}
               {bdatFiles.length > 0 && (
