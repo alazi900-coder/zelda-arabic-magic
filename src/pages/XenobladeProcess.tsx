@@ -3,9 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Upload, FileText, ArrowRight, Loader2, CheckCircle2, Clock, Pencil, Database, Binary, Sparkles, Download } from "lucide-react";
+import { Upload, FileText, ArrowRight, Loader2, CheckCircle2, Clock, Pencil, Database, Binary, Sparkles, Download, ChevronDown, ChevronRight, Shield, Tag } from "lucide-react";
 import heroBg from "@/assets/xc3-hero-bg.jpg";
 import { categorizeBdatTable, categorizeByTableName, categorizeByColumnName, categorizeByFilename } from "@/components/editor/types";
+import type { BdatSchemaReport } from "@/lib/bdat-schema-inspector";
 
 type ProcessingStage = "idle" | "uploading" | "extracting" | "done" | "error";
 
@@ -31,6 +32,11 @@ const XenobladeProcess = () => {
   const [autoDetectedCount, setAutoDetectedCount] = useState(0);
   const [mergeMode, setMergeMode] = useState<"fresh" | "merge">("fresh");
   const [hasPreviousSession, setHasPreviousSession] = useState(false);
+  // Schema Inspector state
+  const [schemaReports, setSchemaReports] = useState<BdatSchemaReport[]>([]);
+  const [schemaTab, setSchemaTab] = useState<"summary" | "tables">("summary");
+  const [selectedTable, setSelectedTable] = useState<string | null>(null);
+  const [samplesEnabled, setSamplesEnabled] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -78,6 +84,7 @@ const XenobladeProcess = () => {
     setExtracting(true);
     setStage("uploading");
     setLogs([]);
+    setSchemaReports([]);
     addLog("🚀 بدء استخراج النصوص...");
     addLog(`📄 MSBT: ${msbtFiles.length} | BDAT JSON: ${bdatFiles.length} | BDAT ثنائي: ${bdatBinaryFiles.length}`);
 
@@ -90,6 +97,8 @@ const XenobladeProcess = () => {
         addLog("🔧 معالجة ملفات BDAT الثنائية محلياً...");
         const { parseBdatFile, extractBdatStrings } = await import("@/lib/bdat-parser");
         const { unhashLabel } = await import("@/lib/bdat-hash-dictionary");
+        const { inspectBdatSchema } = await import("@/lib/bdat-schema-inspector");
+        const schemaReportsAccumulator: BdatSchemaReport[] = [];
         
         for (const file of bdatBinaryFiles) {
           try {
@@ -98,6 +107,17 @@ const XenobladeProcess = () => {
             const data = new Uint8Array(buffer);
             addLog(`📂 حجم الملف: ${(data.length / 1024).toFixed(1)} KB — أول 4 بايت: ${String.fromCharCode(...data.slice(0, 4))}`);
             const bdatFile = parseBdatFile(data, unhashLabel);
+
+            // 📊 Schema Inspector — يعمل على نفس BdatFile
+            const schema = inspectBdatSchema(bdatFile, file.name, {
+              include_samples: samplesEnabled,
+              sample_mask_mode: samplesEnabled ? "prefix5" : "statsOnly",
+              max_records_for_full_scan: 5000,
+              sample_record_cap: 1000,
+            });
+            schemaReportsAccumulator.push(schema);
+            addLog(`📊 Schema: ${schema.table_count} جدول | ${schema.translatable_tables} قابلة للترجمة | ${schema.all_discovered_tags.length} وسم`);
+
             const strings = extractBdatStrings(bdatFile, file.name);
             
             // تفاصيل إضافية للتشخيص
@@ -191,6 +211,9 @@ const XenobladeProcess = () => {
               addLog(`💡 الملف ليس بصيغة BDAT صالحة. تأكد أنه ملف .bdat من Xenoblade Chronicles 3.`);
             }
           }
+        }
+        if (schemaReportsAccumulator.length > 0) {
+          setSchemaReports(schemaReportsAccumulator);
         }
       }
 
@@ -557,6 +580,230 @@ const XenobladeProcess = () => {
                   <div key={i} className="text-muted-foreground whitespace-pre-wrap">{log}</div>
                 ))}
               </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* ===== Schema Inspector Panel ===== */}
+        {stage === "done" && schemaReports.length > 0 && (
+          <Card className="mb-6 border-primary/30 bg-primary/5">
+            <CardHeader>
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <CardTitle className="font-display text-lg flex items-center gap-2">
+                  📊 Schema BDAT Inspector
+                  <span className="text-xs font-normal text-muted-foreground font-body">
+                    ({schemaReports.reduce((s, r) => s + r.table_count, 0)} جدول | {schemaReports.reduce((s, r) => s + r.translatable_tables, 0)} قابلة للترجمة)
+                  </span>
+                </CardTitle>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5 text-xs"
+                    onClick={() => setSamplesEnabled(v => !v)}
+                  >
+                    {samplesEnabled ? "🙈 إخفاء العينات" : "👁 تفعيل العينات"}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5 text-xs"
+                    onClick={() => {
+                      const payload = {
+                        meta: {
+                          game: "Xenoblade Chronicles 3",
+                          generated_at: new Date().toISOString(),
+                          tool: "XC3 BDAT Schema Inspector v1",
+                        },
+                        reports: schemaReports,
+                      };
+                      const json = JSON.stringify(payload, null, 2);
+                      const blob = new Blob([json], { type: "application/json" });
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement("a");
+                      a.href = url;
+                      a.download = `bdat-schema-${new Date().toISOString().slice(0, 10)}.json`;
+                      a.click();
+                      URL.revokeObjectURL(url);
+                    }}
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    تصدير JSON
+                  </Button>
+                </div>
+              </div>
+
+              {/* Tab selector */}
+              <div className="flex gap-1 mt-3">
+                {(["summary", "tables"] as const).map(tab => (
+                  <button
+                    key={tab}
+                    onClick={() => setSchemaTab(tab)}
+                    className={`px-4 py-1.5 rounded-lg text-sm font-display font-semibold transition-all ${
+                      schemaTab === tab
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {tab === "summary" ? "📋 ملخص" : "📁 الجداول"}
+                  </button>
+                ))}
+              </div>
+            </CardHeader>
+
+            <CardContent>
+              {/* ── Summary Tab ── */}
+              {schemaTab === "summary" && schemaReports.map((report, ri) => (
+                <div key={ri} className="mb-6 last:mb-0">
+                  {schemaReports.length > 1 && (
+                    <p className="font-mono text-xs text-muted-foreground mb-3" dir="ltr">{report.file}</p>
+                  )}
+
+                  {/* Stats row */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+                    {[
+                      { label: "إجمالي الجداول", value: report.table_count },
+                      { label: "قابلة للترجمة", value: report.translatable_tables, highlight: true },
+                      { label: "غير قابلة", value: report.table_count - report.translatable_tables },
+                      { label: "أنواع وسوم", value: report.all_discovered_tags.length },
+                    ].map(({ label, value, highlight }) => (
+                      <div key={label} className={`rounded-lg p-3 text-center border ${highlight ? "border-primary/40 bg-primary/10" : "border-border bg-background"}`}>
+                        <div className={`text-2xl font-display font-black ${highlight ? "text-primary" : ""}`}>{value}</div>
+                        <div className="text-xs text-muted-foreground font-body mt-0.5">{label}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Tags */}
+                  {report.all_discovered_tags.length > 0 && (
+                    <div className="mb-4">
+                      <p className="text-xs font-display font-semibold mb-2 flex items-center gap-1.5">
+                        <Tag className="w-3.5 h-3.5" />
+                        وسوم التحكم المكتشفة
+                      </p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {report.all_discovered_tags.map(tag => (
+                          <span key={tag} className="px-2 py-0.5 rounded-full bg-secondary/20 border border-secondary/40 text-xs font-mono text-secondary-foreground" dir="ltr">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Safety Contract */}
+                  <div className="rounded-lg border border-warning/30 bg-warning/5 p-4">
+                    <p className="text-xs font-display font-bold text-warning-foreground mb-2 flex items-center gap-1.5">
+                      <Shield className="w-3.5 h-3.5" />
+                      قواعد السلامة (Translation Safety Contract)
+                    </p>
+                    <ol className="space-y-1">
+                      {report.safety_contract.map((rule, i) => (
+                        <li key={i} className="text-xs text-muted-foreground flex items-start gap-2">
+                          <span className="font-bold text-foreground shrink-0">{i + 1}.</span>
+                          {rule}
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                </div>
+              ))}
+
+              {/* ── Tables Tab ── */}
+              {schemaTab === "tables" && schemaReports.map((report, ri) => (
+                <div key={ri} className="mb-6 last:mb-0">
+                  {schemaReports.length > 1 && (
+                    <p className="font-mono text-xs text-muted-foreground mb-3" dir="ltr">{report.file}</p>
+                  )}
+
+                  <div className="space-y-2">
+                    {report.tables.map(tbl => {
+                      const isOpen = selectedTable === `${ri}:${tbl.table}`;
+                      return (
+                        <div key={tbl.table} className="rounded-lg border border-border overflow-hidden">
+                          {/* Table header row */}
+                          <button
+                            className="w-full flex items-center justify-between px-4 py-2.5 text-left hover:bg-muted/30 transition-colors"
+                            onClick={() => setSelectedTable(isOpen ? null : `${ri}:${tbl.table}`)}
+                          >
+                            <div className="flex items-center gap-2">
+                              {isOpen ? <ChevronDown className="w-4 h-4 text-muted-foreground" /> : <ChevronRight className="w-4 h-4 text-muted-foreground" />}
+                              <span className="font-mono text-sm font-semibold" dir="ltr">{tbl.table}</span>
+                              {tbl.primary_key && (
+                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-accent/20 text-accent-foreground font-mono" dir="ltr">
+                                  PK: {tbl.primary_key}
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-2 shrink-0">
+                              <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${tbl.translatable_count > 0 ? "bg-green-500/15 text-green-600 dark:text-green-400" : "bg-muted text-muted-foreground"}`}>
+                                {tbl.translatable_count > 0 ? `✓ ${tbl.translatable_count} قابل` : "غير قابل"}
+                              </span>
+                              <span className="text-xs text-muted-foreground">{tbl.fields.length} حقل</span>
+                            </div>
+                          </button>
+
+                          {/* Field details */}
+                          {isOpen && (
+                            <div className="border-t border-border bg-background/60">
+                              <div className="overflow-x-auto">
+                                <table className="w-full text-xs">
+                                  <thead>
+                                    <tr className="border-b border-border bg-muted/30">
+                                      {["الحقل", "النوع", "ترجمة", "max_chars", "max_bytes", "صفوف", "multiline", "وسوم"].map(h => (
+                                        <th key={h} className="px-3 py-2 text-right font-display font-semibold text-muted-foreground whitespace-nowrap">{h}</th>
+                                      ))}
+                                      {samplesEnabled && <th className="px-3 py-2 text-right font-display font-semibold text-muted-foreground">عينة</th>}
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {tbl.fields.map(field => (
+                                      <tr key={field.field_name} className="border-b border-border/50 hover:bg-muted/20 transition-colors">
+                                        <td className="px-3 py-2 font-mono font-semibold whitespace-nowrap" dir="ltr">{field.field_name}</td>
+                                        <td className="px-3 py-2">
+                                          <span className="px-1.5 py-0.5 rounded bg-secondary/20 font-mono text-[10px]">{field.data_type}</span>
+                                        </td>
+                                        <td className="px-3 py-2">
+                                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${field.translate ? "bg-green-500/15 text-green-600 dark:text-green-400" : "bg-muted text-muted-foreground"}`}>
+                                            {field.translate ? "✓ نعم" : "✗ لا"}
+                                          </span>
+                                        </td>
+                                        <td className="px-3 py-2 text-center font-mono">{field.max_chars}</td>
+                                        <td className="px-3 py-2 text-center font-mono">{field.max_utf8_bytes}</td>
+                                        <td className="px-3 py-2 text-center font-mono">{field.record_count}</td>
+                                        <td className="px-3 py-2 text-center">
+                                          <span className={`text-[10px] ${field.multiline ? "text-blue-500" : "text-muted-foreground"}`}>
+                                            {field.multiline ? "✓" : "–"}
+                                          </span>
+                                        </td>
+                                        <td className="px-3 py-2 max-w-[180px]">
+                                          <div className="flex flex-wrap gap-1" dir="ltr">
+                                            {field.allowed_tags.slice(0, 4).map(t => (
+                                              <span key={t} className="px-1 py-0.5 rounded bg-primary/10 text-primary font-mono text-[10px]">{t}</span>
+                                            ))}
+                                            {field.allowed_tags.length > 4 && (
+                                              <span className="text-[10px] text-muted-foreground">+{field.allowed_tags.length - 4}</span>
+                                            )}
+                                          </div>
+                                        </td>
+                                        {samplesEnabled && (
+                                          <td className="px-3 py-2 font-mono text-[10px] text-muted-foreground max-w-[120px] truncate" dir="ltr">
+                                            {field.samples?.[0] ?? "–"}
+                                          </td>
+                                        )}
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
             </CardContent>
           </Card>
         )}
