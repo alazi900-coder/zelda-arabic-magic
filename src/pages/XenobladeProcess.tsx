@@ -854,6 +854,10 @@ const XenobladeProcess = () => {
                           {/* Field details */}
                           {isOpen && (
                             <div className="border-t border-border bg-background/60">
+                              <p className="px-4 pt-2 pb-0 text-[10px] text-muted-foreground flex items-center gap-1.5">
+                                <span>ℹ️</span>
+                                <span><strong className="text-foreground">max_bytes ~</strong> قيمة مُقدَّرة من أطول نص مرصود — لا يوجد حدٌّ مكتوب في بنية BDAT. الحد الحقيقي محدد برمجياً داخل محرك اللعبة.</span>
+                              </p>
                               <div className="overflow-x-auto">
                                 <table className="w-full text-xs">
                                    <thead>
@@ -862,7 +866,7 @@ const XenobladeProcess = () => {
                                          { key: "الحقل", title: undefined },
                                          { key: "النوع", title: undefined },
                                          { key: "ترجمة", title: undefined },
-                                         { key: "max_bytes", title: "الحد الأقصى بالبايت المخزن في BDAT" },
+                                         { key: "max_bytes ~", title: "⚠ هذه القيمة مُقدَّرة وليست مكتوبة في بنية BDAT — تُمثّل أطول نص مرصود في هذا العمود. الحد الحقيقي محدد برمجياً داخل محرك اللعبة فقط." },
                                          { key: "أحرف عربية", title: "عدد الأحرف العربية المتاحة (كل حرف = 2 بايت)" },
                                          { key: "خطورة الطول", title: "مؤشر خطورة الطول: 🔴 خطرة جداً (≤10) | 🟡 محدودة (11-30) | 🟢 مريحة (>30)" },
                                          { key: "صفوف", title: undefined },
