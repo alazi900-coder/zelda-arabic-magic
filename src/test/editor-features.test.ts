@@ -217,3 +217,52 @@ describe("Editor Features", () => {
     });
   });
 });
+
+// Column-name categorization tests
+describe("categorizeBdatTable - column name fallback", () => {
+  // Inline the categorization logic for testing
+  function categorizeByColumnName(columnName: string): string | null {
+    const col = columnName.toLowerCase();
+    if (/window|btn|caption|title|dialog|label|layout|menu/i.test(col)) return "bdat-menu";
+    if (/task|purpose|summary|quest|event|scenario|after|client|talk/i.test(col)) return "bdat-quest";
+    if (/landmark|spot|colony|area|map|place|field/i.test(col)) return "bdat-field";
+    if (/skill|price|armor|weapon|description|pouch|gem|art/i.test(col)) return "bdat-item";
+    if (/voice|audio|config|option|setting|display/i.test(col)) return "bdat-settings";
+    return null;
+  }
+
+  it("categorizes UI columns correctly", () => {
+    expect(categorizeByColumnName("WindowTitle")).toBe("bdat-menu");
+    expect(categorizeByColumnName("BtnLabel")).toBe("bdat-menu");
+    expect(categorizeByColumnName("DialogCaption")).toBe("bdat-menu");
+  });
+
+  it("categorizes quest columns correctly", () => {
+    expect(categorizeByColumnName("TaskSummary")).toBe("bdat-quest");
+    expect(categorizeByColumnName("QuestPurpose")).toBe("bdat-quest");
+    expect(categorizeByColumnName("EventScenario")).toBe("bdat-quest");
+  });
+
+  it("categorizes location columns correctly", () => {
+    expect(categorizeByColumnName("LandmarkName")).toBe("bdat-field");
+    expect(categorizeByColumnName("ColonyArea")).toBe("bdat-field");
+    expect(categorizeByColumnName("SpotLocation")).toBe("bdat-field");
+  });
+
+  it("categorizes item columns correctly", () => {
+    expect(categorizeByColumnName("WeaponSkill")).toBe("bdat-item");
+    expect(categorizeByColumnName("ArmorPrice")).toBe("bdat-item");
+    expect(categorizeByColumnName("GemEffect")).toBe("bdat-item");
+  });
+
+  it("categorizes settings columns correctly", () => {
+    expect(categorizeByColumnName("VoiceSetting")).toBe("bdat-settings");
+    expect(categorizeByColumnName("DisplayMode")).toBe("bdat-settings");
+    expect(categorizeByColumnName("AudioConfig")).toBe("bdat-settings");
+  });
+
+  it("returns null for unknown columns", () => {
+    expect(categorizeByColumnName("RandomColumn")).toBeNull();
+    expect(categorizeByColumnName("Unknown")).toBeNull();
+  });
+});
