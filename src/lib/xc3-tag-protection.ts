@@ -22,6 +22,7 @@ const PROTECTED_ABBREVIATIONS = [
   'DPS', 'DOT', 'AOE', 'HoT', 'MPH',
   'Lv', 'LV', 'MAX', 'DLC', 'NPC', 'QTE', 'UI', 'HUD',
   'KO', 'NG', 'NG\\+',
+  'm', 's', 'x', 'g', 'kg', 'km', 'cm', 'mm',
 ];
 
 // Build regex: match abbreviations as whole words (case-sensitive)
