@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Upload, FileText, ArrowRight, Loader2, CheckCircle2, Clock, Pencil, Database, Binary, Sparkles } from "lucide-react";
 import heroBg from "@/assets/xc3-hero-bg.jpg";
+import { categorizeBdatTable } from "@/components/editor/types";
 
 type ProcessingStage = "idle" | "uploading" | "extracting" | "done" | "error";
 
@@ -105,16 +106,41 @@ const XenobladeProcess = () => {
             addLog(`📦 ${file.name}: ${bdatFile.tables.length} جدول، ${totalRows} صف، ${totalStringCols} عمود نصي، ${strings.length} نص مستخرج`);
             
             if (strings.length === 0 && bdatFile.tables.length > 0) {
-              // عرض أسماء الجداول للتشخيص
               const tableNames = bdatFile.tables.slice(0, 5).map(t => t.name).join(', ');
               addLog(`ℹ️ أسماء الجداول: ${tableNames}${bdatFile.tables.length > 5 ? '...' : ''}`);
               addLog(`⚠️ لا توجد نصوص في هذا الملف — قد يحتوي فقط على بيانات رقمية`);
+            }
+
+            // 🔍 TEMP LOGGING: Classification diagnostics
+            if (strings.length > 0) {
+              const categoryMap: Record<string, number> = {};
+              const sampleLabels: string[] = [];
+              for (let i = 0; i < Math.min(strings.length, 200); i++) {
+                const s = strings[i];
+                const label = `${s.tableName}[${s.rowIndex}].${s.columnName}`;
+                const cat = categorizeBdatTable(label);
+                categoryMap[cat] = (categoryMap[cat] || 0) + 1;
+                if (sampleLabels.length < 10 && cat === "other") {
+                  sampleLabels.push(label);
+                }
+              }
+              const catSummary = Object.entries(categoryMap).map(([k, v]) => `${k}:${v}`).join(', ');
+              console.log(`📊 [BDAT Classification] ${file.name}: ${catSummary}`);
+              if (sampleLabels.length > 0) {
+                console.log(`🔍 [BDAT Other samples] ${sampleLabels.join(' | ')}`);
+              }
+              // Also log unique table+column combos
+              const uniquePairs = new Set<string>();
+              for (const s of strings.slice(0, 500)) {
+                uniquePairs.add(`${s.tableName} → ${s.columnName}`);
+              }
+              console.log(`📋 [BDAT Table→Column pairs] ${[...uniquePairs].slice(0, 20).join(' | ')}`);
             }
             
             for (let i = 0; i < strings.length; i++) {
               const s = strings[i];
               bdatBinaryEntries.push({
-                msbtFile: s.key.split(':').slice(0, 2).join(':'), // bdat-bin:filename
+                msbtFile: s.key.split(':').slice(0, 2).join(':'),
                 index: i,
                 label: `${s.tableName}[${s.rowIndex}].${s.columnName}`,
                 original: s.original,
