@@ -40,11 +40,18 @@ const Xenoblade = forwardRef<HTMLDivElement>((_, ref) => {
           <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-lg mx-auto font-body bg-background/40 backdrop-blur-sm rounded-lg px-4 py-2">
             ارفع ملفات اللعبة واحصل على نسخة معرّبة بالكامل مع ربط الحروف وعكس الاتجاه تلقائياً
           </p>
-          <Link to="/process">
-            <Button size="lg" className="font-display font-bold text-lg px-10 py-6 bg-primary hover:bg-primary/90 shadow-xl shadow-primary/30">
-              ابدأ التعريب 🔮
-            </Button>
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+            <Link to="/process">
+              <Button size="lg" className="font-display font-bold text-lg px-10 py-6 bg-primary hover:bg-primary/90 shadow-xl shadow-primary/30">
+                ابدأ التعريب 🔮
+              </Button>
+            </Link>
+            <Link to="/mod-packager">
+              <Button size="lg" variant="outline" className="font-display font-bold text-lg px-10 py-6 border-primary/40 hover:bg-primary/10">
+                بناء حزمة المود 📦
+              </Button>
+            </Link>
+          </div>
         </div>
       </header>
 
