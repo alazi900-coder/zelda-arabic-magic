@@ -719,7 +719,7 @@ const Editor = () => {
                     key={key}
                     entry={entry}
                     translation={editor.state?.translations[key] || ''}
-                    glossary={editor.state?.glossary}
+                    glossary={editor.activeGlossary}
                     isProtected={editor.state?.protectedEntries?.has(key) || false}
                     hasProblem={editor.qualityStats.problemKeys.has(key)}
                     isDamagedTag={editor.qualityStats.damagedTagKeys.has(key)}
