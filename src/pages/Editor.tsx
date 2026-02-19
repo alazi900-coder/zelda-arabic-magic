@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { useEditorState } from "@/hooks/useEditorState";
+import { useTranslationMemory } from "@/hooks/useTranslationMemory";
 import { PAGE_SIZE, isTechnicalText } from "@/components/editor/types";
 import DebouncedInput from "@/components/editor/DebouncedInput";
 import CategoryProgress from "@/components/editor/CategoryProgress";
@@ -45,6 +46,7 @@ import ConsistencyResultsPanel from "@/components/editor/ConsistencyResultsPanel
 
 const Editor = () => {
   const editor = useEditorState();
+  const { findSimilar } = useTranslationMemory(editor.state);
   const isMobile = useIsMobile();
   const [showDiffView, setShowDiffView] = React.useState(false);
   const [isDragging, setIsDragging] = React.useState(false);
@@ -740,6 +742,7 @@ const Editor = () => {
                     handleLocalFixDamagedTag={editor.handleLocalFixDamagedTag}
                     onAcceptFuzzy={editor.handleAcceptFuzzy}
                     onRejectFuzzy={editor.handleRejectFuzzy}
+                    tmSuggestions={findSimilar(key, entry.original)}
                   />
                 );
               })
