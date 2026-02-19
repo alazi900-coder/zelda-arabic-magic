@@ -927,7 +927,7 @@ export function useEditorState() {
         }
       }
     }
-    setState({ entries, translations: {}, protectedEntries: new Set() });
+    setState({ entries, translations: {}, protectedEntries: new Set(), technicalBypass: new Set() });
     setGameType("xenoblade");
     setLastSaved("✅ تم تحميل بيانات BDAT تجريبية");
     setTimeout(() => setLastSaved(""), 3000);
