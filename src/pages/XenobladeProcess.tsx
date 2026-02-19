@@ -607,6 +607,64 @@ const XenobladeProcess = () => {
                   <Button
                     variant="outline"
                     size="sm"
+                    title={samplesEnabled ? "سيتضمن القاموس عينات نصية من الملف" : "فعّل العينات أولاً للحصول على قاموس أغنى بالمصطلحات"}
+                    className="gap-1.5 text-xs border-secondary/40 text-secondary hover:text-secondary"
+                    onClick={() => {
+                      // Build glossary .txt: one English term per line = ready for Arabic
+                      const lines: string[] = [
+                        `# قاموس مُولَّد تلقائياً من Schema BDAT Inspector`,
+                        `# التاريخ: ${new Date().toISOString().slice(0, 10)}`,
+                        `# الصيغة: English=Arabic`,
+                        `# أضف الترجمة العربية بعد علامة =`,
+                        ``,
+                      ];
+                      // Collect unique translatable samples across all reports
+                      const seen = new Set<string>();
+                      for (const report of schemaReports) {
+                        lines.push(`# ── الملف: ${report.file} ──`);
+                        for (const tbl of report.tables) {
+                          const translatableFields = tbl.fields.filter(f => f.translate);
+                          if (translatableFields.length === 0) continue;
+                          lines.push(`# الجدول: ${tbl.table}`);
+                          for (const field of translatableFields) {
+                            // Add unmasked samples if available, else field name as placeholder
+                            if (field.samples && field.samples.length > 0) {
+                              for (const sample of field.samples) {
+                                // Strip masking suffix (***) to get the prefix hint
+                                const clean = sample.replace(/\*+$/, "").trim();
+                                if (clean && !seen.has(clean)) {
+                                  seen.add(clean);
+                                  lines.push(`${clean}=`);
+                                }
+                              }
+                            } else {
+                              // No samples: export field name as a category comment
+                              const key = `${tbl.table}/${field.field_name}`;
+                              if (!seen.has(key)) {
+                                seen.add(key);
+                                lines.push(`# ${field.field_name} (max ${field.max_chars} حرف / ${field.max_utf8_bytes} byte)`);
+                              }
+                            }
+                          }
+                          lines.push(``);
+                        }
+                      }
+                      const txt = lines.join("\n");
+                      const blob = new Blob([txt], { type: "text/plain;charset=utf-8" });
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement("a");
+                      a.href = url;
+                      a.download = `bdat-glossary-${new Date().toISOString().slice(0, 10)}.txt`;
+                      a.click();
+                      URL.revokeObjectURL(url);
+                    }}
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    تصدير قاموس .txt
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
                     className="gap-1.5 text-xs"
                     onClick={() => {
                       const payload = {
