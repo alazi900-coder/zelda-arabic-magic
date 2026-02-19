@@ -449,3 +449,105 @@ Meat=لحم
 Fish=سمك
 Spice=بهار
 Grain=حبوب
+
+# ═══════════════════════════════════════════════════
+# DLC: Future Redeemed (المستقبل المُسترد)
+# ═══════════════════════════════════════════════════
+
+# ── شخصيات Future Redeemed ──
+Matthew=ماثيو
+A=أ
+Nikol=نيكول
+Glimmer=غليمر
+Shulk=شولك
+Rex=ريكس
+Na'el=نائيل
+Alpha=ألفا
+Origin=الأصل
+
+# ── شخصيات ثانوية DLC ──
+Panacea=باناسيا
+Ino=إينو
+Linka=لينكا
+Kite=كايت
+Philia=فيليا
+Rael=رائيل
+Rael's Father=والد رائيل
+
+# ── فصائل وأدوار DLC ──
+Mastermind=العقل المدبر
+Lapidarist=صانع الجواهر
+Spelunker=مستكشف الكهوف
+Royal Summoner=الاستدعاء الملكي
+Boundless=اللامحدود
+Phantom Thief=اللص الشبح
+
+# ── مناطق ومواقع DLC ──
+Cent-Omnia Region=منطقة سنت-أومنيا
+Great Cotte Falls=شلالات كوت الكبرى
+Ragmos Bazaar=سوق راغموس
+Aionios Wilds=براري أيونيوس
+Llyn Nyddwr=لين نيدور
+Outlook Post=موقع المراقبة
+Rebuilder Camp=مخيم إعادة البناء
+Underground=تحت الأرض
+Origin Interior=داخل الأصل
+Amphitheatre=المدرج
+Colony 15=المستعمرة 15
+Mechanoid Factory=مصنع الميكانويد
+Dannagh Desert=صحراء داناغ
+Tableland=الهضبة
+Tor Mearc=تور ميرك
+Sealed Ruins=الأطلال المختومة
+Boundary=الحدود
+Great Crevasse=الشق الكبير
+Ancient Warship=السفينة الحربية القديمة
+
+# ── مصطلحات قصة DLC ──
+Future Redeemed=المستقبل المُسترد
+Liberator=المحرر
+Liberators=المحررون
+Rebuilders=المُعيدون للبناء
+Boundary=الحدود
+Founders=المؤسسون
+Passage of Fate=ممر القدر
+Conduit=القناة
+Trinity Processor=المعالج الثلاثي
+Ontos=أونتوس
+Logos=لوغوس
+Pneuma=بنيوما
+Klaus=كلاوس
+Architect=المهندس
+Zanza=زانزا
+Meyneth=مينيث
+Bionis=بيونيس
+Mechonis=ميكونيس
+Alrest=ألريست
+Elysium=الفردوس
+Conduit Gate=بوابة القناة
+
+# ── آليات وأنظمة DLC ──
+Affinity Growth=نمو الألفة
+Unity Combo=كومبو الوحدة
+Unity Link=رابط الوحدة
+Brave Combo=كومبو الشجاعة
+Relic Exchange=تبادل الآثار
+Nopon Archsage=حكيم النوبون الأعظم
+Community Development=تنمية المجتمع
+Community Level=مستوى المجتمع
+Archsage's Gauntlet=تحدي الحكيم الأعظم
+
+# ── وحوش فريدة DLC ──
+Dreadwyrm Niall=نيال التنين المرعب
+Origin Guardian=حارس الأصل
+Moebius Fragment=شظية موبيوس
+Alpha's Vessel=وعاء ألفا
+Boundary Sentinel=حارس الحدود
+
+# ── أسلحة وعناصر DLC ──
+Monado REX=موناديو ريكس
+Aegis Sword=سيف الإيجيس
+Lucky Seven=الحظ السابع
+Replica Monado=موناديو مقلد
+Shulk's Monado=موناديو شولك
+Rex's Aegis=إيجيس ريكس
