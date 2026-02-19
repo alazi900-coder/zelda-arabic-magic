@@ -297,9 +297,7 @@ const XenobladeProcess = () => {
       });
 
       setStage("done");
-      addLog("✨ جاهز للتحرير!");
-
-      setTimeout(() => navigate("/editor"), 500);
+      addLog("✨ جاهز للتحرير! اضغط الزر أدناه للانتقال إلى المحرر.");
     } catch (err) {
       setStage("error");
       addLog(`❌ ${err instanceof Error ? err.message : "خطأ غير معروف"}`);
@@ -514,6 +512,17 @@ const XenobladeProcess = () => {
               </div>
             </CardContent>
           </Card>
+        )}
+
+        {/* Go to editor button - shown after processing is done */}
+        {stage === "done" && (
+          <div className="flex justify-center mb-6">
+            <Button size="lg" onClick={() => navigate("/editor")} className="gap-2 text-lg px-8">
+              <Pencil className="w-5 h-5" />
+              انتقل إلى المحرر
+              <ArrowRight className="w-5 h-5" />
+            </Button>
+          </div>
         )}
       </div>
       </div>
