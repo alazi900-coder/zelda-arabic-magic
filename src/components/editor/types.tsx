@@ -234,6 +234,9 @@ export function categorizeByTableName(tbl: string): string | null {
   if (/^msg_qst_/i.test(tbl)) return "bdat-quest";
   if (/^msg_item_/i.test(tbl)) return "bdat-item";
   if (/^msg_enemy_/i.test(tbl)) return "bdat-enemy";
+  if (/^msg_colony_/i.test(tbl)) return "bdat-field";
+  if (/^msg_comspot_/i.test(tbl)) return "bdat-field";
+  if (/^msg_extra_/i.test(tbl)) return "bdat-dlc";
   if (/^msg_/i.test(tbl)) return "bdat-message";
 
   // === المحتوى الإضافي ===
