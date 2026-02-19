@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, AlertTriangle, Info, Download, Loader2, ShieldCheck, ShieldAlert } from "lucide-react";
 import { validateFontForArabic, type FontValidationResult } from "@/lib/font-validator";
-import { isBfttf, bfttfToTtf } from "@/lib/bfttf-converter";
+import { isBfttf, bfttfToTtf, ttfToBfttf } from "@/lib/bfttf-converter";
 
 interface FontFile {
   name: string;
@@ -112,12 +112,18 @@ export default function ModPackager() {
       // Dynamic import JSZip-like functionality using native compression
       const zipParts: { path: string; data: Uint8Array }[] = [];
 
-      // Add font file to romfs structure
+      // Add font file to romfs structure (auto-convert TTF → BFTTF)
       if (fontFile) {
-        // XC3 font path: romfs/menu/font/
+        let fontData = fontFile.data;
+        let fontName = fontFile.name;
+        if (!isBfttf(fontData)) {
+          setStatus("تحويل الخط إلى صيغة BFTTF...");
+          fontData = ttfToBfttf(fontData);
+          fontName = fontName.replace(/\.(ttf|otf)$/i, ".bfttf");
+        }
         zipParts.push({
-          path: `romfs/menu/font/${fontFile.name}`,
-          data: new Uint8Array(fontFile.data),
+          path: `romfs/menu/font/${fontName}`,
+          data: new Uint8Array(fontData),
         });
       }
 
@@ -323,7 +329,7 @@ export default function ModPackager() {
                 <>
                   <p className="pr-12">├── menu/</p>
                   <p className="pr-20">└── font/</p>
-                  <p className="pr-28 text-primary">└── {fontFile.name}</p>
+                  <p className="pr-28 text-primary">└── {fontFile.name.endsWith(".bfttf") ? fontFile.name : fontFile.name.replace(/\.(ttf|otf)$/i, ".bfttf")}</p>
                 </>
               )}
               {bdatFiles.length > 0 && (
@@ -343,15 +349,14 @@ export default function ModPackager() {
           </Card>
         )}
 
-        {/* Warning */}
+        {/* Auto-convert notice */}
         {fontFile && !fontFile.name.endsWith(".bfttf") && (
-          <Card className="p-4 bg-accent/50 border-accent flex gap-3 items-start">
-            <AlertTriangle className="w-5 h-5 text-accent-foreground mt-0.5 shrink-0" />
+          <Card className="p-4 bg-primary/5 border-primary/20 flex gap-3 items-start">
+            <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 shrink-0" />
             <div className="text-sm">
-              <p className="font-bold text-foreground mb-1">الخط ليس بصيغة .bfttf</p>
+              <p className="font-bold text-foreground mb-1">سيتم تحويل الخط تلقائياً إلى .bfttf</p>
               <p className="text-muted-foreground">
-                Xenoblade 3 تستخدم صيغة <code className="bg-muted px-1 rounded">.bfttf</code>. 
-                ستحتاج لتحويل الخط باستخدام <strong>Switch Toolbox</strong> أو <strong>BFTTF Converter</strong> قبل التثبيت.
+                عند بناء الحزمة، سيُحوَّل الخط من <code className="bg-muted px-1 rounded">{fontFile.name.split('.').pop()}</code> إلى صيغة <code className="bg-muted px-1 rounded">.bfttf</code> المطلوبة للعبة تلقائياً.
               </p>
             </div>
           </Card>
