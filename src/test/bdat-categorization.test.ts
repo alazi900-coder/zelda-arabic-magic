@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { categorizeBdatTable } from "@/components/editor/types";
+import { categorizeBdatTable, categorizeByFilename } from "@/components/editor/types";
 
 describe("categorizeBdatTable - table name prefixes", () => {
   it("classifies MNU_ tables as menu", () => {
@@ -47,7 +47,28 @@ describe("categorizeBdatTable - column name fallback (smart classification)", ()
   it("classifies unknown table with BtnCaption as menu", () => {
     expect(categorizeBdatTable("RandomHash[2].BtnCaption")).toBe("bdat-menu");
   });
-  it("returns other for truly unknown entries", () => {
+});
+
+describe("categorizeBdatTable - Stage 3: filename fallback", () => {
+  it("classifies hex-hash entries using field.bdat filename", () => {
+    expect(categorizeBdatTable("<0x8b7d949b>[0].<0x0000001a>", "field.bdat")).toBe("bdat-field");
+  });
+  it("classifies hex-hash entries using dlc.bdat filename", () => {
+    expect(categorizeBdatTable("<0x18d9e310>[0].<0x00000006>", "dlc.bdat")).toBe("bdat-dlc");
+  });
+  it("classifies hex-hash entries using battle.bdat filename", () => {
+    expect(categorizeBdatTable("<0xDEADBEEF>[0].<0xFACEFEED>", "battle.bdat")).toBe("bdat-battle");
+  });
+  it("classifies hex-hash entries using quest.bdat filename", () => {
+    expect(categorizeBdatTable("<0xABC>[0].<0xDEF>", "quest.bdat")).toBe("bdat-quest");
+  });
+  it("classifies hex-hash entries using system.bdat filename", () => {
+    expect(categorizeBdatTable("<0x50219162>[0].<0x00000009>", "system.bdat")).toBe("bdat-system");
+  });
+  it("returns other for unknown filename with hex hashes", () => {
+    expect(categorizeBdatTable("<0xDEADBEEF>[0].<0xFACEFEED>", "zzz.bdat")).toBe("other");
+  });
+  it("returns other for truly unknown entries without filename", () => {
     expect(categorizeBdatTable("0xDEADBEEF[0].0xFACEFEED")).toBe("other");
   });
   it("returns other for unrecognizable labels", () => {
