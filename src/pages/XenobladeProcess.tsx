@@ -111,30 +111,39 @@ const XenobladeProcess = () => {
               addLog(`⚠️ لا توجد نصوص في هذا الملف — قد يحتوي فقط على بيانات رقمية`);
             }
 
-            // 🔍 TEMP LOGGING: Classification diagnostics
+            // 🔍 Classification diagnostics (shown in UI)
             if (strings.length > 0) {
               const categoryMap: Record<string, number> = {};
               const sampleLabels: string[] = [];
-              for (let i = 0; i < Math.min(strings.length, 200); i++) {
+              for (let i = 0; i < Math.min(strings.length, 500); i++) {
                 const s = strings[i];
                 const label = `${s.tableName}[${s.rowIndex}].${s.columnName}`;
                 const cat = categorizeBdatTable(label);
                 categoryMap[cat] = (categoryMap[cat] || 0) + 1;
-                if (sampleLabels.length < 10 && cat === "other") {
+                if (sampleLabels.length < 15 && cat === "other") {
                   sampleLabels.push(label);
                 }
               }
-              const catSummary = Object.entries(categoryMap).map(([k, v]) => `${k}:${v}`).join(', ');
-              console.log(`📊 [BDAT Classification] ${file.name}: ${catSummary}`);
+              const catSummary = Object.entries(categoryMap)
+                .sort((a, b) => b[1] - a[1])
+                .map(([k, v]) => `${k}: ${v}`)
+                .join(' | ');
+              addLog(`📊 تصنيف ${file.name}: ${catSummary}`);
               if (sampleLabels.length > 0) {
-                console.log(`🔍 [BDAT Other samples] ${sampleLabels.join(' | ')}`);
+                addLog(`🔍 عيّنات "أخرى" (${sampleLabels.length}):`);
+                for (const lbl of sampleLabels) {
+                  addLog(`   → ${lbl}`);
+                }
               }
-              // Also log unique table+column combos
+              // Unique table→column pairs
               const uniquePairs = new Set<string>();
               for (const s of strings.slice(0, 500)) {
                 uniquePairs.add(`${s.tableName} → ${s.columnName}`);
               }
-              console.log(`📋 [BDAT Table→Column pairs] ${[...uniquePairs].slice(0, 20).join(' | ')}`);
+              addLog(`📋 أزواج جدول→عمود (${uniquePairs.size}):`);
+              for (const pair of [...uniquePairs].slice(0, 30)) {
+                addLog(`   • ${pair}`);
+              }
             }
             
             for (let i = 0; i < strings.length; i++) {
@@ -498,7 +507,7 @@ const XenobladeProcess = () => {
           <Card className="mb-6">
             <CardHeader><CardTitle className="font-display text-lg">📋 سجل العمليات</CardTitle></CardHeader>
             <CardContent>
-              <div className="bg-background rounded-lg p-4 max-h-48 overflow-y-auto font-mono text-xs space-y-1 border border-border/40">
+              <div className="bg-background rounded-lg p-4 max-h-96 overflow-y-auto font-mono text-xs space-y-1 border border-border/40" dir="ltr">
                 {logs.map((log, i) => (
                   <div key={i} className="text-muted-foreground whitespace-pre-wrap">{log}</div>
                 ))}
