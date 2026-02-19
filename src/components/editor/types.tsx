@@ -105,6 +105,7 @@ export const FILE_CATEGORIES: FileCategory[] = [
 
 // === BDAT (Xenoblade) Game Categories ===
 export const BDAT_CATEGORIES: FileCategory[] = [
+  { id: "bdat-title-menu", label: "القائمة الرئيسية", emoji: "🏠", icon: "Home", color: "text-emerald-400" },
   { id: "bdat-menu", label: "القوائم والواجهة", emoji: "🖥️", icon: "Monitor", color: "text-sky-400" },
   { id: "bdat-battle", label: "نظام القتال", emoji: "⚔️", icon: "Swords", color: "text-red-400" },
   { id: "bdat-character", label: "الشخصيات والأبطال", emoji: "🧑‍🤝‍🧑", icon: "Users", color: "text-blue-400" },
@@ -206,6 +207,9 @@ export function categorizeByFilename(filename: string): string | null {
 export function categorizeByTableName(tbl: string): string | null {
   const t = tbl.toLowerCase();
 
+  // === القائمة الرئيسية (title screen & core menus) — must be checked FIRST ===
+  if (/^msg_mnu_(common_ms|title|save|load|option|config)/i.test(tbl)) return "bdat-title-menu";
+
   // === القوائم والواجهة ===
   if (/^mnu_/i.test(tbl) || /^menu$/i.test(tbl)) return "bdat-menu";
   if (/mnu_option|mnu_msg|mnu_name|mnu_shop|mnu_camp|mnu_tutorial|mnu_map|mnu_status|mnu_battle|mnu_quest|mnu_hero|mnu_system|mnu_achievement|mnu_class|mnu_collect|mnu_item|mnu_gem|mnu_filter|mnu_sort|mnu_font|mnu_res|mnu_layer|mnu_text|mnu_weapon/i.test(tbl)) return "bdat-menu";
@@ -228,6 +232,8 @@ export function categorizeByTableName(tbl: string): string | null {
   // === الأحداث والقصة ===
   if (/^(evt_|tlk_|fld_talk|fld_event)/i.test(tbl)) return "bdat-story";
   // msg_ sub-categories (check specific prefixes before generic msg_)
+  // القائمة الرئيسية - title screen and core menus
+  if (/^msg_mnu_(common_ms|title|save|load|option|config)/i.test(tbl)) return "bdat-title-menu";
   if (/^msg_mnu_/i.test(tbl)) return "bdat-menu";
   if (/^msg_btl_/i.test(tbl)) return "bdat-battle";
   if (/^msg_fld_/i.test(tbl)) return "bdat-character";
