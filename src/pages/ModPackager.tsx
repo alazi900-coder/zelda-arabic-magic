@@ -26,9 +26,11 @@ export default function ModPackager() {
   const [status, setStatus] = useState("");
   const [downloadingFont, setDownloadingFont] = useState(false);
 
-  const NOTO_FONT_URLS = [
-    "https://cdn.jsdelivr.net/gh/googlefonts/noto-fonts@main/hinted/ttf/NotoSansArabic/NotoSansArabic-Regular.ttf",
-    "https://raw.githubusercontent.com/googlefonts/noto-fonts/main/hinted/ttf/NotoSansArabic/NotoSansArabic-Regular.ttf",
+  // Cairo includes BOTH Arabic PF-B AND Latin (A-Z, a-z, 0-9)
+  // NotoSansArabic is Arabic-ONLY and causes English text to disappear in-game!
+  const CAIRO_FONT_URLS = [
+    "https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/cairo/static/Cairo-Regular.ttf",
+    "https://raw.githubusercontent.com/google/fonts/main/ofl/cairo/static/Cairo-Regular.ttf",
   ];
 
   const validateAndSetFont = useCallback((name: string, data: ArrayBuffer) => {
@@ -45,7 +47,7 @@ export default function ModPackager() {
     setDownloadingFont(true);
     try {
       let data: ArrayBuffer | null = null;
-      for (const url of NOTO_FONT_URLS) {
+      for (const url of CAIRO_FONT_URLS) {
         try {
           const response = await fetch(url);
           if (response.ok) {
@@ -55,14 +57,14 @@ export default function ModPackager() {
         } catch { /* try next */ }
       }
       if (!data) throw new Error("فشل تحميل الخط");
-      validateAndSetFont("NotoSansArabic-Regular.ttf", data);
+      validateAndSetFont("Cairo-Regular.ttf", data);
     } catch {
-      setStatus("❌ فشل تحميل خط Noto Sans Arabic — تحقق من اتصالك بالإنترنت");
+      setStatus("❌ فشل تحميل خط Cairo — تحقق من اتصالك بالإنترنت");
       setTimeout(() => setStatus(""), 5000);
     } finally {
       setDownloadingFont(false);
     }
-  }, [validateAndSetFont]);
+  }, [validateAndSetFont, CAIRO_FONT_URLS]);
 
   const handleFontUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -304,7 +306,7 @@ export default function ModPackager() {
                   ) : (
                     <Download className="w-4 h-4" />
                   )}
-                  {downloadingFont ? "جارٍ التحميل..." : "تحميل Noto Sans Arabic تلقائياً"}
+                  {downloadingFont ? "جارٍ التحميل..." : "تحميل Cairo-Regular تلقائياً (عربي + لاتيني)"}
                 </Button>
                 <label className="flex flex-col items-center gap-3 p-6 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
                   <Upload className="w-6 h-6 text-muted-foreground" />
@@ -314,10 +316,10 @@ export default function ModPackager() {
               </div>
             )}
             <div className="text-xs text-muted-foreground bg-muted/30 rounded p-3 space-y-1">
-              <p className="font-semibold">💡 خطوط مقترحة:</p>
-              <p>• Noto Sans Arabic — شامل ومستقر</p>
-              <p>• Cairo — واضح وعصري</p>
-              <p>• Tajawal — خفيف ومناسب للألعاب</p>
+              <p className="font-semibold">💡 خطوط مقترحة (تدعم العربية واللاتينية معاً):</p>
+              <p>• <strong>Cairo</strong> — ✅ موصى به (عربي + لاتيني كامل)</p>
+              <p>• <strong>Tajawal</strong> — ✅ خفيف ومناسب للألعاب (عربي + لاتيني)</p>
+              <p className="text-destructive/80">• ⚠️ Noto Sans Arabic — عربي فقط، النصوص الإنجليزية ستختفي!</p>
             </div>
           </Card>
 
