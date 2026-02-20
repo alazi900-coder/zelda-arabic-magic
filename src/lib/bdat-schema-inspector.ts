@@ -309,7 +309,9 @@ function inspectField(
     non_empty_count: nonEmpty,
     max_chars: maxChars,
     avg_chars: Math.round(avgChars * 10) / 10,
-    max_utf8_bytes: Math.max(Math.ceil(maxBytes * opts.safety_margin), 4),
+    // Arabic chars cost 2 bytes each in UTF-8; base the limit on char count × 2
+    // so translators aren't penalised for writing Arabic where English was shorter.
+    max_utf8_bytes: Math.max(Math.ceil(maxChars * 2 * opts.safety_margin), 4),
     avg_utf8_bytes: Math.round(avgBytes * 10) / 10,
     multiline,
     duplicate_ratio: Math.round(dupRatio * 100) / 100,
