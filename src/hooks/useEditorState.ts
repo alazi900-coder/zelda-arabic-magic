@@ -4,7 +4,7 @@ import { idbSet, idbGet } from "@/lib/idb-storage";
 import { processArabicText, hasArabicChars as hasArabicCharsProcessing, hasArabicPresentationForms, removeArabicPresentationForms } from "@/lib/arabic-processing";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { utf16leByteLength } from "@/lib/byte-utils";
+
 import { useEditorGlossary } from "@/hooks/useEditorGlossary";
 import { useEditorFileIO } from "@/hooks/useEditorFileIO";
 import { useEditorQuality } from "@/hooks/useEditorQuality";
@@ -18,7 +18,6 @@ import {
 } from "@/components/editor/types";
 export function useEditorState() {
   const [state, setState] = useState<EditorState | null>(null);
-  const [gameType, setGameType] = useState<string>("zelda");
   const [search, setSearch] = useState("");
   const [filterFile, setFilterFile] = useState<string>("all");
   const [filterCategory, setFilterCategory] = useState<string[]>([]);
@@ -30,9 +29,6 @@ export function useEditorState() {
   const [lastSaved, setLastSaved] = useState<string>("");
   const [cloudSyncing, setCloudSyncing] = useState(false);
   const [cloudStatus, setCloudStatus] = useState("");
-  const [technicalEditingMode, setTechnicalEditingMode] = useState<string | null>(null);
-  const [showPreview, setShowPreview] = useState(false);
-  const [previewKey, setPreviewKey] = useState<string | null>(null);
   const [reviewing, setReviewing] = useState(false);
   const [reviewResults, setReviewResults] = useState<ReviewResults | null>(null);
   const [suggestingShort, setSuggestingShort] = useState(false);
@@ -72,7 +68,7 @@ export function useEditorState() {
   const quality = useEditorQuality({ state });
   const { isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage, needsImprovement, qualityStats, needsImproveCount, categoryProgress, translatedCount } = quality;
 
-  const build = useEditorBuild({ state, setState, setLastSaved, arabicNumerals, mirrorPunctuation, gameType });
+  const build = useEditorBuild({ state, setState, setLastSaved, arabicNumerals, mirrorPunctuation, gameType: "xenoblade" });
   const { building, buildProgress, applyingArabic, buildStats, setBuildStats, buildPreview, showBuildConfirm, setShowBuildConfirm, handleApplyArabicProcessing, handlePreBuild, handleBuild } = build;
 
 
@@ -171,8 +167,6 @@ export function useEditorState() {
 
   useEffect(() => {
     const loadState = async () => {
-      const game = await idbGet<string>("editorGame");
-      if (game) setGameType(game);
       const stored = await idbGet<EditorState>("editorState");
       if (stored) {
         const validKeys = new Set(stored.entries.map(e => `${e.msbtFile}:${e.index}`));
@@ -246,42 +240,38 @@ export function useEditorState() {
         if (autoFixCount > 0) parts.push(`🔧 إصلاح تلقائي لـ ${autoFixCount} رمز تالف`);
         setLastSaved(parts.length > 0 ? `تم التحميل + ${parts.join(' + ')}` : "تم التحميل من الحفظ السابق");
       } else {
-        // Demo data
+        // Demo data — Xenoblade Chronicles 3 style
         const demoEntries: ExtractedEntry[] = [
-          // maxBytes = 3x original UTF-16LE size (dynamic rebuild supports expansion)
-          { msbtFile: "ActorMsg/Link.msbt", index: 0, label: "Link", original: "Link", maxBytes: 24 },
-          { msbtFile: "ActorMsg/Link.msbt", index: 1, label: "Hero", original: "The Hero of Hyrule", maxBytes: 108 },
-          { msbtFile: "LayoutMsg/Common.msbt", index: 0, label: "Accept", original: "Accept", maxBytes: 36 },
-          { msbtFile: "LayoutMsg/Common.msbt", index: 1, label: "Cancel", original: "Cancel", maxBytes: 36 },
-          { msbtFile: "StoryMsg/MainQuest.msbt", index: 0, label: "Quest_Intro", original: "The ancient evil has returned to [Color:Red]Hyrule[Color:White]. You must find the Master Sword.", maxBytes: 576 },
-          { msbtFile: "StoryMsg/MainQuest.msbt", index: 1, label: "Quest_Complete", original: "You have completed the trial!", maxBytes: 168 },
-          { msbtFile: "EventFlowMsg/NPC_Dialog.msbt", index: 0, label: "Greet", original: "Hello, traveler! Welcome to our village.", maxBytes: 240 },
-          { msbtFile: "EventFlowMsg/NPC_Dialog.msbt", index: 1, label: "Warning", original: "Be careful! The monsters in the forest are very dangerous at night.", maxBytes: 396 },
-          { msbtFile: "ChallengeMsg/Shrine.msbt", index: 0, label: "Shrine_Name", original: "Trial of Power", maxBytes: 90 },
-          { msbtFile: "ChallengeMsg/Shrine.msbt", index: 1, label: "Shrine_Desc", original: "Defeat all enemies within the time limit to prove your strength.", maxBytes: 378 },
-          // Demo entries with technical control characters (U+FFF9, U+FFFA, U+FFFB, PUA)
-          { msbtFile: "EventFlowMsg/Npc_Impa.msbt", index: 0, label: "Impa_Greet", original: "\uFFF9Press \uE000\uE001\uFFFA to talk to \uFFFBImpa\uFFFC", maxBytes: 300 },
-          { msbtFile: "EventFlowMsg/Npc_Impa.msbt", index: 1, label: "Impa_Quest", original: "You need \uFFF9\uE002 3 items\uFFFA to complete this quest\uFFFB.", maxBytes: 350 },
-          { msbtFile: "LayoutMsg/ButtonGuide.msbt", index: 0, label: "Btn_A", original: "\uFFF9\uE000\uFFFA Confirm", maxBytes: 100 },
-          { msbtFile: "LayoutMsg/ButtonGuide.msbt", index: 1, label: "Btn_B", original: "\uFFF9\uE001\uFFFA Cancel", maxBytes: 100 },
+          { msbtFile: "bdat:SYS_CharacterName", index: 0, label: "SYS_CharacterName[0].name", original: "Noah", maxBytes: 24 },
+          { msbtFile: "bdat:SYS_CharacterName", index: 1, label: "SYS_CharacterName[1].name", original: "Mio", maxBytes: 18 },
+          { msbtFile: "bdat:SYS_CharacterName", index: 2, label: "SYS_CharacterName[2].name", original: "Eunie", maxBytes: 30 },
+          { msbtFile: "bdat:SYS_CharacterName", index: 3, label: "SYS_CharacterName[3].name", original: "Taion", maxBytes: 30 },
+          { msbtFile: "bdat:SYS_ItemName", index: 0, label: "SYS_ItemName[0].name", original: "Lucky Clover", maxBytes: 72 },
+          { msbtFile: "bdat:SYS_ItemName", index: 1, label: "SYS_ItemName[1].name", original: "Nopon Coin", maxBytes: 60 },
+          { msbtFile: "bdat:MNU_MainMenu", index: 0, label: "MNU_MainMenu[0].caption", original: "Party", maxBytes: 36 },
+          { msbtFile: "bdat:MNU_MainMenu", index: 1, label: "MNU_MainMenu[1].caption", original: "Quests", maxBytes: 42 },
+          { msbtFile: "bdat:MNU_MainMenu", index: 2, label: "MNU_MainMenu[2].caption", original: "Map", maxBytes: 24 },
+          // Demo entries with technical control characters
+          { msbtFile: "bdat:FLD_NpcTalk", index: 0, label: "FLD_NpcTalk[0].msg", original: "\uFFF9Press \uE000\uFFFA to speak with \uFFFBNoah\uFFFC", maxBytes: 300 },
+          { msbtFile: "bdat:FLD_NpcTalk", index: 1, label: "FLD_NpcTalk[1].msg", original: "You need \uFFF9\uE002 3 Nopon Coins\uFFFA to unlock this\uFFFB.", maxBytes: 350 },
+          { msbtFile: "bdat:QST_QuestName", index: 0, label: "QST_QuestName[0].name", original: "Beyond the Boundary", maxBytes: 120 },
+          { msbtFile: "bdat:QST_QuestName", index: 1, label: "QST_QuestName[1].name", original: "A Life Sent On", maxBytes: 90 },
         ];
         const demoTranslations: Record<string, string> = {
-          "ActorMsg/Link.msbt:0": "لينك",
-          "ActorMsg/Link.msbt:1": "بطل مملكة هايرول الأسطوري العظيم المختار من الآلهة القديمة",
-          "LayoutMsg/Common.msbt:0": "الموافقة والقبول على جميع الشروط",
-          "LayoutMsg/Common.msbt:1": "إلغاء العملية والرجوع للخلف",
-          "StoryMsg/MainQuest.msbt:0": "لقد عاد الشر القديم إلى [Color:Red]هايرول[Color:White]. يجب عليك أن تجد سيف الماستر السحري الأسطوري لهزيمة الشر وإنقاذ المملكة من الدمار الشامل",
-          "StoryMsg/MainQuest.msbt:1": "لقد أكملت التحدي بنجاح! تهانينا يا بطل هايرول الشجاع",
-          "EventFlowMsg/NPC_Dialog.msbt:0": "مرحباً أيها المسافر الشجاع! أهلاً وسهلاً بك في قريتنا الصغيرة الجميلة",
-          "EventFlowMsg/NPC_Dialog.msbt:1": "احذر جيداً! الوحوش الموجودة في الغابة المظلمة خطيرة للغاية خاصةً في الليل عندما يحل الظلام الدامس",
-          "ChallengeMsg/Shrine.msbt:0": "تحدي القوة والشجاعة الأسطورية",
-          "ChallengeMsg/Shrine.msbt:1": "اهزم جميع الأعداء والوحوش الخطيرة خلال الوقت المحدد لإثبات قوتك وشجاعتك في المعركة",
+          "bdat:SYS_CharacterName:0": "نوا",
+          "bdat:SYS_CharacterName:1": "ميو",
+          "bdat:SYS_CharacterName:2": "يوني",
+          "bdat:SYS_CharacterName:3": "تايون",
+          "bdat:SYS_ItemName:0": "البرسيم المحظوظ",
+          "bdat:SYS_ItemName:1": "عملة النوبون",
+          "bdat:MNU_MainMenu:0": "الفريق",
+          "bdat:MNU_MainMenu:1": "المهام",
+          "bdat:MNU_MainMenu:2": "الخريطة",
           // Damaged translations — tags were stripped by AI
-          "EventFlowMsg/Npc_Impa.msbt:0": "اضغط للتحدث مع إمبا",
-          "EventFlowMsg/Npc_Impa.msbt:1": "تحتاج 3 عناصر لإكمال هذه المهمة.",
-          // Intact translations — tags preserved
-          "LayoutMsg/ButtonGuide.msbt:0": "\uFFF9\uE000\uFFFA تأكيد",
-          "LayoutMsg/ButtonGuide.msbt:1": "\uFFF9\uE001\uFFFA إلغاء",
+          "bdat:FLD_NpcTalk:0": "اضغط للتحدث مع نوا",
+          "bdat:FLD_NpcTalk:1": "تحتاج 3 عملات نوبون لفتح هذا.",
+          "bdat:QST_QuestName:0": "ما وراء الحدود",
+          "bdat:QST_QuestName:1": "حياة تمضي قُدُماً",
         };
         setState({
           entries: demoEntries,
@@ -319,17 +309,6 @@ export function useEditorState() {
     return Array.from(set).sort();
   }, [state?.entries]);
 
-  const categoryCounts = useMemo(() => {
-    if (!state) return {};
-    const counts: Record<string, number> = {};
-    for (const e of state.entries) {
-      const isBdat = /^.+?\[\d+\]\./.test(e.label);
-      const sourceFile = e.msbtFile.startsWith('bdat:') ? e.msbtFile.slice(5) : undefined;
-      const cat = isBdat ? categorizeBdatTable(e.label, sourceFile, e.original) : categorizeFile(e.msbtFile);
-      counts[cat] = (counts[cat] || 0) + 1;
-    }
-    return counts;
-  }, [state?.entries]);
 
   // === Count entries with technical tags ===
   const tagsCount = useMemo(() => {
@@ -965,7 +944,6 @@ export function useEditorState() {
       }
     }
     setState({ entries, translations: {}, protectedEntries: new Set(), technicalBypass: new Set() });
-    setGameType("xenoblade");
     setLastSaved("✅ تم تحميل بيانات BDAT تجريبية");
     setTimeout(() => setLastSaved(""), 3000);
   }, []);
@@ -987,10 +965,9 @@ export function useEditorState() {
 
   return {
     // State
-    state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, showFindReplace, userGeminiKey, gameType,
+    state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, showFindReplace, userGeminiKey,
     building, buildProgress, translating, translateProgress,
     lastSaved, cloudSyncing, cloudStatus,
-    technicalEditingMode, showPreview, previewKey,
     reviewing, reviewResults, tmStats,
     suggestingShort, shortSuggestions,
     quickReviewMode, quickReviewIndex,
@@ -1009,7 +986,7 @@ export function useEditorState() {
     // Setters
     setSearch, setFilterFile, setFilterCategory, setFilterStatus, setFilterTechnical, setFilterTable, setFilterColumn,
     setFiltersOpen, setShowQualityStats, setQuickReviewMode, setQuickReviewIndex, setShowFindReplace,
-    setCurrentPage, setShowRetranslateConfirm, setShowPreview, setPreviewKey,
+    setCurrentPage, setShowRetranslateConfirm,
     setArabicNumerals, setMirrorPunctuation, setUserGeminiKey,
     setReviewResults, setShortSuggestions, setImproveResults, setBuildStats, setShowBuildConfirm,
     setConsistencyResults,
