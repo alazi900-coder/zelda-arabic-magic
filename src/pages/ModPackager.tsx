@@ -35,13 +35,16 @@ export default function ModPackager() {
   const [bdatFiles, setBdatFiles] = useState<BdatFile[]>([]);
   const [building, setBuilding] = useState(false);
   const [status, setStatus] = useState("");
-  const [downloadingFont, setDownloadingFont] = useState(false);
+  const [downloadingFont, setDownloadingFont] = useState<"cairo" | "tajawal" | null>(null);
   const [showLatinWarning, setShowLatinWarning] = useState(false);
 
   // Cairo includes BOTH Arabic PF-B AND Latin (A-Z, a-z, 0-9)
   // NotoSansArabic is Arabic-ONLY and causes English text to disappear in-game!
   const CAIRO_FONT_URLS = [
     "https://github.com/Gue3bara/Cairo/raw/7030db78cca3a7a7d94f9071b3f35dad7447ae71/fonts/ttf/Cairo-Regular.ttf",
+  ];
+  const TAJAWAL_FONT_URLS = [
+    "https://github.com/googlefonts/tajawal/raw/main/fonts/ttf/Tajawal-Regular.ttf",
   ];
 
   const validateAndSetFont = useCallback((name: string, data: ArrayBuffer) => {
@@ -54,13 +57,17 @@ export default function ModPackager() {
     setFontFile({ name, data, size: data.byteLength, validation });
   }, []);
 
-  const handleDownloadNotoFont = useCallback(async () => {
-    setDownloadingFont(true);
-    setStatus("جارٍ تحميل خط Cairo...");
+  const handleDownloadFont = useCallback(async (fontType: "cairo" | "tajawal") => {
+    setDownloadingFont(fontType);
+    const isCairo = fontType === "cairo";
+    const urls = isCairo ? CAIRO_FONT_URLS : TAJAWAL_FONT_URLS;
+    const fileName = isCairo ? "Cairo-Regular.ttf" : "Tajawal-Regular.ttf";
+    const label = isCairo ? "Cairo" : "Tajawal";
+    setStatus(`جارٍ تحميل خط ${label}...`);
     try {
       let data: ArrayBuffer | null = null;
       const edgeFunctionUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/font-proxy`;
-      for (const url of CAIRO_FONT_URLS) {
+      for (const url of urls) {
         try {
           const response = await fetch(edgeFunctionUrl, {
             method: "POST",
@@ -76,16 +83,16 @@ export default function ModPackager() {
         } catch { /* try next */ }
       }
       if (!data) throw new Error("فشل تحميل الخط");
-      validateAndSetFont("Cairo-Regular.ttf", data);
-      setStatus("✅ تم تحميل خط Cairo بنجاح!");
+      validateAndSetFont(fileName, data);
+      setStatus(`✅ تم تحميل خط ${label} بنجاح!`);
       setTimeout(() => setStatus(""), 4000);
     } catch {
-      setStatus("❌ فشل تحميل خط Cairo — يرجى رفع الخط يدوياً");
+      setStatus(`❌ فشل تحميل خط ${label} — يرجى رفع الخط يدوياً`);
       setTimeout(() => setStatus(""), 7000);
     } finally {
-      setDownloadingFont(false);
+      setDownloadingFont(null);
     }
-  }, [validateAndSetFont, CAIRO_FONT_URLS]);
+  }, [validateAndSetFont, CAIRO_FONT_URLS, TAJAWAL_FONT_URLS]);
 
   const handleFontUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -326,19 +333,35 @@ export default function ModPackager() {
               </div>
             ) : (
               <div className="space-y-3">
-                <Button
-                  variant="outline"
-                  className="w-full gap-2 border-primary/30 hover:bg-primary/5"
-                  onClick={handleDownloadNotoFont}
-                  disabled={downloadingFont}
-                >
-                  {downloadingFont ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <Download className="w-4 h-4" />
-                  )}
-                  {downloadingFont ? "جارٍ التحميل..." : "تحميل Cairo-Regular تلقائياً (عربي + لاتيني)"}
-                </Button>
+                <div className="grid grid-cols-2 gap-2">
+                  <Button
+                    variant="outline"
+                    className="w-full gap-2 border-primary/30 hover:bg-primary/5"
+                    onClick={() => handleDownloadFont("cairo")}
+                    disabled={downloadingFont !== null}
+                  >
+                    {downloadingFont === "cairo" ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Download className="w-4 h-4" />
+                    )}
+                    {downloadingFont === "cairo" ? "جارٍ التحميل..." : "Cairo"}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full gap-2 border-primary/30 hover:bg-primary/5"
+                    onClick={() => handleDownloadFont("tajawal")}
+                    disabled={downloadingFont !== null}
+                  >
+                    {downloadingFont === "tajawal" ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Download className="w-4 h-4" />
+                    )}
+                    {downloadingFont === "tajawal" ? "جارٍ التحميل..." : "Tajawal"}
+                  </Button>
+                </div>
+                <p className="text-xs text-center text-muted-foreground">تحميل تلقائي (عربي + لاتيني)</p>
                 <label className="flex flex-col items-center gap-3 p-6 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
                   <Upload className="w-6 h-6 text-muted-foreground" />
                   <span className="text-sm text-muted-foreground">أو ارفع خطاً يدوياً</span>
