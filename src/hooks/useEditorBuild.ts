@@ -315,29 +315,25 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
         const blob = await response.blob();
         const modifiedCount = parseInt(response.headers.get('X-Modified-Count') || '0') + localModifiedCount;
         
-        // If we also have local BDAT results, we need to combine them
-        // For now, download server ZIP and local files separately
+        // Pack everything into a single ZIP (server ZIP + local BDAT results)
         if (localBdatResults.length > 0) {
-          // Download server ZIP first
-          const blobUrl = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = blobUrl;
-          a.download = "xenoblade_arabized_msbt.zip";
-          a.click();
-          
-          // Then download local BDAT files
+          setBuildProgress(`دمج ${localBdatResults.length} ملف BDAT مع ملفات MSBT في ZIP واحد...`);
+          const JSZip = (await import("jszip")).default;
+          // Load the server ZIP so we can merge it
+          const serverZip = await JSZip.loadAsync(blob);
           for (const result of localBdatResults) {
-            const bdatBlob = new Blob([new Uint8Array(result.data) as any], { type: "application/octet-stream" });
-            const bdatUrl = URL.createObjectURL(bdatBlob);
-            const bdatA = document.createElement("a");
-            bdatA.href = bdatUrl;
-            // Ensure filename ends with .bdat (strip any extra extension added by the upload)
             const cleanName = result.name.replace(/\.(txt|bin)$/i, "");
-            bdatA.download = cleanName.endsWith(".bdat") ? cleanName : cleanName + ".bdat";
-            bdatA.click();
-            URL.revokeObjectURL(bdatUrl);
+            const finalName = cleanName.endsWith(".bdat") ? cleanName : cleanName + ".bdat";
+            serverZip.file(finalName, result.data);
           }
-          setBuildProgress(`✅ تم بنجاح! تم تعديل ${modifiedCount} نص`);
+          const mergedBlob = await serverZip.generateAsync({ type: "blob", compression: "DEFLATE", compressionOptions: { level: 6 } });
+          const mergedUrl = URL.createObjectURL(mergedBlob);
+          const a = document.createElement("a");
+          a.href = mergedUrl;
+          a.download = "xenoblade_arabized.zip";
+          a.click();
+          URL.revokeObjectURL(mergedUrl);
+          setBuildProgress(`✅ تم بنجاح! تم تعديل ${modifiedCount} نص — جميع الملفات في ZIP واحد`);
         } else {
           const blobUrl = URL.createObjectURL(blob);
           const a = document.createElement("a");
@@ -347,19 +343,23 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
           setBuildProgress(`✅ تم بنجاح! تم تعديل ${modifiedCount} نص — الملفات في ملف ZIP`);
         }
       } else if (localBdatResults.length > 0) {
-        // Only binary BDAT files, download them directly
-        setBuildProgress("تحميل ملفات BDAT المعرّبة...");
+        // Only binary BDAT files → pack ALL into a single ZIP
+        setBuildProgress(`تجميع ${localBdatResults.length} ملف BDAT في ZIP...`);
+        const JSZip = (await import("jszip")).default;
+        const zip = new JSZip();
         for (const result of localBdatResults) {
-          const bdatBlob = new Blob([new Uint8Array(result.data) as any], { type: "application/octet-stream" });
-          const bdatUrl = URL.createObjectURL(bdatBlob);
-          const bdatA = document.createElement("a");
-          bdatA.href = bdatUrl;
           const cleanName = result.name.replace(/\.(txt|bin)$/i, "");
-          bdatA.download = cleanName.endsWith(".bdat") ? cleanName : cleanName + ".bdat";
-          bdatA.click();
-          URL.revokeObjectURL(bdatUrl);
+          const finalName = cleanName.endsWith(".bdat") ? cleanName : cleanName + ".bdat";
+          zip.file(finalName, result.data);
         }
-        setBuildProgress(`✅ تم بنجاح! تم تعديل ${localModifiedCount} نص في ملفات BDAT`);
+        const zipBlob = await zip.generateAsync({ type: "blob", compression: "DEFLATE", compressionOptions: { level: 6 } });
+        const zipUrl = URL.createObjectURL(zipBlob);
+        const a = document.createElement("a");
+        a.href = zipUrl;
+        a.download = "xenoblade_arabized_bdat.zip";
+        a.click();
+        URL.revokeObjectURL(zipUrl);
+        setBuildProgress(`✅ تم بنجاح! ${localBdatResults.length} ملف BDAT في ZIP — تم تعديل ${localModifiedCount} نص`);
       }
       
       setTimeout(() => { setBuilding(false); setBuildProgress(""); }, 3000);
