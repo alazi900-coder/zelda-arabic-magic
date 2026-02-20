@@ -40,11 +40,12 @@ export default function ModPackager() {
 
   // Cairo includes BOTH Arabic PF-B AND Latin (A-Z, a-z, 0-9)
   // NotoSansArabic is Arabic-ONLY and causes English text to disappear in-game!
+  // Google Fonts static TTFs — تشمل العربية واللاتينية معاً
   const CAIRO_FONT_URLS = [
-    "https://github.com/Gue3bara/Cairo/raw/7030db78cca3a7a7d94f9071b3f35dad7447ae71/fonts/ttf/Cairo-Regular.ttf",
+    "https://raw.githubusercontent.com/google/fonts/main/ofl/cairo/static/Cairo-Regular.ttf",
   ];
   const TAJAWAL_FONT_URLS = [
-    "https://github.com/googlefonts/tajawal/raw/main/fonts/ttf/Tajawal-Regular.ttf",
+    "https://raw.githubusercontent.com/google/fonts/main/ofl/tajawal/Tajawal-Regular.ttf",
   ];
 
   const validateAndSetFont = useCallback((name: string, data: ArrayBuffer) => {
