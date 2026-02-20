@@ -392,32 +392,36 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     }
     setLastSaved(msg);
 
-    setTimeout(() => {
-      setState(prevState => {
-        if (!prevState) return null;
-        const newTranslations = { ...prevState.translations };
-        const newProtected = new Set(prevState.protectedEntries || []);
-        let count = 0;
-        for (const entry of prevState.entries) {
-          const key = `${entry.msbtFile}:${entry.index}`;
-          if (hasArabicChars(entry.original)) {
-            if (newProtected.has(key)) continue;
-            const existing = newTranslations[key]?.trim();
-            const isAutoDetected = !existing || existing === entry.original || existing === entry.original.trim();
-            if (isAutoDetected) {
-              const corrected = unReverseBidi(entry.original);
-              if (corrected !== entry.original) {
-                newTranslations[key] = corrected;
-                newProtected.add(key);
-                count++;
-              }
+    // FIX: Apply BiDi fix only to entries that have Arabic in the ORIGINAL text
+    // and do NOT yet have a translation from the imported JSON.
+    // We must NOT touch keys that were just imported (cleanedImported) — only truly empty ones.
+    setState(prevState => {
+      if (!prevState) return null;
+      const newTranslations = { ...prevState.translations };
+      const newProtected = new Set(prevState.protectedEntries || []);
+      let count = 0;
+      const importedKeys = new Set(Object.keys(cleanedImported));
+      for (const entry of prevState.entries) {
+        const key = `${entry.msbtFile}:${entry.index}`;
+        // Skip any key that was just imported — never overwrite freshly imported translations
+        if (importedKeys.has(key)) continue;
+        if (hasArabicChars(entry.original)) {
+          if (newProtected.has(key)) continue;
+          const existing = newTranslations[key]?.trim();
+          const isAutoDetected = !existing || existing === entry.original || existing === entry.original.trim();
+          if (isAutoDetected) {
+            const corrected = unReverseBidi(entry.original);
+            if (corrected !== entry.original) {
+              newTranslations[key] = corrected;
+              newProtected.add(key);
+              count++;
             }
           }
         }
-        if (count > 0) setLastSaved(prev => prev + ` + تصحيح ${count} نص معكوس`);
-        return { ...prevState, translations: newTranslations, protectedEntries: newProtected };
-      });
-    }, 0);
+      }
+      if (count > 0) setLastSaved(prev => prev + ` + تصحيح ${count} نص معكوس`);
+      return { ...prevState, translations: newTranslations, protectedEntries: newProtected };
+    });
   }, [state, setState, setLastSaved, isFilterActive, filteredEntries, filterLabel]);
 
   /** Handle drop/paste of JSON file or text */
