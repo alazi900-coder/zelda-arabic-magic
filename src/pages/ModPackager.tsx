@@ -28,6 +28,7 @@ interface BdatFile {
   name: string;
   data: ArrayBuffer;
   size: number;
+  subPath?: string; // e.g. "gb" → romfs/bdat/gb/filename.bdat
 }
 
 export default function ModPackager() {
@@ -37,6 +38,7 @@ export default function ModPackager() {
   const [status, setStatus] = useState("");
   const [downloadingFont, setDownloadingFont] = useState<"cairo" | "tajawal" | null>(null);
   const [showLatinWarning, setShowLatinWarning] = useState(false);
+  const [bdatSubPath, setBdatSubPath] = useState("gb"); // default XC3 subpath
 
   // Cairo includes BOTH Arabic PF-B AND Latin (A-Z, a-z, 0-9)
   // NotoSansArabic is Arabic-ONLY and causes English text to disappear in-game!
@@ -158,10 +160,15 @@ export default function ModPackager() {
         });
       }
 
-      // Add BDAT files to romfs structure
+      // Add BDAT files to romfs structure with correct subpath
+      // libxc3_file_loader expects: romfs/bdat/{subpath}/{filename}.bdat
+      const subPath = bdatSubPath.trim().replace(/^\/|\/$/g, "");
       for (const bdat of bdatFiles) {
+        const bdatPath = subPath
+          ? `romfs/bdat/${subPath}/${bdat.name}`
+          : `romfs/bdat/${bdat.name}`;
         zipParts.push({
-          path: `romfs/bdat/${bdat.name}`,
+          path: bdatPath,
           data: new Uint8Array(bdat.data),
         });
       }
@@ -187,7 +194,7 @@ export default function ModPackager() {
     } finally {
       setBuilding(false);
     }
-  }, [fontFile, bdatFiles]);
+  }, [fontFile, bdatFiles, bdatSubPath]);
 
   const handleBuildMod = useCallback(async () => {
     if (!fontFile && bdatFiles.length === 0) return;
@@ -392,6 +399,27 @@ export default function ModPackager() {
               </div>
             </div>
 
+            {/* BDAT subpath field */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-foreground">المسار الفرعي داخل romfs/bdat/</label>
+              <div className="flex items-center gap-2 bg-muted/50 rounded-lg border px-3 py-2 font-mono text-sm" dir="ltr">
+                <span className="text-muted-foreground shrink-0">romfs/bdat/</span>
+                <input
+                  type="text"
+                  value={bdatSubPath}
+                  onChange={e => setBdatSubPath(e.target.value)}
+                  placeholder="gb"
+                  className="flex-1 bg-transparent outline-none text-foreground min-w-0"
+                  dir="ltr"
+                />
+                <span className="text-muted-foreground shrink-0">/{"{filename}"}.bdat</span>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                📁 XC3 الافتراضي: <code className="bg-muted px-1 rounded">gb</code> — (romfs/bdat/gb/filename.bdat)
+                <br />اتركه فارغاً إذا كانت الملفات في الجذر مباشرة
+              </p>
+            </div>
+
             <label className="flex flex-col items-center gap-3 p-6 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
               <Upload className="w-6 h-6 text-muted-foreground" />
               <span className="text-sm text-muted-foreground">ارفع ملفات BDAT ({bdatFiles.length} ملف مرفوع)</span>
@@ -433,13 +461,16 @@ export default function ModPackager() {
               {bdatFiles.length > 0 && (
                 <>
                   <p className="pr-12">{fontFile ? "└" : "├"}── bdat/</p>
+                  {bdatSubPath.trim() && (
+                    <p className="pr-20 text-muted-foreground">├── {bdatSubPath.trim()}/</p>
+                  )}
                   {bdatFiles.slice(0, 5).map((f, i) => (
-                    <p key={i} className="pr-20 text-primary">
+                    <p key={i} className={bdatSubPath.trim() ? "pr-28 text-primary" : "pr-20 text-primary"}>
                       {i === Math.min(bdatFiles.length, 5) - 1 ? "└" : "├"}── {f.name}
                     </p>
                   ))}
                   {bdatFiles.length > 5 && (
-                    <p className="pr-20 text-muted-foreground/60">... و{bdatFiles.length - 5} ملفات أخرى</p>
+                    <p className={bdatSubPath.trim() ? "pr-28 text-muted-foreground/60" : "pr-20 text-muted-foreground/60"}>... و{bdatFiles.length - 5} ملفات أخرى</p>
                   )}
                 </>
               )}
