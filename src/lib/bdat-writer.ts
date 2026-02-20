@@ -190,11 +190,22 @@ function rebuildTable(table: BdatTable, translations: Map<string, string>): Uint
     }
   }
 
-  // Update string table offset and length in table header
-  // 0x20: String Table Offset (u32)
-  // 0x24: String Table Length (u32)
-  preStringView.setUint32(0x20, raw.stringTableOffset, true); // offset stays same
-  preStringView.setUint32(0x24, newStringTableLength, true);  // length may change
+  // Update string table length in table header
+  // The offset stays the same (we rebuild from position 0..stringTableOffset)
+  // but the length may change if translated strings are longer/shorter than originals.
+  //
+  // Header layout depends on isU32Layout (detected during parsing):
+  //   u32 layout (48-byte header): stringTableOffset at 0x28, stringTableLength at 0x2C
+  //   u16 layout (40-byte header): stringTableOffset at 0x20, stringTableLength at 0x24
+  if (raw.isU32Layout) {
+    // u32 layout — string table fields at 0x28 / 0x2C
+    preStringView.setUint32(0x28, raw.stringTableOffset, true); // offset stays same
+    preStringView.setUint32(0x2C, newStringTableLength, true);  // length may change
+  } else {
+    // u16 layout — string table fields at 0x20 / 0x24
+    preStringView.setUint32(0x20, raw.stringTableOffset, true); // offset stays same
+    preStringView.setUint32(0x24, newStringTableLength, true);  // length may change
+  }
 
   // Assemble final table
   const newTableData = new Uint8Array(raw.stringTableOffset + newStringTableLength);
