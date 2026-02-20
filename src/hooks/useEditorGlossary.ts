@@ -90,7 +90,10 @@ export function useEditorGlossary({
           return { ...prev, glossary: Array.from(seen.values()).join('\n') };
         });
         const fileNames = Array.from(files).map(f => f.name).join('، ');
-        const newCount = newTerms.split('\n').filter(l => l.includes('=')).length;
+        const newCount = newTerms.split('\n').filter(l => {
+          const t = l.trim();
+          return t && !t.startsWith('#') && !t.startsWith('//') && t.includes('=');
+        }).length;
         setLastSaved(`📖 تم دمج ${newCount} مصطلح من (${fileNames})`);
         setTimeout(() => setLastSaved(""), 4000);
       } catch { alert('خطأ في قراءة الملف'); }
@@ -104,7 +107,7 @@ export function useEditorGlossary({
       const response = await fetch(url);
       if (!response.ok) throw new Error('فشل تحميل القاموس');
       const text = await response.text();
-      const newCount = text.split('\n').filter(l => l.includes('=')).length;
+      const newCount = text.split('\n').filter(l => { const t = l.trim(); return t && !t.startsWith('#') && !t.startsWith('//') && t.includes('='); }).length;
       if (replace) {
         setState(prev => prev ? { ...prev, glossary: text } : null);
       } else {

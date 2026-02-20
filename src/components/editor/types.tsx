@@ -250,8 +250,6 @@ export function categorizeByTableName(tbl: string): string | null {
   // === الأحداث والقصة ===
   if (/^(evt_|tlk_|fld_talk|fld_event)/i.test(tbl)) return "bdat-story";
   // msg_ sub-categories (check specific prefixes before generic msg_)
-  // القائمة الرئيسية - title screen and core menus
-  if (/^msg_mnu_(common_ms|title|save|load|option|config)/i.test(tbl)) return "bdat-title-menu";
   if (/^msg_mnu_/i.test(tbl)) return "bdat-menu";
   if (/^msg_btl_/i.test(tbl)) return "bdat-battle";
   if (/^msg_fld_/i.test(tbl)) return "bdat-character";
