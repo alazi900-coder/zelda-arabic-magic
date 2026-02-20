@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -40,8 +41,7 @@ export default function ModPackager() {
   // Cairo includes BOTH Arabic PF-B AND Latin (A-Z, a-z, 0-9)
   // NotoSansArabic is Arabic-ONLY and causes English text to disappear in-game!
   const CAIRO_FONT_URLS = [
-    "https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/cairo/static/Cairo-Regular.ttf",
-    "https://raw.githubusercontent.com/google/fonts/main/ofl/cairo/static/Cairo-Regular.ttf",
+    "https://github.com/Gue3bara/Cairo/raw/7030db78cca3a7a7d94f9071b3f35dad7447ae71/fonts/ttf/Cairo-Regular.ttf",
   ];
 
   const validateAndSetFont = useCallback((name: string, data: ArrayBuffer) => {
@@ -60,9 +60,18 @@ export default function ModPackager() {
       let data: ArrayBuffer | null = null;
       for (const url of CAIRO_FONT_URLS) {
         try {
-          const response = await fetch(url);
-          if (response.ok) {
-            data = await response.arrayBuffer();
+          const { data: responseData, error } = await supabase.functions.invoke("font-proxy", {
+            body: { fontUrl: url },
+          });
+          if (error) continue;
+          // responseData is already an ArrayBuffer when the response is binary
+          if (responseData instanceof ArrayBuffer && responseData.byteLength > 0) {
+            data = responseData;
+            break;
+          }
+          // Fallback: if it comes as a Blob
+          if (responseData instanceof Blob) {
+            data = await responseData.arrayBuffer();
             break;
           }
         } catch { /* try next */ }
@@ -70,8 +79,8 @@ export default function ModPackager() {
       if (!data) throw new Error("فشل تحميل الخط");
       validateAndSetFont("Cairo-Regular.ttf", data);
     } catch {
-      setStatus("❌ فشل تحميل خط Cairo — تحقق من اتصالك بالإنترنت");
-      setTimeout(() => setStatus(""), 5000);
+      setStatus("❌ فشل تحميل خط Cairo — يرجى رفع الخط يدوياً");
+      setTimeout(() => setStatus(""), 7000);
     } finally {
       setDownloadingFont(false);
     }
