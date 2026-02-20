@@ -74,6 +74,7 @@ export interface BdatTable {
     stringTableLength: number;
     hashedNames: boolean;
     baseId: number;
+    isU32Layout: boolean;  // true = 48-byte header (u32 offsets), false = 40-byte header (u16 offsets)
   };
 }
 
@@ -160,6 +161,7 @@ function parseTableHeader(data: Uint8Array, tableOffset: number): BdatTable['_ra
     stringTableLength,
     hashedNames,
     baseId,
+    isU32Layout,
   };
 }
 
@@ -356,6 +358,7 @@ export function parseBdatFile(data: Uint8Array, unhashFn?: (hash: number) => str
       stringTableLength: rawInfo.stringTableLength,
       hashedNames: rawInfo.hashedNames,
       baseId: rawInfo.baseId,
+      isU32Layout: rawInfo.isU32Layout,
     };
 
     const columns = parseColumns(rawInfo.tableData, raw, defaultUnhash);
