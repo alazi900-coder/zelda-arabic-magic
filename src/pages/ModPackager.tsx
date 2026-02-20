@@ -2,6 +2,16 @@ import { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, AlertTriangle, Info, Download, Loader2, ShieldCheck, ShieldAlert } from "lucide-react";
 import { validateFontForArabic, type FontValidationResult } from "@/lib/font-validator";
 import { isBfttf, bfttfToTtf, ttfToBfttf } from "@/lib/bfttf-converter";
@@ -25,6 +35,7 @@ export default function ModPackager() {
   const [building, setBuilding] = useState(false);
   const [status, setStatus] = useState("");
   const [downloadingFont, setDownloadingFont] = useState(false);
+  const [showLatinWarning, setShowLatinWarning] = useState(false);
 
   // Cairo includes BOTH Arabic PF-B AND Latin (A-Z, a-z, 0-9)
   // NotoSansArabic is Arabic-ONLY and causes English text to disappear in-game!
@@ -105,13 +116,11 @@ export default function ModPackager() {
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
 
-  const handleBuildMod = useCallback(async () => {
-    if (!fontFile && bdatFiles.length === 0) return;
+  const doBuild = useCallback(async () => {
     setBuilding(true);
     setStatus("تجهيز حزمة المود...");
 
     try {
-      // Dynamic import JSZip-like functionality using native compression
       const zipParts: { path: string; data: Uint8Array }[] = [];
 
       // Add font file to romfs structure (auto-convert TTF → BFTTF)
@@ -131,7 +140,6 @@ export default function ModPackager() {
 
       // Add BDAT files to romfs structure
       for (const bdat of bdatFiles) {
-        // XC3 BDAT path: romfs/bdat/
         zipParts.push({
           path: `romfs/bdat/${bdat.name}`,
           data: new Uint8Array(bdat.data),
@@ -160,6 +168,19 @@ export default function ModPackager() {
       setBuilding(false);
     }
   }, [fontFile, bdatFiles]);
+
+  const handleBuildMod = useCallback(async () => {
+    if (!fontFile && bdatFiles.length === 0) return;
+
+    // Check Latin coverage before building
+    const latinCoverage = fontFile?.validation?.latinCoveragePercent ?? 100;
+    if (fontFile && latinCoverage < 100) {
+      setShowLatinWarning(true);
+      return;
+    }
+
+    await doBuild();
+  }, [fontFile, bdatFiles, doBuild]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -422,6 +443,48 @@ export default function ModPackager() {
           )}
         </div>
       </main>
+
+      {/* Latin coverage warning dialog */}
+      <AlertDialog open={showLatinWarning} onOpenChange={setShowLatinWarning}>
+        <AlertDialogContent className="border-destructive/50">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2 text-destructive">
+              <AlertTriangle className="w-5 h-5" />
+              تحذير: النصوص الإنجليزية ستختفي!
+            </AlertDialogTitle>
+            <AlertDialogDescription className="space-y-3 text-right" dir="rtl">
+              <p className="text-destructive font-semibold">
+                الخط المختار لا يحتوي على حروف لاتينية كاملة
+                {fontFile?.validation?.latinCoveragePercent !== undefined && (
+                  <span> ({fontFile.validation.latinCoveragePercent}% تغطية)</span>
+                )}
+              </p>
+              <p>
+                عند تثبيت هذا المود، ستختفي جميع النصوص الإنجليزية في اللعبة (أسماء الأماكن، القوائم، معلومات المعارك) وستظهر فارغة تماماً.
+              </p>
+              {fontFile?.validation?.missingLatinRanges && fontFile.validation.missingLatinRanges.length > 0 && (
+                <div className="bg-destructive/10 rounded p-2 text-xs text-destructive">
+                  <strong>النطاقات المفقودة:</strong> {fontFile.validation.missingLatinRanges.join(" | ")}
+                </div>
+              )}
+              <p className="text-muted-foreground text-sm">
+                💡 يُنصح باستخدام <strong>Cairo-Regular</strong> أو <strong>Tajawal</strong> اللذين يدعمان العربية واللاتينية معاً.
+              </p>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex-row-reverse sm:flex-row-reverse gap-2">
+            <AlertDialogCancel className="flex-1">
+              إلغاء — اختر خطاً آخر
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className="flex-1 bg-destructive hover:bg-destructive/90 text-destructive-foreground"
+              onClick={() => { setShowLatinWarning(false); doBuild(); }}
+            >
+              أعلم بالمخاطر — بنِ على أي حال
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
