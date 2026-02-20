@@ -139,9 +139,12 @@ export function validateFontForArabic(data: ArrayBuffer): FontValidationResult {
     }
     
     // --- Arabic PF-B check ---
-    const pfbCount = supportedCodepoints.size;
+    let arabicPfbCount = 0;
+    for (let c = 0xFE70; c <= 0xFEFF; c++) {
+      if (supportedCodepoints.has(c)) arabicPfbCount++;
+    }
     const totalPfB = 141;
-    const coveragePercent = Math.round((pfbCount / totalPfB) * 100);
+    const coveragePercent = Math.round((arabicPfbCount / totalPfB) * 100);
     const sampleHits = SAMPLE_CODEPOINTS.filter(cp => supportedCodepoints.has(cp)).length;
     const samplePercent = Math.round((sampleHits / SAMPLE_CODEPOINTS.length) * 100);
 
@@ -155,7 +158,7 @@ export function validateFontForArabic(data: ArrayBuffer): FontValidationResult {
       warnings.push(latinMsg);
     }
     
-    if (pfbCount === 0) {
+    if (arabicPfbCount === 0) {
       warnings.push("الخط لا يدعم أشكال العرض العربية (Presentation Forms-B) إطلاقاً — النصوص العربية لن تظهر بشكل متصل في اللعبة");
       return {
         valid: false, totalGlyphs: totalMappings, arabicPresentationFormsB: 0,
@@ -174,9 +177,9 @@ export function validateFontForArabic(data: ArrayBuffer): FontValidationResult {
     }
     
     return {
-      valid: pfbCount > 0 && latinCoveragePercent === 100,
+      valid: arabicPfbCount > 0 && latinCoveragePercent === 100,
       totalGlyphs: totalMappings,
-      arabicPresentationFormsB: pfbCount,
+      arabicPresentationFormsB: arabicPfbCount,
       coveragePercent,
       latinCoveragePercent,
       missingLatinRanges,
@@ -198,45 +201,40 @@ export function validateFontForArabic(data: ArrayBuffer): FontValidationResult {
   }
 }
 
-/** Parse cmap format 4 (BMP) and collect Arabic PF-B codepoints */
+/** Parse cmap format 4 (BMP) and collect all codepoints */
 function parseFormat4(view: DataView, offset: number, result: Set<number>): number {
   let totalMappings = 0;
   try {
     const segCountX2 = view.getUint16(offset + 6);
     const segCount = segCountX2 / 2;
-    
+
     const endCountBase = offset + 14;
-    const startCountBase = endCountBase + segCountX2 + 2; // +2 for reservedPad
+    const startCountBase = endCountBase + segCountX2 + 2;
     const idDeltaBase = startCountBase + segCountX2;
     const idRangeOffsetBase = idDeltaBase + segCountX2;
-    
+
     for (let i = 0; i < segCount; i++) {
       const endCode = view.getUint16(endCountBase + i * 2);
       const startCode = view.getUint16(startCountBase + i * 2);
-      
+
       if (startCode === 0xFFFF) break;
-      
+
       totalMappings += endCode - startCode + 1;
-      
-      // Check overlap with Arabic PF-B range (U+FE70–U+FEFF)
-      if (endCode >= 0xFE70 && startCode <= 0xFEFF) {
-        const rangeStart = Math.max(startCode, 0xFE70);
-        const rangeEnd = Math.min(endCode, 0xFEFF);
-        
-        const idRangeOffset = view.getUint16(idRangeOffsetBase + i * 2);
-        const idDelta = view.getInt16(idDeltaBase + i * 2);
-        
-        for (let c = rangeStart; c <= rangeEnd; c++) {
-          let glyphId: number;
-          if (idRangeOffset === 0) {
-            glyphId = (c + idDelta) & 0xFFFF;
-          } else {
-            const glyphOffset = idRangeOffsetBase + i * 2 + idRangeOffset + (c - startCode) * 2;
-            glyphId = view.getUint16(glyphOffset);
-            if (glyphId !== 0) glyphId = (glyphId + idDelta) & 0xFFFF;
-          }
-          if (glyphId !== 0) result.add(c);
+
+      const idRangeOffset = view.getUint16(idRangeOffsetBase + i * 2);
+      const idDelta = view.getInt16(idDeltaBase + i * 2);
+
+      for (let c = startCode; c <= endCode; c++) {
+        let glyphId: number;
+        if (idRangeOffset === 0) {
+          glyphId = (c + idDelta) & 0xFFFF;
+        } else {
+          const glyphOffset = idRangeOffsetBase + i * 2 + idRangeOffset + (c - startCode) * 2;
+          if (glyphOffset + 2 > view.byteLength) continue;
+          glyphId = view.getUint16(glyphOffset);
+          if (glyphId !== 0) glyphId = (glyphId + idDelta) & 0xFFFF;
         }
+        if (glyphId !== 0) result.add(c);
       }
     }
   } catch {
@@ -245,28 +243,24 @@ function parseFormat4(view: DataView, offset: number, result: Set<number>): numb
   return totalMappings;
 }
 
-/** Parse cmap format 12 (full Unicode) and collect Arabic PF-B codepoints */
+/** Parse cmap format 12 (full Unicode) and collect all codepoints */
 function parseFormat12(view: DataView, offset: number, result: Set<number>): number {
   let totalMappings = 0;
   try {
     const numGroups = view.getUint32(offset + 12);
     const groupBase = offset + 16;
-    
+
     for (let i = 0; i < numGroups; i++) {
       const groupOffset = groupBase + i * 12;
       const startCharCode = view.getUint32(groupOffset);
       const endCharCode = view.getUint32(groupOffset + 4);
       const startGlyphID = view.getUint32(groupOffset + 8);
-      
+
       totalMappings += endCharCode - startCharCode + 1;
-      
-      if (endCharCode >= 0xFE70 && startCharCode <= 0xFEFF) {
-        const rangeStart = Math.max(startCharCode, 0xFE70);
-        const rangeEnd = Math.min(endCharCode, 0xFEFF);
-        for (let c = rangeStart; c <= rangeEnd; c++) {
-          const glyphId = startGlyphID + (c - startCharCode);
-          if (glyphId !== 0) result.add(c);
-        }
+
+      for (let c = startCharCode; c <= endCharCode; c++) {
+        const glyphId = startGlyphID + (c - startCharCode);
+        if (glyphId !== 0) result.add(c);
       }
     }
   } catch {
