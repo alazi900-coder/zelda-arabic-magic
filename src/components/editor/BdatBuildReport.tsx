@@ -43,9 +43,9 @@ const BdatBuildReport: React.FC<BdatBuildReportProps> = ({ stats }) => {
                 {f.hasError ? (
                   <XCircle className="w-3.5 h-3.5 text-destructive" />
                 ) : isFullyTranslated ? (
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[hsl(142,71%,45%)]" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-secondary" />
                 ) : isPartial ? (
-                  <AlertTriangle className="w-3.5 h-3.5 text-[hsl(38,92%,50%)]" />
+                  <AlertTriangle className="w-3.5 h-3.5 text-accent" />
                 ) : (
                   <AlertTriangle className="w-3.5 h-3.5 text-muted-foreground" />
                 )}
@@ -63,9 +63,9 @@ const BdatBuildReport: React.FC<BdatBuildReportProps> = ({ stats }) => {
                     <div
                       className={`h-full rounded-full transition-all ${
                         isFullyTranslated
-                          ? "bg-[hsl(142,71%,45%)]"
+                          ? "bg-secondary"
                           : isPartial
-                          ? "bg-[hsl(38,92%,50%)]"
+                          ? "bg-accent"
                           : "bg-muted-foreground/30"
                       }`}
                       style={{ width: `${pct}%` }}
@@ -76,9 +76,9 @@ const BdatBuildReport: React.FC<BdatBuildReportProps> = ({ stats }) => {
                   f.hasError
                     ? "text-destructive"
                     : isFullyTranslated
-                    ? "text-[hsl(142,71%,45%)]"
+                    ? "text-secondary"
                     : isPartial
-                    ? "text-[hsl(38,92%,50%)]"
+                    ? "text-accent"
                     : "text-muted-foreground"
                 }`}>
                   {f.hasError ? "خطأ" : `${f.translated}/${f.total}`}

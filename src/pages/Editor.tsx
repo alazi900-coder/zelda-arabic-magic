@@ -43,6 +43,7 @@ import DiffView from "@/components/editor/DiffView";
 import BuildStatsDialog from "@/components/editor/BuildStatsDialog";
 import BuildConfirmDialog from "@/components/editor/BuildConfirmDialog";
 import ConsistencyResultsPanel from "@/components/editor/ConsistencyResultsPanel";
+import BdatBuildReport from "@/components/editor/BdatBuildReport";
 
 const Editor = () => {
   const editor = useEditorState();
@@ -288,9 +289,13 @@ const Editor = () => {
           )}
           {editor.buildProgress && (
             <Card className="mb-4 border-secondary/30 bg-secondary/5 cursor-pointer" onClick={() => editor.buildStats && editor.setBuildStats(editor.buildStats)}>
-              <CardContent className="p-4 text-center font-display">
-                {editor.buildProgress}
-                {editor.buildStats && <span className="text-xs text-muted-foreground mr-2"> (اضغط للتفاصيل)</span>}
+              <CardContent className="p-4 font-display">
+                <div className="text-center">{editor.buildProgress}
+                  {editor.buildStats && <span className="text-xs text-muted-foreground mr-2"> (اضغط للتفاصيل)</span>}
+                </div>
+                {editor.bdatFileStats && editor.bdatFileStats.length > 0 && (
+                  <BdatBuildReport stats={editor.bdatFileStats} />
+                )}
               </CardContent>
             </Card>
           )}
