@@ -16,6 +16,7 @@ export interface EditorState {
   glossary?: string;
   technicalBypass?: Set<string>;
   fuzzyScores?: Record<string, number>;
+  isDemo?: boolean; // true when showing demo data (no real BDAT file loaded)
 }
 
 export interface ReviewIssue {
