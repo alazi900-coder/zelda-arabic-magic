@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
-import { utf16leByteLength } from "@/lib/byte-utils";
 import { hasArabicPresentationForms } from "@/lib/arabic-processing";
 import { ExtractedEntry, EditorState, categorizeFile, categorizeBdatTable, hasTechnicalTags } from "@/components/editor/types";
 
@@ -41,7 +40,7 @@ export function useEditorQuality({ state }: UseEditorQualityProps) {
 
   const isTranslationTooLong = useCallback((entry: ExtractedEntry, translation: string): boolean => {
     if (!translation?.trim() || entry.maxBytes <= 0) return false;
-    return utf16leByteLength(translation) > entry.maxBytes;
+    return new TextEncoder().encode(translation).length > entry.maxBytes;
   }, []);
 
   const hasStuckChars = useCallback((translation: string): boolean => {
@@ -107,7 +106,7 @@ export function useEditorQuality({ state }: UseEditorQualityProps) {
         if (!isTranslated) continue;
 
         if (entry.maxBytes > 0) {
-          const bytes = utf16leByteLength(trimmed);
+          const bytes = new TextEncoder().encode(trimmed).length;
           if (bytes > entry.maxBytes) { qTooLong++; problemKeys.add(key); }
           else if (bytes / entry.maxBytes > 0.8) { qNearLimit++; problemKeys.add(key); }
         }
