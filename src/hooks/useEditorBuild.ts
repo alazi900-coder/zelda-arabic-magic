@@ -136,50 +136,46 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
           await new Promise(r => setTimeout(r, 800));
         }
 
+        const { extractBdatStrings } = await import("@/lib/bdat-parser");
+
         for (const fileName of bdatBinaryFileNames!) {
           const buf = bdatBinaryFiles![fileName];
           if (!buf) continue;
           try {
             const data = new Uint8Array(buf);
             const bdatFile = parseBdatFile(data, unhashLabel);
-            
-            // Build translation map for this file
+
+            // Re-extract strings in the SAME order as XenobladeProcess.tsx
+            // so that the sequential index matches state.translations keys:
+            // Key format stored during extraction: "bdat:fileName:index"
+            const extractedStrings = extractBdatStrings(bdatFile, fileName);
+
+            // Build translation map: "tableName:rowIndex:colName" -> processed Arabic text
             const translationMap = new Map<string, string>();
-            for (const table of bdatFile.tables) {
-              for (let r = 0; r < table.rows.length; r++) {
-                for (const col of table.columns) {
-                  if (col.valueType !== 7 && col.valueType !== 11) continue; // String or DebugString
-                  // Find matching translation key
-                  const key = `bdat-bin:${fileName}:${table.name}:${r}:${col.name}`;
-                  // Search in translations using the entry index format
-                  for (const [tKey, tVal] of Object.entries(nonEmptyTranslations)) {
-                    if (tKey.startsWith(`bdat-bin:${fileName}:`) && tVal) {
-                      // Parse the entry key to match table:row:col
-                      const parts = tKey.split(':');
-                      if (parts.length >= 5) {
-                        const tTable = parts[2];
-                        // Match by table name and column
-                        if (tTable === table.name) {
-                          const mapKey = `${table.name}:${r}:${col.name}`;
-                          const entryKey = `bdat-bin:${fileName}:${table.name}:${r}:${col.name}`;
-                          const trans = nonEmptyTranslations[entryKey];
-                          if (trans) {
-                            let processed: string;
-                            if (hasPF(trans)) {
-                              processed = trans;
-                            } else {
-                              processed = processArabicText(trans, { arabicNumerals, mirrorPunct: mirrorPunctuation });
-                            }
-                            translationMap.set(mapKey, processed);
-                            localModifiedCount++;
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
+
+            for (let i = 0; i < extractedStrings.length; i++) {
+              const s = extractedStrings[i];
+              // The key stored in state.translations during extraction is:
+              // `bdat:${file.name}:${i}` (sequential index)
+              const stateKey = `bdat:${fileName}:${i}`;
+              const trans = nonEmptyTranslations[stateKey];
+              if (!trans) continue;
+
+              // Process Arabic text if needed
+              let processed: string;
+              if (hasPF(trans)) {
+                processed = trans;
+              } else {
+                processed = processArabicText(trans, { arabicNumerals, mirrorPunct: mirrorPunctuation });
               }
+
+              // Map key for bdat-writer: "tableName:rowIndex:colName"
+              const mapKey = `${s.tableName}:${s.rowIndex}:${s.columnName}`;
+              translationMap.set(mapKey, processed);
+              localModifiedCount++;
             }
+
+            console.log(`[BUILD-BDAT] ${fileName}: ${extractedStrings.length} strings extracted, ${translationMap.size} translations applied`);
 
             if (translationMap.size > 0) {
               const rebuilt = rebuildBdatFile(bdatFile, translationMap);
