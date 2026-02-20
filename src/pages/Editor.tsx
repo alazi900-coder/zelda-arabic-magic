@@ -44,6 +44,7 @@ import BuildStatsDialog from "@/components/editor/BuildStatsDialog";
 import BuildConfirmDialog from "@/components/editor/BuildConfirmDialog";
 import ConsistencyResultsPanel from "@/components/editor/ConsistencyResultsPanel";
 import BdatBuildReport from "@/components/editor/BdatBuildReport";
+import IntegrityCheckDialog from "@/components/editor/IntegrityCheckDialog";
 
 const Editor = () => {
   const editor = useEditorState();
@@ -724,6 +725,10 @@ const Editor = () => {
             <Button size="lg" variant="secondary" onClick={editor.handleApplyArabicProcessing} disabled={editor.applyingArabic} className="flex-1 font-display font-bold">
               {editor.applyingArabic ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Sparkles className="w-4 h-4 mr-2" />} تطبيق المعالجة العربية ✨
             </Button>
+            <Button size="sm" variant="outline" onClick={editor.handleCheckIntegrity} disabled={editor.building} className="font-body gap-1 shrink-0" title="التحقق من سلامة الترجمة">
+              <ShieldCheck className="w-4 h-4" />
+              <span className="hidden sm:inline">تحقق من السلامة</span>
+            </Button>
             <Button size="lg" onClick={editor.handlePreBuild} disabled={editor.building} className="flex-1 font-display font-bold">
               {editor.building ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <FileDown className="w-4 h-4 mr-2" />} بناء الملف النهائي
             </Button>
@@ -849,6 +854,13 @@ const Editor = () => {
         </AlertDialog>
 
         <BuildStatsDialog stats={editor.buildStats} onClose={() => editor.setBuildStats(null)} />
+        <IntegrityCheckDialog
+          open={editor.showIntegrityDialog}
+          onOpenChange={editor.setShowIntegrityDialog}
+          result={editor.integrityResult}
+          checking={editor.checkingIntegrity}
+          onRecheck={editor.handleCheckIntegrity}
+        />
         <BuildConfirmDialog
           open={editor.showBuildConfirm}
           onOpenChange={editor.setShowBuildConfirm}
