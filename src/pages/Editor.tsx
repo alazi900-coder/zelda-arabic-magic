@@ -50,7 +50,7 @@ const Editor = () => {
   const isMobile = useIsMobile();
   const [showDiffView, setShowDiffView] = React.useState(false);
   const [isDragging, setIsDragging] = React.useState(false);
-  const gameType = editor.gameType || "xenoblade";
+  const gameType = "xenoblade";
   const processPath = "/process";
 
   // Drag & Drop handlers

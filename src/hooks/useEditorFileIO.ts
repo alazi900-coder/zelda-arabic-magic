@@ -285,9 +285,6 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     setTimeout(() => setLastSaved(""), 4000);
   };
 
-  /** Get untranslated count for UI display */
-  const getUntranslatedCount = () => getUntranslatedGrouped().totalCount;
-
   /** Core logic: process raw JSON text into translations */
   const processJsonImport = useCallback(async (rawText: string, sourceName?: string) => {
     const repaired = repairJson(rawText);
@@ -839,6 +836,5 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     normalizeArabicPresentationForms,
     isFilterActive,
     filterLabel,
-    getUntranslatedCount,
   };
 }
