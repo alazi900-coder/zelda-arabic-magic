@@ -200,9 +200,11 @@ const XenobladeProcess = () => {
             
             for (let i = 0; i < strings.length; i++) {
               const s = strings[i];
+              // Key encodes structural position directly: "bdat-bin:filename:tableName:rowIndex:colName"
+              // This makes build step independent of extraction order matching.
               bdatBinaryEntries.push({
-                msbtFile: `bdat:${file.name}`,
-                index: i,
+                msbtFile: `bdat-bin:${file.name}:${s.tableName}:${s.rowIndex}:${s.columnName}`,
+                index: 0,
                 label: `${s.tableName}[${s.rowIndex}].${s.columnName}`,
                 original: s.original,
                 maxBytes: s.maxBytes,
