@@ -169,10 +169,14 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
               if (!key.startsWith(prefix)) continue;
               // key = "bdat-bin:fileName:tableName:rowIndex:colName:0"
               const rest = key.slice(prefix.length); // "tableName:rowIndex:colName:0"
-              // Remove trailing ":0" (the index suffix)
-              const withoutIndex = rest.endsWith(':0') ? rest.slice(0, -2) : rest;
-              // withoutIndex = "tableName:rowIndex:colName"
-              // Validate it has at least tableName:rowIndex:colName
+
+              // FIX: Use lastIndexOf to safely strip ONLY the trailing ":index" suffix
+              // This prevents cutting column names that might end with digits
+              const lastColon = rest.lastIndexOf(':');
+              if (lastColon === -1) continue;
+              const withoutIndex = rest.slice(0, lastColon); // "tableName:rowIndex:colName"
+
+              // Validate it has at least tableName:rowIndex:colName (3 parts minimum)
               const parts = withoutIndex.split(':');
               if (parts.length < 3) continue;
 
@@ -185,7 +189,13 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
 
               // mapKey for bdat-writer is "tableName:rowIndex:colName"
               translationMap.set(withoutIndex, processed);
-              localModifiedCount++;
+            }
+
+            console.log(`[BUILD-BDAT] ${fileName}: prefix="${prefix}", found ${translationMap.size} matching translations out of ${Object.keys(nonEmptyTranslations).length} total`);
+            if (translationMap.size === 0) {
+              // Debug: show sample keys to help diagnose mismatch
+              const sampleKeys = Object.keys(nonEmptyTranslations).slice(0, 3);
+              console.log(`[BUILD-BDAT] ${fileName}: sample state keys:`, sampleKeys);
             }
 
             // Also support legacy key format: "bdat:fileName:index" (old sessions)
@@ -241,6 +251,7 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
               } else {
                 console.log(`[BDAT-PATCH] ${fileName}: ${patchedCount} patched successfully`);
               }
+              // Use patchedCount as the authoritative count (not translationMap.size which may include overflow)
               localModifiedCount += patchedCount;
             } else {
               localBdatResults.push({ name: fileName, data });
