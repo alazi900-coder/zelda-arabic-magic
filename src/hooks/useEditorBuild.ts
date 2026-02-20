@@ -379,23 +379,30 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
       const bdatBinaryFiles = await idbGet<Record<string, ArrayBuffer>>("editorBdatBinaryFiles");
       const bdatBinaryFileNames = await idbGet<string[]>("editorBdatBinaryFileNames");
 
+      // All translated (non-empty) keys
       const allTransKeys = Object.keys(state.translations).filter(k => state.translations[k]?.trim());
+      // All entry keys (including untranslated) — used to count total extracted strings per file
+      const allEntryKeys = state.entries
+        ? state.entries.map(e => `${e.msbtFile}:${e.index}`)
+        : Object.keys(state.translations);
 
-      // Collect unique filenames referenced in translation keys
-      // New format: "bdat-bin:filename:tableName:rowIndex:colName:0"
-      // Old format: "bdat:filename:index"
+      // Collect unique filenames from entry keys + translated keys
       const newFormatFiles = new Set<string>();
       const oldFormatFiles = new Set<string>();
 
-      for (const key of allTransKeys) {
-        if (key.startsWith('bdat-bin:')) {
-          const parts = key.split(':');
-          if (parts.length >= 2) newFormatFiles.add(parts[1]);
-        } else if (key.startsWith('bdat:')) {
-          const parts = key.split(':');
-          if (parts.length >= 2) oldFormatFiles.add(parts[1]);
+      const collectFileNames = (keys: string[]) => {
+        for (const key of keys) {
+          if (key.startsWith('bdat-bin:')) {
+            const parts = key.split(':');
+            if (parts.length >= 2) newFormatFiles.add(parts[1]);
+          } else if (key.startsWith('bdat:')) {
+            const parts = key.split(':');
+            if (parts.length >= 2) oldFormatFiles.add(parts[1]);
+          }
         }
-      }
+      };
+      collectFileNames(allEntryKeys);
+      collectFileNames(allTransKeys);
 
       const allFileNames = new Set([
         ...Array.from(newFormatFiles),
@@ -413,19 +420,23 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
         const isLegacyFormat = oldFormatFiles.has(fileName) && !newFormatFiles.has(fileName);
         if (isLegacyFormat) hasLegacy = true;
 
-        // Count matched translations for this file
         const prefix = `bdat-bin:${fileName}:`;
+
+        // Count translated (non-empty) for this file
         const matched = allTransKeys.filter(k => k.startsWith(prefix)).length;
 
-        // Count orphaned (old format keys for this file that have no file in IDB)
+        // Count total entries loaded for this file (translated + untranslated)
+        const totalLoaded = allEntryKeys.filter(k => k.startsWith(prefix)).length;
+
+        // Count orphaned old-format keys
         const oldPrefix = `bdat:${fileName}:`;
         const orphanedCount = (!fileExists && isLegacyFormat)
           ? allTransKeys.filter(k => k.startsWith(oldPrefix)).length
           : 0;
 
-        // Total strings: try to extract if file exists
-        let total = 0;
-        if (fileExists && bdatBinaryFiles![fileName]) {
+        // Total = from loaded entries; fallback to re-parsing IDB file
+        let total = totalLoaded;
+        if (total === 0 && fileExists && bdatBinaryFiles![fileName]) {
           try {
             const { parseBdatFile, extractBdatStrings } = await import("@/lib/bdat-parser");
             const { unhashLabel } = await import("@/lib/bdat-hash-dictionary");
@@ -442,6 +453,10 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
           ? allTransKeys.filter(k => k.startsWith(`bdat:${fileName}:`)).length
           : 0;
       }
+
+      // Count MSBT/other translated entries too
+      const msbtTranslated = allTransKeys.filter(k => !k.startsWith('bdat-bin:') && !k.startsWith('bdat:')).length;
+      if (msbtTranslated > 0) totalWillApply += msbtTranslated;
 
       const isHealthy = files.length > 0
         && !hasLegacy
