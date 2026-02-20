@@ -125,11 +125,12 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
       let localBdatResults: { name: string; data: Uint8Array }[] = [];
       let localModifiedCount = 0;
       const newBdatFileStats: BdatFileStat[] = [];
+      const allOverflowErrors: { fileName: string; key: string; originalBytes: number; translationBytes: number }[] = [];
 
       if (hasBdatBinary) {
         setBuildProgress("معالجة ملفات BDAT الثنائية محلياً...");
         const { parseBdatFile } = await import("@/lib/bdat-parser");
-        const { rebuildBdatFile } = await import("@/lib/bdat-writer");
+        const { patchBdatFile } = await import("@/lib/bdat-writer");
         const { unhashLabel } = await import("@/lib/bdat-hash-dictionary");
         const { processArabicText, hasArabicPresentationForms: hasPF } = await import("@/lib/arabic-processing");
 
@@ -229,8 +230,18 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
             }
 
             if (translationMap.size > 0) {
-              const rebuilt = rebuildBdatFile(bdatFile, translationMap);
-              localBdatResults.push({ name: fileName, data: rebuilt });
+              const { result: patched, overflowErrors, patchedCount, skippedCount } = patchBdatFile(bdatFile, translationMap);
+              localBdatResults.push({ name: fileName, data: patched });
+              // Collect overflow errors for reporting
+              for (const e of overflowErrors) {
+                allOverflowErrors.push({ fileName, ...e });
+              }
+              if (overflowErrors.length > 0) {
+                console.warn(`[BDAT-PATCH] ${fileName}: ${patchedCount} patched, ${skippedCount} skipped (overflow):`, overflowErrors.slice(0, 5));
+              } else {
+                console.log(`[BDAT-PATCH] ${fileName}: ${patchedCount} patched successfully`);
+              }
+              localModifiedCount += patchedCount;
             } else {
               localBdatResults.push({ name: fileName, data });
             }
@@ -333,7 +344,10 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
           a.download = "xenoblade_arabized.zip";
           a.click();
           URL.revokeObjectURL(mergedUrl);
-          setBuildProgress(`✅ تم بنجاح! تم تعديل ${modifiedCount} نص — جميع الملفات في ZIP واحد`);
+          const overflowSummary = allOverflowErrors.length > 0
+            ? ` ⚠️ ${allOverflowErrors.length} نص تجاوز الحجم وتم تخطيه`
+            : '';
+          setBuildProgress(`✅ تم بنجاح! تم تعديل ${modifiedCount} نص — جميع الملفات في ZIP واحد${overflowSummary}`);
         } else {
           const blobUrl = URL.createObjectURL(blob);
           const a = document.createElement("a");
@@ -359,7 +373,10 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
         a.download = "xenoblade_arabized_bdat.zip";
         a.click();
         URL.revokeObjectURL(zipUrl);
-        setBuildProgress(`✅ تم بنجاح! ${localBdatResults.length} ملف BDAT في ZIP — تم تعديل ${localModifiedCount} نص`);
+        const overflowSummary = allOverflowErrors.length > 0
+          ? ` ⚠️ ${allOverflowErrors.length} نص تجاوز الحجم الأصلي وتم تخطيه`
+          : '';
+        setBuildProgress(`✅ تم بنجاح! ${localBdatResults.length} ملف BDAT في ZIP — تم تطبيق ${localModifiedCount} نص${overflowSummary}`);
       }
       
       setTimeout(() => { setBuilding(false); setBuildProgress(""); }, 3000);
