@@ -56,28 +56,29 @@ export default function ModPackager() {
 
   const handleDownloadNotoFont = useCallback(async () => {
     setDownloadingFont(true);
+    setStatus("جارٍ تحميل خط Cairo...");
     try {
       let data: ArrayBuffer | null = null;
+      const edgeFunctionUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/font-proxy`;
       for (const url of CAIRO_FONT_URLS) {
         try {
-          const { data: responseData, error } = await supabase.functions.invoke("font-proxy", {
-            body: { fontUrl: url },
+          const response = await fetch(edgeFunctionUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ fontUrl: url }),
           });
-          if (error) continue;
-          // responseData is already an ArrayBuffer when the response is binary
-          if (responseData instanceof ArrayBuffer && responseData.byteLength > 0) {
-            data = responseData;
-            break;
-          }
-          // Fallback: if it comes as a Blob
-          if (responseData instanceof Blob) {
-            data = await responseData.arrayBuffer();
+          if (!response.ok) continue;
+          const buffer = await response.arrayBuffer();
+          if (buffer.byteLength > 0) {
+            data = buffer;
             break;
           }
         } catch { /* try next */ }
       }
       if (!data) throw new Error("فشل تحميل الخط");
       validateAndSetFont("Cairo-Regular.ttf", data);
+      setStatus("✅ تم تحميل خط Cairo بنجاح!");
+      setTimeout(() => setStatus(""), 4000);
     } catch {
       setStatus("❌ فشل تحميل خط Cairo — يرجى رفع الخط يدوياً");
       setTimeout(() => setStatus(""), 7000);
