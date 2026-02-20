@@ -11,6 +11,8 @@ export interface FontValidationResult {
   arabicPresentationFormsB: number;
   /** How many of the critical Arabic PF-B codepoints are covered (out of ~141) */
   coveragePercent: number;
+  latinCoveragePercent: number;
+  missingLatinRanges: string[];
   warnings: string[];
   details: string;
 }
@@ -43,8 +45,32 @@ const SAMPLE_CODEPOINTS = [
   0xFEF5, // ARABIC LIGATURE LAM WITH ALEF MADDA ISOLATED
 ];
 
+/** Latin character ranges to check */
+const LATIN_RANGES = [
+  { start: 0x41, end: 0x5A, label: "A–Z (أحرف كبيرة)" },
+  { start: 0x61, end: 0x7A, label: "a–z (أحرف صغيرة)" },
+  { start: 0x30, end: 0x39, label: "0–9 (أرقام)" },
+];
+
+/** Check how many latin codepoints are covered */
+function checkLatinCoverage(supported: Set<number>): { percent: number; missing: string[] } {
+  const missing: string[] = [];
+  let total = 0;
+  let found = 0;
+  for (const range of LATIN_RANGES) {
+    let rangeMissing = 0;
+    for (let c = range.start; c <= range.end; c++) {
+      total++;
+      if (supported.has(c)) found++;
+      else rangeMissing++;
+    }
+    if (rangeMissing > 0) missing.push(`${range.label} (${rangeMissing} مفقود)`);
+  }
+  return { percent: Math.round((found / total) * 100), missing };
+}
+
 /**
- * Validate a font file (TTF/OTF) for Arabic Presentation Forms-B support.
+ * Validate a font file (TTF/OTF) for Arabic Presentation Forms-B + Latin support.
  * Parses the cmap table directly from the binary data.
  */
 export function validateFontForArabic(data: ArrayBuffer): FontValidationResult {
@@ -64,7 +90,6 @@ export function validateFontForArabic(data: ArrayBuffer): FontValidationResult {
     
     // Find cmap table
     let cmapOffset = -1;
-    let cmapLength = 0;
     for (let i = 0; i < numTables; i++) {
       const tableOffset = 12 + i * 16;
       const tag = String.fromCharCode(
@@ -75,7 +100,6 @@ export function validateFontForArabic(data: ArrayBuffer): FontValidationResult {
       );
       if (tag === "cmap") {
         cmapOffset = view.getUint32(tableOffset + 8);
-        cmapLength = view.getUint32(tableOffset + 12);
         break;
       }
     }
@@ -83,16 +107,16 @@ export function validateFontForArabic(data: ArrayBuffer): FontValidationResult {
     if (cmapOffset === -1) {
       return {
         valid: false, totalGlyphs: 0, arabicPresentationFormsB: 0,
-        coveragePercent: 0, warnings: ["لم يتم العثور على جدول cmap — الملف قد لا يكون خطاً صالحاً"],
+        coveragePercent: 0, latinCoveragePercent: 0, missingLatinRanges: [],
+        warnings: ["لم يتم العثور على جدول cmap — الملف قد لا يكون خطاً صالحاً"],
         details: "ملف الخط لا يحتوي على جدول ترميز الحروف (cmap)"
       };
     }
     
     // Parse cmap table — find a Unicode subtable (platformID 0 or 3)
-    const cmapVersion = view.getUint16(cmapOffset);
     const cmapNumSubtables = view.getUint16(cmapOffset + 2);
     
-    // Collect all codepoints the font supports in the Arabic PF-B range
+    // Collect all codepoints the font supports
     const supportedCodepoints = new Set<number>();
     let totalMappings = 0;
     
@@ -114,20 +138,29 @@ export function validateFontForArabic(data: ArrayBuffer): FontValidationResult {
       }
     }
     
+    // --- Arabic PF-B check ---
     const pfbCount = supportedCodepoints.size;
-    // Total Arabic PF-B range: U+FE70 to U+FEFF = 144 codepoints (some are unassigned)
-    const totalPfB = 141; // Actual assigned codepoints in the range
+    const totalPfB = 141;
     const coveragePercent = Math.round((pfbCount / totalPfB) * 100);
-    
-    // Check sample coverage
     const sampleHits = SAMPLE_CODEPOINTS.filter(cp => supportedCodepoints.has(cp)).length;
     const samplePercent = Math.round((sampleHits / SAMPLE_CODEPOINTS.length) * 100);
+
+    // --- Latin check ---
+    const { percent: latinCoveragePercent, missing: missingLatinRanges } = checkLatinCoverage(supportedCodepoints);
+
+    if (latinCoveragePercent < 100) {
+      const latinMsg = latinCoveragePercent === 0
+        ? "⚠️ الخط لا يحتوي على أي حرف لاتيني (A-Z, a-z, 0-9) — النصوص الإنجليزية ستختفي من اللعبة!"
+        : `⚠️ الخط يفتقر لبعض الحروف اللاتينية (${latinCoveragePercent}% تغطية) — قد تختفي بعض النصوص الإنجليزية`;
+      warnings.push(latinMsg);
+    }
     
     if (pfbCount === 0) {
       warnings.push("الخط لا يدعم أشكال العرض العربية (Presentation Forms-B) إطلاقاً — النصوص العربية لن تظهر بشكل متصل في اللعبة");
       return {
         valid: false, totalGlyphs: totalMappings, arabicPresentationFormsB: 0,
-        coveragePercent: 0, warnings,
+        coveragePercent: 0, latinCoveragePercent, missingLatinRanges,
+        warnings,
         details: `الخط يحتوي على ${totalMappings} حرف لكن لا يدعم مجال U+FE70–U+FEFF المطلوب للعربية المُشكَّلة`
       };
     }
@@ -141,22 +174,25 @@ export function validateFontForArabic(data: ArrayBuffer): FontValidationResult {
     }
     
     return {
-      valid: pfbCount > 0,
+      valid: pfbCount > 0 && latinCoveragePercent === 100,
       totalGlyphs: totalMappings,
       arabicPresentationFormsB: pfbCount,
       coveragePercent,
+      latinCoveragePercent,
+      missingLatinRanges,
       warnings,
-      details: coveragePercent >= 80 
-        ? `✅ الخط يدعم ${pfbCount} حرف من أشكال العرض العربية (${coveragePercent}% تغطية) — متوافق تماماً`
-        : coveragePercent >= 50
-        ? `⚠️ الخط يدعم ${pfbCount} حرف (${coveragePercent}% تغطية) — متوافق جزئياً`
-        : `❌ الخط يدعم ${pfbCount} حرف فقط (${coveragePercent}% تغطية) — غير كافي`
+      details: coveragePercent >= 80 && latinCoveragePercent === 100
+        ? `✅ الخط يدعم العربية (${coveragePercent}%) واللاتينية (${latinCoveragePercent}%) — متوافق تماماً`
+        : coveragePercent >= 50 || latinCoveragePercent > 0
+        ? `⚠️ الخط يدعم العربية (${coveragePercent}%) / اللاتينية (${latinCoveragePercent}%) — متوافق جزئياً`
+        : `❌ الخط غير كافٍ — عربية: ${coveragePercent}%، لاتينية: ${latinCoveragePercent}%`
     };
     
   } catch (err) {
     return {
       valid: false, totalGlyphs: 0, arabicPresentationFormsB: 0,
-      coveragePercent: 0, warnings: ["فشل في تحليل ملف الخط — تأكد أنه بصيغة TTF أو OTF صالحة"],
+      coveragePercent: 0, latinCoveragePercent: 0, missingLatinRanges: [],
+      warnings: ["فشل في تحليل ملف الخط — تأكد أنه بصيغة TTF أو OTF صالحة"],
       details: `خطأ في التحليل: ${err instanceof Error ? err.message : "غير معروف"}`
     };
   }

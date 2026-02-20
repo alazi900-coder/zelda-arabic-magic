@@ -224,20 +224,57 @@ export default function ModPackager() {
                 {/* Font validation result */}
                 {fontFile.validation && (
                   <div className={`p-3 rounded-lg border text-sm space-y-1.5 ${
-                    fontFile.validation.coveragePercent >= 80 
+                    fontFile.validation.valid
                       ? "bg-primary/5 border-primary/20" 
-                      : fontFile.validation.coveragePercent > 0 
+                      : fontFile.validation.coveragePercent > 0 || fontFile.validation.latinCoveragePercent > 0
                       ? "bg-accent/50 border-accent" 
                       : "bg-destructive/5 border-destructive/20"
                   }`}>
                     <div className="flex items-center gap-2 font-bold">
-                      {fontFile.validation.coveragePercent >= 80 ? (
+                      {fontFile.validation.valid ? (
                         <ShieldCheck className="w-4 h-4 text-primary" />
                       ) : (
                         <ShieldAlert className="w-4 h-4 text-destructive" />
                       )}
                       <span>{fontFile.validation.details}</span>
                     </div>
+                    {/* Coverage bars */}
+                    {fontFile.validation.totalGlyphs > 0 && (
+                      <div className="space-y-1.5 pt-1">
+                        {/* Arabic coverage */}
+                        <div className="space-y-0.5">
+                          <div className="flex justify-between text-xs text-muted-foreground">
+                            <span>العربية (PF-B)</span>
+                            <span>{fontFile.validation.coveragePercent}%</span>
+                          </div>
+                          <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+                            <div
+                              className={`h-full rounded-full transition-all ${fontFile.validation.coveragePercent >= 80 ? "bg-primary" : fontFile.validation.coveragePercent >= 50 ? "bg-yellow-500" : "bg-destructive"}`}
+                              style={{ width: `${fontFile.validation.coveragePercent}%` }}
+                            />
+                          </div>
+                        </div>
+                        {/* Latin coverage */}
+                        <div className="space-y-0.5">
+                          <div className="flex justify-between text-xs text-muted-foreground">
+                            <span>اللاتينية (A-Z, a-z, 0-9)</span>
+                            <span>{fontFile.validation.latinCoveragePercent}%</span>
+                          </div>
+                          <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+                            <div
+                              className={`h-full rounded-full transition-all ${fontFile.validation.latinCoveragePercent === 100 ? "bg-primary" : fontFile.validation.latinCoveragePercent >= 50 ? "bg-yellow-500" : "bg-destructive"}`}
+                              style={{ width: `${fontFile.validation.latinCoveragePercent}%` }}
+                            />
+                          </div>
+                        </div>
+                        {/* Missing Latin ranges */}
+                        {fontFile.validation.missingLatinRanges.length > 0 && (
+                          <p className="text-xs text-destructive">
+                            مفقود: {fontFile.validation.missingLatinRanges.join(" | ")}
+                          </p>
+                        )}
+                      </div>
+                    )}
                     {fontFile.validation.warnings.length > 0 && (
                       <ul className="text-xs text-muted-foreground space-y-0.5 pr-6">
                         {fontFile.validation.warnings.map((w, i) => (
