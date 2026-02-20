@@ -289,6 +289,13 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
   const processJsonImport = useCallback(async (rawText: string, sourceName?: string) => {
     const repaired = repairJson(rawText);
     const imported = repaired.parsed;
+    const totalInFile = Object.keys(imported).length;
+
+    if (totalInFile === 0) {
+      alert('⚠️ الملف فارغ أو لا يحتوي على ترجمات صالحة.');
+      return;
+    }
+
     let cleanedImported: Record<string, string> = {};
 
     if (isFilterActive && filteredEntries.length < (state?.entries.length || 0)) {
@@ -303,6 +310,14 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
         cleanedImported[key] = normalizeArabicPresentationForms(value);
       }
     }
+
+    // ── Diagnostic: count how many imported keys match loaded entries ──
+    const entryKeySet = new Set(
+      (state?.entries || []).map(e => `${e.msbtFile}:${e.index}`)
+    );
+    const matchedCount = Object.keys(cleanedImported).filter(k => entryKeySet.has(k)).length;
+    const unmatchedCount = Object.keys(cleanedImported).length - matchedCount;
+    const noEntriesLoaded = (state?.entries || []).length === 0;
 
     // Backward compat: convert legacy FFF9-FFFC markers in imported translations to PUA markers
     if (state?.entries) {
@@ -324,13 +339,53 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       }
     }
 
+    // ── Show warning if no entries are loaded or keys don't match ──
+    if (noEntriesLoaded) {
+      alert(
+        `⚠️ لا يوجد ملف BDAT مرفوع في الجلسة الحالية!\n\n` +
+        `الملف يحتوي على ${totalInFile} ترجمة لكن لن تظهر في المحرر لأنه لا توجد مدخلات محملة.\n\n` +
+        `الحل: اذهب إلى صفحة المعالجة وارفع ملفات BDAT أولاً، ثم عد وأعد الاستيراد.`
+      );
+      return;
+    }
+
+    // إذا كانت الجلسة تعرض demo data — لا نوقف الاستيراد بل نتيح له أن يُحدِّث الترجمات
+    const isDemo = state?.isDemo === true;
+
+    if (!isDemo && matchedCount === 0 && unmatchedCount > 0) {
+      const sampleKey = Object.keys(cleanedImported)[0] || '';
+      const sampleEntry = state?.entries[0];
+      const sampleEntryKey = sampleEntry ? `${sampleEntry.msbtFile}:${sampleEntry.index}` : '';
+      alert(
+        `⚠️ لم يتطابق أي مفتاح من الملف مع المدخلات المحملة!\n\n` +
+        `مثال مفتاح في الملف: "${sampleKey}"\n` +
+        `مثال مفتاح في المحرر: "${sampleEntryKey}"\n\n` +
+        `تأكد أن الملف المستورد صادر من نفس ملفات BDAT المرفوعة حالياً، أو ارفع ملفات BDAT أولاً من صفحة المعالجة.`
+      );
+      return;
+    }
+
+    if (!isDemo && matchedCount < Object.keys(cleanedImported).length * 0.1 && matchedCount > 0) {
+      const confirmed = window.confirm(
+        `⚠️ تحذير: فقط ${matchedCount} من ${Object.keys(cleanedImported).length} ترجمة تطابقت مع المدخلات المحملة.\n\n` +
+        `هل تريد الاستمرار في الاستيراد؟`
+      );
+      if (!confirmed) return;
+    }
+
     setState(prev => { if (!prev) return null; return { ...prev, translations: { ...prev.translations, ...cleanedImported } }; });
 
-    const totalImported = Object.keys(imported).length;
     const appliedCount = Object.keys(cleanedImported).length;
-    let msg = isFilterActive
-      ? `✅ تم استيراد ${appliedCount} من ${totalImported} ترجمة (${filterLabel})`
-      : `✅ تم استيراد ${appliedCount} ترجمة وتنظيفها`;
+    let msg: string;
+    if (isDemo) {
+      msg = `✅ تم استيراد ${appliedCount} ترجمة — ستظهر عند رفع ملفات BDAT من صفحة المعالجة`;
+    } else if (matchedCount > 0 && matchedCount < appliedCount) {
+      msg = `✅ تم استيراد ${matchedCount} ترجمة مطابقة (${unmatchedCount} مفتاح غير مطابق محفوظ أيضاً)`;
+    } else if (isFilterActive) {
+      msg = `✅ تم استيراد ${appliedCount} من ${totalInFile} ترجمة (${filterLabel})`;
+    } else {
+      msg = `✅ تم استيراد ${appliedCount} ترجمة — ${matchedCount} مطابقة في المحرر`;
+    }
     if (sourceName) msg += ` — ${sourceName}`;
     if (repaired.wasTruncated) {
       msg += ` ⚠️ الملف كان مقطوعاً — تم تخطي ${repaired.skippedCount} سطر غير مكتمل`;

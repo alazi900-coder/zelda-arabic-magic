@@ -280,6 +280,7 @@ export function useEditorState() {
           translations: demoTranslations,
           protectedEntries: new Set(),
           technicalBypass: new Set(),
+          isDemo: true,
         });
         setLastSaved("تم تحميل بيانات تجريبية");
       }
