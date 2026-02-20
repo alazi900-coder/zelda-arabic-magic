@@ -146,8 +146,6 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
           await new Promise(r => setTimeout(r, 800));
         }
 
-        const { extractBdatStrings } = await import("@/lib/bdat-parser");
-
         for (const fileName of bdatBinaryFileNames!) {
           const buf = bdatBinaryFiles![fileName];
           if (!buf) continue;
@@ -155,21 +153,24 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
             const data = new Uint8Array(buf);
             const bdatFile = parseBdatFile(data, unhashLabel);
 
-            // Re-extract strings in the SAME order as XenobladeProcess.tsx
-            // so that the sequential index matches state.translations keys:
-            // Key format stored during extraction: "bdat:fileName:index"
-            const extractedStrings = extractBdatStrings(bdatFile, fileName);
-
-            // Build translation map: "tableName:rowIndex:colName" -> processed Arabic text
+            // NEW KEY FORMAT: "bdat-bin:fileName:tableName:rowIndex:colName:0"
+            // Extract translations directly from key structure — no order dependency!
             const translationMap = new Map<string, string>();
+            const prefix = `bdat-bin:${fileName}:`;
 
-            for (let i = 0; i < extractedStrings.length; i++) {
-              const s = extractedStrings[i];
-              const stateKey = `bdat:${fileName}:${i}`;
-              const trans = nonEmptyTranslations[stateKey];
-              if (!trans) continue;
+            let totalExtracted = 0;
 
-              // Process Arabic text if needed
+            for (const [key, trans] of Object.entries(nonEmptyTranslations)) {
+              if (!key.startsWith(prefix)) continue;
+              // key = "bdat-bin:fileName:tableName:rowIndex:colName:0"
+              const rest = key.slice(prefix.length); // "tableName:rowIndex:colName:0"
+              // Remove trailing ":0" (the index suffix)
+              const withoutIndex = rest.endsWith(':0') ? rest.slice(0, -2) : rest;
+              // withoutIndex = "tableName:rowIndex:colName"
+              // Validate it has at least tableName:rowIndex:colName
+              const parts = withoutIndex.split(':');
+              if (parts.length < 3) continue;
+
               let processed: string;
               if (hasPF(trans)) {
                 processed = trans;
@@ -177,20 +178,51 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
                 processed = processArabicText(trans, { arabicNumerals, mirrorPunct: mirrorPunctuation });
               }
 
-              // Map key for bdat-writer: "tableName:rowIndex:colName"
-              const mapKey = `${s.tableName}:${s.rowIndex}:${s.columnName}`;
-              translationMap.set(mapKey, processed);
+              // mapKey for bdat-writer is "tableName:rowIndex:colName"
+              translationMap.set(withoutIndex, processed);
               localModifiedCount++;
+            }
+
+            // Also support legacy key format: "bdat:fileName:index" (old sessions)
+            if (translationMap.size === 0) {
+              const legacyPrefix = `bdat:${fileName}:`;
+              const legacyKeys = Object.keys(nonEmptyTranslations).filter(k => k.startsWith(legacyPrefix));
+              if (legacyKeys.length > 0) {
+                console.log(`[BUILD-BDAT] ${fileName}: falling back to legacy sequential keys (${legacyKeys.length} found)`);
+                const { extractBdatStrings } = await import("@/lib/bdat-parser");
+                const extractedStrings = extractBdatStrings(bdatFile, fileName);
+                totalExtracted = extractedStrings.length;
+                for (let i = 0; i < extractedStrings.length; i++) {
+                  const s = extractedStrings[i];
+                  const stateKey = `bdat:${fileName}:${i}`;
+                  const trans = nonEmptyTranslations[stateKey];
+                  if (!trans) continue;
+                  let processed: string;
+                  if (hasPF(trans)) { processed = trans; }
+                  else { processed = processArabicText(trans, { arabicNumerals, mirrorPunct: mirrorPunctuation }); }
+                  translationMap.set(`${s.tableName}:${s.rowIndex}:${s.columnName}`, processed);
+                  localModifiedCount++;
+                }
+              }
+            }
+
+            // Count total strings for stats (parse if not already done)
+            if (totalExtracted === 0) {
+              const { extractBdatStrings } = await import("@/lib/bdat-parser");
+              totalExtracted = extractBdatStrings(bdatFile, fileName).length;
             }
 
             // Record per-file stats
             newBdatFileStats.push({
               fileName,
-              total: extractedStrings.length,
+              total: totalExtracted,
               translated: translationMap.size,
             });
 
-            console.log(`[BUILD-BDAT] ${fileName}: ${extractedStrings.length} strings extracted, ${translationMap.size} translations applied`);
+            console.log(`[BUILD-BDAT] ${fileName}: ${totalExtracted} strings total, ${translationMap.size} translations applied`);
+            if (translationMap.size > 0) {
+              console.log(`[BUILD-BDAT] ${fileName}: sample map keys:`, [...translationMap.keys()].slice(0, 3));
+            }
 
             if (translationMap.size > 0) {
               const rebuilt = rebuildBdatFile(bdatFile, translationMap);

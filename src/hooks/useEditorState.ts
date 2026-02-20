@@ -241,37 +241,39 @@ export function useEditorState() {
         setLastSaved(parts.length > 0 ? `تم التحميل + ${parts.join(' + ')}` : "تم التحميل من الحفظ السابق");
       } else {
         // Demo data — Xenoblade Chronicles 3 style
+        // msbtFile format for BDAT binary: "bdat-bin:filename:tableName:rowIndex:colName"
+        // with index always 0 — key = "bdat-bin:filename:tableName:rowIndex:colName:0"
         const demoEntries: ExtractedEntry[] = [
-          { msbtFile: "bdat:SYS_CharacterName", index: 0, label: "SYS_CharacterName[0].name", original: "Noah", maxBytes: 24 },
-          { msbtFile: "bdat:SYS_CharacterName", index: 1, label: "SYS_CharacterName[1].name", original: "Mio", maxBytes: 18 },
-          { msbtFile: "bdat:SYS_CharacterName", index: 2, label: "SYS_CharacterName[2].name", original: "Eunie", maxBytes: 30 },
-          { msbtFile: "bdat:SYS_CharacterName", index: 3, label: "SYS_CharacterName[3].name", original: "Taion", maxBytes: 30 },
-          { msbtFile: "bdat:SYS_ItemName", index: 0, label: "SYS_ItemName[0].name", original: "Lucky Clover", maxBytes: 72 },
-          { msbtFile: "bdat:SYS_ItemName", index: 1, label: "SYS_ItemName[1].name", original: "Nopon Coin", maxBytes: 60 },
-          { msbtFile: "bdat:MNU_MainMenu", index: 0, label: "MNU_MainMenu[0].caption", original: "Party", maxBytes: 36 },
-          { msbtFile: "bdat:MNU_MainMenu", index: 1, label: "MNU_MainMenu[1].caption", original: "Quests", maxBytes: 42 },
-          { msbtFile: "bdat:MNU_MainMenu", index: 2, label: "MNU_MainMenu[2].caption", original: "Map", maxBytes: 24 },
+          { msbtFile: "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:0:name", index: 0, label: "SYS_CharacterName[0].name", original: "Noah", maxBytes: 24 },
+          { msbtFile: "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:1:name", index: 0, label: "SYS_CharacterName[1].name", original: "Mio", maxBytes: 18 },
+          { msbtFile: "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:2:name", index: 0, label: "SYS_CharacterName[2].name", original: "Eunie", maxBytes: 30 },
+          { msbtFile: "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:3:name", index: 0, label: "SYS_CharacterName[3].name", original: "Taion", maxBytes: 30 },
+          { msbtFile: "bdat-bin:SYS_ItemName.bdat:SYS_ItemName:0:name", index: 0, label: "SYS_ItemName[0].name", original: "Lucky Clover", maxBytes: 72 },
+          { msbtFile: "bdat-bin:SYS_ItemName.bdat:SYS_ItemName:1:name", index: 0, label: "SYS_ItemName[1].name", original: "Nopon Coin", maxBytes: 60 },
+          { msbtFile: "bdat-bin:MNU_MainMenu.bdat:MNU_MainMenu:0:caption", index: 0, label: "MNU_MainMenu[0].caption", original: "Party", maxBytes: 36 },
+          { msbtFile: "bdat-bin:MNU_MainMenu.bdat:MNU_MainMenu:1:caption", index: 0, label: "MNU_MainMenu[1].caption", original: "Quests", maxBytes: 42 },
+          { msbtFile: "bdat-bin:MNU_MainMenu.bdat:MNU_MainMenu:2:caption", index: 0, label: "MNU_MainMenu[2].caption", original: "Map", maxBytes: 24 },
           // Demo entries with technical control characters
-          { msbtFile: "bdat:FLD_NpcTalk", index: 0, label: "FLD_NpcTalk[0].msg", original: "\uFFF9Press \uE000\uFFFA to speak with \uFFFBNoah\uFFFC", maxBytes: 300 },
-          { msbtFile: "bdat:FLD_NpcTalk", index: 1, label: "FLD_NpcTalk[1].msg", original: "You need \uFFF9\uE002 3 Nopon Coins\uFFFA to unlock this\uFFFB.", maxBytes: 350 },
-          { msbtFile: "bdat:QST_QuestName", index: 0, label: "QST_QuestName[0].name", original: "Beyond the Boundary", maxBytes: 120 },
-          { msbtFile: "bdat:QST_QuestName", index: 1, label: "QST_QuestName[1].name", original: "A Life Sent On", maxBytes: 90 },
+          { msbtFile: "bdat-bin:FLD_NpcTalk.bdat:FLD_NpcTalk:0:msg", index: 0, label: "FLD_NpcTalk[0].msg", original: "\uFFF9Press \uE000\uFFFA to speak with \uFFFBNoah\uFFFC", maxBytes: 300 },
+          { msbtFile: "bdat-bin:FLD_NpcTalk.bdat:FLD_NpcTalk:1:msg", index: 0, label: "FLD_NpcTalk[1].msg", original: "You need \uFFF9\uE002 3 Nopon Coins\uFFFA to unlock this\uFFFB.", maxBytes: 350 },
+          { msbtFile: "bdat-bin:QST_QuestName.bdat:QST_QuestName:0:name", index: 0, label: "QST_QuestName[0].name", original: "Beyond the Boundary", maxBytes: 120 },
+          { msbtFile: "bdat-bin:QST_QuestName.bdat:QST_QuestName:1:name", index: 0, label: "QST_QuestName[1].name", original: "A Life Sent On", maxBytes: 90 },
         ];
         const demoTranslations: Record<string, string> = {
-          "bdat:SYS_CharacterName:0": "نوا",
-          "bdat:SYS_CharacterName:1": "ميو",
-          "bdat:SYS_CharacterName:2": "يوني",
-          "bdat:SYS_CharacterName:3": "تايون",
-          "bdat:SYS_ItemName:0": "البرسيم المحظوظ",
-          "bdat:SYS_ItemName:1": "عملة النوبون",
-          "bdat:MNU_MainMenu:0": "الفريق",
-          "bdat:MNU_MainMenu:1": "المهام",
-          "bdat:MNU_MainMenu:2": "الخريطة",
+          "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:0:name:0": "نوا",
+          "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:1:name:0": "ميو",
+          "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:2:name:0": "يوني",
+          "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:3:name:0": "تايون",
+          "bdat-bin:SYS_ItemName.bdat:SYS_ItemName:0:name:0": "البرسيم المحظوظ",
+          "bdat-bin:SYS_ItemName.bdat:SYS_ItemName:1:name:0": "عملة النوبون",
+          "bdat-bin:MNU_MainMenu.bdat:MNU_MainMenu:0:caption:0": "الفريق",
+          "bdat-bin:MNU_MainMenu.bdat:MNU_MainMenu:1:caption:0": "المهام",
+          "bdat-bin:MNU_MainMenu.bdat:MNU_MainMenu:2:caption:0": "الخريطة",
           // Damaged translations — tags were stripped by AI
-          "bdat:FLD_NpcTalk:0": "اضغط للتحدث مع نوا",
-          "bdat:FLD_NpcTalk:1": "تحتاج 3 عملات نوبون لفتح هذا.",
-          "bdat:QST_QuestName:0": "ما وراء الحدود",
-          "bdat:QST_QuestName:1": "حياة تمضي قُدُماً",
+          "bdat-bin:FLD_NpcTalk.bdat:FLD_NpcTalk:0:msg:0": "اضغط للتحدث مع نوا",
+          "bdat-bin:FLD_NpcTalk.bdat:FLD_NpcTalk:1:msg:0": "تحتاج 3 عملات نوبون لفتح هذا.",
+          "bdat-bin:QST_QuestName.bdat:QST_QuestName:0:name:0": "ما وراء الحدود",
+          "bdat-bin:QST_QuestName.bdat:QST_QuestName:1:name:0": "حياة تمضي قُدُماً",
         };
         setState({
           entries: demoEntries,
@@ -403,7 +405,7 @@ export function useEditorState() {
         translation.includes(search);
       const matchFile = filterFile === "all" || e.msbtFile === filterFile;
       const isBdat = /^.+?\[\d+\]\./.test(e.label);
-      const sourceFile = e.msbtFile.startsWith('bdat:') ? e.msbtFile.slice(5) : undefined;
+      const sourceFile = e.msbtFile.startsWith('bdat-bin:') ? e.msbtFile.split(':')[1] : e.msbtFile.startsWith('bdat:') ? e.msbtFile.slice(5) : undefined;
       const matchCategory = filterCategory.length === 0 || filterCategory.includes(isBdat ? categorizeBdatTable(e.label, sourceFile, e.original) : categorizeFile(e.msbtFile));
       const matchStatus = 
         filterStatus === "all" || 
