@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { IntegrityCheckResult } from "@/components/editor/IntegrityCheckDialog";
 import { idbGet } from "@/lib/idb-storage";
 import { processArabicText, hasArabicChars as hasArabicCharsProcessing, hasArabicPresentationForms } from "@/lib/arabic-processing";
 import { EditorState, hasTechnicalTags, restoreTagsLocally } from "@/components/editor/types";
@@ -40,6 +41,9 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
   const [buildPreview, setBuildPreview] = useState<BuildPreview | null>(null);
   const [showBuildConfirm, setShowBuildConfirm] = useState(false);
   const [bdatFileStats, setBdatFileStats] = useState<BdatFileStat[]>([]);
+  const [integrityResult, setIntegrityResult] = useState<IntegrityCheckResult | null>(null);
+  const [showIntegrityDialog, setShowIntegrityDialog] = useState(false);
+  const [checkingIntegrity, setCheckingIntegrity] = useState(false);
 
 
   const handleApplyArabicProcessing = () => {
@@ -365,6 +369,100 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
     }
   };
 
+  const handleCheckIntegrity = async () => {
+    if (!state) return;
+    setCheckingIntegrity(true);
+    setShowIntegrityDialog(true);
+
+    try {
+      const { idbGet } = await import("@/lib/idb-storage");
+      const bdatBinaryFiles = await idbGet<Record<string, ArrayBuffer>>("editorBdatBinaryFiles");
+      const bdatBinaryFileNames = await idbGet<string[]>("editorBdatBinaryFileNames");
+
+      const allTransKeys = Object.keys(state.translations).filter(k => state.translations[k]?.trim());
+
+      // Collect unique filenames referenced in translation keys
+      // New format: "bdat-bin:filename:tableName:rowIndex:colName:0"
+      // Old format: "bdat:filename:index"
+      const newFormatFiles = new Set<string>();
+      const oldFormatFiles = new Set<string>();
+
+      for (const key of allTransKeys) {
+        if (key.startsWith('bdat-bin:')) {
+          const parts = key.split(':');
+          if (parts.length >= 2) newFormatFiles.add(parts[1]);
+        } else if (key.startsWith('bdat:')) {
+          const parts = key.split(':');
+          if (parts.length >= 2) oldFormatFiles.add(parts[1]);
+        }
+      }
+
+      const allFileNames = new Set([
+        ...Array.from(newFormatFiles),
+        ...Array.from(oldFormatFiles),
+        ...(bdatBinaryFileNames || []),
+      ]);
+
+      const files: IntegrityCheckResult['files'] = [];
+      let totalWillApply = 0;
+      let totalOrphaned = 0;
+      let hasLegacy = false;
+
+      for (const fileName of Array.from(allFileNames)) {
+        const fileExists = !!(bdatBinaryFiles && bdatBinaryFiles[fileName]);
+        const isLegacyFormat = oldFormatFiles.has(fileName) && !newFormatFiles.has(fileName);
+        if (isLegacyFormat) hasLegacy = true;
+
+        // Count matched translations for this file
+        const prefix = `bdat-bin:${fileName}:`;
+        const matched = allTransKeys.filter(k => k.startsWith(prefix)).length;
+
+        // Count orphaned (old format keys for this file that have no file in IDB)
+        const oldPrefix = `bdat:${fileName}:`;
+        const orphanedCount = (!fileExists && isLegacyFormat)
+          ? allTransKeys.filter(k => k.startsWith(oldPrefix)).length
+          : 0;
+
+        // Total strings: try to extract if file exists
+        let total = 0;
+        if (fileExists && bdatBinaryFiles![fileName]) {
+          try {
+            const { parseBdatFile, extractBdatStrings } = await import("@/lib/bdat-parser");
+            const { unhashLabel } = await import("@/lib/bdat-hash-dictionary");
+            const data = new Uint8Array(bdatBinaryFiles![fileName]);
+            const bdatFile = parseBdatFile(data, unhashLabel);
+            total = extractBdatStrings(bdatFile, fileName).length;
+          } catch { total = 0; }
+        }
+
+        files.push({ fileName, matched, total, orphaned: orphanedCount, isLegacyFormat, fileExists });
+
+        if (fileExists && !isLegacyFormat) totalWillApply += matched;
+        if (!fileExists || isLegacyFormat) totalOrphaned += isLegacyFormat
+          ? allTransKeys.filter(k => k.startsWith(`bdat:${fileName}:`)).length
+          : 0;
+      }
+
+      const isHealthy = files.length > 0
+        && !hasLegacy
+        && files.every(f => f.fileExists)
+        && files.some(f => f.matched > 0);
+
+      setIntegrityResult({
+        files: files.sort((a, b) => b.matched - a.matched),
+        willApply: totalWillApply,
+        orphaned: totalOrphaned,
+        hasLegacy,
+        isHealthy,
+      });
+    } catch (e) {
+      console.error('[INTEGRITY]', e);
+      setIntegrityResult({ files: [], willApply: 0, orphaned: 0, hasLegacy: false, isHealthy: false });
+    } finally {
+      setCheckingIntegrity(false);
+    }
+  };
+
   const handleBuild = async () => {
     if (!state) return;
     setShowBuildConfirm(false);
@@ -490,8 +588,14 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
     showBuildConfirm,
     setShowBuildConfirm,
     bdatFileStats,
+    integrityResult,
+    showIntegrityDialog,
+    setShowIntegrityDialog,
+    checkingIntegrity,
     handleApplyArabicProcessing,
     handlePreBuild,
     handleBuild,
+    handleCheckIntegrity,
   };
 }
+
