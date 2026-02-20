@@ -93,9 +93,11 @@ const IntegrityCheckDialog = ({ open, onOpenChange, result, checking, onRecheck 
                 </p>
               </div>
               <p className="text-sm font-body text-muted-foreground">
-                {result.willApply} ترجمة ستُطبَّق
+                <span className="font-bold text-foreground">{result.willApply}</span> نص مُترجم سيُطبَّق
                 {result.orphaned > 0 && ` • ${result.orphaned} مفتاح بلا ملف`}
               </p>
+              <p className="text-xs font-body text-muted-foreground mt-1">
+                الأرقام تُظهر النصوص المُترجمة فعلاً (ذات محتوى)، ليس إجمالي النصوص المستخرجة</p>
             </div>
 
             {/* Legacy warning */}
@@ -150,9 +152,12 @@ const IntegrityCheckDialog = ({ open, onOpenChange, result, checking, onRecheck 
                         {!f.fileExists && (
                           <Badge variant="destructive" className="text-[10px] px-1 py-0">غير موجود</Badge>
                         )}
-                        <span className={`font-bold ${f.matched > 0 ? "text-secondary" : "text-muted-foreground"}`}>
-                          {f.matched}/{f.total}
+                        <span className={`font-bold text-xs ${f.matched > 0 ? "text-secondary" : "text-muted-foreground"}`}>
+                          {f.matched} مُترجم
                         </span>
+                        {f.total > 0 && (
+                          <span className="text-muted-foreground text-[10px]">/ {f.total}</span>
+                        )}
                       </div>
                     </div>
                   ))}
