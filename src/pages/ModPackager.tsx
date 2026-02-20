@@ -40,12 +40,15 @@ export default function ModPackager() {
 
   // Cairo includes BOTH Arabic PF-B AND Latin (A-Z, a-z, 0-9)
   // NotoSansArabic is Arabic-ONLY and causes English text to disappear in-game!
-  // Google Fonts static TTFs — تشمل العربية واللاتينية معاً
+  // Correct source repos from googlefonts organization
   const CAIRO_FONT_URLS = [
     "https://raw.githubusercontent.com/google/fonts/main/ofl/cairo/static/Cairo-Regular.ttf",
+    "https://raw.githubusercontent.com/Gue3bara/Cairo/master/fonts/ttf/Cairo-Regular.ttf",
+    "https://cdn.jsdelivr.net/gh/Gue3bara/Cairo@master/fonts/ttf/Cairo-Regular.ttf",
   ];
   const TAJAWAL_FONT_URLS = [
-    "https://raw.githubusercontent.com/google/fonts/main/ofl/tajawal/Tajawal-Regular.ttf",
+    "https://raw.githubusercontent.com/googlefonts/tajawal/main/fonts/ttf/Tajawal-Regular.ttf",
+    "https://cdn.jsdelivr.net/gh/googlefonts/tajawal@main/fonts/ttf/Tajawal-Regular.ttf",
   ];
 
   const validateAndSetFont = useCallback((name: string, data: ArrayBuffer) => {
@@ -142,16 +145,15 @@ export default function ModPackager() {
       const zipParts: { path: string; data: Uint8Array }[] = [];
 
       // Add font file to romfs structure (auto-convert TTF → BFTTF)
+      // Path: romfs/font/font_main.bfttf — standard layeredFS path for XC3
       if (fontFile) {
         let fontData = fontFile.data;
-        let fontName = fontFile.name;
         if (!isBfttf(fontData)) {
           setStatus("تحويل الخط إلى صيغة BFTTF...");
           fontData = ttfToBfttf(fontData);
-          fontName = fontName.replace(/\.(ttf|otf)$/i, ".bfttf");
         }
         zipParts.push({
-          path: `romfs/skyline/font/font_main.bfttf`,
+          path: `romfs/font/font_main.bfttf`,
           data: new Uint8Array(fontData),
         });
       }
@@ -424,9 +426,8 @@ export default function ModPackager() {
               <p className="pr-4">└── romfs/</p>
               {fontFile && (
                 <>
-                  <p className="pr-12">├── skyline/</p>
-                  <p className="pr-20">└── font/</p>
-                  <p className="pr-28 text-primary">└── font_main.bfttf</p>
+                  <p className="pr-12">├── font/</p>
+                  <p className="pr-20 text-primary">└── font_main.bfttf</p>
                 </>
               )}
               {bdatFiles.length > 0 && (
