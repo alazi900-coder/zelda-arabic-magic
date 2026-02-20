@@ -16,6 +16,13 @@ export interface BuildStats {
   categories: Record<string, { total: number; modified: number }>;
 }
 
+export interface BdatFileStat {
+  fileName: string;
+  total: number;
+  translated: number;
+  hasError?: boolean;
+}
+
 interface UseEditorBuildProps {
   state: EditorState | null;
   setState: React.Dispatch<React.SetStateAction<EditorState | null>>;
@@ -32,6 +39,8 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
   const [buildStats, setBuildStats] = useState<BuildStats | null>(null);
   const [buildPreview, setBuildPreview] = useState<BuildPreview | null>(null);
   const [showBuildConfirm, setShowBuildConfirm] = useState(false);
+  const [bdatFileStats, setBdatFileStats] = useState<BdatFileStat[]>([]);
+
 
   const handleApplyArabicProcessing = () => {
     if (!state) return;
@@ -111,6 +120,7 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
       // Process binary BDAT files locally
       let localBdatResults: { name: string; data: Uint8Array }[] = [];
       let localModifiedCount = 0;
+      const newBdatFileStats: BdatFileStat[] = [];
 
       if (hasBdatBinary) {
         setBuildProgress("معالجة ملفات BDAT الثنائية محلياً...");
@@ -155,8 +165,6 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
 
             for (let i = 0; i < extractedStrings.length; i++) {
               const s = extractedStrings[i];
-              // The key stored in state.translations during extraction is:
-              // `bdat:${file.name}:${i}` (sequential index)
               const stateKey = `bdat:${fileName}:${i}`;
               const trans = nonEmptyTranslations[stateKey];
               if (!trans) continue;
@@ -175,6 +183,13 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
               localModifiedCount++;
             }
 
+            // Record per-file stats
+            newBdatFileStats.push({
+              fileName,
+              total: extractedStrings.length,
+              translated: translationMap.size,
+            });
+
             console.log(`[BUILD-BDAT] ${fileName}: ${extractedStrings.length} strings extracted, ${translationMap.size} translations applied`);
 
             if (translationMap.size > 0) {
@@ -185,9 +200,13 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
             }
           } catch (e) {
             console.warn(`Failed to rebuild BDAT ${fileName}:`, e);
+            newBdatFileStats.push({ fileName, total: 0, translated: 0, hasError: true });
             localBdatResults.push({ name: fileName, data: new Uint8Array(buf) });
           }
         }
+
+        // Update stats state so UI can display per-file breakdown
+        setBdatFileStats(newBdatFileStats);
       }
       
       // Handle MSBT and JSON BDAT files via server
@@ -438,6 +457,7 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
     buildPreview,
     showBuildConfirm,
     setShowBuildConfirm,
+    bdatFileStats,
     handleApplyArabicProcessing,
     handlePreBuild,
     handleBuild,
