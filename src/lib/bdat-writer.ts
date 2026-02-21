@@ -41,15 +41,21 @@ export interface PatchResult {
 const encoder = new TextEncoder();
 
 /**
- * Measure how many bytes the null-terminated string at `absOffset` occupies
- * inside `data` (inclusive of the null terminator).
- * Returns 1 for empty strings (just the null byte).
+ * Measure the usable slot size for a null-terminated string at `absOffset`.
+ * Includes the string bytes, its null terminator, AND any trailing null bytes
+ * (padding/gap) before the next non-null byte or end of buffer.
+ * This allows translations to use all available space, not just the original
+ * string's exact byte length.
  */
-function measureStringSlot(data: Uint8Array, absOffset: number): number {
+function measureStringSlot(data: Uint8Array, absOffset: number, strTableEnd: number): number {
   let i = absOffset;
-  while (i < data.length && data[i] !== 0) i++;
-  // +1 for the null terminator itself
-  return i - absOffset + 1;
+  // Scan past the string content
+  while (i < strTableEnd && data[i] !== 0) i++;
+  // Skip the null terminator
+  if (i < strTableEnd) i++;
+  // Include any trailing null bytes (padding) as usable space
+  while (i < strTableEnd && data[i] === 0) i++;
+  return i - absOffset;
 }
 
 // ============= Core patch function =============
@@ -112,8 +118,9 @@ export function patchBdatFile(
         const absStrOffset = absStrTableStart + strOff;
         if (absStrOffset >= result.length) continue;
 
-        // Measure original slot (bytes including null terminator)
-        const originalSlot = measureStringSlot(result, absStrOffset);
+        // Measure original slot — includes trailing padding up to next string
+        const strTableEnd = absStrTableStart + raw.tableData.length - raw.stringTableOffset;
+        const originalSlot = measureStringSlot(result, absStrOffset, strTableEnd);
 
         // Encode translation to UTF-8
         const transBytes = encoder.encode(translation);
