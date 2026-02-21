@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import type { IntegrityCheckResult } from "@/components/editor/IntegrityCheckDialog";
 import { idbGet } from "@/lib/idb-storage";
 import { processArabicText, hasArabicChars as hasArabicCharsProcessing, hasArabicPresentationForms } from "@/lib/arabic-processing";
@@ -36,6 +36,10 @@ interface UseEditorBuildProps {
 }
 
 export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, mirrorPunctuation, gameType, forceSaveRef }: UseEditorBuildProps) {
+  // Use a ref to always access the LATEST state in async handlers
+  const stateRef = useRef(state);
+  useEffect(() => { stateRef.current = state; }, [state]);
+
   const [building, setBuilding] = useState(false);
   const [buildProgress, setBuildProgress] = useState("");
   const [applyingArabic, setApplyingArabic] = useState(false);
@@ -49,9 +53,10 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
 
 
   const handleApplyArabicProcessing = () => {
-    if (!state) return;
+    const currentState = stateRef.current;
+    if (!currentState) return;
     setApplyingArabic(true);
-    const newTranslations = { ...state.translations };
+    const newTranslations = { ...currentState.translations };
     let processedCount = 0, skippedCount = 0;
     for (const [key, value] of Object.entries(newTranslations)) {
       if (!value?.trim()) continue;
@@ -67,7 +72,8 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
   };
 
   const handlePreBuild = async () => {
-    if (!state) return;
+    const currentState = stateRef.current;
+    if (!currentState) return;
     
     // Force-save before preview too
     if (forceSaveRef?.current) {
@@ -75,11 +81,11 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
     }
 
     const nonEmptyTranslations: Record<string, string> = {};
-    for (const [k, v] of Object.entries(state.translations)) {
+    for (const [k, v] of Object.entries(currentState.translations)) {
       if (v.trim()) nonEmptyTranslations[k] = v;
     }
 
-    const protectedCount = Array.from(state.protectedEntries || []).filter(k => nonEmptyTranslations[k]).length;
+    const protectedCount = Array.from(currentState.protectedEntries || []).filter(k => nonEmptyTranslations[k]).length;
     const normalCount = Object.keys(nonEmptyTranslations).length - protectedCount;
 
     // Category breakdown
@@ -96,7 +102,7 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
     const arabicRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/;
     const formsRegex = /[\uFB50-\uFDFF\uFE70-\uFEFF]/;
 
-    for (const entry of state.entries) {
+    for (const entry of currentState.entries) {
       const key = `${entry.msbtFile}:${entry.index}`;
       const trans = nonEmptyTranslations[key];
       if (!trans) continue;
@@ -116,7 +122,7 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
     // Check if real files are loaded
     const bdatBinaryFileNames = await idbGet<string[]>("editorBdatBinaryFileNames");
     const hasBdatFiles = !!(bdatBinaryFileNames && bdatBinaryFileNames.length > 0);
-    const isDemo = state.isDemo === true;
+    const isDemo = currentState.isDemo === true;
 
     // Count affected BDAT files
     let affectedFileCount = 0;
@@ -151,7 +157,9 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
   };
 
   const handleBuildXenoblade = async () => {
-    if (!state) return;
+    // Always use the LATEST state via ref to avoid stale closures
+    const currentState = stateRef.current;
+    if (!currentState) return;
     // Force-save to IDB before reading data — prevents race condition with autosave
     if (forceSaveRef?.current) {
       await forceSaveRef.current();
@@ -189,7 +197,9 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
         const { processArabicText, hasArabicPresentationForms: hasPF } = await import("@/lib/arabic-processing");
 
         const nonEmptyTranslations: Record<string, string> = {};
-        for (const [k, v] of Object.entries(state.translations)) { if (v.trim()) nonEmptyTranslations[k] = v; }
+        for (const [k, v] of Object.entries(currentState.translations)) { if (v.trim()) nonEmptyTranslations[k] = v; }
+        
+        console.log('[BUILD] ✅ State has', Object.keys(currentState.translations).length, 'total keys,', Object.keys(nonEmptyTranslations).length, 'non-empty');
 
         // Auto Arabic processing before build
         let autoProcessedCountBin = 0;
@@ -247,8 +257,13 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
 
             console.log(`[BUILD-BDAT] ${fileName}: prefix="${prefix}", found ${translationMap.size} matching translations out of ${Object.keys(nonEmptyTranslations).length} total`);
             if (translationMap.size === 0) {
-              // Debug: show sample keys to help diagnose mismatch
-              const sampleKeys = Object.keys(nonEmptyTranslations).slice(0, 3);
+              // Debug: show sample state keys AND what the parser expects
+              const sampleKeys = Object.keys(nonEmptyTranslations).filter(k => k.includes(fileName)).slice(0, 5);
+              const sampleAllKeys = Object.keys(nonEmptyTranslations).slice(0, 5);
+              console.warn(`[BUILD-BDAT] ❌ NO MATCH for ${fileName}!`);
+              console.warn(`[BUILD-BDAT] Keys containing filename:`, sampleKeys);
+              console.warn(`[BUILD-BDAT] First 5 state keys:`, sampleAllKeys);
+              console.warn(`[BUILD-BDAT] Expected prefix: "${prefix}"`);
               console.log(`[BUILD-BDAT] ${fileName}: sample state keys:`, sampleKeys);
             }
 
@@ -340,7 +355,7 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
         }
         
         const nonEmptyTranslations: Record<string, string> = {};
-        for (const [k, v] of Object.entries(state.translations)) { if (v.trim()) nonEmptyTranslations[k] = v; }
+        for (const [k, v] of Object.entries(currentState.translations)) { if (v.trim()) nonEmptyTranslations[k] = v; }
 
         // Auto Arabic processing before build
         let autoProcessedCountMsbt = 0;
@@ -357,7 +372,7 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
         }
         
         // Auto-fix damaged tags before build
-        for (const entry of state.entries) {
+        for (const entry of currentState.entries) {
           if (!/[\uFFF9-\uFFFC\uE000-\uE0FF]/.test(entry.original)) continue;
           const key = `${entry.msbtFile}:${entry.index}`;
           const trans = nonEmptyTranslations[key];
@@ -370,7 +385,7 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
         }
         
         formData.append("translations", JSON.stringify(nonEmptyTranslations));
-        formData.append("protectedEntries", JSON.stringify(Array.from(state.protectedEntries || [])));
+        formData.append("protectedEntries", JSON.stringify(Array.from(currentState.protectedEntries || [])));
         if (arabicNumerals) formData.append("arabicNumerals", "true");
         if (mirrorPunctuation) formData.append("mirrorPunctuation", "true");
         
@@ -452,7 +467,8 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
   };
 
   const handleCheckIntegrity = async () => {
-    if (!state) return;
+    const currentState = stateRef.current;
+    if (!currentState) return;
     setCheckingIntegrity(true);
     setShowIntegrityDialog(true);
 
@@ -462,11 +478,11 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
       const bdatBinaryFileNames = await idbGet<string[]>("editorBdatBinaryFileNames");
 
       // All translated (non-empty) keys
-      const allTransKeys = Object.keys(state.translations).filter(k => state.translations[k]?.trim());
+      const allTransKeys = Object.keys(currentState.translations).filter(k => currentState.translations[k]?.trim());
       // All entry keys (including untranslated) — used to count total extracted strings per file
-      const allEntryKeys = state.entries
-        ? state.entries.map(e => `${e.msbtFile}:${e.index}`)
-        : Object.keys(state.translations);
+      const allEntryKeys = currentState.entries
+        ? currentState.entries.map(e => `${e.msbtFile}:${e.index}`)
+        : Object.keys(currentState.translations);
 
       // Collect unique filenames from entry keys + translated keys
       const newFormatFiles = new Set<string>();
@@ -561,7 +577,8 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
   };
 
   const handleBuild = async () => {
-    if (!state) return;
+    const currentState = stateRef.current;
+    if (!currentState) return;
     setShowBuildConfirm(false);
     // Force-save before build
     if (forceSaveRef?.current) {
@@ -583,13 +600,13 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
       formData.append("langFile", new File([new Uint8Array(langBuf)], langFileName));
       if (dictBuf) formData.append("dictFile", new File([new Uint8Array(dictBuf)], (await idbGet<string>("editorDictFileName")) || "ZsDic.pack.zs"));
       const nonEmptyTranslations: Record<string, string> = {};
-      for (const [k, v] of Object.entries(state.translations)) { if (v.trim()) nonEmptyTranslations[k] = v; }
+      for (const [k, v] of Object.entries(currentState.translations)) { if (v.trim()) nonEmptyTranslations[k] = v; }
 
       // Auto-fix damaged tags before build
       let tagFixCount = 0;
       let tagSkipCount = 0;
       let tagOkCount = 0;
-      for (const entry of state.entries) {
+      for (const entry of currentState.entries) {
         if (!hasTechnicalTags(entry.original)) continue;
         const key = `${entry.msbtFile}:${entry.index}`;
         const trans = nonEmptyTranslations[key];
@@ -618,7 +635,7 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
       const translationsSizeKB = Math.round(translationsJson.length / 1024);
       console.log(`[BUILD] Total translations being sent: ${Object.keys(nonEmptyTranslations).length}`);
       console.log(`[BUILD] Translations JSON size: ${translationsSizeKB} KB`);
-      console.log('[BUILD] Protected entries:', Array.from(state.protectedEntries || []).length);
+      console.log('[BUILD] Protected entries:', Array.from(currentState.protectedEntries || []).length);
       console.log('[BUILD] Sample keys:', Object.keys(nonEmptyTranslations).slice(0, 10));
       
       if (translationsSizeKB > 5000) {
@@ -626,7 +643,7 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
       }
       
       formData.append("translations", JSON.stringify(nonEmptyTranslations));
-      formData.append("protectedEntries", JSON.stringify(Array.from(state.protectedEntries || [])));
+      formData.append("protectedEntries", JSON.stringify(Array.from(currentState.protectedEntries || [])));
       if (arabicNumerals) formData.append("arabicNumerals", "true");
       if (mirrorPunctuation) formData.append("mirrorPunctuation", "true");
       setBuildProgress("إرسال للمعالجة...");
