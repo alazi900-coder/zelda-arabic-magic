@@ -4,6 +4,7 @@ import { idbGet } from "@/lib/idb-storage";
 import { processArabicText, hasArabicChars as hasArabicCharsProcessing, hasArabicPresentationForms } from "@/lib/arabic-processing";
 import { EditorState, hasTechnicalTags, restoreTagsLocally } from "@/components/editor/types";
 import { BuildPreview } from "@/components/editor/BuildConfirmDialog";
+import type { MutableRefObject } from "react";
 
 export interface BuildStats {
   modifiedCount: number;
@@ -31,9 +32,10 @@ interface UseEditorBuildProps {
   arabicNumerals: boolean;
   mirrorPunctuation: boolean;
   gameType?: string;
+  forceSaveRef?: React.RefObject<() => Promise<void>>;
 }
 
-export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, mirrorPunctuation, gameType }: UseEditorBuildProps) {
+export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, mirrorPunctuation, gameType, forceSaveRef }: UseEditorBuildProps) {
   const [building, setBuilding] = useState(false);
   const [buildProgress, setBuildProgress] = useState("");
   const [applyingArabic, setApplyingArabic] = useState(false);
@@ -64,9 +66,14 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
     setTimeout(() => setLastSaved(""), 5000);
   };
 
-  const handlePreBuild = () => {
+  const handlePreBuild = async () => {
     if (!state) return;
     
+    // Force-save before preview too
+    if (forceSaveRef?.current) {
+      await forceSaveRef.current();
+    }
+
     const nonEmptyTranslations: Record<string, string> = {};
     for (const [k, v] of Object.entries(state.translations)) {
       if (v.trim()) nonEmptyTranslations[k] = v;
@@ -83,12 +90,50 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
       categories[cat] = (categories[cat] || 0) + 1;
     }
 
+    // Compute warnings
+    let overflowCount = 0;
+    let unprocessedArabicCount = 0;
+    const arabicRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/;
+    const formsRegex = /[\uFB50-\uFDFF\uFE70-\uFEFF]/;
+
+    for (const entry of state.entries) {
+      const key = `${entry.msbtFile}:${entry.index}`;
+      const trans = nonEmptyTranslations[key];
+      if (!trans) continue;
+
+      // Check byte overflow
+      if (entry.maxBytes > 0) {
+        const byteLen = new TextEncoder().encode(trans).length;
+        if (byteLen > entry.maxBytes) overflowCount++;
+      }
+
+      // Check unprocessed Arabic
+      if (arabicRegex.test(trans) && !formsRegex.test(trans)) {
+        unprocessedArabicCount++;
+      }
+    }
+
+    // Check if real files are loaded
+    const bdatBinaryFileNames = await idbGet<string[]>("editorBdatBinaryFileNames");
+    const hasBdatFiles = !!(bdatBinaryFileNames && bdatBinaryFileNames.length > 0);
+    const isDemo = state.isDemo === true;
+
+    // Count affected BDAT files
+    let affectedFileCount = 0;
+    if (hasBdatFiles && bdatBinaryFileNames) {
+      for (const fileName of bdatBinaryFileNames) {
+        const prefix = `bdat-bin:${fileName}:`;
+        if (Object.keys(nonEmptyTranslations).some(k => k.startsWith(prefix))) {
+          affectedFileCount++;
+        }
+      }
+    }
+
     const sampleKeys = Object.keys(nonEmptyTranslations).slice(0, 10);
 
     console.log('[BUILD-PREVIEW] Total translations:', Object.keys(nonEmptyTranslations).length);
-    console.log('[BUILD-PREVIEW] Protected entries:', protectedCount);
-    console.log('[BUILD-PREVIEW] Categories:', categories);
-    console.log('[BUILD-PREVIEW] Sample keys:', sampleKeys);
+    console.log('[BUILD-PREVIEW] Overflow:', overflowCount, 'Unprocessed Arabic:', unprocessedArabicCount);
+    console.log('[BUILD-PREVIEW] BDAT files:', affectedFileCount, 'isDemo:', isDemo);
 
     setBuildPreview({
       totalTranslations: Object.keys(nonEmptyTranslations).length,
@@ -96,12 +141,21 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
       normalCount,
       categories,
       sampleKeys,
+      overflowCount,
+      unprocessedArabicCount,
+      hasBdatFiles,
+      isDemo,
+      affectedFileCount,
     });
     setShowBuildConfirm(true);
   };
 
   const handleBuildXenoblade = async () => {
     if (!state) return;
+    // Force-save to IDB before reading data — prevents race condition with autosave
+    if (forceSaveRef?.current) {
+      await forceSaveRef.current();
+    }
     setBuilding(true); setBuildProgress("تجهيز الترجمات...");
     try {
       const msbtFiles = await idbGet<Record<string, ArrayBuffer>>("editorMsbtFiles");
@@ -509,7 +563,10 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
   const handleBuild = async () => {
     if (!state) return;
     setShowBuildConfirm(false);
-    
+    // Force-save before build
+    if (forceSaveRef?.current) {
+      await forceSaveRef.current();
+    }
     const isXenoblade = gameType === "xenoblade";
     
     if (isXenoblade) {

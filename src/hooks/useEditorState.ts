@@ -58,6 +58,7 @@ export function useEditorState() {
 
 
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const forceSaveRef = useRef<() => Promise<void>>(async () => {});
   const { user } = useAuth();
 
   const glossary = useEditorGlossary({
@@ -68,7 +69,7 @@ export function useEditorState() {
   const quality = useEditorQuality({ state });
   const { isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage, needsImprovement, qualityStats, needsImproveCount, categoryProgress, translatedCount } = quality;
 
-  const build = useEditorBuild({ state, setState, setLastSaved, arabicNumerals, mirrorPunctuation, gameType: "xenoblade" });
+  const build = useEditorBuild({ state, setState, setLastSaved, arabicNumerals, mirrorPunctuation, gameType: "xenoblade", forceSaveRef });
   const { building, buildProgress, applyingArabic, buildStats, setBuildStats, buildPreview, showBuildConfirm, setShowBuildConfirm, bdatFileStats, integrityResult, showIntegrityDialog, setShowIntegrityDialog, checkingIntegrity, handleApplyArabicProcessing, handlePreBuild, handleBuild, handleCheckIntegrity } = build;
 
 
@@ -297,6 +298,26 @@ export function useEditorState() {
     });
     setLastSaved(`آخر حفظ: ${new Date().toLocaleTimeString("ar-SA")}`);
   }, []);
+
+  // Keep a ref to the latest state for forceSave
+  const latestStateRef = useRef<EditorState | null>(null);
+  useEffect(() => { latestStateRef.current = state; }, [state]);
+
+  // Force-save: flush pending autosave immediately (call before build)
+  const forceSave = useCallback(async () => {
+    if (saveTimerRef.current) {
+      clearTimeout(saveTimerRef.current);
+      saveTimerRef.current = undefined;
+    }
+    const s = latestStateRef.current;
+    if (s) {
+      await saveToIDB(s);
+      console.log('[FORCE-SAVE] Saved', Object.keys(s.translations).length, 'translation keys to IDB');
+    }
+  }, [saveToIDB]);
+
+  // Wire the ref so useEditorBuild can call it
+  useEffect(() => { forceSaveRef.current = forceSave; }, [forceSave]);
 
   useEffect(() => {
     if (!state) return;

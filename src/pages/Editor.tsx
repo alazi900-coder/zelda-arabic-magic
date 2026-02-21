@@ -45,6 +45,7 @@ import BuildConfirmDialog from "@/components/editor/BuildConfirmDialog";
 import ConsistencyResultsPanel from "@/components/editor/ConsistencyResultsPanel";
 import BdatBuildReport from "@/components/editor/BdatBuildReport";
 import IntegrityCheckDialog from "@/components/editor/IntegrityCheckDialog";
+import PreBuildDiagnostic from "@/components/editor/PreBuildDiagnostic";
 
 const Editor = () => {
   const editor = useEditorState();
@@ -52,6 +53,7 @@ const Editor = () => {
   const isMobile = useIsMobile();
   const [showDiffView, setShowDiffView] = React.useState(false);
   const [isDragging, setIsDragging] = React.useState(false);
+  const [showDiagnostic, setShowDiagnostic] = React.useState(false);
   const gameType = "xenoblade";
   const processPath = "/process";
 
@@ -721,13 +723,17 @@ const Editor = () => {
           )}
 
           {/* Arabic Processing + Build Buttons */}
-          <div className="flex gap-3 mb-6">
+           <div className="flex gap-3 mb-6">
             <Button size="lg" variant="secondary" onClick={editor.handleApplyArabicProcessing} disabled={editor.applyingArabic} className="flex-1 font-display font-bold">
               {editor.applyingArabic ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Sparkles className="w-4 h-4 mr-2" />} تطبيق المعالجة العربية ✨
             </Button>
+            <Button size="sm" variant="outline" onClick={() => setShowDiagnostic(true)} disabled={editor.building} className="font-body gap-1 shrink-0" title="تشخيص ما قبل البناء">
+              <BarChart3 className="w-4 h-4" />
+              <span className="hidden sm:inline">تشخيص</span>
+            </Button>
             <Button size="sm" variant="outline" onClick={editor.handleCheckIntegrity} disabled={editor.building} className="font-body gap-1 shrink-0" title="التحقق من سلامة الترجمة">
               <ShieldCheck className="w-4 h-4" />
-              <span className="hidden sm:inline">تحقق من السلامة</span>
+              <span className="hidden sm:inline">سلامة</span>
             </Button>
             <Button size="lg" onClick={editor.handlePreBuild} disabled={editor.building} className="flex-1 font-display font-bold">
               {editor.building ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <FileDown className="w-4 h-4 mr-2" />} بناء الملف النهائي
@@ -867,6 +873,12 @@ const Editor = () => {
           preview={editor.buildPreview}
           onConfirm={editor.handleBuild}
           building={editor.building}
+        />
+        <PreBuildDiagnostic
+          open={showDiagnostic}
+          onOpenChange={setShowDiagnostic}
+          state={editor.state}
+          onProceedToBuild={() => { setShowDiagnostic(false); editor.handlePreBuild(); }}
         />
       </div>
     </TooltipProvider>
