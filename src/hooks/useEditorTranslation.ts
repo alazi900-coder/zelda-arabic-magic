@@ -19,7 +19,7 @@ interface UseEditorTranslationProps {
   parseGlossaryMap: (glossary: string) => Map<string, string>;
   paginatedEntries: ExtractedEntry[];
   userGeminiKey: string;
-  translationProvider: 'gemini' | 'mymemory';
+  translationProvider: 'gemini' | 'mymemory' | 'google';
   myMemoryEmail: string;
   addMyMemoryChars: (chars: number) => void;
 }

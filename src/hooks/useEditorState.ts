@@ -55,10 +55,10 @@ export function useEditorState() {
     _setUserGeminiKey(key);
     try { if (key) localStorage.setItem('userGeminiKey', key); else localStorage.removeItem('userGeminiKey'); } catch {}
   }, []);
-  const [translationProvider, _setTranslationProvider] = useState<'gemini' | 'mymemory'>(() => {
-    try { return (localStorage.getItem('translationProvider') as 'gemini' | 'mymemory') || 'gemini'; } catch { return 'gemini'; }
+  const [translationProvider, _setTranslationProvider] = useState<'gemini' | 'mymemory' | 'google'>(() => {
+    try { return (localStorage.getItem('translationProvider') as 'gemini' | 'mymemory' | 'google') || 'gemini'; } catch { return 'gemini'; }
   });
-  const setTranslationProvider = useCallback((p: 'gemini' | 'mymemory') => {
+  const setTranslationProvider = useCallback((p: 'gemini' | 'mymemory' | 'google') => {
     _setTranslationProvider(p);
     try { localStorage.setItem('translationProvider', p); } catch {}
   }, []);
