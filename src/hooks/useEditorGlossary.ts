@@ -71,8 +71,10 @@ export function useEditorGlossary({
       try {
         let newTerms = '';
         for (const file of Array.from(files)) {
-          const text = await file.text();
-          newTerms += (newTerms ? '\n' : '') + text;
+          const rawText = await file.text();
+          // Trim trailing spaces from each line
+          const cleaned = rawText.split('\n').map(l => l.trimEnd()).join('\n');
+          newTerms += (newTerms ? '\n' : '') + cleaned;
         }
         setState(prev => {
           if (!prev) return null;
@@ -106,12 +108,21 @@ export function useEditorGlossary({
     try {
       const response = await fetch(url);
       if (!response.ok) throw new Error('فشل تحميل القاموس');
-      const text = await response.text();
-      const newCount = text.split('\n').filter(l => { const t = l.trim(); return t && !t.startsWith('#') && !t.startsWith('//') && t.includes('='); }).length;
+      const rawText = await response.text();
+      // Clean glossary lines: trim trailing spaces, remove useless technical-only entries
+      const cleanedText = rawText.split('\n').map(line => {
+        const trimmed = line.trimEnd();
+        // Skip pure technical entries like #[ML:...], +=+, -=-, .=., etc.
+        if (/^[#%+=\-.\\/;:]+\s*=\s*[#%+=\-.\\/;:]+\s*$/.test(trimmed)) return null;
+        if (/^#\[ML:/.test(trimmed)) return null;
+        if (/^\+\[ML:/.test(trimmed)) return null;
+        return trimmed;
+      }).filter(l => l !== null).join('\n');
+      const newCount = cleanedText.split('\n').filter(l => { const t = l.trim(); return t && !t.startsWith('#') && !t.startsWith('//') && t.includes('='); }).length;
       if (replace) {
-        setState(prev => prev ? { ...prev, glossary: text } : null);
+        setState(prev => prev ? { ...prev, glossary: cleanedText } : null);
       } else {
-        setState(prev => prev ? mergeGlossaryText(prev, text) : null);
+        setState(prev => prev ? mergeGlossaryText(prev, cleanedText) : null);
       }
       setLastSaved(`📖 تم ${replace ? 'تحميل' : 'دمج'} ${name} (${newCount} مصطلح)`);
       setTimeout(() => setLastSaved(""), 3000);
