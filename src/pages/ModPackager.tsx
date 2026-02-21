@@ -54,6 +54,11 @@ export default function ModPackager() {
   ];
 
   const validateAndSetFont = useCallback((name: string, data: ArrayBuffer) => {
+    // For .wifnt files, skip validation (custom game format)
+    if (name.toLowerCase().endsWith(".wifnt")) {
+      setFontFile({ name, data, size: data.byteLength });
+      return;
+    }
     // For BFTTF files, decrypt first to validate the inner TTF
     let dataToValidate = data;
     if (isBfttf(data)) {
@@ -146,18 +151,27 @@ export default function ModPackager() {
     try {
       const zipParts: { path: string; data: Uint8Array }[] = [];
 
-      // Add font file to romfs structure (auto-convert TTF → BFTTF)
-      // Path: romfs/font/font_main.bfttf — standard layeredFS path for XC3
+      // Add font file to romfs structure
       if (fontFile) {
-        let fontData = fontFile.data;
-        if (!isBfttf(fontData)) {
-          setStatus("تحويل الخط إلى صيغة BFTTF...");
-          fontData = ttfToBfttf(fontData);
+        const isWifnt = fontFile.name.toLowerCase().endsWith(".wifnt");
+        if (isWifnt) {
+          // .wifnt goes to romfs/menu/font/standard.wifnt (game's native font path)
+          zipParts.push({
+            path: `romfs/menu/font/standard.wifnt`,
+            data: new Uint8Array(fontFile.data),
+          });
+        } else {
+          // TTF/OTF → auto-convert to BFTTF, path: romfs/font/font_main.bfttf
+          let fontData = fontFile.data;
+          if (!isBfttf(fontData)) {
+            setStatus("تحويل الخط إلى صيغة BFTTF...");
+            fontData = ttfToBfttf(fontData);
+          }
+          zipParts.push({
+            path: `romfs/font/font_main.bfttf`,
+            data: new Uint8Array(fontData),
+          });
         }
-        zipParts.push({
-          path: `romfs/font/font_main.bfttf`,
-          data: new Uint8Array(fontData),
-        });
       }
 
       // Add BDAT files to romfs structure with correct subpath
@@ -232,13 +246,13 @@ export default function ModPackager() {
         <Card className="p-4 bg-primary/5 border-primary/20 flex gap-3 items-start">
           <Info className="w-5 h-5 text-primary mt-0.5 shrink-0" />
           <div className="text-sm text-muted-foreground">
-            <p className="font-bold text-foreground mb-1">كيف تعمل حزمة المود؟</p>
+           <p className="font-bold text-foreground mb-1">كيف تعمل حزمة المود؟</p>
             <p>
-              ارفع خط عربي بصيغة <code className="bg-muted px-1 rounded">.ttf</code> أو <code className="bg-muted px-1 rounded">.bfttf</code> 
+              ارفع خط عربي بصيغة <code className="bg-muted px-1 rounded">.ttf</code> أو <code className="bg-muted px-1 rounded">.bfttf</code> أو <code className="bg-muted px-1 rounded">.wifnt</code>
               وملفات BDAT المترجمة، وستقوم الأداة بتجميعها في هيكل مجلدات جاهز للتثبيت على المحاكي أو الجهاز.
             </p>
             <p className="mt-2 text-xs font-semibold text-primary">
-              ⚙️ هذه الأداة مُصممة للمودات المعتمدة على <strong>Skyline plugin</strong> — الخط يُوضع في <code className="bg-muted px-1 rounded">romfs/skyline/font/font_main.bfttf</code>
+              ⚙️ خط .wifnt يُوضع في <code className="bg-muted px-1 rounded">romfs/menu/font/standard.wifnt</code> — خط .ttf/.bfttf يُوضع في <code className="bg-muted px-1 rounded">romfs/font/font_main.bfttf</code>
             </p>
           </div>
         </Card>
@@ -252,7 +266,7 @@ export default function ModPackager() {
               </div>
               <div>
                 <h2 className="font-display font-bold text-lg">الخط العربي</h2>
-                <p className="text-xs text-muted-foreground">.ttf أو .bfttf</p>
+                <p className="text-xs text-muted-foreground">.ttf أو .bfttf أو .wifnt</p>
               </div>
             </div>
 
@@ -375,7 +389,7 @@ export default function ModPackager() {
                 <label className="flex flex-col items-center gap-3 p-6 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
                   <Upload className="w-6 h-6 text-muted-foreground" />
                   <span className="text-sm text-muted-foreground">أو ارفع خطاً يدوياً</span>
-                  <input type="file" accept=".ttf,.otf,.bfttf,.woff,.woff2" onChange={handleFontUpload} className="hidden" />
+                  <input type="file" accept=".ttf,.otf,.bfttf,.woff,.woff2,.wifnt" onChange={handleFontUpload} className="hidden" />
                 </label>
               </div>
             )}
@@ -453,10 +467,18 @@ export default function ModPackager() {
               <p className="text-foreground font-bold">xc3_arabic_mod.zip/</p>
               <p className="pr-4">└── romfs/</p>
               {fontFile && (
-                <>
-                  <p className="pr-12">├── font/</p>
-                  <p className="pr-20 text-primary">└── font_main.bfttf</p>
-                </>
+                fontFile.name.toLowerCase().endsWith(".wifnt") ? (
+                  <>
+                    <p className="pr-12">├── menu/</p>
+                    <p className="pr-20">└── font/</p>
+                    <p className="pr-28 text-primary">└── standard.wifnt</p>
+                  </>
+                ) : (
+                  <>
+                    <p className="pr-12">├── font/</p>
+                    <p className="pr-20 text-primary">└── font_main.bfttf</p>
+                  </>
+                )
               )}
               {bdatFiles.length > 0 && (
                 <>
@@ -479,13 +501,24 @@ export default function ModPackager() {
         )}
 
         {/* Auto-convert notice */}
-        {fontFile && !fontFile.name.endsWith(".bfttf") && (
+        {fontFile && !fontFile.name.endsWith(".bfttf") && !fontFile.name.toLowerCase().endsWith(".wifnt") && (
           <Card className="p-4 bg-primary/5 border-primary/20 flex gap-3 items-start">
             <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 shrink-0" />
             <div className="text-sm">
               <p className="font-bold text-foreground mb-1">سيتم تحويل الخط تلقائياً إلى .bfttf</p>
               <p className="text-muted-foreground">
                 عند بناء الحزمة، سيُحوَّل الخط من <code className="bg-muted px-1 rounded">{fontFile.name.split('.').pop()}</code> إلى صيغة <code className="bg-muted px-1 rounded">.bfttf</code> المطلوبة للعبة تلقائياً.
+              </p>
+            </div>
+          </Card>
+        )}
+        {fontFile?.name.toLowerCase().endsWith(".wifnt") && (
+          <Card className="p-4 bg-primary/5 border-primary/20 flex gap-3 items-start">
+            <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+            <div className="text-sm">
+              <p className="font-bold text-foreground mb-1">خط اللعبة المعدّل (.wifnt)</p>
+              <p className="text-muted-foreground">
+                سيتم وضع الخط في <code className="bg-muted px-1 rounded" dir="ltr">romfs/menu/font/standard.wifnt</code> — المسار الأصلي لخط اللعبة.
               </p>
             </div>
           </Card>
