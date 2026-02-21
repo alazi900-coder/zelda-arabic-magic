@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, AlertTriangle, Info, Download, Loader2, ShieldCheck, ShieldAlert } from "lucide-react";
 import { validateFontForArabic, type FontValidationResult } from "@/lib/font-validator";
-import { isBfttf, bfttfToTtf, ttfToBfttf } from "@/lib/bfttf-converter";
 
 interface FontFile {
   name: string;
@@ -36,74 +35,33 @@ export default function ModPackager() {
   const [bdatFiles, setBdatFiles] = useState<BdatFile[]>([]);
   const [building, setBuilding] = useState(false);
   const [status, setStatus] = useState("");
-  const [downloadingFont, setDownloadingFont] = useState<"cairo" | "tajawal" | null>(null);
   const [showLatinWarning, setShowLatinWarning] = useState(false);
+  const [loadingBundledFont, setLoadingBundledFont] = useState(false);
   const [bdatSubPath, setBdatSubPath] = useState("gb"); // default XC3 subpath
 
-  // Cairo includes BOTH Arabic PF-B AND Latin (A-Z, a-z, 0-9)
-  // NotoSansArabic is Arabic-ONLY and causes English text to disappear in-game!
-  // Correct source repos from googlefonts organization
-  const CAIRO_FONT_URLS = [
-    "https://raw.githubusercontent.com/google/fonts/main/ofl/cairo/static/Cairo-Regular.ttf",
-    "https://raw.githubusercontent.com/Gue3bara/Cairo/master/fonts/ttf/Cairo-Regular.ttf",
-    "https://cdn.jsdelivr.net/gh/Gue3bara/Cairo@master/fonts/ttf/Cairo-Regular.ttf",
-  ];
-  const TAJAWAL_FONT_URLS = [
-    "https://raw.githubusercontent.com/googlefonts/tajawal/main/fonts/ttf/Tajawal-Regular.ttf",
-    "https://cdn.jsdelivr.net/gh/googlefonts/tajawal@main/fonts/ttf/Tajawal-Regular.ttf",
-  ];
-
-  const validateAndSetFont = useCallback((name: string, data: ArrayBuffer) => {
-    // For .wifnt files, skip validation (custom game format)
-    if (name.toLowerCase().endsWith(".wifnt")) {
-      setFontFile({ name, data, size: data.byteLength });
-      return;
-    }
-    // For BFTTF files, decrypt first to validate the inner TTF
-    let dataToValidate = data;
-    if (isBfttf(data)) {
-      try { dataToValidate = bfttfToTtf(data); } catch { /* validate raw */ }
-    }
-    const validation = validateFontForArabic(dataToValidate);
-    setFontFile({ name, data, size: data.byteLength, validation });
-  }, []);
-
-  const handleDownloadFont = useCallback(async (fontType: "cairo" | "tajawal") => {
-    setDownloadingFont(fontType);
-    const isCairo = fontType === "cairo";
-    const urls = isCairo ? CAIRO_FONT_URLS : TAJAWAL_FONT_URLS;
-    const fileName = isCairo ? "Cairo-Regular.ttf" : "Tajawal-Regular.ttf";
-    const label = isCairo ? "Cairo" : "Tajawal";
-    setStatus(`جارٍ تحميل خط ${label}...`);
+  const handleLoadBundledFont = useCallback(async () => {
+    setLoadingBundledFont(true);
+    setStatus("جارٍ تحميل خط اللعبة المدمج...");
     try {
-      let data: ArrayBuffer | null = null;
-      const edgeFunctionUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/font-proxy`;
-      for (const url of urls) {
-        try {
-          const response = await fetch(edgeFunctionUrl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ fontUrl: url }),
-          });
-          if (!response.ok) continue;
-          const buffer = await response.arrayBuffer();
-          if (buffer.byteLength > 0) {
-            data = buffer;
-            break;
-          }
-        } catch { /* try next */ }
-      }
-      if (!data) throw new Error("فشل تحميل الخط");
-      validateAndSetFont(fileName, data);
-      setStatus(`✅ تم تحميل خط ${label} بنجاح!`);
+      const response = await fetch("/fonts/standard.wifnt");
+      if (!response.ok) throw new Error("فشل تحميل الخط المدمج");
+      const data = await response.arrayBuffer();
+      setFontFile({ name: "standard.wifnt", data, size: data.byteLength });
+      setStatus("✅ تم تحميل خط اللعبة بنجاح!");
       setTimeout(() => setStatus(""), 4000);
     } catch {
-      setStatus(`❌ فشل تحميل خط ${label} — يرجى رفع الخط يدوياً`);
+      setStatus("❌ فشل تحميل الخط المدمج — يرجى رفعه يدوياً");
       setTimeout(() => setStatus(""), 7000);
     } finally {
-      setDownloadingFont(null);
+      setLoadingBundledFont(false);
     }
-  }, [validateAndSetFont, CAIRO_FONT_URLS, TAJAWAL_FONT_URLS]);
+  }, []);
+
+  const validateAndSetFont = useCallback((name: string, data: ArrayBuffer) => {
+    // .wifnt files skip validation (custom game format)
+    setFontFile({ name, data, size: data.byteLength });
+  }, []);
+
 
   const handleFontUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -153,25 +111,10 @@ export default function ModPackager() {
 
       // Add font file to romfs structure
       if (fontFile) {
-        const isWifnt = fontFile.name.toLowerCase().endsWith(".wifnt");
-        if (isWifnt) {
-          // .wifnt goes to romfs/menu/font/standard.wifnt (game's native font path)
-          zipParts.push({
-            path: `romfs/menu/font/standard.wifnt`,
-            data: new Uint8Array(fontFile.data),
-          });
-        } else {
-          // TTF/OTF → auto-convert to BFTTF, path: romfs/font/font_main.bfttf
-          let fontData = fontFile.data;
-          if (!isBfttf(fontData)) {
-            setStatus("تحويل الخط إلى صيغة BFTTF...");
-            fontData = ttfToBfttf(fontData);
-          }
-          zipParts.push({
-            path: `romfs/font/font_main.bfttf`,
-            data: new Uint8Array(fontData),
-          });
-        }
+        zipParts.push({
+          path: `romfs/menu/font/standard.wifnt`,
+          data: new Uint8Array(fontFile.data),
+        });
       }
 
       // Add BDAT files to romfs structure with correct subpath
@@ -248,11 +191,11 @@ export default function ModPackager() {
           <div className="text-sm text-muted-foreground">
            <p className="font-bold text-foreground mb-1">كيف تعمل حزمة المود؟</p>
             <p>
-              ارفع خط عربي بصيغة <code className="bg-muted px-1 rounded">.ttf</code> أو <code className="bg-muted px-1 rounded">.bfttf</code> أو <code className="bg-muted px-1 rounded">.wifnt</code>
-              وملفات BDAT المترجمة، وستقوم الأداة بتجميعها في هيكل مجلدات جاهز للتثبيت على المحاكي أو الجهاز.
+              استخدم خط اللعبة المدمج <code className="bg-muted px-1 rounded">standard.wifnt</code> أو ارفعه يدوياً،
+              ثم أضف ملفات BDAT المترجمة، وستقوم الأداة بتجميعها في ملف ZIP جاهز للتثبيت.
             </p>
             <p className="mt-2 text-xs font-semibold text-primary">
-              ⚙️ خط .wifnt يُوضع في <code className="bg-muted px-1 rounded">romfs/menu/font/standard.wifnt</code> — خط .ttf/.bfttf يُوضع في <code className="bg-muted px-1 rounded">romfs/font/font_main.bfttf</code>
+              ⚙️ الخط يُوضع في <code className="bg-muted px-1 rounded">romfs/menu/font/standard.wifnt</code>
             </p>
           </div>
         </Card>
@@ -265,8 +208,8 @@ export default function ModPackager() {
                 <FileType className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <h2 className="font-display font-bold text-lg">الخط العربي</h2>
-                <p className="text-xs text-muted-foreground">.ttf أو .bfttf أو .wifnt</p>
+                <h2 className="font-display font-bold text-lg">خط اللعبة</h2>
+                <p className="text-xs text-muted-foreground">standard.wifnt</p>
               </div>
             </div>
 
@@ -357,47 +300,30 @@ export default function ModPackager() {
               </div>
             ) : (
               <div className="space-y-3">
-                <div className="grid grid-cols-2 gap-2">
-                  <Button
-                    variant="outline"
-                    className="w-full gap-2 border-primary/30 hover:bg-primary/5"
-                    onClick={() => handleDownloadFont("cairo")}
-                    disabled={downloadingFont !== null}
-                  >
-                    {downloadingFont === "cairo" ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <Download className="w-4 h-4" />
-                    )}
-                    {downloadingFont === "cairo" ? "جارٍ التحميل..." : "Cairo"}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full gap-2 border-primary/30 hover:bg-primary/5"
-                    onClick={() => handleDownloadFont("tajawal")}
-                    disabled={downloadingFont !== null}
-                  >
-                    {downloadingFont === "tajawal" ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <Download className="w-4 h-4" />
-                    )}
-                    {downloadingFont === "tajawal" ? "جارٍ التحميل..." : "Tajawal"}
-                  </Button>
-                </div>
-                <p className="text-xs text-center text-muted-foreground">تحميل تلقائي (عربي + لاتيني)</p>
+                <Button
+                  variant="outline"
+                  className="w-full gap-2 border-primary/30 hover:bg-primary/5"
+                  onClick={handleLoadBundledFont}
+                  disabled={loadingBundledFont}
+                >
+                  {loadingBundledFont ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Download className="w-4 h-4" />
+                  )}
+                  {loadingBundledFont ? "جارٍ التحميل..." : "استخدام خط اللعبة المدمج"}
+                </Button>
                 <label className="flex flex-col items-center gap-3 p-6 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
                   <Upload className="w-6 h-6 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">أو ارفع خطاً يدوياً</span>
-                  <input type="file" accept=".ttf,.otf,.bfttf,.woff,.woff2,.wifnt" onChange={handleFontUpload} className="hidden" />
+                  <span className="text-sm text-muted-foreground">أو ارفع خطاً يدوياً (.wifnt)</span>
+                  <input type="file" accept=".wifnt" onChange={handleFontUpload} className="hidden" />
                 </label>
               </div>
             )}
             <div className="text-xs text-muted-foreground bg-muted/30 rounded p-3 space-y-1">
-              <p className="font-semibold">💡 خطوط مقترحة (تدعم العربية واللاتينية معاً):</p>
-              <p>• <strong>Cairo</strong> — ✅ موصى به (عربي + لاتيني كامل)</p>
-              <p>• <strong>Tajawal</strong> — ✅ خفيف ومناسب للألعاب (عربي + لاتيني)</p>
-              <p className="text-destructive/80">• ⚠️ Noto Sans Arabic — عربي فقط، النصوص الإنجليزية ستختفي!</p>
+              <p className="font-semibold">📌 خط اللعبة (standard.wifnt):</p>
+              <p>خط اللعبة الأصلي المعدّل لدعم العربية. يُوضع في:</p>
+              <p dir="ltr" className="font-mono text-primary">romfs/menu/font/standard.wifnt</p>
             </div>
           </Card>
 
@@ -467,18 +393,11 @@ export default function ModPackager() {
               <p className="text-foreground font-bold">xc3_arabic_mod.zip/</p>
               <p className="pr-4">└── romfs/</p>
               {fontFile && (
-                fontFile.name.toLowerCase().endsWith(".wifnt") ? (
-                  <>
-                    <p className="pr-12">├── menu/</p>
-                    <p className="pr-20">└── font/</p>
-                    <p className="pr-28 text-primary">└── standard.wifnt</p>
-                  </>
-                ) : (
-                  <>
-                    <p className="pr-12">├── font/</p>
-                    <p className="pr-20 text-primary">└── font_main.bfttf</p>
-                  </>
-                )
+                <>
+                  <p className="pr-12">├── menu/</p>
+                  <p className="pr-20">└── font/</p>
+                  <p className="pr-28 text-primary">└── standard.wifnt</p>
+                </>
               )}
               {bdatFiles.length > 0 && (
                 <>
