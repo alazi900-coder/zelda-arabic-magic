@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Shield, FileText, Download, Sparkles } from "lucide-react";
 import GameInfoSection from "@/components/GameInfoSection";
 import heroBg from "@/assets/xc3-hero-bg.jpg";
+import { APP_VERSION } from "@/lib/version";
 
 const steps = [
   { icon: FileText, title: "ارفع الملفات", desc: "ارفع ملف BDAT أو MSBT وملف القاموس الخاص باللعبة" },
@@ -96,7 +97,8 @@ const Xenoblade = forwardRef<HTMLDivElement>((_, ref) => {
 
       {/* Footer */}
       <footer className="mt-auto py-6 text-center text-sm text-muted-foreground border-t border-border">
-        أداة تعريب زينوبليد كرونيكلز 3 — مشروع مفتوح المصدر 🇸🇦
+        <div>أداة تعريب زينوبليد كرونيكلز 3 — مشروع مفتوح المصدر 🇸🇦</div>
+        <div className="mt-1 text-xs opacity-60">الإصدار {APP_VERSION}</div>
       </footer>
     </div>
   );
