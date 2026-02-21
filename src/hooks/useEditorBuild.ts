@@ -199,7 +199,17 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
         const nonEmptyTranslations: Record<string, string> = {};
         for (const [k, v] of Object.entries(currentState.translations)) { if (v.trim()) nonEmptyTranslations[k] = v; }
         
-        console.log('[BUILD] ✅ State has', Object.keys(currentState.translations).length, 'total keys,', Object.keys(nonEmptyTranslations).length, 'non-empty');
+        const totalKeys = Object.keys(currentState.translations).length;
+        const nonEmptyCount = Object.keys(nonEmptyTranslations).length;
+        setBuildProgress(`📊 وجدت ${nonEmptyCount} ترجمة من أصل ${totalKeys} مفتاح...`);
+        await new Promise(r => setTimeout(r, 600));
+        console.log('[BUILD] ✅ State has', totalKeys, 'total keys,', nonEmptyCount, 'non-empty');
+        
+        if (nonEmptyCount === 0) {
+          setBuildProgress(`❌ لا توجد ترجمات! تأكد من ترجمة النصوص أولاً. (${totalKeys} مفتاح بدون ترجمات)`);
+          setBuilding(false);
+          return;
+        }
 
         // Auto Arabic processing before build
         let autoProcessedCountBin = 0;
@@ -255,16 +265,15 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
               translationMap.set(withoutIndex, processed);
             }
 
+            setBuildProgress(`📂 ${fileName}: وجدت ${translationMap.size} ترجمة مطابقة...`);
             console.log(`[BUILD-BDAT] ${fileName}: prefix="${prefix}", found ${translationMap.size} matching translations out of ${Object.keys(nonEmptyTranslations).length} total`);
             if (translationMap.size === 0) {
-              // Debug: show sample state keys AND what the parser expects
               const sampleKeys = Object.keys(nonEmptyTranslations).filter(k => k.includes(fileName)).slice(0, 5);
               const sampleAllKeys = Object.keys(nonEmptyTranslations).slice(0, 5);
-              console.warn(`[BUILD-BDAT] ❌ NO MATCH for ${fileName}!`);
-              console.warn(`[BUILD-BDAT] Keys containing filename:`, sampleKeys);
-              console.warn(`[BUILD-BDAT] First 5 state keys:`, sampleAllKeys);
-              console.warn(`[BUILD-BDAT] Expected prefix: "${prefix}"`);
-              console.log(`[BUILD-BDAT] ${fileName}: sample state keys:`, sampleKeys);
+              const firstKey = sampleAllKeys[0] || '(فارغ)';
+              setBuildProgress(`⚠️ ${fileName}: لم تتطابق أي ترجمة! أول مفتاح: ${firstKey.substring(0, 60)}`);
+              await new Promise(r => setTimeout(r, 2000));
+              console.warn(`[BUILD-BDAT] ❌ NO MATCH for ${fileName}!`, { sampleKeys, sampleAllKeys, prefix });
             }
 
             // Also support legacy key format: "bdat:fileName:index" (old sessions)
@@ -311,16 +320,11 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
             if (translationMap.size > 0) {
               const { result: patched, overflowErrors, patchedCount, skippedCount } = patchBdatFile(bdatFile, translationMap);
               localBdatResults.push({ name: fileName, data: patched });
-              // Collect overflow errors for reporting
               for (const e of overflowErrors) {
                 allOverflowErrors.push({ fileName, ...e });
               }
-              if (overflowErrors.length > 0) {
-                console.warn(`[BDAT-PATCH] ${fileName}: ${patchedCount} patched, ${skippedCount} skipped (overflow):`, overflowErrors.slice(0, 5));
-              } else {
-                console.log(`[BDAT-PATCH] ${fileName}: ${patchedCount} patched successfully`);
-              }
-              // Use patchedCount as the authoritative count (not translationMap.size which may include overflow)
+              setBuildProgress(`✅ ${fileName}: تم حقن ${patchedCount} نص${skippedCount > 0 ? ` ⚠️ تخطي ${skippedCount} (تجاوز الحجم)` : ''}`);
+              await new Promise(r => setTimeout(r, 400));
               localModifiedCount += patchedCount;
             } else {
               localBdatResults.push({ name: fileName, data });
