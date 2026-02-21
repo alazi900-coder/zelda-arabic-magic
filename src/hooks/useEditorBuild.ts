@@ -181,7 +181,7 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
 
       if (!hasMsbt && !hasBdat && !hasBdatBinary) {
         setBuildProgress("❌ لا توجد ملفات. يرجى العودة لصفحة المعالجة وإعادة رفع الملفات.");
-        setTimeout(() => setBuildProgress(""), 5000);
+        setBuilding(false);
         return;
       }
 
@@ -465,10 +465,10 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
         setBuildProgress(`✅ تم بنجاح! ${localBdatResults.length} ملف BDAT في ZIP — تم تطبيق ${localModifiedCount} نص${overflowSummary}`);
       }
       
-      setTimeout(() => { setBuilding(false); setBuildProgress(""); }, 3000);
+      setBuilding(false);
     } catch (err) {
       setBuildProgress(`❌ ${err instanceof Error ? err.message : 'خطأ غير معروف'}`);
-      setTimeout(() => { setBuilding(false); setBuildProgress(""); }, 5000);
+      setBuilding(false);
     }
   };
 
@@ -599,7 +599,7 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
     const langBuf = await idbGet<ArrayBuffer>("editorLangFile");
     const dictBuf = await idbGet<ArrayBuffer>("editorDictFile");
     const langFileName = (await idbGet<string>("editorLangFileName")) || "output.zs";
-    if (!langBuf) { setBuildProgress("❌ ملف اللغة غير موجود. يرجى العودة لصفحة المعالجة وإعادة رفع الملفات."); setTimeout(() => setBuildProgress(""), 5000); return; }
+    if (!langBuf) { setBuildProgress("❌ ملف اللغة غير موجود. يرجى العودة لصفحة المعالجة وإعادة رفع الملفات."); return; }
     setBuilding(true); setBuildProgress("تجهيز الترجمات...");
     try {
       const formData = new FormData();
@@ -694,16 +694,19 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
         shortest: buildStatsData?.shortest || null,
         categories: buildStatsData?.categories || {},
       });
-      setTimeout(() => { setBuilding(false); setBuildProgress(""); }, 3000);
+      setBuilding(false);
     } catch (err) {
       setBuildProgress(`❌ ${err instanceof Error ? err.message : 'خطأ غير معروف'}`);
-      setTimeout(() => { setBuilding(false); setBuildProgress(""); }, 5000);
+      setBuilding(false);
     }
   };
+
+  const dismissBuildProgress = () => { setBuildProgress(""); };
 
   return {
     building,
     buildProgress,
+    dismissBuildProgress,
     applyingArabic,
     buildStats,
     setBuildStats,
