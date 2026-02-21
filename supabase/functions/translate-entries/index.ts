@@ -156,6 +156,91 @@ async function translateWithMyMemory(
   return { translations: result, charsUsed };
 }
 
+// --- Google Translate (unofficial free endpoint) ---
+async function translateWithGoogle(
+  entries: { key: string; original: string }[],
+  protectedEntries: { key: string; cleaned: string; tags: Map<string, string> }[],
+  glossaryMap?: Map<string, string>,
+): Promise<{ translations: Record<string, string>; charsUsed: number }> {
+  const result: Record<string, string> = {};
+  let charsUsed = 0;
+
+  // Google Translate supports batch via newline-joined text
+  const batchSize = 20;
+  for (let start = 0; start < entries.length; start += batchSize) {
+    const batchEntries = entries.slice(start, start + batchSize);
+    const batchProtected = protectedEntries.slice(start, start + batchSize);
+
+    // Check glossary exact matches first
+    const toTranslate: { idx: number; text: string }[] = [];
+    for (let i = 0; i < batchEntries.length; i++) {
+      const pe = batchProtected[i];
+      const text = pe.cleaned.trim();
+      if (!text) continue;
+      if (glossaryMap) {
+        const norm = text.toLowerCase();
+        const hit = glossaryMap.get(norm);
+        if (hit) {
+          result[batchEntries[i].key] = restoreTags(hit, pe.tags);
+          continue;
+        }
+      }
+      toTranslate.push({ idx: i, text });
+    }
+
+    if (toTranslate.length === 0) continue;
+
+    // Join texts with newline separator for batch translation
+    const joinedText = toTranslate.map(t => t.text).join('\n');
+    
+    try {
+      const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ar&dt=t&q=${encodeURIComponent(joinedText)}`;
+      const response = await fetchWithRetry(url);
+      if (!response.ok) {
+        console.error(`Google Translate error: ${response.status}`);
+        await response.text();
+        continue;
+      }
+      const data = await response.json();
+      
+      // Parse Google's response format: [[["translated","original",...],...],...]
+      let fullTranslation = '';
+      if (Array.isArray(data) && Array.isArray(data[0])) {
+        for (const segment of data[0]) {
+          if (Array.isArray(segment) && segment[0]) {
+            fullTranslation += segment[0];
+          }
+        }
+      }
+      
+      // Split back by newlines to get individual translations
+      const translations = fullTranslation.split('\n');
+      
+      for (let j = 0; j < Math.min(toTranslate.length, translations.length); j++) {
+        const t = toTranslate[j];
+        let translation = translations[j]?.trim();
+        if (translation) {
+          // Post-process glossary
+          if (glossaryMap) {
+            translation = applyGlossaryPost(translation, glossaryMap);
+          }
+          result[batchEntries[t.idx].key] = restoreTags(translation, batchProtected[t.idx].tags);
+          charsUsed += t.text.length;
+        }
+      }
+    } catch (err) {
+      console.error('Google Translate batch error:', err);
+    }
+
+    // Delay between batches
+    if (start + batchSize < entries.length) {
+      await new Promise(r => setTimeout(r, 200));
+    }
+  }
+
+  return { translations: result, charsUsed };
+}
+
 // --- Parse glossary text into a map ---
 function parseGlossaryToMap(glossary: string): Map<string, string> {
   const map = new Map<string, string>();
@@ -326,6 +411,12 @@ Deno.serve(async (req) => {
     if (provider === 'mymemory') {
       const glossaryMap = glossary ? parseGlossaryToMap(glossary) : undefined;
       const { translations, charsUsed } = await translateWithMyMemory(entries, protectedEntries, glossaryMap, myMemoryEmail);
+      return new Response(JSON.stringify({ translations, charsUsed }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    } else if (provider === 'google') {
+      const glossaryMap = glossary ? parseGlossaryToMap(glossary) : undefined;
+      const { translations, charsUsed } = await translateWithGoogle(entries, protectedEntries, glossaryMap);
       return new Response(JSON.stringify({ translations, charsUsed }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });

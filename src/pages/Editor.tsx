@@ -232,7 +232,7 @@ const Editor = () => {
                     <Key className="w-4 h-4 text-primary" />
                     <span className="text-sm font-display font-bold">🔧 محرك الترجمة</span>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 flex-wrap">
                     <Button
                       size="sm"
                       variant={editor.translationProvider === 'mymemory' ? 'default' : 'outline'}
@@ -240,6 +240,14 @@ const Editor = () => {
                       className="text-xs font-display"
                     >
                       🆓 MyMemory (مجاني)
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant={editor.translationProvider === 'google' ? 'default' : 'outline'}
+                      onClick={() => editor.setTranslationProvider('google')}
+                      className="text-xs font-display"
+                    >
+                      🌐 Google Translate (مجاني)
                     </Button>
                     <Button
                       size="sm"
@@ -287,6 +295,13 @@ const Editor = () => {
                         </span>
                       </div>
                     </div>
+                  </div>
+                )}
+
+                {editor.translationProvider === 'google' && (
+                  <div className="flex flex-col gap-1">
+                    <p className="text-xs text-secondary font-body">🌐 ترجمة Google مجانية بالكامل — بدون حد يومي ولا حاجة لمفتاح API</p>
+                    <p className="text-xs text-muted-foreground font-body">ترجمة آلية سريعة مع دعم دفعات متعددة. جودة أقل من Gemini AI لكنها مجانية تماماً.</p>
                   </div>
                 )}
 
