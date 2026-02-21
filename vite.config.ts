@@ -22,6 +22,9 @@ export default defineConfig(({ mode }) => ({
       workbox: {
         navigateFallbackDenylist: [/^\/~oauth/],
         globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
+        // Force the new service worker to activate immediately
+        skipWaiting: true,
+        clientsClaim: true,
       },
       manifest: {
         name: "أداة تعريب زيلدا",
