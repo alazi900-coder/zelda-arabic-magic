@@ -70,7 +70,7 @@ export function useEditorState() {
   const { isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage, needsImprovement, qualityStats, needsImproveCount, categoryProgress, translatedCount } = quality;
 
   const build = useEditorBuild({ state, setState, setLastSaved, arabicNumerals, mirrorPunctuation, gameType: "xenoblade", forceSaveRef });
-  const { building, buildProgress, applyingArabic, buildStats, setBuildStats, buildPreview, showBuildConfirm, setShowBuildConfirm, bdatFileStats, integrityResult, showIntegrityDialog, setShowIntegrityDialog, checkingIntegrity, handleApplyArabicProcessing, handlePreBuild, handleBuild, handleCheckIntegrity } = build;
+  const { building, buildProgress, dismissBuildProgress, applyingArabic, buildStats, setBuildStats, buildPreview, showBuildConfirm, setShowBuildConfirm, bdatFileStats, integrityResult, showIntegrityDialog, setShowIntegrityDialog, checkingIntegrity, handleApplyArabicProcessing, handlePreBuild, handleBuild, handleCheckIntegrity } = build;
 
 
   // === Protection handlers ===
@@ -990,7 +990,7 @@ export function useEditorState() {
   return {
     // State
     state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, showFindReplace, userGeminiKey,
-    building, buildProgress, translating, translateProgress,
+    building, buildProgress, dismissBuildProgress, translating, translateProgress,
     lastSaved, cloudSyncing, cloudStatus,
     reviewing, reviewResults, tmStats,
     suggestingShort, shortSuggestions,

@@ -299,6 +299,13 @@ const Editor = () => {
                 {editor.bdatFileStats && editor.bdatFileStats.length > 0 && (
                   <BdatBuildReport stats={editor.bdatFileStats} />
                 )}
+                {!editor.building && (
+                  <div className="flex justify-center mt-3">
+                    <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); editor.dismissBuildProgress(); }} className="font-display">
+                      ✓ موافق
+                    </Button>
+                  </div>
+                )}
               </CardContent>
             </Card>
           )}
