@@ -55,6 +55,13 @@ export function useEditorState() {
     _setUserGeminiKey(key);
     try { if (key) localStorage.setItem('userGeminiKey', key); else localStorage.removeItem('userGeminiKey'); } catch {}
   }, []);
+  const [translationProvider, _setTranslationProvider] = useState<'gemini' | 'mymemory'>(() => {
+    try { return (localStorage.getItem('translationProvider') as 'gemini' | 'mymemory') || 'gemini'; } catch { return 'gemini'; }
+  });
+  const setTranslationProvider = useCallback((p: 'gemini' | 'mymemory') => {
+    _setTranslationProvider(p);
+    try { localStorage.setItem('translationProvider', p); } catch {}
+  }, []);
 
 
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
@@ -483,7 +490,7 @@ export function useEditorState() {
 
   const translation = useEditorTranslation({
     state, setState, setLastSaved, setTranslateProgress, setPreviousTranslations, updateTranslation,
-    filterCategory, activeGlossary, parseGlossaryMap, paginatedEntries, userGeminiKey,
+    filterCategory, activeGlossary, parseGlossaryMap, paginatedEntries, userGeminiKey, translationProvider,
   });
   const { translating, translatingSingle, tmStats, handleTranslateSingle, handleAutoTranslate, handleStopTranslate, handleRetranslatePage, handleFixDamagedTags } = translation;
 
@@ -989,7 +996,7 @@ export function useEditorState() {
 
   return {
     // State
-    state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, showFindReplace, userGeminiKey,
+    state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, showFindReplace, userGeminiKey, translationProvider,
     building, buildProgress, dismissBuildProgress, translating, translateProgress,
     lastSaved, cloudSyncing, cloudStatus,
     reviewing, reviewResults, tmStats,
@@ -1011,7 +1018,7 @@ export function useEditorState() {
     setSearch, setFilterFile, setFilterCategory, setFilterStatus, setFilterTechnical, setFilterTable, setFilterColumn,
     setFiltersOpen, setShowQualityStats, setQuickReviewMode, setQuickReviewIndex, setShowFindReplace,
     setCurrentPage, setShowRetranslateConfirm,
-    setArabicNumerals, setMirrorPunctuation, setUserGeminiKey,
+    setArabicNumerals, setMirrorPunctuation, setUserGeminiKey, setTranslationProvider,
     setReviewResults, setShortSuggestions, setImproveResults, setBuildStats, setShowBuildConfirm,
     setConsistencyResults,
 
