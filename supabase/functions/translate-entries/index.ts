@@ -25,6 +25,72 @@ function restoreTags(text: string, tags: Map<string, string>): string {
   return result;
 }
 
+// --- Apply glossary replacements to translated text (post-processing) ---
+function applyGlossaryPost(text: string, glossaryMap: Map<string, string>): string {
+  let result = text;
+  // Also build a reverse map: English term → Arabic term for post-replacement
+  for (const [eng, ara] of glossaryMap) {
+    // Case-insensitive whole-word replacement of English terms left in translation
+    const escaped = eng.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`\\b${escaped}\\b`, 'gi');
+    result = result.replace(regex, ara);
+  }
+  return result;
+}
+
+// --- Fetch with retry ---
+async function fetchWithRetry(url: string, retries = 2, delayMs = 1000): Promise<Response> {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const response = await fetch(url);
+      if (response.ok || response.status === 400) return response;
+      if (attempt < retries) {
+        await new Promise(r => setTimeout(r, delayMs * (attempt + 1)));
+      } else {
+        return response;
+      }
+    } catch (err) {
+      if (attempt >= retries) throw err;
+      await new Promise(r => setTimeout(r, delayMs * (attempt + 1)));
+    }
+  }
+  throw new Error('fetchWithRetry exhausted');
+}
+
+// --- Pick best translation from MyMemory matches ---
+function pickBestTranslation(data: any): string | null {
+  // Primary result
+  const primary = data?.responseData?.translatedText;
+  const primaryMatch = data?.responseData?.match;
+  
+  // Check TM matches for higher quality
+  const matches = data?.matches;
+  if (Array.isArray(matches) && matches.length > 0) {
+    // Sort by quality (match score), prefer human translations
+    const ranked = matches
+      .filter((m: any) => m.translation?.trim() && m.segment?.trim())
+      .sort((a: any, b: any) => {
+        // Prefer "human" created-by over "MT"
+        const aHuman = a['created-by'] !== 'MT' ? 1 : 0;
+        const bHuman = b['created-by'] !== 'MT' ? 1 : 0;
+        if (aHuman !== bHuman) return bHuman - aHuman;
+        // Then by match quality
+        return (b.match || 0) - (a.match || 0);
+      });
+    
+    if (ranked.length > 0 && ranked[0].match >= 0.5) {
+      return ranked[0].translation;
+    }
+  }
+  
+  // Fallback to primary if quality is acceptable
+  if (primary?.trim() && primaryMatch >= 0.3) {
+    return primary;
+  }
+  
+  return primary?.trim() ? primary : null;
+}
+
 // --- MyMemory free translation (with email for 50k/day limit) ---
 async function translateWithMyMemory(
   entries: { key: string; original: string }[],
@@ -42,7 +108,7 @@ async function translateWithMyMemory(
     
     if (!textToTranslate) continue;
 
-    // Check glossary first
+    // Check glossary for exact match first
     if (glossaryMap) {
       const norm = textToTranslate.toLowerCase();
       const hit = glossaryMap.get(norm);
@@ -57,19 +123,33 @@ async function translateWithMyMemory(
       if (email?.trim()) {
         url += `&de=${encodeURIComponent(email.trim())}`;
       }
-      const response = await fetch(url);
+      
+      const response = await fetchWithRetry(url);
       if (!response.ok) {
         console.error(`MyMemory error for key ${entry.key}: ${response.status}`);
+        await response.text(); // consume body
         continue;
       }
       const data = await response.json();
-      const translation = data?.responseData?.translatedText;
-      if (translation && translation.trim()) {
+      
+      // Pick best translation from primary + TM matches
+      let translation = pickBestTranslation(data);
+      
+      if (translation?.trim()) {
+        // Post-process: apply glossary terms to fix any English words left
+        if (glossaryMap) {
+          translation = applyGlossaryPost(translation, glossaryMap);
+        }
         result[entry.key] = restoreTags(translation, pe.tags);
         charsUsed += textToTranslate.length;
       }
     } catch (err) {
       console.error(`MyMemory fetch error for key ${entry.key}:`, err);
+    }
+    
+    // Small delay between requests to avoid rate limiting
+    if (i < entries.length - 1) {
+      await new Promise(r => setTimeout(r, 150));
     }
   }
 
