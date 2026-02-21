@@ -52,13 +52,7 @@ function measureStringSlot(data: Uint8Array, absOffset: number): number {
   return i - absOffset + 1;
 }
 
-/**
- * Check whether `text` contains technical tag characters that must be preserved.
- * Tags live in PUA U+E000–U+E0FF and IAT controls U+FFF9–U+FFFC.
- */
-function hasTags(text: string): boolean {
-  return /[\uE000-\uE0FF\uFFF9-\uFFFC]/.test(text);
-}
+// ============= Core patch function =============
 
 // ============= Core patch function =============
 
@@ -120,14 +114,6 @@ export function patchBdatFile(
 
         // Measure original slot (bytes including null terminator)
         const originalSlot = measureStringSlot(result, absStrOffset);
-
-        // Skip strings that contain tag sequences to avoid corruption
-        if (hasTags(translation)) {
-          // Encode only the non-tag portion and check length — still enforce limit
-          // But to be safe: if translation contains tags, skip patching entirely
-          skippedCount++;
-          continue;
-        }
 
         // Encode translation to UTF-8
         const transBytes = encoder.encode(translation);
