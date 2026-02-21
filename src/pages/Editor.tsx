@@ -253,7 +253,41 @@ const Editor = () => {
                 </div>
 
                 {editor.translationProvider === 'mymemory' && (
-                  <p className="text-xs text-secondary font-body">🆓 ترجمة مجانية عبر MyMemory — بدون مفتاح API. الحد: 5000 حرف/يوم. الترجمة أبسط من الذكاء الاصطناعي.</p>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-3">
+                      <div className="flex gap-2 flex-1">
+                        <input
+                          type="email"
+                          placeholder="بريدك الإلكتروني (اختياري — يرفع الحد إلى 50,000 حرف/يوم)"
+                          value={editor.myMemoryEmail}
+                          onChange={(e) => editor.setMyMemoryEmail(e.target.value)}
+                          className="flex-1 px-3 py-1.5 rounded bg-background border border-border font-body text-sm"
+                          dir="ltr"
+                        />
+                        {editor.myMemoryEmail && (
+                          <Button variant="ghost" size="sm" onClick={() => editor.setMyMemoryEmail('')} className="text-xs text-destructive shrink-0">
+                            مسح
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs text-secondary font-body">
+                        {editor.myMemoryEmail
+                          ? '✅ الحد اليومي: 50,000 حرف'
+                          : '🆓 الحد اليومي: 5,000 حرف (أضف بريدك لرفعه إلى 50,000)'}
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <Progress
+                          value={(editor.myMemoryCharsUsed / (editor.myMemoryEmail ? 50000 : 5000)) * 100}
+                          className="w-24 h-2"
+                        />
+                        <span className="text-xs font-mono text-muted-foreground">
+                          {editor.myMemoryCharsUsed.toLocaleString()} / {editor.myMemoryEmail ? '50,000' : '5,000'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 )}
 
                 {editor.translationProvider === 'gemini' && (
