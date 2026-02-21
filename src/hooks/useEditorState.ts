@@ -169,6 +169,21 @@ export function useEditorState() {
   useEffect(() => {
     const loadState = async () => {
       const stored = await idbGet<EditorState>("editorState");
+
+      // Restore emergency save from localStorage if available
+      let emergencyTranslations: Record<string, string> | null = null;
+      try {
+        const emergency = localStorage.getItem('arabize-emergency-save');
+        if (emergency) {
+          const parsed = JSON.parse(emergency);
+          // Only use if less than 24h old
+          if (parsed.timestamp && Date.now() - parsed.timestamp < 86400000) {
+            emergencyTranslations = parsed.translations;
+          }
+          localStorage.removeItem('arabize-emergency-save');
+        }
+      } catch {}
+
       if (stored) {
         const validKeys = new Set(stored.entries.map(e => `${e.msbtFile}:${e.index}`));
         const autoTranslations = detectPreTranslated({
@@ -180,7 +195,8 @@ export function useEditorState() {
         for (const [k, v] of Object.entries(stored.translations || {})) {
           if (validKeys.has(k)) filteredStored[k] = v;
         }
-        const mergedTranslations = { ...autoTranslations, ...filteredStored };
+        // Merge: autoTranslations < stored < emergency (emergency wins)
+        const mergedTranslations = { ...autoTranslations, ...filteredStored, ...(emergencyTranslations || {}) };
         const protectedSet = new Set<string>(
           Array.isArray(stored.protectedEntries) ? (stored.protectedEntries as string[]) : []
         );
@@ -322,9 +338,37 @@ export function useEditorState() {
   useEffect(() => {
     if (!state) return;
     if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
-    saveTimerRef.current = setTimeout(() => saveToIDB(state), AUTOSAVE_DELAY);
-    return () => { if (saveTimerRef.current) clearTimeout(saveTimerRef.current); };
+    saveTimerRef.current = setTimeout(() => {
+      saveToIDB(state);
+      saveTimerRef.current = undefined;
+    }, AUTOSAVE_DELAY);
+    return () => {
+      // On cleanup (unmount or re-run): save immediately instead of discarding
+      if (saveTimerRef.current) {
+        clearTimeout(saveTimerRef.current);
+        saveTimerRef.current = undefined;
+        saveToIDB(state);
+      }
+    };
   }, [state?.translations, saveToIDB]);
+
+  // Save on page close / tab close
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      const s = latestStateRef.current;
+      if (s) {
+        // Use sync localStorage as fallback since IDB is async
+        try {
+          localStorage.setItem('arabize-emergency-save', JSON.stringify({
+            translations: s.translations,
+            timestamp: Date.now(),
+          }));
+        } catch {}
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, []);
 
   // === Computed values ===
   const msbtFiles = useMemo(() => {
