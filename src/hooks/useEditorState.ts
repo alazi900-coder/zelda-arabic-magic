@@ -62,6 +62,32 @@ export function useEditorState() {
     _setTranslationProvider(p);
     try { localStorage.setItem('translationProvider', p); } catch {}
   }, []);
+  const [myMemoryEmail, _setMyMemoryEmail] = useState(() => {
+    try { return localStorage.getItem('myMemoryEmail') || ''; } catch { return ''; }
+  });
+  const setMyMemoryEmail = useCallback((email: string) => {
+    _setMyMemoryEmail(email);
+    try { if (email) localStorage.setItem('myMemoryEmail', email); else localStorage.removeItem('myMemoryEmail'); } catch {}
+  }, []);
+  const [myMemoryCharsUsed, setMyMemoryCharsUsed] = useState(() => {
+    try {
+      const stored = localStorage.getItem('myMemoryCharsUsed');
+      const storedDate = localStorage.getItem('myMemoryCharsDate');
+      const today = new Date().toDateString();
+      if (storedDate === today && stored) return parseInt(stored, 10);
+      return 0;
+    } catch { return 0; }
+  });
+  const addMyMemoryChars = useCallback((chars: number) => {
+    setMyMemoryCharsUsed(prev => {
+      const newVal = prev + chars;
+      try {
+        localStorage.setItem('myMemoryCharsUsed', String(newVal));
+        localStorage.setItem('myMemoryCharsDate', new Date().toDateString());
+      } catch {}
+      return newVal;
+    });
+  }, []);
 
 
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
@@ -490,7 +516,7 @@ export function useEditorState() {
 
   const translation = useEditorTranslation({
     state, setState, setLastSaved, setTranslateProgress, setPreviousTranslations, updateTranslation,
-    filterCategory, activeGlossary, parseGlossaryMap, paginatedEntries, userGeminiKey, translationProvider,
+    filterCategory, activeGlossary, parseGlossaryMap, paginatedEntries, userGeminiKey, translationProvider, myMemoryEmail, addMyMemoryChars,
   });
   const { translating, translatingSingle, tmStats, handleTranslateSingle, handleAutoTranslate, handleStopTranslate, handleRetranslatePage, handleFixDamagedTags } = translation;
 
@@ -996,7 +1022,7 @@ export function useEditorState() {
 
   return {
     // State
-    state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, showFindReplace, userGeminiKey, translationProvider,
+    state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, showFindReplace, userGeminiKey, translationProvider, myMemoryEmail, myMemoryCharsUsed,
     building, buildProgress, dismissBuildProgress, translating, translateProgress,
     lastSaved, cloudSyncing, cloudStatus,
     reviewing, reviewResults, tmStats,
@@ -1018,7 +1044,7 @@ export function useEditorState() {
     setSearch, setFilterFile, setFilterCategory, setFilterStatus, setFilterTechnical, setFilterTable, setFilterColumn,
     setFiltersOpen, setShowQualityStats, setQuickReviewMode, setQuickReviewIndex, setShowFindReplace,
     setCurrentPage, setShowRetranslateConfirm,
-    setArabicNumerals, setMirrorPunctuation, setUserGeminiKey, setTranslationProvider,
+    setArabicNumerals, setMirrorPunctuation, setUserGeminiKey, setTranslationProvider, setMyMemoryEmail,
     setReviewResults, setShortSuggestions, setImproveResults, setBuildStats, setShowBuildConfirm,
     setConsistencyResults,
 

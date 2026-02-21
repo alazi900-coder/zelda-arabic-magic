@@ -25,13 +25,15 @@ function restoreTags(text: string, tags: Map<string, string>): string {
   return result;
 }
 
-// --- MyMemory free translation ---
+// --- MyMemory free translation (with email for 50k/day limit) ---
 async function translateWithMyMemory(
   entries: { key: string; original: string }[],
   protectedEntries: { key: string; cleaned: string; tags: Map<string, string> }[],
   glossaryMap?: Map<string, string>,
-): Promise<Record<string, string>> {
+  email?: string,
+): Promise<{ translations: Record<string, string>; charsUsed: number }> {
   const result: Record<string, string> = {};
+  let charsUsed = 0;
 
   for (let i = 0; i < entries.length; i++) {
     const entry = entries[i];
@@ -51,7 +53,10 @@ async function translateWithMyMemory(
     }
 
     try {
-      const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(textToTranslate)}&langpair=en|ar`;
+      let url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(textToTranslate)}&langpair=en|ar`;
+      if (email?.trim()) {
+        url += `&de=${encodeURIComponent(email.trim())}`;
+      }
       const response = await fetch(url);
       if (!response.ok) {
         console.error(`MyMemory error for key ${entry.key}: ${response.status}`);
@@ -61,13 +66,14 @@ async function translateWithMyMemory(
       const translation = data?.responseData?.translatedText;
       if (translation && translation.trim()) {
         result[entry.key] = restoreTags(translation, pe.tags);
+        charsUsed += textToTranslate.length;
       }
     } catch (err) {
       console.error(`MyMemory fetch error for key ${entry.key}:`, err);
     }
   }
 
-  return result;
+  return { translations: result, charsUsed };
 }
 
 // --- Parse glossary text into a map ---
@@ -215,12 +221,13 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { entries, glossary, context, userApiKey, provider } = await req.json() as {
+    const { entries, glossary, context, userApiKey, provider, myMemoryEmail } = await req.json() as {
       entries: { key: string; original: string }[];
       glossary?: string;
       context?: { key: string; original: string; translation?: string }[];
       userApiKey?: string;
-      provider?: string; // "mymemory" | "gemini" (default)
+      provider?: string;
+      myMemoryEmail?: string;
     };
 
     if (!entries || entries.length === 0) {
@@ -236,18 +243,18 @@ Deno.serve(async (req) => {
       return { ...e, cleaned, tags };
     });
 
-    let result: Record<string, string>;
-
     if (provider === 'mymemory') {
       const glossaryMap = glossary ? parseGlossaryToMap(glossary) : undefined;
-      result = await translateWithMyMemory(entries, protectedEntries, glossaryMap);
+      const { translations, charsUsed } = await translateWithMyMemory(entries, protectedEntries, glossaryMap, myMemoryEmail);
+      return new Response(JSON.stringify({ translations, charsUsed }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     } else {
-      result = await translateWithAI(entries, protectedEntries, glossary, context, userApiKey);
+      const result = await translateWithAI(entries, protectedEntries, glossary, context, userApiKey);
+      return new Response(JSON.stringify({ translations: result }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
-
-    return new Response(JSON.stringify({ translations: result }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
   } catch (error) {
     console.error('Error:', error);
     return new Response(
