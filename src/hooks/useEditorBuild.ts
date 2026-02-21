@@ -160,6 +160,8 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
     // Always use the LATEST state via ref to avoid stale closures
     const currentState = stateRef.current;
     if (!currentState) return;
+    // Close the build confirm dialog so progress messages are visible
+    setShowBuildConfirm(false);
     // Force-save to IDB before reading data — prevents race condition with autosave
     if (forceSaveRef?.current) {
       await forceSaveRef.current();
