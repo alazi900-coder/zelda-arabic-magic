@@ -10,27 +10,60 @@ const DebouncedInput = memo(({ value, onChange, placeholder, className, autoFocu
 }) => {
   const [localValue, setLocalValue] = useState(value);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const localRef = useRef(value);
+  const onChangeRef = useRef(onChange);
+  const committedRef = useRef(value);
+
+  // Keep refs current
+  onChangeRef.current = onChange;
   
   useEffect(() => {
     setLocalValue(value);
+    localRef.current = value;
+    committedRef.current = value;
   }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVal = e.target.value;
     setLocalValue(newVal);
+    localRef.current = newVal;
     if (timerRef.current) clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => onChange(newVal), INPUT_DEBOUNCE);
+    timerRef.current = setTimeout(() => {
+      onChangeRef.current(newVal);
+      committedRef.current = newVal;
+    }, INPUT_DEBOUNCE);
   };
 
+  // Flush pending change on unmount instead of discarding it
   useEffect(() => {
-    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        // If local value differs from last committed, flush it
+        if (localRef.current !== committedRef.current) {
+          onChangeRef.current(localRef.current);
+        }
+      }
+    };
   }, []);
+
+  const handleBlur = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = undefined;
+    }
+    if (localRef.current !== committedRef.current) {
+      onChangeRef.current(localRef.current);
+      committedRef.current = localRef.current;
+    }
+  };
 
   return (
     <input
       type="text"
       value={localValue}
       onChange={handleChange}
+      onBlur={handleBlur}
       placeholder={placeholder}
       className={className}
       autoFocus={autoFocus}
