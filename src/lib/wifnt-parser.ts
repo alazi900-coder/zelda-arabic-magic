@@ -189,6 +189,16 @@ export function analyzeWifnt(data: ArrayBuffer): WifntInfo {
     textureHeight = miblFooter.height;
     imageFormat = miblFooter.imageFormat;
     
+    console.log('[WIFNT Diagnostic] Mibl Footer:', {
+      imageFormat,
+      formatName: getFormatName(imageFormat),
+      width: textureWidth,
+      height: textureHeight,
+      imageSize: miblFooter.imageSize,
+      unk: miblFooter.unk,
+      fileSize: data.byteLength,
+    });
+    
     const bpp = getBpp(imageFormat);
     const bc = isBlockCompressed(imageFormat);
     
