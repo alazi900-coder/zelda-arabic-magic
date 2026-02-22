@@ -397,6 +397,7 @@ const XenobladeProcess = () => {
       await idbSet("editorState", {
         entries: allEntries,
         translations: finalTranslations,
+        freshExtraction: true,
       });
       await idbSet("editorGame", "xenoblade");
       // Verify save worked

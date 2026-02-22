@@ -378,6 +378,34 @@ export function useEditorState() {
     const loadState = async () => {
       const stored = await idbGet<EditorState>("editorState");
       if (stored && stored.entries && stored.entries.length > 0) {
+        const isFreshExtraction = !!(stored as any).freshExtraction;
+        
+        if (isFreshExtraction) {
+          // Freshly extracted data — load directly, no recovery dialog
+          // Clear the flag so next time recovery dialog shows normally
+          const autoTranslations = detectPreTranslated({
+            entries: stored.entries,
+            translations: stored.translations || {},
+            protectedEntries: new Set(),
+          });
+          const mergedTranslations = { ...autoTranslations, ...(stored.translations || {}) };
+          setState({
+            entries: stored.entries,
+            translations: mergedTranslations,
+            protectedEntries: new Set(),
+            technicalBypass: new Set(),
+            isDemo: false,
+          });
+          // Remove freshExtraction flag for future loads
+          await idbSet("editorState", {
+            entries: stored.entries,
+            translations: mergedTranslations,
+          });
+          const autoCount = Object.keys(autoTranslations).length;
+          setLastSaved(`تم تحميل ${stored.entries.length} نص مستخرج` + (autoCount > 0 ? ` + اكتشاف ${autoCount} نص معرّب` : ''));
+          return;
+        }
+        
         // Count real translations (not auto-detected)
         const translationCount = Object.values(stored.translations || {}).filter(v => v?.trim()).length;
         if (translationCount > 0) {
@@ -388,7 +416,7 @@ export function useEditorState() {
           });
           return;
         }
-        // Entries exist but no translations yet (freshly extracted) — load them directly
+        // Entries exist but no translations yet — load them directly
         setState({
           entries: stored.entries,
           translations: stored.translations || {},
