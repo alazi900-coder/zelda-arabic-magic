@@ -249,10 +249,40 @@ export function useEditorState() {
       translations: stored.translations || {},
       protectedEntries: new Set(),
     });
-    const filteredStored: Record<string, string> = {};
-    for (const [k, v] of Object.entries(stored.translations || {})) {
-      if (validKeys.has(k)) filteredStored[k] = v;
+
+    // Build legacy key mapping for old sequential keys
+    const entriesByFile: Record<string, ExtractedEntry[]> = {};
+    for (const entry of stored.entries) {
+      const parts = entry.msbtFile.split(':');
+      const filename = parts.length >= 2 ? parts[1] : entry.msbtFile;
+      if (!entriesByFile[filename]) entriesByFile[filename] = [];
+      entriesByFile[filename].push(entry);
     }
+
+    const filteredStored: Record<string, string> = {};
+    let legacyConverted = 0;
+    for (const [k, v] of Object.entries(stored.translations || {})) {
+      if (validKeys.has(k)) {
+        filteredStored[k] = v;
+      } else {
+        // Try legacy key conversion: "bdat-bin:filename.bdat:NUMBER"
+        const parts = k.split(':');
+        if (parts.length === 3 && !isNaN(parseInt(parts[2], 10))) {
+          const filename = parts[1];
+          const idx = parseInt(parts[2], 10);
+          const fileEntries = entriesByFile[filename];
+          if (fileEntries && idx < fileEntries.length) {
+            const entry = fileEntries[idx];
+            const newKey = `${entry.msbtFile}:${entry.index}`;
+            if (!filteredStored[newKey]) {
+              filteredStored[newKey] = v;
+              legacyConverted++;
+            }
+          }
+        }
+      }
+    }
+
     const mergedTranslations = { ...autoTranslations, ...filteredStored };
     const protectedSet = new Set<string>(
       Array.isArray(stored.protectedEntries) ? (stored.protectedEntries as string[]) : []
@@ -296,8 +326,8 @@ export function useEditorState() {
       technicalBypass: bypassSet,
     };
 
-    // Save immediately if we auto-fixed anything
-    if (autoFixCount > 0) {
+    // Save immediately if we auto-fixed or converted legacy keys
+    if (autoFixCount > 0 || legacyConverted > 0) {
       await idbSet("editorState", {
         entries: finalState.entries,
         translations: finalState.translations,
@@ -306,13 +336,13 @@ export function useEditorState() {
       });
     }
 
-    return { finalState, autoTranslations, autoFixCount };
+    return { finalState, autoTranslations, autoFixCount, legacyConverted };
   }, [detectPreTranslated]);
 
   const handleRecoverSession = useCallback(async () => {
     const result = await loadSavedState();
     if (!result) return;
-    const { finalState, autoTranslations, autoFixCount } = result;
+    const { finalState, autoTranslations, autoFixCount, legacyConverted } = result;
     setState(finalState);
     setPendingRecovery(null);
 
@@ -320,6 +350,7 @@ export function useEditorState() {
     const parts: string[] = [];
     if (autoCount > 0) parts.push(`اكتشاف ${autoCount} نص معرّب مسبقاً`);
     if (autoFixCount > 0) parts.push(`🔧 إصلاح تلقائي لـ ${autoFixCount} رمز تالف`);
+    if (legacyConverted > 0) parts.push(`🔄 تحويل ${legacyConverted} مفتاح قديم`);
     setLastSaved(parts.length > 0 ? `تم التحميل + ${parts.join(' + ')}` : "تم التحميل من الحفظ السابق ✅");
   }, [loadSavedState]);
 
