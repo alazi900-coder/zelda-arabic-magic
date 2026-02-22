@@ -38,12 +38,122 @@ const CELL_HEIGHT = 57;
 const GLYPH_COUNT = GRID_COLS * GRID_ROWS; // 150
 
 /**
- * Calculate BC1/DXT1 compressed data size for given dimensions
+ * Calculate BC1/DXT1 compressed data size for given dimensions (linear)
  */
 function bc1DataSize(width: number, height: number): number {
   const blocksX = Math.ceil(width / 4);
   const blocksY = Math.ceil(height / 4);
   return blocksX * blocksY * 8; // 8 bytes per 4x4 block in BC1
+}
+
+/**
+ * Calculate the swizzled (block-linear) data size, which is padded to GOB/block boundaries
+ */
+function bc1SwizzledSize(width: number, height: number): number {
+  const bpp = 8; // bytes per BC1 block
+  const blocksX = Math.ceil(width / 4);
+  const blocksY = Math.ceil(height / 4);
+  const byteWidth = blocksX * bpp;
+  const gobsX = Math.ceil(byteWidth / 64);
+  const blockHeight = getBlockHeight(blocksY);
+  const gobsY = Math.ceil(blocksY / (8 * blockHeight));
+  return gobsX * gobsY * blockHeight * 512;
+}
+
+/** Round up to next power of 2 */
+function pow2RoundUp(v: number): number {
+  v--;
+  v |= v >> 1; v |= v >> 2; v |= v >> 4; v |= v >> 8; v |= v >> 16;
+  return v + 1;
+}
+
+/** Determine block_height in GOBs for a given height (in BC1 block rows) */
+function getBlockHeight(heightInBlocks: number): number {
+  let bh = pow2RoundUp(Math.ceil(heightInBlocks / 8));
+  if (bh > 16) bh = 16;
+  if (bh < 1) bh = 1;
+  return bh;
+}
+
+/**
+ * Tegra X1 Block Linear → Linear deswizzle for BC1 data.
+ * Operates on BC1 block coordinates (each "pixel" = 4x4 pixel block = 8 bytes).
+ */
+function deswizzleBlockLinear(
+  swizzledData: Uint8Array,
+  widthInBlocks: number,
+  heightInBlocks: number
+): Uint8Array {
+  const bpp = 8; // bytes per BC1 block
+  const byteWidth = widthInBlocks * bpp;
+  const gobsX = Math.ceil(byteWidth / 64);
+  const blockHeight = getBlockHeight(heightInBlocks);
+  const linearSize = widthInBlocks * heightInBlocks * bpp;
+  const linear = new Uint8Array(linearSize);
+
+  for (let y = 0; y < heightInBlocks; y++) {
+    for (let x = 0; x < widthInBlocks; x++) {
+      const linearOffset = (y * widthInBlocks + x) * bpp;
+      const swizzledOffset = getAddrBlockLinear(x, y, widthInBlocks, bpp, blockHeight, gobsX);
+      if (swizzledOffset + bpp <= swizzledData.length) {
+        linear.set(swizzledData.subarray(swizzledOffset, swizzledOffset + bpp), linearOffset);
+      }
+    }
+  }
+  return linear;
+}
+
+/**
+ * Linear → Tegra X1 Block Linear reswizzle for BC1 data.
+ */
+function swizzleBlockLinear(
+  linearData: Uint8Array,
+  widthInBlocks: number,
+  heightInBlocks: number
+): Uint8Array {
+  const bpp = 8;
+  const byteWidth = widthInBlocks * bpp;
+  const gobsX = Math.ceil(byteWidth / 64);
+  const blockHeight = getBlockHeight(heightInBlocks);
+  const gobsY = Math.ceil(heightInBlocks / (8 * blockHeight));
+  const swizzledSize = gobsX * gobsY * blockHeight * 512;
+  const swizzled = new Uint8Array(swizzledSize);
+
+  for (let y = 0; y < heightInBlocks; y++) {
+    for (let x = 0; x < widthInBlocks; x++) {
+      const linearOffset = (y * widthInBlocks + x) * bpp;
+      const swizzledOffset = getAddrBlockLinear(x, y, widthInBlocks, bpp, blockHeight, gobsX);
+      if (linearOffset + bpp <= linearData.length && swizzledOffset + bpp <= swizzled.length) {
+        swizzled.set(linearData.subarray(linearOffset, linearOffset + bpp), swizzledOffset);
+      }
+    }
+  }
+  return swizzled;
+}
+
+/**
+ * Tegra X1 TRM block linear address calculation.
+ * x, y are in "block" coordinates for BC1 (each block = 4x4 pixels).
+ */
+function getAddrBlockLinear(
+  x: number, y: number,
+  widthInBlocks: number, bpp: number,
+  blockHeight: number, gobsX: number
+): number {
+  const xByte = x * bpp;
+  const gobAddress =
+    Math.floor(y / (8 * blockHeight)) * 512 * blockHeight * gobsX +
+    Math.floor(xByte / 64) * 512 * blockHeight +
+    Math.floor((y % (8 * blockHeight)) / 8) * 512;
+  const xInGob = xByte % 64;
+  const yInGob = y % 8;
+  // GOB internal layout (Tegra X1 TRM)
+  const inGobOffset =
+    ((yInGob >> 1) << 7) | // bit4 of y → bit7
+    ((xInGob >> 5) << 6) | // bit5 of x → bit6
+    ((yInGob & 1) << 5) |  // bit0 of y → bit5
+    (xInGob & 0x1F);       // bits 0-4 of x → bits 0-4
+  return gobAddress + inGobOffset;
 }
 
 /**
@@ -66,11 +176,10 @@ export function analyzeWifnt(data: ArrayBuffer): WifntInfo {
     .map(b => b.toString(16).padStart(2, "0"))
     .join(" ");
 
-  // Calculate expected texture data size
-  const expectedTextureSize = bc1DataSize(ATLAS_WIDTH, ATLAS_HEIGHT);
+  // Calculate expected texture data size (swizzled, padded to block boundaries)
+  const expectedTextureSize = bc1SwizzledSize(ATLAS_WIDTH, ATLAS_HEIGHT);
   
   // Try to find where texture data starts by looking at file size
-  // textureDataOffset = fileSize - expectedTextureSize (approximately)
   const textureDataOffset = data.byteLength - expectedTextureSize;
   const headerSize = Math.max(0, textureDataOffset);
 
@@ -191,12 +300,16 @@ export function decodeWifntTexture(
   info: WifntInfo
 ): Uint8ClampedArray | null {
   try {
-    const compressed = new Uint8Array(
+    const swizzled = new Uint8Array(
       fileData,
       info.textureDataOffset,
       Math.min(info.textureDataSize, fileData.byteLength - info.textureDataOffset)
     );
-    const rgba = decodeDXT1(compressed, info.textureWidth, info.textureHeight);
+    // Deswizzle from Tegra X1 block linear to linear BC1 data
+    const blocksX = Math.ceil(info.textureWidth / 4);
+    const blocksY = Math.ceil(info.textureHeight / 4);
+    const linearBC1 = deswizzleBlockLinear(swizzled, blocksX, blocksY);
+    const rgba = decodeDXT1(linearBC1, info.textureWidth, info.textureHeight);
     return new Uint8ClampedArray(rgba.buffer);
   } catch {
     return null;
@@ -367,10 +480,14 @@ export function rebuildWifnt(
   info: WifntInfo,
   newPixels: Uint8Array | Uint8ClampedArray
 ): ArrayBuffer {
-  const newCompressed = encodeDXT1(newPixels, info.textureWidth, info.textureHeight);
+  const linearBC1 = encodeDXT1(newPixels, info.textureWidth, info.textureHeight);
+  // Reswizzle to Tegra X1 block linear layout
+  const blocksX = Math.ceil(info.textureWidth / 4);
+  const blocksY = Math.ceil(info.textureHeight / 4);
+  const swizzled = swizzleBlockLinear(linearBC1, blocksX, blocksY);
   const header = new Uint8Array(originalFile, 0, info.textureDataOffset);
-  const result = new Uint8Array(header.length + newCompressed.length);
+  const result = new Uint8Array(header.length + swizzled.length);
   result.set(header);
-  result.set(newCompressed, header.length);
+  result.set(swizzled, header.length);
   return result.buffer;
 }
