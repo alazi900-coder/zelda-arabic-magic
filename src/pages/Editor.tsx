@@ -257,7 +257,7 @@ const Editor = () => {
                       onClick={() => editor.setTranslationProvider('gemini')}
                       className="text-xs font-display"
                     >
-                      🤖 Gemini AI
+                      🤖 Lovable AI (Gemini)
                     </Button>
                   </div>
                 </div>
