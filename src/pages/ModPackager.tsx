@@ -4,12 +4,23 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, Info, Download, Loader2, MoveVertical } from "lucide-react";
+import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, Info, Download, Loader2, MoveVertical, Search } from "lucide-react";
+
+interface WifntAnalysis {
+  magic: string;
+  version: number;
+  glyphCount: number;
+  baseline: number;
+  headerSize: number;
+  dataOffset: number;
+  valid: boolean;
+}
 
 interface FontFile {
   name: string;
   data: ArrayBuffer;
   size: number;
+  analysis?: WifntAnalysis;
 }
 
 interface BdatFile {
@@ -28,6 +39,24 @@ export default function ModPackager() {
   const [bdatSubPath, setBdatSubPath] = useState("gb");
   const [baselineOffset, setBaselineOffset] = useState(0);
 
+  const analyzeWifnt = useCallback((data: ArrayBuffer): WifntAnalysis | undefined => {
+    if (data.byteLength < 0x20) return undefined;
+    try {
+      const view = new DataView(data);
+      const magicBytes = new Uint8Array(data, 0, 4);
+      const magic = String.fromCharCode(...magicBytes);
+      const version = view.getUint16(0x04, true);
+      const glyphCount = view.getUint16(0x08, true);
+      const baseline = view.getInt16(0x1A, true);
+      const headerSize = view.getUint16(0x06, true) || 0x20;
+      const dataOffset = view.getUint32(0x0C, true);
+      const valid = magic === "LAFT" || magic === "TFAL";
+      return { magic, version, glyphCount, baseline, headerSize, dataOffset, valid };
+    } catch {
+      return undefined;
+    }
+  }, []);
+
   const handleLoadBundledFont = useCallback(async () => {
     setLoadingBundledFont(true);
     setStatus("جارٍ تحميل خط اللعبة المدمج...");
@@ -35,7 +64,8 @@ export default function ModPackager() {
       const response = await fetch("/fonts/standard.wifnt");
       if (!response.ok) throw new Error("فشل تحميل الخط المدمج");
       const data = await response.arrayBuffer();
-      setFontFile({ name: "standard.wifnt", data, size: data.byteLength });
+      const analysis = analyzeWifnt(data);
+      setFontFile({ name: "standard.wifnt", data, size: data.byteLength, analysis });
       setStatus("✅ تم تحميل خط اللعبة بنجاح!");
       setTimeout(() => setStatus(""), 4000);
     } catch {
@@ -44,7 +74,7 @@ export default function ModPackager() {
     } finally {
       setLoadingBundledFont(false);
     }
-  }, []);
+  }, [analyzeWifnt]);
 
   const handleFontUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -52,7 +82,8 @@ export default function ModPackager() {
     const reader = new FileReader();
     reader.onload = () => {
       const data = reader.result as ArrayBuffer;
-      setFontFile({ name: file.name, data, size: data.byteLength });
+      const analysis = analyzeWifnt(data);
+      setFontFile({ name: file.name, data, size: data.byteLength, analysis });
     };
     reader.readAsArrayBuffer(file);
   }, []);
@@ -216,6 +247,50 @@ export default function ModPackager() {
                     </Button>
                   </div>
                 </div>
+
+                {/* WIFNT Analysis */}
+                {fontFile.analysis && (
+                  <div className="p-3 bg-muted/30 rounded-lg border space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Search className="w-4 h-4 text-primary" />
+                      <span className="text-sm font-semibold">تحليل بنية WIFNT</span>
+                      {fontFile.analysis.valid ? (
+                        <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">صالح ✓</span>
+                      ) : (
+                        <span className="text-xs bg-destructive/10 text-destructive px-2 py-0.5 rounded-full">تنسيق غير معروف</span>
+                      )}
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 text-xs" dir="ltr">
+                      <div className="bg-background/50 rounded p-2 border">
+                        <span className="text-muted-foreground block">Magic</span>
+                        <span className="font-mono font-bold text-foreground">{fontFile.analysis.magic}</span>
+                      </div>
+                      <div className="bg-background/50 rounded p-2 border">
+                        <span className="text-muted-foreground block">Version</span>
+                        <span className="font-mono font-bold text-foreground">{fontFile.analysis.version}</span>
+                      </div>
+                      <div className="bg-background/50 rounded p-2 border">
+                        <span className="text-muted-foreground block">Glyph Count</span>
+                        <span className="font-mono font-bold text-foreground">{fontFile.analysis.glyphCount.toLocaleString()}</span>
+                      </div>
+                      <div className="bg-background/50 rounded p-2 border">
+                        <span className="text-muted-foreground block">Baseline</span>
+                        <span className="font-mono font-bold text-primary">{fontFile.analysis.baseline}</span>
+                      </div>
+                      <div className="bg-background/50 rounded p-2 border">
+                        <span className="text-muted-foreground block">Header Size</span>
+                        <span className="font-mono font-bold text-foreground">0x{fontFile.analysis.headerSize.toString(16).toUpperCase()}</span>
+                      </div>
+                      <div className="bg-background/50 rounded p-2 border">
+                        <span className="text-muted-foreground block">Data Offset</span>
+                        <span className="font-mono font-bold text-foreground">0x{fontFile.analysis.dataOffset.toString(16).toUpperCase()}</span>
+                      </div>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      الحجم الكلي: <span className="font-mono">{formatSize(fontFile.size)}</span>
+                    </p>
+                  </div>
+                )}
 
                 {/* Baseline Offset Control */}
                 <div className="space-y-3 p-3 bg-muted/30 rounded-lg border">
