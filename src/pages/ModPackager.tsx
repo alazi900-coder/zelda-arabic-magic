@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, Info, Download, Loader2, MoveVertical, Search, Eye, Grid3X3, ImageDown, ImageUp, Replace, Trash2, Pencil } from "lucide-react";
+import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, Info, Download, Loader2, MoveVertical, Search, Eye, Grid3X3, ImageDown, ImageUp, Replace, Trash2, Pencil, AlignCenter } from "lucide-react";
 import { analyzeWifnt, decodeWifntTexture, renderAtlasToCanvas, rebuildWifnt, type WifntInfo } from "@/lib/wifnt-parser";
 import GlyphDrawingEditor from "@/components/editor/GlyphDrawingEditor";
 
@@ -216,6 +216,68 @@ export default function ModPackager() {
     setStatus(`✅ تم مسح الحرف #${selectedGlyph}`);
     setTimeout(() => setStatus(""), 4000);
   }, [fontFile, selectedGlyph, processFont]);
+
+  const handleCenterAllGlyphs = useCallback(() => {
+    if (!fontFile?.info || !atlasCanvasRef.current) return;
+    const info = fontFile.info;
+    const atlas = atlasCanvasRef.current;
+    const ctx = atlas.getContext("2d");
+    if (!ctx) return;
+    const totalGlyphs = info.gridCols * info.gridRows;
+    let centered = 0;
+
+    for (let idx = 0; idx < totalGlyphs; idx++) {
+      const col = idx % info.gridCols;
+      const row = Math.floor(idx / info.gridCols);
+      const sx = col * info.cellWidth;
+      const sy = row * info.cellHeight;
+      const cellData = ctx.getImageData(sx, sy, info.cellWidth, info.cellHeight);
+      const pixels = cellData.data;
+
+      // Find bounding box of non-transparent pixels
+      let minX = info.cellWidth, minY = info.cellHeight, maxX = -1, maxY = -1;
+      for (let y = 0; y < info.cellHeight; y++) {
+        for (let x = 0; x < info.cellWidth; x++) {
+          const a = pixels[(y * info.cellWidth + x) * 4 + 3];
+          if (a > 0) {
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+            if (y < minY) minY = y;
+            if (y > maxY) maxY = y;
+          }
+        }
+      }
+
+      // Skip empty cells
+      if (maxX < 0) continue;
+
+      const contentW = maxX - minX + 1;
+      const contentH = maxY - minY + 1;
+      const newX = Math.floor((info.cellWidth - contentW) / 2);
+      const newY = Math.floor((info.cellHeight - contentH) / 2);
+
+      // Skip if already centered
+      if (newX === minX && newY === minY) continue;
+
+      // Extract content, clear cell, paste centered
+      const contentData = ctx.getImageData(sx + minX, sy + minY, contentW, contentH);
+      ctx.clearRect(sx, sy, info.cellWidth, info.cellHeight);
+      ctx.putImageData(contentData, sx + newX, sy + newY);
+      centered++;
+    }
+
+    if (centered === 0) {
+      setStatus("ℹ️ جميع الأحرف متمركزة بالفعل");
+      setTimeout(() => setStatus(""), 4000);
+      return;
+    }
+
+    const fullImageData = ctx.getImageData(0, 0, info.textureWidth, info.textureHeight);
+    const newData = rebuildWifnt(fontFile.data, info, fullImageData.data);
+    processFont(newData, fontFile.name);
+    setStatus(`✅ تم توسيط ${centered} حرف بنجاح!`);
+    setTimeout(() => setStatus(""), 5000);
+  }, [fontFile, processFont]);
 
   const doBuild = useCallback(async () => {
     setBuilding(true);
@@ -616,17 +678,28 @@ export default function ModPackager() {
         {/* Glyph Map (full width) */}
         {showGlyphMap && fontFile?.info && (
           <Card className="p-5 space-y-3">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between flex-wrap gap-2">
               <h3 className="font-display font-bold flex items-center gap-2">
                 <Grid3X3 className="w-4 h-4 text-primary" />
                 خريطة الأحرف — {fontFile.info.glyphCount} حرف ({fontFile.info.gridCols}×{fontFile.info.gridRows})
               </h3>
-              {selectedGlyph !== null && (
-                <div className="flex items-center gap-2 text-xs bg-primary/10 text-primary px-3 py-1 rounded-full" dir="ltr">
-                  <span>Glyph #{selectedGlyph}</span>
-                  <span>Row {Math.floor(selectedGlyph / fontFile.info.gridCols)}, Col {selectedGlyph % fontFile.info.gridCols}</span>
-                </div>
-              )}
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-1.5 h-7 text-xs"
+                  onClick={handleCenterAllGlyphs}
+                >
+                  <AlignCenter className="w-3.5 h-3.5" />
+                  توسيط جميع الأحرف
+                </Button>
+                {selectedGlyph !== null && (
+                  <div className="flex items-center gap-2 text-xs bg-primary/10 text-primary px-3 py-1 rounded-full" dir="ltr">
+                    <span>Glyph #{selectedGlyph}</span>
+                    <span>Row {Math.floor(selectedGlyph / fontFile.info.gridCols)}, Col {selectedGlyph % fontFile.info.gridCols}</span>
+                  </div>
+                )}
+              </div>
             </div>
             <div className="bg-[#0a0a1a] rounded-lg p-2 overflow-x-auto border border-border/50">
               <canvas
