@@ -4,9 +4,10 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, Info, Download, Loader2, MoveVertical, Search, Eye, Grid3X3, ImageDown, ImageUp, Replace, Trash2, Pencil, AlignCenter } from "lucide-react";
+import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, Info, Download, Loader2, MoveVertical, Search, Eye, Grid3X3, ImageDown, ImageUp, Replace, Trash2, Pencil, AlignCenter, AlignHorizontalDistributeCenter, AlignVerticalDistributeCenter, ChevronDown } from "lucide-react";
 import { analyzeWifnt, decodeWifntTexture, renderAtlasToCanvas, rebuildWifnt, type WifntInfo } from "@/lib/wifnt-parser";
 import GlyphDrawingEditor from "@/components/editor/GlyphDrawingEditor";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 interface FontFile {
   name: string;
@@ -217,7 +218,7 @@ export default function ModPackager() {
     setTimeout(() => setStatus(""), 4000);
   }, [fontFile, selectedGlyph, processFont]);
 
-  const handleCenterAllGlyphs = useCallback(() => {
+  const handleCenterAllGlyphs = useCallback((mode: 'both' | 'horizontal' | 'vertical' = 'both') => {
     if (!fontFile?.info || !atlasCanvasRef.current) return;
     const info = fontFile.info;
     const atlas = atlasCanvasRef.current;
@@ -234,7 +235,6 @@ export default function ModPackager() {
       const cellData = ctx.getImageData(sx, sy, info.cellWidth, info.cellHeight);
       const pixels = cellData.data;
 
-      // Find bounding box of non-transparent pixels
       let minX = info.cellWidth, minY = info.cellHeight, maxX = -1, maxY = -1;
       for (let y = 0; y < info.cellHeight; y++) {
         for (let x = 0; x < info.cellWidth; x++) {
@@ -248,18 +248,15 @@ export default function ModPackager() {
         }
       }
 
-      // Skip empty cells
       if (maxX < 0) continue;
 
       const contentW = maxX - minX + 1;
       const contentH = maxY - minY + 1;
-      const newX = Math.floor((info.cellWidth - contentW) / 2);
-      const newY = Math.floor((info.cellHeight - contentH) / 2);
+      const newX = mode === 'vertical' ? minX : Math.floor((info.cellWidth - contentW) / 2);
+      const newY = mode === 'horizontal' ? minY : Math.floor((info.cellHeight - contentH) / 2);
 
-      // Skip if already centered
       if (newX === minX && newY === minY) continue;
 
-      // Extract content, clear cell, paste centered
       const contentData = ctx.getImageData(sx + minX, sy + minY, contentW, contentH);
       ctx.clearRect(sx, sy, info.cellWidth, info.cellHeight);
       ctx.putImageData(contentData, sx + newX, sy + newY);
@@ -275,7 +272,8 @@ export default function ModPackager() {
     const fullImageData = ctx.getImageData(0, 0, info.textureWidth, info.textureHeight);
     const newData = rebuildWifnt(fontFile.data, info, fullImageData.data);
     processFont(newData, fontFile.name);
-    setStatus(`✅ تم توسيط ${centered} حرف بنجاح!`);
+    const modeLabel = mode === 'horizontal' ? 'أفقياً' : mode === 'vertical' ? 'عمودياً' : 'بالكامل';
+    setStatus(`✅ تم توسيط ${centered} حرف ${modeLabel} بنجاح!`);
     setTimeout(() => setStatus(""), 5000);
   }, [fontFile, processFont]);
 
@@ -684,15 +682,29 @@ export default function ModPackager() {
                 خريطة الأحرف — {fontFile.info.glyphCount} حرف ({fontFile.info.gridCols}×{fontFile.info.gridRows})
               </h3>
               <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="gap-1.5 h-7 text-xs"
-                  onClick={handleCenterAllGlyphs}
-                >
-                  <AlignCenter className="w-3.5 h-3.5" />
-                  توسيط جميع الأحرف
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="gap-1.5 h-7 text-xs">
+                      <AlignCenter className="w-3.5 h-3.5" />
+                      توسيط الأحرف
+                      <ChevronDown className="w-3 h-3" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => handleCenterAllGlyphs('both')}>
+                      <AlignCenter className="w-3.5 h-3.5 ml-2" />
+                      توسيط كامل
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleCenterAllGlyphs('horizontal')}>
+                      <AlignHorizontalDistributeCenter className="w-3.5 h-3.5 ml-2" />
+                      توسيط أفقي فقط
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleCenterAllGlyphs('vertical')}>
+                      <AlignVerticalDistributeCenter className="w-3.5 h-3.5 ml-2" />
+                      توسيط عمودي فقط
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
                 {selectedGlyph !== null && (
                   <div className="flex items-center gap-2 text-xs bg-primary/10 text-primary px-3 py-1 rounded-full" dir="ltr">
                     <span>Glyph #{selectedGlyph}</span>
