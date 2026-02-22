@@ -189,7 +189,7 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
       let localBdatResults: { name: string; data: Uint8Array }[] = [];
       let localModifiedCount = 0;
       const newBdatFileStats: BdatFileStat[] = [];
-      const allOverflowErrors: { fileName: string; key: string; originalBytes: number; translationBytes: number }[] = [];
+      const allOverflowErrors: { fileName: string; key: string; originalBytes: number; translationBytes: number; reason?: string; newOffset?: number }[] = [];
 
       if (hasBdatBinary) {
         setBuildProgress("معالجة ملفات BDAT الثنائية محلياً...");
