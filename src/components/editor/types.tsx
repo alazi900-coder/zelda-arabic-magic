@@ -121,6 +121,7 @@ export const BDAT_CATEGORIES: FileCategory[] = [
   { id: "bdat-tips", label: "النصائح والشروحات", emoji: "💡", icon: "Lightbulb", color: "text-lime-400" },
   { id: "bdat-dlc", label: "المحتوى الإضافي (DLC)", emoji: "🎮", icon: "Gamepad2", color: "text-pink-400" },
   { id: "bdat-system", label: "إعدادات النظام", emoji: "⚙️", icon: "Settings", color: "text-slate-400" },
+  { id: "bdat-dialogue", label: "الحوارات والمشاهد", emoji: "🎬", icon: "Clapperboard", color: "text-purple-400" },
   { id: "bdat-message", label: "أرشيف الرسائل", emoji: "💬", icon: "MessageSquare", color: "text-teal-400" },
   { id: "bdat-gimmick", label: "الآليات والألغاز", emoji: "🔧", icon: "Wrench", color: "text-gray-400" },
   { id: "bdat-settings", label: "إعدادات الصوت والعرض", emoji: "🎚️", icon: "SlidersHorizontal", color: "text-fuchsia-400" },
@@ -220,6 +221,9 @@ export function categorizeByFilename(filename: string): string | null {
     if (f.includes(key)) return cat;
   }
   
+  // Dialogue files: msg_ev*, msg_fev*, msg_ask*, msg_bev*, msg_sev*
+  if (/^msg_(ev|fev|ask|bev|sev)\d/i.test(f)) return "bdat-dialogue";
+  
   return null;
 }
 
@@ -260,6 +264,8 @@ export function categorizeByTableName(tbl: string): string | null {
   if (/^msg_colony_/i.test(tbl)) return "bdat-field";
   if (/^msg_comspot_/i.test(tbl)) return "bdat-field";
   if (/^msg_extra_/i.test(tbl)) return "bdat-dlc";
+  // Dialogue / cutscene files: msg_ev*, msg_fev*, msg_ask*, msg_bev*
+  if (/^msg_(ev|fev|ask|bev|sev)\d/i.test(tbl)) return "bdat-dialogue";
   if (/^msg_/i.test(tbl)) return "bdat-message";
 
   // === المحتوى الإضافي ===
