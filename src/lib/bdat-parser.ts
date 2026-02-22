@@ -114,11 +114,15 @@ function parseTableHeader(data: Uint8Array, tableOffset: number): BdatTable['_ra
   const baseId = view.getUint16(0x10, true);
 
   // Detect header layout: u32 offsets (48-byte header) vs u16 offsets (40-byte header).
-  // If u16 at 0x1E (rowLength in u16 layout) is 0 but u32 at 0x18 is a reasonable value,
-  // it's the u32 layout used in newer XC3 BDAT files.
-  const testRowLength16 = view.getUint16(0x1E, true);
-  const testColDefsOffset32 = view.getUint32(0x18, true);
-  const isU32Layout = testRowLength16 === 0 && testColDefsOffset32 > 0 && testColDefsOffset32 < 0x10000;
+  // XC3 uses table version 0x3004 which always implies u32 layout.
+  // Fallback: heuristic check for ambiguous versions.
+  const tableVersion = view.getUint32(0x04, true);
+  const isU32Layout = tableVersion === 0x3004 || (() => {
+    // Heuristic fallback for non-0x3004 versions
+    const testRowLength16 = view.getUint16(0x1E, true);
+    const testColDefsOffset32 = view.getUint32(0x18, true);
+    return testRowLength16 === 0 && testColDefsOffset32 > 0 && testColDefsOffset32 < 0x10000;
+  })();
 
   let columnDefsOffset: number, hashTableOffset: number, rowDataOffset: number, rowLength: number, stringTableOffset: number, stringTableLength: number;
 
@@ -178,7 +182,9 @@ function parseColumns(tableData: Uint8Array, raw: BdatTable['_raw'], unhashFn: (
 
     let name: string;
     if (raw.hashedNames) {
-      const hashOffset = raw.hashTableOffset + nameRef * 4;
+      // nameRef is byte offset into string table (after flag byte).
+      // The hash (u32) is stored at stringTableOffset + 1 + nameRef (matching bdat-rs).
+      const hashOffset = raw.stringTableOffset + 1 + nameRef;
       if (hashOffset + 4 <= tableData.length) {
         const hash = view.getUint32(hashOffset, true);
         name = unhashFn(hash);
@@ -301,10 +307,8 @@ function getTableName(tableData: Uint8Array, raw: BdatTable['_raw'], tableIndex:
   const view = new DataView(tableData.buffer, tableData.byteOffset);
   
   if (raw.hashedNames && raw.stringTableLength > 0) {
-    // Table name hash is the first entry in the hash table (before column hashes)
-    // Actually, the table name is typically at a fixed position
-    // In XC3 modern format, table name is hashed and stored at string table offset + 1
-    const hashOffset = raw.stringTableOffset + 1;
+    // Table name hash is at stringTableOffset + 2 (flag byte + 1 padding byte), matching bdat-rs.
+    const hashOffset = raw.stringTableOffset + 2;
     if (hashOffset + 4 <= tableData.length) {
       const hash = view.getUint32(hashOffset, true);
       return { name: unhashFn(hash), hash };
