@@ -878,6 +878,99 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     input.click();
   };
 
+  /** Convert legacy sequential keys (bdat-bin:file.bdat:N) to new structural keys */
+  const convertLegacyKeys = (imported: Record<string, string>, entries: ExtractedEntry[]): { converted: Record<string, string>; convertedCount: number; skippedCount: number } => {
+    // Group entries by source filename
+    const entriesByFile: Record<string, ExtractedEntry[]> = {};
+    for (const entry of entries) {
+      // Extract filename from the structural key: "bdat-bin:FILE.bdat:Table:row:col:0"
+      const parts = entry.msbtFile.split(':');
+      const filename = parts.length >= 2 ? parts[1] : entry.msbtFile;
+      if (!entriesByFile[filename]) entriesByFile[filename] = [];
+      entriesByFile[filename].push(entry);
+    }
+
+    const converted: Record<string, string> = {};
+    let convertedCount = 0;
+    let skippedCount = 0;
+
+    for (const [key, value] of Object.entries(imported)) {
+      const parts = key.split(':');
+      // Legacy key pattern: "bdat-bin:filename.bdat:NUMBER" (3 parts, last is integer)
+      if (parts.length === 3 && !isNaN(parseInt(parts[2], 10))) {
+        const filename = parts[1];
+        const index = parseInt(parts[2], 10);
+        const fileEntries = entriesByFile[filename];
+        if (fileEntries && index < fileEntries.length) {
+          const entry = fileEntries[index];
+          const newKey = `${entry.msbtFile}:${entry.index}`;
+          converted[newKey] = value;
+          convertedCount++;
+        } else {
+          skippedCount++;
+        }
+      } else {
+        // Not a legacy key — pass through as-is
+        converted[key] = value;
+      }
+    }
+
+    return { converted, convertedCount, skippedCount };
+  };
+
+  /** Import old-format JSON with legacy sequential keys */
+  const handleImportLegacyJson = () => {
+    if (!state || state.entries.length === 0) {
+      alert('⚠️ لا توجد مدخلات محملة! ارفع ملفات BDAT أولاً من صفحة المعالجة.');
+      return;
+    }
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json,application/json,text/plain,.txt,*/*';
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+      try {
+        const rawText = (await file.text()).trim();
+        const repaired = repairJson(rawText);
+        const imported = repaired.parsed;
+        const totalInFile = Object.keys(imported).length;
+        if (totalInFile === 0) {
+          alert('⚠️ الملف فارغ أو لا يحتوي على ترجمات صالحة.');
+          return;
+        }
+
+        const { converted, convertedCount, skippedCount } = convertLegacyKeys(imported, state.entries);
+
+        if (convertedCount === 0) {
+          alert(`⚠️ لم يتم تحويل أي مفتاح قديم!\n\nتأكد أن الملف يستخدم التنسيق القديم مثل:\n"bdat-bin:filename.bdat:0": "ترجمة"\n\nوأن ملفات BDAT المرفوعة تطابق الملف المستورد.`);
+          return;
+        }
+
+        // Clean presentation forms
+        const cleaned: Record<string, string> = {};
+        for (const [key, value] of Object.entries(converted)) {
+          cleaned[key] = normalizeArabicPresentationForms(value);
+        }
+
+        setState(prev => {
+          if (!prev) return null;
+          return { ...prev, translations: { ...prev.translations, ...cleaned } };
+        });
+
+        let msg = `✅ تم تحويل واستيراد ${convertedCount} ترجمة من التنسيق القديم — ${file.name}`;
+        if (skippedCount > 0) msg += ` (${skippedCount} مفتاح لم يُطابق)`;
+        if (repaired.wasTruncated) msg += ` ⚠️ ملف مقطوع`;
+        setLastSaved(msg);
+        setTimeout(() => setLastSaved(""), 5000);
+      } catch (err) {
+        console.error('Legacy JSON import error:', err);
+        alert(`ملف JSON غير صالح\n\nالخطأ: ${err instanceof Error ? err.message : err}`);
+      }
+    };
+    input.click();
+  };
+
   return {
     handleExportTranslations,
     handleExportEnglishOnly,
@@ -892,6 +985,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     handleExportTMX,
     handleImportXLIFF,
     handleImportTMX,
+    handleImportLegacyJson,
     normalizeArabicPresentationForms,
     isFilterActive,
     filterLabel,
