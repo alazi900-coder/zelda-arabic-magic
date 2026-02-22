@@ -1,71 +1,42 @@
 
+# استبدال `bdat-writer.ts` بالنسخة المحسّنة من Manos
 
-## إضافة زر "استيراد JSON قديم" في المحرر
+## ملخص التحسينات
 
-### المشكلة
-ملفات الترجمة القديمة تستخدم مفاتيح تسلسلية مثل:
-```text
-"bdat-bin:SYS_CharacterName.bdat:0": "نوح"
-"bdat-bin:SYS_CharacterName.bdat:1": "ميو"
-```
+الملف المحسّن يعالج 4 مشاكل حقيقية في الكود الحالي:
 
-النظام الحالي يستخدم مفاتيح هيكلية:
-```text
-"bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:0:name:0": "نوح"
-```
+| المشكلة | الحل في النسخة الجديدة |
+|---------|------------------------|
+| MessageId u16 overflow (مؤشرات تتجاوز 65,535) | كشف مسبق + ضغط جدول النصوص (MessageId strings first) |
+| تعارض النصوص المشتركة (صفوف مختلفة → نفس النص → ترجمات مختلفة) | تتبع per-cell بدل per-offset، إنشاء نسخ منفصلة |
+| overflowErrors فارغة دائماً | تقارير مفصلة مع السبب (u16_offset_overflow / bounds_exceeded / write_error) |
+| كتابة بدون فحص حدود | دوال safeSetUint16/safeSetUint32 مع فحص bounds |
 
-عند استيراد ملف قديم بالطريقة العادية، لا يتطابق أي مفتاح فيُرفض الملف.
+## خطة التنفيذ
 
-### الحل
-إضافة زر استيراد مخصص يحوّل المفاتيح القديمة تلقائياً إلى الجديدة.
+### 1. استبدال `src/lib/bdat-writer.ts`
+- نسخ الملف المرفوع `bdat-writer-improved.ts` بالكامل ليحل محل الملف الحالي
+- الملف يحافظ على نفس الـ API: `patchBdatFile()` و `rebuildBdatFile()` (legacy)
+- التغييرات في `PatchResult`: إضافة حقل `tableStats` جديد (لا يكسر الكود الحالي لأنه حقل إضافي)
 
-### التغييرات
+### 2. تحديث `src/hooks/useEditorBuild.ts`
+- استخدام `tableStats` الجديد لعرض تفاصيل أفضل في سجل البناء (حجم جدول النصوص قبل/بعد، وجود أعمدة u16)
+- عرض تحذيرات u16 overflow في واجهة المستخدم
 
-**1. ملف `src/hooks/useEditorFileIO.ts`**
+### 3. تحديث `OverflowError` في المستدعين
+- الحقل `reason` الجديد (`'u16_offset_overflow' | 'bounds_exceeded' | 'write_error'`) يحتاج تحديث عرض الأخطاء في `BdatBuildReport.tsx` إن وُجد
 
-- إضافة دالة `convertLegacyKeys(imported, entries)`:
-  - تكشف المفاتيح القديمة (3 أجزاء مفصولة بنقطتين، الجزء الأخير رقم صحيح)
-  - تجمّع المدخلات الحالية حسب اسم الملف المصدر
-  - تطابق الفهرس التسلسلي القديم مع المدخلة المقابلة بالترتيب
-  - تُرجع كائن ترجمات بالمفاتيح الجديدة
+## التفاصيل التقنية
 
-- إضافة دالة `handleImportLegacyJson()`:
-  - تفتح منتقي ملفات JSON
-  - تقرأ الملف وتصلحه بـ `repairJson`
-  - تستدعي `convertLegacyKeys` للتحويل
-  - تطبّق الترجمات المحوّلة على المحرر عبر `setState`
-  - تعرض رسالة نجاح بعدد المفاتيح المحوّلة
+### التغييرات الهيكلية الرئيسية في الـ writer:
 
-- تصدير `handleImportLegacyJson` من الـ hook
+1. **Per-cell tracking**: بدل تجميع الخلايا بالـ offset فقط، يتم تتبع كل خلية مع ترجمتها المحددة. إذا صفين يشيرون لنفس النص الأصلي لكن بترجمات مختلفة، يُنشأ نسختان منفصلتان في جدول النصوص.
 
-**2. ملف `src/pages/Editor.tsx`**
+2. **u16 compaction**: عند اكتشاف تجاوز u16، يعاد ترتيب جدول النصوص لوضع النصوص المرتبطة بأعمدة MessageId أولاً (offsets أصغر). إذا نجح الضغط، تُزال أخطاء الـ overflow.
 
-- إضافة زر "استيراد JSON قديم" في قائمة الاستيراد (في نسختي الموبايل والديسكتوب) بعد أزرار الاستيراد الحالية (سطر 695 وسطر 763)
-- الزر يستدعي `editor.handleImportLegacyJson`
+3. **Safe writes**: كل عملية كتابة تمر عبر `safeSetUint16`/`safeSetUint32` مع فحص الحدود.
 
-### التفاصيل التقنية
-
-منطق كشف المفاتيح القديمة:
-```text
-مفتاح قديم: "bdat-bin:filename.bdat:5"
-  -> split(":") = ["bdat-bin", "filename.bdat", "5"]
-  -> 3 أجزاء، parseInt("5") ليس NaN = قديم
-
-مفتاح جديد: "bdat-bin:filename.bdat:TableName:0:colName:0"
-  -> 6 أجزاء = جديد
-```
-
-منطق التحويل:
-```text
-1. تجميع entries حسب اسم الملف:
-   استخراج filename من msbtFile (الجزء الثاني من المفتاح الهيكلي)
-   مثلاً: "bdat-bin:test.bdat:Table:0:col:0" -> filename = "test.bdat"
-
-2. لكل مفتاح قديم "bdat-bin:test.bdat:2":
-   -> filename = "test.bdat"
-   -> index = 2
-   -> entries من "test.bdat" مرتبة حسب ظهورها
-   -> المدخلة رقم 2 = entries[filename][2]
-   -> المفتاح الجديد = entries[2].msbtFile + ":" + entries[2].index
-```
-
+### الملفات المتأثرة:
+- `src/lib/bdat-writer.ts` — استبدال كامل
+- `src/hooks/useEditorBuild.ts` — تحديث طفيف لاستخدام `tableStats`
+- الاختبارات الحالية (`bdat-roundtrip-nochange.test.ts`, `bdat-expansion.test.ts`) ستعمل بدون تعديل لأن الـ API متوافق
