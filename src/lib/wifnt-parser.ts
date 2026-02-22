@@ -189,40 +189,49 @@ export function analyzeWifnt(data: ArrayBuffer): WifntInfo {
     textureHeight = miblFooter.height;
     imageFormat = miblFooter.imageFormat;
     
+    const bpp = getBpp(imageFormat);
+    const bc = isBlockCompressed(imageFormat);
+    textureDataSize = swizzledSize(textureWidth, textureHeight, bpp, bc);
+    
+    // Try reading texture offset directly from LAFT header (byte 36) and texture size (byte 40)
+    const view = new DataView(data);
+    let laftTextureOffset = 0;
+    let laftTextureSize = 0;
+    if (data.byteLength >= 44) {
+      laftTextureOffset = view.getUint32(36, true);
+      laftTextureSize = view.getUint32(40, true);
+    }
+    
+    if (laftTextureOffset > 0 && laftTextureOffset < data.byteLength && laftTextureSize > 0) {
+      // Use values from LAFT header directly
+      textureDataOffset = laftTextureOffset;
+      textureDataSize = laftTextureSize;
+    } else {
+      // Fallback: compute from Mibl footer
+      const alignedSize = Math.ceil(textureDataSize / 4096) * 4096;
+      const padding = alignedSize - textureDataSize;
+      const miblTotalSize = padding >= MIBL_FOOTER_SIZE ? alignedSize : alignedSize + 4096;
+      textureDataOffset = data.byteLength - miblTotalSize;
+      if (textureDataOffset < 0) {
+        textureDataOffset = data.byteLength - miblFooter.imageSize;
+      }
+      if (textureDataOffset % 4096 !== 0 && textureDataOffset > 0) {
+        textureDataOffset = Math.floor(textureDataOffset / 4096) * 4096;
+      }
+    }
+    
     console.log('[WIFNT Diagnostic] Mibl Footer:', {
       imageFormat,
       formatName: getFormatName(imageFormat),
       width: textureWidth,
       height: textureHeight,
       imageSize: miblFooter.imageSize,
-      unk: miblFooter.unk,
+      laftTextureOffset,
+      laftTextureSize,
+      computedTextureDataOffset: textureDataOffset,
+      computedTextureDataSize: textureDataSize,
       fileSize: data.byteLength,
     });
-    
-    const bpp = getBpp(imageFormat);
-    const bc = isBlockCompressed(imageFormat);
-    
-    // The swizzled data size
-    textureDataSize = swizzledSize(textureWidth, textureHeight, bpp, bc);
-    
-    // The Mibl section: image data is at the beginning, footer at the end
-    // footer.imageSize is the aligned (4096) size
-    // The Mibl section spans from some offset to end of file
-    // Mibl total = max(imageSize, swizzledSize aligned to 4096) + possible extra page for footer
-    const alignedSize = Math.ceil(textureDataSize / 4096) * 4096;
-    const padding = alignedSize - textureDataSize;
-    const miblTotalSize = padding >= MIBL_FOOTER_SIZE ? alignedSize : alignedSize + 4096;
-    
-    textureDataOffset = data.byteLength - miblTotalSize;
-    if (textureDataOffset < 0) {
-      // Fallback: use imageSize from footer
-      textureDataOffset = data.byteLength - miblFooter.imageSize;
-    }
-    // Ensure 4096 alignment
-    if (textureDataOffset % 4096 !== 0 && textureDataOffset > 0) {
-      // Try to find the nearest 4096-aligned offset
-      textureDataOffset = Math.floor(textureDataOffset / 4096) * 4096;
-    }
   } else {
     // Fallback: hardcoded values for XC3
     textureWidth = 2800;
@@ -322,6 +331,10 @@ function readFontSettings(data: ArrayBuffer): {
 
 /**
  * Tegra X1 Block Linear address calculation.
+ * Reference: KillzXGaming/Switch-Toolbox (ported from AboodXD's BNTX Extractor)
+ * 
+ * In-GOB bit layout (9 bits = 512 bytes per GOB):
+ *   [bit 8: x5] [bits 7-6: y2-y1] [bit 5: x4] [bit 4: y0] [bits 3-0: x3-x0]
  */
 function getAddrBlockLinear(
   x: number, y: number,
@@ -333,13 +346,16 @@ function getAddrBlockLinear(
     Math.floor(y / (8 * blockHeight)) * 512 * blockHeight * gobsX +
     Math.floor(xByte / 64) * 512 * blockHeight +
     Math.floor((y % (8 * blockHeight)) / 8) * 512;
-  const xInGob = xByte % 64;
-  const yInGob = y % 8;
+  
+  // Correct in-GOB offset per Tegra X1 TRM
+  const xb = xByte;
   const inGobOffset =
-    ((yInGob >> 1) << 7) |
-    ((xInGob >> 5) << 6) |
-    ((yInGob & 1) << 5) |
-    (xInGob & 0x1F);
+    (Math.floor((xb % 64) / 32) * 256) +
+    (Math.floor((y % 8) / 2) * 64) +
+    (Math.floor((xb % 32) / 16) * 32) +
+    ((y % 2) * 16) +
+    (xb % 16);
+  
   return gobAddress + inGobOffset;
 }
 
