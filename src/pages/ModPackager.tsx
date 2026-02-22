@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, Info, Download, Loader2, MoveVertical, Search } from "lucide-react";
+import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, Info, Download, Loader2, MoveVertical, Search, Eye } from "lucide-react";
 
 interface WifntAnalysis {
   magic: string;
@@ -332,6 +332,37 @@ export default function ModPackager() {
                       </Button>
                     </div>
                   )}
+                </div>
+
+                {/* Live Baseline Preview */}
+                <div className="p-3 bg-muted/30 rounded-lg border space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Eye className="w-4 h-4 text-primary" />
+                    <span className="text-sm font-semibold">معاينة تأثير الإزاحة</span>
+                  </div>
+                  <div className="bg-[#1a1a2e] rounded-lg p-1 overflow-hidden border border-border/50">
+                    <div className="relative bg-[#0f0f23] rounded p-4 min-h-[100px] flex flex-col justify-center items-center gap-3">
+                      <div className="absolute inset-x-4 top-1/2 border-t border-dashed border-primary/20" />
+                      <p className="text-[10px] text-primary/40 absolute top-1 left-2 font-mono select-none">baseline ref</p>
+                      <div style={{ transform: `translateY(${-baselineOffset}px)`, transition: "transform 0.2s ease" }}>
+                        <p className="text-white text-lg text-center font-bold" style={{ fontFamily: "'Noto Kufi Arabic', 'Noto Sans Arabic', sans-serif" }}>
+                          مغامرة زينوبليد
+                        </p>
+                        <p className="text-white/70 text-sm text-center mt-1" style={{ fontFamily: "'Noto Kufi Arabic', 'Noto Sans Arabic', sans-serif" }}>
+                          اضغط أي زر للمتابعة
+                        </p>
+                      </div>
+                      {baselineOffset !== 0 && (
+                        <div className="absolute right-2 top-1/2 flex flex-col items-center" style={{ transform: "translateY(-50%)" }}>
+                          <div className="w-px bg-primary/60" style={{ height: `${Math.abs(baselineOffset) * 2}px` }} />
+                          <span className="text-[10px] text-primary font-mono mt-0.5">{baselineOffset > 0 ? "↑" : "↓"}{Math.abs(baselineOffset)}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground text-center">
+                    محاكاة بصرية — الخط الفعلي سيظهر داخل اللعبة فقط
+                  </p>
                 </div>
 
               </div>
