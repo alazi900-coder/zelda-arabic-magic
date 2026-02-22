@@ -4,8 +4,8 @@
  * Extracted from types.tsx for cleaner architecture.
  */
 
-const TAG_REGEX = /[\uFFF9-\uFFFC\uE000-\uE0FF]/g;
-const TAG_TEST = /[\uFFF9-\uFFFC\uE000-\uE0FF]/;
+const TAG_REGEX = /[\uFFF9-\uFFFC\uE000-\uE0FF]|\[\w+:[^\]]*\]/g;
+const TAG_TEST = /[\uFFF9-\uFFFC\uE000-\uE0FF]|\[\w+:[^\]]*\]/;
 
 /**
  * Locally restore missing control characters from original into translation

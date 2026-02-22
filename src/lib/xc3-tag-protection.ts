@@ -34,7 +34,7 @@ const ABBREV_PATTERN = new RegExp(
 // Patterns to match technical tags in order of priority
 const TAG_PATTERNS: RegExp[] = [
   /[\uE000-\uE0FF]+/g,                     // PUA icons (consecutive = atomic block)
-  /\[[\w]+(?::[\w\u3000-\u9FFF]*)*\]/g,    // [Tag:Value] format tags
+  /\[\w+:[^\]]*\]/g,                        // [Tag:Value] format tags including spaces (e.g. [ML:undisp ], [ML:Feeling ])
   /\{[\w]+\}/g,                             // {variable} placeholders
   /[\uFFF9-\uFFFC]/g,                       // Unicode special markers
   /<[\w\/][^>]*>/g,                         // HTML-like tags

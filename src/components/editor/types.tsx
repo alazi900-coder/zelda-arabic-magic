@@ -342,9 +342,9 @@ export function categorizeByColumnName(columnName: string): string | null {
   return null;
 }
 
-// Check if text contains technical tag markers
+// Check if text contains technical tag markers (PUA, control chars, or [Tag:...] format)
 export function hasTechnicalTags(text: string): boolean {
-  return /[\uFFF9\uFFFA\uFFFB\uFFFC\uE000-\uE0FF]/.test(text);
+  return /[\uFFF9\uFFFA\uFFFB\uFFFC\uE000-\uE0FF]/.test(text) || /\[\w+:[^\]]*\]/.test(text);
 }
 
 // Re-export from dedicated module for backward compatibility
@@ -352,14 +352,38 @@ export { restoreTagsLocally, previewTagRestore } from "@/lib/xc3-tag-restoration
 
 // Sanitize original text: replace binary tag markers with color-coded, tooltipped badges
 export function displayOriginal(text: string): React.ReactNode {
-  const regex = /([\uFFF9\uFFFA\uFFFB\uFFFC\uE000-\uE0FF\u0000-\u0008\u000E-\u001F]+)/g;
+  // Split on PUA, control chars, AND [Tag:...] patterns
+  const regex = /([\uFFF9\uFFFA\uFFFB\uFFFC\uE000-\uE0FF\u0000-\u0008\u000E-\u001F]+|\[\w+:[^\]]*\])/g;
   const parts = text.split(regex);
   if (parts.length === 1 && !regex.test(text)) return text;
   const elements: React.ReactNode[] = [];
   let keyIdx = 0;
+  let mlCounter = 0;
   for (const part of parts) {
     if (!part) continue;
     const firstCode = part.charCodeAt(0);
+
+    // [Tag:Value] format tags (e.g. [ML:undisp ], [ML:Feeling ])
+    if (/^\[\w+:[^\]]*\]$/.test(part)) {
+      mlCounter++;
+      const tagContent = part.slice(1, -1); // Remove brackets
+      const tagType = tagContent.split(':')[0]; // e.g. "ML"
+      elements.push(
+        <Tooltip key={keyIdx++}>
+          <TooltipTrigger asChild>
+            <span className="inline-block px-1 rounded border text-xs cursor-help mx-0.5 bg-purple-500/20 text-purple-400 border-purple-500/30">
+              [{tagType}]{mlCounter > 0 ? mlCounter : ''}
+            </span>
+          </TooltipTrigger>
+          <TooltipContent side="top" className="max-w-xs text-xs">
+            <div className="font-mono text-[10px] opacity-70">{part}</div>
+            <div>وسم محرك اللعبة — لا تحذفه أو تعدّله</div>
+          </TooltipContent>
+        </Tooltip>
+      );
+      continue;
+    }
+
     // PUA markers (E000-E0FF) — render each one as an individual numbered badge
     if (firstCode >= 0xE000 && firstCode <= 0xE0FF) {
       for (let ci = 0; ci < part.length; ci++) {
@@ -444,6 +468,9 @@ export function isTechnicalText(text: string): boolean {
   if (/[\\/][\w\-]+[\\/]/i.test(text)) return true;
   if (text.length < 10 && /[{}()\[\]<>|&%$#@!]/.test(text)) return true;
   if (/^[a-z]+([A-Z][a-z]*)+$|^[a-z]+(_[a-z]+)+$/.test(text.trim())) return true;
+  // Text that is ONLY [ML:...] tags with no real translatable content
+  const strippedML = text.replace(/\[\w+:[^\]]*\]/g, '').trim();
+  if (strippedML.length === 0 && /\[\w+:[^\]]*\]/.test(text)) return true;
   return false;
 }
 
