@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, Info, Download, Loader2, MoveVertical, Search, Eye, Grid3X3, ImageDown, ImageUp, Replace, Trash2, Pencil, AlignCenter, AlignHorizontalDistributeCenter, AlignVerticalDistributeCenter, ChevronDown } from "lucide-react";
+import { ArrowRight, ArrowUp, ArrowDown, ArrowLeft, Package, Upload, FileType, FolderArchive, CheckCircle2, Info, Download, Loader2, MoveVertical, Search, Eye, Grid3X3, ImageDown, ImageUp, Replace, Trash2, Pencil, AlignCenter, AlignHorizontalDistributeCenter, AlignVerticalDistributeCenter, ChevronDown, Crosshair } from "lucide-react";
 import { analyzeWifnt, decodeWifntTexture, renderAtlasToCanvas, rebuildWifnt, type WifntInfo } from "@/lib/wifnt-parser";
 import GlyphDrawingEditor from "@/components/editor/GlyphDrawingEditor";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -216,6 +216,63 @@ export default function ModPackager() {
     processFont(newData, fontFile.name);
     setStatus(`✅ تم مسح الحرف #${selectedGlyph}`);
     setTimeout(() => setStatus(""), 4000);
+  }, [fontFile, selectedGlyph, processFont]);
+
+  const handleCenterSingleGlyph = useCallback((mode: 'both' | 'horizontal' | 'vertical' = 'both') => {
+    if (!fontFile?.info || selectedGlyph === null || !atlasCanvasRef.current) return;
+    const info = fontFile.info;
+    const atlas = atlasCanvasRef.current;
+    const ctx = atlas.getContext("2d");
+    if (!ctx) return;
+    const col = selectedGlyph % info.gridCols;
+    const row = Math.floor(selectedGlyph / info.gridCols);
+    const sx = col * info.cellWidth;
+    const sy = row * info.cellHeight;
+    const cellData = ctx.getImageData(sx, sy, info.cellWidth, info.cellHeight);
+    const pixels = cellData.data;
+    let minX = info.cellWidth, minY = info.cellHeight, maxX = -1, maxY = -1;
+    for (let y = 0; y < info.cellHeight; y++) {
+      for (let x = 0; x < info.cellWidth; x++) {
+        if (pixels[(y * info.cellWidth + x) * 4 + 3] > 0) {
+          if (x < minX) minX = x;
+          if (x > maxX) maxX = x;
+          if (y < minY) minY = y;
+          if (y > maxY) maxY = y;
+        }
+      }
+    }
+    if (maxX < 0) { setStatus("ℹ️ الحرف فارغ"); setTimeout(() => setStatus(""), 3000); return; }
+    const contentW = maxX - minX + 1;
+    const contentH = maxY - minY + 1;
+    const newX = mode === 'vertical' ? minX : Math.floor((info.cellWidth - contentW) / 2);
+    const newY = mode === 'horizontal' ? minY : Math.floor((info.cellHeight - contentH) / 2);
+    if (newX === minX && newY === minY) { setStatus("ℹ️ الحرف متمركز بالفعل"); setTimeout(() => setStatus(""), 3000); return; }
+    const contentData = ctx.getImageData(sx + minX, sy + minY, contentW, contentH);
+    ctx.clearRect(sx, sy, info.cellWidth, info.cellHeight);
+    ctx.putImageData(contentData, sx + newX, sy + newY);
+    const fullImageData = ctx.getImageData(0, 0, info.textureWidth, info.textureHeight);
+    const newData = rebuildWifnt(fontFile.data, info, fullImageData.data);
+    processFont(newData, fontFile.name);
+    setStatus(`✅ تم توسيط الحرف #${selectedGlyph}`);
+    setTimeout(() => setStatus(""), 4000);
+  }, [fontFile, selectedGlyph, processFont]);
+
+  const handleNudgeGlyph = useCallback((dx: number, dy: number) => {
+    if (!fontFile?.info || selectedGlyph === null || !atlasCanvasRef.current) return;
+    const info = fontFile.info;
+    const atlas = atlasCanvasRef.current;
+    const ctx = atlas.getContext("2d");
+    if (!ctx) return;
+    const col = selectedGlyph % info.gridCols;
+    const row = Math.floor(selectedGlyph / info.gridCols);
+    const sx = col * info.cellWidth;
+    const sy = row * info.cellHeight;
+    const cellData = ctx.getImageData(sx, sy, info.cellWidth, info.cellHeight);
+    ctx.clearRect(sx, sy, info.cellWidth, info.cellHeight);
+    ctx.putImageData(cellData, sx + dx, sy + dy);
+    const fullImageData = ctx.getImageData(0, 0, info.textureWidth, info.textureHeight);
+    const newData = rebuildWifnt(fontFile.data, info, fullImageData.data);
+    processFont(newData, fontFile.name);
   }, [fontFile, selectedGlyph, processFont]);
 
   const handleCenterAllGlyphs = useCallback((mode: 'both' | 'horizontal' | 'vertical' = 'both') => {
@@ -774,6 +831,29 @@ export default function ModPackager() {
                       <Trash2 className="w-3.5 h-3.5" />
                       مسح الحرف
                     </Button>
+                  </div>
+                  {/* Centering & Nudge Controls */}
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <Button variant="outline" size="sm" className="gap-1 text-xs" onClick={() => handleCenterSingleGlyph('both')}>
+                      <Crosshair className="w-3.5 h-3.5" />
+                      توسيط
+                    </Button>
+                    <div className="flex items-center gap-0.5 bg-muted rounded-md p-0.5">
+                      <Button variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={() => handleNudgeGlyph(-1, 0)} title="يسار">
+                        <ArrowLeft className="w-3.5 h-3.5" />
+                      </Button>
+                      <div className="flex flex-col gap-0.5">
+                        <Button variant="ghost" size="sm" className="h-6 w-7 p-0" onClick={() => handleNudgeGlyph(0, -1)} title="أعلى">
+                          <ArrowUp className="w-3.5 h-3.5" />
+                        </Button>
+                        <Button variant="ghost" size="sm" className="h-6 w-7 p-0" onClick={() => handleNudgeGlyph(0, 1)} title="أسفل">
+                          <ArrowDown className="w-3.5 h-3.5" />
+                        </Button>
+                      </div>
+                      <Button variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={() => handleNudgeGlyph(1, 0)} title="يمين">
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
