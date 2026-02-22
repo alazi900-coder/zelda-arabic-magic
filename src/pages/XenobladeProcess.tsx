@@ -440,7 +440,34 @@ const XenobladeProcess = () => {
               <p className="text-xs text-muted-foreground">جداول محوّلة</p>
             </div>
           </div>
-          <p className="text-sm text-muted-foreground mt-4">اسحب وأفلت أو اختر ملفات .msbt و .bdat و .json</p>
+          <div className="flex flex-wrap items-center justify-center gap-3 mt-4">
+            <label className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 border border-primary/30 text-sm font-display font-semibold cursor-pointer hover:bg-primary/20 transition-colors ${isProcessing ? 'opacity-50 pointer-events-none' : ''}`}>
+              <Upload className="w-4 h-4" />
+              اختيار ملفات
+              <input
+                type="file"
+                accept=".msbt,.json,.bdat"
+                multiple
+                className="hidden"
+                onChange={e => handleFileSelect(e.target.files)}
+                disabled={isProcessing}
+              />
+            </label>
+            <label className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary/10 border border-secondary/30 text-sm font-display font-semibold cursor-pointer hover:bg-secondary/20 transition-colors ${isProcessing ? 'opacity-50 pointer-events-none' : ''}`}>
+              <ChevronRight className="w-4 h-4" />
+              اختيار مجلد
+              <input
+                type="file"
+                accept=".msbt,.json,.bdat"
+                multiple
+                className="hidden"
+                onChange={e => handleFileSelect(e.target.files)}
+                disabled={isProcessing}
+                {...({ webkitdirectory: "", directory: "" } as any)}
+              />
+            </label>
+          </div>
+          <p className="text-xs text-muted-foreground mt-2">اسحب وأفلت، أو اختر ملفات فردية، أو ارفع مجلداً كاملاً</p>
           <input
             type="file"
             accept=".msbt,.json,.bdat"
