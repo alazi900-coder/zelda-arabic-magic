@@ -22,11 +22,12 @@ interface UseEditorTranslationProps {
   translationProvider: 'gemini' | 'mymemory' | 'google';
   myMemoryEmail: string;
   addMyMemoryChars: (chars: number) => void;
+  addAiRequest: (count?: number) => void;
 }
 
 export function useEditorTranslation({
   state, setState, setLastSaved, setTranslateProgress, setPreviousTranslations, updateTranslation,
-  filterCategory, activeGlossary, parseGlossaryMap, paginatedEntries, userGeminiKey, translationProvider, myMemoryEmail, addMyMemoryChars,
+  filterCategory, activeGlossary, parseGlossaryMap, paginatedEntries, userGeminiKey, translationProvider, myMemoryEmail, addMyMemoryChars, addAiRequest,
 }: UseEditorTranslationProps) {
   const [translating, setTranslating] = useState(false);
   const [translatingSingle, setTranslatingSingle] = useState<string | null>(null);
@@ -88,6 +89,7 @@ export function useEditorTranslation({
       });
       if (!response.ok) throw new Error(`خطأ ${response.status}`);
       const data = await response.json();
+      addAiRequest(1);
       if (data.charsUsed) addMyMemoryChars(data.charsUsed);
       if (data.translations && data.translations[key]) {
         // Restore protected tags first, then auto-fix any remaining
@@ -240,6 +242,7 @@ export function useEditorTranslation({
         });
         if (!response.ok) throw new Error(`خطأ ${response.status}`);
         const data = await response.json();
+        addAiRequest(1);
         if (data.charsUsed) addMyMemoryChars(data.charsUsed);
         if (data.translations) {
           const fixedTranslations = autoFixTags(data.translations, protectedMap);
@@ -325,6 +328,7 @@ export function useEditorTranslation({
         });
         if (!response.ok) throw new Error(`خطأ ${response.status}`);
         const data = await response.json();
+        addAiRequest(1);
         if (data.charsUsed) addMyMemoryChars(data.charsUsed);
         if (data.translations) {
           const fixedTranslations = autoFixTags(data.translations);
@@ -377,6 +381,7 @@ export function useEditorTranslation({
         });
         if (!response.ok) throw new Error(`خطأ ${response.status}`);
         const data = await response.json();
+        addAiRequest(1);
         if (data.charsUsed) addMyMemoryChars(data.charsUsed);
         if (data.translations) {
           const fixedTranslations = autoFixTags(data.translations);

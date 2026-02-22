@@ -90,6 +90,46 @@ export function useEditorState() {
   }, []);
 
 
+  // === AI Request Counter (daily + monthly) ===
+  const [aiRequestsToday, setAiRequestsToday] = useState(() => {
+    try {
+      const stored = localStorage.getItem('aiRequestsToday');
+      const storedDate = localStorage.getItem('aiRequestsDate');
+      const today = new Date().toDateString();
+      if (storedDate === today && stored) return parseInt(stored, 10);
+      return 0;
+    } catch { return 0; }
+  });
+  const [aiRequestsMonth, setAiRequestsMonth] = useState(() => {
+    try {
+      const stored = localStorage.getItem('aiRequestsMonth');
+      const storedMonth = localStorage.getItem('aiRequestsMonthKey');
+      const currentMonth = `${new Date().getFullYear()}-${new Date().getMonth()}`;
+      if (storedMonth === currentMonth && stored) return parseInt(stored, 10);
+      return 0;
+    } catch { return 0; }
+  });
+  const addAiRequest = useCallback((count: number = 1) => {
+    const today = new Date().toDateString();
+    const currentMonth = `${new Date().getFullYear()}-${new Date().getMonth()}`;
+    setAiRequestsToday(prev => {
+      const newVal = prev + count;
+      try {
+        localStorage.setItem('aiRequestsToday', String(newVal));
+        localStorage.setItem('aiRequestsDate', today);
+      } catch {}
+      return newVal;
+    });
+    setAiRequestsMonth(prev => {
+      const newVal = prev + count;
+      try {
+        localStorage.setItem('aiRequestsMonth', String(newVal));
+        localStorage.setItem('aiRequestsMonthKey', currentMonth);
+      } catch {}
+      return newVal;
+    });
+  }, []);
+
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const forceSaveRef = useRef<() => Promise<void>>(async () => {});
   const { user } = useAuth();
@@ -555,7 +595,7 @@ export function useEditorState() {
 
   const translation = useEditorTranslation({
     state, setState, setLastSaved, setTranslateProgress, setPreviousTranslations, updateTranslation,
-    filterCategory, activeGlossary, parseGlossaryMap, paginatedEntries, userGeminiKey, translationProvider, myMemoryEmail, addMyMemoryChars,
+    filterCategory, activeGlossary, parseGlossaryMap, paginatedEntries, userGeminiKey, translationProvider, myMemoryEmail, addMyMemoryChars, addAiRequest,
   });
   const { translating, translatingSingle, tmStats, handleTranslateSingle, handleAutoTranslate, handleStopTranslate, handleRetranslatePage, handleFixDamagedTags } = translation;
 
@@ -1061,7 +1101,7 @@ export function useEditorState() {
 
   return {
     // State
-    state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, showFindReplace, userGeminiKey, translationProvider, myMemoryEmail, myMemoryCharsUsed,
+    state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, showFindReplace, userGeminiKey, translationProvider, myMemoryEmail, myMemoryCharsUsed, aiRequestsToday, aiRequestsMonth,
     pendingRecovery, handleRecoverSession, handleStartFresh,
     building, buildProgress, dismissBuildProgress, translating, translateProgress,
     lastSaved, cloudSyncing, cloudStatus,

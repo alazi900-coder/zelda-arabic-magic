@@ -434,6 +434,24 @@ const Editor = () => {
             </Card>
           )}
 
+          {/* AI Request Counter */}
+          {(editor.aiRequestsToday > 0 || editor.aiRequestsMonth > 0) && (
+            <Card className="mb-4 border-accent/30 bg-accent/5">
+              <CardContent className="p-3 font-display">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="flex items-center gap-1.5">
+                    <BarChart3 className="w-4 h-4 text-accent-foreground" />
+                    استهلاك الذكاء الاصطناعي
+                  </span>
+                  <div className="flex gap-3 text-xs text-muted-foreground">
+                    <span>اليوم: <strong className="text-foreground">{editor.aiRequestsToday}</strong> طلب</span>
+                    <span>الشهر: <strong className="text-foreground">{editor.aiRequestsMonth}</strong> طلب</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Review Results */}
           <ReviewPanel
             reviewResults={editor.reviewResults}
