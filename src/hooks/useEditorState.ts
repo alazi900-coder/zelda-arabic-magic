@@ -93,6 +93,7 @@ export function useEditorState() {
   const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const forceSaveRef = useRef<() => Promise<void>>(async () => {});
   const { user } = useAuth();
+  const [pendingRecovery, setPendingRecovery] = useState<{ translationCount: number; entryCount: number; lastDate?: string } | null>(null);
 
   const glossary = useEditorGlossary({
     state, setState, setLastSaved, setCloudSyncing, setCloudStatus, userId: user?.id,
@@ -199,128 +200,166 @@ export function useEditorState() {
     return autoTranslations;
   }, []);
 
+  const loadSavedState = useCallback(async () => {
+    const stored = await idbGet<EditorState>("editorState");
+    if (!stored) return null;
+    const validKeys = new Set(stored.entries.map(e => `${e.msbtFile}:${e.index}`));
+    const autoTranslations = detectPreTranslated({
+      entries: stored.entries,
+      translations: stored.translations || {},
+      protectedEntries: new Set(),
+    });
+    const filteredStored: Record<string, string> = {};
+    for (const [k, v] of Object.entries(stored.translations || {})) {
+      if (validKeys.has(k)) filteredStored[k] = v;
+    }
+    const mergedTranslations = { ...autoTranslations, ...filteredStored };
+    const protectedSet = new Set<string>(
+      Array.isArray(stored.protectedEntries) ? (stored.protectedEntries as string[]) : []
+    );
+    const bypassSet = new Set<string>(
+      Array.isArray((stored as any).technicalBypass) ? ((stored as any).technicalBypass as string[]) : []
+    );
+    const arabicRegex = /[\u0600-\u06FF\uFB50-\uFDFF\uFE70-\uFEFF\u0750-\u077F\u08A0-\u08FF]/;
+    for (const entry of stored.entries) {
+      const key = `${entry.msbtFile}:${entry.index}`;
+      if (arabicRegex.test(entry.original)) {
+        if (hasArabicPresentationForms(entry.original)) continue;
+        const existingTranslation = mergedTranslations[key]?.trim();
+        if (existingTranslation && existingTranslation !== entry.original && existingTranslation !== entry.original.trim()) {
+          protectedSet.add(key);
+        }
+      }
+    }
+    // === One-time auto-repair: fix ONLY entries where translation has FEWER tags than original ===
+    let autoFixCount = 0;
+    for (const entry of stored.entries) {
+      if (!hasTechnicalTags(entry.original)) continue;
+      const key = `${entry.msbtFile}:${entry.index}`;
+      const trans = mergedTranslations[key] || '';
+      if (!trans.trim()) continue;
+      const origTags = entry.original.match(/[\uFFF9-\uFFFC\uE000-\uF8FF]/g) || [];
+      const transTags = trans.match(/[\uFFF9-\uFFFC\uE000-\uF8FF]/g) || [];
+      if (transTags.length < origTags.length) {
+        const fixed = restoreTagsLocally(entry.original, trans);
+        if (fixed !== trans) {
+          mergedTranslations[key] = fixed;
+          autoFixCount++;
+        }
+      }
+    }
+
+    const finalState: EditorState = {
+      entries: stored.entries,
+      translations: mergedTranslations,
+      protectedEntries: protectedSet,
+      technicalBypass: bypassSet,
+    };
+
+    // Save immediately if we auto-fixed anything
+    if (autoFixCount > 0) {
+      await idbSet("editorState", {
+        entries: finalState.entries,
+        translations: finalState.translations,
+        protectedEntries: Array.from(finalState.protectedEntries || []),
+        technicalBypass: Array.from(finalState.technicalBypass || []),
+      });
+    }
+
+    return { finalState, autoTranslations, autoFixCount };
+  }, [detectPreTranslated]);
+
+  const handleRecoverSession = useCallback(async () => {
+    const result = await loadSavedState();
+    if (!result) return;
+    const { finalState, autoTranslations, autoFixCount } = result;
+    setState(finalState);
+    setPendingRecovery(null);
+
+    const autoCount = Object.keys(autoTranslations).length;
+    const parts: string[] = [];
+    if (autoCount > 0) parts.push(`اكتشاف ${autoCount} نص معرّب مسبقاً`);
+    if (autoFixCount > 0) parts.push(`🔧 إصلاح تلقائي لـ ${autoFixCount} رمز تالف`);
+    setLastSaved(parts.length > 0 ? `تم التحميل + ${parts.join(' + ')}` : "تم التحميل من الحفظ السابق ✅");
+  }, [loadSavedState]);
+
+  const handleStartFresh = useCallback(async () => {
+    await idbSet("editorState", null);
+    setPendingRecovery(null);
+    // Load demo data
+    const demoEntries: ExtractedEntry[] = [
+      { msbtFile: "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:0:name", index: 0, label: "SYS_CharacterName[0].name", original: "Noah", maxBytes: 24 },
+      { msbtFile: "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:1:name", index: 0, label: "SYS_CharacterName[1].name", original: "Mio", maxBytes: 18 },
+      { msbtFile: "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:2:name", index: 0, label: "SYS_CharacterName[2].name", original: "Eunie", maxBytes: 30 },
+      { msbtFile: "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:3:name", index: 0, label: "SYS_CharacterName[3].name", original: "Taion", maxBytes: 30 },
+    ];
+    setState({
+      entries: demoEntries,
+      translations: {},
+      protectedEntries: new Set(),
+      technicalBypass: new Set(),
+      isDemo: true,
+    });
+    setLastSaved("🆕 تم البدء من جديد");
+  }, []);
+
   useEffect(() => {
     const loadState = async () => {
       const stored = await idbGet<EditorState>("editorState");
-      if (stored) {
-        const validKeys = new Set(stored.entries.map(e => `${e.msbtFile}:${e.index}`));
-        const autoTranslations = detectPreTranslated({
-          entries: stored.entries,
-          translations: stored.translations || {},
-          protectedEntries: new Set(),
-        });
-        const filteredStored: Record<string, string> = {};
-        for (const [k, v] of Object.entries(stored.translations || {})) {
-          if (validKeys.has(k)) filteredStored[k] = v;
-        }
-        const mergedTranslations = { ...autoTranslations, ...filteredStored };
-        const protectedSet = new Set<string>(
-          Array.isArray(stored.protectedEntries) ? (stored.protectedEntries as string[]) : []
-        );
-        const bypassSet = new Set<string>(
-          Array.isArray((stored as any).technicalBypass) ? ((stored as any).technicalBypass as string[]) : []
-        );
-        const arabicRegex = /[\u0600-\u06FF\uFB50-\uFDFF\uFE70-\uFEFF\u0750-\u077F\u08A0-\u08FF]/;
-        for (const entry of stored.entries) {
-          const key = `${entry.msbtFile}:${entry.index}`;
-          if (arabicRegex.test(entry.original)) {
-            // تخطي الحماية إذا كان الأصل من بناء سابق (يحتوي presentation forms)
-            if (hasArabicPresentationForms(entry.original)) continue;
-            const existingTranslation = mergedTranslations[key]?.trim();
-            if (existingTranslation && existingTranslation !== entry.original && existingTranslation !== entry.original.trim()) {
-              protectedSet.add(key);
-            }
-          }
-        }
-        // === One-time auto-repair: fix ONLY entries where translation has FEWER tags than original ===
-        let autoFixCount = 0;
-        for (const entry of stored.entries) {
-          if (!hasTechnicalTags(entry.original)) continue;
-          const key = `${entry.msbtFile}:${entry.index}`;
-          const trans = mergedTranslations[key] || '';
-          if (!trans.trim()) continue;
-          const origTags = entry.original.match(/[\uFFF9-\uFFFC\uE000-\uF8FF]/g) || [];
-          const transTags = trans.match(/[\uFFF9-\uFFFC\uE000-\uF8FF]/g) || [];
-          if (transTags.length < origTags.length) {
-            const fixed = restoreTagsLocally(entry.original, trans);
-            if (fixed !== trans) {
-              mergedTranslations[key] = fixed;
-              autoFixCount++;
-            }
-          }
-        }
-
-        const finalState: EditorState = {
-          entries: stored.entries,
-          translations: mergedTranslations,
-          protectedEntries: protectedSet,
-          technicalBypass: bypassSet,
-        };
-        setState(finalState);
-
-        // Save immediately if we auto-fixed anything
-        if (autoFixCount > 0) {
-          await idbSet("editorState", {
-            entries: finalState.entries,
-            translations: finalState.translations,
-            protectedEntries: Array.from(finalState.protectedEntries || []),
-            technicalBypass: Array.from(finalState.technicalBypass || []),
+      if (stored && stored.entries && stored.entries.length > 0) {
+        // Count real translations (not auto-detected)
+        const translationCount = Object.values(stored.translations || {}).filter(v => v?.trim()).length;
+        if (translationCount > 0) {
+          // Show recovery dialog
+          setPendingRecovery({
+            translationCount,
+            entryCount: stored.entries.length,
           });
+          return;
         }
-
-        const autoCount = Object.keys(autoTranslations).length;
-        const parts: string[] = [];
-        if (autoCount > 0) parts.push(`اكتشاف ${autoCount} نص معرّب مسبقاً`);
-        if (autoFixCount > 0) parts.push(`🔧 إصلاح تلقائي لـ ${autoFixCount} رمز تالف`);
-        setLastSaved(parts.length > 0 ? `تم التحميل + ${parts.join(' + ')}` : "تم التحميل من الحفظ السابق");
-      } else {
-        // Demo data — Xenoblade Chronicles 3 style
-        // msbtFile format for BDAT binary: "bdat-bin:filename:tableName:rowIndex:colName"
-        // with index always 0 — key = "bdat-bin:filename:tableName:rowIndex:colName:0"
-        const demoEntries: ExtractedEntry[] = [
-          { msbtFile: "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:0:name", index: 0, label: "SYS_CharacterName[0].name", original: "Noah", maxBytes: 24 },
-          { msbtFile: "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:1:name", index: 0, label: "SYS_CharacterName[1].name", original: "Mio", maxBytes: 18 },
-          { msbtFile: "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:2:name", index: 0, label: "SYS_CharacterName[2].name", original: "Eunie", maxBytes: 30 },
-          { msbtFile: "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:3:name", index: 0, label: "SYS_CharacterName[3].name", original: "Taion", maxBytes: 30 },
-          { msbtFile: "bdat-bin:SYS_ItemName.bdat:SYS_ItemName:0:name", index: 0, label: "SYS_ItemName[0].name", original: "Lucky Clover", maxBytes: 72 },
-          { msbtFile: "bdat-bin:SYS_ItemName.bdat:SYS_ItemName:1:name", index: 0, label: "SYS_ItemName[1].name", original: "Nopon Coin", maxBytes: 60 },
-          { msbtFile: "bdat-bin:MNU_MainMenu.bdat:MNU_MainMenu:0:caption", index: 0, label: "MNU_MainMenu[0].caption", original: "Party", maxBytes: 36 },
-          { msbtFile: "bdat-bin:MNU_MainMenu.bdat:MNU_MainMenu:1:caption", index: 0, label: "MNU_MainMenu[1].caption", original: "Quests", maxBytes: 42 },
-          { msbtFile: "bdat-bin:MNU_MainMenu.bdat:MNU_MainMenu:2:caption", index: 0, label: "MNU_MainMenu[2].caption", original: "Map", maxBytes: 24 },
-          // Demo entries with technical control characters
-          { msbtFile: "bdat-bin:FLD_NpcTalk.bdat:FLD_NpcTalk:0:msg", index: 0, label: "FLD_NpcTalk[0].msg", original: "\uFFF9Press \uE000\uFFFA to speak with \uFFFBNoah\uFFFC", maxBytes: 300 },
-          { msbtFile: "bdat-bin:FLD_NpcTalk.bdat:FLD_NpcTalk:1:msg", index: 0, label: "FLD_NpcTalk[1].msg", original: "You need \uFFF9\uE002 3 Nopon Coins\uFFFA to unlock this\uFFFB.", maxBytes: 350 },
-          { msbtFile: "bdat-bin:QST_QuestName.bdat:QST_QuestName:0:name", index: 0, label: "QST_QuestName[0].name", original: "Beyond the Boundary", maxBytes: 120 },
-          { msbtFile: "bdat-bin:QST_QuestName.bdat:QST_QuestName:1:name", index: 0, label: "QST_QuestName[1].name", original: "A Life Sent On", maxBytes: 90 },
-        ];
-        const demoTranslations: Record<string, string> = {
-          "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:0:name:0": "نوا",
-          "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:1:name:0": "ميو",
-          "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:2:name:0": "يوني",
-          "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:3:name:0": "تايون",
-          "bdat-bin:SYS_ItemName.bdat:SYS_ItemName:0:name:0": "البرسيم المحظوظ",
-          "bdat-bin:SYS_ItemName.bdat:SYS_ItemName:1:name:0": "عملة النوبون",
-          "bdat-bin:MNU_MainMenu.bdat:MNU_MainMenu:0:caption:0": "الفريق",
-          "bdat-bin:MNU_MainMenu.bdat:MNU_MainMenu:1:caption:0": "المهام",
-          "bdat-bin:MNU_MainMenu.bdat:MNU_MainMenu:2:caption:0": "الخريطة",
-          // Damaged translations — tags were stripped by AI
-          "bdat-bin:FLD_NpcTalk.bdat:FLD_NpcTalk:0:msg:0": "اضغط للتحدث مع نوا",
-          "bdat-bin:FLD_NpcTalk.bdat:FLD_NpcTalk:1:msg:0": "تحتاج 3 عملات نوبون لفتح هذا.",
-          "bdat-bin:QST_QuestName.bdat:QST_QuestName:0:name:0": "ما وراء الحدود",
-          "bdat-bin:QST_QuestName.bdat:QST_QuestName:1:name:0": "حياة تمضي قُدُماً",
-        };
-        setState({
-          entries: demoEntries,
-          translations: demoTranslations,
-          protectedEntries: new Set(),
-          technicalBypass: new Set(),
-          isDemo: true,
-        });
-        setLastSaved("تم تحميل بيانات تجريبية");
       }
+      // No saved state or no translations — show demo
+      const demoEntries: ExtractedEntry[] = [
+        { msbtFile: "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:0:name", index: 0, label: "SYS_CharacterName[0].name", original: "Noah", maxBytes: 24 },
+        { msbtFile: "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:1:name", index: 0, label: "SYS_CharacterName[1].name", original: "Mio", maxBytes: 18 },
+        { msbtFile: "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:2:name", index: 0, label: "SYS_CharacterName[2].name", original: "Eunie", maxBytes: 30 },
+        { msbtFile: "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:3:name", index: 0, label: "SYS_CharacterName[3].name", original: "Taion", maxBytes: 30 },
+        { msbtFile: "bdat-bin:SYS_ItemName.bdat:SYS_ItemName:0:name", index: 0, label: "SYS_ItemName[0].name", original: "Lucky Clover", maxBytes: 72 },
+        { msbtFile: "bdat-bin:SYS_ItemName.bdat:SYS_ItemName:1:name", index: 0, label: "SYS_ItemName[1].name", original: "Nopon Coin", maxBytes: 60 },
+        { msbtFile: "bdat-bin:MNU_MainMenu.bdat:MNU_MainMenu:0:caption", index: 0, label: "MNU_MainMenu[0].caption", original: "Party", maxBytes: 36 },
+        { msbtFile: "bdat-bin:MNU_MainMenu.bdat:MNU_MainMenu:1:caption", index: 0, label: "MNU_MainMenu[1].caption", original: "Quests", maxBytes: 42 },
+        { msbtFile: "bdat-bin:MNU_MainMenu.bdat:MNU_MainMenu:2:caption", index: 0, label: "MNU_MainMenu[2].caption", original: "Map", maxBytes: 24 },
+        { msbtFile: "bdat-bin:FLD_NpcTalk.bdat:FLD_NpcTalk:0:msg", index: 0, label: "FLD_NpcTalk[0].msg", original: "\uFFF9Press \uE000\uFFFA to speak with \uFFFBNoah\uFFFC", maxBytes: 300 },
+        { msbtFile: "bdat-bin:FLD_NpcTalk.bdat:FLD_NpcTalk:1:msg", index: 0, label: "FLD_NpcTalk[1].msg", original: "You need \uFFF9\uE002 3 Nopon Coins\uFFFA to unlock this\uFFFB.", maxBytes: 350 },
+        { msbtFile: "bdat-bin:QST_QuestName.bdat:QST_QuestName:0:name", index: 0, label: "QST_QuestName[0].name", original: "Beyond the Boundary", maxBytes: 120 },
+        { msbtFile: "bdat-bin:QST_QuestName.bdat:QST_QuestName:1:name", index: 0, label: "QST_QuestName[1].name", original: "A Life Sent On", maxBytes: 90 },
+      ];
+      const demoTranslations: Record<string, string> = {
+        "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:0:name:0": "نوا",
+        "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:1:name:0": "ميو",
+        "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:2:name:0": "يوني",
+        "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:3:name:0": "تايون",
+        "bdat-bin:SYS_ItemName.bdat:SYS_ItemName:0:name:0": "البرسيم المحظوظ",
+        "bdat-bin:SYS_ItemName.bdat:SYS_ItemName:1:name:0": "عملة النوبون",
+        "bdat-bin:MNU_MainMenu.bdat:MNU_MainMenu:0:caption:0": "الفريق",
+        "bdat-bin:MNU_MainMenu.bdat:MNU_MainMenu:1:caption:0": "المهام",
+        "bdat-bin:MNU_MainMenu.bdat:MNU_MainMenu:2:caption:0": "الخريطة",
+        "bdat-bin:FLD_NpcTalk.bdat:FLD_NpcTalk:0:msg:0": "اضغط للتحدث مع نوا",
+        "bdat-bin:FLD_NpcTalk.bdat:FLD_NpcTalk:1:msg:0": "تحتاج 3 عملات نوبون لفتح هذا.",
+        "bdat-bin:QST_QuestName.bdat:QST_QuestName:0:name:0": "ما وراء الحدود",
+        "bdat-bin:QST_QuestName.bdat:QST_QuestName:1:name:0": "حياة تمضي قُدُماً",
+      };
+      setState({
+        entries: demoEntries,
+        translations: demoTranslations,
+        protectedEntries: new Set(),
+        technicalBypass: new Set(),
+        isDemo: true,
+      });
+      setLastSaved("تم تحميل بيانات تجريبية");
     };
     loadState();
-  }, [detectPreTranslated]);
+  }, []);
 
   const saveToIDB = useCallback(async (editorState: EditorState) => {
     await idbSet("editorState", {
@@ -1023,6 +1062,7 @@ export function useEditorState() {
   return {
     // State
     state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, showFindReplace, userGeminiKey, translationProvider, myMemoryEmail, myMemoryCharsUsed,
+    pendingRecovery, handleRecoverSession, handleStartFresh,
     building, buildProgress, dismissBuildProgress, translating, translateProgress,
     lastSaved, cloudSyncing, cloudStatus,
     reviewing, reviewResults, tmStats,
