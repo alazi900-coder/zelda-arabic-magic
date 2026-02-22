@@ -355,8 +355,40 @@ const XenobladeProcess = () => {
         const existing = await idbGet<{ translations?: Record<string, string> }>("editorState");
         const existingTranslations = existing?.translations || {};
         const validKeys = new Set(allEntries.map((e: any) => `${e.msbtFile}:${e.index}`));
+
+        // Build legacy-to-new key mapping for old sequential keys
+        const entriesByFile: Record<string, typeof allEntries> = {};
+        for (const entry of allEntries) {
+          const parts = (entry as any).msbtFile.split(':');
+          const filename = parts.length >= 2 ? parts[1] : (entry as any).msbtFile;
+          if (!entriesByFile[filename]) entriesByFile[filename] = [];
+          entriesByFile[filename].push(entry);
+        }
+
+        let legacyConverted = 0;
         for (const [k, v] of Object.entries(existingTranslations)) {
-          if (validKeys.has(k) && v && !finalTranslations[k]) finalTranslations[k] = v as string;
+          if (validKeys.has(k) && v && !finalTranslations[k]) {
+            finalTranslations[k] = v as string;
+          } else if (!validKeys.has(k) && v) {
+            // Try legacy key conversion: "bdat-bin:filename.bdat:NUMBER"
+            const parts = k.split(':');
+            if (parts.length === 3 && !isNaN(parseInt(parts[2], 10))) {
+              const filename = parts[1];
+              const idx = parseInt(parts[2], 10);
+              const fileEntries = entriesByFile[filename];
+              if (fileEntries && idx < fileEntries.length) {
+                const entry = fileEntries[idx] as any;
+                const newKey = `${entry.msbtFile}:${entry.index}`;
+                if (!finalTranslations[newKey]) {
+                  finalTranslations[newKey] = v as string;
+                  legacyConverted++;
+                }
+              }
+            }
+          }
+        }
+        if (legacyConverted > 0) {
+          addLog(`🔄 تم تحويل ${legacyConverted} ترجمة من التنسيق القديم`);
         }
       }
 
