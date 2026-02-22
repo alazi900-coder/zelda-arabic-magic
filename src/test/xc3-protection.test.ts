@@ -114,4 +114,28 @@ describe("XC3 Tag Protection", () => {
     expect(cleanText).toBe(text);
     expect(tags).toHaveLength(0);
   });
+
+  it("should protect descriptive parentheses following ML tags", () => {
+    const text = "[ML:undisp ](Crowd noise of children)";
+    const { cleanText, tags } = protectTags(text);
+    expect(tags).toHaveLength(1);
+    expect(tags[0].original).toBe("[ML:undisp ](Crowd noise of children)");
+    expect(cleanText).toBe("TAG_0");
+  });
+
+  it("should protect standalone descriptive parentheses starting with uppercase", () => {
+    const text = "Hello (Sound effect) world";
+    const { cleanText, tags } = protectTags(text);
+    expect(tags).toHaveLength(1);
+    expect(tags[0].original).toBe("(Sound effect)");
+    expect(cleanText).toBe("Hello TAG_0 world");
+  });
+
+  it("should protect [ML:undisp ] with trailing space", () => {
+    const text = "[ML:undisp ]Some text[ML:Feeling ]";
+    const { cleanText, tags } = protectTags(text);
+    expect(tags).toHaveLength(2);
+    expect(tags[0].original).toBe("[ML:undisp ]");
+    expect(tags[1].original).toBe("[ML:Feeling ]");
+  });
 });
