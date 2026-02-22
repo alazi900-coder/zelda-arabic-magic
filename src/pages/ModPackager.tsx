@@ -3,7 +3,8 @@ import { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, Info, Download, Loader2 } from "lucide-react";
+import { Slider } from "@/components/ui/slider";
+import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, Info, Download, Loader2, MoveVertical } from "lucide-react";
 
 interface FontFile {
   name: string;
@@ -25,6 +26,7 @@ export default function ModPackager() {
   const [status, setStatus] = useState("");
   const [loadingBundledFont, setLoadingBundledFont] = useState(false);
   const [bdatSubPath, setBdatSubPath] = useState("gb");
+  const [baselineOffset, setBaselineOffset] = useState(0);
 
   const handleLoadBundledFont = useCallback(async () => {
     setLoadingBundledFont(true);
@@ -93,9 +95,21 @@ export default function ModPackager() {
 
       // Add font file directly (LAFT/WIFNT format — no conversion needed)
       if (fontFile) {
+        let fontData = new Uint8Array(fontFile.data);
+
+        // Apply baseline offset by patching the WIFNT header
+        // The baseline offset is stored as a signed 16-bit value at offset 0x1A in the LAFT header
+        if (baselineOffset !== 0 && fontData.length > 0x1C) {
+          fontData = new Uint8Array(fontData); // clone to avoid mutating original
+          const view = new DataView(fontData.buffer, fontData.byteOffset, fontData.byteLength);
+          // Read current baseline value and apply offset
+          const currentBaseline = view.getInt16(0x1A, true);
+          view.setInt16(0x1A, currentBaseline + baselineOffset, true);
+        }
+
         zipParts.push({
           path: `romfs/menu/font/standard.wifnt`,
-          data: new Uint8Array(fontFile.data),
+          data: fontData,
         });
       }
 
@@ -133,7 +147,7 @@ export default function ModPackager() {
     } finally {
       setBuilding(false);
     }
-  }, [fontFile, bdatFiles, bdatSubPath]);
+  }, [fontFile, bdatFiles, bdatSubPath, baselineOffset]);
 
   const handleBuildMod = useCallback(async () => {
     if (!fontFile && bdatFiles.length === 0) return;
@@ -201,6 +215,48 @@ export default function ModPackager() {
                       حذف
                     </Button>
                   </div>
+                </div>
+
+                {/* Baseline Offset Control */}
+                <div className="space-y-3 p-3 bg-muted/30 rounded-lg border">
+                  <div className="flex items-center gap-2">
+                    <MoveVertical className="w-4 h-4 text-primary" />
+                    <span className="text-sm font-semibold">تعديل تمركز الخط (Baseline Offset)</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    إذا كان النص طالع أو نازل عن موقعه الصحيح، عدّل هذه القيمة. القيم الموجبة ترفع النص والسالبة تنزّله.
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <Slider
+                      value={[baselineOffset]}
+                      onValueChange={([v]) => setBaselineOffset(v)}
+                      min={-20}
+                      max={20}
+                      step={1}
+                      className="flex-1"
+                    />
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <input
+                        type="number"
+                        value={baselineOffset}
+                        onChange={e => setBaselineOffset(Number(e.target.value))}
+                        className="w-16 h-8 text-center text-sm bg-background border border-input rounded-md"
+                        min={-50}
+                        max={50}
+                      />
+                      <span className="text-xs text-muted-foreground">px</span>
+                    </div>
+                  </div>
+                  {baselineOffset !== 0 && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-primary font-medium">
+                        الإزاحة: {baselineOffset > 0 ? `↑ ${baselineOffset}` : `↓ ${Math.abs(baselineOffset)}`} بكسل
+                      </span>
+                      <Button variant="ghost" size="sm" className="h-6 text-xs px-2" onClick={() => setBaselineOffset(0)}>
+                        إعادة تعيين
+                      </Button>
+                    </div>
+                  )}
                 </div>
 
               </div>
@@ -332,7 +388,10 @@ export default function ModPackager() {
             <div className="text-sm">
               <p className="font-bold text-foreground mb-1">خط LAFT/WIFNT جاهز</p>
               <p className="text-muted-foreground">
-                سيتم وضع الخط في <code className="bg-muted px-1 rounded" dir="ltr">romfs/menu/font/standard.wifnt</code> — بدون أي تحويل.
+                سيتم وضع الخط في <code className="bg-muted px-1 rounded" dir="ltr">romfs/menu/font/standard.wifnt</code>
+                {baselineOffset !== 0 && (
+                  <span className="text-primary font-medium"> — مع إزاحة {baselineOffset > 0 ? "↑" : "↓"} {Math.abs(baselineOffset)}px</span>
+                )}
               </p>
             </div>
           </Card>
