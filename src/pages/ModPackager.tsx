@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { ArrowRight, ArrowUp, ArrowDown, ArrowLeft, Package, Upload, FileType, FolderArchive, CheckCircle2, Info, Download, Loader2, MoveVertical, Search, Eye, Grid3X3, ImageDown, ImageUp, Replace, Trash2, Pencil, AlignCenter, AlignHorizontalDistributeCenter, AlignVerticalDistributeCenter, ChevronDown, Crosshair } from "lucide-react";
+import { ArrowRight, ArrowUp, ArrowDown, ArrowLeft, Package, Upload, FileType, FolderArchive, CheckCircle2, Info, Download, Loader2, MoveVertical, Search, Eye, Grid3X3, ImageDown, ImageUp, Replace, Trash2, Pencil, AlignCenter, AlignHorizontalDistributeCenter, AlignVerticalDistributeCenter, ChevronDown, Crosshair, Type } from "lucide-react";
 import { analyzeWifnt, decodeWifntTexture, renderAtlasToCanvas, rebuildWifnt, type WifntInfo } from "@/lib/wifnt-parser";
 import GlyphDrawingEditor from "@/components/editor/GlyphDrawingEditor";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -34,6 +34,7 @@ export default function ModPackager() {
   const [showGlyphMap, setShowGlyphMap] = useState(false);
   const [selectedGlyph, setSelectedGlyph] = useState<number | null>(null);
   const [showDrawingEditor, setShowDrawingEditor] = useState(false);
+  const [glyphTextInput, setGlyphTextInput] = useState("");
 
   const atlasCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -228,7 +229,13 @@ export default function ModPackager() {
     const row = Math.floor(selectedGlyph / info.gridCols);
     const sx = col * info.cellWidth;
     const sy = row * info.cellHeight;
-    const cellData = ctx.getImageData(sx, sy, info.cellWidth, info.cellHeight);
+    // Work on a temp canvas to avoid bleeding
+    const tempCanvas = document.createElement("canvas");
+    tempCanvas.width = info.cellWidth;
+    tempCanvas.height = info.cellHeight;
+    const tempCtx = tempCanvas.getContext("2d")!;
+    tempCtx.drawImage(atlas, sx, sy, info.cellWidth, info.cellHeight, 0, 0, info.cellWidth, info.cellHeight);
+    const cellData = tempCtx.getImageData(0, 0, info.cellWidth, info.cellHeight);
     const pixels = cellData.data;
     let minX = info.cellWidth, minY = info.cellHeight, maxX = -1, maxY = -1;
     for (let y = 0; y < info.cellHeight; y++) {
@@ -247,9 +254,18 @@ export default function ModPackager() {
     const newX = mode === 'vertical' ? minX : Math.floor((info.cellWidth - contentW) / 2);
     const newY = mode === 'horizontal' ? minY : Math.floor((info.cellHeight - contentH) / 2);
     if (newX === minX && newY === minY) { setStatus("ℹ️ الحرف متمركز بالفعل"); setTimeout(() => setStatus(""), 3000); return; }
-    const contentData = ctx.getImageData(sx + minX, sy + minY, contentW, contentH);
+    // Redraw centered on temp canvas
+    const contentData = tempCtx.getImageData(minX, minY, contentW, contentH);
+    tempCtx.clearRect(0, 0, info.cellWidth, info.cellHeight);
+    tempCtx.putImageData(contentData, newX, newY);
+    // Put back to atlas clipped
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(sx, sy, info.cellWidth, info.cellHeight);
+    ctx.clip();
     ctx.clearRect(sx, sy, info.cellWidth, info.cellHeight);
-    ctx.putImageData(contentData, sx + newX, sy + newY);
+    ctx.drawImage(tempCanvas, sx, sy);
+    ctx.restore();
     const fullImageData = ctx.getImageData(0, 0, info.textureWidth, info.textureHeight);
     const newData = rebuildWifnt(fontFile.data, info, fullImageData.data);
     processFont(newData, fontFile.name);
@@ -267,12 +283,62 @@ export default function ModPackager() {
     const row = Math.floor(selectedGlyph / info.gridCols);
     const sx = col * info.cellWidth;
     const sy = row * info.cellHeight;
-    const cellData = ctx.getImageData(sx, sy, info.cellWidth, info.cellHeight);
+    // Extract cell to a temp canvas to avoid bleeding into neighbors
+    const tempCanvas = document.createElement("canvas");
+    tempCanvas.width = info.cellWidth;
+    tempCanvas.height = info.cellHeight;
+    const tempCtx = tempCanvas.getContext("2d")!;
+    tempCtx.drawImage(atlas, sx, sy, info.cellWidth, info.cellHeight, 0, 0, info.cellWidth, info.cellHeight);
+    // Clear original cell and redraw shifted within bounds
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(sx, sy, info.cellWidth, info.cellHeight);
+    ctx.clip();
     ctx.clearRect(sx, sy, info.cellWidth, info.cellHeight);
-    ctx.putImageData(cellData, sx + dx, sy + dy);
+    ctx.drawImage(tempCanvas, sx + dx, sy + dy);
+    ctx.restore();
     const fullImageData = ctx.getImageData(0, 0, info.textureWidth, info.textureHeight);
     const newData = rebuildWifnt(fontFile.data, info, fullImageData.data);
     processFont(newData, fontFile.name);
+  }, [fontFile, selectedGlyph, processFont]);
+
+  const handleTypeGlyph = useCallback((text: string) => {
+    if (!text || !fontFile?.info || selectedGlyph === null || !atlasCanvasRef.current) return;
+    const info = fontFile.info;
+    const atlas = atlasCanvasRef.current;
+    const ctx = atlas.getContext("2d");
+    if (!ctx) return;
+    const col = selectedGlyph % info.gridCols;
+    const row = Math.floor(selectedGlyph / info.gridCols);
+    const sx = col * info.cellWidth;
+    const sy = row * info.cellHeight;
+    // Render text on a temp canvas
+    const tempCanvas = document.createElement("canvas");
+    tempCanvas.width = info.cellWidth;
+    tempCanvas.height = info.cellHeight;
+    const tempCtx = tempCanvas.getContext("2d")!;
+    tempCtx.clearRect(0, 0, info.cellWidth, info.cellHeight);
+    // Auto-size the font to fit the cell
+    const fontSize = Math.floor(info.cellHeight * 0.75);
+    tempCtx.fillStyle = "#ffffff";
+    tempCtx.textAlign = "center";
+    tempCtx.textBaseline = "middle";
+    tempCtx.font = `bold ${fontSize}px sans-serif`;
+    tempCtx.fillText(text, info.cellWidth / 2, info.cellHeight / 2);
+    // Put on atlas clipped
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(sx, sy, info.cellWidth, info.cellHeight);
+    ctx.clip();
+    ctx.clearRect(sx, sy, info.cellWidth, info.cellHeight);
+    ctx.drawImage(tempCanvas, sx, sy);
+    ctx.restore();
+    const fullImageData = ctx.getImageData(0, 0, info.textureWidth, info.textureHeight);
+    const newData = rebuildWifnt(fontFile.data, info, fullImageData.data);
+    processFont(newData, fontFile.name);
+    setGlyphTextInput("");
+    setStatus(`✅ تم كتابة "${text}" في الحرف #${selectedGlyph}`);
+    setTimeout(() => setStatus(""), 4000);
   }, [fontFile, selectedGlyph, processFont]);
 
   const handleCenterAllGlyphs = useCallback((mode: 'both' | 'horizontal' | 'vertical' = 'both') => {
@@ -283,13 +349,20 @@ export default function ModPackager() {
     if (!ctx) return;
     const totalGlyphs = info.gridCols * info.gridRows;
     let centered = 0;
+    const tempCanvas = document.createElement("canvas");
+    tempCanvas.width = info.cellWidth;
+    tempCanvas.height = info.cellHeight;
+    const tempCtx = tempCanvas.getContext("2d")!;
 
     for (let idx = 0; idx < totalGlyphs; idx++) {
       const col = idx % info.gridCols;
       const row = Math.floor(idx / info.gridCols);
       const sx = col * info.cellWidth;
       const sy = row * info.cellHeight;
-      const cellData = ctx.getImageData(sx, sy, info.cellWidth, info.cellHeight);
+      // Extract to temp canvas
+      tempCtx.clearRect(0, 0, info.cellWidth, info.cellHeight);
+      tempCtx.drawImage(atlas, sx, sy, info.cellWidth, info.cellHeight, 0, 0, info.cellWidth, info.cellHeight);
+      const cellData = tempCtx.getImageData(0, 0, info.cellWidth, info.cellHeight);
       const pixels = cellData.data;
 
       let minX = info.cellWidth, minY = info.cellHeight, maxX = -1, maxY = -1;
@@ -314,9 +387,17 @@ export default function ModPackager() {
 
       if (newX === minX && newY === minY) continue;
 
-      const contentData = ctx.getImageData(sx + minX, sy + minY, contentW, contentH);
+      const contentData = tempCtx.getImageData(minX, minY, contentW, contentH);
+      tempCtx.clearRect(0, 0, info.cellWidth, info.cellHeight);
+      tempCtx.putImageData(contentData, newX, newY);
+      // Put back clipped
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(sx, sy, info.cellWidth, info.cellHeight);
+      ctx.clip();
       ctx.clearRect(sx, sy, info.cellWidth, info.cellHeight);
-      ctx.putImageData(contentData, sx + newX, sy + newY);
+      ctx.drawImage(tempCanvas, sx, sy);
+      ctx.restore();
       centered++;
     }
 
@@ -852,6 +933,31 @@ export default function ModPackager() {
                       </div>
                       <Button variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={() => handleNudgeGlyph(1, 0)} title="يمين">
                         <ArrowRight className="w-3.5 h-3.5" />
+                      </Button>
+                    </div>
+                  </div>
+                  {/* Mobile Text Input */}
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                      <input
+                        type="text"
+                        value={glyphTextInput}
+                        onChange={e => setGlyphTextInput(e.target.value)}
+                        onKeyDown={e => { if (e.key === 'Enter' && glyphTextInput) handleTypeGlyph(glyphTextInput); }}
+                        placeholder="اكتب حرف..."
+                        className="h-8 flex-1 min-w-0 text-center text-sm bg-background border border-input rounded-md px-2"
+                        maxLength={3}
+                        dir="rtl"
+                      />
+                      <Button
+                        variant="default"
+                        size="sm"
+                        className="gap-1 text-xs shrink-0"
+                        onClick={() => handleTypeGlyph(glyphTextInput)}
+                        disabled={!glyphTextInput}
+                      >
+                        <Type className="w-3.5 h-3.5" />
+                        كتابة
                       </Button>
                     </div>
                   </div>
