@@ -1,33 +1,24 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, Info, Download, Loader2, MoveVertical, Search, Eye } from "lucide-react";
-
-interface WifntAnalysis {
-  magic: string;
-  version: number;
-  glyphCount: number;
-  baseline: number;
-  headerSize: number;
-  dataOffset: number;
-  valid: boolean;
-}
+import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, Info, Download, Loader2, MoveVertical, Search, Eye, Grid3X3 } from "lucide-react";
+import { analyzeWifnt, decodeWifntTexture, renderAtlasToCanvas, type WifntInfo } from "@/lib/wifnt-parser";
 
 interface FontFile {
   name: string;
   data: ArrayBuffer;
   size: number;
-  analysis?: WifntAnalysis;
+  info?: WifntInfo;
 }
 
 interface BdatFile {
   name: string;
   data: ArrayBuffer;
   size: number;
-  subPath?: string; // e.g. "gb" → romfs/bdat/gb/filename.bdat
+  subPath?: string;
 }
 
 export default function ModPackager() {
@@ -38,23 +29,50 @@ export default function ModPackager() {
   const [loadingBundledFont, setLoadingBundledFont] = useState(false);
   const [bdatSubPath, setBdatSubPath] = useState("gb");
   const [baselineOffset, setBaselineOffset] = useState(0);
+  const [showGlyphMap, setShowGlyphMap] = useState(false);
+  const [selectedGlyph, setSelectedGlyph] = useState<number | null>(null);
 
-  const analyzeWifnt = useCallback((data: ArrayBuffer): WifntAnalysis | undefined => {
-    if (data.byteLength < 0x20) return undefined;
-    try {
-      const view = new DataView(data);
-      const magicBytes = new Uint8Array(data, 0, 4);
-      const magic = String.fromCharCode(...magicBytes);
-      const version = view.getUint16(0x04, true);
-      const glyphCount = view.getUint16(0x08, true);
-      const baseline = view.getInt16(0x1A, true);
-      const headerSize = view.getUint16(0x06, true) || 0x20;
-      const dataOffset = view.getUint32(0x0C, true);
-      const valid = magic === "LAFT" || magic === "TFAL";
-      return { magic, version, glyphCount, baseline, headerSize, dataOffset, valid };
-    } catch {
-      return undefined;
+  const atlasCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const previewCanvasRef = useRef<HTMLCanvasElement>(null);
+  const glyphMapCanvasRef = useRef<HTMLCanvasElement>(null);
+
+  // Decode and cache the atlas canvas when font changes
+  useEffect(() => {
+    if (!fontFile?.info) {
+      atlasCanvasRef.current = null;
+      return;
     }
+    const canvas = renderAtlasToCanvas(fontFile.data, fontFile.info);
+    atlasCanvasRef.current = canvas;
+
+    // Draw preview
+    if (canvas && previewCanvasRef.current) {
+      drawPreview(previewCanvasRef.current, canvas, fontFile.info, baselineOffset);
+    }
+
+    // Draw glyph map
+    if (canvas && glyphMapCanvasRef.current && showGlyphMap) {
+      drawGlyphMap(glyphMapCanvasRef.current, canvas, fontFile.info, selectedGlyph);
+    }
+  }, [fontFile]);
+
+  // Re-draw preview when baseline changes
+  useEffect(() => {
+    if (atlasCanvasRef.current && previewCanvasRef.current && fontFile?.info) {
+      drawPreview(previewCanvasRef.current, atlasCanvasRef.current, fontFile.info, baselineOffset);
+    }
+  }, [baselineOffset, fontFile?.info]);
+
+  // Re-draw glyph map when toggled or selection changes
+  useEffect(() => {
+    if (atlasCanvasRef.current && glyphMapCanvasRef.current && fontFile?.info && showGlyphMap) {
+      drawGlyphMap(glyphMapCanvasRef.current, atlasCanvasRef.current, fontFile.info, selectedGlyph);
+    }
+  }, [showGlyphMap, selectedGlyph, fontFile?.info]);
+
+  const processFont = useCallback((data: ArrayBuffer, name: string) => {
+    const info = analyzeWifnt(data);
+    setFontFile({ name, data, size: data.byteLength, info });
   }, []);
 
   const handleLoadBundledFont = useCallback(async () => {
@@ -64,8 +82,7 @@ export default function ModPackager() {
       const response = await fetch("/fonts/standard.wifnt");
       if (!response.ok) throw new Error("فشل تحميل الخط المدمج");
       const data = await response.arrayBuffer();
-      const analysis = analyzeWifnt(data);
-      setFontFile({ name: "standard.wifnt", data, size: data.byteLength, analysis });
+      processFont(data, "standard.wifnt");
       setStatus("✅ تم تحميل خط اللعبة بنجاح!");
       setTimeout(() => setStatus(""), 4000);
     } catch {
@@ -74,19 +91,15 @@ export default function ModPackager() {
     } finally {
       setLoadingBundledFont(false);
     }
-  }, [analyzeWifnt]);
+  }, [processFont]);
 
   const handleFontUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = () => {
-      const data = reader.result as ArrayBuffer;
-      const analysis = analyzeWifnt(data);
-      setFontFile({ name: file.name, data, size: data.byteLength, analysis });
-    };
+    reader.onload = () => processFont(reader.result as ArrayBuffer, file.name);
     reader.readAsArrayBuffer(file);
-  }, []);
+  }, [processFont]);
 
   const handleBdatUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -117,6 +130,24 @@ export default function ModPackager() {
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
 
+  const handleGlyphMapClick = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!fontFile?.info || !glyphMapCanvasRef.current) return;
+    const rect = glyphMapCanvasRef.current.getBoundingClientRect();
+    const scaleX = glyphMapCanvasRef.current.width / rect.width;
+    const scaleY = glyphMapCanvasRef.current.height / rect.height;
+    const x = (e.clientX - rect.left) * scaleX;
+    const y = (e.clientY - rect.top) * scaleY;
+    const info = fontFile.info;
+    const cellW = info.cellWidth + 2; // 2px gap
+    const cellH = info.cellHeight + 2;
+    const col = Math.floor(x / cellW);
+    const row = Math.floor(y / cellH);
+    if (col >= 0 && col < info.gridCols && row >= 0 && row < info.gridRows) {
+      const idx = row * info.gridCols + col;
+      setSelectedGlyph(prev => prev === idx ? null : idx);
+    }
+  }, [fontFile?.info]);
+
   const doBuild = useCallback(async () => {
     setBuilding(true);
     setStatus("تجهيز حزمة المود...");
@@ -124,28 +155,14 @@ export default function ModPackager() {
     try {
       const zipParts: { path: string; data: Uint8Array }[] = [];
 
-      // Add font file directly (LAFT/WIFNT format — no conversion needed)
       if (fontFile) {
-        let fontData = new Uint8Array(fontFile.data);
-
-        // Apply baseline offset by patching the WIFNT header
-        // The baseline offset is stored as a signed 16-bit value at offset 0x1A in the LAFT header
-        if (baselineOffset !== 0 && fontData.length > 0x1C) {
-          fontData = new Uint8Array(fontData); // clone to avoid mutating original
-          const view = new DataView(fontData.buffer, fontData.byteOffset, fontData.byteLength);
-          // Read current baseline value and apply offset
-          const currentBaseline = view.getInt16(0x1A, true);
-          view.setInt16(0x1A, currentBaseline + baselineOffset, true);
-        }
-
+        const fontData = new Uint8Array(fontFile.data);
         zipParts.push({
           path: `romfs/menu/font/standard.wifnt`,
           data: fontData,
         });
       }
 
-      // Add BDAT files to romfs structure with correct subpath
-      // libxc3_file_loader expects: romfs/bdat/{subpath}/{filename}.bdat
       const subPath = bdatSubPath.trim().replace(/^\/|\/$/g, "");
       for (const bdat of bdatFiles) {
         const bdatPath = subPath
@@ -157,11 +174,9 @@ export default function ModPackager() {
         });
       }
 
-      // Build a simple ZIP file manually
       setStatus("بناء ملف ZIP...");
       const zipData = buildZip(zipParts);
 
-      // Download
       const blob = new Blob([zipData.buffer as ArrayBuffer], { type: "application/zip" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -178,11 +193,10 @@ export default function ModPackager() {
     } finally {
       setBuilding(false);
     }
-  }, [fontFile, bdatFiles, bdatSubPath, baselineOffset]);
+  }, [fontFile, bdatFiles, bdatSubPath]);
 
   const handleBuildMod = useCallback(async () => {
     if (!fontFile && bdatFiles.length === 0) return;
-
     await doBuild();
   }, [fontFile, bdatFiles, doBuild]);
 
@@ -242,52 +256,76 @@ export default function ModPackager() {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-xs text-muted-foreground">{formatSize(fontFile.size)}</span>
-                    <Button variant="ghost" size="sm" onClick={() => setFontFile(null)} className="text-destructive h-7 px-2">
+                    <Button variant="ghost" size="sm" onClick={() => { setFontFile(null); setShowGlyphMap(false); setSelectedGlyph(null); }} className="text-destructive h-7 px-2">
                       حذف
                     </Button>
                   </div>
                 </div>
 
                 {/* WIFNT Analysis */}
-                {fontFile.analysis && (
+                {fontFile.info && (
                   <div className="p-3 bg-muted/30 rounded-lg border space-y-2">
                     <div className="flex items-center gap-2">
                       <Search className="w-4 h-4 text-primary" />
                       <span className="text-sm font-semibold">تحليل بنية WIFNT</span>
-                      {fontFile.analysis.valid ? (
-                        <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">صالح ✓</span>
+                      {fontFile.info.valid ? (
+                        <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">LAFT ✓</span>
                       ) : (
                         <span className="text-xs bg-destructive/10 text-destructive px-2 py-0.5 rounded-full">تنسيق غير معروف</span>
                       )}
                     </div>
                     <div className="grid grid-cols-2 gap-2 text-xs" dir="ltr">
                       <div className="bg-background/50 rounded p-2 border">
-                        <span className="text-muted-foreground block">Magic</span>
-                        <span className="font-mono font-bold text-foreground">{fontFile.analysis.magic}</span>
+                        <span className="text-muted-foreground block">Texture</span>
+                        <span className="font-mono font-bold text-foreground">{fontFile.info.textureWidth}×{fontFile.info.textureHeight}</span>
                       </div>
                       <div className="bg-background/50 rounded p-2 border">
-                        <span className="text-muted-foreground block">Version</span>
-                        <span className="font-mono font-bold text-foreground">{fontFile.analysis.version}</span>
+                        <span className="text-muted-foreground block">Format</span>
+                        <span className="font-mono font-bold text-foreground">BC1 (DXT1)</span>
                       </div>
                       <div className="bg-background/50 rounded p-2 border">
-                        <span className="text-muted-foreground block">Glyph Count</span>
-                        <span className="font-mono font-bold text-foreground">{fontFile.analysis.glyphCount.toLocaleString()}</span>
+                        <span className="text-muted-foreground block">Grid</span>
+                        <span className="font-mono font-bold text-foreground">{fontFile.info.gridCols}×{fontFile.info.gridRows}</span>
                       </div>
                       <div className="bg-background/50 rounded p-2 border">
-                        <span className="text-muted-foreground block">Baseline</span>
-                        <span className="font-mono font-bold text-primary">{fontFile.analysis.baseline}</span>
+                        <span className="text-muted-foreground block">Cell Size</span>
+                        <span className="font-mono font-bold text-foreground">{fontFile.info.cellWidth}×{fontFile.info.cellHeight}</span>
                       </div>
                       <div className="bg-background/50 rounded p-2 border">
-                        <span className="text-muted-foreground block">Header Size</span>
-                        <span className="font-mono font-bold text-foreground">0x{fontFile.analysis.headerSize.toString(16).toUpperCase()}</span>
+                        <span className="text-muted-foreground block">Glyphs</span>
+                        <span className="font-mono font-bold text-primary">{fontFile.info.glyphCount}</span>
                       </div>
                       <div className="bg-background/50 rounded p-2 border">
-                        <span className="text-muted-foreground block">Data Offset</span>
-                        <span className="font-mono font-bold text-foreground">0x{fontFile.analysis.dataOffset.toString(16).toUpperCase()}</span>
+                        <span className="text-muted-foreground block">Header</span>
+                        <span className="font-mono font-bold text-foreground">{formatSize(fontFile.info.headerSize)}</span>
                       </div>
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      الحجم الكلي: <span className="font-mono">{formatSize(fontFile.size)}</span>
+                    <div className="text-xs text-muted-foreground flex justify-between">
+                      <span>الحجم: <span className="font-mono">{formatSize(fontFile.size)}</span></span>
+                      <span>Texture: <span className="font-mono">{formatSize(fontFile.info.textureDataSize)}</span></span>
+                    </div>
+                    <p className="text-[10px] text-muted-foreground font-mono break-all" dir="ltr">
+                      Header: {fontFile.info.headerHex.slice(0, 71)}…
+                    </p>
+                  </div>
+                )}
+
+                {/* Real Font Atlas Preview */}
+                {fontFile.info && (
+                  <div className="p-3 bg-muted/30 rounded-lg border space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Eye className="w-4 h-4 text-primary" />
+                      <span className="text-sm font-semibold">معاينة الخط الحقيقي</span>
+                    </div>
+                    <div className="bg-[#0a0a1a] rounded-lg p-2 overflow-x-auto border border-border/50">
+                      <canvas
+                        ref={previewCanvasRef}
+                        className="max-w-full h-auto"
+                        style={{ imageRendering: "pixelated" }}
+                      />
+                    </div>
+                    <p className="text-[11px] text-muted-foreground text-center">
+                      أحرف الخط الفعلية مفكوكة من texture بتنسيق BC1
                     </p>
                   </div>
                 )}
@@ -334,36 +372,18 @@ export default function ModPackager() {
                   )}
                 </div>
 
-                {/* Live Baseline Preview */}
-                <div className="p-3 bg-muted/30 rounded-lg border space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Eye className="w-4 h-4 text-primary" />
-                    <span className="text-sm font-semibold">معاينة تأثير الإزاحة</span>
-                  </div>
-                  <div className="bg-[#1a1a2e] rounded-lg p-1 overflow-hidden border border-border/50">
-                    <div className="relative bg-[#0f0f23] rounded p-4 min-h-[100px] flex flex-col justify-center items-center gap-3">
-                      <div className="absolute inset-x-4 top-1/2 border-t border-dashed border-primary/20" />
-                      <p className="text-[10px] text-primary/40 absolute top-1 left-2 font-mono select-none">baseline ref</p>
-                      <div style={{ transform: `translateY(${-baselineOffset}px)`, transition: "transform 0.2s ease" }}>
-                        <p className="text-white text-lg text-center font-bold" style={{ fontFamily: "'Noto Kufi Arabic', 'Noto Sans Arabic', sans-serif" }}>
-                          مغامرة زينوبليد
-                        </p>
-                        <p className="text-white/70 text-sm text-center mt-1" style={{ fontFamily: "'Noto Kufi Arabic', 'Noto Sans Arabic', sans-serif" }}>
-                          اضغط أي زر للمتابعة
-                        </p>
-                      </div>
-                      {baselineOffset !== 0 && (
-                        <div className="absolute right-2 top-1/2 flex flex-col items-center" style={{ transform: "translateY(-50%)" }}>
-                          <div className="w-px bg-primary/60" style={{ height: `${Math.abs(baselineOffset) * 2}px` }} />
-                          <span className="text-[10px] text-primary font-mono mt-0.5">{baselineOffset > 0 ? "↑" : "↓"}{Math.abs(baselineOffset)}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <p className="text-[11px] text-muted-foreground text-center">
-                    محاكاة بصرية — الخط الفعلي سيظهر داخل اللعبة فقط
-                  </p>
-                </div>
+                {/* Glyph Map Toggle */}
+                {fontFile.info && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full gap-2"
+                    onClick={() => setShowGlyphMap(prev => !prev)}
+                  >
+                    <Grid3X3 className="w-4 h-4" />
+                    {showGlyphMap ? "إخفاء خريطة الأحرف" : "عرض خريطة الأحرف (150 حرف)"}
+                  </Button>
+                )}
 
               </div>
             ) : (
@@ -421,7 +441,7 @@ export default function ModPackager() {
                   className="flex-1 bg-transparent outline-none text-foreground min-w-0"
                   dir="ltr"
                 />
-                <span className="text-muted-foreground shrink-0">/{"{filename}"}.bdat</span>
+                <span className="text-muted-foreground shrink-0">/{"filename"}.bdat</span>
               </div>
               <p className="text-xs text-muted-foreground">
                 📁 XC3 الافتراضي: <code className="bg-muted px-1 rounded">gb</code> — (romfs/bdat/gb/filename.bdat)
@@ -450,6 +470,35 @@ export default function ModPackager() {
             )}
           </Card>
         </div>
+
+        {/* Glyph Map (full width) */}
+        {showGlyphMap && fontFile?.info && (
+          <Card className="p-5 space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="font-display font-bold flex items-center gap-2">
+                <Grid3X3 className="w-4 h-4 text-primary" />
+                خريطة الأحرف — {fontFile.info.glyphCount} حرف ({fontFile.info.gridCols}×{fontFile.info.gridRows})
+              </h3>
+              {selectedGlyph !== null && (
+                <div className="flex items-center gap-2 text-xs bg-primary/10 text-primary px-3 py-1 rounded-full" dir="ltr">
+                  <span>Glyph #{selectedGlyph}</span>
+                  <span>Row {Math.floor(selectedGlyph / fontFile.info.gridCols)}, Col {selectedGlyph % fontFile.info.gridCols}</span>
+                </div>
+              )}
+            </div>
+            <div className="bg-[#0a0a1a] rounded-lg p-2 overflow-x-auto border border-border/50">
+              <canvas
+                ref={glyphMapCanvasRef}
+                className="max-w-full h-auto cursor-crosshair"
+                style={{ imageRendering: "pixelated" }}
+                onClick={handleGlyphMapClick}
+              />
+            </div>
+            <p className="text-[11px] text-muted-foreground text-center">
+              اضغط على أي حرف لتحديده — الشبكة: {fontFile.info.cellWidth}×{fontFile.info.cellHeight} بكسل لكل خلية
+            </p>
+          </Card>
+        )}
 
         {/* Folder structure preview */}
         {(fontFile || bdatFiles.length > 0) && (
@@ -527,8 +576,106 @@ export default function ModPackager() {
 }
 
 /**
+ * Draw the full atlas preview into a canvas
+ */
+function drawPreview(canvas: HTMLCanvasElement, atlas: HTMLCanvasElement, info: WifntInfo, offset: number) {
+  // Show first row of glyphs as preview
+  const previewCols = Math.min(15, info.gridCols);
+  const w = previewCols * info.cellWidth;
+  const h = info.cellHeight * 2; // Two rows for before/after
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  ctx.fillStyle = "#0a0a1a";
+  ctx.fillRect(0, 0, w, h);
+
+  // Draw baseline reference
+  ctx.strokeStyle = "rgba(100, 100, 255, 0.3)";
+  ctx.setLineDash([4, 4]);
+  ctx.beginPath();
+  ctx.moveTo(0, info.cellHeight);
+  ctx.lineTo(w, info.cellHeight);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Draw first row of glyphs with offset applied
+  for (let i = 0; i < previewCols; i++) {
+    ctx.drawImage(
+      atlas,
+      i * info.cellWidth, 0, info.cellWidth, info.cellHeight,
+      i * info.cellWidth, -offset, info.cellWidth, info.cellHeight
+    );
+  }
+
+  // Draw second row below
+  for (let i = 0; i < previewCols; i++) {
+    ctx.drawImage(
+      atlas,
+      i * info.cellWidth, info.cellHeight, info.cellWidth, info.cellHeight,
+      i * info.cellWidth, info.cellHeight - offset, info.cellWidth, info.cellHeight
+    );
+  }
+
+  // Label
+  ctx.fillStyle = "rgba(100, 180, 255, 0.5)";
+  ctx.font = "10px monospace";
+  ctx.fillText(`offset: ${offset}px`, 4, h - 4);
+}
+
+/**
+ * Draw the full glyph map with grid lines
+ */
+function drawGlyphMap(canvas: HTMLCanvasElement, atlas: HTMLCanvasElement, info: WifntInfo, selected: number | null) {
+  const gap = 2;
+  const cellW = info.cellWidth + gap;
+  const cellH = info.cellHeight + gap;
+  const w = info.gridCols * cellW;
+  const h = info.gridRows * cellH;
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  ctx.fillStyle = "#0a0a1a";
+  ctx.fillRect(0, 0, w, h);
+
+  // Draw each glyph cell
+  for (let row = 0; row < info.gridRows; row++) {
+    for (let col = 0; col < info.gridCols; col++) {
+      const idx = row * info.gridCols + col;
+      const dx = col * cellW;
+      const dy = row * cellH;
+
+      // Cell background
+      ctx.fillStyle = idx === selected ? "rgba(100, 180, 255, 0.2)" : "rgba(30, 30, 50, 0.5)";
+      ctx.fillRect(dx, dy, info.cellWidth, info.cellHeight);
+
+      // Draw glyph from atlas
+      ctx.drawImage(
+        atlas,
+        col * info.cellWidth, row * info.cellHeight, info.cellWidth, info.cellHeight,
+        dx, dy, info.cellWidth, info.cellHeight
+      );
+
+      // Highlight selected
+      if (idx === selected) {
+        ctx.strokeStyle = "rgba(100, 180, 255, 0.8)";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(dx + 1, dy + 1, info.cellWidth - 2, info.cellHeight - 2);
+      }
+
+      // Glyph index label
+      ctx.fillStyle = "rgba(150, 150, 200, 0.4)";
+      ctx.font = "8px monospace";
+      ctx.fillText(`${idx}`, dx + 2, dy + info.cellHeight - 3);
+    }
+  }
+}
+
+/**
  * Build a simple ZIP file from parts (no compression, store only).
- * Sufficient for mod packaging where files are already binary.
  */
 function buildZip(files: { path: string; data: Uint8Array }[]): Uint8Array {
   const entries: { path: Uint8Array; data: Uint8Array; offset: number }[] = [];
@@ -536,22 +683,21 @@ function buildZip(files: { path: string; data: Uint8Array }[]): Uint8Array {
   const parts: Uint8Array[] = [];
   let offset = 0;
 
-  // Local file headers + data
   for (const file of files) {
     const pathBytes = encoder.encode(file.path);
     const header = new ArrayBuffer(30);
     const view = new DataView(header);
-    view.setUint32(0, 0x04034b50, true); // signature
-    view.setUint16(4, 20, true); // version needed
-    view.setUint16(6, 0, true); // flags
-    view.setUint16(8, 0, true); // compression (store)
-    view.setUint16(10, 0, true); // mod time
-    view.setUint16(12, 0, true); // mod date
-    view.setUint32(14, crc32(file.data), true); // crc32
-    view.setUint32(18, file.data.length, true); // compressed size
-    view.setUint32(22, file.data.length, true); // uncompressed size
-    view.setUint16(26, pathBytes.length, true); // name length
-    view.setUint16(28, 0, true); // extra field length
+    view.setUint32(0, 0x04034b50, true);
+    view.setUint16(4, 20, true);
+    view.setUint16(6, 0, true);
+    view.setUint16(8, 0, true);
+    view.setUint16(10, 0, true);
+    view.setUint16(12, 0, true);
+    view.setUint32(14, crc32(file.data), true);
+    view.setUint32(18, file.data.length, true);
+    view.setUint32(22, file.data.length, true);
+    view.setUint16(26, pathBytes.length, true);
+    view.setUint16(28, 0, true);
 
     const headerBytes = new Uint8Array(header);
     entries.push({ path: pathBytes, data: file.data, offset });
@@ -561,7 +707,6 @@ function buildZip(files: { path: string; data: Uint8Array }[]): Uint8Array {
 
   const cdStart = offset;
 
-  // Central directory
   for (const entry of entries) {
     const cd = new ArrayBuffer(46);
     const view = new DataView(cd);
@@ -589,7 +734,6 @@ function buildZip(files: { path: string; data: Uint8Array }[]): Uint8Array {
 
   const cdSize = offset - cdStart;
 
-  // End of central directory
   const eocd = new ArrayBuffer(22);
   const eocdView = new DataView(eocd);
   eocdView.setUint32(0, 0x06054b50, true);
@@ -602,7 +746,6 @@ function buildZip(files: { path: string; data: Uint8Array }[]): Uint8Array {
   eocdView.setUint16(20, 0, true);
   parts.push(new Uint8Array(eocd));
 
-  // Merge
   const totalSize = parts.reduce((s, p) => s + p.length, 0);
   const result = new Uint8Array(totalSize);
   let pos = 0;
