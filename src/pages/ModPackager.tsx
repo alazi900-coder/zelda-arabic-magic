@@ -4,8 +4,9 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, Info, Download, Loader2, MoveVertical, Search, Eye, Grid3X3, ImageDown, ImageUp, Replace, Trash2 } from "lucide-react";
+import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, Info, Download, Loader2, MoveVertical, Search, Eye, Grid3X3, ImageDown, ImageUp, Replace, Trash2, Pencil } from "lucide-react";
 import { analyzeWifnt, decodeWifntTexture, renderAtlasToCanvas, rebuildWifnt, type WifntInfo } from "@/lib/wifnt-parser";
+import GlyphDrawingEditor from "@/components/editor/GlyphDrawingEditor";
 
 interface FontFile {
   name: string;
@@ -31,6 +32,7 @@ export default function ModPackager() {
   const [baselineOffset, setBaselineOffset] = useState(0);
   const [showGlyphMap, setShowGlyphMap] = useState(false);
   const [selectedGlyph, setSelectedGlyph] = useState<number | null>(null);
+  const [showDrawingEditor, setShowDrawingEditor] = useState(false);
 
   const atlasCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -658,9 +660,18 @@ export default function ModPackager() {
                   <p className="text-xs text-muted-foreground">
                     الحجم: {fontFile.info.cellWidth}×{fontFile.info.cellHeight} بكسل — ارفع صورة PNG لاستبدال هذا الحرف
                   </p>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <Button
+                      variant="default"
+                      size="sm"
+                      className="gap-1.5"
+                      onClick={() => setShowDrawingEditor(true)}
+                    >
+                      <Pencil className="w-3.5 h-3.5" />
+                      رسم الحرف
+                    </Button>
                     <label>
-                      <Button variant="default" size="sm" className="gap-1.5 cursor-pointer" asChild>
+                      <Button variant="secondary" size="sm" className="gap-1.5 cursor-pointer" asChild>
                         <span>
                           <Replace className="w-3.5 h-3.5" />
                           استبدال بصورة
@@ -681,6 +692,34 @@ export default function ModPackager() {
                   </div>
                 </div>
               </div>
+            )}
+
+            {/* Drawing Editor */}
+            {showDrawingEditor && selectedGlyph !== null && atlasCanvasRef.current && (
+              <GlyphDrawingEditor
+                atlasCanvas={atlasCanvasRef.current}
+                glyphIndex={selectedGlyph}
+                cellWidth={fontFile.info.cellWidth}
+                cellHeight={fontFile.info.cellHeight}
+                gridCols={fontFile.info.gridCols}
+                onApply={(imageData) => {
+                  const atlas = atlasCanvasRef.current;
+                  if (!atlas || !fontFile?.info) return;
+                  const ctx = atlas.getContext("2d");
+                  if (!ctx) return;
+                  const info = fontFile.info;
+                  const col = selectedGlyph % info.gridCols;
+                  const row = Math.floor(selectedGlyph / info.gridCols);
+                  ctx.putImageData(imageData, col * info.cellWidth, row * info.cellHeight);
+                  const fullImageData = ctx.getImageData(0, 0, info.textureWidth, info.textureHeight);
+                  const newData = rebuildWifnt(fontFile.data, info, fullImageData.data);
+                  processFont(newData, fontFile.name);
+                  setShowDrawingEditor(false);
+                  setStatus(`✅ تم حفظ رسم الحرف #${selectedGlyph}`);
+                  setTimeout(() => setStatus(""), 4000);
+                }}
+                onCancel={() => setShowDrawingEditor(false)}
+              />
             )}
           </Card>
         )}
