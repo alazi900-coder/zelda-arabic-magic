@@ -281,7 +281,14 @@ const XenobladeProcess = () => {
 
       // Merge server entries with local binary BDAT entries
       const allEntries = [...serverEntries, ...bdatBinaryEntries];
+      
+      // إحصائيات الحوارات مقابل باقي النصوص
+      const dialogueEntries = bdatBinaryEntries.filter(e => /msg_(ev|fev|ask|bev|sev)\d/i.test(e.msbtFile));
+      const otherBdatEntries = bdatBinaryEntries.length - dialogueEntries.length;
       addLog(`✅ تم استخراج ${allEntries.length} نص (${msbtCount} MSBT + ${bdatJsonCount} BDAT JSON + ${bdatBinaryEntries.length} BDAT ثنائي)`);
+      if (dialogueEntries.length > 0) {
+        addLog(`🎬 حوارات ومشاهد (msg_ev/fev/ask/bev/sev): ${dialogueEntries.length} نص | باقي النصوص: ${otherBdatEntries}`);
+      }
 
       if (allEntries.length === 0) {
         setStage("error");
