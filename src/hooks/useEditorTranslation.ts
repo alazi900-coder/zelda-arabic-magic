@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { toast } from "@/hooks/use-toast";
 import {
   ExtractedEntry, EditorState, AI_BATCH_SIZE,
-  categorizeFile, isTechnicalText, hasTechnicalTags,
+  categorizeFile, categorizeBdatTable, isTechnicalText, hasTechnicalTags,
 } from "@/components/editor/types";
 import { restoreTagsLocally } from "@/lib/xc3-tag-restoration";
 import { protectTags, restoreTags } from "@/lib/xc3-tag-protection";
@@ -108,13 +108,23 @@ export function useEditorTranslation({
     finally { setTranslatingSingle(null); }
   };
 
+  /** Categorize an entry using the correct function (BDAT vs MSBT) */
+  const categorizeEntry = (e: ExtractedEntry): string => {
+    const isBdat = /^.+?\[\d+\]\./.test(e.label);
+    if (isBdat) {
+      const sourceFile = e.msbtFile.startsWith('bdat-bin:') ? e.msbtFile.split(':')[1] : e.msbtFile.startsWith('bdat:') ? e.msbtFile.slice(5) : undefined;
+      return categorizeBdatTable(e.label, sourceFile, e.original);
+    }
+    return categorizeFile(e.msbtFile);
+  };
+
   const handleAutoTranslate = async () => {
     if (!state) return;
     const arabicRegex = /[\u0600-\u06FF]/;
     let skipEmpty = 0, skipArabic = 0, skipTechnical = 0, skipTranslated = 0, skipCategory = 0;
     const untranslated = state.entries.filter(e => {
       const key = `${e.msbtFile}:${e.index}`;
-      const matchCategory = filterCategory.length === 0 || filterCategory.includes(categorizeFile(e.msbtFile));
+      const matchCategory = filterCategory.length === 0 || filterCategory.includes(categorizeEntry(e));
       if (!matchCategory) { skipCategory++; return false; }
       if (!e.original.trim()) { skipEmpty++; return false; }
       if (arabicRegex.test(e.original)) { skipArabic++; return false; }
