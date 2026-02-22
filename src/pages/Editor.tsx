@@ -743,7 +743,7 @@ const Editor = () => {
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" className="font-body"><Download className="w-4 h-4" /> تصدير / استيراد</Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="bg-card border-border z-50 min-w-[240px]">
+                <DropdownMenuContent align="start" className="bg-card border-border z-50 min-w-[240px] max-h-[70vh] overflow-y-auto">
                   <DropdownMenuLabel className="text-xs">📤 تصدير</DropdownMenuLabel>
                   <DropdownMenuItem onClick={editor.handleExportTranslations}><Download className="w-4 h-4" /> تصدير JSON{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleExportAllEnglishJson}><FileDown className="w-4 h-4" /> تصدير الكل JSON للترجمة الخارجية 🌍</DropdownMenuItem>
