@@ -40,6 +40,7 @@ const XenobladeProcess = () => {
   const [samplesEnabled, setSamplesEnabled] = useState(false);
   const [dangerFilter, setDangerFilter] = useState<"all" | "critical" | "limited">("all");
   const [safetyMargin, setSafetyMargin] = useState<number>(() => loadBdatSettings().safetyMargin);
+  const [arabicMultiplier, setArabicMultiplier] = useState<number>(() => loadBdatSettings().arabicMultiplier);
   const [showSettings, setShowSettings] = useState(false);
   const navigate = useNavigate();
 
@@ -453,7 +454,7 @@ const XenobladeProcess = () => {
               <Settings2 className="w-4 h-4 text-secondary" />
               <span className="text-sm font-display font-bold flex-1 text-right">⚙️ إعدادات المشروع</span>
               <span className="text-xs text-muted-foreground">
-                هامش الأمان الحالي: <strong>{formatMarginPct(safetyMargin)}</strong>
+                هامش: <strong>{formatMarginPct(safetyMargin)}</strong> | مضاعف عربي: <strong>×{arabicMultiplier.toFixed(1)}</strong>
               </span>
               <span className="text-muted-foreground text-xs">{showSettings ? "▲" : "▼"}</span>
             </button>
@@ -507,6 +508,62 @@ const XenobladeProcess = () => {
                         }}
                         className={`px-2 py-1 rounded text-xs font-mono transition-all ${
                           Math.abs(safetyMargin - p.value) < 0.005
+                            ? "bg-secondary text-secondary-foreground"
+                            : "bg-muted text-muted-foreground hover:bg-muted/80"
+                        }`}
+                      >
+                        {p.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Arabic Multiplier */}
+                <div className="mt-4 pt-4 border-t border-border">
+                  <label className="block text-xs font-display font-semibold mb-1 text-foreground">
+                    مضاعف البايتات العربي
+                    <span className="mr-2 text-secondary font-mono">×{arabicMultiplier.toFixed(1)}</span>
+                  </label>
+                  <p className="text-xs text-muted-foreground mb-3">
+                    يُضاعف ميزانية البايتات لأن الحرف العربي يأخذ 2 بايت مقابل 1 للإنجليزي. القيمة ×2.0 تعني ضعف المساحة.
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="range"
+                      min={150}
+                      max={300}
+                      step={10}
+                      value={Math.round(arabicMultiplier * 100)}
+                      onChange={e => {
+                        const newMul = Number(e.target.value) / 100;
+                        setArabicMultiplier(newMul);
+                        saveBdatSettings({ arabicMultiplier: newMul });
+                      }}
+                      className="flex-1 accent-secondary cursor-pointer"
+                    />
+                    <span className="text-xs font-mono text-secondary w-10 text-center">×{arabicMultiplier.toFixed(1)}</span>
+                  </div>
+                  <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                    <span>×1.5</span>
+                    <span>×2.0</span>
+                    <span>×2.5</span>
+                    <span>×3.0</span>
+                  </div>
+                  <div className="flex gap-2 mt-3 flex-wrap">
+                    {[
+                      { label: "×1.5 (محدود)", value: 1.5 },
+                      { label: "×2.0 (افتراضي)", value: 2.0 },
+                      { label: "×2.5", value: 2.5 },
+                      { label: "×3.0 (واسع)", value: 3.0 },
+                    ].map(p => (
+                      <button
+                        key={p.value}
+                        onClick={() => {
+                          setArabicMultiplier(p.value);
+                          saveBdatSettings({ arabicMultiplier: p.value });
+                        }}
+                        className={`px-2 py-1 rounded text-xs font-mono transition-all ${
+                          Math.abs(arabicMultiplier - p.value) < 0.05
                             ? "bg-secondary text-secondary-foreground"
                             : "bg-muted text-muted-foreground hover:bg-muted/80"
                         }`}

@@ -395,18 +395,16 @@ export function extractBdatStrings(
   columnName: string;
   maxBytes: number;
 }[] {
-  // Resolve margin: caller wins, otherwise fall back to persisted settings
-  const resolvedMargin = (() => {
-    if (safetyMargin !== undefined) return Math.max(safetyMargin, 1.0);
+  // Resolve margin & arabic multiplier from persisted settings
+  const settings = (() => {
     try {
       const raw = localStorage.getItem("bdat-settings-v1");
-      if (raw) {
-        const parsed = JSON.parse(raw) as { safetyMargin?: number };
-        if (typeof parsed.safetyMargin === "number") return Math.max(parsed.safetyMargin, 1.0);
-      }
+      if (raw) return JSON.parse(raw) as { safetyMargin?: number; arabicMultiplier?: number };
     } catch { /* ignore */ }
-    return 1.2; // default
+    return {} as { safetyMargin?: number; arabicMultiplier?: number };
   })();
+  const resolvedMargin = safetyMargin !== undefined ? Math.max(safetyMargin, 1.0) : Math.max(settings.safetyMargin ?? 1.2, 1.0);
+  const resolvedArabicMul = Math.min(Math.max(settings.arabicMultiplier ?? 2.0, 1.5), 3.0);
 
   const entries: { key: string; original: string; tableName: string; rowIndex: number; columnName: string; maxBytes: number }[] = [];
 
@@ -426,9 +424,9 @@ export function extractBdatStrings(
           if (byteLen > max) max = byteLen;
         }
       }
-      // Use observed max + configurable safety margin as the field's byte budget.
+      // Use observed max × safety margin × arabic multiplier as the field's byte budget.
       // Minimum of 4 to handle empty/near-empty columns.
-      colMaxBytes[col.name] = Math.max(Math.ceil(max * resolvedMargin), 4);
+      colMaxBytes[col.name] = Math.max(Math.ceil(max * resolvedMargin * resolvedArabicMul), 4);
     }
 
     for (let r = 0; r < table.rows.length; r++) {
