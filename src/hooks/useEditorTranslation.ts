@@ -100,7 +100,11 @@ export function useEditorTranslation({
         }
         updateTranslation(key, translated);
       }
-    } catch (err) { console.error('Single translate error:', err); }
+    } catch (err) {
+      const errMsg = err instanceof Error ? err.message : 'خطأ في الترجمة';
+      console.error('Single translate error:', err);
+      toast({ title: "❌ فشل الترجمة", description: errMsg, variant: "destructive" });
+    }
     finally { setTranslatingSingle(null); }
   };
 
