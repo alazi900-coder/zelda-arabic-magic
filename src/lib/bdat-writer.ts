@@ -91,7 +91,7 @@ export function patchBdatFile(
     const origTableData = raw.tableData; // original bytes for this table
 
     const stringColumns = table.columns.filter(
-      c => c.valueType === BdatValueType.String || c.valueType === BdatValueType.DebugString,
+      c => c.valueType === BdatValueType.String || c.valueType === BdatValueType.DebugString || c.valueType === BdatValueType.MessageId,
     );
 
     // If no string columns or no translations match this table, keep original
@@ -115,7 +115,7 @@ export function patchBdatFile(
       origOffset: number; // original offset in string table
       origBytes: Uint8Array; // original string bytes (WITHOUT null terminator)
       newBytes: Uint8Array; // new string bytes (WITHOUT null terminator) — same as orig if no translation
-      cells: { row: number; colIdx: number; cellOffset: number }[]; // all cells pointing to this string
+      cells: { row: number; colIdx: number; cellOffset: number; isMessageId: boolean }[]; // all cells pointing to this string
     }
 
     const stringMap = new Map<number, StringEntry>(); // keyed by origOffset
@@ -126,9 +126,12 @@ export function patchBdatFile(
       for (let ci = 0; ci < stringColumns.length; ci++) {
         const col = stringColumns[ci];
         const cellOffset = rowOffset + col.offset;
-        if (cellOffset + 4 > origTableData.length) continue;
+        const ptrSize = col.valueType === BdatValueType.MessageId ? 2 : 4;
+        if (cellOffset + ptrSize > origTableData.length) continue;
 
-        const strOff = origView.getUint32(cellOffset, true);
+        const strOff = col.valueType === BdatValueType.MessageId
+          ? origView.getUint16(cellOffset, true)
+          : origView.getUint32(cellOffset, true);
         if (strOff === 0) continue;
 
         const absStrOffset = raw.stringTableOffset + strOff;
@@ -148,7 +151,7 @@ export function patchBdatFile(
           stringMap.set(strOff, entry);
         }
 
-        entry.cells.push({ row: r, colIdx: ci, cellOffset });
+        entry.cells.push({ row: r, colIdx: ci, cellOffset, isMessageId: col.valueType === BdatValueType.MessageId });
 
         // Check if this cell has a translation
         const mapKey = `${table.name}:${r}:${col.name}`;
@@ -225,7 +228,11 @@ export function patchBdatFile(
       const newOff = offsetMap.get(origOff);
       if (newOff === undefined) continue;
       for (const cell of entry.cells) {
-        newTableView.setUint32(cell.cellOffset, newOff, true);
+        if (cell.isMessageId) {
+          newTableView.setUint16(cell.cellOffset, newOff, true);
+        } else {
+          newTableView.setUint32(cell.cellOffset, newOff, true);
+        }
       }
     }
 
