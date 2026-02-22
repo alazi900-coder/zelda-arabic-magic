@@ -13,14 +13,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, AlertTriangle, Info, Download, Loader2, ShieldCheck, ShieldAlert } from "lucide-react";
+import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, AlertTriangle, Info, Download, Loader2, ShieldCheck, ShieldAlert, Globe } from "lucide-react";
 import { validateFontForArabic, type FontValidationResult } from "@/lib/font-validator";
+import { ttfToBfttf } from "@/lib/bfttf-converter";
 
 interface FontFile {
   name: string;
   data: ArrayBuffer;
   size: number;
   validation?: FontValidationResult;
+  originalFormat?: string; // track original format for conversion
 }
 
 interface BdatFile {
@@ -38,6 +40,7 @@ export default function ModPackager() {
   const [showLatinWarning, setShowLatinWarning] = useState(false);
   const [loadingBundledFont, setLoadingBundledFont] = useState(false);
   const [bdatSubPath, setBdatSubPath] = useState("gb"); // default XC3 subpath
+  const [loadingExternalFont, setLoadingExternalFont] = useState<string | null>(null);
 
   const handleLoadBundledFont = useCallback(async () => {
     setLoadingBundledFont(true);
@@ -58,10 +61,52 @@ export default function ModPackager() {
   }, []);
 
   const validateAndSetFont = useCallback((name: string, data: ArrayBuffer) => {
-    // .wifnt files skip validation (custom game format)
-    setFontFile({ name, data, size: data.byteLength });
+    const ext = name.split('.').pop()?.toLowerCase() || '';
+    if (ext === 'wifnt') {
+      // .wifnt files skip validation (custom game format)
+      setFontFile({ name, data, size: data.byteLength });
+    } else {
+      // TTF/OTF — validate and store with original format
+      const validation = validateFontForArabic(data);
+      setFontFile({ name, data, size: data.byteLength, validation, originalFormat: ext });
+    }
   }, []);
 
+  const EXTERNAL_FONTS = [
+    { id: 'cairo', name: 'Cairo', url: 'https://cdn.jsdelivr.net/gh/google/fonts/ofl/cairo/Cairo%5Bslnt%2Cwght%5D.ttf', desc: 'خط عصري متوافق — الأكثر استخداماً' },
+    { id: 'tajawal', name: 'Tajawal', url: 'https://cdn.jsdelivr.net/gh/google/fonts/ofl/tajawal/Tajawal-Regular.ttf', desc: 'خط أنيق خفيف الوزن' },
+    { id: 'noto-sans', name: 'Noto Sans Arabic', url: 'https://cdn.jsdelivr.net/gh/google/fonts/ofl/notosansarabic/NotoSansArabic%5Bwdth%2Cwght%5D.ttf', desc: 'تغطية شاملة — من Google' },
+    { id: 'noto-kufi', name: 'Noto Kufi Arabic', url: 'https://cdn.jsdelivr.net/gh/google/fonts/ofl/notokufiarabic/NotoKufiArabic%5Bwght%5D.ttf', desc: 'خط كوفي حديث' },
+  ];
+
+  const handleDownloadExternalFont = useCallback(async (font: typeof EXTERNAL_FONTS[0]) => {
+    setLoadingExternalFont(font.id);
+    setStatus(`جارٍ تحميل خط ${font.name}...`);
+    try {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+      const response = await fetch(`${supabaseUrl}/functions/v1/font-proxy`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${supabaseKey}`,
+          'apikey': supabaseKey,
+        },
+        body: JSON.stringify({ fontUrl: font.url }),
+      });
+      if (!response.ok) throw new Error(`فشل التحميل: ${response.status}`);
+      const data = await response.arrayBuffer();
+      const validation = validateFontForArabic(data);
+      setFontFile({ name: `${font.name}.ttf`, data, size: data.byteLength, validation, originalFormat: 'ttf' });
+      setStatus(`✅ تم تحميل خط ${font.name} بنجاح!`);
+      setTimeout(() => setStatus(""), 4000);
+    } catch (err) {
+      setStatus(`❌ فشل تحميل الخط: ${err instanceof Error ? err.message : 'خطأ غير معروف'}`);
+      setTimeout(() => setStatus(""), 7000);
+    } finally {
+      setLoadingExternalFont(null);
+    }
+  }, []);
 
   const handleFontUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -109,11 +154,17 @@ export default function ModPackager() {
     try {
       const zipParts: { path: string; data: Uint8Array }[] = [];
 
-      // Add font file to romfs structure
+      // Add font file to romfs structure (convert TTF→wifnt if needed)
       if (fontFile) {
+        let fontData = fontFile.data;
+        if (fontFile.originalFormat && fontFile.originalFormat !== 'wifnt') {
+          // Convert TTF/OTF to BFTTF (which is used as .wifnt)
+          setStatus("تحويل الخط إلى صيغة .wifnt...");
+          fontData = ttfToBfttf(fontData);
+        }
         zipParts.push({
           path: `romfs/menu/font/standard.wifnt`,
-          data: new Uint8Array(fontFile.data),
+          data: new Uint8Array(fontData),
         });
       }
 
@@ -304,7 +355,7 @@ export default function ModPackager() {
                   variant="outline"
                   className="w-full gap-2 border-primary/30 hover:bg-primary/5"
                   onClick={handleLoadBundledFont}
-                  disabled={loadingBundledFont}
+                  disabled={loadingBundledFont || !!loadingExternalFont}
                 >
                   {loadingBundledFont ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -313,10 +364,41 @@ export default function ModPackager() {
                   )}
                   {loadingBundledFont ? "جارٍ التحميل..." : "استخدام خط اللعبة المدمج"}
                 </Button>
-                <label className="flex flex-col items-center gap-3 p-6 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
-                  <Upload className="w-6 h-6 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">أو ارفع خطاً يدوياً (.wifnt)</span>
-                  <input type="file" accept=".wifnt" onChange={handleFontUpload} className="hidden" />
+
+                {/* External font download options */}
+                <div className="space-y-1.5">
+                  <p className="text-xs font-semibold text-muted-foreground flex items-center gap-1">
+                    <Globe className="w-3 h-3" />
+                    أو حمّل خطاً عربياً (يُحوَّل تلقائياً إلى .wifnt):
+                  </p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {EXTERNAL_FONTS.map(font => (
+                      <Button
+                        key={font.id}
+                        variant="outline"
+                        size="sm"
+                        className="gap-1.5 text-xs h-auto py-2 flex-col items-start"
+                        onClick={() => handleDownloadExternalFont(font)}
+                        disabled={loadingBundledFont || !!loadingExternalFont}
+                      >
+                        <span className="flex items-center gap-1 w-full">
+                          {loadingExternalFont === font.id ? (
+                            <Loader2 className="w-3 h-3 animate-spin shrink-0" />
+                          ) : (
+                            <Download className="w-3 h-3 shrink-0" />
+                          )}
+                          <span className="font-semibold">{font.name}</span>
+                        </span>
+                        <span className="text-muted-foreground font-normal text-[10px] leading-tight">{font.desc}</span>
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
+                <label className="flex flex-col items-center gap-3 p-4 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
+                  <Upload className="w-5 h-5 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground">أو ارفع خطاً يدوياً (.ttf / .otf / .wifnt)</span>
+                  <input type="file" accept=".ttf,.otf,.wifnt" onChange={handleFontUpload} className="hidden" />
                 </label>
               </div>
             )}
@@ -420,13 +502,13 @@ export default function ModPackager() {
         )}
 
         {/* Auto-convert notice */}
-        {fontFile && !fontFile.name.endsWith(".bfttf") && !fontFile.name.toLowerCase().endsWith(".wifnt") && (
+        {fontFile && fontFile.originalFormat && fontFile.originalFormat !== 'wifnt' && (
           <Card className="p-4 bg-primary/5 border-primary/20 flex gap-3 items-start">
             <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 shrink-0" />
             <div className="text-sm">
-              <p className="font-bold text-foreground mb-1">سيتم تحويل الخط تلقائياً إلى .bfttf</p>
+              <p className="font-bold text-foreground mb-1">سيتم تحويل الخط تلقائياً إلى .wifnt</p>
               <p className="text-muted-foreground">
-                عند بناء الحزمة، سيُحوَّل الخط من <code className="bg-muted px-1 rounded">{fontFile.name.split('.').pop()}</code> إلى صيغة <code className="bg-muted px-1 rounded">.bfttf</code> المطلوبة للعبة تلقائياً.
+                عند بناء الحزمة، سيُحوَّل الخط من <code className="bg-muted px-1 rounded">{fontFile.originalFormat}</code> إلى صيغة <code className="bg-muted px-1 rounded">.wifnt</code> المطلوبة للعبة تلقائياً.
               </p>
             </div>
           </Card>
