@@ -320,12 +320,21 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
             }
 
             if (translationMap.size > 0) {
-              const { result: patched, overflowErrors, patchedCount, skippedCount } = patchBdatFile(bdatFile, translationMap);
+              const { result: patched, overflowErrors, patchedCount, skippedCount, tableStats } = patchBdatFile(bdatFile, translationMap);
               localBdatResults.push({ name: fileName, data: patched });
               for (const e of overflowErrors) {
                 allOverflowErrors.push({ fileName, ...e });
               }
-              setBuildProgress(`✅ ${fileName}: تم حقن ${patchedCount} نص${skippedCount > 0 ? ` ⚠️ تخطي ${skippedCount} (تجاوز الحجم)` : ''}`);
+              // Log table-level diagnostics
+              for (const ts of tableStats) {
+                if (ts.stringsPatched > 0 || ts.stringsSkipped > 0) {
+                  const growth = ts.newStringTableSize - ts.originalStringTableSize;
+                  console.log(`[BUILD-BDAT] ${fileName}/${ts.tableName}: ${ts.stringsPatched} patched, string table ${growth >= 0 ? '+' : ''}${growth} bytes${ts.hasU16Columns ? ' ⚠️ u16' : ''}`);
+                }
+              }
+              const u16Tables = tableStats.filter(ts => ts.hasU16Columns && ts.stringsSkipped > 0);
+              const u16Warn = u16Tables.length > 0 ? ` ⚠️ ${u16Tables.length} جدول u16 overflow` : '';
+              setBuildProgress(`✅ ${fileName}: تم حقن ${patchedCount} نص${skippedCount > 0 ? ` ⚠️ تخطي ${skippedCount} (تجاوز الحجم)` : ''}${u16Warn}`);
               await new Promise(r => setTimeout(r, 400));
               localModifiedCount += patchedCount;
             } else {

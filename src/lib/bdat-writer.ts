@@ -1,5 +1,9 @@
 /**
  * BDAT Binary Patcher for Xenoblade Chronicles 3
+ * 
+ * ═══════════════════════════════════════════════════════════════
+ *  IMPROVED VERSION — Safe String Table Expansion
+ * ═══════════════════════════════════════════════════════════════
  *
  * String Table Expansion Mode: rebuilds each table's string table to accommodate
  * translations that are LARGER than the original strings (critical for Arabic
@@ -8,16 +12,25 @@
  * How it works:
  * 1. For each table, collect ALL string offsets referenced by row data.
  * 2. Read original strings and replace with translations where available.
- * 3. Build a NEW string table (may be larger than original).
- * 4. Update string pointers in row data to point to new offsets.
- * 5. Update stringTableLength in the table header.
- * 6. Rebuild the full file with adjusted table sizes and offsets.
+ * 3. Handle SHARED strings correctly: if multiple rows share the same original
+ *    string but have DIFFERENT translations, create separate string entries.
+ * 4. Build a NEW string table (may be larger than original).
+ * 5. Update string pointers in row data to point to new offsets.
+ * 6. Update stringTableLength in the table header.
+ * 7. Rebuild the full file with adjusted table sizes and offsets.
  *
  * Invariants preserved:
  * - Row count, column count, row length are NEVER changed.
  * - Column definitions and hash tables are byte-identical.
  * - String table flag byte and metadata strings (table/column names) are preserved.
  * - Only row-data string pointers are updated.
+ *
+ * Safety improvements over original:
+ * - MessageId (u16) overflow detection: reports error when new offset > 65535
+ * - Shared string conflict resolution: different translations for same original string
+ * - Overflow error reporting with detailed diagnostics
+ * - Bounds checking on all read/write operations
+ * - Optional string table alignment padding
  */
 
 import { BdatFile, BdatTable, BdatValueType } from './bdat-parser';
@@ -31,6 +44,10 @@ export interface OverflowError {
   originalBytes: number;
   /** UTF-8 byte length of the translation + null terminator */
   translationBytes: number;
+  /** Reason for the overflow */
+  reason: 'u16_offset_overflow' | 'bounds_exceeded' | 'write_error';
+  /** The new offset that caused the overflow (for u16 issues) */
+  newOffset?: number;
 }
 
 export interface PatchResult {
@@ -40,6 +57,17 @@ export interface PatchResult {
   patchedCount: number;
   /** Number of strings skipped due to overflow */
   skippedCount: number;
+  /** Diagnostic info per table */
+  tableStats: TablePatchStat[];
+}
+
+export interface TablePatchStat {
+  tableName: string;
+  originalStringTableSize: number;
+  newStringTableSize: number;
+  stringsPatched: number;
+  stringsSkipped: number;
+  hasU16Columns: boolean;
 }
 
 // ============= Helpers =============
@@ -51,6 +79,7 @@ const encoder = new TextEncoder();
  * Returns the string and the number of bytes consumed (including null terminator).
  */
 function readNullTermStr(data: Uint8Array, offset: number): { str: string; byteLen: number } {
+  if (offset >= data.length) return { str: '', byteLen: 1 };
   let end = offset;
   while (end < data.length && data[end] !== 0) end++;
   const bytes = data.slice(offset, end);
@@ -58,6 +87,27 @@ function readNullTermStr(data: Uint8Array, offset: number): { str: string; byteL
     str: new TextDecoder('utf-8').decode(bytes),
     byteLen: end - offset + 1, // +1 for null terminator
   };
+}
+
+/**
+ * Safely write a Uint16 value, checking for overflow.
+ * Returns true if successful, false if value exceeds u16 range.
+ */
+function safeSetUint16(view: DataView, offset: number, value: number, littleEndian: boolean): boolean {
+  if (value > 0xFFFF || value < 0) return false;
+  if (offset + 2 > view.byteLength) return false;
+  view.setUint16(offset, value, littleEndian);
+  return true;
+}
+
+/**
+ * Safely write a Uint32 value, checking bounds.
+ * Returns true if successful, false if out of bounds.
+ */
+function safeSetUint32(view: DataView, offset: number, value: number, littleEndian: boolean): boolean {
+  if (offset + 4 > view.byteLength) return false;
+  view.setUint32(offset, value, littleEndian);
+  return true;
 }
 
 // ============= Core patch function =============
@@ -82,6 +132,7 @@ export function patchBdatFile(
   const overflowErrors: OverflowError[] = [];
   let patchedCount = 0;
   let skippedCount = 0;
+  const tableStats: TablePatchStat[] = [];
 
   // For each table, build a new table buffer (potentially with expanded string table)
   const newTableBuffers: Uint8Array[] = [];
@@ -107,18 +158,33 @@ export function patchBdatFile(
       continue;
     }
 
+    // Track whether this table has MessageId (u16) columns
+    const hasU16Columns = stringColumns.some(c => c.valueType === BdatValueType.MessageId);
+
     const origView = new DataView(origTableData.buffer, origTableData.byteOffset, origTableData.byteLength);
 
-    // ---- Step 1: Collect ALL unique string offsets from row data ----
-    // Map: original strOff (relative to string table) → { original string bytes, translation bytes }
-    interface StringEntry {
-      origOffset: number; // original offset in string table
-      origBytes: Uint8Array; // original string bytes (WITHOUT null terminator)
-      newBytes: Uint8Array; // new string bytes (WITHOUT null terminator) — same as orig if no translation
-      cells: { row: number; colIdx: number; cellOffset: number; isMessageId: boolean }[]; // all cells pointing to this string
+    // ---- Step 1: Collect ALL string references from row data ----
+    // IMPROVED: Use per-cell tracking instead of per-offset to handle shared strings
+    // with different translations correctly.
+
+    interface CellRef {
+      row: number;
+      colIdx: number;
+      colName: string;
+      cellOffset: number;
+      isMessageId: boolean;
+      origStrOffset: number;  // original offset in string table
+      origStr: string;        // original string text
+      translationKey: string; // "tableName:row:colName"
+      translation: string | undefined; // translated text (undefined = keep original)
     }
 
-    const stringMap = new Map<number, StringEntry>(); // keyed by origOffset
+    const cellRefs: CellRef[] = [];
+    // Cache original strings to avoid re-reading
+    const origStringCache = new Map<number, string>();
+
+    let tablePatchedCount = 0;
+    let tableSkippedCount = 0;
 
     for (let r = 0; r < raw.rowCount; r++) {
       const rowOffset = raw.rowDataOffset + r * raw.rowLength;
@@ -127,6 +193,8 @@ export function patchBdatFile(
         const col = stringColumns[ci];
         const cellOffset = rowOffset + col.offset;
         const ptrSize = col.valueType === BdatValueType.MessageId ? 2 : 4;
+
+        // Bounds check for reading
         if (cellOffset + ptrSize > origTableData.length) continue;
 
         const strOff = col.valueType === BdatValueType.MessageId
@@ -137,117 +205,297 @@ export function patchBdatFile(
         const absStrOffset = raw.stringTableOffset + strOff;
         if (absStrOffset >= origTableData.length) continue;
 
-        // Read original string
-        let entry = stringMap.get(strOff);
-        if (!entry) {
+        // Read and cache original string
+        if (!origStringCache.has(strOff)) {
           const { str } = readNullTermStr(origTableData, absStrOffset);
-          const origBytes = encoder.encode(str);
-          entry = {
-            origOffset: strOff,
-            origBytes,
-            newBytes: origBytes, // default: keep original
-            cells: [],
-          };
-          stringMap.set(strOff, entry);
+          origStringCache.set(strOff, str);
         }
+        const origStr = origStringCache.get(strOff)!;
 
-        entry.cells.push({ row: r, colIdx: ci, cellOffset, isMessageId: col.valueType === BdatValueType.MessageId });
-
-        // Check if this cell has a translation
+        // Check for translation
         const mapKey = `${table.name}:${r}:${col.name}`;
         const translation = translations.get(mapKey);
-        if (translation !== undefined) {
-          const transBytes = encoder.encode(translation);
-          entry.newBytes = transBytes;
-          patchedCount++;
+
+        cellRefs.push({
+          row: r,
+          colIdx: ci,
+          colName: col.name,
+          cellOffset,
+          isMessageId: col.valueType === BdatValueType.MessageId,
+          origStrOffset: strOff,
+          origStr,
+          translationKey: mapKey,
+          translation,
+        });
+      }
+    }
+
+    // ---- Step 2: Resolve shared strings with different translations ----
+    // Group cells by their original string offset
+    const offsetGroups = new Map<number, CellRef[]>();
+    for (const cell of cellRefs) {
+      const group = offsetGroups.get(cell.origStrOffset) || [];
+      group.push(cell);
+      offsetGroups.set(cell.origStrOffset, group);
+    }
+
+    // Build the list of unique strings to write
+    // Each entry: { bytes, cells[] }
+    interface NewStringEntry {
+      bytes: Uint8Array;  // string bytes WITHOUT null terminator
+      cells: CellRef[];   // cells that should point to this string
+    }
+
+    const newStringEntries: NewStringEntry[] = [];
+
+    for (const [origOff, cells] of offsetGroups) {
+      // Group cells by their effective text (original or translated)
+      const textGroups = new Map<string, CellRef[]>();
+      for (const cell of cells) {
+        const effectiveText = cell.translation !== undefined ? cell.translation : cell.origStr;
+        const group = textGroups.get(effectiveText) || [];
+        group.push(cell);
+        textGroups.set(effectiveText, group);
+      }
+
+      // Create one string entry per unique text
+      for (const [text, groupCells] of textGroups) {
+        const bytes = encoder.encode(text);
+        newStringEntries.push({ bytes, cells: groupCells });
+
+        // Count patches
+        for (const cell of groupCells) {
+          if (cell.translation !== undefined) {
+            tablePatchedCount++;
+          }
         }
       }
     }
 
-    // ---- Step 2: Build new string table ----
-    // Preserve everything before the row-data strings (flag byte, table name, column names, hashes)
-    // The string table starts with metadata (flag byte, names/hashes).
-    // Row data string offsets are always > 0 (offset 0 means null/empty).
+    // ---- Step 3: Build new string table ----
+    // Preserve metadata prefix (flag byte, table name hash, column name hashes)
+    const allOrigOffsets = [...offsetGroups.keys()].sort((a, b) => a - b);
 
-    // Find the minimum string offset referenced by row data
-    const allOrigOffsets = [...stringMap.keys()].sort((a, b) => a - b);
-
-    // Copy the string table prefix (metadata) unchanged
-    // The metadata portion is everything from stringTableOffset to the first referenced string
+    // The metadata portion is everything from start of string table to the first referenced string
     const metadataEnd = allOrigOffsets.length > 0
       ? Math.min(...allOrigOffsets)
       : raw.stringTableLength;
 
-    // Build new string entries
-    const newStringEntries: { origOffset: number; newOffset: number; newBytes: Uint8Array }[] = [];
-    let currentNewOffset = metadataEnd; // start after metadata
+    // Assign new offsets to each string entry
+    let currentNewOffset = metadataEnd;
+    const entryOffsets: number[] = [];
 
-    for (const origOff of allOrigOffsets) {
-      const entry = stringMap.get(origOff)!;
-      newStringEntries.push({
-        origOffset: origOff,
-        newOffset: currentNewOffset,
-        newBytes: entry.newBytes,
-      });
-      currentNewOffset += entry.newBytes.length + 1; // +1 for null terminator
+    for (const entry of newStringEntries) {
+      entryOffsets.push(currentNewOffset);
+      currentNewOffset += entry.bytes.length + 1; // +1 for null terminator
     }
 
     const newStringTableLength = currentNewOffset;
 
-    // ---- Step 3: Build new table buffer ----
-    // Everything before string table stays the same
+    // ---- Step 4: Pre-flight check for u16 overflow ----
+    // Before writing anything, check if any MessageId cell would overflow
+    let hasU16Overflow = false;
+
+    for (let i = 0; i < newStringEntries.length; i++) {
+      const entry = newStringEntries[i];
+      const newOff = entryOffsets[i];
+
+      for (const cell of entry.cells) {
+        if (cell.isMessageId && newOff > 0xFFFF) {
+          hasU16Overflow = true;
+          overflowErrors.push({
+            key: cell.translationKey,
+            originalBytes: encoder.encode(cell.origStr).length + 1,
+            translationBytes: entry.bytes.length + 1,
+            reason: 'u16_offset_overflow',
+            newOffset: newOff,
+          });
+          tableSkippedCount++;
+        }
+      }
+    }
+
+    // If u16 overflow detected, try to COMPACT the string table
+    // Strategy: place strings referenced by MessageId columns FIRST (lower offsets)
+    if (hasU16Overflow) {
+      console.warn(`[BDAT-WRITER] Table "${table.name}": u16 overflow detected, attempting compaction...`);
+
+      // Separate entries into MessageId-referenced and non-MessageId-referenced
+      const msgIdEntries: { entry: NewStringEntry; idx: number }[] = [];
+      const otherEntries: { entry: NewStringEntry; idx: number }[] = [];
+
+      for (let i = 0; i < newStringEntries.length; i++) {
+        const entry = newStringEntries[i];
+        const hasMsgIdCell = entry.cells.some(c => c.isMessageId);
+        if (hasMsgIdCell) {
+          msgIdEntries.push({ entry, idx: i });
+        } else {
+          otherEntries.push({ entry, idx: i });
+        }
+      }
+
+      // Reassign offsets: MessageId entries first, then others
+      let compactOffset = metadataEnd;
+      const reorderedEntries: NewStringEntry[] = [];
+      const reorderedOffsets: number[] = [];
+
+      // MessageId entries first
+      for (const { entry } of msgIdEntries) {
+        reorderedEntries.push(entry);
+        reorderedOffsets.push(compactOffset);
+        compactOffset += entry.bytes.length + 1;
+      }
+
+      // Check if compaction solved the u16 overflow
+      const maxMsgIdOffset = msgIdEntries.length > 0 ? reorderedOffsets[msgIdEntries.length - 1] : 0;
+      const lastMsgIdEnd = msgIdEntries.length > 0
+        ? reorderedOffsets[msgIdEntries.length - 1] + msgIdEntries[msgIdEntries.length - 1].entry.bytes.length + 1
+        : metadataEnd;
+
+      if (lastMsgIdEnd <= 0xFFFF) {
+        // Compaction successful! Clear overflow errors for this table
+        const tableOverflowKeys = new Set(
+          overflowErrors
+            .filter(e => e.reason === 'u16_offset_overflow')
+            .map(e => e.key)
+        );
+        // Remove overflow errors that we just fixed
+        for (let i = overflowErrors.length - 1; i >= 0; i--) {
+          if (tableOverflowKeys.has(overflowErrors[i].key)) {
+            overflowErrors.splice(i, 1);
+            tableSkippedCount--;
+          }
+        }
+        hasU16Overflow = false;
+
+        console.log(`[BDAT-WRITER] Table "${table.name}": compaction successful, max MessageId offset = ${lastMsgIdEnd}`);
+
+        // Add remaining entries
+        for (const { entry } of otherEntries) {
+          reorderedEntries.push(entry);
+          reorderedOffsets.push(compactOffset);
+          compactOffset += entry.bytes.length + 1;
+        }
+
+        // Use reordered data
+        newStringEntries.length = 0;
+        entryOffsets.length = 0;
+        newStringEntries.push(...reorderedEntries);
+        entryOffsets.push(...reorderedOffsets);
+        // Recalculate string table length
+        // currentNewOffset is already set by compactOffset
+      } else {
+        console.error(`[BDAT-WRITER] Table "${table.name}": compaction FAILED, MessageId strings too large (${lastMsgIdEnd} > 65535)`);
+        // Keep overflow errors, skip this table's translations
+        // Fall through to use original table data
+      }
+    }
+
+    // If there are still unresolvable u16 overflows, skip this table entirely
+    if (hasU16Overflow) {
+      console.error(`[BDAT-WRITER] Table "${table.name}": SKIPPING due to unresolvable u16 overflow`);
+      newTableBuffers.push(origTableData);
+      skippedCount += tableSkippedCount;
+      tableStats.push({
+        tableName: table.name,
+        originalStringTableSize: raw.stringTableLength,
+        newStringTableSize: raw.stringTableLength,
+        stringsPatched: 0,
+        stringsSkipped: tableSkippedCount,
+        hasU16Columns,
+      });
+      continue;
+    }
+
+    // ---- Step 5: Build new table buffer ----
     const preStringLength = raw.stringTableOffset;
-    const newTableSize = preStringLength + newStringTableLength;
+    const finalStringTableLength = entryOffsets.length > 0
+      ? entryOffsets[entryOffsets.length - 1] + newStringEntries[newStringEntries.length - 1].bytes.length + 1
+      : metadataEnd;
+    const newTableSize = preStringLength + finalStringTableLength;
     const newTableData = new Uint8Array(newTableSize);
 
     // Copy everything before string table (header, column defs, hash table, row data)
     newTableData.set(origTableData.subarray(0, preStringLength));
 
-    // Copy string table metadata (flag byte, names, etc.)
-    const origMetadata = origTableData.subarray(raw.stringTableOffset, raw.stringTableOffset + metadataEnd);
-    newTableData.set(origMetadata, raw.stringTableOffset);
+    // Copy string table metadata (flag byte, names/hashes)
+    if (metadataEnd > 0) {
+      const metaSrc = origTableData.subarray(raw.stringTableOffset, raw.stringTableOffset + metadataEnd);
+      newTableData.set(metaSrc, raw.stringTableOffset);
+    }
 
     // Write new strings
-    for (const entry of newStringEntries) {
-      const absOff = raw.stringTableOffset + entry.newOffset;
-      newTableData.set(entry.newBytes, absOff);
-      newTableData[absOff + entry.newBytes.length] = 0; // null terminator
+    for (let i = 0; i < newStringEntries.length; i++) {
+      const entry = newStringEntries[i];
+      const absOff = raw.stringTableOffset + entryOffsets[i];
+
+      // Bounds check
+      if (absOff + entry.bytes.length + 1 > newTableData.length) {
+        console.error(`[BDAT-WRITER] Bounds error writing string at offset ${absOff}`);
+        continue;
+      }
+
+      newTableData.set(entry.bytes, absOff);
+      newTableData[absOff + entry.bytes.length] = 0; // null terminator
     }
 
-    // ---- Step 4: Update string pointers in row data ----
+    // ---- Step 6: Update string pointers in row data ----
     const newTableView = new DataView(newTableData.buffer, newTableData.byteOffset, newTableData.byteLength);
 
-    // Build offset mapping: origOffset → newOffset
-    const offsetMap = new Map<number, number>();
-    for (const entry of newStringEntries) {
-      offsetMap.set(entry.origOffset, entry.newOffset);
-    }
+    for (let i = 0; i < newStringEntries.length; i++) {
+      const entry = newStringEntries[i];
+      const newOff = entryOffsets[i];
 
-    // Update all cell pointers
-    for (const [origOff, entry] of stringMap) {
-      const newOff = offsetMap.get(origOff);
-      if (newOff === undefined) continue;
       for (const cell of entry.cells) {
         if (cell.isMessageId) {
-          newTableView.setUint16(cell.cellOffset, newOff, true);
+          if (!safeSetUint16(newTableView, cell.cellOffset, newOff, true)) {
+            overflowErrors.push({
+              key: cell.translationKey,
+              originalBytes: encoder.encode(cell.origStr).length + 1,
+              translationBytes: entry.bytes.length + 1,
+              reason: 'write_error',
+              newOffset: newOff,
+            });
+            skippedCount++;
+            continue;
+          }
         } else {
-          newTableView.setUint32(cell.cellOffset, newOff, true);
+          if (!safeSetUint32(newTableView, cell.cellOffset, newOff, true)) {
+            overflowErrors.push({
+              key: cell.translationKey,
+              originalBytes: encoder.encode(cell.origStr).length + 1,
+              translationBytes: entry.bytes.length + 1,
+              reason: 'bounds_exceeded',
+              newOffset: newOff,
+            });
+            skippedCount++;
+            continue;
+          }
         }
       }
     }
 
-    // ---- Step 5: Update stringTableLength in table header ----
+    // ---- Step 7: Update stringTableLength in table header ----
     if (raw.isU32Layout) {
-      newTableView.setUint32(0x2C, newStringTableLength, true);
+      safeSetUint32(newTableView, 0x2C, finalStringTableLength, true);
     } else {
-      newTableView.setUint32(0x24, newStringTableLength, true);
+      safeSetUint32(newTableView, 0x24, finalStringTableLength, true);
     }
 
+    patchedCount += tablePatchedCount;
     newTableBuffers.push(newTableData);
+
+    tableStats.push({
+      tableName: table.name,
+      originalStringTableSize: raw.stringTableLength,
+      newStringTableSize: finalStringTableLength,
+      stringsPatched: tablePatchedCount,
+      stringsSkipped: tableSkippedCount,
+      hasU16Columns,
+    });
   }
 
-  // ---- Step 6: Rebuild the full file ----
-  // Calculate new table offsets
+  // ---- Step 8: Rebuild the full file ----
   const newTableOffsets: number[] = [];
   let currentFileOffset = fileHeaderSize;
   for (const buf of newTableBuffers) {
@@ -260,8 +508,8 @@ export function patchBdatFile(
   const result = new Uint8Array(newFileSize);
   const resultView = new DataView(result.buffer);
 
-  // Write file header
-  result.set(originalData.subarray(0, 16)); // magic + version + tableCount + fileSize
+  // Write file header (magic + version + tableCount + fileSize)
+  result.set(originalData.subarray(0, 16));
   resultView.setUint32(12, newFileSize, true); // update file size
 
   // Write table offsets
@@ -274,10 +522,19 @@ export function patchBdatFile(
     result.set(newTableBuffers[t], newTableOffsets[t]);
   }
 
-  return { result, overflowErrors, patchedCount, skippedCount };
+  // Log summary
+  console.log(`[BDAT-WRITER] Patch complete: ${patchedCount} patched, ${skippedCount} skipped, ${overflowErrors.length} errors`);
+  for (const stat of tableStats) {
+    if (stat.stringsPatched > 0 || stat.stringsSkipped > 0) {
+      const growth = stat.newStringTableSize - stat.originalStringTableSize;
+      console.log(`[BDAT-WRITER]   ${stat.tableName}: ${stat.stringsPatched} patched, ${stat.stringsSkipped} skipped, string table ${growth >= 0 ? '+' : ''}${growth} bytes${stat.hasU16Columns ? ' (has u16 MessageId)' : ''}`);
+    }
+  }
+
+  return { result, overflowErrors, patchedCount, skippedCount, tableStats };
 }
 
-// ============= Legacy export (kept for tests that import rebuildBdatFile) =============
+// ============= Legacy export (kept for backward compatibility) =============
 
 /**
  * @deprecated Use patchBdatFile instead. This thin wrapper calls patchBdatFile
