@@ -126,15 +126,27 @@ const XenobladeProcess = () => {
 
             const strings = extractBdatStrings(bdatFile, file.name, safetyMargin);
             
-            // تفاصيل إضافية للتشخيص
+            // تفاصيل إضافية للتشخيص — أنواع الأعمدة
             const totalStringCols = bdatFile.tables.reduce((sum, t) => sum + t.columns.filter(c => c.valueType === 7 || c.valueType === 11).length, 0);
+            const totalMsgIdCols = bdatFile.tables.reduce((sum, t) => sum + t.columns.filter(c => c.valueType === 13).length, 0);
             const totalRows = bdatFile.tables.reduce((sum, t) => sum + t.rows.length, 0);
-            addLog(`📦 ${file.name}: ${bdatFile.tables.length} جدول، ${totalRows} صف، ${totalStringCols} عمود نصي، ${strings.length} نص مستخرج`);
+            addLog(`📦 ${file.name}: ${bdatFile.tables.length} جدول، ${totalRows} صف، ${totalStringCols} عمود String، ${totalMsgIdCols} عمود MessageId، ${strings.length} نص مستخرج`);
+            
+            // عرض تفاصيل كل جدول (أول 5)
+            for (const t of bdatFile.tables.slice(0, 5)) {
+              const colTypes = t.columns.map(c => `${c.name}(${c.valueType})`).join(', ');
+              const strCols = t.columns.filter(c => c.valueType === 7 || c.valueType === 11);
+              const sampleVals = strCols.length > 0 && t.rows.length > 0
+                ? strCols.slice(0, 2).map(c => `${c.name}="${String(t.rows[0].values[c.name] || '').slice(0, 40)}"`).join(' | ')
+                : '(لا توجد أعمدة نصية)';
+              addLog(`  📋 ${t.name}: ${t.columns.length} عمود [${colTypes.slice(0, 120)}] | عيّنة: ${sampleVals}`);
+            }
+            if (bdatFile.tables.length > 5) addLog(`  ... و ${bdatFile.tables.length - 5} جدول آخر`);
             
             if (strings.length === 0 && bdatFile.tables.length > 0) {
               const tableNames = bdatFile.tables.slice(0, 5).map(t => t.name).join(', ');
               addLog(`ℹ️ أسماء الجداول: ${tableNames}${bdatFile.tables.length > 5 ? '...' : ''}`);
-              addLog(`⚠️ لا توجد نصوص في هذا الملف — قد يحتوي فقط على بيانات رقمية`);
+              addLog(`⚠️ لا توجد نصوص في هذا الملف — قد يحتوي فقط على بيانات رقمية أو أعمدة MessageId`);
             }
 
             // 🔍 Classification diagnostics (shown in UI)
