@@ -4,9 +4,8 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, Info, Download, Loader2, MoveVertical, Search, Eye, Grid3X3 } from "lucide-react";
+import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, Info, Download, Loader2, MoveVertical, Search, Eye, Grid3X3, ImageDown, ImageUp, Replace, Trash2 } from "lucide-react";
 import { analyzeWifnt, decodeWifntTexture, renderAtlasToCanvas, rebuildWifnt, type WifntInfo } from "@/lib/wifnt-parser";
-import { ImageDown, ImageUp } from "lucide-react";
 
 interface FontFile {
   name: string;
@@ -36,6 +35,8 @@ export default function ModPackager() {
   const atlasCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
   const glyphMapCanvasRef = useRef<HTMLCanvasElement>(null);
+  const glyphUploadRef = useRef<HTMLInputElement>(null);
+  const selectedGlyphCanvasRef = useRef<HTMLCanvasElement>(null);
 
   // Decode and cache the atlas canvas when font changes
   useEffect(() => {
@@ -148,6 +149,71 @@ export default function ModPackager() {
       setSelectedGlyph(prev => prev === idx ? null : idx);
     }
   }, [fontFile?.info]);
+
+  // Draw selected glyph preview
+  useEffect(() => {
+    if (!selectedGlyphCanvasRef.current || !atlasCanvasRef.current || !fontFile?.info || selectedGlyph === null) return;
+    const info = fontFile.info;
+    const canvas = selectedGlyphCanvasRef.current;
+    const scale = 3;
+    canvas.width = info.cellWidth * scale;
+    canvas.height = info.cellHeight * scale;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    ctx.imageSmoothingEnabled = false;
+    const col = selectedGlyph % info.gridCols;
+    const row = Math.floor(selectedGlyph / info.gridCols);
+    ctx.fillStyle = "#0a0a1a";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(
+      atlasCanvasRef.current,
+      col * info.cellWidth, row * info.cellHeight, info.cellWidth, info.cellHeight,
+      0, 0, canvas.width, canvas.height
+    );
+  }, [selectedGlyph, fontFile?.info]);
+
+  const handleReplaceGlyph = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !fontFile?.info || selectedGlyph === null || !atlasCanvasRef.current) return;
+    const info = fontFile.info;
+    const img = new Image();
+    img.onload = () => {
+      const atlas = atlasCanvasRef.current!;
+      const ctx = atlas.getContext("2d");
+      if (!ctx) return;
+      const col = selectedGlyph % info.gridCols;
+      const row = Math.floor(selectedGlyph / info.gridCols);
+      const dx = col * info.cellWidth;
+      const dy = row * info.cellHeight;
+      // Clear the cell and draw the new image scaled to fit
+      ctx.clearRect(dx, dy, info.cellWidth, info.cellHeight);
+      ctx.drawImage(img, 0, 0, img.width, img.height, dx, dy, info.cellWidth, info.cellHeight);
+      // Rebuild the wifnt from the modified atlas
+      const imageData = ctx.getImageData(0, 0, info.textureWidth, info.textureHeight);
+      const newData = rebuildWifnt(fontFile.data, info, imageData.data);
+      processFont(newData, fontFile.name);
+      setStatus(`✅ تم استبدال الحرف #${selectedGlyph} بنجاح!`);
+      setTimeout(() => setStatus(""), 4000);
+    };
+    img.src = URL.createObjectURL(file);
+    e.target.value = "";
+  }, [fontFile, selectedGlyph, processFont]);
+
+  const handleClearGlyph = useCallback(() => {
+    if (!fontFile?.info || selectedGlyph === null || !atlasCanvasRef.current) return;
+    const info = fontFile.info;
+    const atlas = atlasCanvasRef.current;
+    const ctx = atlas.getContext("2d");
+    if (!ctx) return;
+    const col = selectedGlyph % info.gridCols;
+    const row = Math.floor(selectedGlyph / info.gridCols);
+    ctx.clearRect(col * info.cellWidth, row * info.cellHeight, info.cellWidth, info.cellHeight);
+    const imageData = ctx.getImageData(0, 0, info.textureWidth, info.textureHeight);
+    const newData = rebuildWifnt(fontFile.data, info, imageData.data);
+    processFont(newData, fontFile.name);
+    setStatus(`✅ تم مسح الحرف #${selectedGlyph}`);
+    setTimeout(() => setStatus(""), 4000);
+  }, [fontFile, selectedGlyph, processFont]);
 
   const doBuild = useCallback(async () => {
     setBuilding(true);
@@ -571,6 +637,51 @@ export default function ModPackager() {
             <p className="text-[11px] text-muted-foreground text-center">
               اضغط على أي حرف لتحديده — الشبكة: {fontFile.info.cellWidth}×{fontFile.info.cellHeight} بكسل لكل خلية
             </p>
+
+            {/* Selected Glyph Editor */}
+            {selectedGlyph !== null && (
+              <div className="flex items-center gap-4 p-3 bg-muted/30 rounded-lg border">
+                <div className="shrink-0">
+                  <canvas
+                    ref={selectedGlyphCanvasRef}
+                    className="border border-border rounded"
+                    style={{ imageRendering: "pixelated", width: fontFile.info.cellWidth * 3, height: fontFile.info.cellHeight * 3 }}
+                  />
+                </div>
+                <div className="flex-1 space-y-2">
+                  <div className="text-sm font-semibold" dir="ltr">
+                    Glyph #{selectedGlyph}
+                    <span className="text-muted-foreground font-normal mr-2">
+                      {" "}— Row {Math.floor(selectedGlyph / fontFile.info.gridCols)}, Col {selectedGlyph % fontFile.info.gridCols}
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    الحجم: {fontFile.info.cellWidth}×{fontFile.info.cellHeight} بكسل — ارفع صورة PNG لاستبدال هذا الحرف
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <label>
+                      <Button variant="default" size="sm" className="gap-1.5 cursor-pointer" asChild>
+                        <span>
+                          <Replace className="w-3.5 h-3.5" />
+                          استبدال بصورة
+                        </span>
+                      </Button>
+                      <input
+                        ref={glyphUploadRef}
+                        type="file"
+                        accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                        className="hidden"
+                        onChange={handleReplaceGlyph}
+                      />
+                    </label>
+                    <Button variant="outline" size="sm" className="gap-1.5 text-destructive" onClick={handleClearGlyph}>
+                      <Trash2 className="w-3.5 h-3.5" />
+                      مسح الحرف
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
           </Card>
         )}
 
