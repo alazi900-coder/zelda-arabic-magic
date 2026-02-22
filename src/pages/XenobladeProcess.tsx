@@ -361,17 +361,32 @@ const XenobladeProcess = () => {
       }
 
       await idbClear();
-      await idbSet("editorMsbtFiles", fileBuffers);
-      await idbSet("editorMsbtFileNames", msbtFiles.map(f => f.name));
-      await idbSet("editorBdatFiles", bdatTexts);
-      await idbSet("editorBdatFileNames", bdatFiles.map(f => f.name));
-      await idbSet("editorBdatBinaryFiles", bdatBinaryBuffers);
-      await idbSet("editorBdatBinaryFileNames", bdatBinaryFiles.map(f => f.name));
-      await idbSet("editorGame", "xenoblade");
+      // CRITICAL: Save editor state FIRST (most important data)
       await idbSet("editorState", {
         entries: allEntries,
         translations: finalTranslations,
       });
+      await idbSet("editorGame", "xenoblade");
+      // Verify save worked
+      const verifyState = await idbGet<{ entries?: any[] }>("editorState");
+      if (!verifyState?.entries || verifyState.entries.length !== allEntries.length) {
+        addLog(`⚠️ تحذير: تم حفظ ${verifyState?.entries?.length || 0} من ${allEntries.length} نص - قد تكون مساحة التخزين محدودة`);
+      } else {
+        addLog(`💾 تم حفظ ${allEntries.length} نص في المحرر بنجاح ✅`);
+      }
+      
+      // Then save file buffers (less critical, may fail on mobile due to quota)
+      try {
+        await idbSet("editorMsbtFiles", fileBuffers);
+        await idbSet("editorMsbtFileNames", msbtFiles.map(f => f.name));
+        await idbSet("editorBdatFiles", bdatTexts);
+        await idbSet("editorBdatFileNames", bdatFiles.map(f => f.name));
+        await idbSet("editorBdatBinaryFiles", bdatBinaryBuffers);
+        await idbSet("editorBdatBinaryFileNames", bdatBinaryFiles.map(f => f.name));
+      } catch (storageErr) {
+        addLog(`⚠️ لم يتم حفظ الملفات الثنائية (مساحة تخزين محدودة) - النصوص محفوظة بنجاح`);
+        console.warn("IDB storage quota exceeded for binary files:", storageErr);
+      }
 
       setStage("done");
       addLog("✨ جاهز للتحرير! اضغط الزر أدناه للانتقال إلى المحرر.");
