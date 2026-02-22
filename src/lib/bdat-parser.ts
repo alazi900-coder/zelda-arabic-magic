@@ -352,11 +352,23 @@ export function parseBdatFile(data: Uint8Array, unhashFn?: (hash: number) => str
   const tables: BdatTable[] = [];
 
   // Table offsets start at byte 16
+  console.log(`[BDAT-PARSER] File: version=0x${version.toString(16)}, tableCount=${tableCount}, fileSize=${fileSize}`);
   for (let t = 0; t < tableCount; t++) {
     const tableOffset = view.getUint32(16 + t * 4, true);
     
     const rawInfo = parseTableHeader(data, tableOffset);
-    if (!rawInfo.valid) continue;
+    if (!rawInfo.valid) {
+      console.warn(`[BDAT-PARSER] Table ${t} at offset ${tableOffset}: INVALID (no BDAT magic)`);
+      continue;
+    }
+
+    // Diagnostic: dump raw header bytes for first few tables
+    if (t < 5) {
+      const headerHex = Array.from(data.slice(tableOffset, tableOffset + Math.min(48, rawInfo.tableData.length)))
+        .map(b => b.toString(16).padStart(2, '0')).join(' ');
+      console.log(`[BDAT-PARSER] Table ${t} header (${rawInfo.isU32Layout ? 'u32' : 'u16'}): ${headerHex}`);
+      console.log(`[BDAT-PARSER] Table ${t}: cols=${rawInfo.columnCount}, rows=${rawInfo.rowCount}, rowLen=${rawInfo.rowLength}, colDefs=0x${rawInfo.columnDefsOffset.toString(16)}, hashTbl=0x${rawInfo.hashTableOffset.toString(16)}, rowData=0x${rawInfo.rowDataOffset.toString(16)}, strTbl=0x${rawInfo.stringTableOffset.toString(16)}, strLen=${rawInfo.stringTableLength}, hashed=${rawInfo.hashedNames}`);
+    }
 
     const raw: BdatTable['_raw'] = {
       tableOffset: rawInfo.tableOffset,
@@ -377,6 +389,17 @@ export function parseBdatFile(data: Uint8Array, unhashFn?: (hash: number) => str
     const columns = parseColumns(rawInfo.tableData, raw, defaultUnhash);
     const rows = parseRows(rawInfo.tableData, raw, columns);
     const { name, hash } = getTableName(rawInfo.tableData, raw, t, defaultUnhash);
+
+    // Diagnostic: log column details
+    if (t < 5) {
+      const colSummary = columns.map(c => `${c.name}(type=${c.valueType})`).join(', ');
+      console.log(`[BDAT-PARSER] Table ${t} "${name}": columns=[${colSummary}]`);
+      if (rows.length > 0) {
+        const sampleRow = rows[0].values;
+        const sampleStr = Object.entries(sampleRow).slice(0, 5).map(([k, v]) => `${k}=${JSON.stringify(v)}`).join(', ');
+        console.log(`[BDAT-PARSER] Table ${t} row[0]: ${sampleStr}`);
+      }
+    }
 
     tables.push({
       name,
