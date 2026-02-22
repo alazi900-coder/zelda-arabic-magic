@@ -46,6 +46,7 @@ import ConsistencyResultsPanel from "@/components/editor/ConsistencyResultsPanel
 import BdatBuildReport from "@/components/editor/BdatBuildReport";
 import IntegrityCheckDialog from "@/components/editor/IntegrityCheckDialog";
 import PreBuildDiagnostic from "@/components/editor/PreBuildDiagnostic";
+import CompareEnginesDialog from "@/components/editor/CompareEnginesDialog";
 
 const Editor = () => {
   const editor = useEditorState();
@@ -54,6 +55,7 @@ const Editor = () => {
   const [showDiffView, setShowDiffView] = React.useState(false);
   const [isDragging, setIsDragging] = React.useState(false);
   const [showDiagnostic, setShowDiagnostic] = React.useState(false);
+  const [compareEntry, setCompareEntry] = React.useState<import("@/components/editor/types").ExtractedEntry | null>(null);
   const gameType = "xenoblade";
   const processPath = "/process";
 
@@ -915,6 +917,7 @@ const Editor = () => {
                     handleLocalFixDamagedTag={editor.handleLocalFixDamagedTag}
                     onAcceptFuzzy={editor.handleAcceptFuzzy}
                     onRejectFuzzy={editor.handleRejectFuzzy}
+                    onCompare={(entry) => setCompareEntry(entry)}
                     tmSuggestions={findSimilar(key, entry.original)}
                   />
                 );
@@ -968,6 +971,15 @@ const Editor = () => {
           onOpenChange={setShowDiagnostic}
           state={editor.state}
           onProceedToBuild={() => { setShowDiagnostic(false); editor.handlePreBuild(); }}
+        />
+        <CompareEnginesDialog
+          open={!!compareEntry}
+          onOpenChange={(open) => { if (!open) setCompareEntry(null); }}
+          entry={compareEntry}
+          onSelect={(key, translation) => editor.updateTranslation(key, translation)}
+          glossary={editor.activeGlossary}
+          userGeminiKey={editor.userGeminiKey}
+          myMemoryEmail={editor.myMemoryEmail}
         />
       </div>
     </TooltipProvider>
