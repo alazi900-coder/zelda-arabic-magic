@@ -252,3 +252,125 @@ export function extractGlyph(
   );
   return canvas;
 }
+
+/**
+ * Encode RGBA pixels to BC1 (DXT1) compressed data
+ */
+export function encodeDXT1(
+  pixels: Uint8Array | Uint8ClampedArray,
+  width: number,
+  height: number
+): Uint8Array {
+  const blocksX = Math.ceil(width / 4);
+  const blocksY = Math.ceil(height / 4);
+  const output = new Uint8Array(blocksX * blocksY * 8);
+
+  for (let by = 0; by < blocksY; by++) {
+    for (let bx = 0; bx < blocksX; bx++) {
+      // Extract 4x4 block colors
+      const blockColors: [number, number, number, number][] = [];
+      for (let py = 0; py < 4; py++) {
+        for (let px = 0; px < 4; px++) {
+          const x = bx * 4 + px;
+          const y = by * 4 + py;
+          if (x < width && y < height) {
+            const i = (y * width + x) * 4;
+            blockColors.push([pixels[i], pixels[i + 1], pixels[i + 2], pixels[i + 3]]);
+          } else {
+            blockColors.push([0, 0, 0, 0]);
+          }
+        }
+      }
+
+      // Find min/max colors (simple bounding box)
+      let minR = 255, minG = 255, minB = 255;
+      let maxR = 0, maxG = 0, maxB = 0;
+      let hasTransparent = false;
+
+      for (const [r, g, b, a] of blockColors) {
+        if (a < 128) { hasTransparent = true; continue; }
+        if (r < minR) minR = r; if (r > maxR) maxR = r;
+        if (g < minG) minG = g; if (g > maxG) maxG = g;
+        if (b < minB) minB = b; if (b > maxB) maxB = b;
+      }
+
+      let c0 = rgbaToRGB565(maxR, maxG, maxB);
+      let c1 = rgbaToRGB565(minR, minG, minB);
+
+      // For transparent mode, ensure c0 <= c1
+      if (hasTransparent) {
+        if (c0 > c1) { const tmp = c0; c0 = c1; c1 = tmp; }
+      } else {
+        if (c0 < c1) { const tmp = c0; c0 = c1; c1 = tmp; }
+        if (c0 === c1 && c0 < 0xFFFF) c0++;
+      }
+
+      const colors = [rgb565Decode(c0), rgb565Decode(c1), [0, 0, 0], [0, 0, 0]] as number[][];
+      if (c0 > c1) {
+        colors[2] = [Math.round((2 * colors[0][0] + colors[1][0]) / 3), Math.round((2 * colors[0][1] + colors[1][1]) / 3), Math.round((2 * colors[0][2] + colors[1][2]) / 3)];
+        colors[3] = [Math.round((colors[0][0] + 2 * colors[1][0]) / 3), Math.round((colors[0][1] + 2 * colors[1][1]) / 3), Math.round((colors[0][2] + 2 * colors[1][2]) / 3)];
+      } else {
+        colors[2] = [Math.round((colors[0][0] + colors[1][0]) / 2), Math.round((colors[0][1] + colors[1][1]) / 2), Math.round((colors[0][2] + colors[1][2]) / 2)];
+        colors[3] = [0, 0, 0]; // transparent
+      }
+
+      // Build index bits
+      let indices = 0;
+      for (let i = 0; i < 16; i++) {
+        const [r, g, b, a] = blockColors[i];
+        let best = 0;
+        if (hasTransparent && a < 128) {
+          best = 3;
+        } else {
+          let bestDist = Infinity;
+          const limit = hasTransparent ? 3 : 4;
+          for (let ci = 0; ci < limit; ci++) {
+            const dr = r - colors[ci][0], dg = g - colors[ci][1], db = b - colors[ci][2];
+            const dist = dr * dr + dg * dg + db * db;
+            if (dist < bestDist) { bestDist = dist; best = ci; }
+          }
+        }
+        indices |= (best << (i * 2));
+      }
+
+      const blockOffset = (by * blocksX + bx) * 8;
+      output[blockOffset] = c0 & 0xFF;
+      output[blockOffset + 1] = (c0 >> 8) & 0xFF;
+      output[blockOffset + 2] = c1 & 0xFF;
+      output[blockOffset + 3] = (c1 >> 8) & 0xFF;
+      output[blockOffset + 4] = indices & 0xFF;
+      output[blockOffset + 5] = (indices >> 8) & 0xFF;
+      output[blockOffset + 6] = (indices >> 16) & 0xFF;
+      output[blockOffset + 7] = (indices >> 24) & 0xFF;
+    }
+  }
+  return output;
+}
+
+function rgbaToRGB565(r: number, g: number, b: number): number {
+  return ((r >> 3) << 11) | ((g >> 2) << 5) | (b >> 3);
+}
+
+function rgb565Decode(c: number): number[] {
+  return [
+    Math.round(((c >> 11) & 0x1F) * 255 / 31),
+    Math.round(((c >> 5) & 0x3F) * 255 / 63),
+    Math.round((c & 0x1F) * 255 / 31),
+  ];
+}
+
+/**
+ * Rebuild a WIFNT file by replacing the texture data with new RGBA pixels
+ */
+export function rebuildWifnt(
+  originalFile: ArrayBuffer,
+  info: WifntInfo,
+  newPixels: Uint8Array | Uint8ClampedArray
+): ArrayBuffer {
+  const newCompressed = encodeDXT1(newPixels, info.textureWidth, info.textureHeight);
+  const header = new Uint8Array(originalFile, 0, info.textureDataOffset);
+  const result = new Uint8Array(header.length + newCompressed.length);
+  result.set(header);
+  result.set(newCompressed, header.length);
+  return result.buffer;
+}

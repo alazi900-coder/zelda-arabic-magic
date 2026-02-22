@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { ArrowRight, Package, Upload, FileType, FolderArchive, CheckCircle2, Info, Download, Loader2, MoveVertical, Search, Eye, Grid3X3 } from "lucide-react";
-import { analyzeWifnt, decodeWifntTexture, renderAtlasToCanvas, type WifntInfo } from "@/lib/wifnt-parser";
+import { analyzeWifnt, decodeWifntTexture, renderAtlasToCanvas, rebuildWifnt, type WifntInfo } from "@/lib/wifnt-parser";
+import { ImageDown, ImageUp } from "lucide-react";
 
 interface FontFile {
   name: string;
@@ -313,9 +314,82 @@ export default function ModPackager() {
                 {/* Real Font Atlas Preview */}
                 {fontFile.info && (
                   <div className="p-3 bg-muted/30 rounded-lg border space-y-2">
-                    <div className="flex items-center gap-2">
-                      <Eye className="w-4 h-4 text-primary" />
-                      <span className="text-sm font-semibold">معاينة الخط الحقيقي</span>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Eye className="w-4 h-4 text-primary" />
+                        <span className="text-sm font-semibold">معاينة الخط الحقيقي</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-7 text-xs gap-1 px-2"
+                          onClick={() => {
+                            if (!atlasCanvasRef.current) return;
+                            atlasCanvasRef.current.toBlob((blob) => {
+                              if (!blob) return;
+                              const url = URL.createObjectURL(blob);
+                              const a = document.createElement("a");
+                              a.href = url;
+                              a.download = `${fontFile.name.replace(/\.wifnt$/i, "")}_atlas.png`;
+                              a.click();
+                              URL.revokeObjectURL(url);
+                              setStatus("✅ تم تصدير الـ texture atlas كصورة PNG");
+                              setTimeout(() => setStatus(""), 4000);
+                            }, "image/png");
+                          }}
+                        >
+                          <ImageDown className="w-3.5 h-3.5" />
+                          تصدير PNG
+                        </Button>
+                        <label>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-7 text-xs gap-1 px-2 cursor-pointer"
+                            asChild
+                          >
+                            <span>
+                              <ImageUp className="w-3.5 h-3.5" />
+                              استيراد PNG
+                            </span>
+                          </Button>
+                          <input
+                            type="file"
+                            accept="image/png"
+                            className="hidden"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (!file || !fontFile?.info) return;
+                              const img = new Image();
+                              img.onload = () => {
+                                const info = fontFile.info!;
+                                if (img.width !== info.textureWidth || img.height !== info.textureHeight) {
+                                  setStatus(`❌ أبعاد الصورة يجب أن تكون ${info.textureWidth}×${info.textureHeight} — الصورة المرفوعة: ${img.width}×${img.height}`);
+                                  setTimeout(() => setStatus(""), 7000);
+                                  return;
+                                }
+                                const canvas = document.createElement("canvas");
+                                canvas.width = img.width;
+                                canvas.height = img.height;
+                                const ctx = canvas.getContext("2d")!;
+                                ctx.drawImage(img, 0, 0);
+                                const imageData = ctx.getImageData(0, 0, img.width, img.height);
+                                const newData = rebuildWifnt(fontFile.data, info, imageData.data);
+                                processFont(newData, fontFile.name);
+                                setStatus("✅ تم استيراد الصورة وإعادة بناء الخط بنجاح!");
+                                setTimeout(() => setStatus(""), 5000);
+                              };
+                              img.onerror = () => {
+                                setStatus("❌ فشل تحميل الصورة");
+                                setTimeout(() => setStatus(""), 5000);
+                              };
+                              img.src = URL.createObjectURL(file);
+                              e.target.value = "";
+                            }}
+                          />
+                        </label>
+                      </div>
                     </div>
                     <div className="bg-[#0a0a1a] rounded-lg p-2 overflow-x-auto border border-border/50">
                       <canvas
@@ -325,7 +399,7 @@ export default function ModPackager() {
                       />
                     </div>
                     <p className="text-[11px] text-muted-foreground text-center">
-                      أحرف الخط الفعلية مفكوكة من texture بتنسيق BC1
+                      صدّر الـ atlas كـ PNG للتعديل ببرنامج خارجي ثم أعد استيراده — الأبعاد: {fontFile.info.textureWidth}×{fontFile.info.textureHeight}
                     </p>
                   </div>
                 )}
