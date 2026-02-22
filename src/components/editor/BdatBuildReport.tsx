@@ -81,7 +81,7 @@ const BdatBuildReport: React.FC<BdatBuildReportProps> = ({ stats }) => {
                     ? "text-accent"
                     : "text-muted-foreground"
                 }`}>
-                  {f.hasError ? "خطأ" : `${f.translated}/${f.total}`}
+                  {f.hasError ? (f.hasError === true ? "خطأ" : f.hasError) : `${f.translated}/${f.total}`}
                 </span>
               </div>
             </div>
