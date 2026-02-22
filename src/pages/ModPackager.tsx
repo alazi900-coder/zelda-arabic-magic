@@ -410,7 +410,7 @@ export default function ModPackager() {
                       </div>
                       <div className="bg-background/50 rounded p-2 border">
                         <span className="text-muted-foreground block">Format</span>
-                        <span className="font-mono font-bold text-foreground">BC1 (DXT1)</span>
+                        <span className="font-mono font-bold text-foreground">{fontFile.info?.imageFormatName || 'BC1 (DXT1)'}</span>
                       </div>
                       <div className="bg-background/50 rounded p-2 border">
                         <span className="text-muted-foreground block">Grid</span>

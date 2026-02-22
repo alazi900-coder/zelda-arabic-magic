@@ -1,11 +1,9 @@
 /**
  * WIFNT (LAFT) Font Parser for Xenoblade Chronicles 3
  * 
- * The font is a BC1 (DXT1) compressed texture atlas:
- * - Texture size: 2800×171 pixels
- * - Grid: 50 columns × 3 rows = 150 characters
- * - Each character cell: 56×57 pixels
- * - Characters: ASCII + Western European + special symbols
+ * The font texture is stored as a Mibl (LBIM) image with Tegra X1 swizzling.
+ * The Mibl footer (40 bytes, ending with "LBIM" magic) is at the end of the file
+ * and contains the actual format, dimensions, etc.
  */
 
 export interface WifntInfo {
@@ -24,136 +22,138 @@ export interface WifntInfo {
   headerSize: number;
   textureDataOffset: number;
   textureDataSize: number;
+  // Mibl footer info
+  imageFormat: number; // 66=BC1, 73=BC4, etc.
+  imageFormatName: string;
   // Raw header bytes for inspection
   headerHex: string;
 }
 
-// Known WIFNT atlas constants for XC3
-const ATLAS_WIDTH = 2800;
-const ATLAS_HEIGHT = 171;
-const GRID_COLS = 50;
-const GRID_ROWS = 3;
-const CELL_WIDTH = 56;
-const CELL_HEIGHT = 57;
-const GLYPH_COUNT = GRID_COLS * GRID_ROWS; // 150
+// Mibl footer size
+const MIBL_FOOTER_SIZE = 40;
+
+// Image format IDs from Mibl/NVN
+const FORMAT_BC1 = 66;
+const FORMAT_BC4 = 73;
 
 /**
- * Calculate BC1/DXT1 compressed data size for given dimensions (linear)
+ * Parse the Mibl footer from the last 40 bytes of the file
  */
-function bc1DataSize(width: number, height: number): number {
-  const blocksX = Math.ceil(width / 4);
-  const blocksY = Math.ceil(height / 4);
-  return blocksX * blocksY * 8; // 8 bytes per 4x4 block in BC1
+function parseMiblFooter(data: ArrayBuffer): {
+  imageSize: number;
+  unk: number;
+  width: number;
+  height: number;
+  depth: number;
+  viewDimension: number;
+  imageFormat: number;
+  mipmapCount: number;
+  version: number;
+  valid: boolean;
+} | null {
+  if (data.byteLength < MIBL_FOOTER_SIZE) return null;
+  const view = new DataView(data);
+  const footerOffset = data.byteLength - MIBL_FOOTER_SIZE;
+  
+  // Check for "LBIM" magic at offset 36 within footer
+  const m0 = view.getUint8(footerOffset + 36);
+  const m1 = view.getUint8(footerOffset + 37);
+  const m2 = view.getUint8(footerOffset + 38);
+  const m3 = view.getUint8(footerOffset + 39);
+  const magic = String.fromCharCode(m0, m1, m2, m3);
+  
+  if (magic !== "LBIM") return null;
+  
+  return {
+    imageSize: view.getUint32(footerOffset, true),
+    unk: view.getUint32(footerOffset + 4, true),
+    width: view.getUint32(footerOffset + 8, true),
+    height: view.getUint32(footerOffset + 12, true),
+    depth: view.getUint32(footerOffset + 16, true),
+    viewDimension: view.getUint32(footerOffset + 20, true),
+    imageFormat: view.getUint32(footerOffset + 24, true),
+    mipmapCount: view.getUint32(footerOffset + 28, true),
+    version: view.getUint32(footerOffset + 32, true),
+    valid: true,
+  };
 }
 
-/**
- * Calculate the swizzled (block-linear) data size, which is padded to GOB/block boundaries
- */
-function bc1SwizzledSize(width: number, height: number): number {
-  const bpp = 8; // bytes per BC1 block
-  const blocksX = Math.ceil(width / 4);
-  const blocksY = Math.ceil(height / 4);
-  const byteWidth = blocksX * bpp;
-  const gobsX = Math.ceil(byteWidth / 64);
-  const blockHeight = getBlockHeight(blocksY);
-  const gobsY = Math.ceil(blocksY / (8 * blockHeight));
-  return gobsX * gobsY * blockHeight * 512;
+function getFormatName(fmt: number): string {
+  switch (fmt) {
+    case 1: return "R8";
+    case 37: return "RGBA8";
+    case 41: return "RGBA16F";
+    case 57: return "RGBA4";
+    case FORMAT_BC1: return "BC1 (DXT1)";
+    case 67: return "BC2";
+    case 68: return "BC3";
+    case FORMAT_BC4: return "BC4";
+    case 75: return "BC5";
+    case 77: return "BC7";
+    case 80: return "BC6H";
+    case 109: return "BGRA8";
+    default: return `Unknown (${fmt})`;
+  }
+}
+
+/** Bytes per pixel/block for each format */
+function getBpp(fmt: number): number {
+  switch (fmt) {
+    case FORMAT_BC1: return 8;
+    case FORMAT_BC4: return 8;
+    case 67: case 68: case 75: case 77: case 80: return 16;
+    case 1: return 1;
+    case 37: case 109: return 4;
+    case 41: return 8;
+    case 57: return 2;
+    default: return 8;
+  }
+}
+
+/** Is this a block-compressed format? */
+function isBlockCompressed(fmt: number): boolean {
+  return [FORMAT_BC1, 67, 68, FORMAT_BC4, 75, 77, 80].includes(fmt);
 }
 
 /** Round up to next power of 2 */
 function pow2RoundUp(v: number): number {
+  if (v <= 1) return 1;
   v--;
   v |= v >> 1; v |= v >> 2; v |= v >> 4; v |= v >> 8; v |= v >> 16;
   return v + 1;
 }
 
-/** Determine block_height in GOBs for a given height (in BC1 block rows) */
-function getBlockHeight(heightInBlocks: number): number {
-  let bh = pow2RoundUp(Math.ceil(heightInBlocks / 8));
+function divRoundUp(a: number, b: number): number {
+  return Math.ceil(a / b);
+}
+
+/** Determine block_height in GOBs */
+function getBlockHeight(heightInBytes: number): number {
+  // height in GOB rows = height / 8
+  let bh = pow2RoundUp(divRoundUp(heightInBytes, 8));
   if (bh > 16) bh = 16;
   if (bh < 1) bh = 1;
   return bh;
 }
 
 /**
- * Tegra X1 Block Linear → Linear deswizzle for BC1 data.
- * Operates on BC1 block coordinates (each "pixel" = 4x4 pixel block = 8 bytes).
+ * Calculate the swizzled data size for a given surface.
+ * Width/height are in pixels. For block compressed, they are converted to block dimensions.
  */
-function deswizzleBlockLinear(
-  swizzledData: Uint8Array,
-  widthInBlocks: number,
-  heightInBlocks: number
-): Uint8Array {
-  const bpp = 8; // bytes per BC1 block
-  const byteWidth = widthInBlocks * bpp;
-  const gobsX = Math.ceil(byteWidth / 64);
-  const blockHeight = getBlockHeight(heightInBlocks);
-  const linearSize = widthInBlocks * heightInBlocks * bpp;
-  const linear = new Uint8Array(linearSize);
-
-  for (let y = 0; y < heightInBlocks; y++) {
-    for (let x = 0; x < widthInBlocks; x++) {
-      const linearOffset = (y * widthInBlocks + x) * bpp;
-      const swizzledOffset = getAddrBlockLinear(x, y, widthInBlocks, bpp, blockHeight, gobsX);
-      if (swizzledOffset + bpp <= swizzledData.length) {
-        linear.set(swizzledData.subarray(swizzledOffset, swizzledOffset + bpp), linearOffset);
-      }
-    }
+function swizzledSize(width: number, height: number, bpp: number, blockCompressed: boolean): number {
+  let widthInUnits: number, heightInUnits: number;
+  if (blockCompressed) {
+    widthInUnits = divRoundUp(width, 4);
+    heightInUnits = divRoundUp(height, 4);
+  } else {
+    widthInUnits = width;
+    heightInUnits = height;
   }
-  return linear;
-}
-
-/**
- * Linear → Tegra X1 Block Linear reswizzle for BC1 data.
- */
-function swizzleBlockLinear(
-  linearData: Uint8Array,
-  widthInBlocks: number,
-  heightInBlocks: number
-): Uint8Array {
-  const bpp = 8;
-  const byteWidth = widthInBlocks * bpp;
-  const gobsX = Math.ceil(byteWidth / 64);
-  const blockHeight = getBlockHeight(heightInBlocks);
-  const gobsY = Math.ceil(heightInBlocks / (8 * blockHeight));
-  const swizzledSize = gobsX * gobsY * blockHeight * 512;
-  const swizzled = new Uint8Array(swizzledSize);
-
-  for (let y = 0; y < heightInBlocks; y++) {
-    for (let x = 0; x < widthInBlocks; x++) {
-      const linearOffset = (y * widthInBlocks + x) * bpp;
-      const swizzledOffset = getAddrBlockLinear(x, y, widthInBlocks, bpp, blockHeight, gobsX);
-      if (linearOffset + bpp <= linearData.length && swizzledOffset + bpp <= swizzled.length) {
-        swizzled.set(linearData.subarray(linearOffset, linearOffset + bpp), swizzledOffset);
-      }
-    }
-  }
-  return swizzled;
-}
-
-/**
- * Tegra X1 TRM block linear address calculation.
- * x, y are in "block" coordinates for BC1 (each block = 4x4 pixels).
- */
-function getAddrBlockLinear(
-  x: number, y: number,
-  widthInBlocks: number, bpp: number,
-  blockHeight: number, gobsX: number
-): number {
-  const xByte = x * bpp;
-  const gobAddress =
-    Math.floor(y / (8 * blockHeight)) * 512 * blockHeight * gobsX +
-    Math.floor(xByte / 64) * 512 * blockHeight +
-    Math.floor((y % (8 * blockHeight)) / 8) * 512;
-  const xInGob = xByte % 64;
-  const yInGob = y % 8;
-  // GOB internal layout (Tegra X1 TRM)
-  const inGobOffset =
-    ((yInGob >> 1) << 7) | // bit4 of y → bit7
-    ((xInGob >> 5) << 6) | // bit5 of x → bit6
-    ((yInGob & 1) << 5) |  // bit0 of y → bit5
-    (xInGob & 0x1F);       // bits 0-4 of x → bits 0-4
-  return gobAddress + inGobOffset;
+  const byteWidth = widthInUnits * bpp;
+  const gobsX = divRoundUp(byteWidth, 64);
+  const blockHeight = getBlockHeight(heightInUnits);
+  const gobsY = divRoundUp(heightInUnits, 8 * blockHeight);
+  return gobsX * gobsY * blockHeight * 512;
 }
 
 /**
@@ -161,7 +161,6 @@ function getAddrBlockLinear(
  */
 export function analyzeWifnt(data: ArrayBuffer): WifntInfo {
   const bytes = new Uint8Array(data);
-  const view = new DataView(data);
   
   // Read magic bytes
   const magic = data.byteLength >= 4
@@ -176,29 +175,222 @@ export function analyzeWifnt(data: ArrayBuffer): WifntInfo {
     .map(b => b.toString(16).padStart(2, "0"))
     .join(" ");
 
-  // Calculate expected texture data size (swizzled, padded to block boundaries)
-  const expectedTextureSize = bc1SwizzledSize(ATLAS_WIDTH, ATLAS_HEIGHT);
+  // Parse Mibl footer from end of file
+  const miblFooter = parseMiblFooter(data);
   
-  // Try to find where texture data starts by looking at file size
-  const textureDataOffset = data.byteLength - expectedTextureSize;
+  let textureWidth: number;
+  let textureHeight: number;
+  let imageFormat: number;
+  let textureDataSize: number;
+  let textureDataOffset: number;
+
+  if (miblFooter) {
+    textureWidth = miblFooter.width;
+    textureHeight = miblFooter.height;
+    imageFormat = miblFooter.imageFormat;
+    
+    const bpp = getBpp(imageFormat);
+    const bc = isBlockCompressed(imageFormat);
+    
+    // The swizzled data size
+    textureDataSize = swizzledSize(textureWidth, textureHeight, bpp, bc);
+    
+    // The Mibl section: image data is at the beginning, footer at the end
+    // footer.imageSize is the aligned (4096) size
+    // The Mibl section spans from some offset to end of file
+    // Mibl total = max(imageSize, swizzledSize aligned to 4096) + possible extra page for footer
+    const alignedSize = Math.ceil(textureDataSize / 4096) * 4096;
+    const padding = alignedSize - textureDataSize;
+    const miblTotalSize = padding >= MIBL_FOOTER_SIZE ? alignedSize : alignedSize + 4096;
+    
+    textureDataOffset = data.byteLength - miblTotalSize;
+    if (textureDataOffset < 0) {
+      // Fallback: use imageSize from footer
+      textureDataOffset = data.byteLength - miblFooter.imageSize;
+    }
+    // Ensure 4096 alignment
+    if (textureDataOffset % 4096 !== 0 && textureDataOffset > 0) {
+      // Try to find the nearest 4096-aligned offset
+      textureDataOffset = Math.floor(textureDataOffset / 4096) * 4096;
+    }
+  } else {
+    // Fallback: hardcoded values for XC3
+    textureWidth = 2800;
+    textureHeight = 171;
+    imageFormat = FORMAT_BC1;
+    const blocksX = divRoundUp(textureWidth, 4);
+    const blocksY = divRoundUp(textureHeight, 4);
+    textureDataSize = blocksX * blocksY * 8;
+    textureDataOffset = data.byteLength - textureDataSize;
+  }
+
+  // Calculate grid from FontSettings in header if available
+  // FontSettings is at an offset stored in the LAFT header
+  let cellWidth = 56, cellHeight = 57, gridCols = 50, gridRows = 3;
+  
+  // Try to read FontSettings from the header
+  // The settings offset is stored in the LAFT header
+  const settingsResult = readFontSettings(data);
+  if (settingsResult) {
+    textureWidth = settingsResult.textureWidth || textureWidth;
+    textureHeight = settingsResult.textureHeight || textureHeight;
+    cellWidth = (settingsResult.glyphAreaWidth || 0) + 1 || cellWidth;
+    cellHeight = (settingsResult.glyphAreaHeight || 0) + 1 || cellHeight;
+    gridCols = settingsResult.glyphsPerRow || gridCols;
+    gridRows = settingsResult.numRows || gridRows;
+  }
+
+  const glyphCount = gridCols * gridRows;
   const headerSize = Math.max(0, textureDataOffset);
 
   return {
     fileSize: data.byteLength,
     magic,
     valid,
-    textureWidth: ATLAS_WIDTH,
-    textureHeight: ATLAS_HEIGHT,
-    gridCols: GRID_COLS,
-    gridRows: GRID_ROWS,
-    cellWidth: CELL_WIDTH,
-    cellHeight: CELL_HEIGHT,
-    glyphCount: GLYPH_COUNT,
+    textureWidth,
+    textureHeight,
+    gridCols,
+    gridRows,
+    cellWidth,
+    cellHeight,
+    glyphCount,
     headerSize,
     textureDataOffset: Math.max(0, textureDataOffset),
-    textureDataSize: expectedTextureSize,
+    textureDataSize,
+    imageFormat,
+    imageFormatName: getFormatName(imageFormat),
     headerHex,
   };
+}
+
+/**
+ * Try to read FontSettings from the LAFT header.
+ * FontSettings offset is stored at byte 44 of the header (after LAFT header fields).
+ * 
+ * LAFT header layout:
+ * 0-3: "LAFT"
+ * 4-7: version (u32)
+ * 8-11: padding
+ * 12-15: font_info offset (u32)
+ * 16-19: offsets offset (u32)
+ * 20-23: offsets count (u32)
+ * 24-27: mappings offset (u32)
+ * 28-31: mappings count (u32)
+ * 32-35: glyph_class_mask (u32)
+ * 36-39: texture offset (u32)
+ * 40-43: texture size (u32)
+ * 44-47: settings offset (u32)
+ * 48-51: global_width_reduction (u32)
+ * 52-55: line_height (u32)
+ */
+function readFontSettings(data: ArrayBuffer): {
+  textureWidth: number;
+  textureHeight: number;
+  glyphAreaWidth: number;
+  glyphAreaHeight: number;
+  glyphsPerRow: number;
+  numRows: number;
+} | null {
+  if (data.byteLength < 56) return null;
+  try {
+    const view = new DataView(data);
+    const settingsOffset = view.getUint32(44, true);
+    if (settingsOffset + 24 > data.byteLength || settingsOffset === 0) return null;
+    
+    return {
+      textureWidth: view.getUint32(settingsOffset, true),
+      textureHeight: view.getUint32(settingsOffset + 4, true),
+      glyphAreaWidth: view.getUint32(settingsOffset + 8, true),
+      glyphAreaHeight: view.getUint32(settingsOffset + 12, true),
+      glyphsPerRow: view.getUint32(settingsOffset + 16, true),
+      numRows: view.getUint32(settingsOffset + 20, true),
+    };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Tegra X1 Block Linear address calculation.
+ */
+function getAddrBlockLinear(
+  x: number, y: number,
+  widthInUnits: number, bpp: number,
+  blockHeight: number, gobsX: number
+): number {
+  const xByte = x * bpp;
+  const gobAddress =
+    Math.floor(y / (8 * blockHeight)) * 512 * blockHeight * gobsX +
+    Math.floor(xByte / 64) * 512 * blockHeight +
+    Math.floor((y % (8 * blockHeight)) / 8) * 512;
+  const xInGob = xByte % 64;
+  const yInGob = y % 8;
+  const inGobOffset =
+    ((yInGob >> 1) << 7) |
+    ((xInGob >> 5) << 6) |
+    ((yInGob & 1) << 5) |
+    (xInGob & 0x1F);
+  return gobAddress + inGobOffset;
+}
+
+/**
+ * Deswizzle Tegra X1 block linear data.
+ * widthInUnits/heightInUnits: for BC formats, these are in blocks (pixels/4).
+ */
+function deswizzleBlockLinear(
+  swizzledData: Uint8Array,
+  widthInUnits: number,
+  heightInUnits: number,
+  bpp: number
+): Uint8Array {
+  const byteWidth = widthInUnits * bpp;
+  const gobsX = divRoundUp(byteWidth, 64);
+  const blockHeight = getBlockHeight(heightInUnits);
+  const linearSize = widthInUnits * heightInUnits * bpp;
+  const linear = new Uint8Array(linearSize);
+
+  for (let y = 0; y < heightInUnits; y++) {
+    for (let x = 0; x < widthInUnits; x++) {
+      const linearOffset = (y * widthInUnits + x) * bpp;
+      const swizzledOffset = getAddrBlockLinear(x, y, widthInUnits, bpp, blockHeight, gobsX);
+      if (swizzledOffset + bpp <= swizzledData.length) {
+        for (let b = 0; b < bpp; b++) {
+          linear[linearOffset + b] = swizzledData[swizzledOffset + b];
+        }
+      }
+    }
+  }
+  return linear;
+}
+
+/**
+ * Reswizzle linear data to Tegra X1 block linear layout.
+ */
+function swizzleBlockLinear(
+  linearData: Uint8Array,
+  widthInUnits: number,
+  heightInUnits: number,
+  bpp: number
+): Uint8Array {
+  const byteWidth = widthInUnits * bpp;
+  const gobsX = divRoundUp(byteWidth, 64);
+  const blockHeight = getBlockHeight(heightInUnits);
+  const gobsY = divRoundUp(heightInUnits, 8 * blockHeight);
+  const swizzledSz = gobsX * gobsY * blockHeight * 512;
+  const swizzled = new Uint8Array(swizzledSz);
+
+  for (let y = 0; y < heightInUnits; y++) {
+    for (let x = 0; x < widthInUnits; x++) {
+      const linearOffset = (y * widthInUnits + x) * bpp;
+      const swizzledOffset = getAddrBlockLinear(x, y, widthInUnits, bpp, blockHeight, gobsX);
+      if (linearOffset + bpp <= linearData.length && swizzledOffset + bpp <= swizzled.length) {
+        for (let b = 0; b < bpp; b++) {
+          swizzled[swizzledOffset + b] = linearData[linearOffset + b];
+        }
+      }
+    }
+  }
+  return swizzled;
 }
 
 /**
@@ -218,11 +410,9 @@ export function decodeDXT1(
       const blockIndex = (by * blocksX + bx) * 8;
       if (blockIndex + 8 > compressedData.length) break;
 
-      // Read two 16-bit colors (RGB565)
       const c0 = compressedData[blockIndex] | (compressedData[blockIndex + 1] << 8);
       const c1 = compressedData[blockIndex + 2] | (compressedData[blockIndex + 3] << 8);
 
-      // Decode RGB565 to RGB888
       const colors: [number, number, number, number][] = [
         rgb565ToRGBA(c0),
         rgb565ToRGBA(c1),
@@ -231,7 +421,6 @@ export function decodeDXT1(
       ];
 
       if (c0 > c1) {
-        // 4-color mode (opaque)
         colors[2] = [
           Math.round((2 * colors[0][0] + colors[1][0]) / 3),
           Math.round((2 * colors[0][1] + colors[1][1]) / 3),
@@ -245,23 +434,20 @@ export function decodeDXT1(
           255,
         ];
       } else {
-        // 3-color + transparent mode
         colors[2] = [
           Math.round((colors[0][0] + colors[1][0]) / 2),
           Math.round((colors[0][1] + colors[1][1]) / 2),
           Math.round((colors[0][2] + colors[1][2]) / 2),
           255,
         ];
-        colors[3] = [0, 0, 0, 0]; // Transparent
+        colors[3] = [0, 0, 0, 0];
       }
 
-      // Read 4 bytes of 2-bit lookup indices
       const indices = compressedData[blockIndex + 4]
         | (compressedData[blockIndex + 5] << 8)
         | (compressedData[blockIndex + 6] << 16)
         | (compressedData[blockIndex + 7] << 24);
 
-      // Write 4×4 pixel block
       for (let py = 0; py < 4; py++) {
         for (let px = 0; px < 4; px++) {
           const x = bx * 4 + px;
@@ -293,6 +479,176 @@ function rgb565ToRGBA(c: number): [number, number, number, number] {
 }
 
 /**
+ * Decode BC4 compressed texture data to RGBA pixels (single channel → grayscale + alpha)
+ */
+export function decodeBC4(
+  compressedData: Uint8Array,
+  width: number,
+  height: number
+): Uint8Array {
+  const blocksX = Math.ceil(width / 4);
+  const blocksY = Math.ceil(height / 4);
+  const output = new Uint8Array(width * height * 4);
+
+  for (let by = 0; by < blocksY; by++) {
+    for (let bx = 0; bx < blocksX; bx++) {
+      const blockIndex = (by * blocksX + bx) * 8;
+      if (blockIndex + 8 > compressedData.length) break;
+
+      const alpha0 = compressedData[blockIndex];
+      const alpha1 = compressedData[blockIndex + 1];
+
+      // Build palette
+      const palette: number[] = [alpha0, alpha1, 0, 0, 0, 0, 0, 0];
+      if (alpha0 > alpha1) {
+        for (let i = 1; i <= 6; i++) {
+          palette[i + 1] = Math.round(((7 - i) * alpha0 + i * alpha1) / 7);
+        }
+      } else {
+        for (let i = 1; i <= 4; i++) {
+          palette[i + 1] = Math.round(((5 - i) * alpha0 + i * alpha1) / 5);
+        }
+        palette[6] = 0;
+        palette[7] = 255;
+      }
+
+      // Read 48 bits of 3-bit indices (6 bytes)
+      const bits = [
+        compressedData[blockIndex + 2],
+        compressedData[blockIndex + 3],
+        compressedData[blockIndex + 4],
+        compressedData[blockIndex + 5],
+        compressedData[blockIndex + 6],
+        compressedData[blockIndex + 7],
+      ];
+
+      // Convert to a 48-bit value for easier indexing
+      for (let py = 0; py < 4; py++) {
+        for (let px = 0; px < 4; px++) {
+          const x = bx * 4 + px;
+          const y = by * 4 + py;
+          if (x >= width || y >= height) continue;
+
+          const pixelIndex = py * 4 + px;
+          const bitOffset = pixelIndex * 3;
+          const byteIdx = Math.floor(bitOffset / 8);
+          const bitIdx = bitOffset % 8;
+          
+          let idx: number;
+          if (bitIdx <= 5) {
+            idx = (bits[byteIdx] >> bitIdx) & 0x7;
+          } else {
+            idx = ((bits[byteIdx] >> bitIdx) | (bits[byteIdx + 1] << (8 - bitIdx))) & 0x7;
+          }
+
+          const val = palette[idx];
+          const outIndex = (y * width + x) * 4;
+          // BC4 is single-channel: use as white with alpha
+          output[outIndex] = 255;
+          output[outIndex + 1] = 255;
+          output[outIndex + 2] = 255;
+          output[outIndex + 3] = val;
+        }
+      }
+    }
+  }
+
+  return output;
+}
+
+/**
+ * Encode RGBA pixels to BC4 compressed data (uses alpha channel)
+ */
+export function encodeBC4(
+  pixels: Uint8Array | Uint8ClampedArray,
+  width: number,
+  height: number
+): Uint8Array {
+  const blocksX = Math.ceil(width / 4);
+  const blocksY = Math.ceil(height / 4);
+  const output = new Uint8Array(blocksX * blocksY * 8);
+
+  for (let by = 0; by < blocksY; by++) {
+    for (let bx = 0; bx < blocksX; bx++) {
+      // Extract alpha values for 4x4 block
+      const alphas: number[] = [];
+      for (let py = 0; py < 4; py++) {
+        for (let px = 0; px < 4; px++) {
+          const x = bx * 4 + px;
+          const y = by * 4 + py;
+          if (x < width && y < height) {
+            const i = (y * width + x) * 4;
+            alphas.push(pixels[i + 3]); // alpha channel
+          } else {
+            alphas.push(0);
+          }
+        }
+      }
+
+      // Find min/max
+      let minA = 255, maxA = 0;
+      for (const a of alphas) {
+        if (a < minA) minA = a;
+        if (a > maxA) maxA = a;
+      }
+
+      const alpha0 = maxA;
+      const alpha1 = minA;
+
+      // Build palette (8 values mode)
+      const palette: number[] = [alpha0, alpha1, 0, 0, 0, 0, 0, 0];
+      if (alpha0 > alpha1) {
+        for (let i = 1; i <= 6; i++) {
+          palette[i + 1] = Math.round(((7 - i) * alpha0 + i * alpha1) / 7);
+        }
+      } else {
+        for (let i = 1; i <= 4; i++) {
+          palette[i + 1] = Math.round(((5 - i) * alpha0 + i * alpha1) / 5);
+        }
+        palette[6] = 0;
+        palette[7] = 255;
+      }
+
+      // Find best index for each pixel
+      const indices: number[] = [];
+      for (const a of alphas) {
+        let bestIdx = 0;
+        let bestDist = Infinity;
+        for (let ci = 0; ci < 8; ci++) {
+          const dist = Math.abs(a - palette[ci]);
+          if (dist < bestDist) { bestDist = dist; bestIdx = ci; }
+        }
+        indices.push(bestIdx);
+      }
+
+      // Pack into 48 bits (6 bytes)
+      const blockOffset = (by * blocksX + bx) * 8;
+      output[blockOffset] = alpha0;
+      output[blockOffset + 1] = alpha1;
+
+      // Pack 16 × 3-bit indices into 6 bytes
+      const bitBuffer = new Uint8Array(6);
+      for (let i = 0; i < 16; i++) {
+        const bitOffset = i * 3;
+        const byteIdx = Math.floor(bitOffset / 8);
+        const bitIdx = bitOffset % 8;
+        bitBuffer[byteIdx] |= (indices[i] & 0x7) << bitIdx;
+        if (bitIdx > 5) {
+          bitBuffer[byteIdx + 1] |= (indices[i] & 0x7) >> (8 - bitIdx);
+        }
+      }
+      output[blockOffset + 2] = bitBuffer[0];
+      output[blockOffset + 3] = bitBuffer[1];
+      output[blockOffset + 4] = bitBuffer[2];
+      output[blockOffset + 5] = bitBuffer[3];
+      output[blockOffset + 6] = bitBuffer[4];
+      output[blockOffset + 7] = bitBuffer[5];
+    }
+  }
+  return output;
+}
+
+/**
  * Extract the texture data from a WIFNT file and decode it to an ImageData-compatible RGBA array
  */
 export function decodeWifntTexture(
@@ -300,18 +656,34 @@ export function decodeWifntTexture(
   info: WifntInfo
 ): Uint8ClampedArray | null {
   try {
-    const swizzled = new Uint8Array(
-      fileData,
-      info.textureDataOffset,
-      Math.min(info.textureDataSize, fileData.byteLength - info.textureDataOffset)
-    );
-    // Deswizzle from Tegra X1 block linear to linear BC1 data
-    const blocksX = Math.ceil(info.textureWidth / 4);
-    const blocksY = Math.ceil(info.textureHeight / 4);
-    const linearBC1 = deswizzleBlockLinear(swizzled, blocksX, blocksY);
-    const rgba = decodeDXT1(linearBC1, info.textureWidth, info.textureHeight);
+    const dataLen = Math.min(info.textureDataSize, fileData.byteLength - info.textureDataOffset);
+    if (dataLen <= 0) return null;
+    
+    const swizzledData = new Uint8Array(fileData, info.textureDataOffset, dataLen);
+    
+    const bc = isBlockCompressed(info.imageFormat);
+    const bpp = getBpp(info.imageFormat);
+    
+    let linearData: Uint8Array;
+    if (bc) {
+      const blocksX = divRoundUp(info.textureWidth, 4);
+      const blocksY = divRoundUp(info.textureHeight, 4);
+      linearData = deswizzleBlockLinear(swizzledData, blocksX, blocksY, bpp);
+    } else {
+      linearData = deswizzleBlockLinear(swizzledData, info.textureWidth, info.textureHeight, bpp);
+    }
+    
+    let rgba: Uint8Array;
+    if (info.imageFormat === FORMAT_BC4) {
+      rgba = decodeBC4(linearData, info.textureWidth, info.textureHeight);
+    } else {
+      // Default to BC1
+      rgba = decodeDXT1(linearData, info.textureWidth, info.textureHeight);
+    }
+    
     return new Uint8ClampedArray(rgba.buffer);
-  } catch {
+  } catch (e) {
+    console.error("decodeWifntTexture error:", e);
     return null;
   }
 }
@@ -380,7 +752,6 @@ export function encodeDXT1(
 
   for (let by = 0; by < blocksY; by++) {
     for (let bx = 0; bx < blocksX; bx++) {
-      // Extract 4x4 block colors
       const blockColors: [number, number, number, number][] = [];
       for (let py = 0; py < 4; py++) {
         for (let px = 0; px < 4; px++) {
@@ -395,7 +766,6 @@ export function encodeDXT1(
         }
       }
 
-      // Find min/max colors (simple bounding box)
       let minR = 255, minG = 255, minB = 255;
       let maxR = 0, maxG = 0, maxB = 0;
       let hasTransparent = false;
@@ -410,7 +780,6 @@ export function encodeDXT1(
       let c0 = rgbaToRGB565(maxR, maxG, maxB);
       let c1 = rgbaToRGB565(minR, minG, minB);
 
-      // For transparent mode, ensure c0 <= c1
       if (hasTransparent) {
         if (c0 > c1) { const tmp = c0; c0 = c1; c1 = tmp; }
       } else {
@@ -424,10 +793,9 @@ export function encodeDXT1(
         colors[3] = [Math.round((colors[0][0] + 2 * colors[1][0]) / 3), Math.round((colors[0][1] + 2 * colors[1][1]) / 3), Math.round((colors[0][2] + 2 * colors[1][2]) / 3)];
       } else {
         colors[2] = [Math.round((colors[0][0] + colors[1][0]) / 2), Math.round((colors[0][1] + colors[1][1]) / 2), Math.round((colors[0][2] + colors[1][2]) / 2)];
-        colors[3] = [0, 0, 0]; // transparent
+        colors[3] = [0, 0, 0];
       }
 
-      // Build index bits
       let indices = 0;
       for (let i = 0; i < 16; i++) {
         const [r, g, b, a] = blockColors[i];
@@ -473,21 +841,60 @@ function rgb565Decode(c: number): number[] {
 }
 
 /**
- * Rebuild a WIFNT file by replacing the texture data with new RGBA pixels
+ * Rebuild a WIFNT file by replacing the texture data with new RGBA pixels.
+ * Encodes to the original format and reswizzles for Switch.
  */
 export function rebuildWifnt(
   originalFile: ArrayBuffer,
   info: WifntInfo,
   newPixels: Uint8Array | Uint8ClampedArray
 ): ArrayBuffer {
-  const linearBC1 = encodeDXT1(newPixels, info.textureWidth, info.textureHeight);
+  // Encode RGBA to the appropriate BC format
+  let linearBC: Uint8Array;
+  if (info.imageFormat === FORMAT_BC4) {
+    linearBC = encodeBC4(newPixels, info.textureWidth, info.textureHeight);
+  } else {
+    linearBC = encodeDXT1(newPixels, info.textureWidth, info.textureHeight);
+  }
+  
   // Reswizzle to Tegra X1 block linear layout
-  const blocksX = Math.ceil(info.textureWidth / 4);
-  const blocksY = Math.ceil(info.textureHeight / 4);
-  const swizzled = swizzleBlockLinear(linearBC1, blocksX, blocksY);
+  const bc = isBlockCompressed(info.imageFormat);
+  const bpp = getBpp(info.imageFormat);
+  let swizzled: Uint8Array;
+  if (bc) {
+    const blocksX = divRoundUp(info.textureWidth, 4);
+    const blocksY = divRoundUp(info.textureHeight, 4);
+    swizzled = swizzleBlockLinear(linearBC, blocksX, blocksY, bpp);
+  } else {
+    swizzled = swizzleBlockLinear(linearBC, info.textureWidth, info.textureHeight, bpp);
+  }
+  
+  // Reconstruct the file: header + swizzled data + padding + footer
   const header = new Uint8Array(originalFile, 0, info.textureDataOffset);
-  const result = new Uint8Array(header.length + swizzled.length);
+  
+  // Get the original file's tail (everything after texture data including footer)
+  const originalSwizzledEnd = info.textureDataOffset + info.textureDataSize;
+  const tailStart = originalSwizzledEnd;
+  const tailSize = originalFile.byteLength - tailStart;
+  const tail = tailSize > 0 ? new Uint8Array(originalFile, tailStart, tailSize) : new Uint8Array(0);
+  
+  const result = new Uint8Array(header.length + swizzled.length + tail.length);
   result.set(header);
   result.set(swizzled, header.length);
+  if (tail.length > 0) {
+    result.set(tail, header.length + swizzled.length);
+  }
+  
+  // Update the Mibl footer's image_size field if present
+  if (result.length >= MIBL_FOOTER_SIZE) {
+    const footerOff = result.length - MIBL_FOOTER_SIZE;
+    const m = String.fromCharCode(result[footerOff + 36], result[footerOff + 37], result[footerOff + 38], result[footerOff + 39]);
+    if (m === "LBIM") {
+      const alignedSize = Math.ceil(swizzled.length / 4096) * 4096;
+      const view = new DataView(result.buffer);
+      view.setUint32(footerOff, alignedSize, true);
+    }
+  }
+  
   return result.buffer;
 }
