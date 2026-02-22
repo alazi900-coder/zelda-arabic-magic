@@ -263,9 +263,18 @@ function parseRows(tableData: Uint8Array, raw: BdatTable['_raw'], columns: BdatC
           values[col.name] = tableData[cellOffset];
           break;
         case BdatValueType.UnsignedShort:
-        case BdatValueType.MessageId:
           values[col.name] = view.getUint16(cellOffset, true);
           break;
+        case BdatValueType.MessageId: {
+          // MessageId is a u16 offset into the string table
+          const msgOff = view.getUint16(cellOffset, true);
+          if (msgOff > 0 && raw.stringTableOffset + msgOff < tableData.length) {
+            values[col.name] = readNullTerminatedString(tableData, raw.stringTableOffset + msgOff);
+          } else {
+            values[col.name] = '';
+          }
+          break;
+        }
         case BdatValueType.UnsignedInt:
         case BdatValueType.HashRef:
           values[col.name] = view.getUint32(cellOffset, true);
@@ -414,7 +423,7 @@ export function extractBdatStrings(
 
   for (const table of bdatFile.tables) {
     const stringColumns = table.columns.filter(
-      c => c.valueType === BdatValueType.String || c.valueType === BdatValueType.DebugString
+      c => c.valueType === BdatValueType.String || c.valueType === BdatValueType.DebugString || c.valueType === BdatValueType.MessageId
     );
 
     // Pre-compute max UTF-8 byte length per column from all non-empty values
