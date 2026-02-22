@@ -19,6 +19,8 @@ export interface InspectorOptions {
   sample_record_cap?: number;         // default: 1000
   /** Safety margin multiplier for max_utf8_bytes (e.g. 1.2 = 20%). Default: read from settings or 1.2 */
   safety_margin?: number;
+  /** Arabic byte multiplier. Default: read from settings or 2.0 */
+  arabic_multiplier?: number;
 }
 
 // ============= Output Interfaces =============
@@ -314,7 +316,7 @@ function inspectField(
     //   - Arabic translations are typically 30-50% longer than English
     //   - The binary writer rebuilds the string table dynamically, so no hard cap exists
     //   - The byte limit here is a soft warning only, not a hard binary constraint
-    max_utf8_bytes: Math.max(Math.ceil(maxChars * 3 * opts.safety_margin), 4),
+    max_utf8_bytes: Math.max(Math.ceil(maxChars * 3 * opts.safety_margin * opts.arabic_multiplier), 4),
     avg_utf8_bytes: Math.round(avgBytes * 10) / 10,
     multiline,
     duplicate_ratio: Math.round(dupRatio * 100) / 100,
@@ -332,18 +334,16 @@ export function inspectBdatSchema(
   fileName: string,
   options?: InspectorOptions,
 ): BdatSchemaReport {
-  // Resolve safety margin: caller wins, otherwise fall back to persisted settings
-  const resolvedMargin = (() => {
-    if (options?.safety_margin !== undefined) return Math.max(options.safety_margin, 1.0);
+  // Resolve safety margin & arabic multiplier from persisted settings
+  const settingsRaw = (() => {
     try {
       const raw = localStorage.getItem("bdat-settings-v1");
-      if (raw) {
-        const parsed = JSON.parse(raw) as { safetyMargin?: number };
-        if (typeof parsed.safetyMargin === "number") return Math.max(parsed.safetyMargin, 1.0);
-      }
+      if (raw) return JSON.parse(raw) as { safetyMargin?: number; arabicMultiplier?: number };
     } catch { /* ignore */ }
-    return 1.2;
+    return {} as { safetyMargin?: number; arabicMultiplier?: number };
   })();
+  const resolvedMargin = options?.safety_margin !== undefined ? Math.max(options.safety_margin, 1.0) : Math.max(settingsRaw.safetyMargin ?? 1.2, 1.0);
+  const resolvedArabicMul = Math.min(Math.max(settingsRaw.arabicMultiplier ?? 2.0, 1.5), 3.0);
 
   const opts: Required<InspectorOptions> = {
     include_samples: options?.include_samples ?? false,
@@ -352,6 +352,7 @@ export function inspectBdatSchema(
     max_records_for_full_scan: options?.max_records_for_full_scan ?? 5000,
     sample_record_cap: options?.sample_record_cap ?? 1000,
     safety_margin: resolvedMargin,
+    arabic_multiplier: resolvedArabicMul,
   };
 
   const tables: BdatTableSchema[] = [];
