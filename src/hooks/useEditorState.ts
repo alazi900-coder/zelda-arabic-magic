@@ -357,8 +357,18 @@ export function useEditorState() {
           });
           return;
         }
+        // Entries exist but no translations yet (freshly extracted) — load them directly
+        setState({
+          entries: stored.entries,
+          translations: stored.translations || {},
+          protectedEntries: new Set(stored.protectedEntries || []),
+          technicalBypass: new Set(stored.technicalBypass || []),
+          isDemo: false,
+        });
+        setLastSaved("تم تحميل نصوص مستخرجة");
+        return;
       }
-      // No saved state or no translations — show demo
+      // No saved state — show demo
       const demoEntries: ExtractedEntry[] = [
         { msbtFile: "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:0:name", index: 0, label: "SYS_CharacterName[0].name", original: "Noah", maxBytes: 24 },
         { msbtFile: "bdat-bin:SYS_CharacterName.bdat:SYS_CharacterName:1:name", index: 0, label: "SYS_CharacterName[1].name", original: "Mio", maxBytes: 18 },
