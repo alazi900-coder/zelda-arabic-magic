@@ -360,7 +360,7 @@ ${textsBlock}`;
 
   const effectiveKey = userApiKey?.trim() || Deno.env.get('GEMINI_API_KEY') || '';
   if (effectiveKey) {
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${effectiveKey}`;
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${effectiveKey}`;
     const geminiResponse = await fetch(geminiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -374,27 +374,34 @@ ${textsBlock}`;
     if (!geminiResponse.ok) {
       const errText = await geminiResponse.text();
       console.error('Gemini API error:', errText);
-      if (geminiResponse.status === 400) throw new Error('مفتاح API غير صالح — تحقق من المفتاح');
-      if (geminiResponse.status === 403) throw new Error('مفتاح API محظور أو منتهي — أنشئ مفتاحاً جديداً من Google AI Studio');
-      if (geminiResponse.status === 429) throw new Error('تم تجاوز الحصة المجانية لـ Gemini — انتظر دقيقة أو استخدم محرك Google Translate');
-      throw new Error(`خطأ Gemini: ${geminiResponse.status}`);
-    }
-
-    const geminiData = await geminiResponse.json();
-    const content = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    const jsonMatch = content.match(/\[[\s\S]*\]/);
-    if (!jsonMatch) throw new Error('فشل في تحليل استجابة Gemini');
-    const sanitized = jsonMatch[0].replace(/[\x00-\x1F\x7F]/g, ' ');
-    const translations: string[] = JSON.parse(sanitized);
-
-    const result: Record<string, string> = {};
-    for (let i = 0; i < Math.min(protectedEntries.length, translations.length); i++) {
-      if (translations[i]?.trim()) {
-        result[protectedEntries[i].key] = restoreTags(translations[i], protectedEntries[i].tags);
+      if (geminiResponse.status === 429) {
+        console.log('Gemini quota exceeded, falling back to Lovable AI...');
+        // Fall through to Lovable AI below
+      } else {
+        if (geminiResponse.status === 400) throw new Error('مفتاح API غير صالح — تحقق من المفتاح');
+        if (geminiResponse.status === 403) throw new Error('مفتاح API محظور أو منتهي — أنشئ مفتاحاً جديداً من Google AI Studio');
+        throw new Error(`خطأ Gemini: ${geminiResponse.status}`);
       }
+    } else {
+      const geminiData = await geminiResponse.json();
+      const content = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      const jsonMatch = content.match(/\[[\s\S]*\]/);
+      if (!jsonMatch) throw new Error('فشل في تحليل استجابة Gemini');
+      const sanitized = jsonMatch[0].replace(/[\x00-\x1F\x7F]/g, ' ');
+      const translations: string[] = JSON.parse(sanitized);
+
+      const result: Record<string, string> = {};
+      for (let i = 0; i < Math.min(protectedEntries.length, translations.length); i++) {
+        if (translations[i]?.trim()) {
+          result[protectedEntries[i].key] = restoreTags(translations[i], protectedEntries[i].tags);
+        }
+      }
+      return result;
     }
-    return result;
-  } else {
+  }
+
+  // Fallback to Lovable AI (when no Gemini key or Gemini quota exceeded)
+  {
     const apiKey = Deno.env.get('LOVABLE_API_KEY');
     if (!apiKey) throw new Error('Missing LOVABLE_API_KEY');
 
