@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { removeArabicPresentationForms } from "@/lib/arabic-processing";
 import type { EditorState } from "@/components/editor/types";
 import { ExtractedEntry, hasArabicChars, unReverseBidi } from "@/components/editor/types";
+import { murmur3_32 } from "@/lib/bdat-hash-dictionary";
 
 /** Parse a single JSON object chunk, repairing common issues */
 function repairSingleChunk(raw: string): Record<string, string> | null {
@@ -301,12 +302,6 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
   /**
    * Extract multi-level fingerprints from a bdat-bin key for cross-extraction matching.
    * Key format: "bdat-bin:filename:<tableHash>:rowIndex:<colHash>:0"
-   * 
-   * Returns multiple fingerprint levels for progressive fallback matching:
-   * - exact: "filename:tableHash:rowIndex:colHash" (unique, for same extraction)
-   * - noTable: "filename:*:rowIndex:colHash" (when table hash resolved to name)
-   * - noCol: "filename:tableHash:rowIndex:*" (when column hash resolved to name)
-   * - base: "filename:*:rowIndex:*" (when both hashes changed, only works if unique)
    */
   const bdatKeyFingerprint = (key: string) => {
     if (!key.startsWith('bdat-bin:')) return null;
@@ -324,6 +319,33 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     };
   };
 
+  /**
+   * Normalize a key part to its numeric hash string.
+   * If it's already a hex hash like "<0x00b8f58d>", extract the number.
+   * If it's a name like "MNU_Msg", compute murmur3_32 and return hex.
+   */
+  const normalizeToHash = (part: string): string => {
+    const hexMatch = part.match(/^<0x([0-9a-fA-F]+)>$/);
+    if (hexMatch) return hexMatch[1].toLowerCase();
+    // It's a resolved name — compute its hash
+    return murmur3_32(part).toString(16).padStart(8, '0').toLowerCase();
+  };
+
+  /**
+   * Create a hash-normalized fingerprint for exact matching across hash resolution changes.
+   * Both "<0x00b8f58d>" and "MNU_Msg" normalize to the same hash string.
+   */
+  const normalizedFingerprint = (key: string): string | null => {
+    if (!key.startsWith('bdat-bin:')) return null;
+    const parts = key.split(':');
+    if (parts.length < 6) return null;
+    const filename = parts[1];
+    const tableNorm = normalizeToHash(parts[2]);
+    const rowIndex = parts[3];
+    const colNorm = normalizeToHash(parts[4]);
+    return `${filename}:${tableNorm}:${rowIndex}:${colNorm}`;
+  };
+
   /** Core logic: process raw JSON text into translations */
   const processJsonImport = useCallback(async (rawText: string, sourceName?: string) => {
     const repaired = repairJson(rawText);
@@ -338,8 +360,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     let cleanedImported: Record<string, string> = {};
 
     // Extract embedded fingerprint map (__fp__: entries → original key)
-    // Supports both old format (__fp__:filename:row:0) and new format (__fp__:filename:tableHash:rowIndex:colHash)
-    const embeddedFpMap = new Map<string, string>(); // fp string → old key
+    const embeddedFpMap = new Map<string, string>();
     for (const [key, value] of Object.entries(imported)) {
       if (key.startsWith('__fp__:')) {
         embeddedFpMap.set(key.slice(6), value);
@@ -349,14 +370,14 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     if (isFilterActive && filteredEntries.length < (state?.entries.length || 0)) {
       const allowedKeys = new Set(filteredEntries.map(e => `${e.msbtFile}:${e.index}`));
       for (const [key, value] of Object.entries(imported)) {
-        if (key.startsWith('__fp__:')) continue; // skip fingerprint metadata
+        if (key.startsWith('__fp__:')) continue;
         if (allowedKeys.has(key)) {
           cleanedImported[key] = normalizeArabicPresentationForms(value);
         }
       }
     } else {
       for (const [key, value] of Object.entries(imported)) {
-        if (key.startsWith('__fp__:')) continue; // skip fingerprint metadata
+        if (key.startsWith('__fp__:')) continue;
         cleanedImported[key] = normalizeArabicPresentationForms(value);
       }
     }
@@ -368,14 +389,19 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     let directMatchCount = Object.keys(cleanedImported).filter(k => entryKeySet.has(k)).length;
     let fpRemappedTotal = 0;
 
-    // Build multi-level fingerprint maps for current entries
+    // Build hash-normalized map for current entries: normalizedFp → entryKey
     const buildEntryFpMaps = () => {
+      const normalizedMap = new Map<string, string>(); // hash-normalized → entryKey
       const exactMap = new Map<string, string>();
       const noTableMap = new Map<string, string[]>();
       const noColMap = new Map<string, string[]>();
       const baseMap = new Map<string, string[]>();
       for (const e of state!.entries) {
         const ek = `${e.msbtFile}:${e.index}`;
+        // Hash-normalized fingerprint (primary matching method)
+        const nfp = normalizedFingerprint(ek);
+        if (nfp) normalizedMap.set(nfp, ek);
+        // Multi-level fallback fingerprints
         const fp = bdatKeyFingerprint(ek);
         if (fp) {
           exactMap.set(fp.exact, ek);
@@ -384,23 +410,28 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
           const b = baseMap.get(fp.base) || []; b.push(ek); baseMap.set(fp.base, b);
         }
       }
-      return { exactMap, noTableMap, noColMap, baseMap };
+      return { normalizedMap, exactMap, noTableMap, noColMap, baseMap };
     };
 
-    /** Try to find the new key for an old key using progressive fingerprint matching */
-    const findNewKey = (oldKey: string, maps: ReturnType<typeof buildEntryFpMaps>): string | undefined => {
+    type FpMaps = ReturnType<typeof buildEntryFpMaps>;
+
+    /** Try to find the new key for an old key using hash-normalized + progressive fingerprint matching */
+    const findNewKey = (oldKey: string, maps: FpMaps): string | undefined => {
+      // 0. Hash-normalized exact match (handles hash↔name resolution changes)
+      const nfp = normalizedFingerprint(oldKey);
+      if (nfp) {
+        const found = maps.normalizedMap.get(nfp);
+        if (found) return found;
+      }
+      // 1-4. Multi-level fallback
       const fp = bdatKeyFingerprint(oldKey);
       if (!fp) return undefined;
-      // 1. Exact match (same table + column hashes)
       let newKey = maps.exactMap.get(fp.exact);
       if (newKey) return newKey;
-      // 2. Table hash changed, column same
       const ntCandidates = maps.noTableMap.get(fp.noTable);
       if (ntCandidates && ntCandidates.length === 1) return ntCandidates[0];
-      // 3. Column hash changed, table same
       const ncCandidates = maps.noColMap.get(fp.noCol);
       if (ncCandidates && ncCandidates.length === 1) return ncCandidates[0];
-      // 4. Both changed — only if unique in base group
       const bCandidates = maps.baseMap.get(fp.base);
       if (bCandidates && bCandidates.length === 1) return bCandidates[0];
       return undefined;

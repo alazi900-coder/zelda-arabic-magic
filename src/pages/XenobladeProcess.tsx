@@ -425,7 +425,15 @@ const XenobladeProcess = () => {
       const savedBuildTranslations = await idbGet<Record<string, string>>("buildTranslations");
       
       if (savedBuildTranslations && Object.keys(savedBuildTranslations).length > 0) {
-        // Build multi-level fingerprint maps for current entries
+        // Build hash-normalized + multi-level fingerprint maps for current entries
+        // Build hash-normalized + multi-level fingerprint maps
+        const { murmur3_32 } = await import("@/lib/bdat-hash-dictionary");
+        const normalizeToHash = (part: string): string => {
+          const hexMatch = part.match(/^<0x([0-9a-fA-F]+)>$/);
+          if (hexMatch) return hexMatch[1].toLowerCase();
+          return murmur3_32(part).toString(16).padStart(8, '0').toLowerCase();
+        };
+        const normalizedMap = new Map<string, string>();
         const exactMap = new Map<string, string>();
         const noTableMap = new Map<string, string[]>();
         const noColMap = new Map<string, string[]>();
@@ -438,6 +446,10 @@ const XenobladeProcess = () => {
             const parts = ek.split(':');
             if (parts.length >= 6) {
               const [filename, tableHash, rowIndex, colHash] = [parts[1], parts[2], parts[3], parts[4]];
+              // Hash-normalized fingerprint (primary)
+              const nfp = `${filename}:${normalizeToHash(tableHash)}:${rowIndex}:${normalizeToHash(colHash)}`;
+              normalizedMap.set(nfp, ek);
+              // Multi-level fallbacks
               exactMap.set(`${filename}:${tableHash}:${rowIndex}:${colHash}`, ek);
               const ntKey = `${filename}:*:${rowIndex}:${colHash}`;
               const nt = noTableMap.get(ntKey) || []; nt.push(ek); noTableMap.set(ntKey, nt);
@@ -454,6 +466,11 @@ const XenobladeProcess = () => {
           const parts = oldKey.split(':');
           if (parts.length < 6) return undefined;
           const [filename, tableHash, rowIndex, colHash] = [parts[1], parts[2], parts[3], parts[4]];
+          // 0. Hash-normalized exact match (handles hash↔name changes)
+          const nfp = `${filename}:${normalizeToHash(tableHash)}:${rowIndex}:${normalizeToHash(colHash)}`;
+          const normMatch = normalizedMap.get(nfp);
+          if (normMatch) return normMatch;
+          // 1-4. Multi-level fallbacks
           let nk = exactMap.get(`${filename}:${tableHash}:${rowIndex}:${colHash}`);
           if (nk) return nk;
           const ntC = noTableMap.get(`${filename}:*:${rowIndex}:${colHash}`);
