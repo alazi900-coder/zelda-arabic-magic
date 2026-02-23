@@ -59,14 +59,16 @@ export default function UpdateBanner() {
   if (!showUpdate) return null;
 
   return (
-    <div className="fixed top-0 inset-x-0 z-[100] bg-primary text-primary-foreground py-2 px-4 flex items-center justify-center gap-3 shadow-lg animate-in slide-in-from-top duration-300">
-      <span className="text-sm font-medium">يتوفر تحديث جديد!</span>
+    <div className="fixed top-0 inset-x-0 z-[100] bg-gradient-to-l from-emerald-600 to-teal-700 text-white py-2.5 px-4 flex items-center justify-center gap-4 shadow-xl animate-in slide-in-from-top duration-300">
+      <div className="flex items-center gap-2">
+        <span className="text-sm font-bold">🎉 تحديث جديد!</span>
+        <span className="text-xs opacity-90">تحسينات في الأداء وإصلاح أخطاء</span>
+      </div>
       <Button
         size="sm"
-        variant="secondary"
         onClick={handleUpdate}
         disabled={updating}
-        className="gap-1.5 h-7 text-xs"
+        className="gap-1.5 h-7 text-xs bg-white/20 hover:bg-white/30 text-white border-white/30 border"
       >
         <RefreshCw className={`h-3.5 w-3.5 ${updating ? "animate-spin" : ""}`} />
         {updating ? "جارٍ التحديث..." : "تحديث الآن"}
