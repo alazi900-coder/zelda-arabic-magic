@@ -49,7 +49,10 @@ const XenobladeProcess = () => {
       const { idbGet } = await import("@/lib/idb-storage");
       const existing = await idbGet<{ translations?: Record<string, string> }>("editorState");
       const game = await idbGet<string>("editorGame");
-      setHasPreviousSession(!!(game === "xenoblade" && existing?.translations && Object.keys(existing.translations).length > 0));
+      const hasOriginals = await idbGet<Record<string, string>>("originalTexts");
+      const hasTranslations = !!(existing?.translations && Object.keys(existing.translations).length > 0);
+      const hasOriginalTexts = !!(hasOriginals && Object.keys(hasOriginals).length > 0);
+      setHasPreviousSession(!!(game === "xenoblade" && (hasTranslations || hasOriginalTexts)));
     })();
   }, []);
 
@@ -349,6 +352,30 @@ const XenobladeProcess = () => {
       }
       setAutoDetectedCount(Object.keys(autoTranslations).length);
       addLog(`🎯 كشف تلقائي: ${Object.keys(autoTranslations).length} نص معرّب من أصل ${allEntries.length} نص مستخرج`);
+      
+      // Diagnostic: show sample character codes from first few entries to debug detection
+      if (Object.keys(autoTranslations).length === 0 && allEntries.length > 0) {
+        const sampleEntries = allEntries.slice(0, 5);
+        for (const entry of sampleEntries) {
+          const first20 = [...entry.original.slice(0, 20)];
+          const codes = first20.map(ch => `U+${ch.charCodeAt(0).toString(16).toUpperCase().padStart(4, '0')}`).join(' ');
+          addLog(`🔍 عينة [${entry.index}]: "${entry.original.slice(0, 30)}" → ${codes}`);
+        }
+        // Check if ANY entry has Arabic-range chars
+        const arabicCheckRegex = /[\u0600-\u06FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
+        const entriesWithArabic = allEntries.filter((e: any) => arabicCheckRegex.test(e.original));
+        addLog(`🔎 عدد النصوص التي تحتوي أحرف عربية (أي نطاق): ${entriesWithArabic.length}`);
+        if (entriesWithArabic.length > 0 && entriesWithArabic.length <= 5) {
+          for (const e of entriesWithArabic) {
+            addLog(`  → [${e.index}] "${e.original.slice(0, 40)}"`);
+          }
+        } else if (entriesWithArabic.length > 5) {
+          for (const e of entriesWithArabic.slice(0, 3)) {
+            addLog(`  → [${e.index}] "${e.original.slice(0, 40)}"`);
+          }
+          addLog(`  ... و ${entriesWithArabic.length - 3} أخرى`);
+        }
+      }
 
       let finalTranslations: Record<string, string> = { ...autoTranslations };
 
