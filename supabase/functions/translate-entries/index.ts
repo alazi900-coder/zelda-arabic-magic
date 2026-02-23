@@ -373,8 +373,9 @@ ${textsBlock}`;
     if (!geminiResponse.ok) {
       const errText = await geminiResponse.text();
       console.error('Gemini API error:', errText);
-      if (geminiResponse.status === 400 || geminiResponse.status === 403) throw new Error('مفتاح API غير صالح أو منتهي الصلاحية');
-      if (geminiResponse.status === 429) throw new Error('تم تجاوز حد الطلبات، حاول لاحقاً');
+      if (geminiResponse.status === 400) throw new Error('مفتاح API غير صالح — تحقق من المفتاح');
+      if (geminiResponse.status === 403) throw new Error('مفتاح API محظور أو منتهي — أنشئ مفتاحاً جديداً من Google AI Studio');
+      if (geminiResponse.status === 429) throw new Error('تم تجاوز الحصة المجانية لـ Gemini — انتظر دقيقة أو استخدم محرك Google Translate');
       throw new Error(`خطأ Gemini: ${geminiResponse.status}`);
     }
 
