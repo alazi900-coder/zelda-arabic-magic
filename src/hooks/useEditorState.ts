@@ -1239,6 +1239,27 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 5000);
   }, [state]);
 
+  // === Remove all Arabic diacritics (tashkeel) from translations ===
+  const handleRemoveAllDiacritics = useCallback(() => {
+    if (!state) return;
+    const diacriticsRegex = /[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06E4\u06E7\u06E8\u06EA-\u06ED]/g;
+    const newTranslations = { ...state.translations };
+    let count = 0;
+    for (const [key, val] of Object.entries(newTranslations)) {
+      if (val && diacriticsRegex.test(val)) {
+        newTranslations[key] = val.replace(diacriticsRegex, '');
+        count++;
+      }
+    }
+    if (count > 0) {
+      setState(prev => prev ? { ...prev, translations: newTranslations } : null);
+      setLastSaved(`✅ تم إزالة التشكيلات من ${count} ترجمة`);
+    } else {
+      setLastSaved("ℹ️ لا توجد تشكيلات لإزالتها");
+    }
+    setTimeout(() => setLastSaved(""), 4000);
+  }, [state]);
+
   return {
     // State
     state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, showFindReplace, userGeminiKey, translationProvider, myMemoryEmail, myMemoryCharsUsed, aiRequestsToday, aiRequestsMonth,
@@ -1283,7 +1304,7 @@ export function useEditorState() {
     handleCheckConsistency, handleApplyConsistencyFix, handleApplyAllConsistencyFixes,
     handleAcceptFuzzy, handleRejectFuzzy, handleAcceptAllFuzzy, handleRejectAllFuzzy,
     handleCloudSave, handleCloudLoad,
-    handleApplyArabicProcessing, handlePreBuild, handleBuild, handleBulkReplace, loadDemoBdatData, handleCheckIntegrity, handleRestoreOriginals,
+    handleApplyArabicProcessing, handlePreBuild, handleBuild, handleBulkReplace, loadDemoBdatData, handleCheckIntegrity, handleRestoreOriginals, handleRemoveAllDiacritics,
     integrityResult, showIntegrityDialog, setShowIntegrityDialog, checkingIntegrity,
 
     // Quality helpers
