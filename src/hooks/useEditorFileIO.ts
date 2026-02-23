@@ -337,11 +337,12 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
 
     let cleanedImported: Record<string, string> = {};
 
-    // Extract embedded fingerprint map (__fp__:filename:row:col → original key)
-    const embeddedFpMap = new Map<string, string>();
+    // Extract embedded fingerprint map (__fp__: entries → original key)
+    // Supports both old format (__fp__:filename:row:0) and new format (__fp__:filename:tableHash:rowIndex:colHash)
+    const embeddedFpMap = new Map<string, string>(); // fp string → old key
     for (const [key, value] of Object.entries(imported)) {
       if (key.startsWith('__fp__:')) {
-        embeddedFpMap.set(key.slice(6), value); // strip "__fp__:" prefix → "filename:row:col" → original key
+        embeddedFpMap.set(key.slice(6), value);
       }
     }
 
@@ -408,13 +409,38 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     // Use fingerprint-based remapping for unmatched keys
     if ((state?.entries || []).length > 0) {
       const maps = buildEntryFpMaps();
+
+      // Build reverse map from old embedded fps: oldKey → base fp (for old-format compat)
+      // Old format: "filename:row:0" — treat as base fp "filename:*:row:*"
+      const oldKeyToBaseFp = new Map<string, string>();
+      if (embeddedFpMap.size > 0) {
+        for (const [fpStr, oldKey] of embeddedFpMap.entries()) {
+          const fpParts = fpStr.split(':');
+          if (fpParts.length === 3) {
+            // Old format: filename:row:0 → base = "filename:*:row:*"
+            oldKeyToBaseFp.set(oldKey, `${fpParts[0]}:*:${fpParts[1]}:*`);
+          } else if (fpParts.length === 4) {
+            // New format: filename:tableHash:rowIndex:colHash — already handled by bdatKeyFingerprint
+          }
+        }
+      }
+
       const remapped: Record<string, string> = {};
       for (const [oldKey, value] of Object.entries(cleanedImported)) {
         if (entryKeySet.has(oldKey)) {
           remapped[oldKey] = value;
           continue;
         }
-        const newKey = findNewKey(oldKey, maps);
+        // Try multi-level fingerprint matching from key structure
+        let newKey = findNewKey(oldKey, maps);
+        // Fallback: use old-format embedded fp as base-level match
+        if (!newKey && oldKeyToBaseFp.has(oldKey)) {
+          const baseFp = oldKeyToBaseFp.get(oldKey)!;
+          const candidates = maps.baseMap.get(baseFp);
+          if (candidates && candidates.length === 1) {
+            newKey = candidates[0];
+          }
+        }
         if (newKey && !remapped[newKey]) {
           remapped[newKey] = value;
           fpRemappedTotal++;
