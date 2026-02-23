@@ -159,11 +159,69 @@ export function useEditorGlossary({
     finally { setCloudSyncing(false); }
   };
 
+  // === Generate glossary from single-word/phrase completed translations ===
+  const handleGenerateGlossaryFromTranslations = useCallback(() => {
+    if (!state?.translations || !state?.entries) return;
+
+    const existingMap = parseGlossaryMap(state.glossary || '');
+    let newTerms = 0;
+    const lines: string[] = [];
+
+    for (const [key, translation] of Object.entries(state.translations)) {
+      if (!translation?.trim()) continue;
+      const entry = state.entries.find(e => `${e.msbtFile}:${e.index}` === key);
+      if (!entry) continue;
+      const original = entry.original.trim();
+      if (!original) continue;
+
+      // Only single-word or short single-phrase entries (no line breaks, reasonable length)
+      // Skip entries with control codes like [ML:...] or {color...}
+      if (original.includes('\n') || original.includes('[ML:') || original.includes('{')) continue;
+      // Max ~60 chars to keep it to short terms/phrases
+      if (original.length > 60) continue;
+
+      const normKey = original.toLowerCase();
+      if (existingMap.has(normKey)) continue; // already in glossary
+
+      lines.push(`${original}=${translation.trim()}`);
+      newTerms++;
+    }
+
+    if (newTerms === 0) {
+      setLastSaved('📖 لا توجد ترجمات جديدة قصيرة لإضافتها للقاموس');
+      setTimeout(() => setLastSaved(""), 3000);
+      return;
+    }
+
+    // Merge into existing glossary
+    const newText = lines.join('\n');
+    setState(prev => {
+      if (!prev) return null;
+      const existing = prev.glossary?.trim() || '';
+      const merged = existing ? existing + '\n' + newText : newText;
+      // Deduplicate
+      const seen = new Map<string, string>();
+      for (const line of merged.split('\n')) {
+        const trimmed = line.trim();
+        if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('//')) continue;
+        const eqIdx = trimmed.indexOf('=');
+        if (eqIdx < 1) continue;
+        const k = trimmed.slice(0, eqIdx).trim().toLowerCase();
+        seen.set(k, trimmed);
+      }
+      return { ...prev, glossary: Array.from(seen.values()).join('\n') };
+    });
+
+    setLastSaved(`📖 تم إنشاء ${newTerms} مصطلح جديد من الترجمات المكتملة`);
+    setTimeout(() => setLastSaved(""), 4000);
+  }, [state, parseGlossaryMap, setState, setLastSaved]);
+
   return {
     glossaryEnabled, setGlossaryEnabled,
     glossaryTermCount, activeGlossary,
     parseGlossaryMap,
     handleImportGlossary, handleLoadXC3Glossary, handleLoadUIMenusGlossary,
     handleSaveGlossaryToCloud, handleLoadGlossaryFromCloud,
+    handleGenerateGlossaryFromTranslations,
   };
 }
