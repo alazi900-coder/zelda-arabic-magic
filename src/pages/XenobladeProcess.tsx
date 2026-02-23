@@ -425,13 +425,39 @@ const XenobladeProcess = () => {
       const savedBuildTranslations = await idbGet<Record<string, string>>("buildTranslations");
       
       if (savedBuildTranslations && Object.keys(savedBuildTranslations).length > 0) {
-        // Restore translations from last build
-        const validKeys = new Set(allEntries.map((e: any) => `${e.msbtFile}:${e.index}`));
+        // Build fingerprint map for current entries: "filename:rowIndex:colIndex" → key
+        const fpToKey = new Map<string, string>();
+        const validKeys = new Set<string>();
+        for (const e of allEntries as any[]) {
+          const ek = `${e.msbtFile}:${e.index}`;
+          validKeys.add(ek);
+          if (ek.startsWith('bdat-bin:')) {
+            const parts = ek.split(':');
+            if (parts.length >= 6) {
+              const fp = `${parts[1]}:${parts[3]}:${parts[5]}`;
+              fpToKey.set(fp, ek);
+            }
+          }
+        }
+
         let restoredCount = 0;
         for (const [k, v] of Object.entries(savedBuildTranslations)) {
-          if (validKeys.has(k) && v?.trim() && !finalTranslations[k]) {
+          if (!v?.trim()) continue;
+          // Direct match
+          if (validKeys.has(k) && !finalTranslations[k]) {
             finalTranslations[k] = v;
             restoredCount++;
+          } else if (k.startsWith('bdat-bin:')) {
+            // Fingerprint match (handles hash name changes)
+            const parts = k.split(':');
+            if (parts.length >= 6) {
+              const fp = `${parts[1]}:${parts[3]}:${parts[5]}`;
+              const newKey = fpToKey.get(fp);
+              if (newKey && !finalTranslations[newKey]) {
+                finalTranslations[newKey] = v;
+                restoredCount++;
+              }
+            }
           }
         }
         addLog(`🔄 تم استعادة ${restoredCount} ترجمة من آخر بناء`);
