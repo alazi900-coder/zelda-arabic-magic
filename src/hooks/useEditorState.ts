@@ -134,6 +134,8 @@ export function useEditorState() {
   const forceSaveRef = useRef<() => Promise<void>>(async () => {});
   const { user } = useAuth();
   const [pendingRecovery, setPendingRecovery] = useState<{ translationCount: number; entryCount: number; lastDate?: string } | null>(null);
+  const [hasStoredOriginals, setHasStoredOriginals] = useState(false);
+  const [originalsDetectedAsPreviousBuild, setOriginalsDetectedAsPreviousBuild] = useState(false);
 
   const glossary = useEditorGlossary({
     state, setState, setLastSaved, setCloudSyncing, setCloudStatus, userId: user?.id,
@@ -376,6 +378,12 @@ export function useEditorState() {
 
   useEffect(() => {
     const loadState = async () => {
+      // Check if stored originals exist
+      const savedOriginals = await idbGet<Record<string, string>>("originalTexts");
+      if (savedOriginals && Object.keys(savedOriginals).length > 0) {
+        setHasStoredOriginals(true);
+      }
+
       const stored = await idbGet<EditorState>("editorState");
       if (stored && stored.entries && stored.entries.length > 0) {
         const isFreshExtraction = !!(stored as any).freshExtraction;
@@ -389,8 +397,42 @@ export function useEditorState() {
             protectedEntries: new Set(),
           });
           const mergedTranslations = { ...autoTranslations, ...(stored.translations || {}) };
+          
+          // Check if originals contain presentation forms (re-extraction from built file)
+          const presentationFormsCount = stored.entries.filter((e: ExtractedEntry) => hasArabicPresentationForms(e.original)).length;
+          let finalEntries = stored.entries;
+          
+          if (presentationFormsCount > 0 && savedOriginals && Object.keys(savedOriginals).length > 0) {
+            // Auto-restore originals from saved English texts
+            let restoredCount = 0;
+            finalEntries = stored.entries.map((entry: ExtractedEntry) => {
+              const key = `${entry.msbtFile}:${entry.index}`;
+              const savedOriginal = savedOriginals[key];
+              if (savedOriginal && hasArabicPresentationForms(entry.original)) {
+                restoredCount++;
+                return { ...entry, original: savedOriginal };
+              }
+              return entry;
+            });
+            if (restoredCount > 0) {
+              setOriginalsDetectedAsPreviousBuild(true);
+              toast({
+                title: "🔄 تم استعادة النصوص الأصلية",
+                description: `تم اكتشاف ${presentationFormsCount} نص من ملف مبني سابقاً — استُعيد ${restoredCount} نص أصلي إنجليزي`,
+                duration: 8000,
+              });
+            }
+          } else if (presentationFormsCount > 0) {
+            setOriginalsDetectedAsPreviousBuild(true);
+            toast({
+              title: "⚠️ ملف مبني سابقاً",
+              description: "تم اكتشاف نصوص عربية مُشكَّلة في الأصل. لا توجد نصوص إنجليزية محفوظة للاستعادة — استخرج من الملف الأصلي أولاً ثم أعد البناء.",
+              duration: 10000,
+            });
+          }
+
           setState({
-            entries: stored.entries,
+            entries: finalEntries,
             translations: mergedTranslations,
             protectedEntries: new Set(),
             technicalBypass: new Set(),
@@ -398,7 +440,7 @@ export function useEditorState() {
           });
           // Remove freshExtraction flag for future loads
           await idbSet("editorState", {
-            entries: stored.entries,
+            entries: finalEntries,
             translations: mergedTranslations,
           });
           const autoCount = Object.keys(autoTranslations).length;
@@ -1168,10 +1210,40 @@ export function useEditorState() {
 
 
 
+  // === Restore original English texts from IndexedDB ===
+  const handleRestoreOriginals = useCallback(async () => {
+    if (!state) return;
+    const savedOriginals = await idbGet<Record<string, string>>("originalTexts");
+    if (!savedOriginals || Object.keys(savedOriginals).length === 0) {
+      setLastSaved("⚠️ لا توجد نصوص أصلية محفوظة");
+      setTimeout(() => setLastSaved(""), 3000);
+      return;
+    }
+    let restoredCount = 0;
+    const newEntries = state.entries.map(entry => {
+      const key = `${entry.msbtFile}:${entry.index}`;
+      const savedOriginal = savedOriginals[key];
+      if (savedOriginal && savedOriginal !== entry.original) {
+        restoredCount++;
+        return { ...entry, original: savedOriginal };
+      }
+      return entry;
+    });
+    if (restoredCount > 0) {
+      setState(prev => prev ? { ...prev, entries: newEntries } : null);
+      setOriginalsDetectedAsPreviousBuild(false);
+      setLastSaved(`✅ تم استعادة ${restoredCount} نص أصلي إنجليزي`);
+    } else {
+      setLastSaved("ℹ️ النصوص الأصلية متطابقة — لا حاجة للاستعادة");
+    }
+    setTimeout(() => setLastSaved(""), 5000);
+  }, [state]);
+
   return {
     // State
     state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, showFindReplace, userGeminiKey, translationProvider, myMemoryEmail, myMemoryCharsUsed, aiRequestsToday, aiRequestsMonth,
     pendingRecovery, handleRecoverSession, handleStartFresh,
+    hasStoredOriginals, originalsDetectedAsPreviousBuild,
     building, buildProgress, dismissBuildProgress, translating, translateProgress,
     lastSaved, cloudSyncing, cloudStatus,
     reviewing, reviewResults, tmStats,
@@ -1211,7 +1283,7 @@ export function useEditorState() {
     handleCheckConsistency, handleApplyConsistencyFix, handleApplyAllConsistencyFixes,
     handleAcceptFuzzy, handleRejectFuzzy, handleAcceptAllFuzzy, handleRejectAllFuzzy,
     handleCloudSave, handleCloudLoad,
-    handleApplyArabicProcessing, handlePreBuild, handleBuild, handleBulkReplace, loadDemoBdatData, handleCheckIntegrity,
+    handleApplyArabicProcessing, handlePreBuild, handleBuild, handleBulkReplace, loadDemoBdatData, handleCheckIntegrity, handleRestoreOriginals,
     integrityResult, showIntegrityDialog, setShowIntegrityDialog, checkingIntegrity,
 
     // Quality helpers
