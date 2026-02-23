@@ -348,6 +348,7 @@ const XenobladeProcess = () => {
         }
       }
       setAutoDetectedCount(Object.keys(autoTranslations).length);
+      addLog(`🎯 كشف تلقائي: ${Object.keys(autoTranslations).length} نص معرّب من أصل ${allEntries.length} نص مستخرج`);
 
       let finalTranslations: Record<string, string> = { ...autoTranslations };
 
@@ -439,6 +440,13 @@ const XenobladeProcess = () => {
         }
       }
 
+      // Log translation stats before saving
+      const translationCount = Object.values(finalTranslations).filter(v => v?.trim()).length;
+      addLog(`📊 إحصائيات الحفظ: ${translationCount} ترجمة من أصل ${allEntries.length} نص`);
+      if (translationCount === 0 && Object.keys(autoTranslations).length > 0) {
+        addLog(`⚠️ تحذير: الكشف التلقائي وجد ${Object.keys(autoTranslations).length} نص لكن لم تُحفظ ترجمات!`);
+      }
+
       // CRITICAL: Save editor state FIRST (most important data)
       await idbSet("editorState", {
         entries: allEntries,
@@ -447,11 +455,12 @@ const XenobladeProcess = () => {
       });
       await idbSet("editorGame", "xenoblade");
       // Verify save worked
-      const verifyState = await idbGet<{ entries?: any[] }>("editorState");
+      const verifyState = await idbGet<{ entries?: any[]; translations?: Record<string, string> }>("editorState");
       if (!verifyState?.entries || verifyState.entries.length !== allEntries.length) {
         addLog(`⚠️ تحذير: تم حفظ ${verifyState?.entries?.length || 0} من ${allEntries.length} نص - قد تكون مساحة التخزين محدودة`);
       } else {
-        addLog(`💾 تم حفظ ${allEntries.length} نص في المحرر بنجاح ✅`);
+        const savedTransCount = Object.values(verifyState.translations || {}).filter(v => (v as string)?.trim()).length;
+        addLog(`💾 تم حفظ ${allEntries.length} نص + ${savedTransCount} ترجمة في المحرر بنجاح ✅`);
       }
       
       // Then save file buffers (less critical, may fail on mobile due to quota)
