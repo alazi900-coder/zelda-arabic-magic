@@ -425,8 +425,9 @@ const XenobladeProcess = () => {
       const savedBuildTranslations = await idbGet<Record<string, string>>("buildTranslations");
       
       if (savedBuildTranslations && Object.keys(savedBuildTranslations).length > 0) {
-        // Build fingerprint map for current entries: "filename:rowIndex:colIndex" → key
-        const fpToKey = new Map<string, string>();
+        // Build fingerprint maps for current entries
+        const fullFpToKey = new Map<string, string>();
+        const baseFpToKeys = new Map<string, string[]>();
         const validKeys = new Set<string>();
         for (const e of allEntries as any[]) {
           const ek = `${e.msbtFile}:${e.index}`;
@@ -434,8 +435,12 @@ const XenobladeProcess = () => {
           if (ek.startsWith('bdat-bin:')) {
             const parts = ek.split(':');
             if (parts.length >= 6) {
-              const fp = `${parts[1]}:${parts[3]}:${parts[5]}`;
-              fpToKey.set(fp, ek);
+              const full = `${parts[1]}:${parts[3]}:${parts[4]}`;
+              const base = `${parts[1]}:${parts[3]}`;
+              fullFpToKey.set(full, ek);
+              const arr = baseFpToKeys.get(base) || [];
+              arr.push(ek);
+              baseFpToKeys.set(base, arr);
             }
           }
         }
@@ -451,8 +456,15 @@ const XenobladeProcess = () => {
             // Fingerprint match (handles hash name changes)
             const parts = k.split(':');
             if (parts.length >= 6) {
-              const fp = `${parts[1]}:${parts[3]}:${parts[5]}`;
-              const newKey = fpToKey.get(fp);
+              const full = `${parts[1]}:${parts[3]}:${parts[4]}`;
+              const base = `${parts[1]}:${parts[3]}`;
+              let newKey = fullFpToKey.get(full);
+              if (!newKey) {
+                const candidates = baseFpToKeys.get(base);
+                if (candidates && candidates.length === 1) {
+                  newKey = candidates[0];
+                }
+              }
               if (newKey && !finalTranslations[newKey]) {
                 finalTranslations[newKey] = v;
                 restoredCount++;

@@ -160,16 +160,13 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       }
     }
 
-    // Add fingerprint mappings: "fp:filename:row:col" → original key
+    // Add fingerprint mappings: "__fp__:filename:row:col" → original key
     // This ensures imports work even if hash names change between extractions
     const fingerprintMap: Record<string, string> = {};
     for (const key of Object.keys(cleanTranslations)) {
-      if (key.startsWith('bdat-bin:')) {
-        const parts = key.split(':');
-        if (parts.length >= 6) {
-          const fp = `__fp__:${parts[1]}:${parts[3]}:${parts[5]}`;
-          fingerprintMap[fp] = key;
-        }
+      const fp = bdatKeyFingerprint(key);
+      if (fp) {
+        fingerprintMap[`__fp__:${fp.full}`] = key;
       }
     }
     if (Object.keys(fingerprintMap).length > 0) {
@@ -304,9 +301,10 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
   /**
    * Extract a "structural fingerprint" from a bdat-bin key for fuzzy matching.
    * Key format: "bdat-bin:filename:<tableHash>:rowIndex:<colHash>:0"
-   * Fingerprint: "filename:rowIndex:colIndex" — ignores hash names that may change.
+   * Full fingerprint: "filename:rowIndex:colHash" — unique per column per row.
+   * Base fingerprint: "filename:rowIndex" — used as fallback when column hashes change.
    */
-  const bdatKeyFingerprint = (key: string): string | null => {
+  const bdatKeyFingerprint = (key: string): { full: string; base: string } | null => {
     if (!key.startsWith('bdat-bin:')) return null;
     // bdat-bin:menu.bdat:<0x00b8f58d>:50:<0x45dbaf43>:0
     // parts: ["bdat-bin", "menu.bdat", "<0x00b8f58d>", "50", "<0x45dbaf43>", "0"]
@@ -314,8 +312,11 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     if (parts.length < 6) return null;
     const filename = parts[1]; // menu.bdat
     const rowIndex = parts[3]; // 50
-    const colIndex = parts[5]; // 0
-    return `${filename}:${rowIndex}:${colIndex}`;
+    const colName = parts[4];  // <0x45dbaf43> or "name"
+    return {
+      full: `${filename}:${rowIndex}:${colName}`,
+      base: `${filename}:${rowIndex}`
+    };
   };
 
   /** Core logic: process raw JSON text into translations */
@@ -361,24 +362,45 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     let directMatchCount = Object.keys(cleanedImported).filter(k => entryKeySet.has(k)).length;
     let fpRemappedTotal = 0;
 
-    // Use embedded fingerprints for remapping if available
-    if (embeddedFpMap.size > 0 && (state?.entries || []).length > 0) {
-      const entryFpToKey = new Map<string, string>();
+    // Build fingerprint maps for current entries (full + base)
+    const buildEntryFpMaps = () => {
+      const fullFpToKey = new Map<string, string>();
+      const baseFpToKeys = new Map<string, string[]>();
       for (const e of state!.entries) {
         const ek = `${e.msbtFile}:${e.index}`;
-        if (ek.startsWith('bdat-bin:')) {
-          const parts = ek.split(':');
-          if (parts.length >= 6) {
-            entryFpToKey.set(`${parts[1]}:${parts[3]}:${parts[5]}`, ek);
-          }
+        const fp = bdatKeyFingerprint(ek);
+        if (fp) {
+          fullFpToKey.set(fp.full, ek);
+          const arr = baseFpToKeys.get(fp.base) || [];
+          arr.push(ek);
+          baseFpToKeys.set(fp.base, arr);
         }
       }
+      return { fullFpToKey, baseFpToKeys };
+    };
+
+    // Use embedded fingerprints for remapping if available
+    if (embeddedFpMap.size > 0 && (state?.entries || []).length > 0) {
+      const { fullFpToKey, baseFpToKeys } = buildEntryFpMaps();
       const remapped: Record<string, string> = {};
       for (const [oldKey, value] of Object.entries(cleanedImported)) {
+        if (entryKeySet.has(oldKey)) {
+          remapped[oldKey] = value;
+          continue;
+        }
         const fp = bdatKeyFingerprint(oldKey);
-        const entryKey = fp ? entryFpToKey.get(fp) : null;
-        if (entryKey && entryKey !== oldKey) {
-          remapped[entryKey] = value;
+        if (!fp) { remapped[oldKey] = value; continue; }
+        // Try full fingerprint match (filename:row:col)
+        let newKey = fullFpToKey.get(fp.full);
+        // Fallback: if column hash changed, try base match (filename:row) only if unique
+        if (!newKey) {
+          const candidates = baseFpToKeys.get(fp.base);
+          if (candidates && candidates.length === 1) {
+            newKey = candidates[0];
+          }
+        }
+        if (newKey && newKey !== oldKey) {
+          remapped[newKey] = value;
           fpRemappedTotal++;
         } else {
           remapped[oldKey] = value;
@@ -397,12 +419,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     let unmatchedCount = Object.keys(cleanedImported).length - matchedCount;
 
     if (unmatchedCount > 0 && (state?.entries || []).length > 0) {
-      const fpToEntryKey = new Map<string, string>();
-      for (const e of state!.entries) {
-        const ek = `${e.msbtFile}:${e.index}`;
-        const fp = bdatKeyFingerprint(ek);
-        if (fp) fpToEntryKey.set(fp, ek);
-      }
+      const { fullFpToKey, baseFpToKeys } = buildEntryFpMaps();
 
       const remapped: Record<string, string> = {};
       let remappedCount = 0;
@@ -411,12 +428,19 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
           remapped[importedKey] = value;
         } else {
           const fp = bdatKeyFingerprint(importedKey);
-          if (fp && fpToEntryKey.has(fp)) {
-            const newKey = fpToEntryKey.get(fp)!;
-            if (!remapped[newKey]) {
-              remapped[newKey] = value;
-              remappedCount++;
+          let newKey: string | undefined;
+          if (fp) {
+            newKey = fullFpToKey.get(fp.full);
+            if (!newKey) {
+              const candidates = baseFpToKeys.get(fp.base);
+              if (candidates && candidates.length === 1) {
+                newKey = candidates[0];
+              }
             }
+          }
+          if (newKey && !remapped[newKey]) {
+            remapped[newKey] = value;
+            remappedCount++;
           } else {
             remapped[importedKey] = value;
           }
