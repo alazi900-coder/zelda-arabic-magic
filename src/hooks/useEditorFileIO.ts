@@ -354,6 +354,13 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       }
     }
 
+    // ── Diagnostic: count how many imported keys match loaded entries ──
+    const entryKeySet = new Set(
+      (state?.entries || []).map(e => `${e.msbtFile}:${e.index}`)
+    );
+    let directMatchCount = Object.keys(cleanedImported).filter(k => entryKeySet.has(k)).length;
+    let fpRemappedTotal = 0;
+
     // Use embedded fingerprints for remapping if available
     if (embeddedFpMap.size > 0 && (state?.entries || []).length > 0) {
       const entryFpToKey = new Map<string, string>();
@@ -367,33 +374,29 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
         }
       }
       const remapped: Record<string, string> = {};
-      let fpRemapped = 0;
       for (const [oldKey, value] of Object.entries(cleanedImported)) {
         const fp = bdatKeyFingerprint(oldKey);
         const entryKey = fp ? entryFpToKey.get(fp) : null;
         if (entryKey && entryKey !== oldKey) {
           remapped[entryKey] = value;
-          fpRemapped++;
+          fpRemappedTotal++;
         } else {
           remapped[oldKey] = value;
         }
       }
-      if (fpRemapped > 0) {
-        console.log(`🔄 Import: remapped ${fpRemapped} keys via embedded fingerprints`);
+      if (fpRemappedTotal > 0) {
+        console.log(`🔄 Import: remapped ${fpRemappedTotal} keys via embedded fingerprints`);
         cleanedImported = remapped;
+        directMatchCount = Object.keys(cleanedImported).filter(k => entryKeySet.has(k)).length - fpRemappedTotal;
+        if (directMatchCount < 0) directMatchCount = 0;
       }
     }
 
-    // ── Diagnostic: count how many imported keys match loaded entries ──
-    const entryKeySet = new Set(
-      (state?.entries || []).map(e => `${e.msbtFile}:${e.index}`)
-    );
+    // ── Fuzzy key matching: if many keys unmatched, try fingerprint-based remapping ──
     let matchedCount = Object.keys(cleanedImported).filter(k => entryKeySet.has(k)).length;
     let unmatchedCount = Object.keys(cleanedImported).length - matchedCount;
 
-    // ── Fuzzy key matching: if many keys unmatched, try fingerprint-based remapping ──
     if (unmatchedCount > 0 && (state?.entries || []).length > 0) {
-      // Build fingerprint → entry key map for loaded entries
       const fpToEntryKey = new Map<string, string>();
       for (const e of state!.entries) {
         const ek = `${e.msbtFile}:${e.index}`;
@@ -401,22 +404,21 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
         if (fp) fpToEntryKey.set(fp, ek);
       }
 
-      // Try to remap unmatched imported keys
       const remapped: Record<string, string> = {};
       let remappedCount = 0;
       for (const [importedKey, value] of Object.entries(cleanedImported)) {
         if (entryKeySet.has(importedKey)) {
-          remapped[importedKey] = value; // already matched
+          remapped[importedKey] = value;
         } else {
           const fp = bdatKeyFingerprint(importedKey);
           if (fp && fpToEntryKey.has(fp)) {
             const newKey = fpToEntryKey.get(fp)!;
-            if (!remapped[newKey]) { // don't overwrite if already set
+            if (!remapped[newKey]) {
               remapped[newKey] = value;
               remappedCount++;
             }
           } else {
-            remapped[importedKey] = value; // keep as-is
+            remapped[importedKey] = value;
           }
         }
       }
@@ -424,8 +426,10 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       if (remappedCount > 0) {
         console.log(`🔄 Import: remapped ${remappedCount} keys via fingerprint matching`);
         cleanedImported = remapped;
-        // Recount matches
+        fpRemappedTotal += remappedCount;
         matchedCount = Object.keys(cleanedImported).filter(k => entryKeySet.has(k)).length;
+        directMatchCount = matchedCount - fpRemappedTotal;
+        if (directMatchCount < 0) directMatchCount = 0;
         unmatchedCount = Object.keys(cleanedImported).length - matchedCount;
       }
     }
@@ -488,15 +492,16 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     setState(prev => { if (!prev) return null; return { ...prev, translations: { ...prev.translations, ...cleanedImported } }; });
 
     const appliedCount = Object.keys(cleanedImported).length;
+    const fpInfo = fpRemappedTotal > 0 ? ` (${directMatchCount} مباشرة + ${fpRemappedTotal} عبر البصمة 🔄)` : '';
     let msg: string;
     if (isDemo) {
       msg = `✅ تم استيراد ${appliedCount} ترجمة — ستظهر عند رفع ملفات BDAT من صفحة المعالجة`;
     } else if (matchedCount > 0 && matchedCount < appliedCount) {
-      msg = `✅ تم استيراد ${matchedCount} ترجمة مطابقة (${unmatchedCount} مفتاح غير مطابق محفوظ أيضاً)`;
+      msg = `✅ تم استيراد ${matchedCount} ترجمة مطابقة${fpInfo} (${unmatchedCount} مفتاح غير مطابق محفوظ أيضاً)`;
     } else if (isFilterActive) {
-      msg = `✅ تم استيراد ${appliedCount} من ${totalInFile} ترجمة (${filterLabel})`;
+      msg = `✅ تم استيراد ${appliedCount} من ${totalInFile} ترجمة${fpInfo} (${filterLabel})`;
     } else {
-      msg = `✅ تم استيراد ${appliedCount} ترجمة — ${matchedCount} مطابقة في المحرر`;
+      msg = `✅ تم استيراد ${appliedCount} ترجمة — ${matchedCount} مطابقة في المحرر${fpInfo}`;
     }
     if (sourceName) msg += ` — ${sourceName}`;
     if (repaired.wasTruncated) {
