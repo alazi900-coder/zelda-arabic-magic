@@ -285,6 +285,23 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     setTimeout(() => setLastSaved(""), 4000);
   };
 
+  /**
+   * Extract a "structural fingerprint" from a bdat-bin key for fuzzy matching.
+   * Key format: "bdat-bin:filename:<tableHash>:rowIndex:<colHash>:0"
+   * Fingerprint: "filename:rowIndex:colIndex" — ignores hash names that may change.
+   */
+  const bdatKeyFingerprint = (key: string): string | null => {
+    if (!key.startsWith('bdat-bin:')) return null;
+    // bdat-bin:menu.bdat:<0x00b8f58d>:50:<0x45dbaf43>:0
+    // parts: ["bdat-bin", "menu.bdat", "<0x00b8f58d>", "50", "<0x45dbaf43>", "0"]
+    const parts = key.split(':');
+    if (parts.length < 6) return null;
+    const filename = parts[1]; // menu.bdat
+    const rowIndex = parts[3]; // 50
+    const colIndex = parts[5]; // 0
+    return `${filename}:${rowIndex}:${colIndex}`;
+  };
+
   /** Core logic: process raw JSON text into translations */
   const processJsonImport = useCallback(async (rawText: string, sourceName?: string) => {
     const repaired = repairJson(rawText);
@@ -315,8 +332,47 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     const entryKeySet = new Set(
       (state?.entries || []).map(e => `${e.msbtFile}:${e.index}`)
     );
-    const matchedCount = Object.keys(cleanedImported).filter(k => entryKeySet.has(k)).length;
-    const unmatchedCount = Object.keys(cleanedImported).length - matchedCount;
+    let matchedCount = Object.keys(cleanedImported).filter(k => entryKeySet.has(k)).length;
+    let unmatchedCount = Object.keys(cleanedImported).length - matchedCount;
+
+    // ── Fuzzy key matching: if many keys unmatched, try fingerprint-based remapping ──
+    if (unmatchedCount > 0 && (state?.entries || []).length > 0) {
+      // Build fingerprint → entry key map for loaded entries
+      const fpToEntryKey = new Map<string, string>();
+      for (const e of state!.entries) {
+        const ek = `${e.msbtFile}:${e.index}`;
+        const fp = bdatKeyFingerprint(ek);
+        if (fp) fpToEntryKey.set(fp, ek);
+      }
+
+      // Try to remap unmatched imported keys
+      const remapped: Record<string, string> = {};
+      let remappedCount = 0;
+      for (const [importedKey, value] of Object.entries(cleanedImported)) {
+        if (entryKeySet.has(importedKey)) {
+          remapped[importedKey] = value; // already matched
+        } else {
+          const fp = bdatKeyFingerprint(importedKey);
+          if (fp && fpToEntryKey.has(fp)) {
+            const newKey = fpToEntryKey.get(fp)!;
+            if (!remapped[newKey]) { // don't overwrite if already set
+              remapped[newKey] = value;
+              remappedCount++;
+            }
+          } else {
+            remapped[importedKey] = value; // keep as-is
+          }
+        }
+      }
+
+      if (remappedCount > 0) {
+        console.log(`🔄 Import: remapped ${remappedCount} keys via fingerprint matching`);
+        cleanedImported = remapped;
+        // Recount matches
+        matchedCount = Object.keys(cleanedImported).filter(k => entryKeySet.has(k)).length;
+        unmatchedCount = Object.keys(cleanedImported).length - matchedCount;
+      }
+    }
     const noEntriesLoaded = (state?.entries || []).length === 0;
 
     // Backward compat: convert legacy FFF9-FFFC markers in imported translations to PUA markers
