@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { toast } from "@/hooks/use-toast";
 import { idbSet, idbGet } from "@/lib/idb-storage";
 import { processArabicText, hasArabicChars as hasArabicCharsProcessing, hasArabicPresentationForms, removeArabicPresentationForms } from "@/lib/arabic-processing";
+import { scanAllTranslations as scanMergedTranslations } from "@/lib/arabic-sentence-splitter";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -46,6 +47,8 @@ export function useEditorState() {
   const [fixingMixed, setFixingMixed] = useState(false);
   const [checkingConsistency, setCheckingConsistency] = useState(false);
   const [consistencyResults, setConsistencyResults] = useState<{ groups: any[]; aiSuggestions: { best: string; reason: string }[] } | null>(null);
+  const [scanningSentences, setScanningSentences] = useState(false);
+  const [sentenceSplitResults, setSentenceSplitResults] = useState<import("@/lib/arabic-sentence-splitter").SentenceSplitResult[] | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [showFindReplace, setShowFindReplace] = useState(false);
   const [userGeminiKey, _setUserGeminiKey] = useState(() => {
@@ -1260,6 +1263,45 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 4000);
   }, [state]);
 
+  // === Sentence Splitter ===
+  const handleScanMergedSentences = useCallback(() => {
+    if (!state) return;
+    setScanningSentences(true);
+    const results = scanMergedTranslations(state.translations, state.entries);
+    setSentenceSplitResults(results);
+    setSentenceSplitResults(results);
+    setScanningSentences(false);
+    if (results.length === 0) {
+      setLastSaved("✅ لم يتم اكتشاف جمل مندمجة");
+      setTimeout(() => setLastSaved(""), 4000);
+    }
+  }, [state]);
+
+  const handleApplySentenceSplit = useCallback((key: string) => {
+    if (!state || !sentenceSplitResults) return;
+    const item = sentenceSplitResults.find(r => r.key === key);
+    if (!item) return;
+    setState(prev => prev ? { ...prev, translations: { ...prev.translations, [key]: item.after } } : null);
+    setSentenceSplitResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'accepted' as const } : r) : null);
+  }, [state, sentenceSplitResults]);
+
+  const handleRejectSentenceSplit = useCallback((key: string) => {
+    setSentenceSplitResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'rejected' as const } : r) : null);
+  }, []);
+
+  const handleApplyAllSentenceSplits = useCallback(() => {
+    if (!state || !sentenceSplitResults) return;
+    const pending = sentenceSplitResults.filter(r => r.status === 'pending');
+    const newTranslations = { ...state.translations };
+    for (const item of pending) {
+      newTranslations[item.key] = item.after;
+    }
+    setState(prev => prev ? { ...prev, translations: newTranslations } : null);
+    setSentenceSplitResults(prev => prev ? prev.map(r => r.status === 'pending' ? { ...r, status: 'accepted' as const } : r) : null);
+    setLastSaved(`✅ تم تطبيق فصل ${pending.length} جملة مندمجة`);
+    setTimeout(() => setLastSaved(""), 4000);
+  }, [state, sentenceSplitResults]);
+
   return {
     // State
     state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, showFindReplace, userGeminiKey, translationProvider, myMemoryEmail, myMemoryCharsUsed, aiRequestsToday, aiRequestsMonth,
@@ -1276,6 +1318,7 @@ export function useEditorState() {
     applyingArabic, improvingTranslations, improveResults,
     fixingMixed, filtersOpen, buildStats, buildPreview, showBuildConfirm, bdatFileStats,
     checkingConsistency, consistencyResults,
+    scanningSentences, sentenceSplitResults,
     categoryProgress, qualityStats, needsImproveCount, translatedCount, tagsCount, fuzzyCount, byteOverflowCount,
     bdatTableNames, bdatColumnNames, bdatTableCounts, bdatColumnCounts,
     ...glossary,
@@ -1288,7 +1331,7 @@ export function useEditorState() {
     setCurrentPage, setShowRetranslateConfirm,
     setArabicNumerals, setMirrorPunctuation, setUserGeminiKey, setTranslationProvider, setMyMemoryEmail,
     setReviewResults, setShortSuggestions, setImproveResults, setBuildStats, setShowBuildConfirm,
-    setConsistencyResults,
+    setConsistencyResults, setSentenceSplitResults,
 
     // Handlers
     toggleProtection, toggleTechnicalBypass,
@@ -1305,6 +1348,7 @@ export function useEditorState() {
     handleAcceptFuzzy, handleRejectFuzzy, handleAcceptAllFuzzy, handleRejectAllFuzzy,
     handleCloudSave, handleCloudLoad,
     handleApplyArabicProcessing, handlePreBuild, handleBuild, handleBulkReplace, loadDemoBdatData, handleCheckIntegrity, handleRestoreOriginals, handleRemoveAllDiacritics,
+    handleScanMergedSentences, handleApplySentenceSplit, handleRejectSentenceSplit, handleApplyAllSentenceSplits,
     integrityResult, showIntegrityDialog, setShowIntegrityDialog, checkingIntegrity,
 
     // Quality helpers
