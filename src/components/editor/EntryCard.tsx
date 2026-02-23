@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag, BookOpen, Wrench, Copy, Eye, Check, X, Table2, Columns3, History, GitCompareArrows } from "lucide-react";
+import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag, BookOpen, Wrench, Copy, Eye, Check, X, Table2, Columns3, History, GitCompareArrows, Type } from "lucide-react";
 import type { TMSuggestion } from "@/hooks/useTranslationMemory";
 import DebouncedInput from "./DebouncedInput";
 import { ExtractedEntry, displayOriginal, hasArabicChars, isTechnicalText, hasTechnicalTags, previewTagRestore } from "./types";
@@ -194,6 +194,14 @@ const EntryCard: React.FC<EntryCardProps> = ({
               <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => handleImproveSingleTranslation(entry)} disabled={improvingTranslations || !translation?.trim()} title="تحسين هذه الترجمة">
                 {improvingTranslations ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4 text-secondary" />}
               </Button>
+              {translation?.trim() && /[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06E4\u06E7\u06E8\u06EA-\u06ED]/.test(translation) && (
+                <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => {
+                  const cleaned = translation.replace(/[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06E4\u06E7\u06E8\u06EA-\u06ED]/g, '');
+                  updateTranslation(key, cleaned);
+                }} title="إزالة التشكيلات">
+                  <Type className="w-4 h-4 text-muted-foreground" />
+                </Button>
+              )}
               {isDamagedTag && handleLocalFixDamagedTag && (
                 <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => setShowTagPreview(prev => !prev)} title="👁 معاينة الإصلاح قبل التطبيق">
                   <Eye className="w-4 h-4 text-accent" />
