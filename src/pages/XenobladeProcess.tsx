@@ -420,9 +420,25 @@ const XenobladeProcess = () => {
         }
       }
 
+      // Check for saved build translations (most reliable method)
+      const { idbClearExcept } = await import("@/lib/idb-storage");
+      const savedBuildTranslations = await idbGet<Record<string, string>>("buildTranslations");
+      
+      if (savedBuildTranslations && Object.keys(savedBuildTranslations).length > 0) {
+        // Restore translations from last build
+        const validKeys = new Set(allEntries.map((e: any) => `${e.msbtFile}:${e.index}`));
+        let restoredCount = 0;
+        for (const [k, v] of Object.entries(savedBuildTranslations)) {
+          if (validKeys.has(k) && v?.trim() && !finalTranslations[k]) {
+            finalTranslations[k] = v;
+            restoredCount++;
+          }
+        }
+        addLog(`🔄 تم استعادة ${restoredCount} ترجمة من آخر بناء`);
+      }
+
       // Check if extracted texts contain presentation forms (re-extraction from built file)
       const { hasArabicPresentationForms } = await import("@/lib/arabic-processing");
-      const { idbClearExcept } = await import("@/lib/idb-storage");
       const hasPresentationFormsInOriginals = allEntries.some((e: any) => hasArabicPresentationForms(e.original));
       
       if (hasPresentationFormsInOriginals) {
@@ -446,8 +462,8 @@ const XenobladeProcess = () => {
           addLog("⚠️ لا توجد نصوص أصلية محفوظة — استخرج من الملف الأصلي أولاً ثم أعد البناء");
         }
         
-        // Clear everything EXCEPT originalTexts
-        await idbClearExcept(["originalTexts"]);
+        // Clear everything EXCEPT originalTexts and buildTranslations
+        await idbClearExcept(["originalTexts", "buildTranslations"]);
       } else {
         // Clean file — save original English texts for future restoration
         const originalTextsMap: Record<string, string> = {};
@@ -456,7 +472,7 @@ const XenobladeProcess = () => {
           originalTextsMap[key] = (entry as any).original;
         }
         
-        await idbClear();
+        await idbClearExcept(["buildTranslations"]);
         
         // Save originalTexts after clear
         try {

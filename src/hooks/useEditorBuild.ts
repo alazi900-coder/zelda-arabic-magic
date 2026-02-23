@@ -474,6 +474,20 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
         setBuildProgress(`✅ تم بنجاح! ${localBdatResults.length} ملف BDAT في ZIP — تم تطبيق ${localModifiedCount} نص${overflowSummary}`);
       }
       
+      // Save translations snapshot for future re-extraction
+      try {
+        const { idbSet } = await import("@/lib/idb-storage");
+        const nonEmpty: Record<string, string> = {};
+        for (const [k, v] of Object.entries(currentState.translations || {})) {
+          if (v && (v as string).trim()) nonEmpty[k] = v as string;
+        }
+        if (Object.keys(nonEmpty).length > 0) {
+          await idbSet("buildTranslations", nonEmpty);
+        }
+      } catch (e) {
+        console.warn("Could not save build translations snapshot:", e);
+      }
+
       setBuilding(false);
     } catch (err) {
       setBuildProgress(`❌ ${err instanceof Error ? err.message : 'خطأ غير معروف'}`);
