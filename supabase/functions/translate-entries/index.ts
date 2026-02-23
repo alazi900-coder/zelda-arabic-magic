@@ -358,8 +358,9 @@ CRITICAL RULES:
 Texts:
 ${textsBlock}`;
 
-  if (userApiKey?.trim()) {
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${userApiKey.trim()}`;
+  const effectiveKey = userApiKey?.trim() || Deno.env.get('GEMINI_API_KEY') || '';
+  if (effectiveKey) {
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${effectiveKey}`;
     const geminiResponse = await fetch(geminiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
