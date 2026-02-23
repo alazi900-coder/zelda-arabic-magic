@@ -46,4 +46,29 @@ describe('arabic-sentence-splitter', () => {
     const { splitCount } = splitMergedSentences('\uFE8D\uFEE0\uFEE4\uFEA9\uFEAE\uFEB3\uFEA4');
     expect(splitCount).toBe(0);
   });
+
+  it('detects ta marbuta followed by another word', () => {
+    // "مدرسةكبيرة" = مدرسة + كبيرة
+    const points = detectMergedInWord('مدرسةكبيرة');
+    expect(points.length).toBeGreaterThan(0);
+    // ة should be detected as a merge point somewhere
+    expect(points.some(p => p.charBefore === '\u0629')).toBe(true);
+  });
+
+  it('detects alef maksura as word-ender', () => {
+    // "علىالطاولة" = على + الطاولة
+    const { splitCount } = splitMergedSentences('علىالطاولة');
+    expect(splitCount).toBeGreaterThan(0);
+  });
+
+  it('detects hamza alone as non-connecting', () => {
+    const points = detectMergedInWord('شيءجديد');
+    expect(points.length).toBeGreaterThan(0);
+  });
+
+  it('handles short words with ta marbuta correctly', () => {
+    // "كلمةجد" has 6 Arabic chars - should NOT split (threshold is 6)
+    const { splitCount } = splitMergedSentences('كلمةجد');
+    expect(splitCount).toBe(0);
+  });
 });

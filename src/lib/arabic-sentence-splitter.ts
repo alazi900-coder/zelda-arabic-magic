@@ -18,6 +18,13 @@ const NON_CONNECTING = new Set([
   '\u0629', // ة ta marbuta
   '\u0649', // ى alef maksura
   '\u0624', // ؤ waw hamza
+  '\u0621', // ء hamza alone
+]);
+
+// Ta marbuta ALWAYS ends a word — if followed by any Arabic letter, it's 100% a merge
+const WORD_ENDERS = new Set([
+  '\u0629', // ة ta marbuta
+  '\u0649', // ى alef maksura
 ]);
 
 // Arabic letter range (basic block only, excludes diacritics)
@@ -76,7 +83,18 @@ export function detectMergedInWord(word: string): MergePoint[] {
     const nextCh = chars[nextIdx];
     if (!isArabicLetter(nextCh)) continue;
     
-    // Rule 1: Non-connecting letter followed by Arabic letter
+    // Rule 1a: Word-enders (ة، ى) — these ALWAYS end a word, so any Arabic letter after = merge
+    if (WORD_ENDERS.has(ch)) {
+      points.push({
+        position: nextIdx,
+        charBefore: ch,
+        charAfter: nextCh,
+        rule: 'non-connecting',
+      });
+      continue;
+    }
+    
+    // Rule 1b: Non-connecting letter followed by Arabic letter
     if (NON_CONNECTING.has(ch) && isArabicLetter(nextCh)) {
       // Exception: don't split "ال" (definite article)
       if (ch === '\u0627' && nextCh === '\u0644') continue; // ال
