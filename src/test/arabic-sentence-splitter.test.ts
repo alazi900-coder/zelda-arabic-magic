@@ -1,0 +1,49 @@
+import { describe, it, expect } from 'vitest';
+import { detectMergedInWord, splitMergedSentences, scanAllTranslations } from '@/lib/arabic-sentence-splitter';
+
+describe('arabic-sentence-splitter', () => {
+  it('detects non-connecting letter merge', () => {
+    // "مثلكلمة" — ل is connecting but let's test with ة
+    const points = detectMergedInWord('كلمةجديدة');
+    expect(points.length).toBeGreaterThan(0);
+    expect(points[0].rule).toBe('non-connecting');
+  });
+
+  it('splits merged words correctly', () => {
+    const { result, splitCount } = splitMergedSentences('كلمةجديدة');
+    expect(splitCount).toBeGreaterThan(0);
+    expect(result).toContain(' ');
+  });
+
+  it('does not split normal Arabic text', () => {
+    const { result, splitCount } = splitMergedSentences('كلمة جديدة');
+    expect(splitCount).toBe(0);
+    expect(result).toBe('كلمة جديدة');
+  });
+
+  it('does not split short words', () => {
+    const { result, splitCount } = splitMergedSentences('من');
+    expect(splitCount).toBe(0);
+  });
+
+  it('detects medial ال', () => {
+    // "كتابالمدرسة" should detect ال in middle
+    const { result, splitCount } = splitMergedSentences('كتابالمدرسة');
+    expect(splitCount).toBeGreaterThan(0);
+  });
+
+  it('scanAllTranslations returns results for merged text', () => {
+    const entries = [
+      { msbtFile: 'test.bdat', index: 0, original: 'Hello' },
+    ];
+    const translations = { 'test.bdat:0': 'مرحباكيف الحال' };
+    const results = scanAllTranslations(translations, entries);
+    expect(results.length).toBeGreaterThan(0);
+    expect(results[0].splits).toBeGreaterThan(0);
+  });
+
+  it('skips presentation forms text', () => {
+    const { splitCount } = splitMergedSentences('\uFE8D\uFEE0\uFEE4\uFEA9\uFEAE\uFEB3\uFEA4');
+    expect(splitCount).toBe(0);
+  });
+});

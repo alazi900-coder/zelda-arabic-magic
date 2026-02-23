@@ -47,6 +47,7 @@ import BdatBuildReport from "@/components/editor/BdatBuildReport";
 import IntegrityCheckDialog from "@/components/editor/IntegrityCheckDialog";
 import PreBuildDiagnostic from "@/components/editor/PreBuildDiagnostic";
 import CompareEnginesDialog from "@/components/editor/CompareEnginesDialog";
+import SentenceSplitPanel from "@/components/editor/SentenceSplitPanel";
 
 const Editor = () => {
   const editor = useEditorState();
@@ -500,6 +501,17 @@ const Editor = () => {
             />
           )}
 
+          {/* Sentence Split Results */}
+          {editor.sentenceSplitResults && editor.sentenceSplitResults.length > 0 && (
+            <SentenceSplitPanel
+              results={editor.sentenceSplitResults}
+              onAccept={editor.handleApplySentenceSplit}
+              onReject={editor.handleRejectSentenceSplit}
+              onAcceptAll={editor.handleApplyAllSentenceSplits}
+              onClose={() => editor.setSentenceSplitResults(null)}
+            />
+          )}
+
           {!editor.user && (
             <Card className="mb-4 border-primary/30 bg-primary/5">
               <CardContent className="flex items-center gap-3 p-4"><LogIn className="w-4 h-4" /> سجّل دخولك للمزامنة</CardContent>
@@ -755,6 +767,9 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleCheckConsistency} disabled={editor.checkingConsistency || editor.translatedCount === 0}>
                     {editor.checkingConsistency ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />} فحص اتساق المصطلحات 🔍
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleScanMergedSentences} disabled={editor.scanningSentences || editor.translatedCount === 0}>
+                    {editor.scanningSentences ? <Loader2 className="w-4 h-4 animate-spin" /> : <AlertTriangle className="w-4 h-4" />} فصل الجمل المندمجة ✂️
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -843,6 +858,9 @@ const Editor = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleCheckConsistency} disabled={editor.checkingConsistency || editor.translatedCount === 0}>
                     {editor.checkingConsistency ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />} فحص اتساق المصطلحات 🔍
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleScanMergedSentences} disabled={editor.scanningSentences || editor.translatedCount === 0}>
+                    {editor.scanningSentences ? <Loader2 className="w-4 h-4 animate-spin" /> : <AlertTriangle className="w-4 h-4" />} فصل الجمل المندمجة ✂️
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
