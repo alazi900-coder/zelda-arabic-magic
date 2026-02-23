@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import UpdateBanner from "@/components/UpdateBanner";
 
 import Xenoblade from "./pages/Xenoblade";
 import XenobladeProcess from "./pages/XenobladeProcess";
@@ -22,6 +23,7 @@ const App = () => (
       <AuthProvider>
         <Toaster />
         <Sonner />
+        <UpdateBanner />
         
         <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <ErrorBoundary fallbackTitle="حدث خطأ في التطبيق">
