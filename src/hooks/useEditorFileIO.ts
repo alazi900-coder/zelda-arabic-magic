@@ -160,6 +160,22 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       }
     }
 
+    // Add fingerprint mappings: "fp:filename:row:col" → original key
+    // This ensures imports work even if hash names change between extractions
+    const fingerprintMap: Record<string, string> = {};
+    for (const key of Object.keys(cleanTranslations)) {
+      if (key.startsWith('bdat-bin:')) {
+        const parts = key.split(':');
+        if (parts.length >= 6) {
+          const fp = `__fp__:${parts[1]}:${parts[3]}:${parts[5]}`;
+          fingerprintMap[fp] = key;
+        }
+      }
+    }
+    if (Object.keys(fingerprintMap).length > 0) {
+      Object.assign(cleanTranslations, fingerprintMap);
+    }
+
     const data = JSON.stringify(cleanTranslations, null, 2);
     const blob = new Blob([data], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -315,16 +331,56 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
 
     let cleanedImported: Record<string, string> = {};
 
+    // Extract embedded fingerprint map (__fp__:filename:row:col → original key)
+    const embeddedFpMap = new Map<string, string>();
+    for (const [key, value] of Object.entries(imported)) {
+      if (key.startsWith('__fp__:')) {
+        embeddedFpMap.set(key.slice(6), value); // strip "__fp__:" prefix → "filename:row:col" → original key
+      }
+    }
+
     if (isFilterActive && filteredEntries.length < (state?.entries.length || 0)) {
       const allowedKeys = new Set(filteredEntries.map(e => `${e.msbtFile}:${e.index}`));
       for (const [key, value] of Object.entries(imported)) {
+        if (key.startsWith('__fp__:')) continue; // skip fingerprint metadata
         if (allowedKeys.has(key)) {
           cleanedImported[key] = normalizeArabicPresentationForms(value);
         }
       }
     } else {
       for (const [key, value] of Object.entries(imported)) {
+        if (key.startsWith('__fp__:')) continue; // skip fingerprint metadata
         cleanedImported[key] = normalizeArabicPresentationForms(value);
+      }
+    }
+
+    // Use embedded fingerprints for remapping if available
+    if (embeddedFpMap.size > 0 && (state?.entries || []).length > 0) {
+      const entryFpToKey = new Map<string, string>();
+      for (const e of state!.entries) {
+        const ek = `${e.msbtFile}:${e.index}`;
+        if (ek.startsWith('bdat-bin:')) {
+          const parts = ek.split(':');
+          if (parts.length >= 6) {
+            entryFpToKey.set(`${parts[1]}:${parts[3]}:${parts[5]}`, ek);
+          }
+        }
+      }
+      const remapped: Record<string, string> = {};
+      let fpRemapped = 0;
+      for (const [oldKey, value] of Object.entries(cleanedImported)) {
+        const fp = bdatKeyFingerprint(oldKey);
+        const entryKey = fp ? entryFpToKey.get(fp) : null;
+        if (entryKey && entryKey !== oldKey) {
+          remapped[entryKey] = value;
+          fpRemapped++;
+        } else {
+          remapped[oldKey] = value;
+        }
+      }
+      if (fpRemapped > 0) {
+        console.log(`🔄 Import: remapped ${fpRemapped} keys via embedded fingerprints`);
+        cleanedImported = remapped;
       }
     }
 
