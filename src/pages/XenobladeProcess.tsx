@@ -394,37 +394,49 @@ const XenobladeProcess = () => {
 
       // Check if extracted texts contain presentation forms (re-extraction from built file)
       const { hasArabicPresentationForms } = await import("@/lib/arabic-processing");
+      const { idbClearExcept } = await import("@/lib/idb-storage");
       const hasPresentationFormsInOriginals = allEntries.some((e: any) => hasArabicPresentationForms(e.original));
       
       if (hasPresentationFormsInOriginals) {
         addLog("⚠️ تم اكتشاف نصوص عربية مُشكَّلة (Presentation Forms) — يبدو أن الملف مبني سابقاً");
-        addLog("💡 سيتم محاولة استعادة النصوص الأصلية الإنجليزية المحفوظة تلقائياً في المحرر");
+        
+        // Try to restore original English texts from saved originals
+        const savedOriginals = await idbGet<Record<string, string>>("originalTexts");
+        if (savedOriginals && Object.keys(savedOriginals).length > 0) {
+          let restoredCount = 0;
+          for (let i = 0; i < allEntries.length; i++) {
+            const entry = allEntries[i] as any;
+            const key = `${entry.msbtFile}:${entry.index}`;
+            const savedOriginal = savedOriginals[key];
+            if (savedOriginal && hasArabicPresentationForms(entry.original)) {
+              entry.original = savedOriginal;
+              restoredCount++;
+            }
+          }
+          addLog(`🔄 تم استعادة ${restoredCount} نص أصلي إنجليزي من النسخة المحفوظة`);
+        } else {
+          addLog("⚠️ لا توجد نصوص أصلية محفوظة — استخرج من الملف الأصلي أولاً ثم أعد البناء");
+        }
+        
+        // Clear everything EXCEPT originalTexts
+        await idbClearExcept(["originalTexts"]);
       } else {
-        // Save original English texts for future restoration (only from clean files)
+        // Clean file — save original English texts for future restoration
         const originalTextsMap: Record<string, string> = {};
         for (const entry of allEntries) {
           const key = `${(entry as any).msbtFile}:${(entry as any).index}`;
           originalTextsMap[key] = (entry as any).original;
         }
-        // Save before clearing IDB
+        
+        await idbClear();
+        
+        // Save originalTexts after clear
         try {
           await idbSet("originalTexts", originalTextsMap);
           addLog(`📝 تم حفظ ${Object.keys(originalTextsMap).length} نص أصلي للاستعادة المستقبلية`);
         } catch (err) {
           addLog("⚠️ لم يتم حفظ النصوص الأصلية — مساحة التخزين محدودة");
         }
-      }
-
-      await idbClear();
-      
-      // Re-save originalTexts after clear (if we saved them above)
-      if (!hasPresentationFormsInOriginals) {
-        const originalTextsMap: Record<string, string> = {};
-        for (const entry of allEntries) {
-          const key = `${(entry as any).msbtFile}:${(entry as any).index}`;
-          originalTextsMap[key] = (entry as any).original;
-        }
-        try { await idbSet("originalTexts", originalTextsMap); } catch {}
       }
 
       // CRITICAL: Save editor state FIRST (most important data)
