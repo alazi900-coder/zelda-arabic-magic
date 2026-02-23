@@ -42,3 +42,18 @@ export async function idbClear(): Promise<void> {
     tx.onerror = () => reject(tx.error);
   });
 }
+
+export async function idbClearExcept(keepKeys: string[]): Promise<void> {
+  // Read values to preserve
+  const preserved: Record<string, unknown> = {};
+  for (const key of keepKeys) {
+    const val = await idbGet(key);
+    if (val !== undefined) preserved[key] = val;
+  }
+  // Clear everything
+  await idbClear();
+  // Restore preserved keys
+  for (const [key, val] of Object.entries(preserved)) {
+    await idbSet(key, val);
+  }
+}
