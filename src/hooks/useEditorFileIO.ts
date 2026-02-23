@@ -166,7 +166,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     for (const key of Object.keys(cleanTranslations)) {
       const fp = bdatKeyFingerprint(key);
       if (fp) {
-        fingerprintMap[`__fp__:${fp.full}`] = key;
+        fingerprintMap[`__fp__:${fp.exact}`] = key;
       }
     }
     if (Object.keys(fingerprintMap).length > 0) {
@@ -299,23 +299,28 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
   };
 
   /**
-   * Extract a "structural fingerprint" from a bdat-bin key for fuzzy matching.
+   * Extract multi-level fingerprints from a bdat-bin key for cross-extraction matching.
    * Key format: "bdat-bin:filename:<tableHash>:rowIndex:<colHash>:0"
-   * Full fingerprint: "filename:rowIndex:colHash" — unique per column per row.
-   * Base fingerprint: "filename:rowIndex" — used as fallback when column hashes change.
+   * 
+   * Returns multiple fingerprint levels for progressive fallback matching:
+   * - exact: "filename:tableHash:rowIndex:colHash" (unique, for same extraction)
+   * - noTable: "filename:*:rowIndex:colHash" (when table hash resolved to name)
+   * - noCol: "filename:tableHash:rowIndex:*" (when column hash resolved to name)
+   * - base: "filename:*:rowIndex:*" (when both hashes changed, only works if unique)
    */
-  const bdatKeyFingerprint = (key: string): { full: string; base: string } | null => {
+  const bdatKeyFingerprint = (key: string) => {
     if (!key.startsWith('bdat-bin:')) return null;
-    // bdat-bin:menu.bdat:<0x00b8f58d>:50:<0x45dbaf43>:0
-    // parts: ["bdat-bin", "menu.bdat", "<0x00b8f58d>", "50", "<0x45dbaf43>", "0"]
     const parts = key.split(':');
     if (parts.length < 6) return null;
-    const filename = parts[1]; // menu.bdat
-    const rowIndex = parts[3]; // 50
-    const colName = parts[4];  // <0x45dbaf43> or "name"
+    const filename = parts[1];
+    const tableHash = parts[2];
+    const rowIndex = parts[3];
+    const colHash = parts[4];
     return {
-      full: `${filename}:${rowIndex}:${colName}`,
-      base: `${filename}:${rowIndex}`
+      exact: `${filename}:${tableHash}:${rowIndex}:${colHash}`,
+      noTable: `${filename}:*:${rowIndex}:${colHash}`,
+      noCol: `${filename}:${tableHash}:${rowIndex}:*`,
+      base: `${filename}:*:${rowIndex}:*`,
     };
   };
 
@@ -362,44 +367,55 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     let directMatchCount = Object.keys(cleanedImported).filter(k => entryKeySet.has(k)).length;
     let fpRemappedTotal = 0;
 
-    // Build fingerprint maps for current entries (full + base)
+    // Build multi-level fingerprint maps for current entries
     const buildEntryFpMaps = () => {
-      const fullFpToKey = new Map<string, string>();
-      const baseFpToKeys = new Map<string, string[]>();
+      const exactMap = new Map<string, string>();
+      const noTableMap = new Map<string, string[]>();
+      const noColMap = new Map<string, string[]>();
+      const baseMap = new Map<string, string[]>();
       for (const e of state!.entries) {
         const ek = `${e.msbtFile}:${e.index}`;
         const fp = bdatKeyFingerprint(ek);
         if (fp) {
-          fullFpToKey.set(fp.full, ek);
-          const arr = baseFpToKeys.get(fp.base) || [];
-          arr.push(ek);
-          baseFpToKeys.set(fp.base, arr);
+          exactMap.set(fp.exact, ek);
+          const nt = noTableMap.get(fp.noTable) || []; nt.push(ek); noTableMap.set(fp.noTable, nt);
+          const nc = noColMap.get(fp.noCol) || []; nc.push(ek); noColMap.set(fp.noCol, nc);
+          const b = baseMap.get(fp.base) || []; b.push(ek); baseMap.set(fp.base, b);
         }
       }
-      return { fullFpToKey, baseFpToKeys };
+      return { exactMap, noTableMap, noColMap, baseMap };
     };
 
-    // Use embedded fingerprints for remapping if available
-    if (embeddedFpMap.size > 0 && (state?.entries || []).length > 0) {
-      const { fullFpToKey, baseFpToKeys } = buildEntryFpMaps();
+    /** Try to find the new key for an old key using progressive fingerprint matching */
+    const findNewKey = (oldKey: string, maps: ReturnType<typeof buildEntryFpMaps>): string | undefined => {
+      const fp = bdatKeyFingerprint(oldKey);
+      if (!fp) return undefined;
+      // 1. Exact match (same table + column hashes)
+      let newKey = maps.exactMap.get(fp.exact);
+      if (newKey) return newKey;
+      // 2. Table hash changed, column same
+      const ntCandidates = maps.noTableMap.get(fp.noTable);
+      if (ntCandidates && ntCandidates.length === 1) return ntCandidates[0];
+      // 3. Column hash changed, table same
+      const ncCandidates = maps.noColMap.get(fp.noCol);
+      if (ncCandidates && ncCandidates.length === 1) return ncCandidates[0];
+      // 4. Both changed — only if unique in base group
+      const bCandidates = maps.baseMap.get(fp.base);
+      if (bCandidates && bCandidates.length === 1) return bCandidates[0];
+      return undefined;
+    };
+
+    // Use fingerprint-based remapping for unmatched keys
+    if ((state?.entries || []).length > 0) {
+      const maps = buildEntryFpMaps();
       const remapped: Record<string, string> = {};
       for (const [oldKey, value] of Object.entries(cleanedImported)) {
         if (entryKeySet.has(oldKey)) {
           remapped[oldKey] = value;
           continue;
         }
-        const fp = bdatKeyFingerprint(oldKey);
-        if (!fp) { remapped[oldKey] = value; continue; }
-        // Try full fingerprint match (filename:row:col)
-        let newKey = fullFpToKey.get(fp.full);
-        // Fallback: if column hash changed, try base match (filename:row) only if unique
-        if (!newKey) {
-          const candidates = baseFpToKeys.get(fp.base);
-          if (candidates && candidates.length === 1) {
-            newKey = candidates[0];
-          }
-        }
-        if (newKey && newKey !== oldKey) {
+        const newKey = findNewKey(oldKey, maps);
+        if (newKey && !remapped[newKey]) {
           remapped[newKey] = value;
           fpRemappedTotal++;
         } else {
@@ -407,56 +423,15 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
         }
       }
       if (fpRemappedTotal > 0) {
-        console.log(`🔄 Import: remapped ${fpRemappedTotal} keys via embedded fingerprints`);
+        console.log(`🔄 Import: remapped ${fpRemappedTotal} keys via multi-level fingerprints`);
         cleanedImported = remapped;
         directMatchCount = Object.keys(cleanedImported).filter(k => entryKeySet.has(k)).length - fpRemappedTotal;
         if (directMatchCount < 0) directMatchCount = 0;
       }
     }
 
-    // ── Fuzzy key matching: if many keys unmatched, try fingerprint-based remapping ──
     let matchedCount = Object.keys(cleanedImported).filter(k => entryKeySet.has(k)).length;
     let unmatchedCount = Object.keys(cleanedImported).length - matchedCount;
-
-    if (unmatchedCount > 0 && (state?.entries || []).length > 0) {
-      const { fullFpToKey, baseFpToKeys } = buildEntryFpMaps();
-
-      const remapped: Record<string, string> = {};
-      let remappedCount = 0;
-      for (const [importedKey, value] of Object.entries(cleanedImported)) {
-        if (entryKeySet.has(importedKey)) {
-          remapped[importedKey] = value;
-        } else {
-          const fp = bdatKeyFingerprint(importedKey);
-          let newKey: string | undefined;
-          if (fp) {
-            newKey = fullFpToKey.get(fp.full);
-            if (!newKey) {
-              const candidates = baseFpToKeys.get(fp.base);
-              if (candidates && candidates.length === 1) {
-                newKey = candidates[0];
-              }
-            }
-          }
-          if (newKey && !remapped[newKey]) {
-            remapped[newKey] = value;
-            remappedCount++;
-          } else {
-            remapped[importedKey] = value;
-          }
-        }
-      }
-
-      if (remappedCount > 0) {
-        console.log(`🔄 Import: remapped ${remappedCount} keys via fingerprint matching`);
-        cleanedImported = remapped;
-        fpRemappedTotal += remappedCount;
-        matchedCount = Object.keys(cleanedImported).filter(k => entryKeySet.has(k)).length;
-        directMatchCount = matchedCount - fpRemappedTotal;
-        if (directMatchCount < 0) directMatchCount = 0;
-        unmatchedCount = Object.keys(cleanedImported).length - matchedCount;
-      }
-    }
     const noEntriesLoaded = (state?.entries || []).length === 0;
 
     // Backward compat: convert legacy FFF9-FFFC markers in imported translations to PUA markers

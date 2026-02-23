@@ -425,9 +425,11 @@ const XenobladeProcess = () => {
       const savedBuildTranslations = await idbGet<Record<string, string>>("buildTranslations");
       
       if (savedBuildTranslations && Object.keys(savedBuildTranslations).length > 0) {
-        // Build fingerprint maps for current entries
-        const fullFpToKey = new Map<string, string>();
-        const baseFpToKeys = new Map<string, string[]>();
+        // Build multi-level fingerprint maps for current entries
+        const exactMap = new Map<string, string>();
+        const noTableMap = new Map<string, string[]>();
+        const noColMap = new Map<string, string[]>();
+        const baseMap = new Map<string, string[]>();
         const validKeys = new Set<string>();
         for (const e of allEntries as any[]) {
           const ek = `${e.msbtFile}:${e.index}`;
@@ -435,40 +437,45 @@ const XenobladeProcess = () => {
           if (ek.startsWith('bdat-bin:')) {
             const parts = ek.split(':');
             if (parts.length >= 6) {
-              const full = `${parts[1]}:${parts[3]}:${parts[4]}`;
-              const base = `${parts[1]}:${parts[3]}`;
-              fullFpToKey.set(full, ek);
-              const arr = baseFpToKeys.get(base) || [];
-              arr.push(ek);
-              baseFpToKeys.set(base, arr);
+              const [filename, tableHash, rowIndex, colHash] = [parts[1], parts[2], parts[3], parts[4]];
+              exactMap.set(`${filename}:${tableHash}:${rowIndex}:${colHash}`, ek);
+              const ntKey = `${filename}:*:${rowIndex}:${colHash}`;
+              const nt = noTableMap.get(ntKey) || []; nt.push(ek); noTableMap.set(ntKey, nt);
+              const ncKey = `${filename}:${tableHash}:${rowIndex}:*`;
+              const nc = noColMap.get(ncKey) || []; nc.push(ek); noColMap.set(ncKey, nc);
+              const bKey = `${filename}:*:${rowIndex}:*`;
+              const b = baseMap.get(bKey) || []; b.push(ek); baseMap.set(bKey, b);
             }
           }
         }
 
+        const findNewKey = (oldKey: string): string | undefined => {
+          if (!oldKey.startsWith('bdat-bin:')) return undefined;
+          const parts = oldKey.split(':');
+          if (parts.length < 6) return undefined;
+          const [filename, tableHash, rowIndex, colHash] = [parts[1], parts[2], parts[3], parts[4]];
+          let nk = exactMap.get(`${filename}:${tableHash}:${rowIndex}:${colHash}`);
+          if (nk) return nk;
+          const ntC = noTableMap.get(`${filename}:*:${rowIndex}:${colHash}`);
+          if (ntC && ntC.length === 1) return ntC[0];
+          const ncC = noColMap.get(`${filename}:${tableHash}:${rowIndex}:*`);
+          if (ncC && ncC.length === 1) return ncC[0];
+          const bC = baseMap.get(`${filename}:*:${rowIndex}:*`);
+          if (bC && bC.length === 1) return bC[0];
+          return undefined;
+        };
+
         let restoredCount = 0;
         for (const [k, v] of Object.entries(savedBuildTranslations)) {
           if (!v?.trim()) continue;
-          // Direct match
           if (validKeys.has(k) && !finalTranslations[k]) {
             finalTranslations[k] = v;
             restoredCount++;
-          } else if (k.startsWith('bdat-bin:')) {
-            // Fingerprint match (handles hash name changes)
-            const parts = k.split(':');
-            if (parts.length >= 6) {
-              const full = `${parts[1]}:${parts[3]}:${parts[4]}`;
-              const base = `${parts[1]}:${parts[3]}`;
-              let newKey = fullFpToKey.get(full);
-              if (!newKey) {
-                const candidates = baseFpToKeys.get(base);
-                if (candidates && candidates.length === 1) {
-                  newKey = candidates[0];
-                }
-              }
-              if (newKey && !finalTranslations[newKey]) {
-                finalTranslations[newKey] = v;
-                restoredCount++;
-              }
+          } else {
+            const newKey = findNewKey(k);
+            if (newKey && !finalTranslations[newKey]) {
+              finalTranslations[newKey] = v;
+              restoredCount++;
             }
           }
         }
