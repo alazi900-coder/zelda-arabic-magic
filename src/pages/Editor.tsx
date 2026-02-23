@@ -253,7 +253,25 @@ const Editor = () => {
             <Button size={isMobile ? "default" : "lg"} variant="outline" onClick={() => editor.setShowRetranslateConfirm(true)} disabled={editor.translating} className="font-display font-bold px-4 md:px-6 border-accent/30 text-accent hover:text-accent">
               <RotateCcw className="w-4 h-4" /> إعادة ترجمة الصفحة 🔄
             </Button>
+            {(editor.hasStoredOriginals || editor.originalsDetectedAsPreviousBuild) && (
+              <Button size={isMobile ? "default" : "lg"} variant="outline" onClick={editor.handleRestoreOriginals} className="font-display font-bold px-4 md:px-6 border-secondary/30 text-secondary hover:text-secondary">
+                <RotateCcw className="w-4 h-4" /> استعادة الأصل الإنجليزي 🔙
+              </Button>
+            )}
           </div>
+
+          {/* Warning: Previous build detected */}
+          {editor.originalsDetectedAsPreviousBuild && (
+            <Card className="mb-4 border-destructive/30 bg-destructive/5">
+              <CardContent className="p-4 text-center font-display text-sm">
+                <AlertTriangle className="w-4 h-4 inline-block ml-1 text-destructive" />
+                تم اكتشاف نصوص من ملف مبني سابقاً — النصوص "الأصلية" تحتوي عربية مُشكَّلة بدلاً من الإنجليزية
+                {editor.hasStoredOriginals && (
+                  <span className="text-secondary mr-2"> • اضغط "استعادة الأصل الإنجليزي" لإصلاحها</span>
+                )}
+              </CardContent>
+            </Card>
+          )}
 
           {/* Translation Provider Selection */}
           <Card className="mb-6 border-primary/20 bg-primary/5">
