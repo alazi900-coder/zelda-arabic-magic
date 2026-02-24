@@ -7439,3 +7439,390 @@ It all comes together here. In us.=كل شيء يجتمع هنا. فينا.
 The future is redeemed. And it belongs to everyone.=المستقبل مُستعاد. وهو ملك للجميع.
 This is the beginning of a new story.=هذه بداية قصة جديدة.
 A story we'll write together.=قصة سنكتبها معًا.
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم التاسع: حوارات مهام الأبطال (Hero Quest Dialogues)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- إيثل (Ethel) - المستعمرة 4 ---
+I am Ethel, commander of Colony 4.=أنا إيثل، قائدة المستعمرة 4.
+We fight for our colony. That's all that matters.=نحن نقاتل من أجل مستعمرتنا. هذا كل ما يهم.
+You claim to seek peace? Then prove it with your blade.=تدّعون أنكم تسعون للسلام؟ إذن أثبتوا ذلك بسيوفكم.
+I've lost too many soldiers to believe in empty promises.=فقدت كثيرًا من الجنود لأصدّق وعودًا فارغة.
+If what you say is true... then perhaps we can walk the same path.=إذا كان ما تقولونه صحيحًا... فربما يمكننا السير في الدرب ذاته.
+Ethel has joined your party!=إيثل انضمت إلى فريقكم!
+Colony 4 is now liberated!=المستعمرة 4 تحررت الآن!
+
+# --- أشيرا (Ashera) - المستعمرة 15 ---
+The name's Ashera. Don't wear it out.=اسمي أشيرا. لا تبلوه بكثرة الاستعمال.
+I don't need friends. I need warriors.=لا أحتاج أصدقاء. أحتاج محاربين.
+You think you can keep up with me? Try it.=تظنون أنكم تستطيعون مجاراتي؟ حاولوا.
+Fine. You've earned my respect. I'll fight alongside you.=حسنًا. لقد نلتم احترامي. سأقاتل إلى جانبكم.
+Ashera has joined your party!=أشيرا انضمت إلى فريقكم!
+
+# --- زيون (Zeon) - المستعمرة 9 ---
+I am Zeon. I lead Colony 9 with honor.=أنا زيون. أقود المستعمرة 9 بشرف.
+A true warrior fights not for glory, but for those behind him.=المحارب الحقيقي لا يقاتل من أجل المجد، بل من أجل من خلفه.
+You've shown me there's more to this world than endless war.=لقد أريتموني أن هناك أكثر من حرب لا نهاية لها في هذا العالم.
+Zeon has joined your party!=زيون انضم إلى فريقكم!
+Colony 9 is now liberated!=المستعمرة 9 تحررت الآن!
+
+# --- فالدي (Valdi) - المستعمرة 30 ---
+I'm Valdi! I fix things. That's what I do.=أنا فالدي! أنا أصلح الأشياء. هذا ما أفعله.
+Every machine has a purpose. Even broken ones can be repaired.=لكل آلة غرض. حتى المكسورة منها يمكن إصلاحها.
+If I can fix Levnises, maybe I can help fix this world too.=إذا كنت أستطيع إصلاح الليفنيس، فربما أستطيع المساعدة في إصلاح هذا العالم أيضًا.
+Valdi has joined your party!=فالدي انضم إلى فريقكم!
+
+# --- فيونا (Fiona) - المستعمرة لامبدا ---
+I'm Fiona. Colony Lambda is my home.=أنا فيونا. مستعمرة لامبدا هي موطني.
+We don't fight here. We grow things. We nurture life.=نحن لا نقاتل هنا. نحن نزرع الأشياء. نحن نرعى الحياة.
+If your cause is truly just, then let me lend you my healing arts.=إذا كانت قضيتكم عادلة حقًا، فدعوني أعيركم فنوني العلاجية.
+Fiona has joined your party!=فيونا انضمت إلى فريقكم!
+
+# --- ألكسندريا (Alexandria) - المستعمرة 0 ---
+Colony 0 answers to no one but the Consul.=المستعمرة 0 لا تخضع لأحد سوى القنصل.
+You dare challenge the strongest colony?=أتجرؤون على تحدي أقوى مستعمرة؟
+I see now. True strength isn't about domination.=أرى الآن. القوة الحقيقية ليست في السيطرة.
+Alexandria has joined your party!=الكسندريا انضمت إلى فريقكم!
+
+# --- مونيكا (Monica) - المدينة ---
+I'm Monica. I represent the City's interests.=أنا مونيكا. أمثّل مصالح المدينة.
+The City has survived in secret for generations.=المدينة نجت في السر عبر أجيال.
+We've been waiting for people like you. People who question this world.=كنا ننتظر أناسًا مثلكم. أناس يتساءلون عن هذا العالم.
+Monica has joined your party!=مونيكا انضمت إلى فريقكم!
+
+# --- غراي (Gray) ---
+...=...
+You talk too much.=أنتم تتكلمون كثيرًا.
+I have my reasons for fighting. That's all you need to know.=لدي أسبابي للقتال. هذا كل ما تحتاجون معرفته.
+Gray has joined your party!=غراي انضم إلى فريقكم!
+
+# --- إيزل (Isurd) - المستعمرة غاما ---
+I am Isurd, tactician of Colony Gamma.=أنا إيزرد، خبير المستعمرة غاما التكتيكي.
+A battle won through intellect saves more lives than one won through brute force.=معركة تُربح بالعقل تنقذ أرواحًا أكثر من تلك التي تُربح بالقوة الغاشمة.
+Your strategy... it's unconventional. But effective.=استراتيجيتكم... غير تقليدية. لكنها فعّالة.
+Isurd has joined your party!=إيزرد انضم إلى فريقكم!
+
+# --- جوندو (Juniper) ---
+Name's Juniper. I keep watch from the shadows.=اسمي جونيبر. أراقب من الظلال.
+The forest tells me everything I need to know.=الغابة تخبرني بكل ما أحتاج معرفته.
+You've earned the forest's trust. And mine.=لقد نلتم ثقة الغابة. وثقتي.
+Juniper has joined your party!=جونيبر انضم إلى فريقكم!
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم العاشر: حوارات القتال الموسعة (Extended Battle Dialogues)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- مواجهة القناصل ---
+# القنصل D
+Consul D! You won't terrorize these people any longer!=القنصل دي! لن تروّع هؤلاء الناس بعد الآن!
+You think you can defy Moebius? How adorable.=تظنون أنكم تستطيعون تحدي موبيوس؟ يا لكم من ظرفاء.
+This power... it's not yours to wield!=هذه القوة... ليست ملككم لتستخدموها!
+
+# القنصل J
+Consul J... why do you cling to this endless cycle?=القنصل جيه... لماذا تتشبث بهذه الدورة اللانهائية؟
+Because eternity is beautiful! Why would anyone choose to end?=لأن الخلود جميل! لماذا يختار أي شخص أن ينتهي؟
+You call this living? This is a cage!=أتسمي هذا حياة؟ هذا قفص!
+
+# القنصل K
+K! Your sick games end now!=كيه! ألعابك المريضة تنتهي الآن!
+Games? Oh, this is just the beginning of the fun.=ألعاب؟ أوه، هذه مجرد بداية المرح.
+
+# القنصل X
+You were once like us. You had a life!=لقد كنت مثلنا يومًا. كان لديك حياة!
+That life was meaningless. Moebius gave me purpose.=تلك الحياة كانت بلا معنى. موبيوس منحني هدفًا.
+
+# القنصل Y
+Another Consul... how many of you are there?=قنصل آخر... كم عددكم؟
+Enough to ensure the cycle never breaks.=يكفي لضمان ألا تنكسر الدورة أبدًا.
+
+# القنصل Z - المواجهة النهائية
+Z! This ends now!=زد! ينتهي هذا الآن!
+End? Nothing ends. Nothing begins. That is the beauty of Moebius.=ينتهي؟ لا شيء ينتهي. لا شيء يبدأ. هذا هو جمال موبيوس.
+You're afraid! Afraid of a world that moves forward!=أنت خائف! خائف من عالم يتقدم للأمام!
+I am not afraid. I am eternal.=أنا لست خائفًا. أنا أبدي.
+Then we'll show you what it means to truly live!=إذن سنريك ما يعنيه أن تعيش حقًا!
+
+# --- سقوط الرفاق ---
+Noah! Get up! We need you!=نوح! انهض! نحتاجك!
+Mio! No! Someone heal her!=ميو! لا! ليعالجها أحد!
+Lanz! Don't you dare give up!=لانز! لا تجرؤ على الاستسلام!
+Sena is down! Cover her!=سينا سقطت! غطّوها!
+Eunie! Hang in there!=يوني! تماسكي!
+Taion! Stay with us!=تايون! ابقَ معنا!
+I won't... let it end... like this...=لن... أدعه ينتهي... هكذا...
+Not yet... I can still fight...=ليس بعد... لا زلت أستطيع القتال...
+
+# --- الوحوش الفريدة ---
+That thing is massive! Everyone, stay sharp!=ذلك الشيء ضخم! الجميع، ابقوا متيقظين!
+A Unique Monster! Be careful, it won't go down easy!=وحش فريد! احذروا، لن يسقط بسهولة!
+We've never seen anything like this before!=لم نرَ شيئًا كهذا من قبل!
+It's adapting to our attacks! Change tactics!=إنه يتكيف مع هجماتنا! غيّروا التكتيكات!
+Now! While it's staggered!=الآن! بينما هو مترنح!
+
+# --- حوارات النصر ---
+We did it! That was incredible!=فعلناها! كان ذلك مذهلاً!
+Everyone okay? Let's patch up and move on.=هل الجميع بخير؟ لنضمد جراحنا ونتحرك.
+That was too close. We need to be more careful.=كان ذلك قريبًا جدًا. علينا أن نكون أكثر حذرًا.
+Another battle won. Another step forward.=معركة أخرى نُربح. خطوة أخرى للأمام.
+See? Told you we could handle it!=أرأيتم؟ قلت لكم أننا نستطيع التعامل معه!
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم الحادي عشر: حوارات تطور الشخصيات (Character Arc Dialogues)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- نوح: من جندي إلى ثائر ---
+I was taught to fight. To send off the fallen. Never to question why.=عُلِّمت أن أقاتل. أن أودّع الراحلين. ألا أسأل لماذا أبدًا.
+But now I see it. This cycle... it's wrong. All of it.=لكنني الآن أرى ذلك. هذه الدورة... خاطئة. كلها.
+I won't be Moebius's soldier anymore. I choose my own path.=لن أكون جندي موبيوس بعد الآن. أنا أختار طريقي.
+Every life I've sent off... they deserved more than this.=كل حياة ودّعتها... كانت تستحق أكثر من هذا.
+I'm not fighting to destroy. I'm fighting so others can live.=أنا لا أقاتل لأدمر. أنا أقاتل لكي يعيش الآخرون.
+This blade isn't for ending lives. It's for carving a future.=هذا النصل ليس لإنهاء الأرواح. إنه لنحت المستقبل.
+I used to play my flute to mourn. Now I play it to hope.=كنت أعزف نايي للرثاء. الآن أعزفه للأمل.
+
+# --- ميو: مواجهة نهاية العمر ---
+Three months. That's all I have left.=ثلاثة أشهر. هذا كل ما تبقى لي.
+I don't want to waste a single moment.=لا أريد أن أضيع لحظة واحدة.
+If my time is short, then I'll make every second count.=إذا كان وقتي قصيرًا، فسأجعل كل ثانية تُحسب.
+Noah... don't look at me like that. I'm not gone yet.=نوح... لا تنظر إليّ هكذا. لم أرحل بعد.
+I want to see the world beyond the war. Even if only for a moment.=أريد أن أرى العالم خلف الحرب. حتى لو للحظة فقط.
+My time may be limited, but my will is not.=قد يكون وقتي محدودًا، لكن إرادتي ليست كذلك.
+When I'm gone... keep playing. For both of us.=عندما أرحل... واصل العزف. عنّا كلينا.
+
+# --- لانز: المواجهة مع جوران ---
+Joran?! But you... you were dead!=جوران؟! لكنك... كنت ميتًا!
+I couldn't save you back then. That failure haunts me every day.=لم أستطع إنقاذك حينها. ذلك الفشل يطاردني كل يوم.
+You chose Moebius?! After everything we went through?!=اخترت موبيوس؟! بعد كل ما مررنا به؟!
+Joran... I won't give up on you. Not again.=جوران... لن أتخلى عنك. ليس مجددًا.
+I was weak then. But I'm stronger now. Strong enough to save you.=كنت ضعيفًا حينها. لكنني أقوى الآن. قوي بما يكفي لإنقاذك.
+You're my friend, Joran. That hasn't changed.=أنت صديقي يا جوران. هذا لم يتغير.
+
+# --- سينا: اكتشاف القوة الحقيقية ---
+Everyone says I'm strong. But I don't feel strong.=الجميع يقولون إنني قوية. لكنني لا أشعر بالقوة.
+Lanz is the real strong one. I'm just... following along.=لانز هو القوي الحقيقي. أنا فقط... أتبع.
+No. I'm done being in someone's shadow. This strength is mine.=لا. لقد انتهيت من العيش في ظل أحد. هذه القوة قوتي.
+I don't need anyone to protect me. I can protect them.=لا أحتاج أحدًا ليحميني. أنا أستطيع حمايتهم.
+Being strong isn't just about power. It's about heart.=أن تكون قويًا ليس فقط عن القوة. إنه عن القلب.
+
+# --- يوني: فقدان موامبا ---
+Mumba... why did you have to go?=موامبا... لماذا كان عليك أن ترحل؟
+I became a medic because I never wanted to lose anyone again.=أصبحت طبيبة لأنني لم أرد أن أفقد أحدًا مجددًا.
+Every life I save... it's for you, Mumba.=كل حياة أنقذها... هي من أجلك يا موامبا.
+I'm done crying. I'm going to fight for the living.=لقد انتهيت من البكاء. سأقاتل من أجل الأحياء.
+Healing isn't just about bodies. It's about souls too.=الشفاء ليس فقط عن الأجساد. إنه عن الأرواح أيضًا.
+
+# --- تايون: تعلّم الثقة ---
+I prefer to work alone. Emotions cloud judgment.=أفضّل العمل وحدي. المشاعر تُعكّر الحكم.
+Trusting others... it's not something that comes naturally to me.=الوثوق بالآخرين... ليس شيئًا يأتي طبيعيًا لي.
+Perhaps I was wrong. Perhaps strength lies in relying on others.=ربما كنت مخطئًا. ربما تكمن القوة في الاعتماد على الآخرين.
+Eunie... you're insufferably optimistic. But... I appreciate it.=يوني... أنتِ متفائلة بشكل لا يُحتمل. لكن... أقدّر ذلك.
+My strategies mean nothing without people to fight for.=خططي لا تعني شيئًا بدون أناس أقاتل من أجلهم.
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم الثاني عشر: المشاهد السينمائية الرئيسية (Key Cutscene Lines)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- تحول أوروبوروس الأول ---
+What's happening to us?!=ماذا يحدث لنا؟!
+Our bodies... they're merging!=أجسادنا... تندمج!
+This power... it's like nothing I've ever felt!=هذه القوة... لم أشعر بمثلها قط!
+We've become... Ouroboros?=لقد أصبحنا... أوروبوروس؟
+Two lives, one form. This is our answer to Moebius.=حياتان، شكل واحد. هذا هو ردنا على موبيوس.
+Noah and Mio have awakened as Ouroboros!=نوح وميو استيقظا كـأوروبوروس!
+
+# --- اكتشاف المدينة (The City) ---
+A city? Hidden underground?=مدينة؟ مخبأة تحت الأرض؟
+These people... they live differently. They have families.=هؤلاء الناس... يعيشون بشكل مختلف. لديهم عائلات.
+Families? You mean... parents and children?=عائلات؟ تقصد... آباء وأبناء؟
+This is what life is supposed to be like.=هذا ما يُفترض أن تكون عليه الحياة.
+They've been fighting Moebius in secret for generations.=لقد كانوا يقاتلون موبيوس سرًا عبر أجيال.
+The City... it's proof that another way of living exists.=المدينة... هي دليل على أن طريقة أخرى للعيش موجودة.
+
+# --- كشف حقيقة أيونيوس ---
+Aionios isn't a natural world. It was created.=أيونيوس ليس عالمًا طبيعيًا. لقد تم صنعه.
+Two worlds, frozen at the moment of collision.=عالمان، مجمّدان في لحظة الاصطدام.
+Moebius feeds on the cycle of life and death.=موبيوس يتغذى على دورة الحياة والموت.
+Every battle, every death... it all feeds their power.=كل معركة، كل موت... كله يغذّي قوتهم.
+Origin was supposed to save both worlds. Instead, Z corrupted it.=الأوريجن كان من المفترض أن ينقذ كلا العالمين. بدلاً من ذلك، أفسده زد.
+We were never enemies. Keves and Agnus... we were always the same.=لم نكن أعداءً قط. كيفيس وأغنوس... كنا دائمًا متشابهين.
+
+# --- المواجهة النهائية مع زد ---
+Z! Your reign of stagnation is over!=زد! حكمك بالركود انتهى!
+You would choose an uncertain future over perfect eternity?=هل تختارون مستقبلاً غير مؤكد على خلود مثالي؟
+Yes! Because that's what it means to be alive!=نعم! لأن هذا ما يعنيه أن تكون حيًا!
+Foolish children. You don't know what you're throwing away.=أيها الأطفال الحمقى. لا تعرفون ما الذي تتخلون عنه.
+We're not throwing anything away. We're choosing to move forward.=نحن لا نتخلى عن شيء. نحن نختار أن نتقدم للأمام.
+This moment... this single, fleeting moment... is worth more than your eternity!=هذه اللحظة... هذه اللحظة العابرة الوحيدة... تساوي أكثر من خلودك!
+
+# --- الوداع الأخير بين نوح وميو ---
+When the worlds split apart... we'll be separated.=عندما ينفصل العالمان... سنُفرَّق.
+I know. But that doesn't mean it's the end.=أعرف. لكن هذا لا يعني أنها النهاية.
+Promise me you'll keep living. Even without me.=عِدني أنك ستستمر بالعيش. حتى بدوني.
+I promise. And I'll keep playing our song.=أعدك. وسأواصل عزف أغنيتنا.
+Mio... I love you. Across every world, every lifetime.=ميو... أحبك. عبر كل عالم، كل حياة.
+And I love you, Noah. Always.=وأنا أحبك يا نوح. دائمًا.
+Don't cry. This isn't goodbye. It's... see you later.=لا تبكِ. هذا ليس وداعًا. إنه... أراك لاحقًا.
+See you later.=أراك لاحقًا.
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم الثالث عشر: أحداث القلب الموسعة (Extended Heart-to-Hearts)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- نوح وميو ---
+Noah, what kind of world do you want to see?=نوح، أي نوع من العوالم تريد أن ترى؟
+One where no one has to say goodbye.=عالم لا يضطر فيه أحد لقول الوداع.
+That's a beautiful dream.=ذلك حلم جميل.
+It's not a dream. It's a promise.=ليس حلمًا. إنه وعد.
+Your flute playing... it calms my heart.=عزفك على الناي... يهدّئ قلبي.
+And your melody gives mine meaning.=ولحنك يعطي لحني معنى.
+Do you think we knew each other? Before all this?=هل تعتقد أننا عرفنا بعضنا؟ قبل كل هذا؟
+I think some bonds transcend lifetimes.=أعتقد أن بعض الروابط تتجاوز الأعمار.
+
+# --- لانز وسينا ---
+Lanz, am I really strong?=لانز، هل أنا حقًا قوية؟
+Are you kidding? You're the strongest person I know.=هل تمزحين؟ أنتِ أقوى شخص أعرفه.
+But you're always protecting me...=لكنك دائمًا تحميني...
+Because I want to. Not because you need it.=لأنني أريد ذلك. ليس لأنك تحتاجينه.
+We make a good team, don't we?=نحن نشكل فريقًا جيدًا، أليس كذلك؟
+The best. No question.=الأفضل. بلا شك.
+
+# --- يوني وتايون ---
+Taion, do you ever just... feel things? Without analyzing them?=تايون، هل تشعر أحيانًا فقط... بالأشياء؟ دون تحليلها؟
+I... try not to. It complicates things.=أنا... أحاول ألا أفعل. إنها تعقّد الأمور.
+That's your problem. You think too much.=هذه مشكلتك. تفكر كثيرًا.
+And you don't think enough.=وأنتِ لا تفكرين بما يكفي.
+Maybe that's why we work. I bring the heart, you bring the brain.=ربما لهذا ننجح. أنا أجلب القلب، وأنت تجلب العقل.
+...That's surprisingly insightful.=...هذا ذكي بشكل مفاجئ.
+
+# --- أحداث القلب مع الأبطال ---
+Ethel, do you ever think about what comes after the war?=إيثل، هل تفكرين أبدًا فيما يأتي بعد الحرب؟
+After? I've never allowed myself that luxury.=بعد؟ لم أسمح لنفسي أبدًا بهذا الترف.
+Ashera, why do you push everyone away?=أشيرا، لماذا تبعدين الجميع؟
+Because if they're not close, it doesn't hurt when they're gone.=لأنهم إذا لم يكونوا قريبين، لا يؤلم عندما يرحلون.
+Zeon, what does honor mean to you?=زيون، ماذا يعني الشرف لك؟
+Protecting the ones who cannot protect themselves.=حماية أولئك الذين لا يستطيعون حماية أنفسهم.
+Valdi, is there anything you can't fix?=فالدي، هل هناك شيء لا تستطيع إصلاحه؟
+Hearts. I'm still working on that one.=القلوب. لا زلت أعمل على ذلك.
+
+# --- أحداث قلب المستعمرات ---
+This colony feels different now. More alive.=هذه المستعمرة تبدو مختلفة الآن. أكثر حيوية.
+That's because they're free. For the first time.=ذلك لأنهم أحرار. لأول مرة.
+The children here... they're actually smiling.=الأطفال هنا... يبتسمون فعلاً.
+This is what we're fighting for.=هذا ما نقاتل من أجله.
+The food here is terrible. But the company makes up for it.=الطعام هنا فظيع. لكن الرفقة تعوّض عنه.
+I could get used to this. Living without fighting.=يمكنني أن أعتاد على هذا. العيش بدون قتال.
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم الرابع عشر: حوارات NG+ والتحدي (NG+ & Challenge Mode)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- New Game Plus ---
+New Game+ unlocked!=تم فتح اللعبة الجديدة+!
+Carry your experience into a new journey.=احملوا خبرتكم إلى رحلة جديدة.
+New Game+ Started=بدأت اللعبة الجديدة+
+All classes and levels have been retained.=تم الاحتفاظ بجميع الفئات والمستويات.
+Previously locked content is now available.=المحتوى المقفل سابقًا متاح الآن.
+Hidden scenes unlocked in New Game+.=المشاهد المخفية مفتوحة في اللعبة الجديدة+.
+You can now access the full power of Ouroboros from the start.=يمكنكم الآن الوصول لقوة أوروبوروس الكاملة من البداية.
+
+# --- وضع التحدي (Challenge Mode) ---
+Challenge Battle unlocked!=فُتحت معركة التحدي!
+Enter the Archsage's Gauntlet=ادخلوا تحدي الحكيم الأعظم
+Challenge Battle=معركة التحدي
+Select a challenge to begin.=اختاروا تحديًا للبدء.
+Time Limit: None=حد الوقت: لا يوجد
+Time Limit Exceeded=تم تجاوز حد الوقت
+Challenge Complete!=اكتمل التحدي!
+New challenge available!=تحدٍ جديد متاح!
+You've proven your worth, warriors.=لقد أثبتم جدارتكم أيها المحاربون.
+This challenge will test your limits.=هذا التحدي سيختبر حدودكم.
+Enemies are significantly stronger in this mode.=الأعداء أقوى بشكل ملحوظ في هذا الوضع.
+All party members must survive to clear this challenge.=يجب أن ينجو جميع أعضاء الفريق لاجتياز هذا التحدي.
+No items allowed in this challenge.=لا يُسمح بالعناصر في هذا التحدي.
+Reward: Rare Accessory=المكافأة: إكسسوار نادر
+Reward: Legendary Gem=المكافأة: جوهرة أسطورية
+Highest Rank Achieved: S=أعلى رتبة محققة: S
+Rank: A=الرتبة: A
+Rank: B=الرتبة: B
+Rank: C=الرتبة: C
+
+# --- التحدي الصعب ---
+Are you sure? This difficulty is not for the faint of heart.=هل أنتم متأكدون؟ هذه الصعوبة ليست لضعاف القلوب.
+Hard Mode Active=الوضع الصعب نشط
+Enemy levels have been increased.=مستويات الأعداء ارتفعت.
+Experience gained is doubled in Hard Mode.=الخبرة المكتسبة مضاعفة في الوضع الصعب.
+Rare drops are more frequent in Hard Mode.=العناصر النادرة أكثر تكرارًا في الوضع الصعب.
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم الخامس عشر: عبارات الواجهة المتبقية (Remaining UI Strings)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- رسائل تأكيد ---
+Are you sure you want to delete this save data?=هل أنت متأكد أنك تريد حذف بيانات الحفظ هذه؟
+This action cannot be undone.=لا يمكن التراجع عن هذا الإجراء.
+Delete Save Data=حذف بيانات الحفظ
+Confirm Deletion=تأكيد الحذف
+Reset all settings to default?=إعادة تعيين جميع الإعدادات إلى الافتراضي؟
+Reset Settings=إعادة تعيين الإعدادات
+Overwrite existing save data?=الكتابة فوق بيانات الحفظ الموجودة؟
+Save Overwritten=تم الكتابة فوق الحفظ
+Return to Title Screen?=العودة إلى شاشة العنوان؟
+Unsaved progress will be lost.=التقدم غير المحفوظ سيُفقد.
+
+# --- رسائل الخطأ ---
+Save failed. Please check available storage.=فشل الحفظ. يرجى التحقق من التخزين المتاح.
+Could not load save data. The file may be corrupted.=تعذر تحميل بيانات الحفظ. قد يكون الملف تالفًا.
+Connection error. Please try again.=خطأ في الاتصال. يرجى المحاولة مجددًا.
+An error has occurred. Returning to title screen.=حدث خطأ. العودة إلى شاشة العنوان.
+Insufficient storage space.=مساحة التخزين غير كافية.
+DLC content not found. Please redownload.=محتوى DLC غير موجود. يرجى إعادة التحميل.
+Update required to access online features.=مطلوب تحديث للوصول إلى الميزات عبر الإنترنت.
+
+# --- نصائح شاشات التحميل المتقدمة ---
+Ouroboros forms can be enhanced through Soul Points.=يمكن تعزيز أشكال أوروبوروس من خلال نقاط الروح.
+Chain Attacks deal more damage with higher TP.=هجمات السلسلة تُلحق ضررًا أكبر مع نقاط تكتيكية أعلى.
+Explore every corner—hidden areas often contain rare items.=استكشفوا كل زاوية—المناطق المخفية غالبًا ما تحتوي على عناصر نادرة.
+Cooking at rest spots provides temporary stat boosts.=الطهي في نقاط الراحة يوفر تعزيزات مؤقتة للإحصائيات.
+Classes can be mastered by earning CP in battle.=يمكن إتقان الفئات بكسب نقاط الفئة في المعركة.
+Gems can be crafted using materials found in the field.=يمكن صنع الجواهر باستخدام مواد موجودة في الميدان.
+Some enemies are weak to specific element types.=بعض الأعداء ضعفاء أمام أنواع عناصر محددة.
+Filling the Party Gauge allows you to revive fallen allies.=ملء مقياس الفريق يسمح لكم بإحياء الحلفاء الساقطين.
+Switching between attackers mid-battle can turn the tide.=التبديل بين المهاجمين وسط المعركة يمكن أن يقلب الموازين.
+Field skills unlock new paths and hidden treasures.=مهارات الميدان تفتح مسارات جديدة وكنوزًا مخفية.
+Affinity with colonies unlocks new quests and rewards.=الألفة مع المستعمرات تفتح مهامًا ومكافآت جديدة.
+Rest at campfires to cook, craft, and discuss.=استريحوا عند نيران المخيم للطهي والصنع والنقاش.
+Interlink levels increase through battle experience.=مستويات الترابط تزداد من خلال خبرة المعركة.
+Master Arts can be mixed between classes for powerful combos.=فنون الإتقان يمكن مزجها بين الفئات لتوليفات قوية.
+Unique Monsters drop rare materials for crafting.=الوحوش الفريدة تُسقط مواد نادرة للصنع.
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم السادس عشر: حوارات المستعمرات التفصيلية (Detailed Colony Dialogues)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- الزيارة الأولى ---
+So this is Colony 4. It's more fortified than I expected.=إذن هذه هي المستعمرة 4. أكثر تحصينًا مما توقعت.
+Colony 9... it feels familiar somehow.=المستعمرة 9... تبدو مألوفة بطريقة ما.
+This must be Colony Lambda. It's so... peaceful.=هذه لا بد أنها مستعمرة لامبدا. إنها... سلمية جدًا.
+Colony 30 is run by Valdi? No wonder it's full of machines.=المستعمرة 30 يديرها فالدي؟ لا عجب أنها مليئة بالآلات.
+Colony Gamma... an intelligence-focused unit.=مستعمرة غاما... وحدة تركز على الاستخبارات.
+Colony 0. The strongest of them all, they say.=المستعمرة 0. يقولون إنها الأقوى بينهم جميعًا.
+
+# --- تطور الألفة ---
+The colony's attitude has changed. They trust us more now.=موقف المستعمرة تغيّر. يثقون بنا أكثر الآن.
+Affinity increased! New quests available.=زادت الألفة! مهام جديدة متاحة.
+The soldiers here used to see us as enemies. Now we share meals.=الجنود هنا كانوا يروننا أعداءً. الآن نتشارك الوجبات.
+They're starting to question the war. That's the first step.=بدأوا يتساءلون عن الحرب. هذه الخطوة الأولى.
+This colony has become a second home.=هذه المستعمرة أصبحت بيتًا ثانيًا.
+Maximum Affinity reached! Colony fully liberated.=بلغت الألفة الحد الأقصى! تحررت المستعمرة بالكامل.
+
+# --- NPCs المستعمرات ---
+I used to hate the other side. But now... they're just like us.=كنت أكره الطرف الآخر. لكن الآن... هم مثلنا تمامًا.
+The Consul is gone. For the first time, I can breathe.=القنصل رحل. لأول مرة، أستطيع أن أتنفس.
+Is it true? We don't have to fight anymore?=هل هذا صحيح؟ لسنا مضطرين للقتال بعد الآن؟
+What do we do now? Fighting is all I've ever known.=ماذا نفعل الآن؟ القتال هو كل ما عرفته.
+Thank you. You've given us something we never had: choice.=شكرًا لكم. لقد منحتمونا شيئًا لم نملكه قط: الاختيار.
+I want to learn how to cook. Real food, not rations.=أريد أن أتعلم الطهي. طعام حقيقي، ليس حصصًا.
+For the first time, I'm thinking about tomorrow.=لأول مرة، أفكر في الغد.
+The children don't know what war is. Let's keep it that way.=الأطفال لا يعرفون ما هي الحرب. لنبقِها هكذا.
+We're building something new here. Something worth protecting.=نحن نبني شيئًا جديدًا هنا. شيئًا يستحق الحماية.
+I heard there's a world beyond Aionios. Is that true?=سمعت أن هناك عالمًا وراء أيونيوس. هل هذا صحيح؟
