@@ -840,3 +840,148 @@ Auto-Attack=هجوم تلقائي
 Weapon Power=قوة السلاح
 Stability=الثبات
 Weight=الوزن
+# ═══════════════════════════════════════════════════
+# الطبخ والأطعمة والوصفات (Cooking, Food & Recipes)
+# ═══════════════════════════════════════════════════
+# مصطلحات نظام الطبخ العامة
+Cooking=الطبخ
+Recipe=وصفة
+Meal=وجبة
+Ingredient=مكوّن
+Cook=اطبخ
+Cuisine=مطبخ
+Canteen=المقصف
+Rest Spot=نقطة استراحة
+Campfire=نار المخيم
+Meal Effect=تأثير الوجبة
+Effect Duration=مدة التأثير
+Collectopedia=موسوعة المقتنيات
+# ═══════════════════════════════════════════════════
+# الوصفات (Recipes)
+# ═══════════════════════════════════════════════════
+# وصفات المستعمرات
+Spongy Bread=خبز إسفنجي
+Hard-Boiled Eggs=بيض مسلوق
+Colony Stew=يخنة المستعمرة
+Grilled Armu Steak=ستيك أرمو مشوي
+Steamed Elma Bun=كعكة إلما مبخرة
+Armu Roast=أرمو محمّر
+Fried Armu=أرمو مقلي
+Armu Stir-Fry=أرمو مقلّب
+Armu Burger=برغر أرمو
+Smoked Armu=أرمو مدخّن
+Grilled Tirkin=تيركن مشوي
+Tirkin Skewer=سيخ تيركن
+Fried Tirkin=تيركن مقلي
+Tirkin Pie=فطيرة تيركن
+Tirkin Stew=يخنة تيركن
+Gogol Soup=حساء غوغول
+Gogol Roast=غوغول محمّر
+Gogol Steak=ستيك غوغول
+Krabble Pot=قدر كرابل
+Krabble Boil=كرابل مغلي
+Krabble Bisque=شوربة كرابل
+Pippito Omelette=أومليت بيبيتو
+Pippito Gratin=غراتان بيبيتو
+Fried Pippito=بيبيتو مقلي
+Pippito Sandwich=ساندويش بيبيتو
+# وصفات الحلويات والمشروبات
+Sweet Bun=كعكة حلوة
+Honey Cake=كعكة العسل
+Fruit Tart=تارت الفواكه
+Berry Juice=عصير التوت
+Citrus Punch=عصير الحمضيات
+Herb Tea=شاي الأعشاب
+Spiced Tea=شاي متبّل
+Sweet Nectar=رحيق حلو
+Fruit Compote=كومبوت الفواكه
+Cream Puff=فطيرة الكريمة
+Ether Jelly=جيلي الإيثر
+# وصفات خاصة بمانانا
+Manana's Special=طبق مانانا الخاص
+Manana's Delight=بهجة مانانا
+Manana's Surprise=مفاجأة مانانا
+Nopon Cuisine=مطبخ النوبون
+Nopon Special=طبق النوبون الخاص
+Nopon Dumpling=زلابية النوبون
+# وصفات متقدمة
+Gourmet Steak=ستيك فاخر
+Luxury Platter=طبق فاخر
+Supreme Roast=محمّر ممتاز
+Royal Feast=وليمة ملكية
+Grand Banquet=مأدبة كبرى
+Seafood Platter=طبق المأكولات البحرية
+Fish Stew=يخنة السمك
+Grilled Fish=سمك مشوي
+Sashimi Plate=طبق ساشيمي
+Ocean Salad=سلطة المحيط
+# ═══════════════════════════════════════════════════
+# تأثيرات الوجبات (Meal Effects)
+# ═══════════════════════════════════════════════════
+EXP Bonus=مكافأة خبرة إضافية
+Gold Bonus=مكافأة ذهب إضافية
+AP Bonus=مكافأة نقاط فنون إضافية
+SP Bonus=مكافأة نقاط مهارة إضافية
+HP Recovery=استعادة نقاط الصحة
+Attack Boost=تعزيز الهجوم
+Defense Boost=تعزيز الدفاع
+Agility Boost=تعزيز الرشاقة
+Drop Rate Up=زيادة معدل الإسقاط
+Exploration Bonus=مكافأة الاستكشاف
+Dexterity Boost=تعزيز البراعة
+Luck Boost=تعزيز الحظ
+# ═══════════════════════════════════════════════════
+# المكونات والمواد الغذائية (Ingredients)
+# ═══════════════════════════════════════════════════
+# لحوم ومنتجات حيوانية
+Armu Meat=لحم أرمو
+Tirkin Meat=لحم تيركن
+Gogol Meat=لحم غوغول
+Krabble Meat=لحم كرابل
+Pippito Egg=بيضة بيبيتو
+Fresh Milk=حليب طازج
+Animal Fat=دهن حيواني
+Tender Meat=لحم طري
+Premium Meat=لحم ممتاز
+# فواكه وخضروات
+Cloud Berry=توت الغيوم
+Ether Apple=تفاحة الإيثر
+Flame Pepper=فلفل اللهب
+Snow Lettuce=خس الثلج
+Honey Melon=شمام العسل
+Sweet Potato=بطاطا حلوة
+Wild Onion=بصل بري
+Forest Mushroom=فطر الغابة
+Cave Mushroom=فطر الكهف
+Giant Turnip=لفت عملاق
+Red Cabbage=ملفوف أحمر
+Green Herb=عشبة خضراء
+Spicy Root=جذر حار
+Sweet Berry=توت حلو
+Sour Fruit=فاكهة حامضة
+Bitter Leaf=ورقة مرة
+# بهارات وتوابل
+Rock Salt=ملح صخري
+Black Pepper=فلفل أسود
+Aromatic Spice=بهار عطري
+Sweet Honey=عسل حلو
+Ether Sugar=سكر الإيثر
+Aged Vinegar=خل معتّق
+Herb Seasoning=تتبيلة الأعشاب
+Fire Spice=بهار ناري
+# حبوب وأساسيات
+Wheat Flour=طحين القمح
+Rice Grain=حبة أرز
+Dried Pasta=معكرونة مجففة
+Fresh Bread=خبز طازج
+Baking Powder=مسحوق الخبز
+Cooking Oil=زيت الطبخ
+Pure Water=ماء نقي
+# أسماك ومأكولات بحرية
+River Fish=سمك النهر
+Ocean Fish=سمك المحيط
+Lake Shrimp=روبيان البحيرة
+Giant Crab=سلطعون عملاق
+Sea Urchin=قنفذ البحر
+Coral Squid=حبّار المرجان
+Freshwater Clam=محار المياه العذبة
