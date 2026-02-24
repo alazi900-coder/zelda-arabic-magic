@@ -313,6 +313,65 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     setTimeout(() => setLastSaved(""), 4000);
   };
 
+  const handleExportEnglishOnlyJson = async (chunkSize?: number) => {
+    if (!state) return;
+    const { groupedByFile, totalCount } = getUntranslatedGrouped();
+    if (totalCount === 0) {
+      setLastSaved("ℹ️ لا توجد نصوص غير مترجمة للتصدير");
+      setTimeout(() => setLastSaved(""), 3000);
+      return;
+    }
+
+    const sortedFiles = Object.keys(groupedByFile).sort();
+    const flatEntries: { file: string; index: number; original: string; label: string }[] = [];
+    for (const file of sortedFiles) {
+      for (const entry of groupedByFile[file].sort((a, b) => a.index - b.index)) {
+        flatEntries.push({ file, ...entry });
+      }
+    }
+
+    const suffix = isFilterActive ? `_${filterLabel}` : '';
+    const date = new Date().toISOString().slice(0, 10);
+
+    const buildJsonChunk = (entries: typeof flatEntries) => {
+      const obj: Record<string, string> = {};
+      for (const entry of entries) {
+        const key = `${entry.file}:${entry.index}`;
+        obj[key] = entry.original;
+      }
+      return JSON.stringify(obj, null, 2);
+    };
+
+    if (!chunkSize || chunkSize >= totalCount) {
+      const content = buildJsonChunk(flatEntries);
+      const blob = new Blob([content], { type: 'application/json;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `english-only${suffix}_${date}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      setLastSaved(`✅ تم تصدير ${totalCount} نص إنجليزي JSON (${sortedFiles.length} ملف)`);
+    } else {
+      const totalParts = Math.ceil(totalCount / chunkSize);
+      const JSZip = (await import("jszip")).default;
+      const zip = new JSZip();
+      for (let i = 0; i < totalParts; i++) {
+        const chunk = flatEntries.slice(i * chunkSize, (i + 1) * chunkSize);
+        zip.file(`english-only${suffix}_part${i + 1}_of_${totalParts}.json`, buildJsonChunk(chunk));
+      }
+      const blob = await zip.generateAsync({ type: "blob" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `english-only${suffix}_${totalParts}files_${date}.zip`;
+      a.click();
+      URL.revokeObjectURL(url);
+      setLastSaved(`✅ تم تصدير ${totalCount} نص JSON في ${totalParts} ملفات ZIP`);
+    }
+    setTimeout(() => setLastSaved(""), 4000);
+  };
+
   /**
    * Extract multi-level fingerprints from a bdat-bin key for cross-extraction matching.
    * Key format: "bdat-bin:filename:<tableHash>:rowIndex:<colHash>:0"
@@ -1161,6 +1220,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
   return {
     handleExportTranslations,
     handleExportEnglishOnly,
+    handleExportEnglishOnlyJson,
     getUntranslatedCount,
     handleImportTranslations,
     handleDropImport,

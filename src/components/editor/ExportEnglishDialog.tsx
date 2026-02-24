@@ -4,11 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Download, FileText, Archive } from "lucide-react";
 
+type ExportFormat = "txt" | "json";
+
 interface ExportEnglishDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   totalCount: number;
-  onExport: (chunkSize: number) => void;
+  onExport: (chunkSize: number, format: ExportFormat) => void;
 }
 
 const ExportEnglishDialog: React.FC<ExportEnglishDialogProps> = ({
@@ -18,15 +20,17 @@ const ExportEnglishDialog: React.FC<ExportEnglishDialogProps> = ({
   onExport,
 }) => {
   const [chunkSize, setChunkSize] = useState(1000);
+  const [format, setFormat] = useState<ExportFormat>("json");
 
   const fileCount = useMemo(() => Math.ceil(totalCount / chunkSize), [totalCount, chunkSize]);
 
   const handleExport = () => {
-    onExport(chunkSize);
+    onExport(chunkSize, format);
     onOpenChange(false);
   };
 
   const presets = [200, 500, 1000, 2000, 5000];
+  const ext = format === "json" ? "JSON" : "TXT";
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -42,6 +46,29 @@ const ExportEnglishDialog: React.FC<ExportEnglishDialogProps> = ({
         </DialogHeader>
 
         <div className="space-y-4 py-2">
+          {/* Format selection */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">صيغة التصدير</label>
+            <div className="flex gap-2">
+              <Button
+                size="sm"
+                variant={format === "json" ? "default" : "outline"}
+                className="text-xs h-8 px-3"
+                onClick={() => setFormat("json")}
+              >
+                JSON (للاستيراد التلقائي)
+              </Button>
+              <Button
+                size="sm"
+                variant={format === "txt" ? "default" : "outline"}
+                className="text-xs h-8 px-3"
+                onClick={() => setFormat("txt")}
+              >
+                TXT (نص عادي)
+              </Button>
+            </div>
+          </div>
+
           {/* Chunk size slider */}
           <div className="space-y-2">
             <label className="text-sm font-medium">عدد النصوص في كل ملف</label>
@@ -89,10 +116,10 @@ const ExportEnglishDialog: React.FC<ExportEnglishDialogProps> = ({
               <FileText className="w-4 h-4 text-primary" />
               <span>
                 {fileCount === 1 ? (
-                  <span>ملف واحد يحتوي على <strong>{totalCount.toLocaleString()}</strong> نص</span>
+                  <span>ملف {ext} واحد يحتوي على <strong>{totalCount.toLocaleString()}</strong> نص</span>
                 ) : (
                   <span>
-                    <strong>{fileCount}</strong> ملفات، كل ملف يحتوي على <strong>{chunkSize.toLocaleString()}</strong> نص
+                    <strong>{fileCount}</strong> ملفات {ext}، كل ملف يحتوي على <strong>{chunkSize.toLocaleString()}</strong> نص
                     {totalCount % chunkSize !== 0 && (
                       <span className="text-muted-foreground"> (الأخير: {(totalCount % chunkSize).toLocaleString()})</span>
                     )}
@@ -113,7 +140,7 @@ const ExportEnglishDialog: React.FC<ExportEnglishDialogProps> = ({
           <Button variant="outline" onClick={() => onOpenChange(false)}>إلغاء</Button>
           <Button onClick={handleExport} className="gap-1.5">
             <Download className="w-4 h-4" />
-            تصدير {fileCount > 1 ? `${fileCount} ملفات (ZIP)` : "ملف واحد"}
+            تصدير {fileCount > 1 ? `${fileCount} ملفات ${ext} (ZIP)` : `ملف ${ext} واحد`}
           </Button>
         </DialogFooter>
       </DialogContent>
