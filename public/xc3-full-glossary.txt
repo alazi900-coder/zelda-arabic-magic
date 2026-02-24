@@ -10268,3 +10268,557 @@ Affinity Level 2: Friendly relationship. New dialogue available.=مستوى ال
 Affinity Level 3: Trusted ally. Special quests unlocked.=مستوى الألفة 3: حليف موثوق. مهام خاصة مفتوحة.
 Affinity Level 4: Close bond. Unique rewards and cutscenes.=مستوى الألفة 4: رابطة وثيقة. مكافآت ومشاهد فريدة.
 Affinity Level 5: Maximum affinity. All benefits unlocked.=مستوى الألفة 5: أقصى ألفة. جميع المزايا مفتوحة.
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم الخمسون: حوارات القصة الرئيسية - الفصل الأول (Main Story - Chapter 1)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- مقدمة الفصل الأول: ساحة المعركة (Chapter 1 Opening: The Battlefield) ---
+Colony 9 is coming into view...=المستعمرة 9 بدأت تظهر...
+Are we the only ones left...? Sorry to keep you waiting.=هل نحن الوحيدون المتبقون...؟ آسف لإبقائكم تنتظرون.
+As planned, we'll take on the guards!=كما هو مخطط، سنتولى أمر الحراس!
+Yeah, we should just follow the route we took yesterday.=نعم، يجب أن نتبع نفس الطريق الذي سلكناه بالأمس.
+Should we get going soon?=هل يجب أن ننطلق قريبًا؟
+This way.=من هنا.
+Let's hurry.=لنسرع.
+We just have to do it right. Let's do our best.=علينا فقط أن نفعلها بشكل صحيح. لنبذل قصارى جهدنا.
+Look.=انظروا.
+Come here!=تعالوا هنا!
+That's all of them.=هذا كل شيء.
+Let us return for now.=لنعد الآن.
+Alright, next.=حسنًا، التالي.
+Subjugation complete.=اكتمل الإخضاع.
+Time to go back and report.=حان وقت العودة وتقديم التقرير.
+
+# --- مشهد اللقاء الأول مع عدو مجهول (First Encounter with Unknown Enemy) ---
+What we need are three types of parts and an ether cylinder...=ما نحتاجه هو ثلاثة أنواع من القطع وأسطوانة أثير...
+It's a punishment device...=إنه جهاز عقاب...
+An ether channel, as I thought.=قناة أثير، كما ظننت.
+Could it be...?=هل يمكن أن يكون...؟
+That light...=ذلك الضوء...
+A good find.=اكتشاف جيد.
+It is better to collect it.=من الأفضل جمعها.
+I will go take a look.=سأذهب وألقي نظرة.
+A cave...? I wonder what is inside.=كهف...؟ أتساءل ما بداخله.
+It seems worth investigating.=يبدو أنه يستحق التحقيق.
+A survivor from the City. Let's protect them.=ناجٍ من المدينة. لنحميهم.
+It seems they are in some trouble.=يبدو أنهم في مشكلة ما.
+We might be able to use it if we repair it.=قد نتمكن من استخدامه إذا أصلحناه.
+Let's go and hear what they have to say.=لنذهب ونسمع ما لديهم ليقولوه.
+
+# --- حوارات ما بعد المعركة الأولى (Post-First Battle Dialogues) ---
+We will absolutely defeat him!=سنهزمه حتمًا!
+Yes, perhaps they were drawn to the husks...=نعم، ربما انجذبوا إلى الأصداف...
+Shall we head back?=هل نعود؟
+An anomaly in the ecosystem? Interesting.=خلل في النظام البيئي؟ مثير للاهتمام.
+Seven Origin shards on an island like this...=سبع شظايا أوريجن على جزيرة كهذه...
+The Commander might be more of what you would call a 'chief' than a friend.=القائد قد يكون أقرب لما تسمونه 'رئيسًا' من كونه صديقًا.
+Could it really be Nami-san...=هل يمكن حقًا أن تكون نامي-سان...
+A wonderful place...=مكان رائع...
+It's just like the photo Nami-san showed me...=تمامًا مثل الصورة التي أرتني إياها نامي-سان...
+A City Torpedo... Interesting.=طوربيد المدينة... مثير للاهتمام.
+The Pedesto Valley Floor is just ahead.=أرضية وادي بيديستو أمامنا مباشرة.
+Let's track them.=لنتعقبهم.
+Collection complete.=اكتمل الجمع.
+Yes, there is also a Skeeter nest in this area. Let's proceed with caution.=نعم، هناك أيضًا عش سكيتر في هذه المنطقة. لنتقدم بحذر.
+To think we could harvest Sirius Anemones here...=لم أتخيل أننا سنحصد زهور شقائق سيريوس هنا...
+Rudi, that Levnis is...=رودي، ذلك الليفنيس هو...
+This is probably proof that our Iron Giant God is working well. It helps hide us, so it is convenient.=هذا ربما دليل على أن إلهنا العملاق الحديدي يعمل جيدًا. يساعدنا على الاختباء، لذا فهو مناسب.
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم الحادي والخمسون: حوارات ريكو ومانانا الميدانية (Riku & Manana Field Dialogues - BDAT)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- حوارات ريكو (Riku's Dialogues - "mo" suffix) ---
+Riku can see the flow of ether, mo.=ريكو يستطيع رؤية تدفق الأثير، مو.
+There is ether here, mo!=يوجد أثير هنا، مو!
+Noah, you do not need to send them off, mo?=نوا، لا تحتاج لتوديعهم، مو؟
+Riku knows what Noah is thinking, mo.=ريكو يعرف ما يفكر فيه نوا، مو.
+It will take too long to investigate in detail, so Riku will pass, mo.=سيستغرق التحقيق بالتفصيل وقتًا طويلًا، لذا ريكو سيمتنع، مو.
+You should try gem crafting, mo.=يجب أن تجرب صناعة الأحجار الكريمة، مو.
+If you have materials, you can make gems, mo.=إذا كانت لديك مواد، يمكنك صنع أحجار كريمة، مو.
+Use gems to strengthen your weapons, mo.=استخدم الأحجار الكريمة لتقوية أسلحتك، مو.
+Riku will find something good, mo!=ريكو سيجد شيئًا جيدًا، مو!
+Riku senses danger ahead, mo.=ريكو يشعر بالخطر في الأمام، مو.
+Riku is worried about this place, mo.=ريكو قلق بشأن هذا المكان، مو.
+Riku thinks we should rest, mo.=ريكو يعتقد أنه يجب أن نستريح، مو.
+Leave it to Riku, mo!=اتركوها لريكو، مو!
+Riku's blade is ready, mo!=نصل ريكو جاهز، مو!
+Riku will protect everyone, mo.=ريكو سيحمي الجميع، مو.
+This is Riku's specialty, mo.=هذا تخصص ريكو، مو.
+Riku remembers this path, mo.=ريكو يتذكر هذا الطريق، مو.
+The ether is flowing strangely here, mo.=الأثير يتدفق بشكل غريب هنا، مو.
+Riku has a bad feeling about this, mo.=ريكو لديه شعور سيء حيال هذا، مو.
+Riku made this weapon with love, mo!=ريكو صنع هذا السلاح بحب، مو!
+
+# --- حوارات مانانا (Manana's Dialogues - "desu mo" suffix) ---
+Where are you, desu mo...?=أين أنتم، ديسو مو...؟
+Manana wants to meet you, desu mo!=مانانا تريد مقابلتكم، ديسو مو!
+Manana is clueless when it comes to stones, desu mo...=مانانا جاهلة عندما يتعلق الأمر بالأحجار، ديسو مو...
+This... just looks like a normal stone to Manana, desu mo...=هذا... يبدو مجرد حجر عادي لمانانا، ديسو مو...
+Manana will cook something delicious, desu mo!=مانانا ستطبخ شيئًا لذيذًا، ديسو مو!
+Manana's cooking is the best, desu mo!=طبخ مانانا هو الأفضل، ديسو مو!
+Everyone needs to eat properly, desu mo.=الجميع يحتاج للأكل بشكل صحيح، ديسو مو.
+Manana found rare ingredients, desu mo!=مانانا وجدت مكونات نادرة، ديسو مو!
+This smells amazing, desu mo!=هذه رائحتها مذهلة، ديسو مو!
+Manana is tired of walking, desu mo...=مانانا تعبت من المشي، ديسو مو...
+Are we there yet, desu mo?=هل وصلنا بعد، ديسو مو؟
+Manana will do her best too, desu mo!=مانانا ستبذل قصارى جهدها أيضًا، ديسو مو!
+Leave the cooking to Manana, desu mo!=اتركوا الطبخ لمانانا، ديسو مو!
+Manana knows the perfect recipe for this, desu mo.=مانانا تعرف الوصفة المثالية لهذا، ديسو مو.
+This place is scary, desu mo...=هذا المكان مخيف، ديسو مو...
+Manana doesn't like monsters, desu mo!=مانانا لا تحب الوحوش، ديسو مو!
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم الثاني والخمسون: حوارات المهام - أوصاف وأهداف (Quest Dialogues - BDAT quest.bdat)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- أوصاف المهام التفصيلية (Detailed Quest Descriptions) ---
+Farewell Melody=لحن الوداع
+Leonardo's friends were killed by monsters while on a mission. Head to Resonance Hill to see them off.=أصدقاء ليوناردو قُتلوا بالوحوش أثناء مهمة. توجّه إلى تل الرنين لتوديعهم.
+With Jango, Olivia and Marlon seen off, the burden in Leonardo's heart was slightly eased.=بعد توديع جانغو وأوليفيا ومارلون، خفّ العبء في قلب ليوناردو قليلًا.
+Resonance Hill=تل الرنين
+See off Leonardo's squad.=ودّع فرقة ليوناردو.
+Forgotten Supplies=إمدادات منسية
+Noah recalls a container that got blown off-course before it could be recovered. With Colony 9 short on supplies, now is a good time to go look for it.=يتذكر نوا حاوية انحرفت عن مسارها قبل أن يتم استردادها. مع نقص الإمدادات في المستعمرة 9، الآن وقت مناسب للبحث عنها.
+The party found the unrecovered container and gave it to Trish. There's still a way to go until the shortage is resolved, though.=وجد الفريق الحاوية غير المستردة وأعطوها لتريش. لا يزال هناك طريق طويل حتى يُحلّ النقص.
+The party found the unrecovered container and delivered it to Camilla. Hopefully, it will mitigate the shortage somewhat.=وجد الفريق الحاوية غير المستردة وسلّموها لكاميلا. نأمل أن تخفف من النقص قليلًا.
+Murmur Rise=مرتفع الهمسات
+Shared Secret=سرّ مشترك
+Leonardo and Eastman appear to have fallen out about something. Go and ask Leonardo what happened.=يبدو أن ليوناردو وإيستمان قد تشاجرا حول شيء ما. اذهب واسأل ليوناردو ما حدث.
+Reach the southern Aetia region.=اوصل إلى المنطقة الجنوبية من أيتيا.
+Make a Spongy Spud supper at the Colony Mu Canteen.=حضّر عشاء البطاطا الإسفنجية في مطعم مستعمرة مو.
+Rest up at the Station Breakroom.=استرِح في غرفة استراحة المحطة.
+Head for Captocorn Ridge, where the battle is taking place.=توجّه إلى حافة كابتوكورن، حيث تدور المعركة.
+
+# --- مهام المستعمرة 15 (Colony 15 Quests) ---
+Colony 15 Soldiers Missing=جنود المستعمرة 15 مفقودون
+The Colony 15 soldiers seem to have gone missing from the City. Stop by Michiba Canteen to find out more.=يبدو أن جنود المستعمرة 15 اختفوا من المدينة. مرّ بمطعم ميتشيبا لمعرفة المزيد.
+Thanks to the Colony 15 soldiers' sterling work as soldiers of the Lost Numbers, Triden has been given permission to enter the City.=بفضل عمل جنود المستعمرة 15 المتميز كجنود للأرقام المفقودة، مُنح تريدن إذن دخول المدينة.
+Michiba Canteen=مطعم ميتشيبا
+Sentridge Harbor=ميناء سينتريدج
+Pioneer's Inlet=مدخل الرواد
+
+# --- مهام الصداقة والعلاقات (Friendship & Relationship Quests) ---
+Friendship=الصداقة
+Find a Bright Fig in Morukuna Wildwood, and take it to Triden's drinking buddy, Jougo.=ابحث عن تينة مشرقة في غابة موروكونا البرية، وخذها لرفيق شرب تريدن، جوغو.
+Unfortunately, Jougo died as you were searching for a Bright Fig, leaving Triden with one fewer friend.=للأسف، مات جوغو بينما كنت تبحث عن التينة المشرقة، تاركًا تريدن بصديق أقل.
+High Morukuna Wildwood Area=منطقة غابة موروكونا البرية العليا
+Monument of Life=نصب الحياة
+Liberi Plaza=ساحة ليبيري
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم الثالث والخمسون: حوارات مستعمرة لامبدا الموسعة (Colony Lambda Extended - BDAT autotalk)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- حوارات بعد التحرير (Post-Liberation Dialogues) ---
+I don't know. I thought a different Consul had come, but I have no memory of what happened after that...=لا أعرف. ظننت أن قنصلًا مختلفًا قد جاء، لكن ليس لديّ ذاكرة لما حدث بعد ذلك...
+The Consul did a lot of crazy things, but the plan that Kouju was promoting hasn't been derailed, has it?=القنصل فعل الكثير من الأشياء المجنونة، لكن الخطة التي كان كوجو يروّج لها لم تنحرف عن مسارها، أليس كذلك؟
+That seems to be fine. He said it was essential, considering the future of Lambda.=يبدو أن ذلك على ما يرام. قال إنها ضرورية، بالنظر إلى مستقبل لامبدا.
+We need autonomous Levnisters to carry out the Invidian Tunnels plan.=نحتاج ليفنيسترات مستقلة لتنفيذ خطة أنفاق إنفيديا.
+There are some problems, but we are proceeding with the recovery.=هناك بعض المشاكل، لكننا نمضي في التعافي.
+
+# --- حوارات السيف العظيم (Great Sword Dialogues) ---
+You're aiming for the Great Sword, right?=أنت تستهدف السيف العظيم، صحيح؟
+Once you leave the colony and cross the Moram Bridge, next you climb the Great Conté Falls. After that... it's still a long way to go.=بمجرد مغادرة المستعمرة وعبور جسر مورام، بعدها تصعد شلالات كونتيه العظيمة. بعد ذلك... لا يزال الطريق طويلًا.
+There are mysterious ruins at the Great Conté Falls. Please let me investigate.=هناك آثار غامضة عند شلالات كونتيه العظيمة. أرجوكم دعوني أحقق.
+I can't authorize an investigation there right now. First, we need to stabilize this colony. We have no support from our home country.=لا أستطيع الموافقة على تحقيق هناك الآن. أولًا، نحتاج لتثبيت هذه المستعمرة. ليس لدينا دعم من بلدنا الأم.
+
+# --- حوارات تبادل التقنيات (Technology Exchange Dialogues) ---
+It feels strange having a Kevesi Levnister in our colony.=يبدو غريبًا وجود ليفنيستر كيفيسية في مستعمرتنا.
+It's not just Levnisters, we'll be exchanging technology and people too, so it might become normal from now on.=ليست الليفنيسترات فحسب، سنتبادل التقنيات والأفراد أيضًا، لذا قد يصبح هذا طبيعيًا من الآن.
+The Kevesi Levnister is suited for long-range. I suppose it's to counter Agnus.=الليفنيستر الكيفيسية مناسبة للمدى البعيد. أفترض أنها لمواجهة أغنوس.
+Hmm, I think the Kevesi ones are easier to maintain. It seems you can get parts for them anywhere.=حسنًا، أعتقد أن الكيفيسية أسهل في الصيانة. يبدو أنه يمكنك الحصول على قطع لها في أي مكان.
+
+# --- حوارات الانتقال والتغيير (Transfer & Change Dialogues) ---
+I had submitted a request for a change of assignment. I wanted to go to a colony further in the rear and contribute as a mechanic...=كنت قد قدّمت طلبًا لتغيير المهمة. أردت الذهاب إلى مستعمرة أبعد في المؤخرة والمساهمة كميكانيكي...
+That's a shame. The environment has changed completely, so you should reconsider.=هذا مؤسف. البيئة تغيرت تمامًا، لذا يجب أن تعيد النظر.
+
+# --- حوارات القائد إيسوروغي (Commander Isurugi Dialogues) ---
+When Commander Isurugi was on an expedition to Reebe Highlands, he was just staring blankly at a single tree.=عندما كان القائد إيسوروغي في رحلة استكشافية إلى مرتفعات ريبي، كان يحدّق بفراغ في شجرة واحدة.
+I think I understand what that means now... But I won't say it, because I'd probably get yelled at.=أعتقد أنني أفهم معنى ذلك الآن... لكنني لن أقوله، لأنني سأُوبَّخ على الأرجح.
+I need to prepare some onigiri for Commander Isurugi.=أحتاج لتحضير بعض الأونيغيري للقائد إيسوروغي.
+That guy eats about 10 a day, right...=ذلك الرجل يأكل حوالي 10 يوميًا، أليس كذلك...
+
+# --- حوارات الليفنيستر الغامض (Mysterious Levnister Dialogues) ---
+It seems the transport convoys are no longer being attacked by the mysterious Levnister.=يبدو أن قوافل النقل لم تعد تتعرض للهجوم من الليفنيستر الغامض.
+It was a big help that the Yzana Plains has so many herbivorous monsters.=كان من المفيد جدًا أن سهول يزانا تحتوي على الكثير من الوحوش العاشبة.
+Yeah. There's no way we could drive away monsters that approach the Colony in this state.=نعم. لا توجد طريقة لطرد الوحوش التي تقترب من المستعمرة في هذه الحالة.
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم الرابع والخمسون: حوارات الفريق الميدانية الموسعة (Extended Party Field Banter - BDAT)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- حوارات الاستكشاف العامة (General Exploration Banter) ---
+Think you'll find anything, Riku?=هل تعتقد أنك ستجد شيئًا، ريكو؟
+Looks like this could be useful.=يبدو أن هذا قد يكون مفيدًا.
+A search...=بحث...
+Mm...?=مم...؟
+Let's hurry up and go.=لنسرع ونذهب.
+We should be careful around here.=يجب أن نكون حذرين حول هنا.
+I can sense something nearby.=أستطيع استشعار شيء قريب.
+There's something over there. Let's check it out.=هناك شيء هناك. لنتحقق منه.
+The air feels different here.=الهواء يبدو مختلفًا هنا.
+Watch your step. The terrain is rough.=انتبه لخطواتك. التضاريس وعرة.
+We should set up camp before it gets dark.=يجب أن ننصب المخيم قبل حلول الظلام.
+The view from here is incredible.=المنظر من هنا لا يُصدّق.
+I wonder what's beyond those mountains.=أتساءل ما وراء تلك الجبال.
+This must be one of the old battlefields.=لا بد أن هذا أحد ساحات المعارك القديمة.
+The ether concentration here is unusually high.=تركيز الأثير هنا مرتفع بشكل غير عادي.
+Look at those ruins. They must be ancient.=انظروا إلى تلك الآثار. لا بد أنها قديمة جدًا.
+The wildlife here seems more aggressive than usual.=الحياة البرية هنا تبدو أكثر عدوانية من المعتاد.
+Stay alert. We're in enemy territory now.=ابقوا متيقظين. نحن في أرض العدو الآن.
+It's quiet... too quiet.=إنه هادئ... هادئ أكثر من اللازم.
+I hear water. There must be a river nearby.=أسمع ماءً. لا بد أن هناك نهرًا قريبًا.
+The path ahead looks treacherous.=الطريق أمامنا يبدو خطيرًا.
+We should rest at the next colony we find.=يجب أن نستريح في المستعمرة التالية التي نجدها.
+
+# --- حوارات القتال الميدانية (Field Battle Banter) ---
+Enemies ahead! Get ready!=أعداء في الأمام! استعدوا!
+Focus on the big one first!=ركزوا على الكبير أولًا!
+I'll draw their attention! Attack from behind!=سأجذب انتباههم! هاجموا من الخلف!
+We're outnumbered, but we can handle this!=نحن أقل عددًا، لكننا نستطيع التعامل مع هذا!
+Is everyone okay? That was close.=هل الجميع بخير؟ كانت قريبة.
+Nice work, everyone! We did it!=عمل رائع يا جماعة! فعلناها!
+That monster was tougher than I expected.=ذلك الوحش كان أصعب مما توقعت.
+We need to be more careful next time.=نحتاج لنكون أكثر حذرًا في المرة القادمة.
+Let's heal up before moving on.=لنتعالج قبل المضي قدمًا.
+The enemies here are getting stronger.=الأعداء هنا يزدادون قوة.
+
+# --- حوارات المعالم والاكتشافات (Landmark & Discovery Banter) ---
+A Rest Spot! Finally, we can take a break.=نقطة استراحة! أخيرًا، يمكننا أخذ استراحة.
+A landmark! Let's mark it on the map.=معلم! لنحدده على الخريطة.
+Secret Area discovered! I wonder what's hidden here.=تم اكتشاف منطقة سرية! أتساءل ماذا مخبأ هنا.
+A Container! Let's see what's inside.=حاوية! لنرَ ما بداخلها.
+An Ether Channel! The energy here is flowing strongly.=قناة أثير! الطاقة هنا تتدفق بقوة.
+A unique monster! Should we fight it or avoid it?=وحش فريد! هل نقاتله أم نتجنبه؟
+This area was used as a battlefield. You can still see the scars.=هذه المنطقة استُخدمت كساحة معركة. لا يزال بإمكانك رؤية الندوب.
+The wreckage of a Levnis... I wonder whose it was.=حطام ليفنيس... أتساءل لمن كان.
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم الخامس والخمسون: أسماء الوصفات والأطعمة (Recipe & Food Names - BDAT field.bdat)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- أسماء الأطباق (Dish Names) ---
+Mixed-Veg Torpedo Wrap=لفائف الخضار المشكّلة
+Whole Wild Lobster=سرطان بحر بري كامل
+Terunii-Style Fish Pie=فطيرة سمك على طريقة تيرونيي
+Cured-Meat Vizzard=فيزارد اللحم المقدد
+Nutritious Block Bar=لوح الكتلة المغذّية
+Erythia Sashimi Plate=طبق ساشيمي إريثيا
+Ta-da-to Surprise=مفاجأة تا-دا-تو
+Pon-Fried Croquettes=كروكيت مقلية بون
+Centrilo Torpedo Wrap=لفائف سنتريلو
+Fish-Fillet Toastie=توستي فيليه السمك
+Riverbird Crispygrill=شواء طائر النهر المقرمش
+Yapolta Veggie-Beans=فاصوليا خضار يابولتا
+Spicy Lambda Curry=كاري لامبدا الحارّ
+Colony 9 Special Stew=يخنة المستعمرة 9 الخاصة
+Agnus-Style Grilled Fish=سمك مشوي على طريقة أغنوس
+Kevesi Onigiri Set=مجموعة أونيغيري كيفيسية
+Frontier Mushroom Soup=شوربة فطر الحدود
+Sena's Power Protein Bowl=وعاء بروتين سينا القوي
+Lanz's Mega Meat Platter=صحن لانز الضخم للحوم
+Eunie's Healing Herbal Tea=شاي يوني العشبي الشافي
+Taion's Strategic Ration=حصة تايون الاستراتيجية
+Mio's Melodic Dessert=حلوى ميو اللحنية
+Noah's Traveler's Meal=وجبة نوا المسافر
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم السادس والخمسون: مصطلحات العلاقات والروابط (Relationship Terms - BDAT system.bdat)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- أنواع العلاقات (Relationship Types) ---
+Friends=أصدقاء
+Tension=توتر
+Worried about=قلق بشأن
+Source of anguish=مصدر الكرب
+Live true!=عِش بصدق!
+Fellow comrade=رفيق سلاح
+Aspires to be like=يطمح لأن يكون مثل
+Reliable leader=قائد موثوق
+Couple=زوجان
+Servant=خادم
+Helper=مساعد
+Bacon-saver=منقذ
+Married soldiers=جنود متزوجون
+Kindred spirit=روح مماثلة
+Mutual respect=احترام متبادل
+Childhood friends=أصدقاء الطفولة
+Bitter rivals=أعداء ألدّاء
+Sworn allies=حلفاء مُقسمون
+Teacher and student=معلم وتلميذ
+Comrades in arms=رفاق سلاح
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم السابع والخمسون: حوارات القصة الرئيسية - المشاهد المحورية (Main Story - Key Cutscenes)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- مشهد اكتشاف أوروبوروس (Ouroboros Discovery Scene) ---
+What... what is this power?=ما... ما هذه القوة؟
+Our bodies... they're merging?=أجسادنا... تندمج؟
+This is the power of Ouroboros. The power to change fate itself.=هذه قوة أوروبوروس. القوة لتغيير المصير نفسه.
+Keves and Agnus, united as one...=كيفيس وأغنوس، متحدتان كواحدة...
+We were supposed to be enemies. But this power... it's telling us otherwise.=كان من المفترض أن نكون أعداء. لكن هذه القوة... تخبرنا بالعكس.
+If we have this power, maybe we can end the war.=إذا كانت لدينا هذه القوة، ربما نستطيع إنهاء الحرب.
+The Flame Clocks... they stopped?=ساعات اللهب... توقفت؟
+Without the Flame Clocks, we don't need to fight anymore.=بدون ساعات اللهب، لسنا بحاجة للقتال بعد الآن.
+But Moebius won't let us go that easily.=لكن مويبيوس لن يتركنا بهذه السهولة.
+Then we'll fight Moebius. For everyone's freedom.=إذن سنقاتل مويبيوس. من أجل حرية الجميع.
+
+# --- مشهد الحقيقة (The Truth Revealed Scene) ---
+Aionios... this world was created by merging two others.=أيونيوس... هذا العالم أُنشئ بدمج عالمين آخرين.
+The two worlds were on a collision course. Origin was built to save them.=العالمان كانا في مسار تصادمي. الأوريجن بُني لإنقاذهما.
+But someone hijacked Origin. They created this endless cycle of war.=لكن أحدًا اختطف الأوريجن. أنشأوا هذه الدورة اللامتناهية من الحرب.
+Moebius feeds on the conflict. They need the war to continue.=مويبيوس يتغذى على الصراع. يحتاجون للحرب أن تستمر.
+Every soldier who dies... their life force fuels the system.=كل جندي يموت... قوة حياته تغذي النظام.
+The Flame Clocks measure how much life energy a colony has harvested.=ساعات اللهب تقيس مقدار طاقة الحياة التي حصدتها المستعمرة.
+Ten terms... that's all anyone gets. Ten terms to live and fight and die.=عشر دورات... هذا كل ما يحصل عليه أي أحد. عشر دورات ليعيش ويقاتل ويموت.
+But we're different now. We've broken free from the cycle.=لكننا مختلفون الآن. تحررنا من الدورة.
+We carry the hopes of everyone who came before us.=نحمل آمال كل من سبقونا.
+Let's make their sacrifice mean something.=لنجعل تضحيتهم ذات معنى.
+
+# --- مشهد مواجهة مويبيوس (Confronting Moebius Scene) ---
+So you've come, Ouroboros. How predictable.=إذن أتيتم، أوروبوروس. كم هذا متوقع.
+You think you can change anything? This world exists because of us.=تظنون أنكم تستطيعون تغيير أي شيء؟ هذا العالم موجود بسببنا.
+Without Moebius, there is no Aionios. Without war, there is no life.=بدون مويبيوس، لا يوجد أيونيوس. بدون حرب، لا توجد حياة.
+You're wrong! Life isn't about fighting and dying!=أنت مخطئ! الحياة ليست عن القتال والموت!
+People deserve to live on their own terms. To choose their own futures.=الناس يستحقون العيش بشروطهم الخاصة. أن يختاروا مستقبلهم بأنفسهم.
+Foolish children. You don't even understand what you're destroying.=أطفال حمقى. لا تفهمون حتى ما تدمرونه.
+Maybe not. But we know what we're fighting for.=ربما لا. لكننا نعرف لماذا نقاتل.
+For a world where people can live freely. Where they can grow old and be happy.=من أجل عالم يمكن للناس فيه العيش بحرية. حيث يمكنهم أن يكبروا ويكونوا سعداء.
+A world without Flame Clocks. Without terms. Without Moebius.=عالم بدون ساعات لهب. بدون دورات. بدون مويبيوس.
+Then come. Show me this "power of freedom" you speak of.=إذن تعالوا. أروني "قوة الحرية" هذه التي تتحدثون عنها.
+
+# --- مشهد الوداع النهائي (Final Farewell Scene) ---
+It's time. The two worlds need to separate.=حان الوقت. العالمان يحتاجان للانفصال.
+But that means... we'll be separated too?=لكن هذا يعني... سنُفرَّق نحن أيضًا؟
+Noah... Mio... This isn't goodbye. Not really.=نوا... ميو... هذا ليس وداعًا. ليس حقًا.
+Even if we're in different worlds, the time we spent together is real.=حتى لو كنا في عوالم مختلفة، الوقت الذي قضيناه معًا حقيقي.
+The memories we made... the bonds we forged... they'll last forever.=الذكريات التي صنعناها... الروابط التي كوّنّاها... ستدوم للأبد.
+I'll find you again. No matter how long it takes.=سأجدك مجددًا. مهما طال الوقت.
+Promise me. Promise me you'll keep living.=عدني. عدني أنك ستستمر بالعيش.
+I promise. And I'll keep playing... for you.=أعدك. وسأستمر بالعزف... من أجلك.
+The flute's melody... it connects us across worlds.=لحن الناي... يربطنا عبر العوالم.
+As long as we remember each other, we're never truly apart.=طالما نتذكر بعضنا، لن نفترق حقًا أبدًا.
+Goodbye, Aionios. And thank you... for everything.=وداعًا، أيونيوس. وشكرًا لك... على كل شيء.
+This isn't the end. It's a new beginning.=هذه ليست النهاية. إنها بداية جديدة.
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم الثامن والخمسون: حوارات القصة - الفصول المتقدمة (Story Dialogues - Advanced Chapters)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- الفصل الرابع: رحلة إلى المدينة (Chapter 4: Journey to the City) ---
+So this is the path to the City...=إذن هذا هو الطريق إلى المدينة...
+The Lost Numbers have been hiding here for generations.=الأرقام المفقودة تختبئ هنا منذ أجيال.
+It's hard to believe a whole settlement exists underground.=من الصعب تصديق أن مستوطنة بأكملها موجودة تحت الأرض.
+These people... they live without Flame Clocks?=هؤلاء الناس... يعيشون بدون ساعات اللهب؟
+They've found another way. A way to live freely.=لقد وجدوا طريقة أخرى. طريقة للعيش بحرية.
+If they can do it, so can we. So can everyone.=إذا استطاعوا فعلها، نستطيع نحن أيضًا. وكذلك الجميع.
+
+# --- الفصل الخامس: معركة الحصار (Chapter 5: The Siege Battle) ---
+They're coming! All forces, prepare for battle!=إنهم قادمون! جميع القوات، استعدوا للمعركة!
+We hold this line no matter what. The colony depends on us.=نحافظ على هذا الخط مهما حدث. المستعمرة تعتمد علينا.
+Moebius sent their strongest. They really want us dead.=مويبيوس أرسلوا أقوى ما لديهم. يريدوننا أمواتًا حقًا.
+But we have something they don't. We have something worth fighting for.=لكن لدينا شيء ليس لديهم. لدينا شيء يستحق القتال من أجله.
+Everyone, link up! It's Ouroboros time!=الجميع، ارتبطوا! حان وقت أوروبوروس!
+We won't let anyone else die today. Not on our watch.=لن ندع أحدًا آخر يموت اليوم. ليس في حراستنا.
+
+# --- الفصل السادس: كشف أصل العالم (Chapter 6: Origin of the World) ---
+Origin... the machine that was supposed to save both worlds.=الأوريجن... الآلة التي كان من المفترض أن تنقذ كلا العالمين.
+But instead, it became a prison. A cage for billions of souls.=لكن بدلًا من ذلك، أصبحت سجنًا. قفصًا لمليارات الأرواح.
+Z took control of Origin and created Moebius. He wanted this world to last forever.=Z سيطر على الأوريجن وأنشأ مويبيوس. أراد لهذا العالم أن يدوم للأبد.
+An eternal world built on suffering. That's not something we can accept.=عالم أبدي مبني على المعاناة. هذا شيء لا يمكننا قبوله.
+Even if the future is uncertain, it's better than an endless present of pain.=حتى لو كان المستقبل غير مؤكد، فهو أفضل من حاضر لا نهائي من الألم.
+Let's go. Let's reclaim Origin and set everyone free.=لنذهب. لنستعيد الأوريجن ونحرر الجميع.
+
+# --- الفصل السابع: المعركة النهائية (Chapter 7: The Final Battle) ---
+This is it. The heart of Origin.=هذا هو. قلب الأوريجن.
+Z is waiting for us inside. The source of everything.=Z ينتظرنا بالداخل. مصدر كل شيء.
+Are we ready for this? There's no turning back.=هل نحن مستعدون لهذا؟ لا عودة.
+I was born to be a soldier. To fight and die for Keves.=وُلدت لأكون جنديًا. لأقاتل وأموت من أجل كيفيس.
+But now I know there's more to life than that.=لكنني الآن أعرف أن هناك أكثر في الحياة من ذلك.
+We fight not because we have to, but because we choose to.=نحن نقاتل ليس لأننا مضطرون، بل لأننا نختار ذلك.
+For every person trapped in this cycle. For every life cut short.=من أجل كل شخص محبوس في هذه الدورة. من أجل كل حياة انتهت مبكرًا.
+For Noah. For Mio. For Lanz and Sena and Eunie and Taion.=من أجل نوا. من أجل ميو. من أجل لانز وسينا ويوني وتايون.
+For Riku and Manana. For everyone we've met along the way.=من أجل ريكو ومانانا. من أجل كل من قابلناهم في الطريق.
+Let's end this. Together.=لننهِ هذا. معًا.
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم التاسع والخمسون: حوارات القلب إلى القلب الموسعة (Extended Heart-to-Hearts - BDAT)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- نوا وميو: على ضفة النهر (Noah & Mio: By the Riverside) ---
+The water's so clear here. You can see all the way to the bottom.=الماء صافٍ جدًا هنا. يمكنك الرؤية حتى القاع.
+It reminds me of the river near Colony 9. We used to go there after missions.=يذكرني بالنهر قرب المستعمرة 9. كنا نذهب هناك بعد المهمات.
+Did you ever just... stop and watch the water flow?=هل سبق لك أن... توقفت وراقبت الماء يتدفق؟
+Sometimes. It helps me think. The music comes easier when I'm calm.=أحيانًا. يساعدني على التفكير. الموسيقى تأتي أسهل عندما أكون هادئًا.
+Play something for me? Something peaceful.=اعزف لي شيئًا؟ شيئًا هادئًا.
+For you? Always.=من أجلك؟ دائمًا.
+
+# --- لانز وسينا: تدريب (Lanz & Sena: Training) ---
+You call that a punch? Put your whole body into it!=تسمّين تلك لكمة؟ ضعي جسمك كله فيها!
+Like this?! How's THAT for putting my body into it?!=هكذا؟! كيف تلك لوضع جسمي كله فيها؟!
+Ow! Okay, maybe a little TOO much...=آخ! حسنًا، ربما أكثر من اللازم قليلًا...
+Hah! The mighty Lanz, taken down by one punch!=ها! لانز العظيم، أسقطته لكمة واحدة!
+You got me. But next time, I won't go easy on you.=أصبتني. لكن في المرة القادمة، لن أتساهل معك.
+We'll see about that, big guy.=سنرى بشأن ذلك، أيها الكبير.
+
+# --- يوني وتايون: حوار استراتيجي (Eunie & Taion: Strategic Discussion) ---
+Your plan has seventeen steps. SEVENTEEN. Can't you simplify it?=خطتك فيها سبع عشرة خطوة. سبع عشرة. ألا تستطيع تبسيطها؟
+Every step is necessary. If we skip even one—=كل خطوة ضرورية. إذا تخطينا حتى واحدة—
+The enemy's gonna move before we finish step three, Taion.=العدو سيتحرك قبل أن ننتهي من الخطوة الثالثة، تايون.
+Then we adapt. That's what the contingency plans are for.=إذن نتكيف. هذا ما خطط الطوارئ موجودة لأجله.
+Contingency plans? You have THOSE too?=خطط طوارئ؟ لديك تلك أيضًا؟
+Of course. Plans A through F, covering most possible scenarios.=بالطبع. الخطط من أ إلى و، تغطي معظم السيناريوهات الممكنة.
+...You're impossible. But I'm glad you're on our side.=...أنت مستحيل. لكنني سعيدة أنك في جانبنا.
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم الستون: حوارات الأبطال والقناصل (Hero & Consul Dialogues - Extended)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- حوارات أشيرا (Ashera's Dialogues) ---
+Fight me! I want to see what Ouroboros can really do!=قاتلوني! أريد أن أرى ما يمكن لأوروبوروس فعله حقًا!
+You think peace is the answer? Peace makes people weak.=تظنون أن السلام هو الجواب؟ السلام يجعل الناس ضعفاء.
+Maybe you're right. Maybe there's strength in not fighting.=ربما أنتم على حق. ربما هناك قوة في عدم القتال.
+I lived my whole life as a weapon. What am I without war?=عشت حياتي كلها كسلاح. ماذا أنا بدون الحرب؟
+You're Ashera. That's more than enough.=أنتِ أشيرا. هذا أكثر من كافٍ.
+
+# --- حوارات زيون (Zeon's Dialogues) ---
+Colony 9 is my home. I'll protect it with my life.=المستعمرة 9 هي بيتي. سأحميها بحياتي.
+The Flame Clock is gone, but our duty remains.=ساعة اللهب ذهبت، لكن واجبنا باقٍ.
+We fight now not for the clock, but for each other.=نقاتل الآن ليس من أجل الساعة، بل من أجل بعضنا البعض.
+Commander Vandham taught me what it means to lead.=القائد فاندام علمني ما يعني أن تقود.
+A leader doesn't just give orders. A leader protects. A leader inspires.=القائد لا يعطي أوامر فحسب. القائد يحمي. القائد يُلهم.
+
+# --- حوارات إتيل (Ethel's Dialogues) ---
+We were enemies once. Funny how things change.=كنا أعداءً ذات يوم. مضحك كيف تتغير الأمور.
+Cammuravi and I... we fought more times than I can count.=كاموراڤي وأنا... تقاتلنا مرات أكثر مما أستطيع عدّه.
+But in the end, we wanted the same thing. Freedom.=لكن في النهاية، أردنا نفس الشيء. الحرية.
+The best way to honor the fallen is to live. Really live.=أفضل طريقة لتكريم الذين سقطوا هي أن تعيش. تعيش حقًا.
+Every dawn I see is a gift they gave me.=كل فجر أراه هو هدية قدّموها لي.
+
+# --- حوارات كاموراڤي (Cammuravi's Dialogues) ---
+The flames of my resolve will never be extinguished.=لهيب عزيمتي لن ينطفئ أبدًا.
+Ethel... she was the worthiest opponent I ever faced.=إتيل... كانت أجدر خصم واجهته على الإطلاق.
+But now we fight side by side. And I wouldn't have it any other way.=لكن الآن نقاتل جنبًا إلى جنب. ولن أريدها بأي طريقة أخرى.
+Burn bright. Fight with everything you have. That is the way of Colony Gamma.=اشتعلوا بقوة. قاتلوا بكل ما لديكم. هذا هو طريق مستعمرة غاما.
+A warrior's true strength is measured by what they protect, not what they destroy.=قوة المحارب الحقيقية تُقاس بما يحمونه، لا بما يدمرونه.
+
+# --- حوارات فالدي (Valdi's Dialogues) ---
+If I can just adjust this gear ratio... there! Perfect.=لو أستطيع فقط ضبط نسبة التروس هذه... ها! مثالي.
+Levnises aren't just machines. They're partners.=الليفنيسات ليست مجرد آلات. إنها شركاء.
+Colony 30 might be small, but our engineering is second to none.=المستعمرة 30 قد تكون صغيرة، لكن هندستنا لا يُضاهيها أحد.
+I'll build something that can change the world. Just you watch.=سأبني شيئًا يمكنه تغيير العالم. فقط راقبوا.
+Every machine tells a story. You just have to listen.=كل آلة تروي قصة. عليك فقط أن تستمع.
+
+# --- حوارات القناصل (Consul Dialogues) ---
+You think you're free? You're just playing a different game.=تظنون أنكم أحرار؟ أنتم فقط تلعبون لعبة مختلفة.
+Moebius is eternal. You are fleeting. The math is simple.=مويبيوس أبدي. أنتم زائلون. الحساب بسيط.
+We were like you once. Full of hope. Full of dreams. It all fades.=كنا مثلكم ذات يوم. مليئين بالأمل. مليئين بالأحلام. كل شيء يتلاشى.
+Eternity is the only truth. Everything else is an illusion.=الأبدية هي الحقيقة الوحيدة. كل شيء آخر وهم.
+You'll understand someday. When you've lived long enough to see everything you love crumble.=ستفهمون يومًا ما. عندما تعيشون طويلًا بما يكفي لترون كل ما تحبونه ينهار.
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم الحادي والستون: حوارات ما بعد القصة والخاتمة (Post-Game & Ending Dialogues)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- ما بعد هزيمة Z (After Defeating Z) ---
+It's over. Z is gone. Moebius is finished.=انتهى. Z رحل. مويبيوس انتهى.
+The worlds are starting to separate. We don't have much time.=العوالم بدأت بالانفصال. ليس لدينا الكثير من الوقت.
+I don't want to say goodbye. Not yet. Not ever.=لا أريد أن أقول وداعًا. ليس بعد. ليس أبدًا.
+But this is what we fought for, isn't it? For the worlds to return to normal.=لكن هذا ما قاتلنا من أجله، أليس كذلك؟ لتعود العوالم إلى طبيعتها.
+Normal... I'm not sure I know what that means anymore.=طبيعي... لست متأكدًا أنني أعرف ماذا يعني ذلك بعد الآن.
+It means everyone gets to live their own life. Make their own choices.=يعني أن الجميع يحق لهم عيش حياتهم. اتخاذ خياراتهم.
+Then it was worth it. All of it.=إذن كان الأمر يستحق. كل شيء.
+See you on the other side. I know we'll meet again.=أراك على الجانب الآخر. أعرف أننا سنلتقي مجددًا.
+
+# --- حوارات أعضاء الفريق الأخيرة (Final Party Member Lines) ---
+Noah... thank you for showing me there's more to life than fighting.=نوا... شكرًا لأنك أريتني أن هناك أكثر في الحياة من القتال.
+Mio... your music gave us strength when we needed it most.=ميو... موسيقاكِ أعطتنا قوة عندما احتجنا إليها أكثر ما يمكن.
+Lanz... you carried us on your back more times than we can count.=لانز... حملتنا على ظهرك مرات أكثر مما نستطيع عدّها.
+Sena... your kindness was the light that guided us through the darkness.=سينا... لطفكِ كان النور الذي أرشدنا عبر الظلام.
+Eunie... your honesty kept us grounded when everything was falling apart.=يوني... صراحتكِ أبقتنا ثابتين عندما كان كل شيء ينهار.
+Taion... your plans saved our lives more than once.=تايون... خططك أنقذت حياتنا أكثر من مرة.
+Riku... your wisdom went far beyond your small stature, mo.=ريكو... حكمتك تجاوزت بكثير قامتك الصغيرة، مو.
+Manana... you fed our bodies and our souls, desu mo.=مانانا... أطعمتِ أجسادنا وأرواحنا، ديسو مو.
+
+# --- الجمل الأخيرة (Final Lines) ---
+The worlds are separating now. This is truly goodbye.=العوالم تنفصل الآن. هذا وداع حقيقي.
+No matter what happens, I'll never forget you. Any of you.=مهما حدث، لن أنساكم أبدًا. أيًّا منكم.
+We walked this path together. That's something no one can take away.=مشينا هذا الطريق معًا. هذا شيء لا يمكن لأحد أن يسلبه.
+Until we meet again... live your lives to the fullest.=إلى أن نلتقي مجددًا... عيشوا حياتكم بالكامل.
+I will. And I'll tell the story of what happened here. So no one forgets.=سأفعل. وسأروي قصة ما حدث هنا. حتى لا ينسى أحد.
+The future is ours now. Let's make it a good one.=المستقبل لنا الآن. لنجعله جيدًا.
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم الثاني والستون: حوارات استكشاف المناطق (Region Exploration Dialogues)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- منطقة أيتيا (Aetia Region) ---
+The Aetia region stretches as far as the eye can see.=منطقة أيتيا تمتد بقدر ما يمكن للعين أن ترى.
+Colony 9 is somewhere in this direction. Let's keep moving.=المستعمرة 9 في مكان ما في هذا الاتجاه. لنستمر بالتحرك.
+These plains remind me of home. Before everything changed.=هذه السهول تذكرني بالوطن. قبل أن يتغير كل شيء.
+The wind carries the scent of wildflowers. It's almost peaceful.=الرياح تحمل عبير الزهور البرية. تكاد تكون سلمية.
+Aetia used to be a major battleground. Now look at it.=أيتيا كانت ساحة معركة رئيسية. انظروا إليها الآن.
+
+# --- منطقة فورنيس (Fornis Region) ---
+The Fornis desert is brutal. Stay hydrated, everyone.=صحراء فورنيس قاسية. ابقوا مُرطَّبين يا جماعة.
+Sand as far as the eye can see. And monsters hiding beneath it.=رمال بقدر ما يمكن للعين أن ترى. ووحوش تختبئ تحتها.
+The heat is getting to me. When can we find shade?=الحرارة تؤثر عليّ. متى يمكننا إيجاد ظل؟
+The oasis! Thank goodness. I thought we'd never find water.=الواحة! الحمد لله. ظننت أننا لن نجد ماءً أبدًا.
+Fornis might be harsh, but the sunsets here are beautiful.=فورنيس قد تكون قاسية، لكن غروب الشمس هنا جميل.
+
+# --- منطقة بينتلاس (Pentelas Region) ---
+Pentelas is Agnus territory. We should be careful.=بينتلاس هي أرض أغنوس. يجب أن نكون حذرين.
+The architecture here is completely different from Keves.=العمارة هنا مختلفة تمامًا عن كيفيس.
+Agnus uses ether technology in ways Keves never imagined.=أغنوس تستخدم تقنية الأثير بطرق لم تتخيلها كيفيس أبدًا.
+The soldiers here fight differently too. More magic-focused.=الجنود هنا يقاتلون بشكل مختلف أيضًا. أكثر تركيزًا على السحر.
+We're all from the same world, when you think about it.=كلنا من نفس العالم، عندما تفكر في الأمر.
+
+# --- منطقة كاديينسيا (Cadensia Region) ---
+The ocean stretches endlessly before us. It's breathtaking.=المحيط يمتد أمامنا بلا نهاية. إنه يخطف الأنفاس.
+Cadensia... the region closest to Origin.=كادينسيا... المنطقة الأقرب إلى الأوريجن.
+You can see Origin from here. That massive structure in the sky.=يمكنك رؤية الأوريجن من هنا. ذلك الهيكل الضخم في السماء.
+The final battle awaits us beyond those waves.=المعركة النهائية تنتظرنا وراء تلك الأمواج.
+Let's take in this view one last time. We might not get another chance.=لننظر إلى هذا المنظر مرة أخيرة. قد لا نحصل على فرصة أخرى.
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم الثالث والستون: أسماء وحوش ومواقع إضافية (Additional Monsters & Locations - BDAT)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- أسماء وحوش إضافية (Additional Monster Names) ---
+Rogal Vvarga=روغال فارغا
+Rox Vvarga=روكس فارغا
+Obster Bunnit=أوبستر بانيت
+Testudo Scout=كشّاف تيستودو
+Colnicas Ropl=كولنيكاس روبل
+Bemot Ropl=بيموت روبل
+Rockheart Ropl=روبل قلب الصخر
+Odolera Ropl=أودوليرا روبل
+Automaton Sentry=حارس الأوتوماتون
+Sky Rhogul=روغول السماء
+Arogan Rhogul=أروغان روغول
+Brute Rhogul=روغول الوحشي
+Smart Rhogul=روغول الذكي
+Brute Ansel=أنسل الوحشي
+Scarred Ansel=أنسل المُنَدَّب
+Venomtail Skeeter=سكيتر ذيل السم
+Ironclad Tirkin=تيركين المُدَرَّع
+Flamescale Armu=أرمو حراشف اللهب
+Frostbite Krabble=كرابل عضة الصقيع
+Thunderhorn Gogol=غوغول قرن الرعد
+
+# --- مواقع إضافية (Additional Location Names) ---
+Travalga Bridge=جسر ترافالغا
+Basverg Belfry=برج باسفيرغ
+Prison Terrace=شرفة السجن
+The Dragongate=بوابة التنين
+Moram Bridge=جسر مورام
+Great Conté Falls=شلالات كونتيه العظيمة
+Yzana Plains=سهول يزانا
+Reebe Highlands=مرتفعات ريبي
+Pedesto Valley Floor=أرضية وادي بيديستو
+Invidian Tunnels=أنفاق إنفيديا
+Morukuna Wildwood=غابة موروكونا البرية
+Captocorn Ridge=حافة كابتوكورن
