@@ -1615,3 +1615,93 @@ Ether Core=نواة أثير
 Ancient Component=مكوّن قديم
 Rusty Part=قطعة صدئة
 Polished Part=قطعة مصقولة
+# ═══════════════════════════════════════════════════
+# نظام ألفة المستعمرات (Colony Affinity System)
+# ═══════════════════════════════════════════════════
+Colony Affinity=ألفة المستعمرة
+Affinity=الألفة
+Affinity Level=مستوى الألفة
+Affinity Chart=مخطط الألفة
+Colony Development=تطوير المستعمرة
+Colony Request=طلب المستعمرة
+Colony Trade=تجارة المستعمرة
+# ─────────────────────────────────────────────────
+# مستويات الألفة (Affinity Levels)
+# ─────────────────────────────────────────────────
+Affinity Level 1=مستوى الألفة 1
+Affinity Level 2=مستوى الألفة 2
+Affinity Level 3=مستوى الألفة 3
+Affinity Level 4=مستوى الألفة 4
+Affinity Level 5=مستوى الألفة 5
+Star 1=نجمة 1
+Star 2=نجمتان
+Star 3=3 نجوم
+Star 4=4 نجوم
+Star 5=5 نجوم
+Max Affinity=أقصى ألفة
+# ─────────────────────────────────────────────────
+# ألفة المستعمرات الفردية (Individual Colony Affinity)
+# ─────────────────────────────────────────────────
+Colony 9 Affinity=ألفة المستعمرة 9
+Colony 4 Affinity=ألفة المستعمرة 4
+Colony Gamma Affinity=ألفة المستعمرة غاما
+Colony Tau Affinity=ألفة المستعمرة تاو
+Colony Lambda Affinity=ألفة المستعمرة لامدا
+Colony 30 Affinity=ألفة المستعمرة 30
+Colony 15 Affinity=ألفة المستعمرة 15
+Colony 11 Affinity=ألفة المستعمرة 11
+Colony Iota Affinity=ألفة المستعمرة يوتا
+Colony 0 Affinity=ألفة المستعمرة 0
+Colony 5 Affinity=ألفة المستعمرة 5
+Colony 7 Affinity=ألفة المستعمرة 7
+City Affinity=ألفة المدينة
+# ─────────────────────────────────────────────────
+# طرق رفع الألفة (Ways to Raise Affinity)
+# ─────────────────────────────────────────────────
+Complete Quests=إكمال المهمات
+Defeat Enemies=هزيمة الأعداء
+Liberate Colony=تحرير المستعمرة
+Discussion Topic=موضوع نقاش
+Colony Discussion=نقاش المستعمرة
+Deliver Items=تسليم العناصر
+Collectopaedia Completion=إكمال موسوعة المقتنيات
+Side Story=قصة جانبية
+Hero Quest=مهمة بطل
+Standard Quest=مهمة عادية
+# ─────────────────────────────────────────────────
+# مكافآت الألفة (Affinity Rewards)
+# ─────────────────────────────────────────────────
+Affinity Reward=مكافأة الألفة
+Unlocked Feature=ميزة مفتوحة
+New Item Available=عنصر جديد متاح
+Colony Shop Upgrade=ترقية متجر المستعمرة
+New Discussion=نقاش جديد
+New Quest Available=مهمة جديدة متاحة
+Recipe Unlocked=وصفة مفتوحة
+Gem Recipe Unlocked=وصفة جوهرة مفتوحة
+Hero Unlocked=بطل مفتوح
+Class Unlocked=فصل مفتوح
+Accessory Unlocked=إكسسوار مفتوح
+Special Reward=مكافأة خاصة
+Colony Equipment=معدات المستعمرة
+Upgraded Shop=متجر مُرقّى
+Expanded Inventory=مخزون موسّع
+# ─────────────────────────────────────────────────
+# مصطلحات تحرير المستعمرات (Colony Liberation Terms)
+# ─────────────────────────────────────────────────
+Flame Clock Destruction=تدمير ساعة اللهب
+Liberation=التحرير
+Liberated Colony=مستعمرة محررة
+Free Colony=مستعمرة حرة
+Colony Leader=قائد المستعمرة
+Colony Soldier=جندي المستعمرة
+Colony Resident=مقيم المستعمرة
+Ferronis=فيرونيس
+Deactivated Ferronis=فيرونيس معطّل
+Colony Conflict=صراع المستعمرة
+Kevesi Colony=مستعمرة كيفيسية
+Agnian Colony=مستعمرة أغنوسية
+Off-Seer=مُنشد الوداع
+Off-Seeing=إنشاد الوداع
+Homecoming=العودة إلى الوطن
+Sending=التوديع
