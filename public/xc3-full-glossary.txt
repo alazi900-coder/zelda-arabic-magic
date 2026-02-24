@@ -16829,3 +16829,372 @@ And Manana love all of you. Every single one.=ومانانا تحب كلكم. ك
 # --- نهاية حوارات الطعام والوصفات ---
 # End of Cooking Dialogues & Recipes
 # Total sections: 201-212 (Cooking & Recipes)
+
+# =============================================
+# القسم 213: نصائح التحميل - أساسيات القتال
+# =============================================
+
+# --- Combat Basics ---
+Press the A button near an enemy to auto-attack.=اضغط زر A بالقرب من عدو للهجوم التلقائي.
+Arts become available as you auto-attack. Use them to deal extra damage.=الفنون تصبح متاحة أثناء الهجوم التلقائي. استخدمها لإلحاق ضرر إضافي.
+Position yourself carefully! Some Arts deal more damage from the side or back.=ضع نفسك بعناية! بعض الفنون تلحق ضرراً أكبر من الجانب أو الخلف.
+Canceling an Art into another Art increases damage and fills the Chain Attack gauge.=إلغاء فن إلى فن آخر يزيد الضرر ويملأ مقياس الهجوم المتسلسل.
+A cancel occurs when you use an Art right as the previous one connects.=يحدث الإلغاء عندما تستخدم فناً فور اتصال الفن السابق.
+Master Arts can be set from a different class than your current one.=الفنون الرئيسية يمكن تعيينها من فئة مختلفة عن فئتك الحالية.
+Combine Arts from different classes to create powerful combos.=ادمج الفنون من فئات مختلفة لإنشاء توليفات قوية.
+
+# --- Roles ---
+Attackers deal the most damage but draw less aggro.=المهاجمون يلحقون أكبر ضرر لكن يجذبون عداوة أقل.
+Defenders draw enemy attention and protect the party.=المدافعون يجذبون انتباه العدو ويحمون الفريق.
+Healers restore HP and provide support effects.=المعالجون يستعيدون نقاط الصحة ويوفرون تأثيرات دعم.
+A balanced party with all three roles is recommended.=يُنصح بفريق متوازن يضم الأدوار الثلاثة.
+Each character can change their class at any time outside of battle.=كل شخصية تستطيع تغيير فئتها في أي وقت خارج المعركة.
+
+# =============================================
+# القسم 214: نصائح التحميل - نظام الفئات
+# =============================================
+
+# --- Class System ---
+Gain CP by defeating enemies to level up your class.=اكتسب نقاط الفئة بهزيمة الأعداء لترقية فئتك.
+Each class has a maximum rank of 20.=كل فئة لديها رتبة قصوى من 20.
+Reaching rank 10 in a class unlocks its Skills for use with other classes.=الوصول للرتبة 10 في فئة يفتح مهاراتها للاستخدام مع فئات أخرى.
+Reaching rank 20 in a class unlocks its Master Art for use with other classes.=الوصول للرتبة 20 في فئة يفتح فنها الرئيسي للاستخدام مع فئات أخرى.
+Try switching classes frequently to unlock a wide range of Arts and Skills.=جرب تبديل الفئات بشكل متكرر لفتح مجموعة واسعة من الفنون والمهارات.
+Hero characters join with a unique class that can be inherited by the party.=شخصيات الأبطال تنضم بفئة فريدة يمكن توريثها للفريق.
+Some classes are better suited for certain situations.=بعض الفئات أكثر ملاءمة لمواقف معينة.
+
+# =============================================
+# القسم 215: نصائح التحميل - الإنترلينك والأوروبوروس
+# =============================================
+
+# --- Interlink & Ouroboros ---
+When the Interlink gauge is full, two characters can merge into an Ouroboros form.=عندما يمتلئ مقياس الإنترلينك، شخصيتان يمكنهما الاندماج في شكل أوروبوروس.
+Ouroboros forms are extremely powerful but have a time limit.=أشكال أوروبوروس قوية للغاية لكن لها حد زمني.
+Each pair has two Ouroboros forms. Switch between them for different abilities.=كل زوج لديه شكلان أوروبوروس. بدّل بينهما لقدرات مختلفة.
+The Interlink gauge fills faster when pair members fight near each other.=مقياس الإنترلينك يمتلئ أسرع عندما يقاتل أعضاء الزوج بالقرب من بعضهم.
+Ouroboros Arts can turn the tide of difficult battles.=فنون أوروبوروس يمكن أن تقلب موازين المعارك الصعبة.
+Upgrade Ouroboros abilities using the Soul Tree.=طوّر قدرات أوروبوروس باستخدام شجرة الروح.
+The Soul Tree uses SP gained from battles and quests.=شجرة الروح تستخدم نقاط الروح المكتسبة من المعارك والمهام.
+Each node on the Soul Tree provides a permanent boost to your Ouroboros form.=كل عقدة في شجرة الروح توفر تعزيزاً دائماً لشكل أوروبوروس.
+
+# =============================================
+# القسم 216: نصائح التحميل - الهجوم المتسلسل
+# =============================================
+
+# --- Chain Attacks ---
+Fill the Chain Attack gauge by fighting enemies and canceling Arts.=املأ مقياس الهجوم المتسلسل بقتال الأعداء وإلغاء الفنون.
+Press + to initiate a Chain Attack when the gauge is full.=اضغط + لبدء هجوم متسلسل عندما يمتلئ المقياس.
+During a Chain Attack, select characters in order to build TP.=خلال الهجوم المتسلسل، اختر الشخصيات بالترتيب لبناء نقاط التكتيك.
+Reaching 100 TP completes an order and allows another round.=الوصول إلى 100 نقطة تكتيك يكمل أمراً ويسمح بجولة أخرى.
+Exceeding 150 TP triggers a Brave Order for massive bonus damage.=تجاوز 150 نقطة تكتيك يطلق أمراً شجاعاً لضرر إضافي هائل.
+Characters with a high TP rating are best used first in a chain.=الشخصيات ذات تقييم نقاط تكتيك عالي يُفضل استخدامها أولاً في السلسلة.
+The more rounds you complete, the higher the damage multiplier becomes.=كلما أكملت جولات أكثر، كلما زاد مضاعف الضرر.
+Ouroboros orders during Chain Attacks deal devastating damage.=أوامر أوروبوروس خلال الهجمات المتسلسلة تلحق ضرراً مدمراً.
+Chain Attacks are the key to defeating powerful Unique Monsters.=الهجمات المتسلسلة هي المفتاح لهزيمة الوحوش الفريدة القوية.
+
+# =============================================
+# القسم 217: نصائح التحميل - الاستكشاف
+# =============================================
+
+# --- Exploration ---
+Rest at Camps to cook meals that provide temporary stat boosts.=استرح في المخيمات لطبخ وجبات توفر تعزيزات مؤقتة للإحصائيات.
+Landmarks serve as fast travel points once discovered.=المعالم تعمل كنقاط انتقال سريع بمجرد اكتشافها.
+Secret Areas contain rare treasure and powerful enemies.=المناطق السرية تحتوي على كنوز نادرة وأعداء أقوياء.
+Collectibles sparkle on the ground. Pick them up for crafting and quests.=المقتنيات تتلألأ على الأرض. التقطها للصناعة والمهام.
+Use the Skip Travel menu to quickly return to visited locations.=استخدم قائمة الانتقال السريع للعودة بسرعة إلى المواقع المزارة.
+Unique Monsters are marked with a special icon. They are very powerful.=الوحوش الفريدة معلّمة بأيقونة خاصة. إنها قوية جداً.
+Some areas are only accessible after progressing the main story.=بعض المناطق يمكن الوصول إليها فقط بعد التقدم في القصة الرئيسية.
+Nopon Coins come in two types: Silver and Gold. Gold coins are rarer.=عملات النوبون نوعان: فضية وذهبية. العملات الذهبية أندر.
+Use Nopon Coins to craft Gems or exchange for rare items.=استخدم عملات النوبون لصناعة الأحجار الكريمة أو استبدالها بأغراض نادرة.
+Ether Channels connect different regions. Use them to reach new areas.=قنوات الأثير تربط مناطق مختلفة. استخدمها للوصول إلى مناطق جديدة.
+
+# =============================================
+# القسم 218: نصائح التحميل - المستعمرات وساعة اللهب
+# =============================================
+
+# --- Colonies & Flame Clocks ---
+Liberating a Colony destroys its Flame Clock and frees its soldiers.=تحرير مستعمرة يدمر ساعة لهبها ويحرر جنودها.
+Liberated Colonies offer side quests, shops, and rest spots.=المستعمرات المحررة تقدم مهاماً جانبية، متاجر، ونقاط راحة.
+Raise a Colony's Affinity by completing quests and helping its people.=ارفع ألفة المستعمرة بإكمال المهام ومساعدة سكانها.
+Higher Colony Affinity unlocks new quests and rewards.=ألفة المستعمرة الأعلى تفتح مهاماً ومكافآت جديدة.
+Some Colonies specialize in certain goods or services.=بعض المستعمرات تتخصص في سلع أو خدمات معينة.
+Flame Clock energy was used to sustain soldiers' lives.=طاقة ساعة اللهب كانت تُستخدم لإدامة حياة الجنود.
+Without the Flame Clock, soldiers must learn to live naturally.=بدون ساعة اللهب، يجب على الجنود تعلم العيش طبيعياً.
+Ferronis are mobile fortresses that house each Colony.=الفيرونيس حصون متحركة تؤوي كل مستعمرة.
+Each Colony has a Commander who leads its soldiers.=كل مستعمرة لها قائد يقود جنودها.
+
+# =============================================
+# القسم 219: نصائح التحميل - الأحجار الكريمة والتجهيزات
+# =============================================
+
+# --- Gems & Equipment ---
+Gems provide passive stat bonuses when equipped.=الأحجار الكريمة توفر تعزيزات إحصائية سلبية عند تجهيزها.
+Craft Gems at rest spots using materials collected from enemies and the field.=اصنع الأحجار الكريمة في نقاط الراحة باستخدام مواد مجمعة من الأعداء والميدان.
+Higher-rank Gems require rarer materials.=الأحجار الكريمة الأعلى رتبة تتطلب مواد أندر.
+Each character can equip up to three Gems at once.=كل شخصية تستطيع تجهيز حتى ثلاثة أحجار كريمة في وقت واحد.
+Accessories provide additional bonuses and can be found or purchased.=الإكسسوارات توفر تعزيزات إضافية ويمكن العثور عليها أو شراؤها.
+Some Accessories are only available from specific Colony shops.=بعض الإكسسوارات متاحة فقط من متاجر مستعمرات محددة.
+Match your Gems and Accessories to complement your class role.=طابق أحجارك الكريمة وإكسسواراتك لتكمل دور فئتك.
+Nopon Coins can substitute for missing materials when crafting Gems.=عملات النوبون يمكن أن تحل محل المواد المفقودة عند صناعة الأحجار الكريمة.
+
+# =============================================
+# القسم 220: نصائح التحميل - مُنشد الوداع
+# =============================================
+
+# --- Off-Seeing ---
+Off-Seers play a melody to send the fallen to their rest.=مُنشدو الوداع يعزفون لحناً لإرسال الساقطين إلى راحتهم.
+Noah is the Off-Seer for Keves. He plays the flute.=نوح مُنشد وداع كيفس. يعزف الناي.
+Mio is the Off-Seer for Agnus. She also plays the flute.=ميو مُنشدة وداع أغنوس. هي أيضاً تعزف الناي.
+Off-Seeing is a sacred duty respected by both sides of the war.=إنشاد الوداع واجب مقدس يحترمه كلا طرفي الحرب.
+The melody carries the fallen's life force back into the cycle.=اللحن يحمل قوة حياة الساقطين عائداً إلى الدورة.
+Even enemies deserve to be sent off properly.=حتى الأعداء يستحقون أن يُرسلوا بشكل لائق.
+May your flames return to the cycle of life.=عسى أن تعود نيرانكم إلى دورة الحياة.
+An Off-Seer's flute can be heard across great distances.=ناي مُنشد الوداع يمكن سماعه عبر مسافات بعيدة.
+
+# =============================================
+# القسم 221: نصائح التحميل - عالم أيونيوس
+# =============================================
+
+# --- World of Aionios ---
+Aionios is a vast world where two nations wage an eternal war.=أيونيوس عالم شاسع حيث أمتان تخوضان حرباً أبدية.
+Keves specializes in mechanical weapons and technology.=كيفس تتخصص في الأسلحة الميكانيكية والتقنية.
+Agnus excels in ether-based magic and abilities.=أغنوس تتفوق في السحر والقدرات القائمة على الأثير.
+Soldiers are born from Cradles and live for only ten terms.=الجنود يُولدون من المهود ويعيشون لعشر فترات فقط.
+A term is roughly equivalent to one year of life.=الفترة تعادل تقريباً سنة واحدة من الحياة.
+Soldiers who reach their tenth term undergo the Homecoming ceremony.=الجنود الذين يبلغون فترتهم العاشرة يخضعون لحفل العودة.
+The truth about Homecoming is not what soldiers are told.=حقيقة العودة ليست ما يُقال للجنود.
+Moebius are the true rulers of Aionios, manipulating the war from the shadows.=ميبيوس هم الحكام الحقيقيون لأيونيوس، يتلاعبون بالحرب من الظلال.
+The City is a hidden settlement where people live natural lives.=المدينة مستوطنة مخفية حيث يعيش الناس حياة طبيعية.
+
+# =============================================
+# القسم 222: رسائل شاشة العنوان والنظام
+# =============================================
+
+# --- Title & System ---
+Press any button to start.=اضغط أي زر للبدء.
+New Game=لعبة جديدة
+Continue=متابعة
+Load Game=تحميل اللعبة
+Options=الخيارات
+Saving... Do not turn off the power.=جارٍ الحفظ... لا تقم بإيقاف تشغيل الجهاز.
+Save complete.=اكتمل الحفظ.
+Load complete.=اكتمل التحميل.
+Are you sure you want to overwrite this save file?=هل أنت متأكد أنك تريد الكتابة فوق ملف الحفظ هذا؟
+Yes=نعم
+No=لا
+Return to Title Screen?=العودة إلى شاشة العنوان؟
+All unsaved progress will be lost.=كل التقدم غير المحفوظ سيُفقد.
+Auto-save is enabled.=الحفظ التلقائي مُفعّل.
+Game saved automatically.=تم حفظ اللعبة تلقائياً.
+
+# --- قوائم النظام ---
+System Settings=إعدادات النظام
+Display Settings=إعدادات العرض
+Audio Settings=إعدادات الصوت
+Control Settings=إعدادات التحكم
+Language Settings=إعدادات اللغة
+Brightness=السطوع
+Adjust brightness so the logo is barely visible.=اضبط السطوع بحيث يكون الشعار بالكاد مرئياً.
+Camera Speed=سرعة الكاميرا
+Invert Camera=عكس الكاميرا
+Subtitles=الترجمة
+Subtitle Size=حجم الترجمة
+BGM Volume=مستوى صوت الموسيقى
+SFX Volume=مستوى صوت المؤثرات
+Voice Volume=مستوى صوت الأصوات
+Minimap=الخريطة المصغرة
+Rotate Minimap=تدوير الخريطة المصغرة
+Show Enemy Info=إظهار معلومات العدو
+Show Damage Numbers=إظهار أرقام الضرر
+Battle Speed=سرعة المعركة
+
+# =============================================
+# القسم 223: رسائل الشاشة - التحذيرات والإشعارات
+# =============================================
+
+# --- Warnings ---
+Warning: This area contains high-level enemies.=تحذير: هذه المنطقة تحتوي على أعداء بمستوى عالٍ.
+You cannot enter this area yet.=لا تستطيع دخول هذه المنطقة بعد.
+A powerful enemy blocks the path ahead.=عدو قوي يسد الطريق أمامك.
+Your party has been wiped out.=تم القضاء على فريقك.
+Retry from last checkpoint?=إعادة المحاولة من آخر نقطة تفتيش؟
+Retry=إعادة المحاولة
+Return to Title=العودة للعنوان
+You do not have enough materials.=لا تملك مواد كافية.
+Inventory is full.=المخزون ممتلئ.
+Cannot equip this item.=لا تستطيع تجهيز هذا الغرض.
+This skill is already equipped.=هذه المهارة مجهّزة بالفعل.
+Maximum number of Gems reached.=تم بلوغ العدد الأقصى من الأحجار الكريمة.
+
+# --- Notifications ---
+New quest available.=مهمة جديدة متاحة.
+Quest complete!=اكتملت المهمة!
+Objective updated.=تم تحديث الهدف.
+New area discovered!=تم اكتشاف منطقة جديدة!
+Landmark discovered!=تم اكتشاف معلم!
+Secret Area discovered!=تم اكتشاف منطقة سرية!
+Level up!=ارتقاء مستوى!
+Class rank up!=ارتقاء رتبة الفئة!
+New Art learned!=تم تعلم فن جديد!
+New Skill learned!=تم تعلم مهارة جديدة!
+Affinity increased with Colony.=زادت الألفة مع المستعمرة.
+Hero joined the party!=البطل انضم للفريق!
+New class available!=فئة جديدة متاحة!
+Ouroboros ability unlocked!=قدرة أوروبوروس فُتحت!
+Soul Tree node activated.=عقدة شجرة الروح فُعّلت.
+Gem crafted successfully.=تم صناعة الحجر الكريم بنجاح.
+Accessory obtained.=تم الحصول على إكسسوار.
+Unique Monster defeated!=تم هزيمة وحش فريد!
+Achievement unlocked!=إنجاز فُتح!
+Challenge complete!=التحدي اكتمل!
+
+# =============================================
+# القسم 224: رسائل المعركة
+# =============================================
+
+# --- Battle Messages ---
+Battle Start!=بداية المعركة!
+Victory!=انتصار!
+Bonus EXP earned.=تم كسب خبرة إضافية.
+Chain Attack!=هجوم متسلسل!
+Interlink!=إنترلينك!
+Ouroboros, engage!=أوروبوروس، اشتبك!
+Interlink time is running out!=وقت الإنترلينك ينفد!
+Returning to normal form.=العودة إلى الشكل الطبيعي.
+Brave Order!=أمر شجاع!
+Order complete!=الأمر اكتمل!
+Amazing!=مذهل!
+Incredible combo!=توليفة مذهلة!
+Critical hit!=ضربة حرجة!
+Weak point struck!=نقطة ضعف أُصيبت!
+Enemy toppled!=العدو سقط!
+Enemy launched!=العدو أُطلق!
+Enemy dazed!=العدو مذهول!
+Enemy burst!=العدو انفجر!
+Break!=كسر!
+Topple!=إسقاط!
+Launch!=إطلاق!
+Smash!=تحطيم!
+Daze!=ذهول!
+Burst!=انفجار!
+Aggro drawn!=العداوة جُذبت!
+Healing pulse!=نبض الشفاء!
+Shield activated!=الدرع فُعّل!
+Power charge!=شحن القوة!
+Talent Art ready!=فن الموهبة جاهز!
+Party gauge full!=مقياس الفريق ممتلئ!
+Reinforcements incoming!=تعزيزات قادمة!
+The enemy is enraged!=العدو غاضب!
+Watch out! Powerful attack incoming!=احذر! هجوم قوي قادم!
+
+# =============================================
+# القسم 225: رسائل القوائم والواجهة
+# =============================================
+
+# --- Menu Messages ---
+Party=الفريق
+Characters=الشخصيات
+Classes=الفئات
+Arts=الفنون
+Skills=المهارات
+Gems=الأحجار الكريمة
+Accessories=الإكسسوارات
+Equipment=التجهيزات
+Items=الأغراض
+Collectibles=المقتنيات
+Quests=المهام
+Side Quests=المهام الجانبية
+Hero Quests=مهام الأبطال
+Colony Quests=مهام المستعمرات
+Affinity Chart=مخطط الألفة
+Soul Tree=شجرة الروح
+Interlink=الإنترلينك
+System=النظام
+Save=حفظ
+Load=تحميل
+Event Theater=مسرح الأحداث
+Sound Player=مشغّل الصوت
+Map=الخريطة
+Skip Travel=الانتقال السريع
+Tutorials=الدروس التعليمية
+Tips=النصائح
+Colony Status=حالة المستعمرة
+Collectopaedia=موسوعة المقتنيات
+Nopon Coins=عملات النوبون
+Play Time=وقت اللعب
+Party Level=مستوى الفريق
+Current Objective=الهدف الحالي
+Rest=الراحة
+Cook=الطبخ
+Craft Gems=صناعة الأحجار الكريمة
+Discuss=المناقشة
+Level Up=رفع المستوى
+Change Class=تغيير الفئة
+Change Equipment=تغيير التجهيزات
+View Skills=عرض المهارات
+Set Arts=تعيين الفنون
+Set Master Arts=تعيين الفنون الرئيسية
+Set Skills=تعيين المهارات
+
+# =============================================
+# القسم 226: نصائح التحميل - نصائح متقدمة
+# =============================================
+
+# --- Advanced Tips ---
+Enemies with a crown icon are Unique Monsters. Approach with caution.=الأعداء بأيقونة تاج هم وحوش فريدة. اقترب بحذر.
+Some Unique Monsters only appear at certain times of day.=بعض الوحوش الفريدة تظهر فقط في أوقات معينة من اليوم.
+Weather affects battle conditions. Rain boosts Water Arts damage.=الطقس يؤثر على ظروف المعركة. المطر يعزز ضرر فنون الماء.
+Night-time enemies are often stronger than daytime ones.=أعداء الليل غالباً أقوى من أعداء النهار.
+Bonus EXP can be spent at rest spots to level up safely.=الخبرة الإضافية يمكن إنفاقها في نقاط الراحة للارتقاء بأمان.
+This allows you to control your level and avoid becoming too powerful.=هذا يسمح لك بالتحكم بمستواك وتجنب أن تصبح قوياً جداً.
+Side quests reward Affinity, items, and sometimes new Heroes.=المهام الجانبية تكافئ بالألفة، أغراض، وأحياناً أبطال جدد.
+Talk to NPCs with a "!" icon above their heads for new quests.=تحدث مع الشخصيات غير اللاعبة بأيقونة "!" فوق رؤوسها لمهام جديدة.
+Blue "?" icons indicate standard quests. Gold "!" icons indicate important quests.=أيقونات "?" الزرقاء تشير لمهام عادية. أيقونات "!" الذهبية تشير لمهام مهمة.
+Completing all of a Colony's quests unlocks special rewards.=إكمال جميع مهام مستعمرة يفتح مكافآت خاصة.
+The Collectopaedia rewards you for gathering sets of collectibles.=موسوعة المقتنيات تكافئك على جمع مجموعات من المقتنيات.
+Fast travel is unlocked by discovering landmarks and rest spots.=الانتقال السريع يُفتح باكتشاف المعالم ونقاط الراحة.
+You can change the time of day at any rest spot.=تستطيع تغيير وقت اليوم في أي نقطة راحة.
+Some quests require specific weather conditions to progress.=بعض المهام تتطلب ظروف طقس محددة للتقدم.
+
+# =============================================
+# القسم 227: رسائل الحوار العامة المتكررة
+# =============================================
+
+# --- Common Dialogue Prompts ---
+What should we do?=ماذا يجب أن نفعل؟
+Let's go.=هيا بنا.
+Wait.=انتظروا.
+Look out!=احترسوا!
+Over here!=هنا!
+Behind you!=خلفك!
+Are you okay?=هل أنت بخير؟
+I'm fine.=أنا بخير.
+We need to hurry.=علينا الإسراع.
+There's no time!=لا يوجد وقت!
+We made it.=نجحنا.
+Thank you.=شكراً لكم.
+I won't give up.=لن أستسلم.
+We can do this.=نستطيع فعل هذا.
+Together.=معاً.
+Leave it to me.=اتركه لي.
+I'll handle this.=سأتولى هذا.
+Stay focused.=ابقوا مركزين.
+Don't let your guard down.=لا تخفضوا حذركم.
+Something's coming.=شيء ما قادم.
+It's a trap!=إنه فخ!
+Fall back!=تراجعوا!
+Hold your ground!=اثبتوا في مكانكم!
+Now's our chance!=الآن فرصتنا!
+Finish it!=أنهوه!
+We did it!=فعلناها!
+Is everyone safe?=هل الجميع بأمان؟
+Let's rest here.=لنسترح هنا.
+I have a bad feeling about this.=لدي شعور سيئ حيال هذا.
+Stay close.=ابقوا قريبين.
+Keep moving.=واصلوا التحرك.
+We're almost there.=نحن تقريباً هناك.
+Don't look back.=لا تنظروا للخلف.
+
+# --- نهاية نصائح التحميل ورسائل الشاشة ---
+# End of Loading Tips & Screen Messages
+# Total sections: 213-227 (Loading Tips & Screen Messages)
