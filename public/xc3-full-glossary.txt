@@ -2628,20 +2628,7 @@ New Topic Available=موضوع جديد متاح
 Topic Unlocked=تم فتح الموضوع
 Heart-to-Heart=حوار من القلب
 Overheard Conversation=محادثة مسموعة
-# ═══════════════════════════════════════════════════
-# مصطلحات الحفظ والتحميل (Save/Load Terms)
-# ═══════════════════════════════════════════════════
-Save=حفظ
-Load=تحميل
-Auto-Save=حفظ تلقائي
-Manual Save=حفظ يدوي
-Save Slot=خانة الحفظ
-Save Data=بيانات الحفظ
-Overwrite Save=الكتابة فوق الحفظ
-Delete Save=حذف الحفظ
-Save Successful=تم الحفظ بنجاح
-Loading...=جارٍ التحميل...
-Now Loading=جارٍ التحميل الآن
+# (تم نقل مصطلحات الحفظ والتحميل إلى قسم تفصيلي لاحق)
 # ═══════════════════════════════════════════════════
 # رسائل تأكيد النظام (System Confirmation Messages)
 # ═══════════════════════════════════════════════════
@@ -2677,43 +2664,7 @@ Chain Attack Tutorial=شرح الهجوم المتسلسل
 Interlink Tutorial=شرح الاندماج
 Gem Crafting Tutorial=شرح صناعة الجواهر
 Class Change Tutorial=شرح تغيير الفصل
-# ═══════════════════════════════════════════════════
-# مصطلحات التجارة والمتاجر (Trade & Shops)
-# ═══════════════════════════════════════════════════
-Shop=متجر
-Buy=شراء
-Sell=بيع
-Price=السعر
-Gold=ذهب
-G=ذ
-Buying Price=سعر الشراء
-Selling Price=سعر البيع
-Stock=المخزون
-Out of Stock=نفد المخزون
-Shop Inventory=مخزون المتجر
-Nopon Coin Exchange=تبادل عملة النوبون
-Colony Shop=متجر المستعمرة
-Traveling Merchant=تاجر متجول
-Special Offer=عرض خاص
-Discount=تخفيض
-Limited Stock=مخزون محدود
-# ═══════════════════════════════════════════════════
-# مصطلحات الملاحة والتوجيه (Navigation & Guidance)
-# ═══════════════════════════════════════════════════
-Waypoint=نقطة الإرشاد
-Navigation=الملاحة
-Objective Marker=علامة الهدف
-Destination=الوجهة
-Distance=المسافة
-Direction=الاتجاه
-North=الشمال
-South=الجنوب
-East=الشرق
-West=الغرب
-Compass=البوصلة
-Arrow=السهم
-Follow=اتبع
-Navigate to=انتقل إلى
+# (تم نقل مصطلحات التجارة والملاحة إلى أقسام تفصيلية لاحقة)
 # ═══════════════════════════════════════════════════
 # مصطلحات الكوليبيديا (Collectopaedia System)
 # ═══════════════════════════════════════════════════
@@ -2772,20 +2723,7 @@ We won!=فزنا!
 Good work, everyone!=عمل جيد يا جميع!
 That was close!=كانت قريبة!
 Lend me your power!=أعرني قوتك!
-# ═══════════════════════════════════════════════════
-# مصطلحات النقل والمركبات (Transportation)
-# ═══════════════════════════════════════════════════
-Boat=قارب
-Boat Travel=السفر بالقارب
-Auto-Levnis=ليفنيس آلي
-Levnis=ليفنيس
-Ride=ركوب
-Mount=ركوب
-Dismount=نزول
-Fast Travel=سفر سريع
-Skip Travel=سفر فوري
-Warp=انتقال آني
-Teleport=نقل آني
+# (تم نقل مصطلحات النقل إلى قسم النقل السريع والتنقل التفصيلي)
 # ═══════════════════════════════════════════════════
 # مستعمرات إضافية (Additional Colonies)
 # ═══════════════════════════════════════════════════
@@ -4983,29 +4921,7 @@ Vibration=الاهتزاز
 Rumble=الاهتزاز
 Gyroscope=الجيروسكوب
 Motion Controls=التحكم بالحركة
-# ─────────────────────────────────────────────────
-# إعدادات الحفظ (Save Settings)
-# ─────────────────────────────────────────────────
-Save=حفظ
-Load=تحميل
-Save Game=حفظ اللعبة
-Load Game=تحميل اللعبة
-Save File=ملف الحفظ
-Save Slot=خانة الحفظ
-Auto Save=حفظ تلقائي
-Auto-Save=حفظ تلقائي
-Quick Save=حفظ سريع
-Manual Save=حفظ يدوي
-Save Data=بيانات الحفظ
-Delete Save=حذف الحفظ
-Overwrite Save=الكتابة فوق الحفظ
-Confirm Overwrite=تأكيد الكتابة فوق
-Save Completed=تم الحفظ
-Saving=جارٍ الحفظ
-Loading=جارٍ التحميل
-Cloud Save=حفظ سحابي
-Save to Cloud=حفظ في السحابة
-Download Save=تحميل الحفظ
+# (تم نقل إعدادات الحفظ إلى قسم الحفظ والتحميل التفصيلي)
 # ─────────────────────────────────────────────────
 # إعدادات الشبكة (Network Settings)
 # ─────────────────────────────────────────────────
@@ -6190,3 +6106,8 @@ Loading Screen=شاشة التحميل
 Loading Tips=نصائح التحميل
 Press Any Button=اضغط أي زر
 Press A to Continue=اضغط A للمتابعة
+Close=إغلاق
+Accept=قبول
+Decline=رفض
+Retry=إعادة المحاولة
+Loading...=جارٍ التحميل...
