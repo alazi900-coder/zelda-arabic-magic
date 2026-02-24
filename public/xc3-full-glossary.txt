@@ -6845,3 +6845,320 @@ System Manual=دليل النظام
 Play Guide=دليل اللعب
 Controller Guide=دليل جهاز التحكم
 Online Manual=الدليل الإلكتروني
+
+# ═══════════════════════════════════════════════════════════════
+# نصائح شاشة التحميل (Loading Screen Tips)
+# ═══════════════════════════════════════════════════════════════
+
+# --- نصائح القتال ---
+Tip: Use Chain Attacks to deal massive damage!=نصيحة: استخدم الهجمات التسلسلية لإحداث ضرر هائل!
+Tip: Switch between Attackers, Defenders, and Healers to adapt to battle!=نصيحة: بدّل بين المهاجمين والمدافعين والمعالجين للتكيّف مع المعركة!
+Tip: Cancel Arts into each other for bonus damage!=نصيحة: ألغِ الفنون ببعضها لضرر إضافي!
+Tip: Fill the Interlink gauge to unleash powerful Ouroboros forms!=نصيحة: املأ مقياس الترابط لإطلاق أشكال الأوروبوروس القوية!
+Tip: Master Arts can be used alongside your main class Arts!=نصيحة: يمكن استخدام الفنون الرئيسية مع فنون فصلك الأساسي!
+Tip: Position yourself behind enemies for bonus damage with certain Arts!=نصيحة: تموضع خلف الأعداء لضرر إضافي مع بعض الفنون!
+Tip: Keep your Healer alive to maintain the party's HP!=نصيحة: حافظ على حياة المعالج لضمان صحة الفريق!
+Tip: Use Topple and Launch combos to disable tough enemies!=نصيحة: استخدم مجموعات الإسقاط والإطلاق لتعطيل الأعداء الأقوياء!
+Tip: Defenders draw enemy attention away from your Attackers and Healers!=نصيحة: المدافعون يجذبون انتباه الأعداء بعيدًا عن المهاجمين والمعالجين!
+Tip: Break an enemy's guard with Break Arts, then follow up with Topple!=نصيحة: حطّم دفاع العدو بفنون الكسر، ثم تابع بالإسقاط!
+Tip: Chain Attacks can turn the tide of any battle!=نصيحة: الهجمات التسلسلية قادرة على قلب موازين أي معركة!
+Tip: Accessories provide passive bonuses in battle!=نصيحة: الإكسسوارات توفر مكافآت سلبية في القتال!
+Tip: Gems can be crafted to enhance your party's abilities!=نصيحة: يمكن صياغة الجواهر لتعزيز قدرات فريقك!
+Tip: Heroes fight alongside your party as a seventh member!=نصيحة: الأبطال يقاتلون مع فريقك كعضو سابع!
+Tip: Unlock new Classes by raising Affinity with Heroes!=نصيحة: افتح فصولًا جديدة برفع الألفة مع الأبطال!
+Tip: Some enemies are much stronger than your level. Come back later!=نصيحة: بعض الأعداء أقوى بكثير من مستواك. عُد لاحقًا!
+Tip: Fusion Arts combine two Arts for powerful effects!=نصيحة: الفنون المدمجة تجمع فنّين لتأثيرات قوية!
+Tip: Watch for enemy Art indicators to dodge or block in time!=نصيحة: راقب مؤشرات فنون العدو للمراوغة أو الصد في الوقت المناسب!
+Tip: Charge your Talent Art by fulfilling its role conditions!=نصيحة: اشحن فن الموهبة بتحقيق شروط دورك!
+Tip: Ouroboros forms have a time limit. Use them wisely!=نصيحة: لأشكال الأوروبوروس مهلة زمنية. استخدمها بحكمة!
+
+# --- نصائح الاستكشاف ---
+Tip: Rest at campfires to cook meals that boost your stats!=نصيحة: استرح عند نيران المعسكر لطهي وجبات تعزز إحصائياتك!
+Tip: Collectibles can be found all over the world. Check your Collectopedia!=نصيحة: المقتنيات منتشرة في كل مكان. تفقّد موسوعة المقتنيات!
+Tip: Use Skip Travel to quickly move between discovered Landmarks!=نصيحة: استخدم التنقل السريع للانتقال بين المعالم المكتشفة!
+Tip: Explore at night to find unique monsters and materials!=نصيحة: استكشف ليلًا للعثور على وحوش ومواد فريدة!
+Tip: Some containers require specific Field Skills to open!=نصيحة: بعض الحاويات تتطلب مهارات ميدانية محددة لفتحها!
+Tip: Climbing walls and swimming can lead to hidden areas!=نصيحة: تسلق الجدران والسباحة قد يقودانك لمناطق مخفية!
+Tip: Talk to NPCs to discover Side Quests and local stories!=نصيحة: تحدث مع الشخصيات لاكتشاف مهام جانبية وقصص محلية!
+Tip: Ether Channels provide fast travel between distant areas!=نصيحة: قنوات الأثير توفر انتقالًا سريعًا بين المناطق البعيدة!
+Tip: Check your map for quest markers and points of interest!=نصيحة: تفقّد خريطتك لعلامات المهام ونقاط الاهتمام!
+Tip: Level up your characters evenly for best results!=نصيحة: ارفع مستوى شخصياتك بالتساوي لأفضل النتائج!
+
+# --- نصائح الأنظمة ---
+Tip: You can change classes at any Rest Spot!=نصيحة: يمكنك تغيير الفصول عند أي نقطة استراحة!
+Tip: The Affinity Chart shows your bonds with colonies and NPCs!=نصيحة: مخطط الألفة يعرض روابطك مع المستعمرات والشخصيات!
+Tip: Completing Side Quests raises your Colony Affinity!=نصيحة: إتمام المهام الجانبية يرفع ألفة المستعمرة!
+Tip: Cooking recipes unlock as you discover new ingredients!=نصيحة: وصفات الطبخ تُفتح عند اكتشاف مكونات جديدة!
+Tip: Keep an eye on the weather — it affects enemy spawns!=نصيحة: راقب الطقس — فهو يؤثر على ظهور الأعداء!
+Tip: Auto-Battle can be toggled from the battle menu!=نصيحة: يمكن تفعيل القتال التلقائي من قائمة المعركة!
+Tip: You can replay cutscenes from the Event Theater!=نصيحة: يمكنك إعادة مشاهدة المقاطع من مسرح الأحداث!
+Tip: Nopon Coins can be used to craft Gems or enhance items!=نصيحة: عملات النوبون تُستخدم لصياغة الجواهر أو تعزيز الأغراض!
+Tip: Check the Battle Log for detailed combat information!=نصيحة: تفقّد سجل المعركة لمعلومات قتالية مفصلة!
+Tip: Unique Monsters drop rare materials for crafting!=نصيحة: الوحوش الفريدة تُسقط مواد نادرة للصياغة!
+
+# ═══════════════════════════════════════════════════════════════
+# رسائل الدروس التعليمية (Tutorial Messages)
+# ═══════════════════════════════════════════════════════════════
+
+# --- أساسيات التحكم ---
+Press ZL to open the Arts Palette.=اضغط ZL لفتح لوحة الفنون.
+Press ZR to switch between characters.=اضغط ZR للتبديل بين الشخصيات.
+Press + to open the Main Menu.=اضغط + لفتح القائمة الرئيسية.
+Press - to open the Quick Menu.=اضغط - لفتح القائمة السريعة.
+Use the Left Stick to move your character.=استخدم العصا اليسرى لتحريك شخصيتك.
+Use the Right Stick to control the camera.=استخدم العصا اليمنى للتحكم بالكاميرا.
+Press A to interact with objects and NPCs.=اضغط A للتفاعل مع الأشياء والشخصيات.
+Press B to cancel or go back.=اضغط B للإلغاء أو العودة.
+Press X to jump.=اضغط X للقفز.
+Press Y to sheathe or draw your weapon.=اضغط Y لسحب سلاحك أو إغماده.
+Hold R to run faster.=اضغط R باستمرار للركض أسرع.
+Press L to access the Navigation menu.=اضغط L للوصول لقائمة الملاحة.
+
+# --- أنظمة القتال ---
+Auto-attack activates when near an enemy with your weapon drawn.=الهجوم التلقائي يعمل عند الاقتراب من عدو وسلاحك مسحوب.
+Arts charge over time during battle. Press the button when ready.=الفنون تُشحن مع الوقت في المعركة. اضغط الزر عند الجاهزية.
+Position Arts deal bonus damage based on where you stand.=فنون التموضع تحدث ضررًا إضافيًا حسب موقعك.
+The Talent Art charges by fulfilling your role in battle.=فن الموهبة يُشحن بأداء دورك في المعركة.
+Cancelling an Art into another Art grants a damage bonus.=إلغاء فن بفن آخر يمنح مكافأة ضرر.
+Attackers deal damage. Position behind enemies for extra damage.=المهاجمون يحدثون الضرر. تموضع خلف الأعداء لضرر إضافي.
+Defenders draw aggro and protect the party.=المدافعون يجذبون العداء ويحمون الفريق.
+Healers restore HP and provide buffs to allies.=المعالجون يستعيدون الصحة ويقدمون تعزيزات للحلفاء.
+Chain Attacks allow you to attack in sequence for massive damage.=الهجمات التسلسلية تتيح لك الهجوم بالتتابع لضرر هائل.
+The Chain gauge fills as you deal damage and heal allies.=مقياس التسلسل يمتلئ عند إحداث الضرر وشفاء الحلفاء.
+Ouroboros forms are powerful transformations shared between pairs.=أشكال الأوروبوروس تحولات قوية مشتركة بين الأزواج.
+The Interlink Level increases as you fight in Ouroboros form.=مستوى الترابط يزداد بالقتال في شكل الأوروبوروس.
+Fusion Arts combine a Keves Art with an Agnus Art simultaneously.=الفنون المدمجة تجمع فن كيفيس مع فن أغنوس في آن واحد.
+Master Arts are Arts learned from other classes.=الفنون الرئيسية هي فنون مكتسبة من فصول أخرى.
+You can equip Master Arts in the Master Art slots.=يمكنك تجهيز الفنون الرئيسية في خانات الفنون الرئيسية.
+
+# --- أنظمة النمو ---
+Classes can be changed at Rest Spots or from the menu.=يمكن تغيير الفصول عند نقاط الاستراحة أو من القائمة.
+Raising Class Rank unlocks new Arts and Skills.=رفع رتبة الفصل يفتح فنونًا ومهارات جديدة.
+Skills carry over between classes once unlocked.=المهارات تنتقل بين الفصول بعد فتحها.
+Gems provide passive stat boosts when equipped.=الجواهر توفر تعزيزات سلبية عند تجهيزها.
+Craft Gems at Rest Spots using materials and Nopon Coins.=اصنع الجواهر عند نقاط الاستراحة بالمواد وعملات النوبون.
+Accessories grant additional bonuses in battle.=الإكسسوارات تمنح مكافآت إضافية في القتال.
+The Soul Tree unlocks Ouroboros abilities for each pair.=شجرة الروح تفتح قدرات الأوروبوروس لكل زوج.
+Soul Points are earned by fighting in Ouroboros form.=نقاط الروح تُكتسب بالقتال في شكل الأوروبوروس.
+Hero Quests unlock new Heroes to fight alongside you.=مهام الأبطال تفتح أبطالًا جددًا يقاتلون بجانبك.
+Completing Hero Quests also unlocks their class for your party.=إتمام مهام الأبطال يفتح فصلهم لفريقك أيضًا.
+
+# --- أنظمة الاستكشاف ---
+Landmarks serve as Skip Travel points. Discover them by exploring.=المعالم هي نقاط التنقل السريع. اكتشفها بالاستكشاف.
+Rest Spots let you cook, craft, discuss, and level up.=نقاط الاستراحة تتيح الطبخ والصياغة والنقاش ورفع المستوى.
+Field Skills help you access hidden areas and treasures.=المهارات الميدانية تساعدك على الوصول لمناطق وكنوز مخفية.
+Containers hold items. Some require Field Skills to open.=الحاويات تحوي أغراضًا. بعضها يتطلب مهارات ميدانية لفتحها.
+The Collectopedia tracks collectibles found in each region.=موسوعة المقتنيات تتتبع ما جمعته في كل منطقة.
+Colony Affinity rises by completing quests and helping residents.=ألفة المستعمرة ترتفع بإتمام المهام ومساعدة السكان.
+Higher Colony Affinity unlocks more quests and rewards.=ألفة أعلى للمستعمرة تفتح مهامًا ومكافآت أكثر.
+
+# ═══════════════════════════════════════════════════════════════
+# حوارات المهام الجانبية (Side Quest Dialogues)
+# ═══════════════════════════════════════════════════════════════
+
+# --- قبول وإتمام المهام ---
+Will you accept this quest?=هل تقبل هذه المهمة؟
+Quest accepted.=تم قبول المهمة.
+Quest completed!=تمت المهمة!
+Quest failed.=فشلت المهمة.
+I have a favor to ask of you.=لدي طلب أريده منكم.
+Can you help us with something?=هل يمكنكم مساعدتنا في أمر ما؟
+We could really use your help.=نحتاج مساعدتكم حقًا.
+Please, you're our only hope.=أرجوكم، أنتم أملنا الوحيد.
+Thank you! You've saved us!=شكرًا لكم! لقد أنقذتمونا!
+I knew I could count on you.=عرفت أنني أستطيع الاعتماد عليكم.
+Here, take this as a token of my gratitude.=تفضلوا، خذوا هذا كعربون امتنان.
+You've done more than enough. Thank you.=قدمتم أكثر مما يكفي. شكرًا لكم.
+The situation is dire. We need your strength.=الوضع حرج. نحتاج قوتكم.
+There are monsters threatening our colony.=هناك وحوش تهدد مستعمرتنا.
+Our supplies are running low. Can you gather some for us?=إمداداتنا تنفد. هل يمكنكم جمع بعضها لنا؟
+We've lost contact with our scouts.=فقدنا الاتصال بكشافتنا.
+Please bring them back safely.=أرجوكم أعيدوهم بسلام.
+The path ahead is dangerous. Be careful.=الطريق أمامكم خطير. كونوا حذرين.
+
+# --- حوارات تحرير المستعمرات ---
+Thank you for freeing us from the flame clock.=شكرًا لتحريرنا من ساعة اللهب.
+We can finally live on our own terms.=أخيرًا يمكننا العيش وفق شروطنا.
+Without the flame clock, we're free to choose our own path.=بدون ساعة اللهب، نحن أحرار في اختيار طريقنا.
+Is this what freedom feels like?=أهذا هو شعور الحرية؟
+We don't have to fight anymore... right?=لسنا مضطرين للقتال بعد الآن... أليس كذلك؟
+What do we do now that we're free?=ماذا نفعل الآن بعد أن أصبحنا أحرارًا؟
+For the first time, I feel like I can breathe.=لأول مرة، أشعر أنني أستطيع التنفس.
+You showed us that there's more to life than fighting.=أريتمونا أن في الحياة ما هو أكثر من القتال.
+The children... they won't have to fight anymore.=الأطفال... لن يضطروا للقتال بعد الآن.
+We owe you our lives. All of us.=ندين لكم بحياتنا. جميعنا.
+Our colony stands with you, Ouroboros.=مستعمرتنا تقف معكم، يا أوروبوروس.
+The flame clock is gone. A new dawn has begun.=ساعة اللهب اختفت. فجر جديد قد بدأ.
+We'll rebuild. Together.=سنعيد البناء. معًا.
+You gave us hope when we had none.=منحتمونا الأمل حين لم يكن لدينا أي أمل.
+Tell us... is it true the world is bigger than we thought?=أخبرونا... هل حقًا العالم أكبر مما ظنناه؟
+We want to see it. The world beyond our colony.=نريد أن نراه. العالم خارج مستعمرتنا.
+Stay with us awhile. Share a meal before you go.=ابقوا معنا قليلًا. شاركونا وجبة قبل أن تذهبوا.
+You've changed everything for us.=غيّرتم كل شيء بالنسبة لنا.
+
+# ═══════════════════════════════════════════════════════════════
+# حوارات أحداث القلب (Heart-to-Heart Dialogues)
+# ═══════════════════════════════════════════════════════════════
+
+# --- خيارات حوارية وردود أفعال ---
+That reminds me of something...=هذا يذكرني بشيء...
+What do you think about all this?=ما رأيك في كل هذا؟
+I've been thinking about it a lot lately.=كنت أفكر في هذا كثيرًا مؤخرًا.
+You know, I never thought I'd say this, but...=تعلم، لم أكن أتخيل أنني سأقول هذا، لكن...
+Can I tell you something? Just between us.=هل يمكنني إخبارك بشيء؟ بيننا فقط.
+I feel like I can trust you with anything.=أشعر أنني أستطيع أن أأتمنك على أي شيء.
+Promise me you won't laugh.=عدني ألا تضحك.
+I used to think fighting was all there was.=كنت أظن أن القتال هو كل ما في الحياة.
+But now I know there's so much more.=لكنني الآن أعلم أن هناك الكثير غير ذلك.
+Do you ever wonder what life would be like without the war?=هل تساءلت يومًا كيف ستكون الحياة بدون الحرب؟
+I want to protect this moment. Right here, right now.=أريد أن أحمي هذه اللحظة. هنا والآن.
+Thank you for being by my side.=شكرًا لوقوفك بجانبي.
+We've come a long way, haven't we?=قطعنا شوطًا طويلًا، أليس كذلك؟
+I wouldn't trade this for anything.=لن أستبدل هذا بأي شيء.
+You've changed, you know. In a good way.=لقد تغيرت، أتعلم. بطريقة جيدة.
+I think we all have.=أعتقد أننا جميعًا تغيرنا.
+Sometimes I forget we're supposed to be enemies.=أحيانًا أنسى أنه من المفترض أن نكون أعداء.
+Funny how things work out, huh?=مضحك كيف تسير الأمور، أليس كذلك؟
+I'm glad we met. Truly.=أنا سعيد بلقائنا. حقًا.
+No matter what happens, I'll always have your back.=مهما حدث، سأكون دائمًا خلفك.
+Let's make the most of every moment we have.=لنستغل كل لحظة لدينا.
+This view is incredible. I wish time would stop.=هذا المنظر مذهل. ليت الزمن يتوقف.
+I wonder what the future holds for us.=أتساءل ماذا يخبئ لنا المستقبل.
+Whatever it is, we'll face it together.=مهما كان، سنواجهه معًا.
+You're the reason I keep fighting.=أنت السبب الذي يجعلني أستمر في القتال.
+I didn't know what living meant until I met all of you.=لم أكن أعرف معنى الحياة حتى قابلتكم جميعًا.
+We're more than comrades. We're family.=نحن أكثر من رفاق. نحن عائلة.
+I'll never forget these days we spent together.=لن أنسى أبدًا هذه الأيام التي قضيناها معًا.
+Hey, don't get all sentimental on me!=هيا، لا تصبح عاطفيًا عليّ!
+Too late for that!=فات الأوان على ذلك!
+I'm not crying. It's just the wind.=أنا لا أبكي. إنها مجرد الرياح.
+
+# ═══════════════════════════════════════════════════════════════
+# حوارات الاستكشاف الميداني (Field Exploration Dialogues)
+# ═══════════════════════════════════════════════════════════════
+
+# --- اكتشاف مناطق جديدة ---
+What is this place? I've never seen anything like it.=ما هذا المكان؟ لم أرَ شيئًا مثله من قبل.
+Look at this view! It's breathtaking.=انظروا لهذا المنظر! إنه يخطف الأنفاس.
+We should mark this on the map.=يجب أن نحدد هذا على الخريطة.
+I sense something powerful nearby.=أشعر بقوة كبيرة قريبة من هنا.
+Be on your guard. This area feels dangerous.=كونوا متيقظين. هذه المنطقة تبدو خطرة.
+There's a Landmark up ahead. Let's check it out.=هناك معلم في الأمام. لنتفقده.
+I think I see a way through over there.=أعتقد أنني أرى ممرًا من هناك.
+Watch your step. The terrain here is treacherous.=انتبهوا لخطواتكم. التضاريس هنا غادرة.
+This must be the place the villagers mentioned.=لا بد أن هذا هو المكان الذي ذكره القرويون.
+We're getting close. I can feel it.=نحن نقترب. أستطيع الشعور بذلك.
+Look — ruins from an ancient civilization.=انظروا — أطلال من حضارة قديمة.
+The air here feels different. Heavier somehow.=الهواء هنا مختلف. أثقل بطريقة ما.
+These Ether deposits are massive.=رواسب الأثير هذه ضخمة.
+I wonder who lived here before.=أتساءل من عاش هنا من قبل.
+This path leads deeper underground.=هذا المسار يقود أعمق تحت الأرض.
+
+# --- تعليقات الطقس والبيئة ---
+Looks like rain is coming.=يبدو أن المطر قادم.
+This fog is so thick I can barely see.=هذا الضباب كثيف لدرجة أنني بالكاد أرى.
+The wind is picking up. A storm might be brewing.=الرياح تشتد. قد تكون عاصفة في الطريق.
+What a beautiful sunset.=يا لها من غروب جميل.
+The stars are incredible tonight.=النجوم رائعة الليلة.
+It's freezing out here. Let's find shelter.=الجو متجمد هنا. لنجد مأوى.
+This heat is unbearable.=هذه الحرارة لا تُطاق.
+The ether mist is getting thicker. Stay close.=ضباب الأثير يزداد كثافة. ابقوا قريبين.
+Look at that rainbow! When did that appear?=انظروا لقوس القزح! متى ظهر؟
+The lightning is getting closer. We should move.=البرق يقترب. يجب أن نتحرك.
+I love this time of day. Everything looks golden.=أحب هذا الوقت من اليوم. كل شيء يبدو ذهبيًا.
+The moonlight makes everything look different.=ضوء القمر يجعل كل شيء يبدو مختلفًا.
+
+# ═══════════════════════════════════════════════════════════════
+# حوارات التفاعل بين الشخصيات (Character Interactions)
+# ═══════════════════════════════════════════════════════════════
+
+# --- حوارات أثناء التنقل ---
+Hey, Noah. You've been quiet. What's on your mind?=يا نوح، كنت صامتًا. بمَ تفكر؟
+Just thinking about where we go from here.=أفكر فقط في وجهتنا القادمة.
+You worry too much. We'll figure it out.=أنت تقلق كثيرًا. سنجد حلًا.
+Mio, are you doing okay?=ميو، هل أنتِ بخير؟
+I'm fine. Just a little tired.=أنا بخير. فقط متعبة قليلًا.
+Let's take a break when we find a good spot.=لنأخذ استراحة عندما نجد مكانًا مناسبًا.
+Eunie, stop poking Taion.=يوني، توقفي عن مضايقة تايون.
+I'm not poking him. I'm motivating him.=أنا لا أضايقه. أنا أحفزه.
+That's definitely poking.=هذه بالتأكيد مضايقة.
+Lanz, you're always thinking about food.=لانز، أنت دائمًا تفكر في الطعام.
+A soldier marches on his stomach!=الجندي يسير على معدته!
+Sena, how are you holding up?=سينا، كيف حالكِ؟
+I'm tougher than I look!=أنا أقوى مما أبدو!
+That's the spirit!=هذه هي الروح!
+Riku wonder what lies ahead.=ريكو يتساءل عما ينتظرنا.
+Manana excited for next meal, meh!=مانانا متحمسة للوجبة القادمة، مه!
+Keep your eyes open. You never know what's out there.=أبقوا أعينكم مفتوحة. لا تعرفون ما هو هناك.
+Race you to that hill!=سأسابقك لتلك التلة!
+You're on!=التحدي مقبول!
+Last one there cooks dinner!=الأخير يطبخ العشاء!
+Wait up! Not everyone has long legs, you know!=انتظروا! ليس كل شخص لديه أرجل طويلة!
+Sorry! I got carried away.=آسف! انجرفت مع الحماس.
+
+# --- ردود أفعال عاطفية ---
+I won't let anyone else die. Not on my watch.=لن أدع أحدًا آخر يموت. ليس في عهدي.
+We have to be strong. For everyone counting on us.=يجب أن نكون أقوياء. من أجل كل من يعتمد علينا.
+Sometimes I wonder if we're making any difference.=أحيانًا أتساءل إن كنا نحدث أي فرق.
+We are. Every life we save matters.=نحن نحدث فرقًا. كل حياة ننقذها مهمة.
+I'm scared. But I won't run away.=أنا خائف. لكنني لن أهرب.
+Being scared means you're brave enough to face it.=الخوف يعني أنك شجاع بما يكفي لمواجهته.
+I miss the others. I hope they're safe.=أفتقد الآخرين. أتمنى أن يكونوا بأمان.
+They're strong. They'll be fine.=هم أقوياء. سيكونون بخير.
+What if we can't change anything?=ماذا لو لم نستطع تغيير شيء؟
+Then at least we tried. That's what matters.=إذن على الأقل حاولنا. هذا ما يهم.
+I believe in us. All of us.=أنا أؤمن بنا. بنا جميعًا.
+
+# --- لحظات كوميدية ---
+Manana's cooking is the best! Nobody argue, meh!=طبخ مانانا هو الأفضل! لا أحد يجادل، مه!
+Eunie, your bedhead is legendary.=يوني، شعرك بعد النوم أسطوري.
+Say that again and I'll legendary your face.=قلها مرة أخرى وسأجعل وجهك أسطوريًا.
+Lanz, did you eat all the rations again?=لانز، هل أكلت كل الحصص مجددًا؟
+I was hungry! A growing man needs his fuel!=كنت جائعًا! الرجل النامي يحتاج وقوده!
+You're fully grown, Lanz.=أنت مكتمل النمو يا لانز.
+That's debatable.=هذا قابل للنقاش.
+Riku's engineering is most impressive, yes yes!=هندسة ريكو مثيرة للإعجاب جدًا، نعم نعم!
+Taion, stop narrating everything.=تايون، توقف عن سرد كل شيء.
+I'm analyzing, not narrating. There's a difference.=أنا أحلل، لا أسرد. هناك فرق.
+Sure there is.=بالتأكيد هناك فرق.
+
+# ═══════════════════════════════════════════════════════════════
+# حوارات النهاية والخاتمة (Ending & Epilogue)
+# ═══════════════════════════════════════════════════════════════
+
+# --- حوارات الوداع ---
+This is it. The final battle.=هذه هي. المعركة الأخيرة.
+No matter what happens, we fight as one.=مهما حدث، نقاتل كواحد.
+I won't say goodbye. Because this isn't the end.=لن أقول وداعًا. لأن هذه ليست النهاية.
+Even if our worlds separate, our bond will remain.=حتى لو انفصلت عوالمنا، رابطتنا ستبقى.
+I'll find you. No matter how long it takes.=سأجدك. مهما طال الوقت.
+Remember everything we shared. Hold it close.=تذكر كل ما شاركناه. احتفظ به قريبًا.
+This isn't farewell. It's a promise.=هذا ليس وداعًا. إنه وعد.
+We'll meet again. I know it.=سنلتقي مجددًا. أعلم ذلك.
+Thank you for showing me what life really means.=شكرًا لأنك أريتني ما تعنيه الحياة حقًا.
+I used to count my days. Now I make my days count.=كنت أعدّ أيامي. الآن أجعل أيامي ذات قيمة.
+You taught me that every moment is precious.=علمتني أن كل لحظة ثمينة.
+Our time together was short, but it meant everything.=وقتنا معًا كان قصيرًا، لكنه كان يعني كل شيء.
+Don't cry. We'll carry each other in our hearts.=لا تبكِ. سنحمل بعضنا في قلوبنا.
+The world we fought for... it's beautiful.=العالم الذي قاتلنا من أجله... إنه جميل.
+I wouldn't change a single thing.=لن أغير شيئًا واحدًا.
+Live. Not just survive. Live.=عِش. لا تكتفِ بالبقاء. عِش.
+We carved our own path. And it led us here.=شققنا طريقنا بأنفسنا. وقادنا إلى هنا.
+This is the future we chose. Together.=هذا هو المستقبل الذي اخترناه. معًا.
+
+# --- الجمل الختامية ---
+The world doesn't need us to fight for it anymore.=العالم لم يعد بحاجة لنا لنقاتل من أجله.
+It needs us to live for it.=إنه بحاجة لنا لنعيش من أجله.
+Our story doesn't end here. It's just beginning.=قصتنا لا تنتهي هنا. إنها بدأت للتو.
+As long as we remember, nothing is truly lost.=طالما نتذكر، لا شيء يضيع حقًا.
+The flame may fade, but the light we carry never will.=قد تخبو الشعلة، لكن النور الذي نحمله لن يخبو أبدًا.
+We are the ones who walk forward.=نحن من يمضي قدمًا.
+Not because we were told to. Because we choose to.=ليس لأنه قيل لنا ذلك. بل لأننا اخترنا ذلك.
+Ouroboros... that's what they called us.=أوروبوروس... هكذا سمّونا.
+But we're more than a name. We're a promise.=لكننا أكثر من اسم. نحن وعد.
+A promise that life is worth living.=وعدٌ بأن الحياة تستحق أن تُعاش.
+And no matter how far apart we are...=ومهما ابتعدنا عن بعضنا...
+...we'll always be connected.=...سنبقى متصلين دائمًا.
+The off-seeing continues. For all who came before.=يستمر إنشاد الوداع. لكل من سبقنا.
+And for all who will come after.=ولكل من سيأتي بعدنا.
+This is our story. And it will echo forever.=هذه قصتنا. وستتردد أصداؤها للأبد.
