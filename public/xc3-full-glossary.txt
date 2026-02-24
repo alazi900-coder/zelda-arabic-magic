@@ -2030,6 +2030,185 @@ Boundary Stone=حجر الحدود
 Void Crystal=بلورة الفراغ
 Unity Shard=شريحة الوحدة
 # ═══════════════════════════════════════════════════
+# مصطلحات Xenoblade Chronicles 1 المشتركة مع Future Redeemed
+# ═══════════════════════════════════════════════════
+# ─────────────────────────────────────────────────
+# شخصيات XC1 (Xenoblade Chronicles 1 Characters)
+# ─────────────────────────────────────────────────
+Reyn=راين
+Sharla=شارلا
+Riki=ريكي
+Dickson=ديكسون
+Mumkhar=مومكار
+Metal Face=الوجه المعدني
+Egil=إيغيل
+Vanea=فانيا
+Lorithia=لوريثيا
+Kallian=كاليان
+Sorean=سوريان
+Alvis=ألفيس
+# ─────────────────────────────────────────────────
+# عوالم ومواقع XC1 (XC1 Worlds & Locations)
+# ─────────────────────────────────────────────────
+Gaur Plain=سهل غور
+Makna Forest=غابة ماكنا
+Eryth Sea=بحر إيريث
+Alcamoth=ألكاموث
+Valak Mountain=جبل فالاك
+Sword Valley=وادي السيف
+Galahad Fortress=قلعة غالاهاد
+Mechonis Core=نواة ميكونيس
+Prison Island=جزيرة السجن
+Fallen Arm=الذراع الساقطة
+Bionis' Leg=ساق بيونيس
+Bionis' Interior=داخل بيونيس
+Tephra Cave=كهف تيفرا
+Satorl Marsh=مستنقع ساتورل
+Central Factory=المصنع المركزي
+Agniratha=أغنيراثا
+Memory Space=فضاء الذاكرة
+# ─────────────────────────────────────────────────
+# مصطلحات وأنظمة XC1 (XC1 Terms & Systems)
+# ─────────────────────────────────────────────────
+Monado=مونادو
+Monado I=مونادو الأول
+Monado II=مونادو الثاني
+Monado III=مونادو الثالث
+True Monado=مونادو الحقيقي
+Monado Boy=فتى المونادو
+Monado Purge=تطهير مونادو
+Monado Eater=مونادو الآكل
+Mechon=ميكون
+Faced Mechon=ميكون ذو وجه
+Homs=الهومز
+High Entia=هاي إنتيا
+Machina=الماكينا
+Telethia=تيليثيا
+Bionis' Will=إرادة بيونيس
+Ether Mine=منجم الأثير
+Vision=الرؤية
+Future Sight=رؤية المستقبل
+Titan=العملاق
+# ─────────────────────────────────────────────────
+# عبارات XC1 الشهيرة (Iconic XC1 Phrases)
+# ─────────────────────────────────────────────────
+I'm really feeling it!=أشعر بالحماس حقاً!
+It's Reyn time!=حان وقت راين!
+Born in a world of strife!=وُلدنا في عالم من الصراع!
+This is the Monado's power!=هذه قوة المونادو!
+Man, what a bunch of jokers!=يا رجل، يا لهم من مهرجين!
+The future doesn't belong to you!=المستقبل لا ينتمي لك!
+# ═══════════════════════════════════════════════════
+# مصطلحات Xenoblade Chronicles 2 المشتركة مع Future Redeemed
+# ═══════════════════════════════════════════════════
+# ─────────────────────────────────────────────────
+# شخصيات XC2 (Xenoblade Chronicles 2 Characters)
+# ─────────────────────────────────────────────────
+Tora=تورا
+Poppi α=بوبي ألفا
+Poppi QT=بوبي كيو تي
+Poppi QTπ=بوبي كيو تي باي
+Zeke=زيك
+Pandoria=باندوريا
+Mòrag=موراغ
+Jin=جين
+Malos=مالوس
+Amalthus=أمالثوس
+Addam=أدام
+Lora=لورا
+Haze=هيز
+Minoth=مينوث
+Mikhail=ميخائيل
+Patroka=باتروكا
+Akhos=أخوس
+Fan la Norne=فان لا نورن
+Praetor=البراتور
+Indoline=إندولين
+Praetorium=البراتوريوم
+Torna=تورنا
+# ─────────────────────────────────────────────────
+# عوالم ومواقع XC2 (XC2 Worlds & Locations)
+# ─────────────────────────────────────────────────
+Cloud Sea=بحر الغيوم
+World Tree=شجرة العالم
+Elysium=الجنة
+Leftheria=ليفثيريا
+Gormott=غورموت
+Uraya=أورايا
+Mor Ardain=مور أردين
+Tantal=تانتال
+Indol=إندول
+Torigoth=توريغوث
+Alba Cavanich=ألبا كافانيتش
+Fonsa Myma=فونسا ميما
+Theosoir=ثيوسوير
+Fonsett Village=قرية فونسيت
+Spirit Crucible Elpys=بوتقة الأرواح إلبيس
+Temperantia=تيمبيرانتيا
+Land of Morytha=أرض موريثا
+First Low Orbit Station=محطة المدار المنخفض الأولى
+# ─────────────────────────────────────────────────
+# مصطلحات وأنظمة XC2 (XC2 Terms & Systems)
+# ─────────────────────────────────────────────────
+Core Crystal=بلورة النواة
+Resonance=الرنين
+Blade Resonance=رنين النصل
+Aegis Sword=سيف الإيجيس
+Artifice=الآلة الصنعية
+Artifice Aion=الآلة الصنعية أيون
+Artifice Ophion=الآلة الصنعية أوفيون
+Artifice Siren=الآلة الصنعية سايرن
+Titan Ship=سفينة العملاق
+Flesh Eater=آكل اللحم
+Blade Eater=آكل النصل
+Indoline Praetorium=براتوريوم إندولين
+Praetor Amalthus=البراتور أمالثوس
+Torna Organization=منظمة تورنا
+Aegis War=حرب الإيجيس
+Judicium=يوديسيوم
+Tornan Titan=عملاق تورنا
+Blade Combo=كومبو النصل
+Driver Combo=كومبو السائق
+Elemental Orb=الكرة العنصرية
+Full Burst=انفجار كامل
+Blade Special=فن النصل الخاص
+Driver Art=فن السائق
+Trust=الثقة
+Salvaging=الانتشال
+Salvager=المنتشل
+Titan Weapon=سلاح العملاق
+Zohar=الزوهار
+# ─────────────────────────────────────────────────
+# عبارات XC2 الشهيرة (Iconic XC2 Phrases)
+# ─────────────────────────────────────────────────
+I like your attitude!=أحب موقفك!
+Don't forget me!=لا تنسني!
+Think you can take me?!=أتظن أنك تستطيع هزيمتي؟!
+You're done!=انتهيت!
+Anchor Shot!=طلقة المرساة!
+We'll beat them with the power of friendship!=سنهزمهم بقوة الصداقة!
+# ─────────────────────────────────────────────────
+# مصطلحات القصة المشتركة بين الأجزاء (Cross-Series Story Terms)
+# ─────────────────────────────────────────────────
+Phase Transition Experiment=تجربة انتقال الطور
+Space-Time Rift=شق الزمكان
+Dimension=البُعد
+Parallel Universe=كون موازٍ
+Convergence=التقارب
+Divergence=التباعد
+Two Worlds=العالمان
+Separation=الانفصال
+Reunion=إعادة الاتحاد
+Flow of Time=تيار الزمن
+Frozen Time=الزمن المتجمد
+World Reset=إعادة ضبط العالم
+New World=العالم الجديد
+Original World=العالم الأصلي
+Rhadamanthus=رادامانثوس
+Aion=أيون
+Siren=سايرن
+Ophion=أوفيون
+# ═══════════════════════════════════════════════════
 # نظام الهجوم المتسلسل المتقدم (Chain Attack System)
 # ═══════════════════════════════════════════════════
 Chain Attack=هجوم متسلسل
