@@ -715,7 +715,8 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleExportTMX}><FileDown className="w-4 h-4" /> تصدير TMX</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuLabel className="text-xs">📦 تصدير الإنجليزية غير المترجمة ({untranslatedCount})</DropdownMenuLabel>
-                  <DropdownMenuItem onClick={() => editor.handleExportEnglishOnly()}><FileText className="w-4 h-4" /> ملف واحد</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => editor.handleExportEnglishOnly()}><FileText className="w-4 h-4" /> TXT ملف واحد</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => editor.handleExportEnglishOnlyJson()}><FileText className="w-4 h-4" /> JSON ملف واحد</DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setShowExportEnglishDialog(true)}><FileText className="w-4 h-4" /> تصدير مخصص (تقسيم + ZIP) ⚙️</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuLabel className="text-xs">📥 استيراد</DropdownMenuLabel>
@@ -790,7 +791,8 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleExportTMX}><FileDown className="w-4 h-4" /> تصدير TMX (ذاكرة ترجمة)</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuLabel className="text-xs">📦 تصدير الإنجليزية غير المترجمة ({untranslatedCount})</DropdownMenuLabel>
-                  <DropdownMenuItem onClick={() => editor.handleExportEnglishOnly()}>📄 ملف واحد</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => editor.handleExportEnglishOnly()}>📄 TXT ملف واحد</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => editor.handleExportEnglishOnlyJson()}>📋 JSON ملف واحد</DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setShowExportEnglishDialog(true)}>⚙️ تصدير مخصص (تقسيم + ZIP)</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuLabel className="text-xs">📥 استيراد</DropdownMenuLabel>
@@ -1080,7 +1082,7 @@ const Editor = () => {
           open={showExportEnglishDialog}
           onOpenChange={setShowExportEnglishDialog}
           totalCount={untranslatedCount}
-          onExport={(chunkSize) => editor.handleExportEnglishOnly(chunkSize)}
+          onExport={(chunkSize, format) => format === "json" ? editor.handleExportEnglishOnlyJson(chunkSize) : editor.handleExportEnglishOnly(chunkSize)}
         />
       </div>
     </TooltipProvider>
