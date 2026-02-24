@@ -641,3 +641,202 @@ desu mo=ديس مو
 # أسماء المجموعات (Group Names)
 # ═══════════════════════════════════════════════════
 Three Ravens=الغربان الثلاثة
+# ═══════════════════════════════════════════════════
+# الأسلحة (Weapons)
+# ═══════════════════════════════════════════════════
+# سيوف (Swords)
+Blade=نصل
+Sword=سيف
+Great Sword=السيف العظيم
+Lucky Sword=سيف الحظ
+Iron Sword=سيف حديدي
+Steel Sword=سيف فولاذي
+Silver Sword=سيف فضي
+Braveheart=قلب الشجاع
+Steelcleaver=شاطر الفولاذ
+Crimson Edge=الحد القرمزي
+Darkblade=النصل المظلم
+Flameblade=نصل اللهب
+Iceblade=نصل الجليد
+Thunderblade=نصل الرعد
+Windblade=نصل الريح
+Earthblade=نصل الأرض
+Lightblade=نصل النور
+Duskblade=نصل الغسق
+Rusty Sword=سيف صدئ
+Crystal Sword=سيف بلوري
+Platinum Sword=سيف بلاتيني
+Meteoric Sword=سيف نيزكي
+# رماح وأسلحة طويلة (Lances & Polearms)
+Lance=رمح
+Spear=حربة
+Halberd=هالبرد
+Iron Lance=رمح حديدي
+Steel Lance=رمح فولاذي
+Silver Lance=رمح فضي
+Crystal Lance=رمح بلوري
+Platinum Lance=رمح بلاتيني
+# أسلحة ثنائية (Dual Weapons)
+Twin Rings=الحلقتان التوأم
+Dual Blades=النصلان المزدوجان
+Twin Swords=السيفان التوأم
+Iron Rings=حلقات حديدية
+Steel Rings=حلقات فولاذية
+Silver Rings=حلقات فضية
+Crystal Rings=حلقات بلورية
+# أسلحة مدفعية (Guns & Cannons)
+Ether Cannon=مدفع الإيثير
+Gun Rod=عصا المدفع
+Rifle=بندقية
+Iron Cannon=مدفع حديدي
+Steel Cannon=مدفع فولاذي
+Silver Cannon=مدفع فضي
+Crystal Cannon=مدفع بلوري
+# أسلحة أخرى (Other Weapons)
+Hammer=مطرقة
+Staff=عصا
+Knuckles=قبضات
+Shield=درع
+Iron Staff=عصا حديدية
+Steel Staff=عصا فولاذية
+Silver Staff=عصا فضية
+Crystal Staff=عصا بلورية
+War Hammer=مطرقة حرب
+Battle Staff=عصا المعركة
+# ═══════════════════════════════════════════════════
+# الإكسسوارات (Accessories)
+# ═══════════════════════════════════════════════════
+# خواتم (Rings)
+Power Ring=خاتم القوة
+Guard Ring=خاتم الحراسة
+Speed Ring=خاتم السرعة
+Heal Ring=خاتم الشفاء
+Lucky Charm=تميمة الحظ
+Iron Ring=خاتم حديدي
+Silver Ring=خاتم فضي
+Gold Ring=خاتم ذهبي
+Platinum Ring=خاتم بلاتيني
+Crystal Ring=خاتم بلوري
+Attack Ring=خاتم الهجوم
+Defense Ring=خاتم الدفاع
+HP Ring=خاتم نقاط الصحة
+Agility Ring=خاتم الرشاقة
+Dexterity Ring=خاتم البراعة
+Critical Ring=خاتم الضربة الحرجة
+Ether Ring=خاتم الإيثير
+# قلائد وأحجار (Necklaces & Gems)
+Pendant=قلادة
+Necklace=عقد
+Amulet=تعويذة
+Brooch=بروش
+Gem=جوهرة
+Jewel=حجر كريم
+Ruby=ياقوت أحمر
+Sapphire=ياقوت أزرق
+Emerald=زمرد
+Diamond=ألماس
+Topaz=توباز
+Opal=أوبال
+Amethyst=جمشت
+Pearl=لؤلؤة
+Garnet=عقيق
+# أحزمة وأساور (Belts & Bracelets)
+Belt=حزام
+Bracelet=سوار
+Bangle=إسورة
+Iron Bangle=إسورة حديدية
+Silver Bangle=إسورة فضية
+Gold Bangle=إسورة ذهبية
+Platinum Bangle=إسورة بلاتينية
+Crystal Bangle=إسورة بلورية
+# إكسسوارات خاصة (Special Accessories)
+Brave Charm=تميمة الشجاعة
+Spirit Charm=تميمة الروح
+Fire Charm=تميمة النار
+Ice Charm=تميمة الجليد
+Thunder Charm=تميمة الرعد
+Wind Charm=تميمة الريح
+Earth Charm=تميمة الأرض
+Light Charm=تميمة النور
+Dark Charm=تميمة الظلام
+HP Booster=معزز نقاط الصحة
+Attack Booster=معزز الهجوم
+Defense Booster=معزز الدفاع
+Speed Booster=معزز السرعة
+Ether Booster=معزز الإيثير
+Auto-Heal Amulet=تعويذة الشفاء التلقائي
+Revival Amulet=تعويذة الإحياء
+Anti-Topple Amulet=تعويذة مقاومة الإسقاط
+Anti-Daze Amulet=تعويذة مقاومة الذهول
+Anti-Blowdown Amulet=تعويذة مقاومة الطرح
+# ═══════════════════════════════════════════════════
+# المعدات والمواد (Equipment & Materials)
+# ═══════════════════════════════════════════════════
+# مواد الصياغة (Crafting Materials)
+Iron Ore=خام الحديد
+Silver Ore=خام الفضة
+Gold Ore=خام الذهب
+Platinum Ore=خام البلاتين
+Crystal Ore=خام البلور
+Ether Crystal=بلورة الإيثير
+Flame Crystal=بلورة اللهب
+Ice Crystal=بلورة الجليد
+Thunder Crystal=بلورة الرعد
+Wind Crystal=بلورة الريح
+Earth Crystal=بلورة الأرض
+Light Crystal=بلورة النور
+Dark Crystal=بلورة الظلام
+# مواد الوحوش (Monster Materials)
+Monster Bone=عظم الوحش
+Monster Claw=مخلب الوحش
+Monster Fang=ناب الوحش
+Monster Hide=جلد الوحش
+Monster Scale=حرشفة الوحش
+Monster Horn=قرن الوحش
+Monster Wing=جناح الوحش
+Monster Tail=ذيل الوحش
+Monster Eye=عين الوحش
+Monster Heart=قلب الوحش
+Unique Monster=وحش فريد
+Elite Monster=وحش نخبة
+# أحجار كريمة خام (Raw Gems)
+Raw Ruby=ياقوت أحمر خام
+Raw Sapphire=ياقوت أزرق خام
+Raw Emerald=زمرد خام
+Raw Diamond=ألماس خام
+Raw Topaz=توباز خام
+Raw Opal=أوبال خام
+Raw Amethyst=جمشت خام
+Raw Pearl=لؤلؤة خام
+# مصطلحات المعدات العامة (General Equipment Terms)
+Equipment=معدات
+Weapon=سلاح
+Accessory=إكسسوار
+Armor=درع
+Helmet=خوذة
+Gauntlet=قفاز معدني
+Boots=حذاء
+Material=مادة
+Component=مكوّن
+Upgrade=ترقية
+Enhance=تعزيز
+Forge=تشكيل
+Craft=صنع
+Dismantle=تفكيك
+Rarity=ندرة
+Common=شائع
+Rare=نادر
+Legendary=أسطوري
+Unique=فريد
+# مصطلحات إحصائيات المعدات (Equipment Stats)
+Physical Attack=هجوم فيزيائي
+Ether Attack=هجوم إيثيري
+Physical Defense=دفاع فيزيائي
+Ether Defense=دفاع إيثيري
+Block Rate=معدل الصد
+Critical Rate=معدل الضربة الحرجة
+Attack Speed=سرعة الهجوم
+Auto-Attack=هجوم تلقائي
+Weapon Power=قوة السلاح
+Stability=الثبات
+Weight=الوزن
