@@ -1110,3 +1110,110 @@ Night Spawn=ظهور ليلي
 Weather Spawn=ظهور مرتبط بالطقس
 Enrage=هيجان
 Enraged State=حالة الهيجان
+# ═══════════════════════════════════════════════════
+# الجواهر (Gems) وتأثيراتها
+# ═══════════════════════════════════════════════════
+# نظام الجواهر (Gem System)
+Gem=جوهرة
+Gem Crafting=صناعة الجواهر
+Gem Level=مستوى الجوهرة
+Gem Slot=خانة الجوهرة
+Refine Gem=تنقية الجوهرة
+Gem Material=مادة الجوهرة
+Gem Effect=تأثير الجوهرة
+Nopon Coin=عملة نوبون
+Silver Nopon Coin=عملة نوبون فضية
+Gold Nopon Coin=عملة نوبون ذهبية
+# ─────────────────────────────────────────────────
+# جواهر المهاجمين (Attacker Gems)
+# ─────────────────────────────────────────────────
+Steelcleaver=شاطر الفولاذ
+Analyze Weakness=تحليل الضعف
+Accurate Grace=نعمة الدقة
+Spinning Edge=حد دوّار
+Swelling Scourge=بلاء متصاعد
+Empowered Combo=كومبو معزز
+Ultimate Counter=صد مطلق
+Analyze Weakness Effect=يزيد ضرر الضربات على نقاط الضعف
+Steelcleaver Effect=يزيد ضرر الهجمات الفيزيائية
+Accurate Grace Effect=يزيد معدل الضربات الحرجة
+Spinning Edge Effect=يزيد ضرر الهجمات من الخلف والجانب
+Swelling Scourge Effect=يزيد ضرر حالات الإضعاف بمرور الوقت
+Empowered Combo Effect=يزيد ضرر الكومبو المتسلسل
+Ultimate Counter Effect=يزيد ضرر الهجمات المضادة
+# ─────────────────────────────────────────────────
+# جواهر المدافعين (Defender Gems)
+# ─────────────────────────────────────────────────
+Steady Striker=ضارب ثابت
+Brimming Spirit=روح فائضة
+Peeling Gate=بوابة التقشير
+Steel Protection=حماية فولاذية
+Ironclad=درع حديدي
+Tailwind=ريح خلفية
+Steady Striker Effect=يزيد توليد الكراهية من الهجمات العادية
+Brimming Spirit Effect=يزيد توليد الكراهية عند استخدام الفنون
+Peeling Gate Effect=يسحب كراهية الأعداء من الحلفاء
+Steel Protection Effect=يقلل الضرر الفيزيائي المتلقى
+Ironclad Effect=يقلل الضرر الإيثيري المتلقى
+Tailwind Effect=يزيد سرعة التهرب
+# ─────────────────────────────────────────────────
+# جواهر المعالجين (Healer Gems)
+# ─────────────────────────────────────────────────
+Lifesaving Expertise=خبرة إنقاذ الحياة
+Healing Ring=حلقة الشفاء
+Disperse Bloodlust=تشتيت عطش الدم
+Soothing Breath=نفس مهدئ
+Refined Incantation=تعويذة مصقولة
+Swelling Blessing=بركة متصاعدة
+Lifesaving Expertise Effect=يزيد قوة الشفاء العامة
+Healing Ring Effect=يوسع نطاق تأثير الشفاء
+Disperse Bloodlust Effect=يقلل الكراهية المتولدة من الشفاء
+Soothing Breath Effect=يزيد الشفاء التلقائي بمرور الوقت
+Refined Incantation Effect=يسرّع إعادة شحن فنون الشفاء
+Swelling Blessing Effect=يزيد تأثير تعزيزات الحلفاء
+# ─────────────────────────────────────────────────
+# جواهر عامة (General Gems)
+# ─────────────────────────────────────────────────
+Lifehold Blessing=بركة حفظ الحياة
+Doublestrike=ضربة مزدوجة
+Slow Beat=إيقاع بطيء
+Quick Cooldown=تبريد سريع
+Overclock=تسريع فائق
+Survival Instinct=غريزة البقاء
+Lifehold Blessing Effect=يزيد الحد الأقصى لنقاط الصحة
+Doublestrike Effect=فرصة لتنفيذ ضربة إضافية تلقائياً
+Slow Beat Effect=يبطئ تعبئة شريط كراهية العدو
+Quick Cooldown Effect=يقلل وقت إعادة شحن الفنون
+Overclock Effect=يسرّع إعادة شحن المواهب
+Survival Instinct Effect=يمنح فرصة للبقاء بنقطة صحة واحدة عند تلقي ضربة قاتلة
+# ─────────────────────────────────────────────────
+# مستويات الجواهر (Gem Ranks)
+# ─────────────────────────────────────────────────
+Rank 1=المرتبة 1
+Rank 2=المرتبة 2
+Rank 3=المرتبة 3
+Rank 4=المرتبة 4
+Rank 5=المرتبة 5
+Rank 6=المرتبة 6
+Rank 7=المرتبة 7
+Rank 8=المرتبة 8
+Rank 9=المرتبة 9
+Rank 10=المرتبة 10
+# ─────────────────────────────────────────────────
+# مواد صناعة الجواهر (Gem Crafting Materials)
+# ─────────────────────────────────────────────────
+Shimmering Ore=خام لامع
+Dull Stone=حجر باهت
+Amber Crystal=بلورة كهرمانية
+Silver Ore=خام فضي
+Gold Ore=خام ذهبي
+Luminous Crystal=بلورة مضيئة
+Rainbow Ore=خام قوس قزح
+Fire Element=عنصر النار
+Water Element=عنصر الماء
+Ice Element=عنصر الجليد
+Wind Element=عنصر الرياح
+Earth Element=عنصر الأرض
+Electric Element=عنصر الكهرباء
+Light Element=عنصر النور
+Dark Element=عنصر الظلام
