@@ -7117,3 +7117,331 @@ And no matter how far apart we are...=ومهما ابتعدنا عن بعضنا.
 The off-seeing continues. For all who came before.=يستمر إنشاد الوداع. لكل من سبقنا.
 And for all who will come after.=ولكل من سيأتي بعدنا.
 This is our story. And it will echo forever.=هذه قصتنا. وستتردد أصداؤها للأبد.
+
+
+# ╔═══════════════════════════════════════════════════════════════╗
+# ║         DLC: Future Redeemed - حوارات المستقبل المُستعاد         ║
+# ╚═══════════════════════════════════════════════════════════════╝
+
+# ═══════════════════════════════════════════════════════════════
+# شخصيات Future Redeemed الأساسية
+# ═══════════════════════════════════════════════════════════════
+
+Matthew=ماثيو
+A=إيه
+Nikol=نيكول
+Glimmer=غليمر
+Shulk=شولك
+Rex=ريكس
+Na'el=نائيل
+Alpha=ألفا
+
+# --- ألقاب ومسميات ---
+The Liberator=المحرر
+Successor=الوريث
+Successor of the Aegis=وريث الإيجيس
+Pneuma's Successor=وريثة بنيوما
+The True Architect=المهندس الحقيقي
+Architect of the World=مهندس العالم
+Logos=لوغوس
+Pneuma=بنيوما
+Ontos=أونتوس
+Trinity Processor=المعالج الثلاثي
+Conduit=القناة
+The Passage of Fate=ممر القدر
+
+# ═══════════════════════════════════════════════════════════════
+# مصطلحات وأنظمة Future Redeemed
+# ═══════════════════════════════════════════════════════════════
+
+# --- مناطق ---
+Cent-Omnia Region=منطقة سنت-أومنيا
+The Great Crevasse=الصدع العظيم
+Colony 9 Alcamoth=ألكاموث المستعمرة 9
+Ragmos=راغموس
+Llyn Nyddwr=لين نيدور
+New Colony 9=المستعمرة 9 الجديدة
+Prison Island=جزيرة السجن
+Amphitheatre=المدرج
+The Boundary=الحدود
+
+# --- أنظمة لعب ---
+Unity Combo=كومبو الوحدة
+Union Arts=فنون الاتحاد
+Community Development=تطوير المجتمع
+Affinity Growth=نمو الألفة
+Key of Passage=مفتاح الممر
+Founders' Seal=ختم المؤسسين
+Archsage=كبير الحكماء
+Brave Assault=هجوم شجاع
+Brave Combo=كومبو الشجاعة
+Unification=التوحيد
+
+# ═══════════════════════════════════════════════════════════════
+# حوارات الفصل 1 - لقاء ماثيو وإيه (Meeting of Matthew & A)
+# ═══════════════════════════════════════════════════════════════
+
+I'm going to put things right. All of it.=سأصحح الأمور. كل شيء.
+The name's Matthew. And I'm going to change this world.=اسمي ماثيو. وسأغير هذا العالم.
+You talk big for someone so small.=تتكلم كثيرًا لشخص صغير هكذا.
+I don't care what you think. I've made up my mind.=لا يهمني ما تعتقد. لقد حسمت أمري.
+Another one who thinks he can defy fate...=شخص آخر يظن أنه يستطيع تحدي القدر...
+Fate? I don't believe in that. I make my own path.=القدر؟ لا أؤمن بذلك. أصنع طريقي بنفسي.
+You remind me of someone I knew long ago.=تذكرني بشخص عرفته منذ زمن بعيد.
+I've been fighting for longer than you can imagine.=أقاتل منذ أطول مما تتخيل.
+This world is broken. And Alpha is the one who broke it.=هذا العالم مكسور. وألفا هو من كسره.
+Then we share the same enemy.=إذن نتشارك نفس العدو.
+
+# ═══════════════════════════════════════════════════════════════
+# حوارات الفصل 2 - لقاء الأبطال (Meeting the Heroes)
+# ═══════════════════════════════════════════════════════════════
+
+# --- لقاء شولك ---
+I've waited a long time for this moment.=انتظرت هذه اللحظة طويلاً.
+The Monado showed me the truth of this world.=أراني الموناد حقيقة هذا العالم.
+Visions... I used to see the future. Now I fight to change it.=الرؤى... كنت أرى المستقبل. الآن أقاتل لتغييره.
+This power... it's not just mine. It belongs to everyone.=هذه القوة... ليست ملكي وحدي. إنها ملك الجميع.
+I once faced a god who wanted to control everything.=واجهت ذات مرة إلهًا أراد التحكم بكل شيء.
+And I chose to create a world without gods.=واخترت أن أصنع عالمًا بلا آلهة.
+A world where people decide their own future.=عالمًا يقرر فيه الناس مستقبلهم بأنفسهم.
+
+# --- لقاء ريكس ---
+Pyra... Mythra... I carry their will with me.=بايرا... ميثرا... أحمل إرادتهما معي.
+I promised to take them to Elysium. And I did.=وعدت بأخذهما إلى الإليزيوم. وفعلت.
+But the fight isn't over. Not while Alpha threatens everything.=لكن القتال لم ينتهِ. ليس بينما يهدد ألفا كل شيء.
+You can count on me. I never abandon my friends.=يمكنك الاعتماد عليّ. لا أتخلى عن أصدقائي أبدًا.
+The Aegis chose me for a reason. And I won't let it down.=اختارني الإيجيس لسبب. ولن أخذله.
+All of you matter. Every single life in this world.=كلكم مهمون. كل حياة في هذا العالم.
+
+# ═══════════════════════════════════════════════════════════════
+# حوارات نيكول وغليمر (Nikol & Glimmer Dialogues)
+# ═══════════════════════════════════════════════════════════════
+
+# --- نيكول ---
+My father was Shulk. I carry his legacy.=أبي كان شولك. أحمل إرثه.
+I may not have the Monado, but I have his determination.=قد لا أملك الموناد، لكنني أملك عزيمته.
+I can feel it... the resonance of the Conduit.=أستطيع الشعور بها... رنين القناة.
+We can't let Alpha reach the Conduit. No matter what.=لا يمكننا السماح لألفا بالوصول للقناة. مهما حدث.
+Father told me about Mechonis, about Zanza.=أخبرني أبي عن ميكونيس، عن زانزا.
+I won't repeat the mistakes of the past.=لن أكرر أخطاء الماضي.
+There's a way to fix this. There has to be.=هناك طريقة لإصلاح هذا. لا بد أن تكون.
+
+# --- غليمر ---
+My mother was the Aegis. Both of them.=أمي كانت الإيجيس. كلتاهما.
+Pyra's warmth and Mythra's strength... I carry both.=دفء بايرا وقوة ميثرا... أحمل كليهما.
+I won't let anyone use the Aegis's power for destruction.=لن أسمح لأحد باستخدام قوة الإيجيس للتدمير.
+Father always said: every life has value.=أبي كان يقول دائمًا: كل حياة لها قيمة.
+I can sense Na'el's pain. She's not truly our enemy.=أستطيع الشعور بألم نائيل. هي ليست عدوتنا حقًا.
+The light of the Aegis... it doesn't just destroy. It protects.=نور الإيجيس... لا يدمر فحسب. بل يحمي.
+
+# ═══════════════════════════════════════════════════════════════
+# حوارات نائيل (Na'el Dialogues)
+# ═══════════════════════════════════════════════════════════════
+
+You don't understand what I've been through.=لا تفهمون ما مررت به.
+Alpha promised me a world without suffering.=وعدني ألفا بعالم بلا معاناة.
+I was discarded. Thrown away like I was nothing.=تم التخلي عني. رُميت كأنني لا شيء.
+Is it wrong to want a world where no one has to suffer?=هل من الخطأ أن أريد عالمًا لا يعاني فيه أحد؟
+I've seen what people do when given freedom. They destroy.=رأيت ما يفعله الناس حين يُمنحون الحرية. يدمرون.
+Maybe Alpha is right. Maybe this world needs to be remade.=ربما ألفا محقّ. ربما هذا العالم يحتاج لإعادة صنع.
+But... when I look at you all... I wonder if I'm wrong.=لكن... حين أنظر إليكم جميعًا... أتساءل إن كنت مخطئة.
+You fight so hard for a broken world. Why?=تقاتلون بشدة من أجل عالم مكسور. لماذا؟
+Because it's worth saving? Even like this?=لأنه يستحق الإنقاذ؟ حتى هكذا؟
+Perhaps... perhaps I've been looking at it all wrong.=ربما... ربما كنت أنظر للأمور بشكل خاطئ.
+
+# ═══════════════════════════════════════════════════════════════
+# حوارات ألفا - الخصم الرئيسي (Alpha Dialogues)
+# ═══════════════════════════════════════════════════════════════
+
+I am the Architect. The true one.=أنا المهندس. الحقيقي.
+This world was never meant to exist in this form.=هذا العالم لم يكن يُفترض أن يوجد بهذا الشكل.
+Zanza failed. Klaus failed. I will not.=فشل زانزا. فشل كلاوس. أنا لن أفشل.
+The Conduit holds the key to remaking everything.=القناة تحمل مفتاح إعادة صنع كل شيء.
+You cling to your petty bonds. They mean nothing.=تتمسكون بروابطكم التافهة. لا تعني شيئًا.
+I will create a perfect world. One without flaw.=سأخلق عالمًا مثاليًا. بلا عيب.
+Free will is an illusion. Order is the only truth.=الإرادة الحرة وهم. النظام هو الحقيقة الوحيدة.
+You are echoes of a failed experiment. Nothing more.=أنتم أصداء تجربة فاشلة. لا أكثر.
+The Trinity Processor was meant for one purpose.=المعالج الثلاثي كان مخصصًا لغرض واحد.
+To recreate the universe. And I will fulfill that purpose.=لإعادة خلق الكون. وسأحقق ذلك الغرض.
+Your resistance is meaningless. The outcome is predetermined.=مقاومتكم بلا معنى. النتيجة محددة مسبقًا.
+Predetermined? That word has no power over us.=محددة مسبقًا؟ تلك الكلمة لا سلطة لها علينا.
+
+# ═══════════════════════════════════════════════════════════════
+# حوارات المعارك الرئيسية (Boss Battle Dialogues)
+# ═══════════════════════════════════════════════════════════════
+
+# --- معركة ألفا الأولى ---
+Show me the power you claim to have!=أروني القوة التي تدّعون امتلاكها!
+Is that all? Pathetic.=هذا كل شيء؟ مثير للشفقة.
+The Conduit responds to my will alone!=القناة تستجيب لإرادتي وحدي!
+You cannot stop what has already begun!=لا يمكنكم إيقاف ما بدأ بالفعل!
+
+# --- معركة ألفا النهائية ---
+I will unmake everything and rebuild from nothing!=سأفكك كل شيء وأعيد البناء من العدم!
+This is the end of your futile struggle!=هذه نهاية صراعكم العقيم!
+Impossible! How can you still stand?!=مستحيل! كيف لا تزالون واقفين؟!
+The will of mortals... surpassing a god?!=إرادة البشر... تفوق إلهًا؟!
+
+# --- ردود الأبطال في المعركة ---
+We're not fighting alone! We never were!=لسنا نقاتل وحدنا! لم نكن كذلك أبدًا!
+This power isn't mine. It's ours!=هذه القوة ليست ملكي. إنها ملكنا!
+Shulk! Rex! Lend us your strength!=شولك! ريكس! أعيرانا قوتكما!
+The future isn't yours to decide, Alpha!=المستقبل ليس لك لتقرره يا ألفا!
+Every life that was lived... every choice that was made...=كل حياة عُيشت... كل خيار اتُّخذ...
+They all led to this moment!=كلها قادت لهذه اللحظة!
+
+# ═══════════════════════════════════════════════════════════════
+# حوارات المعسكر والتفاعل (Camp & Interaction)
+# ═══════════════════════════════════════════════════════════════
+
+# --- ماثيو في المعسكر ---
+I wonder what Grandad would say if he could see me now.=أتساءل ماذا سيقول جدي لو رآني الآن.
+The people of Colony 9... they're counting on us.=سكان المستعمرة 9... يعتمدون علينا.
+A, you've been alive for so long. Don't you get tired?=إيه، عشت لفترة طويلة جدًا. ألا تتعب؟
+I'm not just fighting for myself. I'm fighting for everyone.=لا أقاتل لأجل نفسي فحسب. أقاتل لأجل الجميع.
+
+# --- إيه في المعسكر ---
+I've seen civilizations rise and fall. But hope always returns.=رأيت حضارات تنهض وتسقط. لكن الأمل يعود دائمًا.
+You're young. That's not a weakness. It's a strength.=أنت صغير. هذا ليس ضعفًا. إنه قوة.
+Shulk, Rex... their children carry their spirit.=شولك، ريكس... أبناؤهما يحملان روحهما.
+I've waited centuries for someone like you.=انتظرت قرونًا لشخص مثلك.
+
+# --- شولك في المعسكر ---
+Fiora would love this view. I'll bring her here someday.=فيورا ستحب هذا المنظر. سأحضرها هنا يومًا ما.
+The Monado taught me that the future is never fixed.=الموناد علمني أن المستقبل ليس ثابتًا أبدًا.
+Nikol... you've grown so much. I'm proud of you.=نيكول... لقد كبرت كثيرًا. أنا فخور بك.
+Even without the Monado, I can still see a future worth fighting for.=حتى بدون الموناد، لا أزال أرى مستقبلاً يستحق القتال.
+
+# --- ريكس في المعسكر ---
+Pyra, Mythra... I promised I'd protect this world. And I will.=بايرا، ميثرا... وعدت بحماية هذا العالم. وسأفعل.
+Glimmer has her mother's eyes. And her father's stubbornness.=غليمر تملك عيني أمها. وعناد أبيها.
+I used to be a salvager. Now I'm saving the whole world.=كنت غوّاص إنقاذ. الآن أنقذ العالم بأكمله.
+No matter how dark it gets, the light always breaks through.=مهما اشتد الظلام، النور يخترقه دائمًا.
+
+# ═══════════════════════════════════════════════════════════════
+# حوارات تطوير المجتمع (Community Development)
+# ═══════════════════════════════════════════════════════════════
+
+The colony is growing. People are starting to hope again.=المستعمرة تنمو. الناس بدؤوا يأملون مجددًا.
+We need more supplies. Can you help us gather materials?=نحتاج مزيدًا من الإمدادات. هل يمكنك مساعدتنا في جمع المواد؟
+The walls are repaired. We're safer now.=الجدران أُصلحت. نحن أكثر أمانًا الآن.
+Thank you. Because of you, we have a future.=شكرًا لك. بفضلك، لدينا مستقبل.
+The children... they're laughing again. That's all I needed to hear.=الأطفال... يضحكون مجددًا. هذا كل ما احتجت سماعه.
+Every building we raise is a statement: we're here to stay.=كل مبنى نرفعه هو تصريح: نحن هنا لنبقى.
+I never thought I'd see the day. A community, working together.=لم أظن أنني سأرى هذا اليوم. مجتمع يعمل معًا.
+You've given us something no one else could: purpose.=منحتنا شيئًا لم يستطع أحد غيرك: هدفًا.
+
+# ═══════════════════════════════════════════════════════════════
+# حوارات الاستكشاف الميداني (Field Exploration)
+# ═══════════════════════════════════════════════════════════════
+
+This place... it's the ruins of Colony 9 from Father's time.=هذا المكان... أنقاض المستعمرة 9 من زمن أبي.
+Alcamoth... once a great city. Now look at it.=ألكاموث... كانت مدينة عظيمة. انظروا إليها الآن.
+The Boundary is close. I can feel its energy.=الحدود قريبة. أستطيع الشعور بطاقتها.
+These lands were split by Origin's power.=هذه الأراضي انشقت بقوة الأوريجن.
+I recognize this area. It's from the world of the Bionis.=أعرف هذه المنطقة. إنها من عالم البيونيس.
+And this part... it's Alrest. Rex's world.=وهذا الجزء... إنه ألريست. عالم ريكس.
+Two worlds merged into one. That's why everything looks so strange.=عالمان اندمجا في واحد. لذلك كل شيء يبدو غريبًا.
+Prison Island... Shulk told me about this place.=جزيرة السجن... أخبرني شولك عن هذا المكان.
+The Great Crevasse divides more than land. It divides histories.=الصدع العظيم يقسم أكثر من الأرض. يقسم التواريخ.
+
+# ═══════════════════════════════════════════════════════════════
+# حوارات أحداث القلب - Future Redeemed (Heart-to-Hearts)
+# ═══════════════════════════════════════════════════════════════
+
+# --- ماثيو ونيكول ---
+Nikol, what was it like? Growing up with Shulk as a dad?=نيكول، كيف كان الأمر؟ أن تكبر وشولك هو أبوك؟
+He was... just a regular dad, honestly. Except for the visions.=كان... مجرد أب عادي، بصراحة. باستثناء الرؤى.
+Must be nice. Having a dad who saved the world.=لا بد أن ذلك رائع. أن يكون أبوك من أنقذ العالم.
+It came with expectations. Big ones.=جاء مع توقعات. كبيرة.
+
+# --- غليمر ونائيل ---
+Na'el... why do you serve Alpha?=نائيل... لماذا تخدمين ألفا؟
+Because he's the only one who never abandoned me.=لأنه الوحيد الذي لم يتخلَّ عني أبدًا.
+That's not true. You have us now.=هذا ليس صحيحًا. لديكِ نحن الآن.
+Us? You don't even know me.=نحن؟ أنتِ حتى لا تعرفينني.
+I know enough. I know you're hurting.=أعرف ما يكفي. أعرف أنك تتألمين.
+
+# --- شولك وريكس ---
+Rex, your world... Alrest. What was it like?=ريكس، عالمك... ألريست. كيف كان؟
+Blue. Endless blue. Titans floating on a sea of clouds.=أزرق. أزرق لا نهائي. عمالقة يطفون على بحر من السحب.
+Sounds beautiful. My world was different. Land as far as the eye could see.=يبدو جميلاً. عالمي كان مختلفًا. أرض بقدر ما ترى العين.
+Different worlds, same fight. Funny how that works.=عوالم مختلفة، نفس القتال. مضحك كيف يحدث ذلك.
+You know, Rex, our kids are out there fighting together.=تعلم يا ريكس، أبناؤنا هناك يقاتلون معًا.
+Best thing we ever did. Raising them right.=أفضل شيء فعلناه. تربيتهم بشكل صحيح.
+
+# ═══════════════════════════════════════════════════════════════
+# حوارات المعركة الصوتية (Battle Voice Lines)
+# ═══════════════════════════════════════════════════════════════
+
+# --- ماثيو ---
+Let's finish this!=لننهِ هذا!
+You're not taking anyone else!=لن تأخذ أحدًا آخر!
+Unity Combo, now!=كومبو الوحدة، الآن!
+I'll break through!=سأخترق!
+This is our power!=هذه قوتنا!
+
+# --- إيه ---
+How predictable.=يا له من توقع.
+I've fought worse.=قاتلت ما هو أسوأ.
+Stay focused.=ابقَ مركزًا.
+Don't waste my time.=لا تضيع وقتي.
+Hmph. Too easy.=همف. سهل جدًا.
+
+# --- شولك ---
+I can see the future!=أستطيع رؤية المستقبل!
+Monado... lend me your power!=موناد... أعِرني قوتك!
+I'm really feeling it!=حقًا أشعر بها!
+Back Slash!=ضربة الظهر!
+This is the power of the Monado!=هذه قوة الموناد!
+
+# --- ريكس ---
+I'll show you the power of the Aegis!=سأريك قوة الإيجيس!
+Burning Sword!=السيف الملتهب!
+Don't forget me!=لا تنسوني!
+Anchor Shot!=طلقة المرساة!
+Rolling Smash!=الضربة الدوّارة!
+
+# --- نيكول ---
+I won't fall behind!=لن أتخلف!
+For Colony 9!=من أجل المستعمرة 9!
+Take this!=خذ هذه!
+I can do this!=أستطيع فعل هذا!
+
+# --- غليمر ---
+The light of the Aegis!=نور الإيجيس!
+I'll protect everyone!=سأحمي الجميع!
+Sacred Arrow!=السهم المقدس!
+This ends here!=ينتهي هذا هنا!
+
+# ═══════════════════════════════════════════════════════════════
+# خاتمة Future Redeemed (Ending)
+# ═══════════════════════════════════════════════════════════════
+
+# --- المواجهة الأخيرة مع ألفا ---
+Alpha! Your perfect world is a prison!=ألفا! عالمك المثالي سجن!
+A world without choice isn't a world at all!=عالم بلا خيار ليس عالمًا أصلاً!
+I am beyond your comprehension!=أنا أبعد من استيعابكم!
+We don't need to comprehend you. We just need to stop you!=لا نحتاج أن نفهمك. نحتاج فقط أن نوقفك!
+The Conduit... it's reacting to their bonds?!=القناة... تتفاعل مع روابطهم؟!
+That's right. Our bonds are our strength!=هذا صحيح. روابطنا هي قوتنا!
+Impossible... I am the Architect... I am...=مستحيل... أنا المهندس... أنا...
+You're nothing. Because you chose to stand alone.=أنت لا شيء. لأنك اخترت أن تقف وحيدًا.
+
+# --- خاتمة ووداع ---
+The Conduit is gone. The worlds can finally heal.=القناة اختفت. العوالم يمكنها أخيرًا أن تتعافى.
+Shulk, Rex... thank you. For everything.=شولك، ريكس... شكرًا لكما. على كل شيء.
+The future isn't written. It never was.=المستقبل ليس مكتوبًا. لم يكن كذلك أبدًا.
+Take care of this world, Matthew. It's yours now.=اعتنِ بهذا العالم يا ماثيو. إنه لك الآن.
+I will. I promise.=سأفعل. أعدك.
+Father... Mother... I understand now.=أبي... أمي... أفهم الآن.
+The future isn't something you wait for. It's something you build.=المستقبل ليس شيئًا تنتظره. إنه شيء تبنيه.
+Na'el... are you okay?=نائيل... هل أنتِ بخير؟
+I think so. For the first time in a long time.=أعتقد ذلك. لأول مرة منذ وقت طويل.
+You have a place with us. If you want it.=لديكِ مكان معنا. إذا أردتِ.
+I... I'd like that. Thank you.=أنا... أود ذلك. شكرًا لك.
+The worlds Shulk and Rex saved... the world Noah and Mio fought for...=العوالم التي أنقذها شولك وريكس... العالم الذي قاتل من أجله نوح وميو...
+It all comes together here. In us.=كل شيء يجتمع هنا. فينا.
+The future is redeemed. And it belongs to everyone.=المستقبل مُستعاد. وهو ملك للجميع.
+This is the beginning of a new story.=هذه بداية قصة جديدة.
+A story we'll write together.=قصة سنكتبها معًا.
