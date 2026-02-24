@@ -3382,3 +3382,165 @@ Shulk's Outfit=زي شالك
 Rex's Outfit=زي ريكس
 Liberator Outfit=زي المحرر
 Resistance Outfit=زي المقاومة
+# ═══════════════════════════════════════════════════
+# الطبخ والوصفات والمواد الغذائية (Cooking / Recipes / Food)
+# ═══════════════════════════════════════════════════
+# ─────────────────────────────────────────────────
+# نظام الطبخ العام
+# ─────────────────────────────────────────────────
+Cooking=الطبخ
+Cook=طبخ
+Recipe=وصفة
+Recipes=الوصفات
+Meal=وجبة
+Dish=طبق
+Ingredients=المكونات
+Ingredient=مكوّن
+Cooking Rank=رتبة الطبخ
+Cooking Level=مستوى الطبخ
+Cook a Meal=طبخ وجبة
+Select a Recipe=اختر وصفة
+Learn New Recipe=تعلم وصفة جديدة
+Recipe Learned=تم تعلم الوصفة
+Recipe List=قائمة الوصفات
+Cooking Effect=تأثير الطبخ
+Meal Effect=تأثير الوجبة
+Effect Duration=مدة التأثير
+Rest and Cook=استراحة وطبخ
+Campfire Cooking=طبخ على نار المخيم
+Rest Spot=نقطة استراحة
+# ─────────────────────────────────────────────────
+# تأثيرات الوجبات
+# ─────────────────────────────────────────────────
+EXP Bonus=مكافأة نقاط الخبرة
+AP Bonus=مكافأة نقاط القدرة
+SP Bonus=مكافأة نقاط المهارة
+Gold Bonus=مكافأة الذهب
+Item Drop Rate Up=زيادة معدل سقوط العناصر
+Rare Item Drop Rate Up=زيادة معدل سقوط العناصر النادرة
+Attack Boost=تعزيز الهجوم
+Defense Boost=تعزيز الدفاع
+HP Recovery=استعادة نقاط الصحة
+Ether Defense Boost=تعزيز الدفاع الأثيري
+Critical Rate Up=زيادة معدل الضربات الحرجة
+Agility Boost=تعزيز الخفة
+Block Rate Up=زيادة معدل الصد
+# ─────────────────────────────────────────────────
+# المواد الغذائية - لحوم وأسماك
+# ─────────────────────────────────────────────────
+Meat=لحم
+Fresh Meat=لحم طازج
+Prime Meat=لحم ممتاز
+Tender Meat=لحم طري
+Beast Meat=لحم الوحش
+Armu Meat=لحم أرمو
+Ardun Meat=لحم أردون
+Krabble Meat=لحم كرابل
+Fish=سمك
+Fresh Fish=سمك طازج
+Fine Fish=سمك فاخر
+River Fish=سمك نهري
+Sea Fish=سمك بحري
+Ether Fish=سمك الأثير
+Sardi=ساردي
+Bunnit Meat=لحم بانيت
+# ─────────────────────────────────────────────────
+# المواد الغذائية - خضروات وفواكه
+# ─────────────────────────────────────────────────
+Vegetables=خضروات
+Vegetable=خضار
+Fresh Vegetables=خضروات طازجة
+Root Vegetable=خضار جذري
+Leafy Vegetable=خضار ورقي
+Mushroom=فطر
+Mushrooms=فطر
+Rare Mushroom=فطر نادر
+Cave Mushroom=فطر الكهف
+Forest Mushroom=فطر الغابة
+Fruit=فاكهة
+Fruits=فواكه
+Sweet Fruit=فاكهة حلوة
+Sour Fruit=فاكهة حامضة
+Wild Berry=توت بري
+Ether Berry=توت الأثير
+Spice=توابل
+Spices=توابل
+Herb=عشبة
+Herbs=أعشاب
+Aromatic Herb=عشبة عطرية
+# ─────────────────────────────────────────────────
+# المواد الغذائية - حبوب ومنتجات أخرى
+# ─────────────────────────────────────────────────
+Grain=حبوب
+Wheat=قمح
+Rice=أرز
+Flour=طحين
+Sugar=سكر
+Salt=ملح
+Honey=عسل
+Egg=بيضة
+Eggs=بيض
+Milk=حليب
+Butter=زبدة
+Cheese=جبن
+Oil=زيت
+Cooking Oil=زيت الطبخ
+Water=ماء
+Fresh Water=ماء عذب
+Spring Water=ماء الينبوع
+# ─────────────────────────────────────────────────
+# وصفات شهيرة من اللعبة
+# ─────────────────────────────────────────────────
+Grilled Meat=لحم مشوي
+Meat Skewer=سيخ لحم
+Steak=ستيك
+Roasted Fish=سمك مشوي
+Fish Stew=يخنة السمك
+Vegetable Soup=شوربة خضار
+Mushroom Soup=شوربة الفطر
+Fruit Salad=سلطة فواكه
+Mushroom Saute=فطر مقلي
+Mixed Stir-Fry=مقلي مشكل
+Herb Tea=شاي الأعشاب
+Sweet Dessert=حلوى
+Honey Cake=كعكة العسل
+Bread=خبز
+Fresh Bread=خبز طازج
+Meat Pie=فطيرة لحم
+Gratin=غراتان
+Pasta=معكرونة
+Curry=كاري
+Rice Bowl=طبق أرز
+Fried Rice=أرز مقلي
+Fried Egg=بيضة مقلية
+Omelette=أومليت
+Pancake=فطيرة
+Sandwich=سندويشة
+Dumpling=زلابية
+Stew=يخنة
+Roast=مشوي
+# ─────────────────────────────────────────────────
+# وجبات بتأثيرات خاصة
+# ─────────────────────────────────────────────────
+Power Meal=وجبة القوة
+Defense Meal=وجبة الدفاع
+Speed Meal=وجبة السرعة
+Lucky Meal=وجبة الحظ
+EXP Meal=وجبة الخبرة
+Wealth Meal=وجبة الثروة
+Survival Meal=وجبة البقاء
+Party Meal=وجبة الفريق
+Ultimate Feast=وليمة مطلقة
+Nopon Special=طبق النوبون الخاص
+Colony Specialty=طبق المستعمرة المميز
+# ─────────────────────────────────────────────────
+# أدوات ومعدات الطبخ
+# ─────────────────────────────────────────────────
+Cooking Pot=قدر الطبخ
+Frying Pan=مقلاة
+Grill=شواية
+Campfire=نار المخيم
+Portable Stove=موقد محمول
+Cutting Board=لوح التقطيع
+Ladle=مغرفة
+Skewer=سيخ
