@@ -17198,3 +17198,761 @@ Don't look back.=لا تنظروا للخلف.
 # --- نهاية نصائح التحميل ورسائل الشاشة ---
 # End of Loading Tips & Screen Messages
 # Total sections: 213-227 (Loading Tips & Screen Messages)
+
+# ============================================================
+# القسم 228: معالم ومواقع منطقة أيتيا (Aetia Region Landmarks & Locations)
+# Section 228: Aetia Region Landmarks & Locations
+# ============================================================
+
+# --- المعالم الرئيسية (Main Landmarks) ---
+Aetia Region=منطقة أيتيا
+Colony 9=المستعمرة 9
+Colony 9 Camp=معسكر المستعمرة 9
+Alfeto Valley=وادي ألفيتو
+Millick Meadows=مروج ميليك
+Everblight Plain=سهل النور الأبدي
+Yzana Plains=سهول يزانا
+Colony Omega=المستعمرة أوميغا
+Eagus Wilderness=برية إيغوس
+Loch Ciel=بحيرة سييل
+Ribbi Flats=سهول ريبي
+Saffronia Tree=شجرة سافرونيا
+Gura Flava Lowlands=أراضي غورا فلافا المنخفضة
+Ferronis Hulk (Colony 9)=هيكل الفيرونيس (المستعمرة 9)
+Battlescar Canyon=وادي ندبة المعركة
+Tableland of Beginnings=هضبة البدايات
+Gura Flava Highroad=طريق غورا فلافا العلوي
+Ulzaback Overlook=مطل أولزاباك
+Hillside Ferronis Hulk=هيكل فيرونيس التلة
+Colony 4=المستعمرة 4
+Colony 4 Barracks=ثكنات المستعمرة 4
+Aetia Sea=بحر أيتيا
+Elsie Ravine=وادي إلسي
+Aetia, Lower=أيتيا السفلى
+Aetia, Upper=أيتيا العليا
+Pedestal of the Seal=ركيزة الختم
+Titan Rock=صخرة التيتان
+Old Kana Mill=طاحونة كانا القديمة
+Great Sword Monument=نصب السيف العظيم
+Kamos Guidepost=عمود كاموس الإرشادي
+Schala Searching Gate=بوابة شالا للبحث
+Colony Gamma=المستعمرة غاما
+Colony 0=المستعمرة 0
+Ferronis Wreck=حطام الفيرونيس
+Lakeside Camp=معسكر ضفة البحيرة
+Aetia Arch=قوس أيتيا
+Colony 9 Approach=مدخل المستعمرة 9
+
+# --- نقاط الراحة (Rest Spots) ---
+Colony 9 Canteen=مقصف المستعمرة 9
+Alfeto Campsite=موقع تخييم ألفيتو
+Millick Campsite=موقع تخييم ميليك
+Everblight Campsite=موقع تخييم النور الأبدي
+Hillside Campsite=موقع تخييم التلة
+Lakeside Campsite=موقع تخييم البحيرة
+
+# ============================================================
+# القسم 229: معالم ومواقع منطقة فورنيس (Fornis Region Landmarks & Locations)
+# Section 229: Fornis Region Landmarks & Locations
+# ============================================================
+
+Fornis Region=منطقة فورنيس
+Dannagh Desert=صحراء داناخ
+Colony Iota=المستعمرة يوتا
+Fornis Hulk=هيكل فورنيس
+Li Garte Prison Camp=معسكر سجن لي غارتيه
+Rae-Bel Tableland=هضبة راي-بيل
+Rae-Bel Tablelands=هضاب راي-بيل
+Colony Lambda=المستعمرة لامدا
+Colony Tau=المستعمرة تاو
+Milio Trick Caves=كهوف ميليو المخادعة
+Llyn Nyddwr=لين نيدور
+Saffronia Canyon=وادي سافرونيا
+Fornis, Eastern=فورنيس الشرقية
+Fornis, Western=فورنيس الغربية
+Great Desert Ferronis Hulk=هيكل فيرونيس الصحراء الكبرى
+Dannagh Sandsea=بحر رمال داناخ
+Llyn Nyddwr Cave=كهف لين نيدور
+The Sandstorm=العاصفة الرملية
+Desert Oasis=واحة الصحراء
+Fornis Lighthouse=منارة فورنيس
+Sand Dune Overlook=مطل الكثبان الرملية
+Ruined Garrison=الحامية المدمرة
+Sandstorm Shelter=ملجأ العاصفة الرملية
+Ribbi Plain=سهل ريبي
+Colony 4 Approach=مدخل المستعمرة 4
+Tabletop Oasis=واحة سطح الطاولة
+Li Garte Approach=مدخل لي غارتيه
+Fornis Rock Arch=القوس الصخري في فورنيس
+Sandstone Bridge=جسر الحجر الرملي
+Dannagh Ruins=أطلال داناخ
+
+# --- نقاط الراحة ---
+Colony Tau Canteen=مقصف المستعمرة تاو
+Colony Lambda Canteen=مقصف المستعمرة لامدا
+Desert Campsite=موقع تخييم الصحراء
+Oasis Campsite=موقع تخييم الواحة
+Rae-Bel Campsite=موقع تخييم راي-بيل
+Fornis Campsite=موقع تخييم فورنيس
+
+# ============================================================
+# القسم 230: معالم ومواقع منطقة بينتولاس (Pentelas Region Landmarks & Locations)
+# Section 230: Pentelas Region Landmarks & Locations
+# ============================================================
+
+Pentelas Region=منطقة بينتولاس
+Colony 30=المستعمرة 30
+Colony Mu=المستعمرة مو
+Great Cotte Falls=شلالات كوته العظمى
+Maktha Wildwood=غابة ماكثا البرية
+Urayan Tunnels=أنفاق أوريا
+Colony 15=المستعمرة 15
+Swordmarch=مسيرة السيوف
+Eagus Wilderness Pass=ممر برية إيغوس
+Upper Maktha=ماكثا العليا
+Lower Maktha=ماكثا السفلى
+Pentelas, Northern=بينتولاس الشمالية
+Pentelas, Southern=بينتولاس الجنوبية
+Maktha Forest Gate=بوابة غابة ماكثا
+Cotte Falls Summit=قمة شلالات كوته
+Ancient Shrine=المعبد القديم
+Urayan Tunnel Entrance=مدخل أنفاق أوريا
+Pentelas Arch=قوس بينتولاس
+Colony 30 Entrance=مدخل المستعمرة 30
+Pentelas Highroad=طريق بينتولاس العلوي
+Maktha Bridge=جسر ماكثا
+Wildwood Clearing=فسحة الغابة البرية
+Waterfall Basin=حوض الشلال
+Temple of the Sages=معبد الحكماء
+Maktha Wildwood Depths=أعماق غابة ماكثا البرية
+Ancient Battlefield=ساحة المعركة القديمة
+Cotte River=نهر كوته
+Sunken Hollow=الجوف الغارق
+
+# --- نقاط الراحة ---
+Colony 30 Canteen=مقصف المستعمرة 30
+Colony Mu Canteen=مقصف المستعمرة مو
+Maktha Campsite=موقع تخييم ماكثا
+Cotte Falls Campsite=موقع تخييم شلالات كوته
+Urayan Campsite=موقع تخييم أوريا
+
+# ============================================================
+# القسم 231: قلعة كيفيس والمناطق المحيطة (Keves Castle Region)
+# Section 231: Keves Castle Region Landmarks & Locations
+# ============================================================
+
+Keves Castle=قلعة كيفيس
+Keves Castle Region=منطقة قلعة كيفيس
+Keves Castle Gate=بوابة قلعة كيفيس
+Keves Castle Interior=داخل قلعة كيفيس
+Keves Castle Approach=مدخل قلعة كيفيس
+Throne Room=غرفة العرش
+Keves Castle Courtyard=فناء قلعة كيفيس
+Castle Ramparts=أسوار القلعة
+Keves Command Room=غرفة قيادة كيفيس
+Castle Dungeon=زنزانة القلعة
+Castle Observatory=مرصد القلعة
+Castle Library=مكتبة القلعة
+Castle Arsenal=ترسانة القلعة
+Keves Great Hall=قاعة كيفيس الكبرى
+Keves Barracks=ثكنات كيفيس
+Upper Castle=القلعة العليا
+Lower Castle=القلعة السفلى
+Castle Bridge=جسر القلعة
+Keves Memorial=نصب كيفيس التذكاري
+Mechonis Arm=ذراع الميكونيس
+Mechonis Sword=سيف الميكونيس
+
+# ============================================================
+# القسم 232: قلعة أغنوس والمناطق المحيطة (Agnus Castle Region)
+# Section 232: Agnus Castle Region Landmarks & Locations
+# ============================================================
+
+Agnus Castle=قلعة أغنوس
+Agnus Castle Region=منطقة قلعة أغنوس
+Agnus Castle Gate=بوابة قلعة أغنوس
+Agnus Castle Interior=داخل قلعة أغنوس
+Agnus Castle Approach=مدخل قلعة أغنوس
+Agnus Throne Room=غرفة عرش أغنوس
+Agnus Castle Courtyard=فناء قلعة أغنوس
+Agnus Ramparts=أسوار أغنوس
+Agnus Command Room=غرفة قيادة أغنوس
+Agnus Castle Dungeon=زنزانة قلعة أغنوس
+Agnus Observatory=مرصد أغنوس
+Agnus Library=مكتبة أغنوس
+Agnus Arsenal=ترسانة أغنوس
+Agnus Great Hall=قاعة أغنوس الكبرى
+Agnus Barracks=ثكنات أغنوس
+Agnus Upper Castle=قلعة أغنوس العليا
+Agnus Lower Castle=قلعة أغنوس السفلى
+Agnus Castle Bridge=جسر قلعة أغنوس
+Agnus Memorial=نصب أغنوس التذكاري
+
+# ============================================================
+# القسم 233: منطقة كادنسيا (Cadensia Region Landmarks & Locations)
+# Section 233: Cadensia Region Landmarks & Locations
+# ============================================================
+
+Cadensia Region=منطقة كادنسيا
+Erythia Sea=بحر إريثيا
+Colony 11=المستعمرة 11
+Colony 11 Dock=رصيف المستعمرة 11
+Great Sea of Cadensia=بحر كادنسيا العظيم
+Erythia Island=جزيرة إريثيا
+Floating Reef=الشعاب العائمة
+Cadensia Viewpoint=نقطة مراقبة كادنسيا
+Erythia Wharf=رصيف إريثيا
+Drifting Isle=الجزيرة الطائفة
+Azure Sea=البحر الأزرق
+Coral Beach=شاطئ المرجان
+Seaside Overlook=مطل البحر
+Hidden Cove=الخليج المخفي
+Lighthouse Island=جزيرة المنارة
+Storm Shelter=ملجأ العاصفة
+Cadensia Ruins=أطلال كادنسيا
+Sunken Ship=السفينة الغارقة
+Tidal Pool=بركة المد
+Sea Cave=كهف البحر
+Erythia Cliffs=جروف إريثيا
+Cadensia Whirlpool=دوامة كادنسيا
+Isle of the Fallen=جزيرة الأبطال الراحلين
+
+# --- نقاط الراحة ---
+Colony 11 Canteen=مقصف المستعمرة 11
+Erythia Campsite=موقع تخييم إريثيا
+Coral Campsite=موقع تخييم المرجان
+Seaside Campsite=موقع تخييم الشاطئ
+
+# ============================================================
+# القسم 234: غابة ماكثا البرية - تفصيلي (Maktha Wildwood - Detailed)
+# Section 234: Maktha Wildwood - Detailed Landmarks
+# ============================================================
+
+Maktha Wildwood=غابة ماكثا البرية
+Maktha Wildwood Entrance=مدخل غابة ماكثا البرية
+Upper Maktha Wildwood=غابة ماكثا البرية العليا
+Lower Maktha Wildwood=غابة ماكثا البرية السفلى
+Maktha Depths=أعماق ماكثا
+Maktha Cave System=نظام كهوف ماكثا
+Luminous Cave=الكهف المتلألئ
+Ancient Maktha Shrine=معبد ماكثا القديم
+Maktha Summit=قمة ماكثا
+Maktha River=نهر ماكثا
+Maktha Falls=شلالات ماكثا
+Maktha Canopy=سقف غابة ماكثا
+Root Bridge=جسر الجذور
+Mushroom Grove=بستان الفطر
+Moss Hollow=جوف الطحالب
+Spider's Nest=عش العنكبوت
+Ancient Tree=الشجرة القديمة
+Maktha Clearing=فسحة ماكثا
+Firefly Glade=وادي اليراعات
+Crystal Cave=كهف الكريستال
+Hidden Waterfall=الشلال المخفي
+Tangled Roots=الجذور المتشابكة
+Maktha Overlook=مطل ماكثا
+Forest Temple=معبد الغابة
+Sacred Grove=البستان المقدس
+
+# --- نقاط الراحة ---
+Maktha Depths Campsite=موقع تخييم أعماق ماكثا
+Canopy Campsite=موقع تخييم السقف
+Root Campsite=موقع تخييم الجذور
+
+# ============================================================
+# القسم 235: منطقة الأوريجن (Origin Region)
+# Section 235: Origin Region Landmarks & Locations
+# ============================================================
+
+Origin=الأوريجن
+Origin Interior=داخل الأوريجن
+Origin Exterior=خارج الأوريجن
+Origin Approach=مدخل الأوريجن
+Origin Core=نواة الأوريجن
+Origin First Level=المستوى الأول من الأوريجن
+Origin Second Level=المستوى الثاني من الأوريجن
+Origin Third Level=المستوى الثالث من الأوريجن
+Origin Final Level=المستوى الأخير من الأوريجن
+Origin Command Center=مركز قيادة الأوريجن
+Origin Cradle=مهد الأوريجن
+Origin Heart=قلب الأوريجن
+Origin Passage=ممر الأوريجن
+Origin Chamber=حجرة الأوريجن
+Origin Bridge=جسر الأوريجن
+Origin Observation Deck=سطح مراقبة الأوريجن
+Z's Domain=عالم زِد
+Z's Throne=عرش زِد
+Moebius Domain=عالم ميبيوس
+Origin Pillar=عمود الأوريجن
+Origin Gate=بوابة الأوريجن
+Origin Archive=أرشيف الأوريجن
+Origin Engine Room=غرفة محرك الأوريجن
+
+# ============================================================
+# القسم 236: نقاط الراحة - قائمة شاملة (Complete Rest Spots)
+# Section 236: Complete Rest Spots List
+# ============================================================
+
+# --- نقاط الراحة العامة ---
+Rest Spot=نقطة راحة
+Campsite=موقع تخييم
+Camp=معسكر
+Canteen=مقصف
+Cooking Spot=نقطة طبخ
+Save Point=نقطة حفظ
+Landmark=معلم
+Rest Area=منطقة استراحة
+
+# --- أوصاف نقاط الراحة ---
+A good place to set up camp.=مكان جيد لنصب المعسكر.
+The campfire crackles warmly.=طقطق الحطب بدفء.
+A quiet spot to rest and recover.=بقعة هادئة للراحة والتعافي.
+Set up camp here?=هل تريد نصب المعسكر هنا؟
+Break camp and move on?=هل تريد فك المعسكر والمضي قدماً؟
+The party rests at the campsite.=يستريح الفريق في موقع التخييم.
+Cook a meal at the campsite?=هل تريد طبخ وجبة في موقع التخييم؟
+Everyone gathers around the campfire.=يجتمع الجميع حول نار المعسكر.
+Rest until morning?=هل تريد الراحة حتى الصباح؟
+Rest until evening?=هل تريد الراحة حتى المساء؟
+A comforting place to rest after a long journey.=مكان مُريح للراحة بعد رحلة طويلة.
+The sound of water nearby is soothing.=صوت الماء القريب مهدئ.
+
+# ============================================================
+# القسم 237: المناطق السرية (Secret Areas)
+# Section 237: Secret Areas
+# ============================================================
+
+Secret Area=منطقة سرية
+Secret Area Discovered!=تم اكتشاف منطقة سرية!
+You discovered a secret area.=اكتشفت منطقة سرية.
+Hidden Area=منطقة مخفية
+Unexplored Territory=أرض غير مستكشفة
+Uncharted Region=منطقة غير مسجلة على الخريطة
+Secret Passage=ممر سري
+Hidden Cave=كهف مخفي
+Hidden Path=مسار مخفي
+Sealed Door=باب مختوم
+Ancient Ruin=أطلال قديمة
+Forgotten Temple=المعبد المنسي
+Lost Colony=المستعمرة المفقودة
+Sunken Ruins=الأطلال الغارقة
+Sky Garden=حديقة السماء
+Cloud Sea Ruins=أطلال بحر السحب
+Floating Island=الجزيرة العائمة
+Hidden Oasis=الواحة المخفية
+Ancient Battlefield=ساحة المعركة القديمة
+Dragon's Lair=عرين التنين
+Crystal Cavern=كهف الكريستال
+Moonlit Grotto=المغارة المقمرة
+Starlight Summit=قمة ضوء النجوم
+Wind Corridor=ممر الرياح
+Thunder Plateau=هضبة الرعد
+Frozen Falls=الشلالات المتجمدة
+Magma Chamber=حجرة الحمم
+Spirit's Rest=مرقد الأرواح
+
+# ============================================================
+# القسم 238: معالم الانتقال السريع (Skip Travel Landmarks)
+# Section 238: Skip Travel Landmarks
+# ============================================================
+
+Skip Travel=الانتقال السريع
+Skip Travel Point=نقطة الانتقال السريع
+You can now skip travel to this location.=يمكنك الآن الانتقال سريعاً إلى هذا الموقع.
+New skip travel landmark registered.=تم تسجيل معلم انتقال سريع جديد.
+Skip travel to this location?=هل تريد الانتقال سريعاً إلى هذا الموقع؟
+Select a skip travel destination.=اختر وجهة الانتقال السريع.
+Cannot skip travel during battle.=لا يمكن الانتقال السريع أثناء المعركة.
+Cannot skip travel from this location.=لا يمكن الانتقال السريع من هذا الموقع.
+Skip travel is not available right now.=الانتقال السريع غير متاح الآن.
+Landmark discovered!=تم اكتشاف معلم!
+New landmark registered.=تم تسجيل معلم جديد.
+Location registered as a landmark.=تم تسجيل الموقع كمعلم.
+
+# ============================================================
+# القسم 239: مصطلحات البيئة والتضاريس (Environment & Terrain Terms)
+# Section 239: Environment & Terrain Terms
+# ============================================================
+
+# --- التضاريس ---
+Mountain=جبل
+Mountains=جبال
+Valley=وادي
+Canyon=وادي عميق
+Cliff=جُرف
+Cave=كهف
+Forest=غابة
+Desert=صحراء
+Plain=سهل
+Plains=سهول
+Meadow=مرج
+Meadows=مروج
+Swamp=مستنقع
+Lake=بحيرة
+River=نهر
+Sea=بحر
+Ocean=محيط
+Island=جزيرة
+Peninsula=شبه جزيرة
+Waterfall=شلال
+Bridge=جسر
+Road=طريق
+Path=مسار
+Trail=ممر
+Gate=بوابة
+Tower=برج
+Fortress=حصن
+Ruins=أطلال
+Temple=معبد
+Shrine=مزار
+Peak=قمة
+Summit=قمة
+Ridge=سلسلة جبلية
+Gorge=مضيق
+Ravine=وادي ضيق
+Plateau=هضبة
+Lowlands=أراضي منخفضة
+Highlands=مرتفعات
+Hillside=سفح التل
+Hilltop=قمة التل
+Wetlands=أراضي رطبة
+Marsh=مستنقع
+Reef=شعاب مرجانية
+Cove=خليج صغير
+Bay=خليج
+Harbor=ميناء
+Wharf=رصيف
+Dock=رصيف ميناء
+Cavern=كهف كبير
+Grotto=مغارة
+Tunnel=نفق
+Pass=ممر جبلي
+Overlook=مطل
+Campsite=موقع تخييم
+Outpost=موقع أمامي
+Garrison=حامية
+Barracks=ثكنات
+
+# --- الطقس والوقت ---
+Clear Weather=طقس صافي
+Cloudy=غائم
+Rain=مطر
+Heavy Rain=أمطار غزيرة
+Thunderstorm=عاصفة رعدية
+Sandstorm=عاصفة رملية
+Snowstorm=عاصفة ثلجية
+Fog=ضباب
+Dense Fog=ضباب كثيف
+Heatwave=موجة حارة
+Dawn=فجر
+Morning=صباح
+Midday=ظهيرة
+Afternoon=بعد الظهر
+Dusk=غسق
+Evening=مساء
+Night=ليل
+Midnight=منتصف الليل
+Full Moon=بدر
+New Moon=محاق
+
+# ============================================================
+# القسم 240: أوصاف المناطق من الخريطة (Map Region Descriptions)
+# Section 240: Map Region Descriptions
+# ============================================================
+
+A vast region controlled by Colony 9.=منطقة شاسعة تسيطر عليها المستعمرة 9.
+A harsh desert region with towering sand dunes.=منطقة صحراوية قاسية بكثبان رملية شاهقة.
+A dense forest filled with ancient trees.=غابة كثيفة مليئة بالأشجار العتيقة.
+The castle stronghold of the Keves forces.=معقل قلعة قوات كيفيس.
+The castle stronghold of the Agnus forces.=معقل قلعة قوات أغنوس.
+A beautiful coastal region with crystal-clear waters.=منطقة ساحلية جميلة بمياه صافية كالكريستال.
+A deep and mysterious forest region.=منطقة غابات عميقة وغامضة.
+The final destination of the party's journey.=الوجهة الأخيرة في رحلة الفريق.
+An unexplored region filled with powerful enemies.=منطقة غير مستكشفة مليئة بأعداء أقوياء.
+A region scarred by the endless war.=منطقة ندبتها الحرب الأبدية.
+A peaceful region with rolling green hills.=منطقة هادئة بتلال خضراء متموجة.
+A frozen wasteland at the edge of the world.=أرض جليدية قاحلة في أطراف العالم.
+A volcanic region with rivers of molten rock.=منطقة بركانية بأنهار من الصخور المنصهرة.
+The ruins of a once-great civilization.=أطلال حضارة كانت يوماً عظيمة.
+A floating island high above the clouds.=جزيرة عائمة عالياً فوق السحب.
+Entering new area.=دخول منطقة جديدة.
+Now entering: =الآن تدخل: 
+Area map updated.=تم تحديث خريطة المنطقة.
+New area discovered.=تم اكتشاف منطقة جديدة.
+Map data has been updated.=تم تحديث بيانات الخريطة.
+
+# ============================================================
+# القسم 241: مواقع DLC - Future Redeemed: منطقة سنت-أومنيا (Cent-Omnia)
+# Section 241: DLC Future Redeemed - Cent-Omnia Region
+# ============================================================
+
+Cent-Omnia Region=منطقة سنت-أومنيا
+Cent-Omnia=سنت-أومنيا
+Cent-Omnia, Northern=سنت-أومنيا الشمالية
+Cent-Omnia, Southern=سنت-أومنيا الجنوبية
+Cent-Omnia, Eastern=سنت-أومنيا الشرقية
+Cent-Omnia, Western=سنت-أومنيا الغربية
+Cent-Omnia, Central=سنت-أومنيا الوسطى
+Prison Island=جزيرة السجن
+Bionis' Shoulder=كتف البيونيس
+Mechonis Field=حقل الميكونيس
+Fallen Arm=الذراع الساقطة
+Colony 6 Ruins=أطلال المستعمرة 6
+Central Plain=السهل المركزي
+Great Pillar=العمود العظيم
+Llyn Nyddwr Depths=أعماق لين نيدور
+Origin Interior (DLC)=داخل الأوريجن (DLC)
+Memories of the Future=ذكريات المستقبل
+Rex's Landmark=معلم ريكس
+Shulk's Path=مسار شولك
+Hope's Passage=ممر الأمل
+Unity Gate=بوابة الوحدة
+Future's Edge=حافة المستقبل
+
+# ============================================================
+# القسم 242: مواقع DLC - Future Redeemed: معالم تفصيلية
+# Section 242: DLC Future Redeemed - Detailed Landmarks
+# ============================================================
+
+Bionis' Shoulder Peak=قمة كتف البيونيس
+Bionis' Shoulder Base=قاعدة كتف البيونيس
+Shoulder Overlook=مطل الكتف
+Mechonis Wreckage=حطام الميكونيس
+Mechonis Core Fragment=شظية نواة الميكونيس
+Fallen Arm Beach=شاطئ الذراع الساقطة
+Fallen Arm Ruins=أطلال الذراع الساقطة
+Hidden Machina Village=قرية الماكينا المخفية
+Ancient Machina Workshop=ورشة الماكينا القديمة
+Nopon Campsite=موقع تخييم النوبون
+Nopon Trading Post=مركز تجارة النوبون
+Telethia Nest=عش التيليثيا
+Telethia Hunting Ground=أرض صيد التيليثيا
+High Entia Ruins=أطلال الهاي إنتيا
+Spirit Crucible Elpys=بوتقة الأرواح إلبيس
+Boundary of Worlds=حدود العوالم
+Convergence Point=نقطة التلاقي
+Liberation Gate=بوابة التحرير
+Architect's Tower=برج المهندس
+Conduit=القناة
+
+# ============================================================
+# القسم 243: مواقع DLC - Future Redeemed: مناطق المعارك
+# Section 243: DLC Future Redeemed - Battle Areas
+# ============================================================
+
+Alpha's Domain=عالم ألفا
+A's Stronghold=معقل آي
+Alpha's Arena=ساحة ألفا
+Final Battlefield (DLC)=ساحة المعركة الأخيرة (DLC)
+Convergence Arena=ساحة التلاقي
+Moebius Stronghold (DLC)=معقل ميبيوس (DLC)
+Ancient Battleground=أرض المعركة القديمة
+DLC Boss Arena=ساحة زعيم DLC
+Challenge Arena=ساحة التحدي
+Training Grounds (DLC)=أرض التدريب (DLC)
+Unique Monster Lair (DLC)=عرين الوحش الفريد (DLC)
+
+# ============================================================
+# القسم 244: مواقع DLC - Future Redeemed: كهوف ومغارات
+# Section 244: DLC Future Redeemed - Caves & Grottos
+# ============================================================
+
+Cent-Omnia Cave=كهف سنت-أومنيا
+Hidden Cavern (DLC)=الكهف المخفي (DLC)
+Underground Passage=الممر السفلي
+Machina Underground=تحت أرض الماكينا
+Crystal Mine=منجم الكريستال
+Ether Mine Entrance=مدخل منجم الأثير
+Ether Mine Depths=أعماق منجم الأثير
+Underground River=النهر السفلي
+Luminous Tunnel=النفق المتلألئ
+Frozen Cave=الكهف المتجمد
+
+# ============================================================
+# القسم 245: مواقع DLC - Future Redeemed: نقاط الراحة والتخييم
+# Section 245: DLC Future Redeemed - Rest Spots
+# ============================================================
+
+Bionis' Shoulder Camp=معسكر كتف البيونيس
+Fallen Arm Camp=معسكر الذراع الساقطة
+Central Plain Camp=معسكر السهل المركزي
+Prison Island Camp=معسكر جزيرة السجن
+Unity Camp=معسكر الوحدة
+Liberation Camp=معسكر التحرير
+Mechonis Field Camp=معسكر حقل الميكونيس
+Nopon Camp (DLC)=معسكر النوبون (DLC)
+DLC Rest Area=منطقة راحة DLC
+Rex's Campfire=نار معسكر ريكس
+Shulk's Rest=استراحة شولك
+Matthew's Camp=معسكر ماثيو
+Nikol's Rest=استراحة نيكول
+Glimmer's Spot=بقعة غليمر
+Na'el's Refuge=ملجأ نائيل
+
+# ============================================================
+# القسم 246: مصطلحات جغرافية عامة - المعالم المائية
+# Section 246: General Geographic Terms - Water Features
+# ============================================================
+
+Ether River=نهر الأثير
+Ether Lake=بحيرة الأثير
+Ether Falls=شلالات الأثير
+Ether Spring=ينبوع الأثير
+Cloud Sea=بحر السحب
+Titan Sea=بحر التيتان
+Crystal Lake=بحيرة الكريستال
+Spirit Lake=بحيرة الأرواح
+Sacred Spring=الينبوع المقدس
+Hot Spring=ينبوع حار
+Underground Stream=جدول سفلي
+Underground Lake=بحيرة سفلية
+Tidal Basin=حوض المد
+Whirlpool=دوامة
+Frozen Lake=بحيرة متجمدة
+Fog Lake=بحيرة الضباب
+Mirror Lake=بحيرة المرآة
+Moonlit Lake=بحيرة ضوء القمر
+Sunset Bay=خليج الغروب
+Storm Sea=بحر العاصفة
+
+# ============================================================
+# القسم 247: مصطلحات جغرافية عامة - الجبال والمرتفعات
+# Section 247: General Geographic Terms - Mountains & Highlands
+# ============================================================
+
+Titan's Peak=قمة التيتان
+Dragon's Peak=قمة التنين
+Storm Peak=قمة العاصفة
+Thunder Mountain=جبل الرعد
+Wind Mountain=جبل الرياح
+Fire Mountain=جبل النار
+Ice Mountain=جبل الجليد
+Sacred Mountain=الجبل المقدس
+Sleeping Giant=العملاق النائم
+Ancient Peak=القمة القديمة
+Sword Peak=قمة السيف
+Shield Mountain=جبل الدرع
+Crown Ridge=سلسلة التاج
+Eagle's Perch=مجثم النسر
+Hawk's Nest=عش الصقر
+Windswept Ridge=سلسلة الرياح العاصفة
+Snow-Capped Peak=القمة المكللة بالثلج
+Volcanic Summit=القمة البركانية
+Crystal Peak=قمة الكريستال
+
+# ============================================================
+# القسم 248: مصطلحات جغرافية عامة - الكهوف والممرات
+# Section 248: General Geographic Terms - Caves & Passages
+# ============================================================
+
+Deep Cave=كهف عميق
+Dark Cave=كهف مظلم
+Ice Cave=كهف جليدي
+Lava Cave=كهف الحمم
+Wind Cave=كهف الرياح
+Echo Cave=كهف الصدى
+Shadow Cave=كهف الظلال
+Spirit Cave=كهف الأرواح
+Dragon's Cave=كهف التنين
+Ancient Passage=ممر قديم
+Hidden Passage=ممر مخفي
+Underground City=مدينة سفلية
+Abandoned Mine=منجم مهجور
+Old Mine=المنجم القديم
+Secret Tunnel=نفق سري
+Ether Mine=منجم الأثير
+Collapsed Tunnel=نفق منهار
+Narrow Pass=ممر ضيق
+Mountain Pass=ممر جبلي
+Underground Ruins=أطلال سفلية
+
+# ============================================================
+# القسم 249: أسماء أماكن متكررة في الحوارات
+# Section 249: Frequently Referenced Location Names in Dialogue
+# ============================================================
+
+# --- أماكن مذكورة في القصة ---
+The City=المدينة
+City of the Founders=مدينة المؤسسين
+The Lost City=المدينة المفقودة
+Vandam's Village=قرية فاندام
+Guernica's Last Stand=موقف غيرنيكا الأخير
+Monica's Outpost=موقع مونيكا الأمامي
+Ghondor's Training Ground=أرض تدريب غوندور
+Riku's Workshop=ورشة ريكو
+Manana's Kitchen=مطبخ مانانا
+Ethel's Memorial=نصب إيثل التذكاري
+Cammuravi's Flame=لهب كاموراڤي
+Isurd's Watch=مرقب إيزورد
+Ashera's Post=موقع أشيرا
+Zeon's Watch=مرقب زيون
+Fiona's Refuge=ملجأ فيونا
+Teach's Arena=ساحة تيتش
+Triton's Dock=رصيف ترايتون
+Juniper's Nest=عش جونيبر
+Alexandria's Gate=بوابة ألكسندريا
+Gray's Forge=مسبك غراي
+
+# --- مصطلحات عالم اللعبة في الحوارات ---
+The Endless Now=اللحظة الأبدية
+The flow of life=تيار الحياة
+Annihilation Event=حدث الإبادة
+Intersection=التقاطع
+The Great War=الحرب العظمى
+Homecoming=حفل العودة
+Off-Seeing=إنشاد الوداع
+Flame Clock=ساعة اللهب
+The Cycle=الدورة
+The Queen's Will=إرادة الملكة
+The Consul's Domain=عالم القنصل
+
+# ============================================================
+# القسم 250: مصطلحات عامة - الأماكن والعمارة
+# Section 250: General Terms - Places & Architecture
+# ============================================================
+
+Colony=مستعمرة
+Ferronis=فيرونيس
+Ferronis Hulk=هيكل الفيرونيس
+Flame Clock=ساعة اللهب
+Iris=إيريس
+Collectopaedia=موسوعة المقتنيات
+Nopon Coin=عملة النوبون
+Nopon Coin X=عملة النوبون إكس
+Container=حاوية
+Ether Cylinder=أسطوانة الأثير
+Supply Drop=إسقاط إمدادات
+Battle Arena=ساحة المعركة
+Training Ground=أرض التدريب
+Workshop=ورشة
+Forge=مسبك
+Dock=رصيف
+Watchtower=برج مراقبة
+Guardpost=نقطة حراسة
+Market=سوق
+Tavern=حانة
+Inn=نزل
+Storehouse=مخزن
+Armory=مستودع أسلحة
+Mess Hall=قاعة الطعام
+Command Post=مركز القيادة
+Medical Bay=جناح طبي
+War Room=غرفة الحرب
+Memorial=نصب تذكاري
+Graveyard=مقبرة
+Chapel=كنيسة صغيرة
+Altar=مذبح
+Monument=نصب
+Statue=تمثال
+Fountain=نافورة
+Garden=حديقة
+Courtyard=فناء
+Plaza=ساحة
+Gate=بوابة
+Wall=سور
+Drawbridge=جسر متحرك
+Moat=خندق مائي
+
+# --- نهاية المواقع والمعالم ---
+# End of Locations & Landmarks
+# Total sections: 228-250 (Locations & Landmarks)
