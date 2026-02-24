@@ -6041,3 +6041,152 @@ Portal=البوابة
 Warp Portal=بوابة الانتقال
 Affinity Waypoint=نقطة مسار الألفة
 Unity Waypoint=نقطة مسار الوحدة
+
+# ===== نظام الحفظ والتحميل (Save & Load System) =====
+
+# --- الحفظ الأساسي (Basic Save) ---
+Save=حفظ
+Save Game=حفظ اللعبة
+Save Data=بيانات الحفظ
+Save File=ملف الحفظ
+Save Slot=خانة الحفظ
+Save Point=نقطة حفظ
+Manual Save=حفظ يدوي
+Quick Save=حفظ سريع
+Auto Save=حفظ تلقائي
+Auto-Save=حفظ تلقائي
+Autosave=حفظ تلقائي
+Save Complete=اكتمل الحفظ
+Saving=جارٍ الحفظ
+Save Successful=تم الحفظ بنجاح
+Save Failed=فشل الحفظ
+Overwrite Save=الكتابة فوق الحفظ
+Overwrite Confirmation=تأكيد الكتابة الفوقية
+Do Not Turn Off=لا تُطفئ الجهاز
+Saving in Progress=جارٍ الحفظ
+
+# --- التحميل (Loading) ---
+Load=تحميل
+Load Game=تحميل اللعبة
+Load Save=تحميل الحفظ
+Load Data=تحميل البيانات
+Loading=جارٍ التحميل
+Load Complete=اكتمل التحميل
+Load Failed=فشل التحميل
+Continue=متابعة
+Continue Game=متابعة اللعبة
+Resume=استئناف
+Last Save=آخر حفظ
+Most Recent Save=أحدث حفظ
+Load Confirmation=تأكيد التحميل
+Unsaved Progress=تقدم غير محفوظ
+Lose Unsaved Progress=فقدان التقدم غير المحفوظ
+
+# --- خانات الحفظ (Save Slots) ---
+Save Slot 1=خانة الحفظ 1
+Save Slot 2=خانة الحفظ 2
+Save Slot 3=خانة الحفظ 3
+Empty Slot=خانة فارغة
+Used Slot=خانة مستخدمة
+Select Save Slot=اختر خانة الحفظ
+New Save=حفظ جديد
+Copy Save=نسخ الحفظ
+Delete Save=حذف الحفظ
+Delete Save Data=حذف بيانات الحفظ
+Delete Confirmation=تأكيد الحذف
+Move Save=نقل الحفظ
+Rename Save=إعادة تسمية الحفظ
+
+# --- معلومات الحفظ (Save Info) ---
+Save Date=تاريخ الحفظ
+Save Time=وقت الحفظ
+Play Time=وقت اللعب
+Chapter=الفصل
+Current Chapter=الفصل الحالي
+Location=الموقع
+Save Location=موقع الحفظ
+Party Level=مستوى الفريق
+Leader Level=مستوى القائد
+Save Thumbnail=صورة مصغرة للحفظ
+Save Screenshot=لقطة شاشة الحفظ
+Difficulty=الصعوبة
+Game Mode=وضع اللعبة
+
+# --- حفظ New Game Plus ---
+Clear Save=حفظ الإكمال
+Clear Data=بيانات الإكمال
+NG+ Save=حفظ اللعبة الجديدة+
+New Game Plus Save=حفظ اللعبة الجديدة+
+Clear Count=عدد مرات الإكمال
+Playthrough Count=عدد التختيمات
+Inherited Data=بيانات مُوَرَّثة
+Carryover Data=بيانات مُرحَّلة
+Start New Game Plus=بدء اللعبة الجديدة+
+Create Clear Save=إنشاء حفظ الإكمال
+
+# --- إدارة البيانات (Data Management) ---
+Data Management=إدارة البيانات
+Storage Space=مساحة التخزين
+Available Space=المساحة المتاحة
+Insufficient Space=مساحة غير كافية
+Storage Full=التخزين ممتلئ
+Free Space Required=المساحة المطلوبة
+Data Size=حجم البيانات
+Save Data Size=حجم بيانات الحفظ
+System Data=بيانات النظام
+User Data=بيانات المستخدم
+Cloud Save=حفظ سحابي
+Cloud Backup=نسخة احتياطية سحابية
+Download Save=تنزيل الحفظ
+Upload Save=رفع الحفظ
+Sync Save Data=مزامنة بيانات الحفظ
+Backup=نسخة احتياطية
+Restore=استعادة
+Restore Save=استعادة الحفظ
+Corrupted Data=بيانات تالفة
+Data Corruption=تلف البيانات
+Repair Data=إصلاح البيانات
+
+# --- شاشة العنوان (Title Screen) ---
+Title Screen=شاشة العنوان
+Main Menu=القائمة الرئيسية
+New Game=لعبة جديدة
+Continue=متابعة
+Load Game=تحميل اللعبة
+Options=الخيارات
+Settings=الإعدادات
+DLC=المحتوى الإضافي
+Expansion Pass=تذكرة التوسعة
+Extra=إضافي
+Extras=إضافات
+Gallery=المعرض
+Event Theater=مسرح الأحداث
+Sound Test=اختبار الصوت
+Credits=قائمة الشكر
+Staff Credits=شكر فريق العمل
+
+# --- رسائل النظام (System Messages) ---
+Are You Sure=هل أنت متأكد؟
+Yes=نعم
+No=لا
+OK=موافق
+Cancel=إلغاء
+Confirm=تأكيد
+Back=رجوع
+Return=عودة
+Exit=خروج
+Quit=إنهاء
+Quit Game=إنهاء اللعبة
+Return to Title=العودة إلى العنوان
+Return to Title Screen=العودة إلى شاشة العنوان
+Unsaved Changes=تغييرات غير محفوظة
+Warning=تحذير
+Error=خطأ
+System Error=خطأ في النظام
+Data Error=خطأ في البيانات
+Please Wait=يرجى الانتظار
+Now Loading=جارٍ التحميل الآن
+Loading Screen=شاشة التحميل
+Loading Tips=نصائح التحميل
+Press Any Button=اضغط أي زر
+Press A to Continue=اضغط A للمتابعة
