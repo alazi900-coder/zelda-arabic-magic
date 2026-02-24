@@ -15183,6 +15183,568 @@ Then I promise. As long as there's breath in me, I'll play.=إذن أعِدُك�
 And I'll always be there to listen.=وأنا سأكون هناك دائماً لأستمع.
 That's all I need.=هذا كل ما أحتاجه.
 
-# --- نهاية حوارات الراحة ---
-# End of Rest Conversations
-# Total sections: 127-145 (Rest Conversations for all character pairs)
+# --- نهاية حوارات الراحة الأساسية ---
+
+# =============================================
+# القسم 146: حوارات الراحة مع زيون (Zeon - Hero of Colony 9)
+# =============================================
+
+# --- زيون ونوح ---
+Zeon, how's Colony 9 holding up?=زيون، كيف حال مستعمرة 9؟
+Better than ever. The soldiers are learning to live, not just fight.=أفضل من أي وقت. الجنود يتعلمون أن يعيشوا، لا أن يقاتلوا فحسب.
+That's good to hear. You're a fine leader.=يسعدني سماع ذلك. أنت قائد ممتاز.
+I learned from watching you, Noah. Your resolve inspired us all.=تعلمت من مراقبتك، يا نوح. عزيمتك ألهمتنا جميعاً.
+I just did what felt right.=فقط فعلت ما شعرت أنه صحيح.
+And that's exactly what a true leader does.=وهذا بالضبط ما يفعله القائد الحقيقي.
+
+# --- زيون ولانز ---
+Zeon, spar with me. I need someone who can keep up.=زيون، تبارز معي. أحتاج شخصاً يستطيع مجاراتي.
+You sure about that? I don't hold back.=هل أنت متأكد؟ أنا لا أتساهل.
+That's what I'm counting on!=هذا ما أعول عليه!
+Very well. Draw your weapon.=حسناً جداً. اسحب سلاحك.
+Heh, now we're talking!=هه، الآن نتكلم!
+Your form has improved, Lanz. You've grown stronger.=أسلوبك تحسّن، يا لانز. أصبحت أقوى.
+Thanks, Zeon. Means a lot coming from you.=شكراً، يا زيون. تعني الكثير قادمة منك.
+
+# --- زيون وميو ---
+Commander Zeon, may I ask you something?=القائد زيون، هل يمكنني سؤالك شيئاً؟
+Please, just Zeon. We're equals now.=من فضلكِ، فقط زيون. نحن متساوون الآن.
+What drove you to keep fighting? Before we freed Colony 9?=ما الذي دفعك للاستمرار بالقتال؟ قبل أن نحرر مستعمرة 9؟
+Duty. I believed in protecting my people, even under the Flame Clock.=الواجب. آمنت بحماية شعبي، حتى تحت ساعة اللهب.
+And now?=والآن؟
+Now I fight because I choose to. That's the difference freedom gives you.=الآن أقاتل لأنني أختار ذلك. هذا هو الفرق الذي تمنحه الحرية.
+
+# --- زيون ويوني ---
+Zeon, you're always so serious. Lighten up!=زيون، أنت دائماً جاد جداً. خفف عنك!
+A commander must maintain discipline.=القائد يجب أن يحافظ على الانضباط.
+Even at camp? Come on, have a drink with us!=حتى في المعسكر؟ هيا، اشرب معنا!
+...One drink.=...شراب واحد.
+That's the spirit! Lanz, pour the man a big one!=هذه الروح! لانز، اسكب للرجل واحداً كبيراً!
+I said ONE.=قلت واحداً.
+
+# =============================================
+# القسم 147: حوارات الراحة مع أشيرا (Ashera - Hero of Colony 11)
+# =============================================
+
+# --- أشيرا ونوح ---
+Ashera, you seem restless tonight.=أشيرا، تبدين قلقة الليلة.
+I'm always restless. Sitting still isn't my style.=أنا قلقة دائماً. الجلوس ساكنة ليس أسلوبي.
+There's more to life than fighting, you know.=هناك ما هو أكثر من القتال في الحياة، أتعلمين.
+Maybe. But fighting's what I'm good at.=ربما. لكن القتال هو ما أجيده.
+You're good at more than that. You inspired your whole Colony.=أنتِ جيدة في أكثر من ذلك. ألهمتِ مستعمرتكِ بأكملها.
+Hmph. Don't go getting sentimental on me.=همف. لا تصبح عاطفياً معي.
+
+# --- أشيرا ولانز ---
+Ashera! Arm wrestle! Right now!=أشيرا! مصارعة ذراع! الآن!
+You're on. Prepare to lose.=موافقة. استعد للخسارة.
+Ha! That's what I like about you! No hesitation!=ها! هذا ما يعجبني فيكِ! بلا تردد!
+Three... two... one...=ثلاثة... اثنان... واحد...
+Ngh...! You're... strong...!=إنغ...! أنتِ... قوية...!
+And you're stubborn. I respect that.=وأنت عنيد. أحترم ذلك.
+Best two out of three?=أفضل اثنين من ثلاثة؟
+Bring it.=هات.
+
+# --- أشيرا وسينا ---
+Sena, I've been watching you fight.=سينا، كنت أراقب قتالكِ.
+Oh? What do you think?=أوه؟ ما رأيكِ؟
+You've got raw power, but you hesitate at the last moment.=لديكِ قوة خام، لكنكِ تترددين في اللحظة الأخيرة.
+I... I don't want to hurt anyone more than necessary.=أنا... لا أريد إيذاء أي شخص أكثر من اللازم.
+That hesitation will get you killed one day.=ذلك التردد سيقتلكِ يوماً ما.
+But—=لكن—
+Listen. Commit to every strike. Your enemies won't hold back.=اسمعي. التزمي بكل ضربة. أعداؤكِ لن يتساهلوا.
+...You're right. Train me, Ashera.=...أنتِ محقة. دربيني، يا أشيرا.
+Now THAT'S the spirit I want to see.=الآن هذه الروح التي أريد رؤيتها.
+
+# --- أشيرا ويوني ---
+Ashera, ever think about what you'll do when the fighting's over?=أشيرا، هل فكرتِ يوماً بما ستفعلين عندما ينتهي القتال؟
+Fighting's never over. There's always another battle.=القتال لا ينتهي أبداً. هناك دائماً معركة أخرى.
+Wow, that's bleak.=واو، هذا قاتم.
+It's realistic. But... I wouldn't mind a quiet day. Just one.=إنه واقعي. لكن... لن أمانع يوماً هادئاً. واحداً فقط.
+One quiet day? I'll hold you to that.=يوم هادئ واحد؟ سأحاسبكِ على ذلك.
+Don't push your luck, bird girl.=لا تجربي حظكِ، يا فتاة الطيور.
+
+# =============================================
+# القسم 148: حوارات الراحة مع فالدي (Valdi - Hero of Colony 30)
+# =============================================
+
+# --- فالدي ونوح ---
+Valdi, what are you working on?=فالدي، على ماذا تعمل؟
+A new joint mechanism. If I can get the articulation right...=آلية مفصل جديدة. إذا استطعت ضبط المفاصل بشكل صحيح...
+You never stop tinkering, do you?=لا تتوقف أبداً عن العبث، أليس كذلك؟
+Machines don't lie, Noah. They either work or they don't.=الآلات لا تكذب، يا نوح. إما تعمل أو لا.
+And people?=والناس؟
+People are more complicated. But I'm learning.=الناس أكثر تعقيداً. لكنني أتعلم.
+
+# --- فالدي ولانز ---
+Valdi, my blade's making a weird noise. Can you fix it?=فالدي، نصلي يُصدر صوتاً غريباً. هل تستطيع إصلاحه؟
+Let me see... Ah, the resonance chamber is misaligned.=دعني أرى... آه، غرفة الرنين غير محاذاة.
+Can you fix it?=هل تستطيع إصلاحها؟
+Give me ten minutes.=أعطني عشر دقائق.
+You're a lifesaver, Valdi.=أنت منقذ حياة، يا فالدي.
+It's what I do. Machines need care, just like people.=هذا ما أفعله. الآلات تحتاج عناية، مثل الناس تماماً.
+Never thought of it that way.=لم أفكر بالأمر بتلك الطريقة أبداً.
+
+# --- فالدي وتايون ---
+Valdi, I've been studying your repair techniques. Fascinating.=فالدي، كنت أدرس تقنيات إصلاحك. مذهلة.
+You understand machinery, Taion?=أتفهم الآلات، يا تايون؟
+The principles, yes. The hands-on work... less so.=المبادئ، نعم. العمل اليدوي... أقل.
+Theory without practice is just words on paper.=النظرية بلا ممارسة مجرد كلمات على ورق.
+Then teach me. I want to be useful beyond strategy.=إذن علمني. أريد أن أكون مفيداً أبعد من الاستراتيجية.
+Grab a wrench. Lesson one starts now.=أمسك مفتاحاً. الدرس الأول يبدأ الآن.
+
+# --- فالدي وسينا ---
+Sena, your hammer's weight distribution is off.=سينا، توزيع وزن مطرقتكِ غير متوازن.
+It is? I hadn't noticed.=كذلك؟ لم ألاحظ.
+That's because you're so strong you compensate naturally.=لأنكِ قوية جداً فتعوضين بشكل طبيعي.
+Is that a good thing?=هل هذا شيء جيد؟
+It means you're even stronger than you think. Let me optimize it for you.=يعني أنكِ أقوى مما تعتقدين. دعيني أحسّنها لكِ.
+Really? Thanks, Valdi!=حقاً؟ شكراً، يا فالدي!
+When I'm done, you'll hit twice as hard with half the effort.=عندما أنتهي، ستضربين بضعف القوة بنصف الجهد.
+
+# =============================================
+# القسم 149: حوارات الراحة مع ألكساندريا (Alexandria - Hero)
+# =============================================
+
+# --- ألكساندريا وميو ---
+Alexandria, your sword technique is beautiful.=ألكساندريا، تقنية سيفكِ جميلة.
+Beautiful? It's meant to be deadly.=جميلة؟ المقصود أن تكون فتاكة.
+Can't it be both?=ألا يمكن أن تكون كلاهما؟
+...I suppose you have a point, Mio.=...أعتقد أن لديكِ وجهة نظر، يا ميو.
+Grace and power aren't opposites. They complement each other.=الرشاقة والقوة ليستا متناقضتين. تكملان بعضهما.
+You sound like my old instructor.=تبدين مثل معلّمتي القديمة.
+I'll take that as a compliment.=سآخذ ذلك كمجاملة.
+
+# --- ألكساندريا ونوح ---
+Noah, I need to tell you something.=نوح، أحتاج إخبارك بشيء.
+What is it, Alexandria?=ما هو، يا ألكساندريا؟
+When I first met you, I thought you were naive.=عندما قابلتك لأول مرة، ظننت أنك ساذج.
+And now?=والآن؟
+Now I think your naivety might be your greatest strength.=الآن أعتقد أن سذاجتك قد تكون أعظم نقاط قوتك.
+I'm not sure if that's a compliment or an insult.=لست متأكداً إن كانت مجاملة أم إهانة.
+It's both. Take it as you will.=إنها كلاهما. خذها كما تشاء.
+
+# --- ألكساندريا ولانز ---
+Hey Alexandria, wanna train together?=مهلاً ألكساندريا، تريدين التدريب معاً؟
+I don't train with amateurs.=لا أتدرب مع الهواة.
+Amateur?! I'll show you amateur!=هاوٍ؟! سأريكِ من الهاوي!
+That's more like it. Show me your resolve.=هذا أفضل. أريني عزيمتك.
+You were goading me on purpose!=كنتِ تستفزيني عمداً!
+And it worked. You fight better angry.=ونجحت. تقاتل أفضل وأنت غاضب.
+...I hate that you're right.=...أكره أنكِ محقة.
+
+# --- ألكساندريا وتايون ---
+Alexandria, your tactical awareness is impressive.=ألكساندريا، وعيكِ التكتيكي مثير للإعجاب.
+I've survived this long for a reason.=نجوت هذه المدة لسبب.
+Would you be open to sharing your battlefield observations?=هل ستكونين منفتحة لمشاركة ملاحظاتكِ الميدانية؟
+For your little notebook? Fine. But only the important ones.=لدفتركِ الصغير؟ حسناً. لكن فقط المهمة.
+Every observation is important.=كل ملاحظة مهمة.
+Then you'd better have a lot of pages.=إذن يُستحسن أن يكون لديك صفحات كثيرة.
+
+# =============================================
+# القسم 150: حوارات الراحة مع إيثيل (Ethel - Hero of Colony 4)
+# =============================================
+
+# --- إيثيل ونوح ---
+Ethel, thank you for standing with us.=إيثيل، شكراً لوقوفكِ معنا.
+Don't thank me. This fight was always mine too.=لا تشكرني. هذه المعركة كانت دائماً معركتي أيضاً.
+Colony 4 is lucky to have you.=مستعمرة 4 محظوظة بوجودكِ.
+And I'm lucky to have found allies worth fighting alongside.=وأنا محظوظة بإيجاد حلفاء يستحقون القتال جنباً إلى جنب معهم.
+We'll see this through. Together.=سنُنهي هذا. معاً.
+
+# --- إيثيل ولانز ---
+Commander Ethel! You're amazing in battle!=القائدة إيثيل! أنتِ مذهلة في المعركة!
+Flattery won't get you extra rations, Lanz.=الإطراء لن يمنحك حصصاً إضافية، يا لانز.
+That's not why I—! ...Okay, maybe a little.=ليس لهذا—! ...حسناً، ربما قليلاً.
+Ha. I admire your honesty, at least.=ها. أعجب بصراحتك، على الأقل.
+
+# --- إيثيل وميو ---
+Mio, you carry yourself with such grace. Even in battle.=ميو، تحملين نفسكِ برشاقة. حتى في المعركة.
+Thank you, Ethel. You do too.=شكراً، يا إيثيل. وأنتِ كذلك.
+My grace comes from discipline. Yours comes from somewhere deeper.=رشاقتي تأتي من الانضباط. رشاقتكِ تأتي من مكان أعمق.
+The heart, maybe?=القلب، ربما؟
+Perhaps. Guard it well. It's your greatest weapon.=ربما. احرصي عليه. إنه أعظم أسلحتكِ.
+
+# --- إيثيل ويوني ---
+Ethel, how do you handle losing soldiers?=إيثيل، كيف تتعاملين مع خسارة جنود؟
+You don't handle it. You carry it.=لا تتعاملين معها. تحملينها.
+That sounds heavy.=يبدو ذلك ثقيلاً.
+It is. But it reminds you what you're fighting for.=إنه كذلك. لكنه يذكركِ لماذا تقاتلين.
+I never thought of it that way.=لم أفكر بالأمر بتلك الطريقة أبداً.
+Every loss is a promise to fight harder for those who remain.=كل خسارة وعد بالقتال بقوة أكبر لأجل من تبقّوا.
+
+# =============================================
+# القسم 151: حوارات الراحة مع كاموراڤي (Cammuravi - Hero of Colony Delta)
+# =============================================
+
+# --- كاموراڤي وأشيرا ---
+Ashera. It's been a while since we crossed blades.=أشيرا. مضى وقت منذ تقاطعت نصالنا.
+Missing me already, Cammuravi?=تفتقدني بالفعل، يا كاموراڤي؟
+Your fire burns brighter than ever. I merely want to test it.=نارك تشتعل أكثر من أي وقت. أريد فقط اختبارها.
+Then let's not waste time talking.=إذن لنتوقف عن إضاعة الوقت بالكلام.
+Hah! THAT'S the Ashera I know!=هاه! هذه أشيرا التي أعرفها!
+Our rivalry makes us both stronger. Never forget that.=تنافسنا يجعلنا كلينا أقوى. لا تنسَ ذلك أبداً.
+Forget it? It's the only thing that keeps me sharp.=أنساه؟ إنه الشيء الوحيد الذي يبقيني حاداً.
+
+# --- كاموراڤي ونوح ---
+Cammuravi, your flames are incredible.=كاموراڤي، نيرانك مذهلة.
+They are the flames of conviction. Born from purpose.=إنها نيران الاقتناع. وُلدت من الهدف.
+What is your purpose?=ما هو هدفك؟
+To burn away everything that chains the human spirit.=أن أحرق كل ما يقيّد الروح البشرية.
+Even the Flame Clocks?=حتى ساعات اللهب؟
+Especially the Flame Clocks. Those are the greatest chains of all.=خصوصاً ساعات اللهب. تلك أعظم القيود على الإطلاق.
+
+# --- كاموراڤي وسينا ---
+Your hammer strikes carry impressive force.=ضربات مطرقتكِ تحمل قوة مثيرة للإعجاب.
+Th-thank you, Commander Cammuravi!=ش-شكراً، يا القائد كاموراڤي!
+But force without conviction is wasted energy.=لكن القوة بلا اقتناع طاقة مهدرة.
+Conviction?=الاقتناع؟
+Why do you fight, Sena? What burns inside you?=لماذا تقاتلين، يا سينا؟ ما الذي يشتعل داخلكِ؟
+I fight to protect the people I love.=أقاتل لحماية الأشخاص الذين أحبهم.
+Good. Hold onto that flame. Never let it die.=جيد. تمسكي بتلك الشعلة. لا تدعيها تموت أبداً.
+
+# =============================================
+# القسم 152: حوارات الراحة مع مونيكا (Monica - City Leader)
+# =============================================
+
+# --- مونيكا ونوح ---
+Monica, the City is amazing. How did you build all this?=مونيكا، المدينة مذهلة. كيف بنيتم كل هذا؟
+One brick at a time. Over generations.=لبنة واحدة في كل مرة. على مدى أجيال.
+It must have been incredibly difficult.=لا بد أنه كان صعباً بشكل لا يُصدق.
+It was. But every generation added something. That's how civilizations grow.=كان كذلك. لكن كل جيل أضاف شيئاً. هكذا تنمو الحضارات.
+And you're leading this generation.=وأنتِ تقودين هذا الجيل.
+I'm just carrying the torch. You're the ones who'll light the way.=أنا فقط أحمل الشعلة. أنتم من سيضيؤون الطريق.
+
+# --- مونيكا ولانز ---
+Monica, you've seen more battles than any of us. Any advice?=مونيكا، رأيتِ معارك أكثر من أي منا. أي نصيحة؟
+Don't die.=لا تمت.
+That's... pretty straightforward.=هذا... مباشر جداً.
+The best advice usually is. Everything else is details.=أفضل النصائح عادة كذلك. كل شيء آخر تفاصيل.
+Fair point.=نقطة عادلة.
+But if you want details: protect your left side. You drop your guard there.=لكن إن أردت التفاصيل: احمِ جانبك الأيسر. تُسقط حراستك هناك.
+I do?! I never noticed!=أفعل؟! لم ألاحظ أبداً!
+That's why I mentioned it.=لهذا ذكرته.
+
+# --- مونيكا وتايون ---
+Monica, the City's archives are remarkable. May I study them?=مونيكا، أرشيفات المدينة رائعة. هل يمكنني دراستها؟
+Of course. Knowledge should be shared, not hoarded.=بالطبع. المعرفة يجب أن تُشارَك، لا تُكنز.
+There are records here spanning hundreds of years...=هناك سجلات هنا تمتد لمئات السنين...
+Every success, every failure. All documented.=كل نجاح، كل فشل. كلها موثقة.
+This is invaluable. Thank you.=هذا لا يُقدّر بثمن. شكراً.
+Just promise me you'll add your own chapter when this is over.=فقط عِدني أنك ستضيف فصلك الخاص عندما ينتهي هذا.
+
+# =============================================
+# القسم 153: حوارات الراحة مع ميليا (Melia - Queen of Keves)
+# =============================================
+
+# --- ميليا ونوح ---
+Your Majesty, I... have so many questions.=جلالتكِ، أنا... لديّ أسئلة كثيرة.
+Please, call me Melia. We're beyond formalities.=من فضلك، نادني ميليا. تجاوزنا الرسميات.
+Melia. What was the world like before? Before Aionios?=ميليا. كيف كان العالم من قبل؟ قبل أيونيوس؟
+It was two worlds, actually. Each beautiful in its own way.=كان عالمَين في الحقيقة. كل منهما جميل بطريقته.
+Two worlds...=عالمَين...
+And you six carry the hope of both. Never forget that weight.=وأنتم الستة تحملون أمل كليهما. لا تنسوا ذلك الثقل أبداً.
+
+# --- ميليا ويوني ---
+Queen Melia, is it true you can use ether magic?=الملكة ميليا، هل صحيح أنكِ تستطيعين استخدام سحر الأثير؟
+I could, once. The ether flows differently here in Aionios.=كنت أستطيع، ذات مرة. الأثير يسري بشكل مختلف هنا في أيونيوس.
+That's a shame. I bet it was beautiful.=هذا مؤسف. أراهن أنه كان جميلاً.
+It was. Summoning elementals, weaving spells...=كان كذلك. استدعاء العناصر، نسج التعاويذ...
+Sounds way cooler than anything we can do!=يبدو أروع بكثير من أي شيء نستطيع فعله!
+Don't sell yourself short, Eunie. Your healing arts are their own kind of magic.=لا تقللي من نفسكِ، يا يوني. فنون شفائكِ نوعها الخاص من السحر.
+
+# --- ميليا وتايون ---
+Your Majesty, your strategic mind is remarkable.=جلالتكِ، عقلكِ الاستراتيجي رائع.
+I've had centuries of practice, Taion.=لديّ قرون من الممارسة، يا تايون.
+Centuries?!=قرون؟!
+Being a High Entia has its advantages. Long life grants perspective.=كونكِ من الهاي إنتيا له مزاياه. العمر الطويل يمنح منظوراً.
+I can only imagine the wisdom you've accumulated.=لا أستطيع إلا تخيّل الحكمة التي راكمتِها.
+Wisdom isn't accumulated. It's earned through pain and loss.=الحكمة لا تُراكم. تُكتسب من خلال الألم والخسارة.
+
+# =============================================
+# القسم 154: حوارات الراحة مع نيا (Nia - Queen of Agnus)
+# =============================================
+
+# --- نيا وميو ---
+Mio, there's something about you that feels... familiar.=ميو، هناك شيء فيكِ يبدو... مألوفاً.
+Familiar? Have we met before?=مألوف؟ هل التقينا من قبل؟
+Not exactly. But your spirit reminds me of someone dear to me.=ليس بالضبط. لكن روحكِ تذكرني بشخص عزيز عليّ.
+Who?=من؟
+Someone who taught me that love is the strongest power of all.=شخص علّمني أن الحب هو أقوى قوة على الإطلاق.
+That's beautiful, Nia.=هذا جميل، يا نيا.
+Hold onto that boy of yours, Mio. Real bonds are rare.=تمسكي بذلك الفتى، يا ميو. الروابط الحقيقية نادرة.
+
+# --- نيا ونوح ---
+Noah, your music moves me more than you know.=نوح، موسيقاك تحركني أكثر مما تعرف.
+Thank you, Nia. Music is all I have to offer.=شكراً، يا نيا. الموسيقى هي كل ما أملك لأقدمه.
+That's more than enough. Music heals wounds that medicine can't reach.=هذا أكثر من كافٍ. الموسيقى تشفي جروحاً لا يصلها الطب.
+You speak from experience.=تتحدثين من تجربة.
+I do. I was a healer once. The best, some said.=أفعل. كنت معالجة ذات مرة. الأفضل، كما قال البعض.
+Once?=ذات مرة؟
+Some things you carry with you, even when the world changes around you.=بعض الأشياء تحملها معك، حتى عندما يتغير العالم من حولك.
+
+# --- نيا ولانز ---
+Nia, you're really strong for someone so... uh...=نيا، أنتِ قوية حقاً لشخص بهذا... آه...
+Small? You can say it. I've heard worse.=الحجم الصغير؟ يمكنك قولها. سمعت أسوأ.
+I wasn't gonna say small! I was gonna say... compact?=لم أكن سأقول صغيرة! كنت سأقول... مدمجة؟
+Compact. That's a new one.=مدمجة. هذه جديدة.
+Sorry, I'm bad with words.=آسف، أنا سيء بالكلمات.
+It's fine, Lanz. You're good where it counts. In battle.=لا بأس، يا لانز. أنت جيد حيث يهم. في المعركة.
+
+# =============================================
+# القسم 155: حوارات الراحة مع جراي (Gray - Hero)
+# =============================================
+
+# --- جراي ونوح ---
+Gray, you're always so quiet. What's on your mind?=جراي، أنت هادئ دائماً. ما الذي يشغل بالك؟
+Just thinking about the road ahead.=فقط أفكر بالطريق أمامنا.
+Any thoughts you want to share?=أي أفكار تريد مشاركتها؟
+Not particularly. But I will say this: you've got good people with you.=ليس بالتحديد. لكن سأقول هذا: لديك أناس جيدون معك.
+I know. I'm lucky.=أعلم. أنا محظوظ.
+Luck's got nothing to do with it. They chose to follow you. That says everything.=الحظ لا علاقة له بالأمر. اختاروا اتباعك. ذلك يقول كل شيء.
+
+# --- جراي وميو ---
+Gray, that dual-blade style of yours... Where did you learn it?=جراي، أسلوب النصلين المزدوجين لديك... أين تعلمته؟
+Here and there. Picked it up over the years.=هنا وهناك. اكتسبته على مر السنين.
+That's vague.=هذا غامض.
+I'm a vague kind of guy.=أنا نوع غامض من الرجال.
+Will you show me some techniques?=هل تريني بعض التقنيات؟
+If you can keep up.=إذا استطعتِ المجاراة.
+Try me.=جربني.
+
+# --- جراي وتايون ---
+Gray, I notice you always position yourself at the group's rear.=جراي، ألاحظ أنك دائماً تتمركز في مؤخرة المجموعة.
+Old habit. Best view of the battlefield from the back.=عادة قديمة. أفضل رؤية لساحة المعركة من الخلف.
+And the best position to cover a retreat.=وأفضل موقع لتغطية الانسحاب.
+You're sharp, Taion. Sharper than most.=أنت حاد الذهن، يا تايون. أحد من معظمهم.
+I'll take that as a compliment.=سآخذ ذلك كمجاملة.
+It was meant as one.=كان المقصود كذلك.
+
+# =============================================
+# القسم 156: حوارات الراحة مع إيزل (Isurd - Hero of Colony Lambda)
+# =============================================
+
+# --- إيزل ونوح ---
+Isurd, how is Colony Lambda adjusting to freedom?=إيزل، كيف تتأقلم مستعمرة لامدا مع الحرية؟
+It's... a process. Some are thriving. Others are struggling.=إنه... عملية. البعض يزدهر. والبعض يعاني.
+Change is always difficult.=التغيير صعب دائماً.
+But necessary. You showed us that.=لكنه ضروري. أنت أريتنا ذلك.
+How are YOU handling it?=كيف تتعامل أنت معه؟
+I'm a medic. I heal others. Healing myself is... harder.=أنا طبيب. أشفي الآخرين. شفاء نفسي... أصعب.
+You don't have to do it alone.=لا يجب أن تفعل ذلك وحدك.
+
+# --- إيزل ويوني ---
+Eunie, your healing technique is unorthodox but effective.=يوني، تقنية شفائكِ غير تقليدية لكنها فعالة.
+Unorthodox? I just wing it.=غير تقليدية؟ أنا فقط أرتجل.
+That's... exactly what I mean.=هذا... بالضبط ما أعنيه.
+Hey, if it works, it works!=مهلاً، إذا نجحت، نجحت!
+I suppose results matter more than method.=أعتقد أن النتائج أهم من الأسلوب.
+Now you're getting it, doc!=الآن فهمت، يا دكتور!
+
+# --- إيزل وتايون ---
+Isurd, your medical knowledge is extraordinary.=إيزل، معرفتك الطبية استثنائية.
+Medicine is my passion. Every life saved is a victory.=الطب شغفي. كل حياة تُنقذ نصر.
+Have you considered documenting your treatments?=هل فكرت بتوثيق علاجاتك؟
+I have notes, but they're disorganized.=لديّ ملاحظات، لكنها غير منظمة.
+Let me help organize them. A medical archive could save countless lives.=دعني أساعد بتنظيمها. أرشيف طبي قد ينقذ حيوات لا تُحصى.
+You'd do that? Thank you, Taion.=ستفعل ذلك؟ شكراً، يا تايون.
+
+# =============================================
+# القسم 157: حوارات الراحة مع فيونا (Fiona - Hero of Colony Mu)
+# =============================================
+
+# --- فيونا ونوح ---
+Fiona, your devotion to your people is admirable.=فيونا، إخلاصكِ لشعبكِ يُثير الإعجاب.
+I just want everyone to be safe and happy.=أريد فقط أن يكون الجميع آمنين وسعداء.
+That's not a small thing. It's everything.=هذا ليس شيئاً صغيراً. إنه كل شيء.
+Sometimes I worry it's not enough, though.=أحياناً أقلق أنه ليس كافياً، مع ذلك.
+It is. Your kindness gives people something to believe in.=إنه كافٍ. لطفكِ يمنح الناس شيئاً يؤمنون به.
+
+# --- فيونا وميو ---
+Mio, will you dance with me tonight?=ميو، هل ترقصين معي الليلة؟
+I'd love to, Fiona. What kind of dance?=سأحب ذلك، يا فيونا. أي نوع من الرقص؟
+Something from Colony Mu. We dance to celebrate life.=شيء من مستعمرة مو. نرقص للاحتفال بالحياة.
+That's beautiful. Show me the steps.=هذا جميل. أريني الخطوات.
+It starts with your heart. The steps follow naturally.=يبدأ من قلبكِ. الخطوات تتبع بشكل طبيعي.
+Just like Off-Seeing.=تماماً مثل إنشاد الوداع.
+Exactly. You understand.=بالضبط. أنتِ تفهمين.
+
+# --- فيونا وسينا ---
+Sena, you look troubled. Want to talk?=سينا، تبدين مضطربة. تريدين التحدث؟
+It's nothing, Fiona. Just overthinking.=ليس شيئاً، يا فيونا. فقط تفكير زائد.
+Overthinking isn't nothing. It means you care deeply.=التفكير الزائد ليس لا شيء. يعني أنكِ تهتمين بعمق.
+Maybe too deeply...=ربما بعمق زائد...
+There's no such thing. The world needs people who feel strongly.=لا يوجد شيء كهذا. العالم يحتاج أشخاصاً يشعرون بقوة.
+Thanks, Fiona. You always make me feel better.=شكراً، يا فيونا. دائماً تجعلينني أشعر أفضل.
+
+# =============================================
+# القسم 158: حوارات الراحة مع جونيبر (Juniper - Hero)
+# =============================================
+
+# --- جونيبر ونوح ---
+Juniper, you move through the forest like you're part of it.=جونيبر، تتحركين عبر الغابة كأنكِ جزء منها.
+The forest raised me. I know every tree, every path.=الغابة ربتني. أعرف كل شجرة، كل مسار.
+That connection is something special.=تلك الصلة شيء مميز.
+Nature teaches patience. And patience wins battles.=الطبيعة تعلم الصبر. والصبر يكسب المعارك.
+I've seen that firsthand with your archery.=رأيت ذلك مباشرة مع رمايتكِ بالقوس.
+An arrow loosed at the right moment is worth a hundred swung blindly.=سهم يُطلق في اللحظة الصحيحة يساوي مئة ضربة عمياء.
+
+# --- جونيبر وسينا ---
+Juniper, teach me to be stealthy!=جونيبر، علميني التخفي!
+You? Stealthy? With that hammer?=أنتِ؟ خفية؟ مع تلك المطرقة؟
+Hey, I can be quiet when I want to!=مهلاً، أستطيع أن أكون هادئة عندما أريد!
+Sena, you broke three branches just walking over here.=سينا، كسرتِ ثلاثة أغصان فقط بالمشي إلى هنا.
+...Okay, maybe stealth isn't my thing.=...حسناً، ربما التخفي ليس تخصصي.
+That's fine. You have other strengths. Embrace them.=لا بأس. لديكِ نقاط قوة أخرى. احتضنيها.
+Like hitting things really hard?=مثل ضرب الأشياء بقوة شديدة؟
+Exactly like that.=بالضبط مثل ذلك.
+
+# --- جونيبر وتايون ---
+Juniper, your knowledge of terrain is invaluable.=جونيبر، معرفتكِ بالتضاريس لا تُقدّر بثمن.
+Maps don't show everything. The land speaks if you listen.=الخرائط لا تُظهر كل شيء. الأرض تتحدث إن استمعت.
+A poetic way to describe reconnaissance.=طريقة شعرية لوصف الاستطلاع.
+I'm not a poet. Just someone who pays attention.=لستُ شاعرة. فقط شخص يُنصت.
+The best scouts always are.=أفضل الكشافة دائماً كذلك.
+
+# =============================================
+# القسم 159: حوارات الراحة مع ريكو (Riku - Nopon Artisan)
+# =============================================
+
+# --- ريكو ونوح ---
+Riku, that blade you crafted for me... It's extraordinary.=ريكو، ذلك النصل الذي صنعته لي... إنه استثنائي.
+Riku put heart and soul into every weapon.=ريكو يضع القلب والروح في كل سلاح.
+I can feel it. There's warmth in the metal.=أستطيع الإحساس بذلك. هناك دفء في المعدن.
+Metal remember hands that shape it. Riku's hands remember purpose.=المعدن يتذكر الأيدي التي تشكله. أيدي ريكو تتذكر الهدف.
+You're more than just an artisan, Riku.=أنت أكثر من مجرد حرفي، يا ريكو.
+Riku is just Riku. No more, no less.=ريكو هو فقط ريكو. لا أكثر، ولا أقل.
+
+# --- ريكو وتايون ---
+Riku, your craftsmanship defies logic. How do you achieve such precision?=ريكو، حرفيتك تتحدى المنطق. كيف تحقق هذه الدقة؟
+Logic not everything. Sometimes hands know what mind doesn't.=المنطق ليس كل شيء. أحياناً الأيدي تعرف ما لا يعرفه العقل.
+That's... frustratingly unscientific.=هذا... محبط بشكل غير علمي.
+Not everything need to be scientific. Some things just ARE.=ليس كل شيء يحتاج أن يكون علمياً. بعض الأشياء فقط هي.
+I suppose even I must accept that some knowledge transcends analysis.=أعتقد أن حتى أنا يجب أن أقبل أن بعض المعرفة تتجاوز التحليل.
+Now Taion getting it! Took long enough.=الآن تايون فهم! استغرق وقتاً كافياً.
+
+# =============================================
+# القسم 160: حوارات الراحة مع غوندور (Ghondor - City Hero)
+# =============================================
+
+# --- غوندور ونوح ---
+Ghondor, you're Monica's granddaughter, right?=غوندور، أنتِ حفيدة مونيكا، صحيح؟
+Yeah, and? Don't treat me different because of it.=أجل، وماذا؟ لا تعاملني بشكل مختلف بسبب ذلك.
+I wouldn't dream of it. You've earned your place on your own.=لن أحلم بذلك. أنتِ كسبتِ مكانكِ بنفسكِ.
+Damn right I have. Grandma's shadow is big, but I'll cast my own.=صحيح تماماً. ظل جدتي كبير، لكنني سألقي ظلي الخاص.
+I believe you will.=أؤمن أنكِ ستفعلين.
+
+# --- غوندور ولانز ---
+Ghondor, you're pretty fierce for someone your age.=غوندور، أنتِ شرسة جداً لشخص بعمركِ.
+Age? I've been fighting since I could walk, old man.=العمر؟ أقاتل منذ أن استطعت المشي، أيها العجوز.
+Old man?! I'm not that much older than you!=عجوز؟! لست أكبر منكِ بكثير!
+Could've fooled me with those dad jokes.=كان يمكنك خداعي بتلك النكات السخيفة.
+My jokes are GREAT, thank you very much.=نكاتي رائعة، شكراً جزيلاً.
+Sure, grandpa. Whatever you say.=بالتأكيد، يا جدي. مهما تقل.
+
+# --- غوندور ويوني ---
+Ghondor, you remind me of myself when I was younger.=غوندور، تذكرينني بنفسي عندما كنت أصغر.
+Is that a compliment?=هل تلك مجاملة؟
+Take it however you want. But that fire in your eyes? Don't lose it.=خذيها كما تريدين. لكن تلك النار في عينيكِ؟ لا تخسريها.
+Wasn't planning on it.=لم أخطط لذلك.
+Good. The world needs more people who refuse to back down.=جيد. العالم يحتاج أناساً أكثر يرفضون التراجع.
+Now THAT'S a compliment. Thanks, Eunie.=الآن هذه مجاملة. شكراً، يا يوني.
+
+# =============================================
+# القسم 161: حوارات الراحة مع سيغيري (Segiri - Hero)
+# =============================================
+
+# --- سيغيري ونوح ---
+Segiri, you've been staring at the fire for a while.=سيغيري، كنتِ تحدقين في النار لفترة.
+Fire. Warm. Comforting.=النار. دافئة. مريحة.
+It is, isn't it?=إنها كذلك، أليس كذلك؟
+Before... Segiri not understand comfort. Only efficiency.=قبلاً... سيغيري لا تفهم الراحة. فقط الكفاءة.
+And now?=والآن؟
+Now... comfort is important. Makes fighting worth it.=الآن... الراحة مهمة. تجعل القتال يستحق.
+I'm glad you feel that way.=يسعدني أنكِ تشعرين بذلك.
+
+# --- سيغيري وتايون ---
+Taion. Question.=تايون. سؤال.
+Go ahead, Segiri.=تفضلي، يا سيغيري.
+Why do humans seek inefficient solutions?=لماذا يسعى البشر لحلول غير كفؤة؟
+What do you mean?=ماذا تقصدين؟
+Talking when action is faster. Feeling when logic is clearer.=الكلام عندما الفعل أسرع. الشعور عندما المنطق أوضح.
+Because sometimes the inefficient path leads to better outcomes.=لأن أحياناً الطريق غير الكفؤ يقود لنتائج أفضل.
+Illogical. But... Segiri beginning to understand.=غير منطقي. لكن... سيغيري تبدأ بالفهم.
+
+# =============================================
+# القسم 162: حوارات الراحة مع تريستان (Triton - Hero of Colony 15)
+# =============================================
+
+# --- تريستان ونوح ---
+Triton, your leadership of Colony 15 is inspiring.=تريستان، قيادتك لمستعمرة 15 ملهمة.
+Inspiring? I just try to keep everyone alive.=ملهمة؟ أنا فقط أحاول إبقاء الجميع على قيد الحياة.
+That's exactly what makes you great. You put others first.=هذا بالضبط ما يجعلك عظيماً. تضع الآخرين أولاً.
+When you've lost as many soldiers as I have, their lives become precious.=عندما تفقد جنوداً بقدر ما فقدت، حياتهم تصبح ثمينة.
+Every life matters. That's what we're fighting for.=كل حياة مهمة. هذا ما نقاتل لأجله.
+Then let's make sure no more are wasted.=إذن لنتأكد ألا يُهدر المزيد.
+
+# --- تريستان ولانز ---
+Triton, your defensive formations are solid.=تريستان، تشكيلاتك الدفاعية متينة.
+Years of practice. Defense wins wars, not just battles.=سنوات من الممارسة. الدفاع يكسب الحروب، ليس فقط المعارك.
+I'm more of an offense guy myself.=أنا أميل للهجوم شخصياً.
+The best offense starts with a strong defense.=أفضل هجوم يبدأ بدفاع قوي.
+Huh. Never thought of it that way.=هه. لم أفكر بالأمر بتلك الطريقة.
+Stick with me, Lanz. I'll teach you a thing or two.=الزم معي، يا لانز. سأعلمك شيئاً أو اثنين.
+
+# =============================================
+# القسم 163: حوارات الراحة مع مياب (Miyabi - Hero)
+# =============================================
+
+# --- مياب وميو ---
+Miyabi, your art technique is unlike anything I've seen.=مياب، تقنيتكِ الفنية لا تشبه أي شيء رأيته.
+Art and combat are one and the same. Both require passion.=الفن والقتال شيء واحد. كلاهما يتطلب شغفاً.
+I never thought of fighting as art before.=لم أفكر بالقتال كفن من قبل.
+Every movement tells a story. Every strike paints a picture.=كل حركة تحكي قصة. كل ضربة ترسم صورة.
+That's a beautiful way to look at it.=تلك طريقة جميلة للنظر إليه.
+Beauty exists in everything. You just have to look for it.=الجمال موجود في كل شيء. فقط يجب أن تبحثي عنه.
+
+# --- مياب وسينا ---
+Miyabi, am I too rough? As a fighter, I mean.=مياب، هل أنا عنيفة جداً؟ كمقاتلة، أقصد.
+Rough? No. Raw. There's a difference.=عنيفة؟ لا. خامة. هناك فرق.
+What's the difference?=ما الفرق؟
+Rough is careless. Raw is untamed potential.=العنف إهمال. الخامة إمكانية غير مروّضة.
+So I have potential?=إذن لديّ إمكانية؟
+Immense potential. Let me help you shape it.=إمكانية هائلة. دعيني أساعدكِ بتشكيلها.
+
+# =============================================
+# القسم 164: حوارات الراحة مع الأبطال - مشتركة
+# =============================================
+
+# --- حوارات عامة مع الأبطال في المعسكر ---
+Heroes like you give the rest of us courage.=أبطال مثلكم يمنحون البقية شجاعة.
+We're no heroes. Just people who refused to look away.=لسنا أبطالاً. فقط أناس رفضوا أن يشيحوا بنظرهم.
+That's what makes you heroes.=هذا ما يجعلكم أبطالاً.
+Every Colony we've freed, every Flame Clock we've destroyed...=كل مستعمرة حررناها، كل ساعة لهب دمرناها...
+It all matters. Every bit of it.=كلها مهمة. كل جزء منها.
+Then we keep going. Until the job is done.=إذن نستمر. حتى تُنجز المهمة.
+
+# --- حوارات الأبطال حول المستقبل ---
+What will you do when there are no more battles to fight?=ماذا ستفعلون عندما لا تبقى معارك للقتال؟
+Find peace, hopefully. Real peace, not just the absence of war.=نجد السلام، آمل. سلام حقيقي، ليس فقط غياب الحرب.
+I want to teach the next generation. So they never have to fight like we did.=أريد تعليم الجيل القادم. حتى لا يضطروا للقتال مثلنا.
+I'll rebuild. Brick by brick, if I have to.=سأعيد البناء. لبنة بلبنة، إن اضطررت.
+And I'll make sure their stories are remembered.=وأنا سأتأكد أن قصصهم تُتذكر.
+Stories of freedom. Of courage. Of hope.=قصص الحرية. الشجاعة. الأمل.
+The best stories are the ones that inspire others to write their own.=أفضل القصص هي التي تلهم الآخرين لكتابة قصصهم الخاصة.
+
+# --- حوارات وداع الأبطال ---
+It's been an honor fighting alongside all of you.=كان شرفاً القتال جنباً إلى جنب معكم جميعاً.
+The honor is ours, hero.=الشرف لنا، أيها البطل.
+Don't forget us when this is over.=لا تنسونا عندما ينتهي هذا.
+Forget you? Impossible. You're part of our story now.=ننساكم؟ مستحيل. أنتم جزء من قصتنا الآن.
+And you're part of ours. Always.=وأنتم جزء من قصتنا. دائماً.
+May your flames burn bright, wherever you go.=عسى أن تشتعل نيرانكم ساطعة، أينما ذهبتم.
+And may yours light the way to a better world.=وعسى أن تُنير نيرانكم الطريق إلى عالم أفضل.
+Until we meet again.=حتى نلتقي مجدداً.
+
+# --- نهاية حوارات الراحة مع الأبطال ---
+# End of Hero Rest Conversations
+# Total sections: 146-164 (Hero Rest Conversations)
