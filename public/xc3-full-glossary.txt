@@ -4807,3 +4807,399 @@ Alpha Dialogue=حوار ألفا
 Origin Dialogue=حوار الأوريجن
 Community Dialogue=حوار المجتمع
 Settlement Dialogue=حوار المستوطنة
+# ═══════════════════════════════════════════════════
+# نظام New Game Plus والإعدادات المتقدمة
+# (New Game Plus & Advanced Settings)
+# ═══════════════════════════════════════════════════
+
+# ─────────────────────────────────────────────────
+# New Game Plus - عام
+# ─────────────────────────────────────────────────
+New Game Plus=لعبة جديدة+
+New Game+=لعبة جديدة+
+NG+=لعبة جديدة+
+Start New Game Plus=بدء لعبة جديدة+
+Clear Data=بيانات الإنهاء
+Clear Save=حفظ الإنهاء
+Cleared=مُكتمل
+Completion Rate=نسبة الإكمال
+Total Playtime=إجمالي وقت اللعب
+Play Time=وقت اللعب
+Total Play Time=إجمالي وقت اللعب
+# ─────────────────────────────────────────────────
+# عناصر الترحيل (Carryover Items)
+# ─────────────────────────────────────────────────
+Carryover=ترحيل
+Carry Over=ترحيل
+Data Transfer=نقل البيانات
+Inherited Data=بيانات موروثة
+Carryover Items=عناصر مُرحَّلة
+Carryover Equipment=معدات مُرحَّلة
+Carryover Accessories=إكسسوارات مُرحَّلة
+Carryover Gems=أحجار مُرحَّلة
+Carryover Gold=ذهب مُرحَّل
+Gold Carried Over=الذهب المُرحَّل
+Carryover Collectibles=مقتنيات مُرحَّلة
+Carryover Nopon Coins=عملات النوبون المُرحَّلة
+Silver Nopon Coins=عملات النوبون الفضية
+Gold Nopon Coins=عملات النوبون الذهبية
+Nopon Coin Exchange=تبادل عملات النوبون
+# ─────────────────────────────────────────────────
+# فصائل وأبطال NG+
+# ─────────────────────────────────────────────────
+Unlocked Classes=فصائل مفتوحة
+Class Progress Carried Over=تقدم الفصائل مُرحَّل
+Hero Unlock Status=حالة فتح الأبطال
+All Heroes Available=جميع الأبطال متاحون
+NG+ Exclusive Heroes=أبطال حصريون للعبة الجديدة+
+Ino=إينو
+Melia=ميليا
+Nia=نيا
+NG+ Hero=بطل اللعبة الجديدة+
+NG+ Class=فصيل اللعبة الجديدة+
+Lifesage=حكيم الحياة
+Royal Summoner=المستدعي الملكي
+Noponic Champion=بطل النوبون
+# ─────────────────────────────────────────────────
+# مستويات الصعوبة (Difficulty Settings)
+# ─────────────────────────────────────────────────
+Difficulty=الصعوبة
+Difficulty Settings=إعدادات الصعوبة
+Easy Mode=الوضع السهل
+Normal Mode=الوضع العادي
+Hard Mode=الوضع الصعب
+Very Hard Mode=الوضع الصعب جداً
+Change Difficulty=تغيير الصعوبة
+Difficulty Level=مستوى الصعوبة
+Enemy Level Adjustment=تعديل مستوى الأعداء
+EXP Multiplier=مضاعف الخبرة
+Damage Multiplier=مضاعف الضرر
+Incoming Damage=الضرر الوارد
+Outgoing Damage=الضرر الصادر
+# ─────────────────────────────────────────────────
+# إعدادات القتال المتقدمة (Advanced Battle Settings)
+# ─────────────────────────────────────────────────
+Battle Settings=إعدادات القتال
+Auto-Battle=قتال تلقائي
+Auto Battle=قتال تلقائي
+Manual Battle=قتال يدوي
+Battle Speed=سرعة القتال
+Fast Forward=تقديم سريع
+Battle Camera=كاميرا القتال
+Camera Distance=مسافة الكاميرا
+Camera Angle=زاوية الكاميرا
+Lock-On=قفل التصويب
+Target Lock=قفل الهدف
+Switch Target=تبديل الهدف
+Target Line=خط الهدف
+Target Display=عرض الهدف
+Battle Info Display=عرض معلومات القتال
+Damage Numbers=أرقام الضرر
+Show Damage Numbers=إظهار أرقام الضرر
+HP Display=عرض نقاط الصحة
+Battle UI=واجهة القتال
+Battle HUD=شاشة القتال
+Minimap in Battle=الخريطة المصغرة في القتال
+Party Gauge Display=عرض مقياس الفريق
+# ─────────────────────────────────────────────────
+# مستوى الخبرة والتعديلات (EXP & Level Settings)
+# ─────────────────────────────────────────────────
+Level Cap=الحد الأقصى للمستوى
+Max Level=المستوى الأقصى
+Level 99=المستوى 99
+Level Cap Release=رفع سقف المستوى
+EXP Settings=إعدادات الخبرة
+Bonus EXP=خبرة إضافية
+Stored EXP=خبرة مخزّنة
+Rest EXP=خبرة الراحة
+Level Down=خفض المستوى
+Level Reduction=تقليل المستوى
+Reduce Level=تقليل المستوى
+Set Level=تعيين المستوى
+Match Enemy Level=مطابقة مستوى العدو
+Over-Leveled=فوق المستوى
+Under-Leveled=تحت المستوى
+EXP Gain=اكتساب الخبرة
+EXP Share=مشاركة الخبرة
+Party EXP=خبرة الفريق
+# ─────────────────────────────────────────────────
+# إعدادات الصوت (Audio Settings)
+# ─────────────────────────────────────────────────
+Audio Settings=إعدادات الصوت
+Sound Settings=إعدادات الصوت
+Master Volume=مستوى الصوت الرئيسي
+BGM Volume=مستوى الموسيقى
+Music Volume=مستوى الموسيقى
+SFX Volume=مستوى المؤثرات الصوتية
+Sound Effects=المؤثرات الصوتية
+Voice Volume=مستوى الأصوات
+Battle Voice Volume=مستوى أصوات القتال
+Voice Language=لغة الأصوات
+Japanese Voice=أصوات يابانية
+English Voice=أصوات إنجليزية
+Dual Audio=صوت مزدوج
+Surround Sound=صوت محيطي
+Stereo=ستيريو
+Mono=مونو
+# ─────────────────────────────────────────────────
+# إعدادات العرض (Display Settings)
+# ─────────────────────────────────────────────────
+Display Settings=إعدادات العرض
+Screen Settings=إعدادات الشاشة
+Brightness=السطوع
+Screen Brightness=سطوع الشاشة
+Gamma=جاما
+Gamma Correction=تصحيح الجاما
+Resolution=الدقة
+Resolution Mode=وضع الدقة
+Performance Mode=وضع الأداء
+Quality Mode=وضع الجودة
+Frame Rate=معدل الإطارات
+HUD Size=حجم واجهة المستخدم
+HUD Opacity=شفافية واجهة المستخدم
+Subtitle Size=حجم الترجمة
+Subtitle Display=عرض الترجمة
+Show Subtitles=إظهار الترجمة
+Hide Subtitles=إخفاء الترجمة
+Subtitle Background=خلفية الترجمة
+Color Blind Mode=وضع عمى الألوان
+Color Settings=إعدادات الألوان
+# ─────────────────────────────────────────────────
+# إعدادات التحكم (Control Settings)
+# ─────────────────────────────────────────────────
+Control Settings=إعدادات التحكم
+Controller Settings=إعدادات وحدة التحكم
+Button Config=تهيئة الأزرار
+Button Configuration=تهيئة الأزرار
+Button Layout=تخطيط الأزرار
+Default Controls=التحكم الافتراضي
+Custom Controls=تحكم مخصص
+Invert X Axis=عكس المحور الأفقي
+Invert Y Axis=عكس المحور العمودي
+Camera Sensitivity=حساسية الكاميرا
+Camera Speed=سرعة الكاميرا
+Stick Sensitivity=حساسية العصا
+Vibration=الاهتزاز
+Rumble=الاهتزاز
+Gyroscope=الجيروسكوب
+Motion Controls=التحكم بالحركة
+# ─────────────────────────────────────────────────
+# إعدادات الحفظ (Save Settings)
+# ─────────────────────────────────────────────────
+Save=حفظ
+Load=تحميل
+Save Game=حفظ اللعبة
+Load Game=تحميل اللعبة
+Save File=ملف الحفظ
+Save Slot=خانة الحفظ
+Auto Save=حفظ تلقائي
+Auto-Save=حفظ تلقائي
+Quick Save=حفظ سريع
+Manual Save=حفظ يدوي
+Save Data=بيانات الحفظ
+Delete Save=حذف الحفظ
+Overwrite Save=الكتابة فوق الحفظ
+Confirm Overwrite=تأكيد الكتابة فوق
+Save Completed=تم الحفظ
+Saving=جارٍ الحفظ
+Loading=جارٍ التحميل
+Cloud Save=حفظ سحابي
+Save to Cloud=حفظ في السحابة
+Download Save=تحميل الحفظ
+# ─────────────────────────────────────────────────
+# إعدادات الشبكة (Network Settings)
+# ─────────────────────────────────────────────────
+Network Settings=إعدادات الشبكة
+Online Features=ميزات الاتصال
+Online=متصل
+Offline=غير متصل
+Internet Connection=اتصال الإنترنت
+DLC Check=فحص المحتوى الإضافي
+Check for Updates=التحقق من التحديثات
+Software Update=تحديث البرنامج
+Version=الإصدار
+Current Version=الإصدار الحالي
+Patch Notes=ملاحظات التحديث
+# ─────────────────────────────────────────────────
+# إعدادات اللعب (Gameplay Settings)
+# ─────────────────────────────────────────────────
+Gameplay Settings=إعدادات اللعب
+Game Settings=إعدادات اللعبة
+Tutorial Pop-ups=نوافذ الشروحات
+Show Tutorials=إظهار الشروحات
+Tutorial=شرح
+Tutorials=الشروحات
+Tips=نصائح
+Helpful Tips=نصائح مفيدة
+Event Skip=تخطي الأحداث
+Skip Events=تخطي الأحداث
+Skip Cutscenes=تخطي المشاهد السينمائية
+Movement Speed=سرعة الحركة
+Walking Speed=سرعة المشي
+Running Speed=سرعة الجري
+Sprint=ركض سريع
+Dash=اندفاع
+Auto-Run=جري تلقائي
+Field Skills Display=عرض مهارات الميدان
+Navigation Display=عرض الملاحة
+Waypoint Display=عرض نقاط الطريق
+Compass=البوصلة
+Clock Display=عرض الساعة
+Weather Display=عرض الطقس
+Day/Night Cycle=دورة الليل والنهار
+Time of Day=وقت اليوم
+Change Time=تغيير الوقت
+# ─────────────────────────────────────────────────
+# خيارات NG+ الخاصة (NG+ Exclusive Options)
+# ─────────────────────────────────────────────────
+NG+ Options=خيارات اللعبة الجديدة+
+NG+ Features=ميزات اللعبة الجديدة+
+NG+ Rewards=مكافآت اللعبة الجديدة+
+Costume Unlock=فتح الأزياء
+Additional Costumes=أزياء إضافية
+Swimwear=ملابس السباحة
+Color Variants=تنويعات الألوان
+Outfit Variations=تنويعات الملابس
+Character Appearance=مظهر الشخصية
+Growth Unlock=فتح النمو
+Class Mastery=إتقان الفصيل
+Rank 20=المرتبة 20
+Max Rank=المرتبة القصوى
+Soul Hack Unlock=فتح اختراق الروح
+Additional Soul Hacks=اختراقات روح إضافية
+Challenge Battle=معركة التحدي
+Challenge Mode=وضع التحدي
+Challenge Battle Mode=وضع معارك التحدي
+Archsage's Gauntlet=تحدي الحكيم الأعظم
+Nopon Archsage=حكيم النوبون الأعظم
+Time Attack=هجوم زمني
+Score Attack=هجوم النقاط
+Rank S=المرتبة S
+Rank A=المرتبة A
+Rank B=المرتبة B
+Rank C=المرتبة C
+# ─────────────────────────────────────────────────
+# إعدادات إمكانية الوصول (Accessibility Settings)
+# ─────────────────────────────────────────────────
+Accessibility=إمكانية الوصول
+Accessibility Settings=إعدادات إمكانية الوصول
+Casual Mode=الوضع العادي
+Simplified Controls=تحكم مبسط
+One-Button Mode=وضع الزر الواحد
+Auto-Chain Attack=هجوم متسلسل تلقائي
+Auto-Cancel=إلغاء تلقائي
+Assist Mode=وضع المساعدة
+Combat Assist=مساعدة القتال
+Navigation Assist=مساعدة الملاحة
+Text Size=حجم النص
+Large Text=نص كبير
+High Contrast=تباين عالٍ
+Screen Reader=قارئ الشاشة
+Button Remapping=إعادة تعيين الأزرار
+Hold to Confirm=اضغط مطولاً للتأكيد
+Tap to Confirm=انقر للتأكيد
+# ─────────────────────────────────────────────────
+# قائمة النظام (System Menu)
+# ─────────────────────────────────────────────────
+System Menu=قائمة النظام
+Options=الخيارات
+Settings=الإعدادات
+Configuration=التهيئة
+Preferences=التفضيلات
+Default Settings=الإعدادات الافتراضية
+Reset to Default=إعادة التعيين للافتراضي
+Apply Settings=تطبيق الإعدادات
+Confirm Changes=تأكيد التغييرات
+Cancel=إلغاء
+Back=رجوع
+Exit Game=الخروج من اللعبة
+Return to Title=العودة للشاشة الرئيسية
+Title Screen=الشاشة الرئيسية
+Main Menu=القائمة الرئيسية
+Continue=متابعة
+New Game=لعبة جديدة
+Chapter Select=اختيار الفصل
+Scene Replay=إعادة المشاهد
+Event Theater=مسرح الأحداث
+Sound Test=اختبار الصوت
+Music Player=مشغل الموسيقى
+Gallery=المعرض
+Artwork Gallery=معرض الفنون
+Character Gallery=معرض الشخصيات
+Model Viewer=عارض النماذج
+# ─────────────────────────────────────────────────
+# إحصائيات NG+ والسجلات (NG+ Stats & Records)
+# ─────────────────────────────────────────────────
+Play Records=سجلات اللعب
+Statistics=الإحصائيات
+Total Battles=إجمالي المعارك
+Battles Won=معارك منتصرة
+Battles Lost=معارك خاسرة
+Win Rate=نسبة الفوز
+Total Kills=إجمالي القتل
+Unique Monsters Defeated=وحوش فريدة مهزومة
+Items Collected=عناصر مجمّعة
+Quests Completed=مهمات مكتملة
+Side Quests Completed=مهمات فرعية مكتملة
+Hero Quests Completed=مهمات الأبطال المكتملة
+Total Distance Traveled=إجمالي المسافة المقطوعة
+Highest Combo=أعلى سلسلة ضربات
+Max Damage Dealt=أعلى ضرر مُلحق
+Fastest Kill=أسرع قتل
+Chain Attack Count=عدد الهجمات المتسلسلة
+Overkill Count=عدد مرات الضرر الزائد
+Interlink Count=عدد مرات الترابط
+Total Gold Earned=إجمالي الذهب المكتسب
+Total Gold Spent=إجمالي الذهب المنفق
+Cooking Count=عدد مرات الطبخ
+Rest Count=عدد مرات الراحة
+Collectopaedia Completion=اكتمال الموسوعة
+Affinity Chart Completion=اكتمال مخطط الألفة
+# ─────────────────────────────────────────────────
+# إعدادات DLC والمحتوى الإضافي (DLC Settings)
+# ─────────────────────────────────────────────────
+DLC Settings=إعدادات المحتوى الإضافي
+Downloadable Content=محتوى قابل للتحميل
+DLC=محتوى إضافي
+Expansion Pass=تذكرة التوسعة
+Season Pass=تذكرة الموسم
+DLC Pack=حزمة المحتوى الإضافي
+Wave 1=الموجة 1
+Wave 2=الموجة 2
+Wave 3=الموجة 3
+Wave 4=الموجة 4
+Future Redeemed=المستقبل المُستعاد
+New Story Content=محتوى قصصي جديد
+Additional Quests=مهمات إضافية
+Additional Heroes=أبطال إضافيون
+Additional Outfits=أزياء إضافية
+Helpful Items=عناصر مساعدة
+Challenge Battle Pack=حزمة معارك التحدي
+DLC Installed=المحتوى الإضافي مُثبّت
+DLC Not Installed=المحتوى الإضافي غير مُثبّت
+Check DLC=فحص المحتوى الإضافي
+Restore Purchases=استعادة المشتريات
+# ─────────────────────────────────────────────────
+# إعدادات الشاشة المتقدمة (Advanced Display)
+# ─────────────────────────────────────────────────
+Motion Blur=ضبابية الحركة
+Depth of Field=عمق المجال
+Anti-Aliasing=مضاد التعرج
+Bloom Effect=تأثير التوهج
+Shadow Quality=جودة الظلال
+Draw Distance=مسافة الرسم
+Texture Quality=جودة الخامات
+LOD=مستوى التفاصيل
+Level of Detail=مستوى التفاصيل
+Post-Processing=المعالجة البعدية
+Ambient Occlusion=الإضاءة المحيطية
+HDR=النطاق الديناميكي العالي
+HDR Mode=وضع النطاق الديناميكي العالي
+Screen Mode=وضع الشاشة
+Full Screen=ملء الشاشة
+Windowed=نافذة
+Borderless=بدون حدود
+Aspect Ratio=نسبة العرض
+16:9=16:9
+Vertical Sync=المزامنة العمودية
+V-Sync=المزامنة العمودية
