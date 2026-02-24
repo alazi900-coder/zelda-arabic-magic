@@ -3278,3 +3278,107 @@ New Battle - FR=معركة جديدة - FR
 Bionis and Alrest=بيونيس وأرست
 Hope Rekindled=أمل متجدد
 Uniting the Trinity=توحيد الثالوث
+# ═══════════════════════════════════════════════════
+# الأزياء والملابس (Fashion / Costumes)
+# ═══════════════════════════════════════════════════
+# ─────────────────────────────────────────────────
+# نظام الأزياء العام
+# ─────────────────────────────────────────────────
+Fashion=الأزياء
+Costume=زي
+Outfit=طقم ملابس
+Appearance=المظهر
+Change Appearance=تغيير المظهر
+Equipment Appearance=مظهر المعدات
+Show Equipment=إظهار المعدات
+Hide Equipment=إخفاء المعدات
+Default Outfit=الزي الافتراضي
+Alternate Costume=زي بديل
+DLC Costume=زي المحتوى الإضافي
+Color Variation=تنويع اللون
+Color Variant=تنويع لوني
+Outfit Color=لون الزي
+# ─────────────────────────────────────────────────
+# أزياء الشخصيات الرئيسية
+# ─────────────────────────────────────────────────
+Noah's Outfit=زي نوح
+Mio's Outfit=زي ميو
+Eunie's Outfit=زي يوني
+Taion's Outfit=زي تايون
+Lanz's Outfit=زي لانز
+Sena's Outfit=زي سينا
+Military Uniform=الزي العسكري
+Keves Uniform=زي كيفيس
+Agnus Uniform=زي أغنوس
+City Clothes=ملابس المدينة
+Casual Outfit=زي عادي
+# ─────────────────────────────────────────────────
+# أزياء الفصول (Class Outfits)
+# ─────────────────────────────────────────────────
+Class Outfit=زي الفصل
+Swordfighter Outfit=زي المبارز
+Zephyr Outfit=زي الزفير
+Medic Gunner Outfit=زي المسعف المدفعي
+Tactician Outfit=زي التكتيكي
+Heavy Guard Outfit=زي الحارس الثقيل
+Ogre Outfit=زي الغول
+Flash Fencer Outfit=زي المبارز الخاطف
+War Medic Outfit=زي طبيب الحرب
+Guardian Commander Outfit=زي القائد الحارس
+Thaumaturge Outfit=زي المعجز
+Yumsmith Outfit=زي حداد اليوم
+Full Metal Jaguar Outfit=زي الجاغوار المعدني
+Strategos Outfit=زي الاستراتيجي
+Stalker Outfit=زي المتعقب
+Lone Exile Outfit=زي المنفي الوحيد
+Incursor Outfit=زي المقتحم
+Lost Vanguard Outfit=زي الطليعة الضائعة
+Signifer Outfit=زي حامل الراية
+Martial Artist Outfit=زي فنان القتال
+Troubadour Outfit=زي المنشد
+Seraph Outfit=زي السيراف
+Machine Assassin Outfit=زي القاتل الآلي
+Royal Summoner Outfit=زي المستدعي الملكي
+Lifesage Outfit=زي حكيم الحياة
+Soulhacker Outfit=زي مخترق الأرواح
+# ─────────────────────────────────────────────────
+# أزياء المحتوى الإضافي (DLC Outfits)
+# ─────────────────────────────────────────────────
+Swimsuit=ملابس السباحة
+Swimwear=لباس البحر
+Beach Outfit=زي الشاطئ
+Noah Swimsuit=ملابس سباحة نوح
+Mio Swimsuit=ملابس سباحة ميو
+Eunie Swimsuit=ملابس سباحة يوني
+Sena Swimsuit=ملابس سباحة سينا
+Lanz Swimsuit=ملابس سباحة لانز
+Taion Swimsuit=ملابس سباحة تايون
+Heroic Outfit=زي بطولي
+Legacy Outfit=زي الإرث
+# ─────────────────────────────────────────────────
+# الإكسسوارات والتفاصيل
+# ─────────────────────────────────────────────────
+Accessory=إكسسوار
+Headgear=غطاء الرأس
+Eyewear=نظارات
+Cape=عباءة
+Scarf=وشاح
+Gloves=قفازات
+Boots=أحذية
+Armor=درع
+Light Armor=درع خفيف
+Heavy Armor=درع ثقيل
+Helmet=خوذة
+Shield=درع واقي
+Gauntlets=قفازات مدرعة
+# ─────────────────────────────────────────────────
+# ملابس Future Redeemed
+# ─────────────────────────────────────────────────
+Matthew's Outfit=زي ماثيو
+A's Outfit=زي أيه
+Nikol's Outfit=زي نيكول
+Glimmer's Outfit=زي غليمر
+Shulk's Outfit=زي شالك
+Rex's Outfit=زي ريكس
+Liberator Outfit=زي المحرر
+Resistance Outfit=زي المقاومة
