@@ -5614,3 +5614,231 @@ Rest Spots Used=نقاط الراحة المُستخدمة
 Campfire Conversations=محادثات نار المخيم
 Total Gold Earned=إجمالي الذهب المُكتسب
 Max Level Reached=أعلى مستوى تم بلوغه
+
+# ===== نظام التجارة والاقتصاد (Trading & Economy System) =====
+
+# --- العملات (Currencies) ---
+Gold=ذهب
+G=ذ
+Total Gold=إجمالي الذهب
+Gold Earned=الذهب المُكتسب
+Gold Spent=الذهب المُنفق
+Nopon Coin=عملة النوبون
+Silver Nopon Coin=عملة نوبون فضية
+Gold Nopon Coin=عملة نوبون ذهبية
+Bonus EXP=نقاط خبرة إضافية
+Affinity Points=نقاط الألفة
+
+# --- المتاجر والتجار (Shops & Merchants) ---
+Shop=متجر
+Item Shop=متجر العناصر
+Accessory Shop=متجر الإكسسوارات
+Gem Shop=متجر الأحجار الكريمة
+Clothes Shop=متجر الملابس
+Canteen=المقصف
+Shopkeeper=صاحب المتجر
+Nopon Merchant=تاجر نوبون
+Nopon Caravan=قافلة النوبون
+Travelling Merchant=تاجر متجول
+Colony Shop=متجر المستعمرة
+City Shop=متجر المدينة
+Limited Stock=مخزون محدود
+Sold Out=نفد المخزون
+Restock=إعادة التخزين
+Shop Level=مستوى المتجر
+Shop Rank=رتبة المتجر
+Shop Inventory=مخزون المتجر
+New Arrivals=وصول جديد
+Recommended=موصى به
+Popular Items=عناصر شائعة
+
+# --- البيع والشراء (Buying & Selling) ---
+Buy=شراء
+Sell=بيع
+Purchase=شراء
+Price=سعر
+Unit Price=سعر الوحدة
+Total Price=السعر الإجمالي
+Selling Price=سعر البيع
+Buy Price=سعر الشراء
+Discount=خصم
+Bulk Buy=شراء بالجملة
+Bulk Sell=بيع بالجملة
+Quantity=الكمية
+Select Quantity=اختر الكمية
+Confirm Purchase=تأكيد الشراء
+Confirm Sale=تأكيد البيع
+Not Enough Gold=الذهب غير كافٍ
+Insufficient Funds=أموال غير كافية
+Transaction Complete=اكتملت المعاملة
+Item Purchased=تم شراء العنصر
+Item Sold=تم بيع العنصر
+Cannot Sell=لا يمكن البيع
+Key Item=عنصر مفتاحي
+
+# --- أنواع البضائع (Merchandise Types) ---
+Consumable=مستهلك
+Recovery Item=عنصر استعادة
+Attack Item=عنصر هجوم
+Buff Item=عنصر تعزيز
+Debuff Item=عنصر إضعاف
+Field Item=عنصر ميداني
+Material=مادة
+Rare Material=مادة نادرة
+Common Material=مادة شائعة
+Unique Material=مادة فريدة
+Monster Drop=إسقاط الوحش
+Salvage Item=عنصر إنقاذ
+Trade Item=عنصر تجاري
+Exchange Item=عنصر مبادلة
+Collectible=مقتنى
+Ingredient=مكوّن
+Spice=توابل
+Fruit=فاكهة
+Vegetable=خضار
+Meat=لحم
+Fish=سمك
+Grain=حبوب
+Egg=بيضة
+Mineral=معدن
+Flower=زهرة
+Bug=حشرة
+Lumber=خشب
+Ore=خام
+
+# --- نظام المبادلة والتبادل (Exchange & Barter) ---
+Exchange=مبادلة
+Trade=تجارة
+Barter=مقايضة
+Nopon Coin Exchange=مبادلة عملات النوبون
+Silver to Gold Exchange=مبادلة الفضية بالذهبية
+Item Exchange=مبادلة العناصر
+Material Exchange=مبادلة المواد
+Collectopaedia Exchange=مبادلة موسوعة المقتنيات
+Card Exchange=مبادلة البطاقات
+Exchange Rate=سعر الصرف
+Trade Value=قيمة التجارة
+Fair Trade=تجارة عادلة
+
+# --- نظام الصناعة والتصنيع (Crafting Economy) ---
+Craft=صناعة
+Crafting=التصنيع
+Gem Crafting=صناعة الأحجار الكريمة
+Cooking=الطبخ
+Cook=طبخ
+Recipe=وصفة
+Recipe Unlocked=تم فتح الوصفة
+Crafting Cost=تكلفة التصنيع
+Crafting Materials=مواد التصنيع
+Required Materials=المواد المطلوبة
+Missing Materials=مواد ناقصة
+Sufficient Materials=مواد كافية
+Craft Result=نتيجة التصنيع
+Success Rate=معدل النجاح
+Crafting Level=مستوى التصنيع
+Mass Production=إنتاج ضخم
+
+# --- نظام الغنائم والإسقاطات (Loot & Drops) ---
+Loot=غنيمة
+Drop=إسقاط
+Item Drop=إسقاط عنصر
+Drop Rate=معدل الإسقاط
+Rare Drop=إسقاط نادر
+Common Drop=إسقاط شائع
+Guaranteed Drop=إسقاط مضمون
+Bonus Drop=إسقاط إضافي
+Overkill Drop=إسقاط القتل المفرط
+Loot Table=جدول الغنائم
+Auto-Loot=جمع تلقائي
+Pickup=التقاط
+Item Get=الحصول على عنصر
+Treasure=كنز
+Treasure Chest=صندوق كنز
+Rare Chest=صندوق نادر
+Ether Deposit=رواسب الأثير
+Ether Channel=قناة الأثير
+Collection Point=نقطة جمع
+Gathering Point=نقطة تجميع
+Harvest=حصاد
+
+# --- نظام المكافآت الاقتصادية (Economic Bonuses) ---
+Gold Bonus=مكافأة الذهب
+EXP Bonus=مكافأة الخبرة
+Drop Rate Up=زيادة معدل الإسقاط
+Rare Drop Up=زيادة الإسقاط النادر
+Shop Discount=خصم المتجر
+Price Reduction=تخفيض السعر
+Double Gold=ذهب مضاعف
+Triple EXP=خبرة ثلاثية
+Lucky=محظوظ
+Fortune=حظ
+Prosperity=رخاء
+Wealth=ثروة
+
+# --- اقتصاد المستعمرات (Colony Economy) ---
+Colony Development=تطوير المستعمرة
+Colony Level=مستوى المستعمرة
+Colony Affinity=ألفة المستعمرة
+Colony Resources=موارد المستعمرة
+Supply=إمداد
+Demand=طلب
+Colony Trade=تجارة المستعمرة
+Colony Shop Level=مستوى متجر المستعمرة
+Ferronis Hulk=هيكل الفيرونيس
+Rest Spot=نقطة راحة
+Campsite=مخيم
+Container=حاوية
+Supply Pod=كبسولة إمداد
+Supply Drop=إسقاط إمداد
+Donation=تبرع
+Contribution=مساهمة
+Colony Rank=رتبة المستعمرة
+Colony Quest Reward=مكافأة مهمة المستعمرة
+Liberation Bonus=مكافأة التحرير
+
+# --- واجهة التجارة (Trade UI) ---
+Inventory=المخزون
+Item List=قائمة العناصر
+Sort=ترتيب
+Sort by Name=ترتيب بالاسم
+Sort by Price=ترتيب بالسعر
+Sort by Type=ترتيب بالنوع
+Sort by Quantity=ترتيب بالكمية
+Sort by Rarity=ترتيب بالندرة
+Filter=تصفية
+Category Filter=تصفية بالفئة
+Search Items=بحث العناصر
+Item Details=تفاصيل العنصر
+Item Description=وصف العنصر
+Item Count=عدد العناصر
+Stack=تكديس
+Max Stack=الحد الأقصى للتكديس
+Inventory Full=المخزون ممتلئ
+Inventory Space=مساحة المخزون
+Equipped=مُجهَّز
+Unequipped=غير مُجهَّز
+Equip=تجهيز
+Unequip=إزالة التجهيز
+Use=استخدام
+Discard=تجاهل
+Favourite=مفضل
+Mark as Favourite=تحديد كمفضل
+Lock Item=قفل العنصر
+New Item=عنصر جديد
+Recently Acquired=مُكتسب حديثاً
+
+# --- اقتصاد DLC والمحتوى الإضافي ---
+DLC Shop=متجر المحتوى الإضافي
+Expansion Pass Items=عناصر تذكرة التوسعة
+Bonus Items=عناصر إضافية
+Starter Pack=حزمة البداية
+DLC Currency=عملة المحتوى الإضافي
+Challenge Mode Rewards=مكافآت وضع التحدي
+Challenge Mode Shop=متجر وضع التحدي
+Archsage's Shop=متجر الحكيم الأعلى
+Future Redeemed Items=عناصر المستقبل المُسترد
+Future Redeemed Materials=مواد المستقبل المُسترد
+Unity Points=نقاط الوحدة
+Affinity Growth=نمو الألفة
+Community Points=نقاط المجتمع
+Relationship Bonus=مكافأة العلاقة
