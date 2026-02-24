@@ -5421,3 +5421,196 @@ Defeated Count=عدد الهزائم
 First Encounter=المواجهة الأولى
 Discovery Rate=معدل الاكتشاف
 Completion Reward=مكافأة الإكمال
+
+# ===== نظام الإنجازات والجوائز (Achievements & Rewards System) =====
+
+# --- الإنجازات العامة (General Achievements) ---
+Achievement=إنجاز
+Achievement Unlocked=تم فتح إنجاز
+Achievement List=قائمة الإنجازات
+Achievement Progress=تقدم الإنجاز
+Achievement Tracker=متتبع الإنجازات
+Achievement Notification=إشعار الإنجاز
+Hidden Achievement=إنجاز مخفي
+Secret Achievement=إنجاز سري
+Milestone=إنجاز مرحلي
+Total Achievements=إجمالي الإنجازات
+Completion Percentage=نسبة الإكمال
+100% Completion=إكمال 100%
+
+# --- أنواع الإنجازات (Achievement Categories) ---
+Story Achievement=إنجاز القصة
+Battle Achievement=إنجاز القتال
+Exploration Achievement=إنجاز الاستكشاف
+Collection Achievement=إنجاز الجمع
+Social Achievement=إنجاز اجتماعي
+Side Quest Achievement=إنجاز المهمات الجانبية
+Hero Achievement=إنجاز الأبطال
+Colony Achievement=إنجاز المستعمرات
+Class Achievement=إنجاز الفصائل
+Crafting Achievement=إنجاز الصناعة
+Cooking Achievement=إنجاز الطبخ
+Gem Achievement=إنجاز الأحجار الكريمة
+Chain Attack Achievement=إنجاز الهجمات المتسلسلة
+Ouroboros Achievement=إنجاز أوروبوروس
+Superboss Achievement=إنجاز الزعيم الخارق
+
+# --- المكافآت (Rewards) ---
+Reward=مكافأة
+Bonus Reward=مكافأة إضافية
+Rare Reward=مكافأة نادرة
+Exclusive Reward=مكافأة حصرية
+Unlock Reward=مكافأة الفتح
+Clear Reward=مكافأة الإكمال
+First Clear Reward=مكافأة الإكمال الأول
+Rank Reward=مكافأة الرتبة
+Daily Reward=مكافأة يومية
+Bonus EXP Reward=مكافأة نقاط خبرة إضافية
+Gold Reward=مكافأة ذهب
+Item Reward=مكافأة عنصر
+Equipment Reward=مكافأة تجهيزات
+Accessory Reward=مكافأة إكسسوار
+Cosmetic Reward=مكافأة تجميلية
+Title Reward=مكافأة لقب
+
+# --- نظام الجوائز والتحديات (Challenge & Prize System) ---
+Challenge=تحدي
+Challenge Mode=وضع التحدي
+Challenge Battle=معركة تحدي
+Challenge Portal=بوابة التحدي
+Archsage's Gauntlet=قفاز الحكيم الأعلى
+Challenge Rank=رتبة التحدي
+Challenge Score=نتيجة التحدي
+Time Attack=هجوم زمني
+Time Limit=حد زمني
+Clear Time=وقت الإكمال
+Best Time=أفضل وقت
+S Rank=رتبة S
+A Rank=رتبة A
+B Rank=رتبة B
+C Rank=رتبة C
+Rank Up=ترقية الرتبة
+High Score=أعلى نتيجة
+New Record=رقم قياسي جديد
+Leaderboard=لوحة المتصدرين
+
+# --- مكافآت الاستكشاف (Exploration Rewards) ---
+Discovery Reward=مكافأة الاكتشاف
+Landmark Bonus=مكافأة المعلم
+Secret Area Bonus=مكافأة المنطقة السرية
+Location Discovery=اكتشاف الموقع
+Viewpoint Reward=مكافأة نقطة المشاهدة
+Region Completion=إكمال المنطقة
+Map Completion=إكمال الخريطة
+Full Map Bonus=مكافأة الخريطة الكاملة
+Hidden Treasure=كنز مخفي
+Treasure Chest=صندوق كنز
+Rare Chest=صندوق نادر
+Ether Deposit=رواسب الأثير
+Collection Point=نقطة جمع
+Collectopaedia Card=بطاقة موسوعة المقتنيات
+Collectopaedia Completion=إكمال موسوعة المقتنيات
+Card Reward=مكافأة البطاقة
+
+# --- مكافآت القتال (Battle Rewards) ---
+Battle Reward=مكافأة المعركة
+Victory Reward=مكافأة النصر
+Overkill Bonus=مكافأة القتل المفرط
+Chain Attack Bonus=مكافأة الهجوم المتسلسل
+Perfect Chain Bonus=مكافأة السلسلة المثالية
+Bonus Round=جولة إضافية
+EXP Bonus=مكافأة نقاط الخبرة
+Class Points Bonus=مكافأة نقاط الفصيلة
+Gold Bonus=مكافأة الذهب
+Drop Rate Bonus=مكافأة معدل الإسقاط
+Rare Drop Bonus=مكافأة الإسقاط النادر
+Kill Count=عدد القتلى
+Combo Count=عدد المجموعات
+Damage Record=رقم قياسي للضرر
+Highest Damage=أعلى ضرر
+Total Damage Dealt=إجمالي الضرر المُلحق
+Battles Won=المعارك المنتصرة
+Unique Monsters Slain=الوحوش الفريدة المقتولة
+Superboss Defeated=هزيمة الزعيم الخارق
+
+# --- مكافآت القصة والمهمات (Story & Quest Rewards) ---
+Quest Reward=مكافأة المهمة
+Quest Completion Bonus=مكافأة إكمال المهمة
+Hero Quest Reward=مكافأة مهمة البطل
+Hero Unlock=فتح البطل
+New Hero Joined=انضمام بطل جديد
+Colony Liberation Reward=مكافأة تحرير المستعمرة
+Affinity Reward=مكافأة الألفة
+Affinity Coin=عملة الألفة
+Nopon Coin=عملة النوبون
+Silver Nopon Coin=عملة نوبون فضية
+Gold Nopon Coin=عملة نوبون ذهبية
+Bonus Art=فن إضافي
+Bonus Skill=مهارة إضافية
+Skill Tree Completion=إكمال شجرة المهارات
+Class Mastery=إتقان الفصيلة
+Master Art Unlock=فتح الفن الرئيسي
+Master Skill Unlock=فتح المهارة الرئيسية
+
+# --- مكافآت التخصيص (Customization Rewards) ---
+Costume Unlock=فتح الزي
+Outfit Reward=مكافأة الملابس
+Swimsuit Unlock=فتح ملابس السباحة
+Hair Style Unlock=فتح تسريحة الشعر
+Color Variant=تنويعة اللون
+Alternate Costume=زي بديل
+Event Theater Unlock=فتح مسرح الأحداث
+Music Unlock=فتح الموسيقى
+Gallery Unlock=فتح المعرض
+Concept Art=فن المفهوم
+Character Model=نموذج الشخصية
+Sound Test=اختبار الصوت
+Jukebox Track=مقطوعة الجوكبوكس
+
+# --- مكافآت New Game Plus (NG+ Rewards) ---
+NG+ Exclusive Reward=مكافأة حصرية للعبة الجديدة+
+NG+ Hero=بطل اللعبة الجديدة+
+NG+ Class=فصيلة اللعبة الجديدة+
+NG+ Accessory=إكسسوار اللعبة الجديدة+
+NG+ Challenge=تحدي اللعبة الجديدة+
+Inherited Reward=مكافأة مُوَرَّثة
+Carryover Bonus=مكافأة الترحيل
+Clear Count Bonus=مكافأة عدد مرات الإكمال
+Second Playthrough Bonus=مكافأة التختيمة الثانية
+
+# --- مكافآت DLC والمحتوى الإضافي ---
+DLC Reward=مكافأة المحتوى الإضافي
+Expansion Pass Reward=مكافأة تذكرة التوسعة
+Wave 1 Reward=مكافأة الموجة 1
+Wave 2 Reward=مكافأة الموجة 2
+Wave 3 Reward=مكافأة الموجة 3
+Wave 4 Reward=مكافأة الموجة 4
+Future Redeemed Reward=مكافأة المستقبل المُسترد
+Amiibo Reward=مكافأة أميبو
+Special Item=عنصر خاص
+Limited Item=عنصر محدود
+Bonus Content=محتوى إضافي
+Season Pass Bonus=مكافأة التذكرة الموسمية
+
+# --- سجلات الإنجاز (Achievement Records) ---
+Play Time=وقت اللعب
+Total Play Time=إجمالي وقت اللعب
+Steps Taken=الخطوات المقطوعة
+Distance Traveled=المسافة المقطوعة
+Items Collected=العناصر المجموعة
+Enemies Defeated=الأعداء المهزومين
+Quests Completed=المهمات المكتملة
+Heroes Recruited=الأبطال المُجنَّدون
+Colonies Liberated=المستعمرات المُحرَّرة
+Classes Mastered=الفصائل المُتقَنة
+Gems Crafted=الأحجار الكريمة المصنوعة
+Meals Cooked=الوجبات المطبوخة
+Locations Discovered=المواقع المُكتشفة
+Landmarks Found=المعالم المُكتشفة
+Secret Areas Found=المناطق السرية المُكتشفة
+Collectopaedia Cards Completed=بطاقات موسوعة المقتنيات المُكتملة
+Heart-to-Hearts Viewed=أحاديث القلب المُشاهدة
+Rest Spots Used=نقاط الراحة المُستخدمة
+Campfire Conversations=محادثات نار المخيم
+Total Gold Earned=إجمالي الذهب المُكتسب
+Max Level Reached=أعلى مستوى تم بلوغه
