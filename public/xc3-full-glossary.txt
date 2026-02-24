@@ -4594,3 +4594,216 @@ Cave=كهف
 Cavern=مغارة
 Underground=تحت الأرض
 Floating Island=جزيرة عائمة
+# ═══════════════════════════════════════════════════
+# نظام الحوارات والسينمائيات (Cutscenes & Dialogue System)
+# ═══════════════════════════════════════════════════
+# ─────────────────────────────────────────────────
+# مصطلحات عامة للسينمائيات (General Cutscene Terms)
+# ─────────────────────────────────────────────────
+Cutscene=مشهد سينمائي
+Cutscenes=مشاهد سينمائية
+Movie=فيلم
+Event Scene=مشهد حدث
+Story Event=حدث قصصي
+Event Theater=مسرح الأحداث
+Event Gallery=معرض الأحداث
+Rewatch Cutscene=إعادة مشاهدة المشهد
+Skip Cutscene=تخطي المشهد
+Skipping...=جارٍ التخطي...
+Cannot Skip=لا يمكن التخطي
+Pause Cutscene=إيقاف المشهد مؤقتاً
+Resume=استئناف
+Now Playing=قيد التشغيل
+Chapter Event=حدث الفصل
+Main Story Event=حدث القصة الرئيسية
+Side Story Event=حدث القصة الفرعية
+Flashback=استرجاع
+Memory=ذكرى
+# ─────────────────────────────────────────────────
+# واجهة الحوار (Dialogue Interface)
+# ─────────────────────────────────────────────────
+Dialogue=حوار
+Dialogue Box=صندوق الحوار
+Text Box=صندوق النص
+Subtitle=ترجمة
+Subtitles=ترجمات
+Show Subtitles=إظهار الترجمات
+Hide Subtitles=إخفاء الترجمات
+Subtitle Size=حجم الترجمة
+Subtitle Speed=سرعة الترجمة
+Speaker Name=اسم المتحدث
+Character Name Display=عرض اسم الشخصية
+Name Tag=بطاقة الاسم
+Text Speed=سرعة النص
+Auto Text=نص تلقائي
+Auto Advance=تقدم تلقائي
+Manual Advance=تقدم يدوي
+Next=التالي
+Continue=متابعة
+Advance Text=تقديم النص
+Voice Line=سطر صوتي
+Voiced Dialogue=حوار مدبلج
+Unvoiced Dialogue=حوار غير مدبلج
+# ─────────────────────────────────────────────────
+# خيارات الحوار (Dialogue Choices)
+# ─────────────────────────────────────────────────
+Dialogue Choice=خيار الحوار
+Choose Response=اختيار الرد
+Option 1=الخيار 1
+Option 2=الخيار 2
+Option 3=الخيار 3
+Selected=مُختار
+Choice Result=نتيجة الاختيار
+Affinity Increased=زادت الألفة
+Affinity Decreased=انخفضت الألفة
+Good Response=رد جيد
+Neutral Response=رد محايد
+Bad Response=رد سيئ
+# ─────────────────────────────────────────────────
+# أنواع الحوارات (Dialogue Types)
+# ─────────────────────────────────────────────────
+Main Story Dialogue=حوار القصة الرئيسية
+Quest Dialogue=حوار المهمة
+NPC Dialogue=حوار شخصية غير لاعبة
+Party Chat=دردشة الفريق
+Banter=مزاح
+Field Dialogue=حوار الميدان
+Battle Dialogue=حوار المعركة
+Victory Dialogue=حوار الانتصار
+Defeat Dialogue=حوار الهزيمة
+Rest Dialogue=حوار الاستراحة
+Campfire Chat=دردشة نار المخيم
+Heart-to-Heart=حوار من القلب
+Overheard Talk=حديث مسموع
+Incidental Dialogue=حوار عرضي
+Chain Attack Quote=اقتباس الهجوم المتسلسل
+Interlink Quote=اقتباس الاندماج
+Ouroboros Quote=اقتباس الأوروبوروس
+Level Up Quote=اقتباس رفع المستوى
+# ─────────────────────────────────────────────────
+# عناصر واجهة الحوار (Dialogue UI Elements)
+# ─────────────────────────────────────────────────
+Dialogue Indicator=مؤشر الحوار
+Talk Prompt=مطالبة التحدث
+Interaction Prompt=مطالبة التفاعل
+Press A to Talk=اضغط A للتحدث
+Exclamation Bubble=فقاعة التعجب
+Question Bubble=فقاعة الاستفهام
+Thought Bubble=فقاعة التفكير
+Speech Bubble=فقاعة الكلام
+Emotion Icon=أيقونة المشاعر
+Happy=سعيد
+Sad=حزين
+Angry=غاضب
+Surprised=مندهش
+Thinking=يفكر
+Confused=مرتبك
+Determined=مصمم
+Worried=قلق
+Laughing=ضاحك
+Crying=يبكي
+Blushing=خجلان
+Sweat Drop=قطرة عرق
+# ─────────────────────────────────────────────────
+# إعدادات الصوت والحوار (Voice & Dialogue Settings)
+# ─────────────────────────────────────────────────
+Voice Language=لغة الأصوات
+Japanese Voice=صوت ياباني
+English Voice=صوت إنجليزي
+Voice Volume=مستوى صوت الأصوات
+Dialogue Volume=مستوى صوت الحوار
+Cutscene Volume=مستوى صوت السينمائيات
+BGM Volume=مستوى الموسيقى الخلفية
+Sound Effects Volume=مستوى المؤثرات الصوتية
+Voice Acting=أداء صوتي
+Voice Actor=مؤدي صوتي
+Dub=دبلجة
+Sub=ترجمة
+Dual Audio=صوت مزدوج
+# ─────────────────────────────────────────────────
+# مصطلحات حوارات القتال (Battle Dialogue Terms)
+# ─────────────────────────────────────────────────
+Battle Cry=صيحة المعركة
+War Cry=صرخة الحرب
+Attack Shout=هتاف الهجوم
+Heal Call=نداء الشفاء
+Revive Call=نداء الإنعاش
+Chain Attack Initiation=بدء الهجوم المتسلسل
+Ouroboros Activation=تفعيل الأوروبوروس
+Art Call=نداء الفن
+Talent Art Call=نداء فن الموهبة
+Fusion Art Call=نداء الفن المدمج
+Interlink Call=نداء الاندماج
+Enemy Spotted=تم رصد عدو
+Unique Monster Encounter=مواجهة وحش فريد
+Boss Battle Start=بدء معركة الزعيم
+Victory Cheer=هتاف الانتصار
+Defeat Lament=رثاء الهزيمة
+Low HP Warning=تحذير صحة منخفضة
+Critical Situation=وضع حرج
+# ─────────────────────────────────────────────────
+# عبارات شهيرة من اللعبة (Iconic Quotes)
+# ─────────────────────────────────────────────────
+Ouroboros, lend me your power!=أوروبوروس، أعرني قوتك!
+Let's show them our power!=لنريهم قوتنا!
+We'll carve a path to the future!=سنشق طريقاً نحو المستقبل!
+I'll protect everyone!=سأحمي الجميع!
+This is our story!=هذه قصتنا!
+We are Ouroboros!=نحن الأوروبوروس!
+The future is ours to decide!=المستقبل لنا لنقرره!
+I won't let anyone else die!=لن أدع أحداً آخر يموت!
+We walk on!=نحن نمضي قُدماً!
+That's the path we've chosen!=هذا هو الطريق الذي اخترناه!
+Hear our names and tremble!=اسمع أسماءنا وارتعد!
+# ─────────────────────────────────────────────────
+# مسرح الأحداث (Event Theater)
+# ─────────────────────────────────────────────────
+Event Theater=مسرح الأحداث
+Event List=قائمة الأحداث
+Chapter 1 Events=أحداث الفصل 1
+Chapter 2 Events=أحداث الفصل 2
+Chapter 3 Events=أحداث الفصل 3
+Chapter 4 Events=أحداث الفصل 4
+Chapter 5 Events=أحداث الفصل 5
+Chapter 6 Events=أحداث الفصل 6
+Chapter 7 Events=أحداث الفصل 7
+Side Story Events=أحداث القصة الفرعية
+Hero Events=أحداث الأبطال
+Heart-to-Heart Events=أحداث حوارات القلب
+DLC Events=أحداث المحتوى الإضافي
+Future Redeemed Events=أحداث المستقبل المُستعاد
+Locked Event=حدث مقفل
+Unlocked Event=حدث مفتوح
+New Event Available=حدث جديد متاح
+Play Event=تشغيل الحدث
+# ─────────────────────────────────────────────────
+# حالات الحوار الخاصة (Special Dialogue States)
+# ─────────────────────────────────────────────────
+Narrator=الراوي
+Narration=سرد
+Inner Monologue=مونولوج داخلي
+Flashback Dialogue=حوار استرجاع
+Dream Sequence=تسلسل حلم
+Vision=رؤيا
+Prophecy=نبوءة
+Telepathy=تخاطر
+Iris Dialogue=حوار إيريس
+Melia Narration=سرد ميليا
+Nia Narration=سرد نيا
+Off-Seer Song=أغنية مُنشد الوداع
+Flute Melody=لحن الناي
+Sending=وداع الأرواح
+# ─────────────────────────────────────────────────
+# حوارات DLC Future Redeemed
+# ─────────────────────────────────────────────────
+DLC Cutscene=مشهد سينمائي للمحتوى الإضافي
+Matthew Dialogue=حوار ماثيو
+A Dialogue=حوار إيه
+Nikol Dialogue=حوار نيكول
+Glimmer Dialogue=حوار غليمر
+Shulk Dialogue=حوار شولك
+Rex Dialogue=حوار ريكس
+Alpha Dialogue=حوار ألفا
+Origin Dialogue=حوار الأوريجن
+Community Dialogue=حوار المجتمع
+Settlement Dialogue=حوار المستوطنة
