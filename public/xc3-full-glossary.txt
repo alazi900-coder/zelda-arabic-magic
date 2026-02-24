@@ -1335,3 +1335,109 @@ Level Up=رفع المستوى
 Discussion=مناقشة
 Gem Crafting Station=محطة صناعة الجواهر
 Class Change=تغيير الفصل
+# ═══════════════════════════════════════════════════
+# نظام أوروبوروس والاندماج (Ouroboros & Interlink System)
+# ═══════════════════════════════════════════════════
+Ouroboros=أوروبوروس
+Interlink=الاندماج
+Interlink Level=مستوى الاندماج
+Ouroboros Form=شكل أوروبوروس
+Ouroboros Order=وسام أوروبوروس
+Interlink Pair=ثنائي الاندماج
+Heat Gauge=مقياس الحرارة
+Overheat=فرط الحرارة
+Cooldown=فترة التبريد
+Interlink Arte=فن الاندماج
+Talent Arte=فن الموهبة
+Ouroboros Arte=فن أوروبوروس
+Canceling=الإلغاء
+Fusion Arte=فن الدمج
+# ─────────────────────────────────────────────────
+# أشكال الاندماج (Interlink Forms)
+# ─────────────────────────────────────────────────
+Noah-Mio Ouroboros=أوروبوروس نوح-ميو
+Lanz-Sena Ouroboros=أوروبوروس لانز-سينا
+Eunie-Taion Ouroboros=أوروبوروس يوني-تايون
+Form A=الشكل أ
+Form B=الشكل ب
+Noah Ouroboros Form=شكل أوروبوروس نوح
+Mio Ouroboros Form=شكل أوروبوروس ميو
+Lanz Ouroboros Form=شكل أوروبوروس لانز
+Sena Ouroboros Form=شكل أوروبوروس سينا
+Eunie Ouroboros Form=شكل أوروبوروس يوني
+Taion Ouroboros Form=شكل أوروبوروس تايون
+# ─────────────────────────────────────────────────
+# فنون أوروبوروس - نوح وميو (Noah & Mio Ouroboros Arts)
+# ─────────────────────────────────────────────────
+Deadly Twister=إعصار مميت
+Spinning Slash=شرطة دوّارة
+Glittering Fountain=نافورة متلألئة
+Soaring Tempest=عاصفة صاعدة
+Empyrean Salvo=وابل السماء العليا
+Infinity Blade=نصل اللانهاية
+Lucky Seven=السبعة المحظوظة
+Unlimited Sword=سيف بلا حدود
+# ─────────────────────────────────────────────────
+# فنون أوروبوروس - لانز وسينا (Lanz & Sena Ouroboros Arts)
+# ─────────────────────────────────────────────────
+Mega Smash=تحطيم عملاق
+Demolition=الهدم
+Shield Bash=ضربة الدرع
+Pressure Drop=انخفاض الضغط
+Mammoth Crash=اصطدام الماموث
+Brute Force=القوة الغاشمة
+Giant Explosion=انفجار عملاق
+Power Charge=شحنة القوة
+# ─────────────────────────────────────────────────
+# فنون أوروبوروس - يوني وتايون (Eunie & Taion Ouroboros Arts)
+# ─────────────────────────────────────────────────
+Air Fang=ناب الهواء
+Healing Wind=رياح الشفاء
+Piercing Rain=مطر ثاقب
+Ethereal Cannon=مدفع أثيري
+Sky Punishment=عقاب السماء
+Order Wing=جناح النظام
+Resonant Flag=راية الرنين
+Mondo Blaster=مدمر موندو
+# ─────────────────────────────────────────────────
+# مهارات أوروبوروس (Ouroboros Skills - Soul Tree)
+# ─────────────────────────────────────────────────
+Soul Tree=شجرة الروح
+Soul Points=نقاط الروح
+SP=ن.ر
+Prioritize Heart=أولوية القلب
+Prioritize Courage=أولوية الشجاعة
+Extended Interlink=اندماج ممتد
+First Move Advantage=ميزة الحركة الأولى
+Heat Reduction=تقليل الحرارة
+Soul Hack=اختراق الروح
+Awakened State=حالة الصحوة
+Full Power Mode=وضع القوة الكاملة
+Overclock=التسريع الفائق
+Chain Attack Boost=تعزيز الهجوم المتسلسل
+Interlink Charge=شحن الاندماج
+Quick Interlink=اندماج سريع
+Sustained Interlink=اندماج مستدام
+# ─────────────────────────────────────────────────
+# مصطلحات قتالية متعلقة بأوروبوروس (Ouroboros Combat Terms)
+# ─────────────────────────────────────────────────
+Pair Partner=شريك الثنائي
+Dominant=المهيمن
+Submissive=الخاضع
+Link Attack=هجوم الربط
+Combo Interlink=اندماج تتابعي
+Emergency Interlink=اندماج طارئ
+Interlink Transformation=تحول الاندماج
+De-Interlink=فك الاندماج
+Reactivation=إعادة التفعيل
+Power Reversal=انعكاس القوة
+Moebius=موبيوس
+Moebius Form=شكل موبيوس
+Consul=القنصل
+Flame Clock=ساعة اللهب
+Life Force=قوة الحياة
+Iris=القزحية
+Ouroboros Stone=حجر أوروبوروس
+City=المدينة
+Liberator=المحرر
+Lost Numbers=الأرقام المفقودة
