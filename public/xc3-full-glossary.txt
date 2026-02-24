@@ -985,3 +985,128 @@ Giant Crab=سلطعون عملاق
 Sea Urchin=قنفذ البحر
 Coral Squid=حبّار المرجان
 Freshwater Clam=محار المياه العذبة
+# ═══════════════════════════════════════════════════
+# الوحوش الفريدة (Unique Monsters)
+# ═══════════════════════════════════════════════════
+Unique Monster=وحش فريد
+# ═══════════════════════════════════════════════════
+# منطقة سهل أيتيا (Aetia Region)
+# ═══════════════════════════════════════════════════
+Territorial Rotbart=روتبارت الإقليمي
+Immovable Gonzalez=غونزاليز الراسخ
+Phantasmic Durango=دورانغو الشبحي
+Malicious Dimitri=ديمتري الخبيث
+Seasoned Barbatros=بارباتروس المخضرم
+Destructive Bravery=الشجاعة المدمّرة
+Sentry Kukulkan=كوكولكان الحارس
+Impenetrable Fortis=فورتيس المنيع
+Rampaging Gombaba=غومبابا الهائج
+Confiscator Azmort=أزمورت المصادر
+Dread Mermaid=حورية الرعب
+Breezy Aspidochelone=أسبيدوشيلون النسيمي
+Indomitable Maximus=ماكسيموس الذي لا يُقهر
+# ═══════════════════════════════════════════════════
+# منطقة فورنيس (Fornis Region)
+# ═══════════════════════════════════════════════════
+Leaping Zulf=زولف القافز
+Ghostly Gaspar=غاسبار الشبحي
+Withered Vortis=فورتيس الذابل
+Wicked Kelpie=كيلبي الشرير
+Furious Hecaton=هيكاتون الغاضب
+Unflinching Oberon=أوبيرون الصامد
+Ferocious Vasara=فاسارا الشرس
+Majestic Glaive=غلايف المهيب
+Pelagic Narpon=ناربون البحري
+Tyrant Iudicium=يوديسيوم الطاغية
+Dismal Odysseus=أوديسيوس الكئيب
+Rockbound Waldherr=فالدهير الصخري
+Sovereign Dolos=دولوس السيّد
+# ═══════════════════════════════════════════════════
+# منطقة بنتلاس (Pentelas Region)
+# ═══════════════════════════════════════════════════
+Roaming Balrog=بالروغ الجوّال
+Savage Muimui=مويموي المتوحّش
+Glacial Borialis=بورياليس الجليدي
+Lucky Serket=سيركت المحظوظ
+Wrathful Orobas=أوروباس الغاضب
+Untamed Belphoebe=بلفيبي الجامح
+Vigorous Tonitrus=تونيتروس النشيط
+Steelclad Argos=أرغوس المدرّع
+Feathered Zhuriel=زورييل المريّش
+Tenacious Bregalad=بريغالاد العنيد
+Prancing Caladrius=كالادريوس الخيلاء
+Fleetfoot Eruca=إيروكا السريعة
+# ═══════════════════════════════════════════════════
+# منطقة كيفيس كاسل (Keves Castle Region)
+# ═══════════════════════════════════════════════════
+Elite Regalus=ريغالوس النخبوي
+Menacing Norval=نورفال المهدّد
+Dreadnought Valdeus=فالديوس المدرّعة
+Colossal Apeiros=أبيروس الضخم
+Thundering Seidr=سيدر الراعد
+Blademaster Volgran=فولغران سيد النصل
+# ═══════════════════════════════════════════════════
+# منطقة أغنوس كاسل (Agnus Castle Region)
+# ═══════════════════════════════════════════════════
+Supreme Ouroboros=أوروبوروس الأعلى
+Abyssal Noxus=نوكسس الهاوية
+Tempest Vortigern=فورتيغيرن العاصفة
+Immortal Zenobia=زينوبيا الخالدة
+Relentless Brutus=بروتوس القاسي
+# ═══════════════════════════════════════════════════
+# منطقة أصل (Origin)
+# ═══════════════════════════════════════════════════
+Absolute Moebius=مويبيوس المطلق
+Terminus Dreadking=ملك الرعب النهائي
+Omnipotent Zephyrus=زيفيروس القدير
+# ═══════════════════════════════════════════════════
+# منطقة المحيط المتساقط (Cadensia Region)
+# ═══════════════════════════════════════════════════
+Oceanic Leviathan=لفياثان المحيط
+Deepwater Charybdis=كاريبديس الأعماق
+Stormbound Scylla=سيلا العاصفة
+Tidebreaker Nereus=نيريوس كاسر المد
+Coral Guardian=حارس المرجان
+# ═══════════════════════════════════════════════════
+# منطقة سلسلة أبالوس (Erythia Sea)
+# ═══════════════════════════════════════════════════
+Infernal Basilisk=باسيليسك الجحيم
+Ancient Kraken=كراكن القديم
+Primordial Hydra=هيدرا البدائية
+Abyssal Behemoth=بهيموث الهاوية
+# ═══════════════════════════════════════════════════
+# وحوش فريدة عامة ومتكررة
+# ═══════════════════════════════════════════════════
+Ardent Ardun=أردون المتّقد
+Elder Grog=غروغ الأكبر
+Proud Lisard=ليسارد الفخور
+Swift Antol=أنتول السريع
+Emerald Brog=بروغ الزمرّدي
+Golden Aris=أريس الذهبي
+Shadow Volff=فولف الظلال
+Silent Feris=فيريس الصامت
+Iron Moramora=مورامورا الحديدي
+Crystal Eks=إيكس البلوري
+Armored Levnis=ليفنيس المدرّع
+Ancient Gogol=غوغول القديم
+Giant Armu=أرمو العملاق
+Venomous Krabble=كرابل السام
+Alpha Tirkin=تيركن الألفا
+# ═══════════════════════════════════════════════════
+# مصطلحات الوحوش العامة
+# ═══════════════════════════════════════════════════
+Monster Level=مستوى الوحش
+Named Monster=وحش مسمّى
+Elite Monster=وحش نخبوي
+Super Boss=زعيم خارق
+Tombstone=شاهد القبر
+Monster Drop=غنيمة الوحش
+Rare Drop=غنيمة نادرة
+Spawn Point=نقطة الظهور
+Respawn Timer=مؤقت إعادة الظهور
+Aggro Range=نطاق الاستفزاز
+Detection Range=نطاق الكشف
+Night Spawn=ظهور ليلي
+Weather Spawn=ظهور مرتبط بالطقس
+Enrage=هيجان
+Enraged State=حالة الهيجان
