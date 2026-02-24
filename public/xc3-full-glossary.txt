@@ -3681,3 +3681,167 @@ Common Material=مادة شائعة
 Unique Material=مادة فريدة
 Salvage Item=عنصر إنقاذ
 Collectible Material=مادة قابلة للجمع
+# ═══════════════════════════════════════════════════
+# نظام الألفة وشجرة الروح (Affinity / Soul Tree System)
+# ═══════════════════════════════════════════════════
+# ─────────────────────────────────────────────────
+# مصطلحات عامة للنظام
+# ─────────────────────────────────────────────────
+Affinity=الألفة
+Affinity Chart=مخطط الألفة
+Soul Tree=شجرة الروح
+Soul Points=نقاط الروح
+Affinity Level=مستوى الألفة
+Affinity Growth=نمو الألفة
+Max Affinity=أقصى ألفة
+Bond=رابطة
+Bond Level=مستوى الرابطة
+Affinity Link=وصلة الألفة
+Affinity Line=خط الألفة
+Relationship=علاقة
+Trust=ثقة
+Friendship=صداقة
+# ─────────────────────────────────────────────────
+# ألفة الشخصيات (Character Affinity)
+# ─────────────────────────────────────────────────
+Party Affinity=ألفة الفريق
+Character Bond=رابطة الشخصية
+Affinity Between Characters=الألفة بين الشخصيات
+Interlink Level=مستوى الاندماج
+Interlink Growth=نمو الاندماج
+Pair Bond=رابطة الثنائي
+Noah & Mio Bond=رابطة نوح وميو
+Lanz & Sena Bond=رابطة لانز وسينا
+Eunie & Taion Bond=رابطة يوني وتايون
+Ouroboros Bond=رابطة أوروبوروس
+Ouroboros Level=مستوى أوروبوروس
+# ─────────────────────────────────────────────────
+# شجرة الروح - الأوروبوروس (Ouroboros Soul Tree)
+# ─────────────────────────────────────────────────
+Soul Tree Node=عقدة شجرة الروح
+Unlock Node=فتح العقدة
+Locked Node=عقدة مقفلة
+Active Node=عقدة نشطة
+Soul Tree Branch=فرع شجرة الروح
+Soul Tree Path=مسار شجرة الروح
+Soul Tree Level=مستوى شجرة الروح
+Soul Tree Reset=إعادة ضبط شجرة الروح
+Soul Point Cost=تكلفة نقاط الروح
+Node Effect=تأثير العقدة
+# ─────────────────────────────────────────────────
+# تأثيرات عقد شجرة الروح (Soul Tree Node Effects)
+# ─────────────────────────────────────────────────
+Stat Boost=تعزيز إحصائية
+HP Boost=تعزيز نقاط الصحة
+Attack Boost=تعزيز الهجوم
+Defense Boost=تعزيز الدفاع
+Agility Boost=تعزيز الرشاقة
+Dexterity Boost=تعزيز البراعة
+Luck Boost=تعزيز الحظ
+Healing Boost=تعزيز الشفاء
+Art Upgrade=ترقية الفن
+Skill Enhancement=تحسين المهارة
+Interlink Time Extension=تمديد وقت الاندماج
+Interlink Art Enhancement=تحسين فنون الاندماج
+Fusion Art Bonus=مكافأة الفن المدمج
+New Art Unlocked=فتح فن جديد
+New Skill Unlocked=فتح مهارة جديدة
+# ─────────────────────────────────────────────────
+# ألفة المستعمرات (Colony Affinity)
+# ─────────────────────────────────────────────────
+Colony Affinity=ألفة المستعمرة
+Colony Affinity Level=مستوى ألفة المستعمرة
+Colony Rank=رتبة المستعمرة
+Colony Development=تطوير المستعمرة
+Colony Bond=رابطة المستعمرة
+Colony Trust=ثقة المستعمرة
+Colony Affinity Star=نجمة ألفة المستعمرة
+Colony Reward=مكافأة المستعمرة
+Affinity Star 1=نجمة الألفة 1
+Affinity Star 2=نجمة الألفة 2
+Affinity Star 3=نجمة الألفة 3
+Affinity Star 4=نجمة الألفة 4
+Affinity Star 5=نجمة الألفة 5
+Max Colony Affinity=أقصى ألفة المستعمرة
+# ─────────────────────────────────────────────────
+# طرق زيادة الألفة (Affinity Raising Methods)
+# ─────────────────────────────────────────────────
+Discussion=نقاش
+Rest Spot Discussion=نقاش موقع الراحة
+Campfire Chat=دردشة المخيم
+Meal Together=وجبة مشتركة
+Battle Together=قتال مشترك
+Quest Completion=إتمام المهمة
+Side Quest=مهمة فرعية
+Hero Quest=مهمة بطل
+Collectopaedia Card Delivery=تسليم بطاقة كوليبيديا
+Item Delivery=تسليم عنصر
+Gift=هدية
+Affinity Scene=مشهد ألفة
+Affinity Event=حدث ألفة
+Affinity Bonus=مكافأة الألفة
+# ─────────────────────────────────────────────────
+# ألفة الأبطال (Hero Affinity)
+# ─────────────────────────────────────────────────
+Hero Affinity=ألفة البطل
+Hero Bond=رابطة البطل
+Hero Recruitment=تجنيد البطل
+Hero Unlock=فتح البطل
+Hero Join=انضمام البطل
+Hero Level=مستوى البطل
+Hero Affinity Growth=نمو ألفة البطل
+Hero Quest Required=مهمة البطل مطلوبة
+Hero Class Unlock=فتح فصل البطل
+Inherited Skill=مهارة موروثة
+Class Inheritance=وراثة الفصل
+# ─────────────────────────────────────────────────
+# نظام شجرة المهارات (Skill Tree)
+# ─────────────────────────────────────────────────
+Skill Tree=شجرة المهارات
+Skill Node=عقدة المهارة
+Skill Branch=فرع المهارة
+Skill Slot=خانة المهارة
+Skill Set=مجموعة المهارات
+Master Skill=مهارة خبيرة
+Equipped Skill=مهارة مجهزة
+Passive Skill=مهارة خاملة
+Active Skill=مهارة نشطة
+Class Skill=مهارة الفصل
+Shared Skill=مهارة مشتركة
+Skill Compatibility=توافق المهارة
+# ─────────────────────────────────────────────────
+# نظام الفنون والتخصيص (Art Customization)
+# ─────────────────────────────────────────────────
+Art Slot=خانة الفن
+Art Set=مجموعة الفنون
+Master Art=فن خبير
+Class Art=فن الفصل
+Talent Art=فن الموهبة
+Fusion Art=فن مدمج
+Art Combo=تركيبة فنون
+Art Swap=تبديل الفن
+Art Rank=رتبة الفن
+Art Enhancement=تحسين الفن
+Art Upgrade Cost=تكلفة ترقية الفن
+Custom Build=بناء مخصص
+Loadout=تجهيزة
+Save Loadout=حفظ التجهيزة
+Load Loadout=تحميل التجهيزة
+Character Build=بناء الشخصية
+Optimization=تحسين
+Min-Max=تحسين الحد الأقصى
+# ─────────────────────────────────────────────────
+# مصطلحات DLC Future Redeemed - شجرة الروح
+# ─────────────────────────────────────────────────
+Affinity Diagram=مخطط الألفة
+Community=المجتمع
+Community Affinity=ألفة المجتمع
+Community Development=تطوير المجتمع
+Settler Bond=رابطة المستوطن
+Settlement Growth=نمو المستوطنة
+Resource Contribution=مساهمة الموارد
+Community Quest=مهمة مجتمعية
+Community Rank=رتبة المجتمع
+Community Reward=مكافأة المجتمع
+Unity=الوحدة
+Unity Level=مستوى الوحدة
