@@ -3845,3 +3845,208 @@ Community Rank=رتبة المجتمع
 Community Reward=مكافأة المجتمع
 Unity=الوحدة
 Unity Level=مستوى الوحدة
+# ═══════════════════════════════════════════════════
+# نظام الإنجازات والتحديات (Achievements & Challenges)
+# ═══════════════════════════════════════════════════
+# ─────────────────────────────────────────────────
+# مصطلحات عامة للنظام
+# ─────────────────────────────────────────────────
+Achievement=إنجاز
+Achievements=إنجازات
+Challenge=تحدي
+Challenges=تحديات
+Achievement List=قائمة الإنجازات
+Achievement Unlocked=تم فتح الإنجاز
+Achievement Progress=تقدم الإنجاز
+Achievement Complete=إنجاز مكتمل
+Achievement Reward=مكافأة الإنجاز
+Challenge Reward=مكافأة التحدي
+Challenge Complete=تحدي مكتمل
+Challenge Failed=فشل التحدي
+Challenge Active=تحدي نشط
+Challenge Timer=مؤقت التحدي
+Completion Rate=نسبة الإكمال
+Total Achievements=إجمالي الإنجازات
+Hidden Achievement=إنجاز مخفي
+Secret Achievement=إنجاز سري
+# ─────────────────────────────────────────────────
+# تحديات القتال (Battle Challenges)
+# ─────────────────────────────────────────────────
+Battle Challenge=تحدي قتالي
+Defeat Enemies=هزيمة الأعداء
+Defeat Unique Monsters=هزيمة الوحوش الفريدة
+Defeat Superboss=هزيمة الزعيم الخارق
+Total Enemies Defeated=إجمالي الأعداء المهزومين
+Win Without KO=الفوز دون سقوط
+No Damage Clear=إتمام دون ضرر
+Speed Kill=قتل سريع
+Overkill=قتل مفرط
+Chain Attack Challenge=تحدي الهجوم المتسلسل
+Interlink Challenge=تحدي الاندماج
+Ouroboros Challenge=تحدي أوروبوروس
+Fusion Art Challenge=تحدي الفن المدمج
+Cancel Attack Challenge=تحدي هجوم الإلغاء
+Perfect Block Challenge=تحدي الصد المثالي
+Healing Challenge=تحدي الشفاء
+Total Damage Dealt=إجمالي الضرر المُلحق
+Total Damage Healed=إجمالي الضرر المُعالج
+Max Damage in One Hit=أقصى ضرر في ضربة واحدة
+Combo Count Challenge=تحدي عدد التركيبات
+Back Attack Challenge=تحدي الهجوم الخلفي
+Side Attack Challenge=تحدي الهجوم الجانبي
+Topple Challenge=تحدي الإسقاط
+Launch Challenge=تحدي الإطلاق
+Daze Challenge=تحدي الذهول
+Burst Challenge=تحدي الانفجار
+Smash Challenge=تحدي التحطيم
+# ─────────────────────────────────────────────────
+# تحديات الاستكشاف (Exploration Challenges)
+# ─────────────────────────────────────────────────
+Exploration Challenge=تحدي الاستكشاف
+Locations Discovered=المواقع المكتشفة
+Landmarks Discovered=المعالم المكتشفة
+Secret Areas Found=المناطق السرية المكتشفة
+Rest Spots Found=مواقع الراحة المكتشفة
+Containers Opened=الحاويات المفتوحة
+Ether Channels Activated=قنوات الأثير المُفعّلة
+Walls Climbed=الجدران المتسلقة
+Ziplines Used=الحبال الانزلاقية المستخدمة
+Rope Slides Used=انزلاقات الحبل المستخدمة
+Swimming Distance=مسافة السباحة
+Walking Distance=مسافة المشي
+Running Distance=مسافة الجري
+Total Distance Traveled=إجمالي المسافة المقطوعة
+Highest Point Reached=أعلى نقطة تم الوصول إليها
+All Regions Explored=جميع المناطق مستكشفة
+Map Completion=إكمال الخريطة
+Region Completion=إكمال المنطقة
+100% Exploration=استكشاف 100%
+# ─────────────────────────────────────────────────
+# تحديات المهمات (Quest Challenges)
+# ─────────────────────────────────────────────────
+Quest Challenge=تحدي المهمات
+Quests Completed=المهمات المكتملة
+Side Quests Completed=المهمات الفرعية المكتملة
+Hero Quests Completed=مهمات الأبطال المكتملة
+Standard Quests Completed=المهمات العادية المكتملة
+All Quests Complete=جميع المهمات مكتملة
+Quest Chain Complete=سلسلة مهمات مكتملة
+Colony Quests Completed=مهمات المستعمرات المكتملة
+Discussion Scenes Viewed=مشاهد النقاش المشاهدة
+Heart-to-Hearts Viewed=حوارات القلب المشاهدة
+All Heart-to-Hearts=جميع حوارات القلب
+# ─────────────────────────────────────────────────
+# تحديات الفصول والشخصيات (Class & Character Challenges)
+# ─────────────────────────────────────────────────
+Class Challenge=تحدي الفصل
+Class Mastered=فصل متقن
+All Classes Mastered=جميع الفصول متقنة
+Class Rank 10=رتبة الفصل 10
+Class Rank 20=رتبة الفصل 20
+Hero Recruited=بطل مُجنَّد
+All Heroes Recruited=جميع الأبطال مُجنَّدون
+Character Level 99=مستوى الشخصية 99
+All Characters Max Level=جميع الشخصيات بأقصى مستوى
+Max Interlink Level=أقصى مستوى اندماج
+All Interlinks Maxed=جميع الاندماجات بالحد الأقصى
+Soul Tree Complete=شجرة الروح مكتملة
+All Soul Trees Complete=جميع أشجار الروح مكتملة
+Skill Set Complete=مجموعة المهارات مكتملة
+# ─────────────────────────────────────────────────
+# تحديات الجمع والحرف (Collection & Crafting Challenges)
+# ─────────────────────────────────────────────────
+Collection Challenge=تحدي الجمع
+Items Collected=العناصر المجمعة
+Collectibles Found=المقتنيات المكتشفة
+All Collectibles=جميع المقتنيات
+Unique Items Found=العناصر الفريدة المكتشفة
+Gems Crafted=الجواهر المصنوعة
+All Gems Crafted=جميع الجواهر مصنوعة
+Max Rank Gems=جواهر بأقصى رتبة
+Recipes Learned=الوصفات المتعلمة
+All Recipes Learned=جميع الوصفات متعلمة
+Meals Cooked=الوجبات المطبوخة
+Cooking Challenge=تحدي الطبخ
+Accessories Collected=الإكسسوارات المجمعة
+All Accessories=جميع الإكسسوارات
+Collectopaedia Cards Completed=بطاقات الكوليبيديا المكتملة
+All Cards Complete=جميع البطاقات مكتملة
+# ─────────────────────────────────────────────────
+# تحديات الوحوش الفريدة (Unique Monster Challenges)
+# ─────────────────────────────────────────────────
+Unique Monster Challenge=تحدي الوحوش الفريدة
+Unique Monsters Defeated=الوحوش الفريدة المهزومة
+All Unique Monsters Defeated=جميع الوحوش الفريدة مهزومة
+Superboss Defeated=الزعيم الخارق مهزوم
+All Superbosses Defeated=جميع الزعماء الخارقين مهزومون
+Level 100+ Monster Defeated=وحش بمستوى +100 مهزوم
+Monster Compendium Complete=سجل الوحوش مكتمل
+Monster Species Complete=فصائل الوحوش مكتملة
+Tombstone Cleared=شاهد القبر مُطهَّر
+All Tombstones Cleared=جميع شواهد القبور مُطهَّرة
+# ─────────────────────────────────────────────────
+# تحديات ألفة المستعمرات (Colony Affinity Challenges)
+# ─────────────────────────────────────────────────
+Colony Challenge=تحدي المستعمرة
+Colony Affinity Max=ألفة المستعمرة بالحد الأقصى
+All Colonies Max Affinity=جميع المستعمرات بأقصى ألفة
+Colony Liberation=تحرير المستعمرة
+All Colonies Liberated=جميع المستعمرات محررة
+Flame Clock Destroyed=ساعة اللهب مدمرة
+All Flame Clocks Destroyed=جميع ساعات اللهب مدمرة
+Colony Rank S=رتبة المستعمرة S
+All Colonies Rank S=جميع المستعمرات رتبة S
+# ─────────────────────────────────────────────────
+# تحديات القصة والإتمام (Story & Completion Challenges)
+# ─────────────────────────────────────────────────
+Story Challenge=تحدي القصة
+Chapter Cleared=الفصل مُكتمل
+All Chapters Cleared=جميع الفصول مكتملة
+Story Complete=القصة مكتملة
+New Game Plus=لعبة جديدة+
+NG+=ل.ج+
+New Game Plus Started=بدء لعبة جديدة+
+Difficulty Challenge=تحدي الصعوبة
+Hard Mode Clear=إتمام الوضع الصعب
+Time Attack=هجوم زمني
+Speedrun Challenge=تحدي السرعة
+Play Time=وقت اللعب
+Total Play Time=إجمالي وقت اللعب
+100% Completion=إكمال 100%
+Platinum Achievement=إنجاز بلاتيني
+All Achievements Unlocked=جميع الإنجازات مفتوحة
+True Ending=النهاية الحقيقية
+# ─────────────────────────────────────────────────
+# تحديات DLC Future Redeemed
+# ─────────────────────────────────────────────────
+DLC Challenge=تحدي المحتوى الإضافي
+Future Redeemed Challenge=تحدي المستقبل المُستعاد
+Community Max Level=أقصى مستوى المجتمع
+All Settlements Found=جميع المستوطنات مكتشفة
+Archsage Challenge=تحدي حكيم القوس
+DLC Story Complete=قصة المحتوى الإضافي مكتملة
+DLC 100% Completion=إكمال المحتوى الإضافي 100%
+Origin Interior Explored=استكشاف داخل الأوريجن
+All DLC Quests Complete=جميع مهمات المحتوى الإضافي مكتملة
+DLC Unique Monsters Defeated=وحوش المحتوى الإضافي الفريدة مهزومة
+# ─────────────────────────────────────────────────
+# إحصائيات اللعب (Play Statistics)
+# ─────────────────────────────────────────────────
+Play Statistics=إحصائيات اللعب
+Total Battles=إجمالي المعارك
+Battles Won=المعارك المنتصرة
+Battles Fled=المعارك المنسحبة
+Times KO'd=مرات السقوط
+Items Used=العناصر المستخدمة
+Gold Earned=الذهب المكتسب
+Gold Spent=الذهب المُنفق
+Steps Taken=الخطوات المقطوعة
+Jumps=القفزات
+Slide Distance=مسافة الانزلاق
+Chain Attacks Used=الهجمات المتسلسلة المستخدمة
+Interlinks Performed=الاندماجات المنفذة
+Talent Arts Used=فنون الموهبة المستخدمة
+Fusion Arts Used=الفنون المدمجة المستخدمة
+Perfect Cancels=الإلغاءات المثالية
+Critical Hits=الضربات الحرجة
+Revives Performed=الإنعاشات المنفذة
