@@ -17956,3 +17956,1824 @@ Moat=خندق مائي
 # --- نهاية المواقع والمعالم ---
 # End of Locations & Landmarks
 # Total sections: 228-250 (Locations & Landmarks)
+
+# ============================================================
+# القسم 251: الوحوش الفريدة - منطقة أيتيا
+# Section 251: Unique Monsters - Aetia Region
+# ============================================================
+
+Territorial Rotbart=روتبارت الإقليمي
+Immovable Gonzalez=غونزاليس الراسخ
+Brutal Dreadwyrm=تنين الرعب الوحشي
+Perilous Oldar=أولدار الخطير
+Ghostly Philia=فيليا الشبحية
+Malicious Dimitri=ديميتري الخبيث
+Wise Cacademon=الكاكاديمون الحكيم
+Splashing Sandbar=ساندبار المتلاطم
+Roaming Behemoth=البيهيموث الجوّال
+Bounding Galio=غاليو القافز
+Venomous Phalanx=الفالانكس السام
+Thunderous Brontora=برونتورا الرعدي
+Rampaging Volganos=فولغانوس الهائج
+Ferocious Igna=إيغنا الشرسة
+Towering Sentinal=الحارس الشاهق
+Ancient Daedala=دايدالا العتيقة
+Lurking Umbra=أومبرا المتربصة
+Menacing Pteryx=بتيريكس المهدد
+Savage Brutax=بروتاكس المتوحش
+Cunning Velouria=فيلوريا الماكرة
+
+# ============================================================
+# القسم 252: الوحوش الفريدة - منطقة فورنيس
+# Section 252: Unique Monsters - Fornis Region
+# ============================================================
+
+Regal Flamii=فلامي الملكي
+Burrowing Sandworm=دودة الرمل الحفّارة
+Tyrant Basilisk=البازيليسك الطاغية
+Raging Sandking=ملك الرمال الثائر
+Mirage Serpent=أفعى السراب
+Dune Colossus=عملاق الكثبان
+Scorching Pyralis=بيراليس الحارقة
+Blighted Antlion=أسد النمل الملعون
+Ironclad Scarab=الجعران المدرّع
+Venomfang Naga=ناغا الناب السام
+Dustdevil Raptor=رابتور زوبعة الغبار
+Shifting Mirage=السراب المتحوّل
+Relentless Charger=الشاحن العنيد
+Colossal Golem=الغولم الهائل
+Sunbaked Titan=التيتان المشوي
+Piercing Mantis=السرعوف الثاقب
+Armored Pangolin=آكل النمل المدرّع
+Quicksand Terror=رعب الرمال المتحركة
+Desert Phantom=شبح الصحراء
+Burning Chimera=الكايميرا المشتعلة
+
+# ============================================================
+# القسم 253: الوحوش الفريدة - بينتولاس وكادنسيا
+# Section 253: Unique Monsters - Pentelas & Cadensia
+# ============================================================
+
+Glacial Levialord=لورد اللفياثان الجليدي
+Thunderstrike Wyvern=الوايفرن الصاعق
+Blizzard Mammoth=ماموث العاصفة الثلجية
+Abyssal Kraken=الكراكن السحيق
+Frostfang Wolf=ذئب الناب الجليدي
+Stormwing Roc=طائر الرخ العاصف
+Frozen Colossus=العملاق المتجمد
+Tidal Serpentress=أفعى المد والجزر
+Crystal Guardian=حارس الكريستال
+Snowdrift Yeti=يتي الانهيار الثلجي
+Tempest Dragon=تنين العاصفة
+Icebound Behemoth=البيهيموث المتجلد
+Coastal Leviathan=لفياثان الساحل
+Mistwalker Specter=شبح سائر الضباب
+Avalanche Brute=وحش الانهيار
+Deepwater Horror=رعب الأعماق
+Whirlpool Hydra=هيدرا الدوامة
+Permafrost Golem=غولم الجليد الدائم
+Gale Harpy=هاربي العاصفة
+Rime Basilisk=بازيليسك الصقيع
+
+# ============================================================
+# القسم 254: الوحوش الفريدة - ماكثا والقلاع
+# Section 254: Unique Monsters - Maktha & Castle Regions
+# ============================================================
+
+Shadow Stalker=المطارد الظلي
+Abyssal Crawler=الزاحف السحيق
+Void Wraith=شبح الفراغ
+Darkroot Treant=تريانت الجذور المظلمة
+Corrupted Sentinel=الحارس الفاسد
+Nightbane Gargoyle=غرغول بلاء الليل
+Gloom Weaver=نسّاج الكآبة
+Dread Lich=الليتش المرعب
+Phantom Knight=الفارس الشبحي
+Blight Dragon=تنين الآفة
+Cursed Armor=الدرع الملعون
+Tomb Guardian=حارس القبر
+Wailing Banshee=البانشي النائحة
+Bone Colossus=عملاق العظام
+Soul Devourer=مُلتهم الأرواح
+Necro Chimera=كايميرا الموت
+Crypt Warden=حارس السرداب
+Hollow Revenant=العائد الأجوف
+Soulless Golem=الغولم بلا روح
+Eternal Nightmare=الكابوس الأبدي
+
+# ============================================================
+# القسم 255: الوحوش الفريدة - الأوريجن وDLC
+# Section 255: Unique Monsters - Origin & DLC
+# ============================================================
+
+Origin Guardian Alpha=حارس الأوريجن ألفا
+Origin Guardian Omega=حارس الأوريجن أوميغا
+Mechonis Remnant=بقايا الميكونيس
+Bionis Echo=صدى البيونيس
+Moebius Aberration=شذوذ الميبيوس
+Annihilator X=المبيد إكس
+Infinity Sentinel=حارس اللانهاية
+Primordial Beast=الوحش البدائي
+Dimensional Rift Horror=رعب الشق البُعدي
+Chrono Wyrm=تنين الزمن
+Origin Core Defender=مدافع نواة الأوريجن
+Erasure Phantom=شبح المحو
+Singularity Dragon=تنين نقطة التفرد
+Alpha Telethia=التيليثيا ألفا
+Omega Guldo=الغولدو أوميغا
+Archsage Construct=بناء رئيس الحكماء
+Boundary Titan=تيتان الحدود
+Nexus Colossus=عملاق الرابط
+Aion Reborn=آيون المولود من جديد
+Final Guardian=الحارس الأخير
+
+# ============================================================
+# القسم 256: أوصاف الوحوش الفريدة
+# Section 256: Unique Monster Descriptions
+# ============================================================
+
+A fearsome beast that rules this territory. Approach with extreme caution.=وحش مرعب يحكم هذه المنطقة. اقترب بحذر شديد.
+This creature has claimed this area as its hunting ground.=هذا المخلوق اتخذ من هذه المنطقة أرض صيده.
+A legendary monster spoken of in hushed tones by colony soldiers.=وحش أسطوري يتهامس به جنود المستعمرات.
+Its power far exceeds that of ordinary monsters.=قوته تتجاوز بكثير قوة الوحوش العادية.
+Few have seen this beast and lived to tell the tale.=قليلون شاهدوا هذا الوحش وعاشوا ليرووا الحكاية.
+A being of immense power that has existed since ancient times.=كائن ذو قوة هائلة موجود منذ الأزمنة القديمة.
+This unique monster is known to appear only under certain conditions.=يُعرف عن هذا الوحش الفريد أنه يظهر فقط في ظروف معينة.
+Defeating this monster will yield rare materials.=هزيمة هذا الوحش ستُسفر عن مواد نادرة.
+This beast's power rivals that of the Consuls themselves.=قوة هذا الوحش تنافس قوة القناصل أنفسهم.
+An ancient guardian that protects a long-forgotten treasure.=حارس قديم يحمي كنزاً منسياً منذ زمن بعيد.
+Approach only when fully prepared for a fierce battle.=لا تقترب إلا عندما تكون مستعداً تماماً لمعركة شرسة.
+This monster is said to be a remnant from before the world was reborn.=يُقال إن هذا الوحش بقية من قبل أن يُولد العالم من جديد.
+Level=المستوى
+Type=النوع
+Location=الموقع
+Category=الفئة
+Normal=عادي
+Rare=نادر
+Unique=فريد
+Super Boss=رئيس خارق
+Lucky=محظوظ
+
+# ============================================================
+# القسم 257: أنواع الأعداء العادية
+# Section 257: Common Enemy Species
+# ============================================================
+
+Antol=أنتول
+Anu=آنو
+Ardun=أردون
+Brog=بروغ
+Caragor=كاراغور
+Caterpile=كاتربايل
+Deinos=دينوس
+Eks=إكس
+Feris=فيريس
+Flamii=فلامي
+Fourtune=فورتشون
+Gogol=غوغول
+Grex=غريكس
+Igna=إيغنا
+Keves Soldier=جندي كيفيس
+Keves Officer=ضابط كيفيس
+Agnus Soldier=جندي أغنوس
+Agnus Officer=ضابط أغنوس
+Levnis=ليفنيس
+Mechon=ميكون
+Moebius=ميبيوس
+Moramora=مورامورا
+Ogre=غول
+Piranhax=بيرانهاكس
+Ponio=بونيو
+Pteryx=بتيريكس
+Sauros=صوروس
+Skwaror=سكوارور
+Tirkin=تيركن
+Volff=فولف
+
+# ============================================================
+# القسم 258: أوصاف سجل الوحوش
+# Section 258: Bestiary Log Descriptions
+# ============================================================
+
+A small insectoid creature found throughout Aetia.=مخلوق حشري صغير يوجد في جميع أنحاء أيتيا.
+These herbivorous creatures roam the plains in herds.=هذه المخلوقات العاشبة تتجول في السهول في قطعان.
+A predatory beast known for its aggressive territorial behavior.=وحش مفترس معروف بسلوكه الإقليمي العدواني.
+These amphibious creatures inhabit bodies of water across the world.=هذه المخلوقات البرمائية تعيش في المسطحات المائية حول العالم.
+A flying creature that nests in high cliffs and mountain peaks.=مخلوق طائر يعشش في المنحدرات العالية وقمم الجبال.
+Soldiers dispatched from Keves Castle. They fight using Blade weapons.=جنود مُرسلون من قلعة كيفيس. يقاتلون باستخدام أسلحة الشفرة.
+Elite troops of the Agnus army, skilled in ether-based combat.=قوات نخبة جيش أغنوس، ماهرة في القتال القائم على الأثير.
+A massive creature that has roamed these lands since time immemorial.=مخلوق ضخم يتجول في هذه الأراضي منذ الأزل.
+These machines were created as weapons during an ancient conflict.=صُنعت هذه الآلات كأسلحة خلال صراع قديم.
+A creature corrupted by Moebius influence.=مخلوق أفسده تأثير الميبيوس.
+Small but fierce when provoked.=صغير لكنه شرس عند استفزازه.
+Pack hunters that coordinate their attacks with surprising intelligence.=صيادون يعملون في مجموعات وينسقون هجماتهم بذكاء مذهل.
+Docile unless threatened, at which point they become extremely dangerous.=وديع ما لم يُهدَّد، وعندها يصبح خطيراً للغاية.
+Their shells provide excellent natural armor.=أصدافها توفر درعاً طبيعياً ممتازاً.
+Known to migrate between regions with the changing seasons.=معروف بالهجرة بين المناطق مع تغير الفصول.
+
+# ============================================================
+# القسم 259: فنون الأعداء وهجماتهم
+# Section 259: Enemy Arts & Special Attacks
+# ============================================================
+
+Crushing Blow=ضربة ساحقة
+Venomous Bite=عضة سامة
+Tail Sweep=كنس بالذيل
+Fire Breath=نفث النار
+Thunder Roar=زئير الرعد
+Ice Spike=شوكة جليدية
+Dark Pulse=نبضة ظلام
+Healing Aura=هالة شفاء
+Berserk Rage=هيجان جنوني
+Shield Bash=صدم بالدرع
+Wing Gust=عاصفة جناح
+Petrifying Gaze=نظرة تحجير
+Acid Spray=رذاذ حمضي
+Earth Shatter=تحطيم الأرض
+Sonic Scream=صرخة صوتية
+Whirlwind Slash=قطع الإعصار
+Meteor Strike=ضربة نيزكية
+Death Grip=قبضة الموت
+Life Drain=استنزاف الحياة
+Soul Rend=تمزيق الروح
+Annihilation Wave=موجة الإبادة
+Dimensional Tear=تمزق بُعدي
+Time Stop=إيقاف الزمن
+Gravity Well=بئر الجاذبية
+Void Collapse=انهيار الفراغ
+
+# ============================================================
+# القسم 260: حوارات رؤساء الفصل الأول
+# Section 260: Chapter 1 Boss Encounter Dialogues
+# ============================================================
+
+You're nothing but fuel for the Flame Clock!=لستم سوى وقود لساعة اللهب!
+This is where your short lives come to an end!=هنا تنتهي حياتكم القصيرة!
+The enemy commander is approaching! All units, battle stations!=القائد المعادي يقترب! جميع الوحدات، مواقع القتال!
+For the glory of Keves!=من أجل مجد كيفيس!
+Agnus will not fall to the likes of you!=أغنوس لن تسقط أمام أمثالكم!
+How dare you defy the natural order!=كيف تجرؤون على تحدي النظام الطبيعي!
+Your Flame Clock runs low. Accept your fate!=ساعة لهبكم تنفد. تقبلوا مصيركم!
+You think you can change anything? Foolish children!=تظنون أنكم تستطيعون تغيير شيء؟ أطفال حمقى!
+
+# ============================================================
+# القسم 261: حوارات رؤساء الفصل الثاني
+# Section 261: Chapter 2 Boss Encounter Dialogues
+# ============================================================
+
+So, the Ouroboros has appeared at last.=إذاً، ظهر الأوروبوروس أخيراً.
+Interesting... Let me see the power of Interlink!=مثير للاهتمام... دعوني أرى قوة الترابط!
+You've broken free of the Flame Clock? Impossible!=تحررتم من ساعة اللهب؟ مستحيل!
+The Consuls will hear of this transgression!=القناصل سيسمعون بهذا التجاوز!
+You cannot escape the cycle. No one can!=لا يمكنكم الهروب من الدورة. لا أحد يستطيع!
+Your Interlink is nothing compared to our power!=ترابطكم لا شيء مقارنة بقوتنا!
+Consul N won't be pleased about this...=القنصل إن لن يكون سعيداً بهذا...
+You may have won this battle, but the war is far from over!=قد تكونون فزتم بهذه المعركة، لكن الحرب لم تنتهِ بعد!
+
+# ============================================================
+# القسم 262: حوارات رؤساء الفصل الثالث
+# Section 262: Chapter 3 Boss Encounter Dialogues
+# ============================================================
+
+The Consul has ordered your elimination. Nothing personal.=القنصل أمر بإزالتكم. لا شيء شخصي.
+You freed the colonies? How naive. They'll be recaptured soon enough.=حررتم المستعمرات؟ يا للسذاجة. ستُستعاد قريباً.
+Let me show you what true power looks like!=دعوني أريكم ما تبدو عليه القوة الحقيقية!
+The people of this colony are MINE! You have no right to take them!=شعب هذه المستعمرة مِلكي! لا حق لكم في أخذهم!
+You think freedom means anything in this world?=تظنون أن الحرية تعني شيئاً في هذا العالم؟
+Every colony you free just makes Z stronger!=كل مستعمرة تحررونها تجعل Z أقوى!
+The endless now is all there is. Accept it!=الآن اللانهائي هو كل ما هنالك. تقبلوه!
+Your struggle is meaningless in the face of eternity!=كفاحكم بلا معنى أمام الأبدية!
+
+# ============================================================
+# القسم 263: حوارات رؤساء الفصل الرابع والخامس
+# Section 263: Chapter 4-5 Boss Encounter Dialogues
+# ============================================================
+
+N... is that really you?=إن... هل هذا أنت حقاً؟
+You don't understand what you're fighting against!=لا تفهمون ما تحاربونه!
+I've lived through a thousand lifetimes! What do you know of suffering?=عشت ألف حياة! ماذا تعرفون عن المعاناة؟
+The City... those fools who defy the natural order!=المدينة... أولئك الحمقى الذين يتحدون النظام الطبيعي!
+Moebius exists to preserve this world! Why can't you see that?=الميبيوس موجود للحفاظ على هذا العالم! لماذا لا تستطيعون رؤية ذلك؟
+You would risk everything for an uncertain future?=ستخاطرون بكل شيء من أجل مستقبل غير مؤكد؟
+The people chose this eternal present! It wasn't forced upon them!=الناس اختاروا هذا الحاضر الأبدي! لم يُفرض عليهم!
+Fine then. I'll send you to oblivion myself!=حسناً إذاً. سأرسلكم إلى النسيان بنفسي!
+
+# ============================================================
+# القسم 264: حوارات رؤساء الفصل السادس والسابع
+# Section 264: Chapter 6-7 Boss Encounter Dialogues
+# ============================================================
+
+The worlds are merging... this is the end of everything!=العوالم تندمج... هذه نهاية كل شيء!
+Origin was never meant to be used this way!=الأوريجن لم يُصنع ليُستخدم بهذه الطريقة!
+Z embodies the will of all humanity! You fight against yourselves!=Z يجسد إرادة البشرية جمعاء! أنتم تحاربون أنفسكم!
+We chose to walk toward the future. That's what makes us human!=اخترنا أن نسير نحو المستقبل. هذا ما يجعلنا بشراً!
+Even if this world ends, our feelings will live on!=حتى لو انتهى هذا العالم، مشاعرنا ستبقى حية!
+The endless now was never living! It was just existing!=الآن اللانهائي لم يكن حياة! كان مجرد وجود!
+We'll carve our own path, no matter what stands in our way!=سنشق طريقنا الخاص، مهما وقف في طريقنا!
+This is our answer to your eternal stagnation!=هذا جوابنا على ركودكم الأبدي!
+
+# ============================================================
+# القسم 265: أعداء Superboss ووضع التحدي
+# Section 265: Superboss & Challenge Mode Enemies
+# ============================================================
+
+Dreadnought Colossus=عملاق السفينة الحربية
+Seraphic Dragon=التنين السيرافي
+Abyssal Emperor=إمبراطور الهاوية
+Celestial Titan=التيتان السماوي
+Void Sovereign=ملك الفراغ
+Eternal Arbiter=الحَكَم الأبدي
+Primordial Chaos=الفوضى البدائية
+World Eater=مُلتهم العالم
+Star Destroyer=مدمر النجوم
+Dimensional Lord=لورد الأبعاد
+Chronos Warden=حارس كرونوس
+Infinity Beast=وحش اللانهاية
+Supreme Telethia=التيليثيا العليا
+Archon of Ruin=أركون الخراب
+Omega Prime=أوميغا الأولى
+
+# ============================================================
+# القسم 266: حوارات وضع التحدي
+# Section 266: Challenge Mode Battle Dialogues
+# ============================================================
+
+Challenge Battle=معركة التحدي
+Challenge accepted! Show me what you've got!=تحدٍّ مقبول! أروني ما لديكم!
+You think you're strong enough? Prove it!=تظنون أنكم أقوياء بما يكفي؟ أثبتوا ذلك!
+This challenge will test your limits!=هذا التحدي سيختبر حدودكم!
+Only the strongest warriors can survive this battle!=فقط أقوى المحاربين يمكنهم النجاة من هذه المعركة!
+Wave %1 of %2=الموجة %1 من %2
+Time remaining: %1=الوقت المتبقي: %1
+Challenge Complete! Time: %1=اكتمل التحدي! الوقت: %1
+New Record!=رقم قياسي جديد!
+Bonus Reward unlocked!=مكافأة إضافية مُفتَحَت!
+All waves cleared!=تم تجاوز جميع الموجات!
+
+# ============================================================
+# القسم 267: أعداء DLC - Future Redeemed (الجزء 1)
+# Section 267: DLC Enemies - Future Redeemed (Part 1)
+# ============================================================
+
+Alpha Guldo=الغولدو ألفا
+Moebius Phalanx=فالانكس الميبيوس
+Origin Construct=بناء الأوريجن
+Boundary Watcher=مراقب الحدود
+Rift Stalker=مطارد الشق
+Temporal Anomaly=شذوذ زمني
+Erasure Agent=عميل المحو
+Prime Sentinel=الحارس الأول
+Nexus Defender=مدافع الرابط
+Chrono Guardian=حارس الزمن
+Void Walker=سائر الفراغ
+Dimension Breaker=كاسر الأبعاد
+Fate Weaver=نسّاج القدر
+Eternity Keeper=حافظ الأبدية
+Singularity Core=نواة التفرد
+
+# ============================================================
+# القسم 268: أعداء DLC - Future Redeemed (الجزء 2)
+# Section 268: DLC Enemies - Future Redeemed (Part 2)
+# ============================================================
+
+Rex Phantom=شبح ريكس
+Shulk Phantom=شبح شولك
+False Hero=البطل الزائف
+Memory Fragment=شظية ذاكرة
+Echo of Despair=صدى اليأس
+Shadow of Doubt=ظل الشك
+Remnant of Fear=بقية الخوف
+Specter of Regret=شبح الندم
+Illusion of Loss=وهم الفقدان
+Nightmare Incarnate=الكابوس المتجسد
+Twilight Warden=حارس الشفق
+Dawn Breaker=كاسر الفجر
+Dusk Herald=منادي الغسق
+Midnight Stalker=مطارد منتصف الليل
+Horizon Sentinel=حارس الأفق
+
+# ============================================================
+# القسم 269: حوارات أعداء DLC
+# Section 269: DLC Enemy Encounter Dialogues
+# ============================================================
+
+The Conduit's power flows through me!=قوة القناة تتدفق عبري!
+You cannot rewrite what has already been written!=لا تستطيعون إعادة كتابة ما كُتب بالفعل!
+This future was sealed long ago!=هذا المستقبل أُحكم إغلاقه منذ زمن بعيد!
+The boundary between worlds must not be broken!=الحدود بين العوالم يجب ألا تُكسر!
+Shulk and Rex... their legacy ends here!=شولك وريكس... إرثهما ينتهي هنا!
+You dare challenge the fabric of reality itself?=تجرؤون على تحدي نسيج الواقع نفسه؟
+Time has no meaning in this place!=الزمن بلا معنى في هذا المكان!
+The Architect's final failsafe will not be undone!=آخر صمام أمان المهندس لن يُنقض!
+
+# ============================================================
+# القسم 270: فهرس أنواع الأعداء ومستوياتهم
+# Section 270: Enemy Type Index & Level Guide
+# ============================================================
+
+Normal Enemy=عدو عادي
+Elite Enemy=عدو نخبة
+Unique Monster=وحش فريد
+Boss=رئيس
+Superboss=رئيس خارق
+DLC Boss=رئيس المحتوى الإضافي
+Challenge Enemy=عدو التحدي
+Event Boss=رئيس الحدث
+Story Boss=رئيس القصة
+Colony Defense Boss=رئيس دفاع المستعمرة
+Level Range: 1-20=نطاق المستوى: 1-20
+Level Range: 21-40=نطاق المستوى: 21-40
+Level Range: 41-60=نطاق المستوى: 41-60
+Level Range: 61-80=نطاق المستوى: 61-80
+Level Range: 81-99=نطاق المستوى: 81-99
+Level Range: 100+=نطاق المستوى: 100+
+Recommended Level: %1=المستوى الموصى به: %1
+Caution: This enemy is much stronger than you!=تحذير: هذا العدو أقوى منكم بكثير!
+Defeated=مهزوم
+Undiscovered=غير مُكتشَف
+Monster Registered!=تم تسجيل الوحش!
+
+# --- نهاية الوحوش والأعداء ---
+# End of Monsters & Enemies
+# Total sections: 251-270 (Monsters & Enemies)
+
+# ============================================================
+# القسم 271: الأسلحة - السيوف والشفرات
+# Section 271: Weapons - Swords & Blades
+# ============================================================
+
+Lucky Seven=الحظ السابع
+Veiled Sword=سيف الحجاب
+Sword of the End=سيف النهاية
+Blade of Origin=شفرة الأوريجن
+Monado REX=موناريد ريكس
+Lucky Seven (Upgraded)=الحظ السابع (مُطوَّر)
+Steel Broadsword=سيف عريض فولاذي
+Iron Saber=صابر حديدي
+Mythra's Aegis=درع ميثرا
+Pyra's Aegis=درع بايرا
+Soulhacker Blade=شفرة مخترق الأرواح
+Incursor Blade=شفرة المهاجم
+Swordfighter Blade=شفرة المبارز
+Ogre Blade=شفرة الغول
+Yumsmith Blade=شفرة يومسميث
+Seraph Blade=شفرة السيراف
+Flash Fencer Rapier=سيف المبارز الخاطف
+Lone Exile Katana=كاتانا المنفي الوحيد
+Royal Summoner Blade=شفرة المستدعي الملكي
+Signifer Blade=شفرة حامل الراية
+Stalker Blade=شفرة المتعقب
+Martial Artist Blade=شفرة فنان القتال
+Thaumaturge Blade=شفرة المعجزاتي
+Strategos Blade=شفرة الاستراتيجي
+Troubadour Blade=شفرة التروبادور
+Lifesage Blade=شفرة حكيم الحياة
+Machine Assassin Blade=شفرة القاتل الآلي
+Lapidarist Blade=شفرة صانع الأحجار
+Noponic Champion Blade=شفرة بطل النوبون
+
+# ============================================================
+# القسم 272: الأسلحة - الرماح والمطارق
+# Section 272: Weapons - Lances & Hammers
+# ============================================================
+
+Steel Lance=رمح فولاذي
+Iron Halberd=هلبرد حديدي
+Crystal Spear=رمح كريستالي
+Titan's Lance=رمح التيتان
+Dragon Piercer=خارق التنين
+Guardian Pike=رمح الحارس
+Mythril Glaive=سيف ميثريل طويل
+Obsidian Lance=رمح السبج
+Tempest Lance=رمح العاصفة
+Valiant Spear=رمح الشجاعة
+Heavy Hammer=مطرقة ثقيلة
+Iron Maul=مطرقة حديدية
+Titan's Hammer=مطرقة التيتان
+Thundering Mace=صولجان الرعد
+Crystal Crusher=سحّاق الكريستال
+Earthquake Hammer=مطرقة الزلزال
+War Hammer=مطرقة الحرب
+Demolisher=المدمِّر
+Fortress Breaker=كاسر القلاع
+Colossus Fist=قبضة العملاق
+
+# ============================================================
+# القسم 273: الأسلحة - الأقواس والبنادق
+# Section 273: Weapons - Bows & Guns
+# ============================================================
+
+Hunter's Bow=قوس الصياد
+Longbow=قوس طويل
+Crystal Bow=قوس كريستالي
+Gale Bow=قوس العاصفة
+Piercing Bow=قوس الاختراق
+Sniper's Bow=قوس القناص
+Dragon Bow=قوس التنين
+Windcutter Bow=قوس قاطع الريح
+Artemis Bow=قوس أرتميس
+Celestial Bow=قوس سماوي
+Ether Rifle=بندقية الأثير
+Assault Rifle=بندقية هجومية
+Sniper Rifle=بندقية قنص
+Scatter Gun=بندقية انتشار
+Ether Cannon=مدفع الأثير
+Blast Launcher=قاذفة الانفجار
+Pulse Pistol=مسدس النبض
+Railgun=مدفع كهرومغناطيسي
+Energy Launcher=قاذفة طاقة
+Gatling Gun=رشاش غاتلينغ
+
+# ============================================================
+# القسم 274: الأسلحة - العصي والأجراس والأسلحة الخاصة
+# Section 274: Weapons - Staves, Bells & Special Weapons
+# ============================================================
+
+Oak Staff=عصا البلوط
+Crystal Staff=عصا كريستالية
+Ether Staff=عصا الأثير
+Sage Staff=عصا الحكيم
+Arcane Staff=عصا السحر العتيق
+Divine Staff=عصا إلهية
+Healing Staff=عصا الشفاء
+Tempest Staff=عصا العاصفة
+Phoenix Staff=عصا الفينيق
+Celestial Staff=عصا سماوية
+Bronze Bell=جرس برونزي
+Silver Bell=جرس فضي
+Golden Bell=جرس ذهبي
+Crystal Bell=جرس كريستالي
+Harmony Bell=جرس الانسجام
+Resonance Bell=جرس الرنين
+Siren Bell=جرس صفارة الإنذار
+Ethereal Bell=جرس أثيري
+Sacred Bell=جرس مقدس
+Celestial Bell=جرس سماوي
+Ring Blade=شفرة حلقية
+Chain Whip=سوط السلسلة
+Dual Fans=مروحتان مزدوجتان
+Boomerang=بوميرانغ
+Chakram=شاكرام
+
+# ============================================================
+# القسم 275: أسلحة DLC
+# Section 275: DLC Weapons
+# ============================================================
+
+Monado III=موناريد III
+Aegis Blade=شفرة الدرع
+True Monado=الموناريد الحقيقي
+Rex's Broadsword=سيف ريكس العريض
+Shulk's Replica Monado=نسخة موناريد شولك
+Pneuma's Blade=شفرة بنيوما
+Logos Blade=شفرة اللوغوس
+Ontos Blade=شفرة الأونتوس
+Architect's Scepter=صولجان المهندس
+Klaus's Legacy=إرث كلاوس
+Galea's Will=إرادة غاليا
+Alvis Blade=شفرة ألفيس
+Zanza's Monado=موناريد زانزا
+Malos's Monado=موناريد مالوس
+Infinity Blade=شفرة اللانهاية
+
+# ============================================================
+# القسم 276: أوصاف الأسلحة وتأثيراتها
+# Section 276: Weapon Descriptions & Effects
+# ============================================================
+
+A sword of mysterious origin, said to hold the power to cut through anything.=سيف غامض الأصل، يُقال إنه يحمل قوة قطع أي شيء.
+This weapon was forged from materials found deep within Origin.=هذا السلاح صُنع من مواد وُجدت في أعماق الأوريجن.
+A legendary blade passed down through generations of heroes.=شفرة أسطورية تُوورثت عبر أجيال من الأبطال.
+The power within this weapon resonates with the wielder's soul.=القوة داخل هذا السلاح تتناغم مع روح حامله.
+ATK Up=زيادة الهجوم
+DEF Up=زيادة الدفاع
+Critical Rate Up=زيادة معدل الضربات الحرجة
+Attack Speed Up=زيادة سرعة الهجوم
+Ether Damage Up=زيادة ضرر الأثير
+Physical Damage Up=زيادة الضرر الجسدي
+HP Recovery Up=زيادة استعادة نقاط الصحة
+Auto-Attack Boost=تعزيز الهجوم التلقائي
+Art Recharge Speed Up=زيادة سرعة شحن الفنون
+Aggro Reduction=تقليل الاستفزاز
+
+# ============================================================
+# القسم 277: الإكسسوارات
+# Section 277: Accessories
+# ============================================================
+
+Power Ring=خاتم القوة
+Guardian Bangle=سوار الحارس
+Warrior's Emblem=شعار المحارب
+Healer's Charm=تعويذة المعالج
+Speed Boots=حذاء السرعة
+Iron Gauntlet=قفاز حديدي
+Crystal Pendant=قلادة كريستالية
+Ether Amplifier=مُضخّم الأثير
+Battle Scarf=وشاح المعركة
+Titan's Belt=حزام التيتان
+Nopon Charm=تعويذة النوبون
+Colony Badge=شارة المستعمرة
+Hero's Medal=ميدالية البطل
+Strategist's Monocle=عدسة الاستراتيجي
+Sniper's Scope=منظار القناص
+Defender's Shield=درع المدافع
+Lucky Coin=عملة الحظ
+Ancient Talisman=تعويذة قديمة
+Ouroboros Crest=شعار الأوروبوروس
+Origin Shard=شظية الأوريجن
+Flame Clock Fragment=شظية ساعة اللهب
+Silver Earring=قرط فضي
+Gold Necklace=عقد ذهبي
+Platinum Bracelet=سوار بلاتيني
+Diamond Ring=خاتم ألماسي
+
+# ============================================================
+# القسم 278: أوصاف تأثيرات الإكسسوارات
+# Section 278: Accessory Effect Descriptions
+# ============================================================
+
+Increases physical attack power by %1%.=يزيد قوة الهجوم الجسدي بنسبة %1%.
+Increases ether attack power by %1%.=يزيد قوة هجوم الأثير بنسبة %1%.
+Reduces damage taken by %1%.=يقلل الضرر المتلقى بنسبة %1%.
+Increases maximum HP by %1%.=يزيد نقاط الصحة القصوى بنسبة %1%.
+Increases critical hit rate by %1%.=يزيد معدل الضربات الحرجة بنسبة %1%.
+Increases healing power by %1%.=يزيد قوة الشفاء بنسبة %1%.
+Increases aggro generated by %1%.=يزيد الاستفزاز المُولَّد بنسبة %1%.
+Reduces aggro generated by %1%.=يقلل الاستفزاز المُولَّد بنسبة %1%.
+Increases movement speed by %1%.=يزيد سرعة الحركة بنسبة %1%.
+Increases EXP gained by %1%.=يزيد نقاط الخبرة المكتسبة بنسبة %1%.
+Increases gold earned by %1%.=يزيد الذهب المكتسب بنسبة %1%.
+Increases drop rate of rare items by %1%.=يزيد معدل سقوط الأغراض النادرة بنسبة %1%.
+Auto-revives once per battle with %1% HP.=إحياء تلقائي مرة واحدة لكل معركة مع %1% من الصحة.
+Restores %1% HP per second during combat.=يستعيد %1% من الصحة في الثانية أثناء القتال.
+Adds %1 element damage to attacks.=يضيف ضرر عنصر %1 للهجمات.
+
+# ============================================================
+# القسم 279: الدروع والزينة
+# Section 279: Armor & Cosmetic Items
+# ============================================================
+
+Light Armor=درع خفيف
+Medium Armor=درع متوسط
+Heavy Armor=درع ثقيل
+Leather Vest=سترة جلدية
+Chain Mail=درع حلقات
+Plate Armor=درع صفائح
+Ether Shield=درع الأثير
+Crystal Armor=درع كريستالي
+Mythril Coat=معطف ميثريل
+Titan Plate=صفيحة التيتان
+Origin Armor=درع الأوريجن
+Cosmetic Gear=عتاد تجميلي
+Fashion Equipment=معدات الموضة
+Outfit=زي
+Costume=لباس
+Headgear=غطاء رأس
+Eyewear=نظارات
+Accessory (Visual)=إكسسوار (مظهري)
+
+# ============================================================
+# القسم 280: أزياء نوح وميو
+# Section 280: Noah & Mio Fashion Items
+# ============================================================
+
+Noah's Default Outfit=زي نوح الافتراضي
+Noah's Colony 9 Uniform=زي نوح - المستعمرة 9
+Noah's City Attire=لباس نوح - المدينة
+Noah's Casual Wear=ملابس نوح العادية
+Noah's Formal Suit=بذلة نوح الرسمية
+Noah's Off-Seer Garb=رداء نوح كمُنشد الوداع
+Noah's Battle Dress=لباس نوح القتالي
+Noah's Ouroboros Suit=بذلة نوح الأوروبوروس
+Mio's Default Outfit=زي ميو الافتراضي
+Mio's Colony Gamma Uniform=زي ميو - المستعمرة غاما
+Mio's City Attire=لباس ميو - المدينة
+Mio's Casual Wear=ملابس ميو العادية
+Mio's Formal Dress=فستان ميو الرسمي
+Mio's Off-Seer Garb=رداء ميو كمُنشدة الوداع
+Mio's Battle Dress=لباس ميو القتالي
+Mio's Ouroboros Suit=بذلة ميو الأوروبوروس
+
+# ============================================================
+# القسم 281: أزياء لانز وسينا
+# Section 281: Lanz & Sena Fashion Items
+# ============================================================
+
+Lanz's Default Outfit=زي لانز الافتراضي
+Lanz's Colony 9 Uniform=زي لانز - المستعمرة 9
+Lanz's City Attire=لباس لانز - المدينة
+Lanz's Casual Wear=ملابس لانز العادية
+Lanz's Heavy Armor Set=طقم درع لانز الثقيل
+Lanz's Training Gear=عتاد لانز التدريبي
+Lanz's Ouroboros Suit=بذلة لانز الأوروبوروس
+Lanz's Battle Armor=درع لانز القتالي
+Sena's Default Outfit=زي سينا الافتراضي
+Sena's Colony Gamma Uniform=زي سينا - المستعمرة غاما
+Sena's City Attire=لباس سينا - المدينة
+Sena's Casual Wear=ملابس سينا العادية
+Sena's Power Suit=بذلة سينا القوية
+Sena's Training Gear=عتاد سينا التدريبي
+Sena's Ouroboros Suit=بذلة سينا الأوروبوروس
+Sena's Battle Armor=درع سينا القتالي
+
+# ============================================================
+# القسم 282: أزياء يوني وتايون
+# Section 282: Eunie & Taion Fashion Items
+# ============================================================
+
+Eunie's Default Outfit=زي يوني الافتراضي
+Eunie's Colony 9 Uniform=زي يوني - المستعمرة 9
+Eunie's City Attire=لباس يوني - المدينة
+Eunie's Casual Wear=ملابس يوني العادية
+Eunie's Medic Uniform=زي يوني الطبي
+Eunie's Formal Dress=فستان يوني الرسمي
+Eunie's Ouroboros Suit=بذلة يوني الأوروبوروس
+Eunie's Battle Dress=لباس يوني القتالي
+Taion's Default Outfit=زي تايون الافتراضي
+Taion's Colony Gamma Uniform=زي تايون - المستعمرة غاما
+Taion's City Attire=لباس تايون - المدينة
+Taion's Casual Wear=ملابس تايون العادية
+Taion's Strategist Robe=رداء تايون الاستراتيجي
+Taion's Formal Suit=بذلة تايون الرسمية
+Taion's Ouroboros Suit=بذلة تايون الأوروبوروس
+Taion's Battle Dress=لباس تايون القتالي
+
+# ============================================================
+# القسم 283: أزياء أبطال المستعمرات
+# Section 283: Colony Hero Fashion Items
+# ============================================================
+
+Ethel's Commander Armor=درع إيثيل القائدة
+Cammuravi's Flame Armor=درع كامورافي اللهبي
+Ashera's Battle Garb=رداء أشيرا القتالي
+Zeon's Guardian Armor=درع زيون الحارس
+Teach's Casual Outfit=زي تيتش العادي
+Valdi's Mechanic Overalls=بدلة فالدي الميكانيكية
+Juniper's Scout Gear=عتاد جونيبر الكشفي
+Fiona's Healer Robe=رداء فيونا المعالجة
+Ghondor's Street Clothes=ملابس غوندور الشارعية
+Monica's Commander Coat=معطف مونيكا القائدة
+Gray's Lone Wolf Outfit=زي غراي الذئب الوحيد
+Triton's Naval Uniform=زي ترايتون البحري
+Isurd's Medical Coat=معطف إيسورد الطبي
+Segiri's Machine Suit=بذلة سيغيري الآلية
+Alexandria's Royal Armor=درع ألكسندريا الملكي
+Nimue's Mage Robe=رداء نيميو الساحرة
+
+# ============================================================
+# القسم 284: أزياء DLC وNG+
+# Section 284: DLC & NG+ Fashion Items
+# ============================================================
+
+Matthew's Explorer Outfit=زي ماثيو المستكشف
+A's Mysterious Garb=رداء A الغامض
+Nikol's Researcher Coat=معطف نيكول الباحث
+Glimmer's Light Armor=درع غليمر الخفيف
+Rex's Salvager Suit=بذلة ريكس المنقذ
+Shulk's Colony 9 Outfit=زي شولك - المستعمرة 9
+Fiora's Mechon Armor=درع فيورا الميكون
+Dunban's Battle Garb=رداء دنبان القتالي
+Melia's Imperial Dress=فستان ميليا الإمبراطوري
+Nia's Blade Form=هيئة نيا الشفرة
+Poppi's QTπ Form=هيئة بوبي QTπ
+Consul Uniform=زي القنصل
+Moebius Robes=أردية الميبيوس
+Origin Suit=بذلة الأوريجن
+NG+ Exclusive Costume=زي حصري لـ NG+
+
+# ============================================================
+# القسم 285: ملخص وفهرس الأسلحة والمعدات
+# Section 285: Weapons & Equipment Summary Index
+# ============================================================
+
+Total Weapons=إجمالي الأسلحة
+Total Accessories=إجمالي الإكسسوارات
+Total Armor Sets=إجمالي أطقم الدروع
+Total Fashion Items=إجمالي أغراض الموضة
+Weapon Type: Sword=نوع السلاح: سيف
+Weapon Type: Lance=نوع السلاح: رمح
+Weapon Type: Hammer=نوع السلاح: مطرقة
+Weapon Type: Bow=نوع السلاح: قوس
+Weapon Type: Gun=نوع السلاح: بندقية
+Weapon Type: Staff=نوع السلاح: عصا
+Weapon Type: Bell=نوع السلاح: جرس
+Weapon Type: Special=نوع السلاح: خاص
+Equipment Slot: Weapon=خانة العتاد: سلاح
+Equipment Slot: Accessory 1=خانة العتاد: إكسسوار 1
+Equipment Slot: Accessory 2=خانة العتاد: إكسسوار 2
+Equipment Slot: Accessory 3=خانة العتاد: إكسسوار 3
+Equipment Slot: Fashion=خانة العتاد: موضة
+
+# --- نهاية الأسلحة والمعدات ---
+# End of Weapons & Equipment
+# Total sections: 271-285 (Weapons & Equipment)
+
+# ============================================================
+# القسم 286: مواد التجميع - نباتات
+# Section 286: Collectibles - Plants
+# ============================================================
+
+Blue Sage=المريمية الزرقاء
+Red Verbena=لويزة حمراء
+White Clover=نفل أبيض
+Golden Daisy=أقحوان ذهبي
+Night Orchid=أوركيد الليل
+Frozen Lily=زنبق متجمد
+Desert Rose=وردة الصحراء
+Thunder Blossom=زهرة الرعد
+Crystal Fern=سرخس كريستالي
+Ancient Moss=طحلب قديم
+Healing Herb=عشبة شفاء
+Aromatic Leaf=ورقة عطرية
+Sweet Berry=توت حلو
+Bitter Root=جذر مر
+Fresh Mint=نعناع طازج
+Wild Garlic=ثوم بري
+Forest Mushroom=فطر الغابة
+Cave Lichen=أشنة الكهف
+Glowing Spore=بوغ متوهج
+Rainbow Petal=بتلة قوس قزح
+Ether Bloom=زهرة الأثير
+Origin Flower=زهرة الأوريجن
+Nopon Herb=عشبة النوبون
+Colony Garden Plant=نبتة حديقة المستعمرة
+Rare Blossom=زهرة نادرة
+
+# ============================================================
+# القسم 287: مواد التجميع - معادن وأحجار
+# Section 287: Collectibles - Minerals & Stones
+# ============================================================
+
+Iron Ore=خام الحديد
+Copper Ore=خام النحاس
+Silver Ore=خام الفضة
+Gold Ore=خام الذهب
+Mythril Ore=خام الميثريل
+Crystal Shard=شظية كريستال
+Diamond Fragment=شظية ألماس
+Ruby Chip=رقاقة ياقوت
+Sapphire Chip=رقاقة ياقوت أزرق
+Emerald Chip=رقاقة زمرد
+Obsidian=سبج
+Granite=جرانيت
+Marble=رخام
+Sandstone=حجر رملي
+Limestone=حجر جيري
+Ether Crystal=كريستال الأثير
+Origin Stone=حجر الأوريجن
+Flame Ore=خام اللهب
+Frost Ore=خام الصقيع
+Thunder Ore=خام الرعد
+Wind Stone=حجر الريح
+Water Crystal=كريستال الماء
+Earth Crystal=كريستال الأرض
+Light Gem=جوهرة الضوء
+Dark Gem=جوهرة الظلام
+
+# ============================================================
+# القسم 288: مواد التجميع - حشرات وكائنات صغيرة
+# Section 288: Collectibles - Bugs & Small Creatures
+# ============================================================
+
+Jewel Beetle=خنفساء الجوهرة
+Rainbow Butterfly=فراشة قوس قزح
+Thunder Cricket=صرصور الرعد
+Glowing Firefly=يراعة متوهجة
+Crystal Moth=عثة كريستالية
+Desert Scorpion=عقرب الصحراء
+Cave Spider=عنكبوت الكهف
+Mountain Ant=نملة الجبل
+River Dragonfly=يعسوب النهر
+Snow Ladybug=دعسوقة الثلج
+Aetia Cicada=زيز أيتيا
+Fornis Scarab=جعران فورنيس
+Pentelas Moth=عثة بينتولاس
+Cadensia Beetle=خنفساء كادنسيا
+Maktha Centipede=حريش ماكثا
+Luminous Worm=دودة مضيئة
+Ether Mite=سوسة الأثير
+Titan Bug=حشرة التيتان
+Ancient Fossil Bug=حشرة أحفورية قديمة
+Rare Golden Ant=نملة ذهبية نادرة
+
+# ============================================================
+# القسم 289: مواد التجميع - مواد حيوانية
+# Section 289: Collectibles - Animal Materials
+# ============================================================
+
+Beast Hide=جلد وحش
+Feris Fur=فراء الفيريس
+Ardun Horn=قرن الأردون
+Gogol Tusk=ناب الغوغول
+Dragon Scale=حرشفة تنين
+Volff Fang=ناب الفولف
+Piranhax Fin=زعنفة البيرانهاكس
+Pteryx Feather=ريشة البتيريكس
+Brog Shell=صدفة البروغ
+Caterpile Silk=حرير الكاتربايل
+Monster Bone=عظم وحش
+Beast Claw=مخلب وحش
+Animal Tendon=وتر حيواني
+Thick Pelt=جلد سميك
+Soft Down=زغب ناعم
+Sharp Fang=ناب حاد
+Sturdy Horn=قرن متين
+Rare Scale=حرشفة نادرة
+Luminous Horn=قرن مضيء
+Ancient Beast Fossil=أحفورة وحش قديم
+
+# ============================================================
+# القسم 290: مواد التجميع - مواد نادرة
+# Section 290: Collectibles - Rare Materials
+# ============================================================
+
+Condensed Ether=أثير مكثف
+Refined Origin Metal=معدن أوريجن مُنقّى
+Ancient Relic=أثر قديم
+Moebius Fragment=شظية ميبيوس
+Flame Clock Shard=شظية ساعة اللهب
+Ouroboros Crystal=كريستال الأوروبوروس
+Titan Heart=قلب التيتان
+Dragon Pearl=لؤلؤة التنين
+Celestial Ore=خام سماوي
+Abyss Crystal=كريستال الهاوية
+Prismatic Gem=جوهرة منشورية
+Nebula Fragment=شظية سديم
+Starlight Shard=شظية ضوء النجوم
+Moonbeam Crystal=كريستال شعاع القمر
+Sunfire Ore=خام نار الشمس
+
+# ============================================================
+# القسم 291: مواد صناعة الأحجار الكريمة
+# Section 291: Gem Crafting Materials
+# ============================================================
+
+Unrefined Gem=جوهرة خام
+Rough Crystal=كريستال خشن
+Polished Stone=حجر مصقول
+Gem Fragment=شظية جوهرة
+Flame Ether=أثير اللهب
+Ice Ether=أثير الجليد
+Thunder Ether=أثير الرعد
+Wind Ether=أثير الريح
+Water Ether=أثير الماء
+Earth Ether=أثير الأرض
+Light Ether=أثير الضوء
+Dark Ether=أثير الظلام
+Amplifying Catalyst=محفز مُضخِّم
+Stabilizing Agent=عامل استقرار
+Purity Enhancer=مُحسِّن النقاء
+Gem Rank 1 Material=مادة جوهرة رتبة 1
+Gem Rank 5 Material=مادة جوهرة رتبة 5
+Gem Rank 10 Material=مادة جوهرة رتبة 10
+Nopon Special Catalyst=محفز النوبون الخاص
+Master Gem Material=مادة جوهرة الإتقان
+
+# ============================================================
+# القسم 292: أغراض الشفاء والدعم
+# Section 292: Healing & Support Items
+# ============================================================
+
+Small Potion=جرعة صغيرة
+Medium Potion=جرعة متوسطة
+Large Potion=جرعة كبيرة
+Mega Potion=جرعة عظمى
+Full Heal=شفاء كامل
+Revival Medicine=دواء إحياء
+Status Cure=علاج الحالات
+Buff Elixir=إكسير التعزيز
+Shield Potion=جرعة درع
+Ether Tonic=مقوي الأثير
+Strength Potion=جرعة قوة
+Defense Potion=جرعة دفاع
+Speed Potion=جرعة سرعة
+Antidote=ترياق
+Remedy=علاج
+
+# ============================================================
+# القسم 293: الأغراض الرئيسية
+# Section 293: Key Items
+# ============================================================
+
+Noah's Flute=ناي نوح
+Mio's Flute=ناي ميو
+Colony 9 Key=مفتاح المستعمرة 9
+Colony Gamma Key=مفتاح المستعمرة غاما
+Origin Access Card=بطاقة دخول الأوريجن
+Ferronis Ignition Key=مفتاح تشغيل الفيرونيس
+City Pass=تصريح المدينة
+Liberation Orders=أوامر التحرير
+Consul's Seal=ختم القنصل
+Moebius Sigil=رمز الميبيوس
+Ouroboros Stone=حجر الأوروبوروس
+Sword of Origin Fragment=شظية سيف الأوريجن
+Lucky Seven Shard=شظية الحظ السابع
+Ancient Map=خريطة قديمة
+Vandham's Memento=تذكار فاندام
+N's Diary=مذكرة إن
+Melia's Letter=رسالة ميليا
+Nia's Pendant=قلادة نيا
+Rex's Journal=سجل ريكس
+Shulk's Research Notes=ملاحظات بحث شولك
+
+# ============================================================
+# القسم 294: أغراض المهام
+# Section 294: Quest Items
+# ============================================================
+
+Requested Delivery=تسليم مطلوب
+Lost Possession=غرض مفقود
+Colony Supplies=إمدادات المستعمرة
+Repair Parts=قطع إصلاح
+Medical Supplies=إمدادات طبية
+Food Rations=حصص غذائية
+Building Materials=مواد بناء
+Rare Ingredient=مكون نادر
+Monster Trophy=غنيمة وحش
+Exploration Evidence=دليل استكشاف
+Intelligence Report=تقرير استخبارات
+Rescue Beacon=منارة إنقاذ
+Peace Treaty=معاهدة سلام
+Alliance Badge=شارة تحالف
+Liberation Proof=إثبات تحرير
+Nopon Trade Goods=بضائع تجارة النوبون
+Ancient Artifact=أثر قديم
+Mysterious Device=جهاز غامض
+Encoded Message=رسالة مشفرة
+Map Fragment=شظية خريطة
+
+# ============================================================
+# القسم 295: مكونات الطبخ
+# Section 295: Cooking Ingredients
+# ============================================================
+
+Fresh Meat=لحم طازج
+Smoked Fish=سمك مُدخَّن
+Wild Vegetables=خضروات برية
+Mountain Herbs=أعشاب الجبل
+Sweet Honey=عسل حلو
+Rock Salt=ملح صخري
+Black Pepper=فلفل أسود
+Cave Mushroom=فطر الكهف
+Fresh Egg=بيضة طازجة
+Rich Cream=كريمة غنية
+Nopon Spice=بهار النوبون
+Aged Cheese=جبنة معتقة
+Vine Fruit=فاكهة الكرمة
+Root Vegetable=خضار جذري
+Grain=حبوب
+Flour=دقيق
+Sugar=سكر
+Cooking Oil=زيت طبخ
+Dried Fruit=فاكهة مجففة
+Rare Truffle=كمأة نادرة
+
+# ============================================================
+# القسم 296: أوصاف المقتنيات في الموسوعة
+# Section 296: Collectopaedia Descriptions
+# ============================================================
+
+A common plant found throughout the Aetia region.=نبتة شائعة توجد في جميع أنحاء منطقة أيتيا.
+This mineral is prized for its use in gem crafting.=يُقدَّر هذا المعدن لاستخدامه في صناعة الأحجار الكريمة.
+A rare creature found only in specific weather conditions.=مخلوق نادر يوجد فقط في ظروف جوية محددة.
+This material can be traded for valuable items at the Nopon Exchange.=يمكن مقايضة هذه المادة بأغراض قيّمة في مبادلة النوبون.
+Highly sought after by collectors throughout Aionios.=مطلوبة بشدة من قبل الجامعين في أيونيوس.
+Found near bodies of water during rainy weather.=توجد بالقرب من المسطحات المائية أثناء الطقس الممطر.
+This specimen is unique to the Fornis desert region.=هذه العينة فريدة لمنطقة صحراء فورنيس.
+Collectopaedia Entry Registered!=تم تسجيل مدخل الموسوعة!
+Collection Complete for this area!=اكتملت المجموعة لهذه المنطقة!
+New reward available at the Collectopaedia!= مكافأة جديدة متاحة في الموسوعة!
+
+# ============================================================
+# القسم 297: مكافآت الموسوعة
+# Section 297: Collectopaedia Rewards
+# ============================================================
+
+Collectopaedia Reward=مكافأة الموسوعة
+Area Collection Complete=اكتملت مجموعة المنطقة
+Category Collection Complete=اكتملت مجموعة الفئة
+Full Collection Complete=اكتملت المجموعة الكاملة
+Reward: Nopon Coins x%1=المكافأة: عملات النوبون ×%1
+Reward: Rare Accessory=المكافأة: إكسسوار نادر
+Reward: Unique Gem Material=المكافأة: مادة جوهرة فريدة
+Reward: Fashion Item=المكافأة: غرض موضة
+Reward: EXP Bonus=المكافأة: مكافأة خبرة
+Reward: Gold Bonus=المكافأة: مكافأة ذهب
+Aetia Collection=مجموعة أيتيا
+Fornis Collection=مجموعة فورنيس
+Pentelas Collection=مجموعة بينتولاس
+Cadensia Collection=مجموعة كادنسيا
+Maktha Collection=مجموعة ماكثا
+
+# ============================================================
+# القسم 298: أغراض متجر النوبون
+# Section 298: Nopon Coin Exchange Items
+# ============================================================
+
+Nopon Coin Exchange=مبادلة عملات النوبون
+Exchange Rate=سعر المبادلة
+Nopon Coin x1=عملة النوبون ×1
+Nopon Coin x5=عملة النوبون ×5
+Nopon Coin x10=عملة النوبون ×10
+Nopon Coin X x1=عملة النوبون إكس ×1
+Nopon Coin X x5=عملة النوبون إكس ×5
+Exchange for Gem Materials=مبادلة بمواد الأحجار
+Exchange for Rare Items=مبادلة بأغراض نادرة
+Exchange for Fashion Items=مبادلة بأغراض موضة
+Exchange for EXP=مبادلة بنقاط خبرة
+Exchange for Class Points=مبادلة بنقاط فئة
+Exchange for Cooking Ingredients=مبادلة بمكونات طبخ
+Exchange for Accessories=مبادلة بإكسسوارات
+Nopon Secret Stash=مخبأ النوبون السري
+Nopon Premium Selection=تشكيلة النوبون المميزة
+
+# ============================================================
+# القسم 299: أغراض DLC حصرية
+# Section 299: DLC Exclusive Items
+# ============================================================
+
+Monado Keychain=سلسلة مفاتيح الموناريد
+Aegis Core Crystal=كريستال نواة الدرع
+Conduit Fragment=شظية القناة
+Rhadamanthus Key=مفتاح رادامانثوس
+A's Memory Fragment=شظية ذاكرة A
+Matthew's Compass=بوصلة ماثيو
+Nikol's Analyzer=محلل نيكول
+Glimmer's Light Crystal=كريستال ضوء غليمر
+Alpha's Relic=أثر ألفا
+Omega's Relic=أثر أوميغا
+Ancient City Pass=تصريح المدينة القديمة
+Boundary Map=خريطة الحدود
+Temporal Compass=بوصلة زمنية
+Dimensional Key=مفتاح بُعدي
+Origin Blueprint=مخطط الأوريجن
+
+# ============================================================
+# القسم 300: أغراض NG+ الحصرية
+# Section 300: NG+ Exclusive Items
+# ============================================================
+
+Consul's Mask (N)=قناع القنصل (إن)
+Consul's Mask (M)=قناع القنصل (إم)
+Consul's Mask (X)=قناع القنصل (إكس)
+Consul's Mask (Y)=قناع القنصل (واي)
+Moebius Ring=خاتم الميبيوس
+Z's Throne Fragment=شظية عرش Z
+Endless Now Shard=شظية الآن اللانهائي
+Flame Clock Core=نواة ساعة اللهب
+True Origin Key=مفتاح الأوريجن الحقيقي
+NG+ Badge=شارة NG+
+Level Reset Token=رمز إعادة المستوى
+Class Unlock Token=رمز فتح الفئة
+Bonus EXP Token=رمز خبرة إضافية
+Bonus Gold Token=رمز ذهب إضافي
+All Achievements Token=رمز جميع الإنجازات
+
+# --- نهاية المقتنيات والمواد ---
+# End of Collectibles & Materials
+# Total sections: 286-300 (Collectibles & Materials)
+
+# ============================================================
+# القسم 301: المهام الجانبية - أيتيا
+# Section 301: Side Quests - Aetia Region
+# ============================================================
+
+A Soldier's Best Friend=أفضل صديق للجندي
+A Taste of Home=طعم الوطن
+Back to Nature=العودة إلى الطبيعة
+Colony 9 Reborn=المستعمرة 9 تولد من جديد
+Crossing Enemy Lines=عبور خطوط العدو
+Day of Independence=يوم الاستقلال
+Defenders of the Colony=مدافعو المستعمرة
+Farmland Reclamation=استصلاح الأراضي الزراعية
+First Steps to Peace=خطوات أولى نحو السلام
+Flowers of Remembrance=أزهار الذكرى
+Friends in Need=أصدقاء في حاجة
+Hidden Treasure of Aetia=كنز أيتيا المخفي
+In Memory of the Fallen=في ذكرى الذين سقطوا
+Learning to Live=تعلم الحياة
+Lost Child of Colony 9=طفل المستعمرة 9 الضائع
+Mending Broken Bonds=إصلاح الروابط المكسورة
+New Ways of Fighting=طرق قتال جديدة
+Old Wounds, New Hope=جراح قديمة، أمل جديد
+Path of the Off-Seer=طريق مُنشد الوداع
+Promise of Tomorrow=وعد الغد
+Reclaiming the Past=استعادة الماضي
+Seeds of the Future=بذور المستقبل
+Supply Route Restoration=استعادة طريق الإمداد
+The Colony's Wish=أمنية المستعمرة
+The Meaning of Life=معنى الحياة
+Training the Next Generation=تدريب الجيل القادم
+What We Fight For=ما نقاتل من أجله
+Workers' Pride=كبرياء العمال
+
+# ============================================================
+# القسم 302: المهام الجانبية - فورنيس
+# Section 302: Side Quests - Fornis Region
+# ============================================================
+
+A Bridge Between Colonies=جسر بين المستعمرات
+Oasis of Hope=واحة الأمل
+Desert Survival=البقاء في الصحراء
+Sandstorm Rescue=إنقاذ من العاصفة الرملية
+The Trader's Dilemma=معضلة التاجر
+Water for the Colony=ماء للمستعمرة
+Lost Caravan=القافلة الضائعة
+Monument to Peace=نصب للسلام
+The Forge Master's Request=طلب سيد المسبك
+Cammuravi's Legacy=إرث كامورافي
+Flames of Passion=ألسنة الشغف
+A Warrior's Rest=راحة المحارب
+Teaching Old Dogs=تعليم الكبار
+Beneath the Sands=تحت الرمال
+The Oasis Secret=سر الواحة
+New Trade Routes=طرق تجارة جديدة
+Children of the Desert=أبناء الصحراء
+Rebuilding Colony 4=إعادة بناء المستعمرة 4
+The Smith's Apprentice=تلميذ الحداد
+Fornis United=فورنيس المتحدة
+
+# ============================================================
+# القسم 303: المهام الجانبية - بينتولاس
+# Section 303: Side Quests - Pentelas Region
+# ============================================================
+
+Frozen Hearts=قلوب متجمدة
+Mountain Rescue Mission=مهمة إنقاذ جبلية
+Snowbound Colony=مستعمرة محاصرة بالثلج
+The Healer's Journey=رحلة المعالج
+Winter Supplies=إمدادات الشتاء
+A Light in the Storm=نور في العاصفة
+Climbing Higher=التسلق أعلى
+Crystal Cave Expedition=بعثة كهف الكريستال
+Highland Patrol=دورية المرتفعات
+Isurd's Research=بحث إيسورد
+Medicine for All=دواء للجميع
+Northern Alliance=تحالف الشمال
+Pentelas Expedition=بعثة بينتولاس
+Scientific Discovery=اكتشاف علمي
+The Doctor's Oath=قسم الطبيب
+The Peak of Determination=قمة العزيمة
+Tundra Exploration=استكشاف التندرا
+Winter Festival Preparations=تحضيرات مهرجان الشتاء
+Wisdom of the Ancients=حكمة القدماء
+Yakumo's Request=طلب ياكومو
+
+# ============================================================
+# القسم 304: المهام الجانبية - كادنسيا وماكثا
+# Section 304: Side Quests - Cadensia & Maktha
+# ============================================================
+
+Across the Waves=عبر الأمواج
+Coastal Reconnaissance=استطلاع ساحلي
+Deep Sea Mystery=لغز أعماق البحر
+Harbor Restoration=ترميم الميناء
+Island Secrets=أسرار الجزيرة
+Lighthouse Keeper=حارس المنارة
+Maritime Alliance=التحالف البحري
+Naval Defense=الدفاع البحري
+Ocean Treasures=كنوز المحيط
+Sailors' Tales=حكايات البحارة
+Triton's Challenge=تحدي ترايتون
+Underwater Ruins=آثار تحت الماء
+Into the Abyss=في الهاوية
+Maktha's Darkness=ظلام ماكثا
+Shadow of the Past=ظل الماضي
+The Forgotten Depths=الأعماق المنسية
+Underground River=النهر الجوفي
+Creatures of the Dark=مخلوقات الظلام
+Light in Darkness=نور في الظلام
+Maktha Expedition=بعثة ماكثا
+
+# ============================================================
+# القسم 305: المهام الجانبية - المدينة
+# Section 305: Side Quests - The City
+# ============================================================
+
+A Future Worth Fighting For=مستقبل يستحق القتال من أجله
+Building the City=بناء المدينة
+City Defense Plan=خطة دفاع المدينة
+Civil Disputes=نزاعات مدنية
+Dreams of Children=أحلام الأطفال
+Education for All=تعليم للجميع
+Expanding the City=توسيع المدينة
+Family Matters=شؤون عائلية
+Food for the People=طعام للشعب
+Growing Pains=آلام النمو
+Hidden History=تاريخ مخفي
+Infrastructure Upgrade=تطوير البنية التحتية
+Justice for All=عدالة للجميع
+Legacy of Monica=إرث مونيكا
+Medical Revolution=ثورة طبية
+New Government=حكومة جديدة
+Peace Negotiations=مفاوضات السلام
+Research and Development=بحث وتطوير
+The Council's Decision=قرار المجلس
+Urban Planning=تخطيط حضري
+
+# ============================================================
+# القسم 306: أوصاف سجل المهام
+# Section 306: Quest Log Descriptions
+# ============================================================
+
+A request from the colony's soldiers to help with defense preparations.=طلب من جنود المستعمرة للمساعدة في تحضيرات الدفاع.
+The colony's food supply is running low. Find a way to secure more provisions.=إمدادات الغذاء في المستعمرة تنفد. ابحث عن طريقة لتأمين المزيد.
+A child has gone missing near the colony. Search the surrounding area.=طفل اختفى بالقرب من المستعمرة. فتش المنطقة المحيطة.
+Relations between two former enemy colonies need mending.=العلاقات بين مستعمرتين كانتا عدوتين تحتاج إلى إصلاح.
+A mysterious ruin has been discovered. Investigate its secrets.=تم اكتشاف آثار غامضة. تحقق من أسرارها.
+Help establish a new trade route between the colonies.=ساعد في إنشاء طريق تجاري جديد بين المستعمرات.
+A powerful monster threatens the colony's safety. Eliminate it.=وحش قوي يهدد سلامة المستعمرة. اقضِ عليه.
+Gather rare materials needed for the colony's reconstruction.=اجمع المواد النادرة اللازمة لإعادة بناء المستعمرة.
+Quest Started=بدأت المهمة
+Quest Complete=اكتملت المهمة
+Quest Failed=فشلت المهمة
+Quest Updated=تحدثت المهمة
+Reward Received=تم استلام المكافأة
+New Quest Available=مهمة جديدة متاحة
+Return to quest giver.=ارجع إلى مُعطي المهمة.
+
+# ============================================================
+# القسم 307: حوارات مهام التحرير (الجزء 1)
+# Section 307: Liberation Quest Dialogues (Part 1)
+# ============================================================
+
+The Flame Clock... it's gone. We're free!=ساعة اللهب... اختفت. نحن أحرار!
+What does this mean? We don't have to fight anymore?=ماذا يعني هذا؟ لم نعد مضطرين للقتال؟
+Without the Flame Clock, how will we survive?=بدون ساعة اللهب، كيف سنبقى على قيد الحياة؟
+We can live... truly live. Not just as soldiers.=يمكننا أن نعيش... نعيش حقاً. ليس فقط كجنود.
+The fighting between our colonies... it was all for nothing?=القتال بين مستعمراتنا... كان كله بلا جدوى؟
+Don't say that. We fought to protect what mattered to us.=لا تقل ذلك. قاتلنا لحماية ما يهمنا.
+From now on, we choose our own path.=من الآن فصاعداً، نختار طريقنا الخاص.
+This is just the beginning. We have a future now.=هذه مجرد البداية. لدينا مستقبل الآن.
+Thank you, Ouroboros. You gave us our lives back.=شكراً لكم، الأوروبوروس. أعدتم لنا حياتنا.
+We'll make the most of this freedom. I promise.=سنستغل هذه الحرية خير استغلال. أعدكم.
+
+# ============================================================
+# القسم 308: حوارات مهام التحرير (الجزء 2)
+# Section 308: Liberation Quest Dialogues (Part 2)
+# ============================================================
+
+The children... they can grow old now. They can have families.=الأطفال... يمكنهم أن يكبروا الآن. يمكنهم تكوين عائلات.
+For the first time, I feel something I've never felt before... hope.=لأول مرة، أشعر بشيء لم أشعر به من قبل... الأمل.
+We were enemies yesterday. Can we really become friends?=كنا أعداءً بالأمس. هل يمكننا حقاً أن نصبح أصدقاء؟
+It won't be easy, but it's worth trying.=لن يكون سهلاً، لكنه يستحق المحاولة.
+Our commander... she chose to fight alongside former enemies for peace.=قائدتنا... اختارت أن تقاتل جنباً إلى جنب مع أعداء سابقين من أجل السلام.
+The old ways are over. We need to learn how to live, not just survive.=الطرق القديمة انتهت. نحتاج أن نتعلم كيف نعيش، لا مجرد البقاء.
+I never thought I'd see the day when Keves and Agnus soldiers share a meal.=لم أظن أنني سأرى اليوم الذي يتشارك فيه جنود كيفيس وأغنوس وجبة.
+This peace... let's protect it with everything we have.=هذا السلام... لنحمِه بكل ما لدينا.
+
+# ============================================================
+# القسم 309: حوارات مهام السلام بين المستعمرات
+# Section 309: Inter-Colony Peace Quest Dialogues
+# ============================================================
+
+Colony 9 and Colony Gamma have agreed to cooperate.=المستعمرة 9 والمستعمرة غاما وافقتا على التعاون.
+A joint patrol between our colonies begins today.=دورية مشتركة بين مستعمراتنا تبدأ اليوم.
+We're sharing our food supplies with the neighboring colony.=نتشارك إمداداتنا الغذائية مع المستعمرة المجاورة.
+Former enemies working together... who would have thought?=أعداء سابقون يعملون معاً... من كان يظن؟
+The children from both colonies are playing together!=أطفال المستعمرتين يلعبون معاً!
+We need to build a bridge. Literally and figuratively.=نحتاج أن نبني جسراً. حرفياً ومجازياً.
+Trade between colonies is already improving lives.=التجارة بين المستعمرات تحسّن الحياة بالفعل.
+A festival to celebrate our new alliance? I love the idea!=مهرجان للاحتفال بتحالفنا الجديد؟ أحب الفكرة!
+
+# ============================================================
+# القسم 310: حوارات أحداث التحرير الكبرى
+# Section 310: Major Liberation Event Dialogues
+# ============================================================
+
+The last Flame Clock in the region has been destroyed!=آخر ساعة لهب في المنطقة تم تدميرها!
+All colonies in Aetia are now free!=جميع مستعمرات أيتيا أصبحت حرة الآن!
+Fornis has been completely liberated!=فورنيس تحررت بالكامل!
+Pentelas stands united against Moebius!=بينتولاس تقف متحدة ضد الميبيوس!
+The tide is turning. Moebius can no longer control us!=المد يتحول. الميبيوس لم يعد يستطيع السيطرة علينا!
+Every colony freed is a step closer to true peace.=كل مستعمرة تتحرر هي خطوة أقرب إلى السلام الحقيقي.
+The Consuls are losing their grip on this world.=القناصل يفقدون قبضتهم على هذا العالم.
+We fight not just for ourselves, but for everyone's future.=نحن لا نقاتل من أجل أنفسنا فقط، بل من أجل مستقبل الجميع.
+
+# ============================================================
+# القسم 311: حوارات NPC المرتبطة بالمهام (الجزء 1)
+# Section 311: Quest-Related NPC Dialogues (Part 1)
+# ============================================================
+
+Please, you have to help us! Our supplies won't last much longer.=أرجوكم، عليكم مساعدتنا! إمداداتنا لن تدوم طويلاً.
+I heard you freed Colony 4. Can you do the same for us?=سمعت أنكم حررتم المستعمرة 4. هل يمكنكم فعل نفس الشيء لنا؟
+The commander wants to see you. Something about an alliance.=القائد يريد رؤيتكم. شيء عن تحالف.
+There's a cave nearby with rare materials. Want to check it out?=هناك كهف قريب به مواد نادرة. تريدون التحقق منه؟
+My child is sick. Do you know where to find healing herbs?=طفلي مريض. هل تعرفون أين أجد أعشاب الشفاء؟
+We've been trying to repair the Ferronis, but we need special parts.=كنا نحاول إصلاح الفيرونيس، لكننا نحتاج قطعاً خاصة.
+The Nopon merchant has something you might be interested in.=تاجر النوبون لديه شيء قد يثير اهتمامكم.
+A strange monster appeared near the colony last night.=وحش غريب ظهر بالقرب من المستعمرة الليلة الماضية.
+
+# ============================================================
+# القسم 312: حوارات NPC المرتبطة بالمهام (الجزء 2)
+# Section 312: Quest-Related NPC Dialogues (Part 2)
+# ============================================================
+
+The peace talks are going well, thanks to your help.=محادثات السلام تسير بشكل جيد، بفضل مساعدتكم.
+We need a mediator. The two colonies can't agree on borders.=نحتاج وسيطاً. المستعمرتان لا تستطيعان الاتفاق على الحدود.
+The harvest was better than expected! The new farming methods work.=الحصاد كان أفضل من المتوقع! طرق الزراعة الجديدة تعمل.
+Some soldiers refuse to accept the peace. They want to keep fighting.=بعض الجنود يرفضون قبول السلام. يريدون الاستمرار في القتال.
+Education is the key. If we teach the children, the cycle won't repeat.=التعليم هو المفتاح. إذا علمنا الأطفال، الدورة لن تتكرر.
+The old commander left behind a journal. It might help us understand.=القائد القديم ترك مذكرة. قد تساعدنا على الفهم.
+We're building a school! The first one in Aionios!=نبني مدرسة! الأولى في أيونيوس!
+For the first time in years, nobody died today. That's worth celebrating.=لأول مرة منذ سنوات، لم يمت أحد اليوم. هذا يستحق الاحتفال.
+
+# ============================================================
+# القسم 313: حوارات NPC - تطور المستعمرات
+# Section 313: NPC Dialogues - Colony Development
+# ============================================================
+
+The colony is starting to feel like a real home.=المستعمرة بدأت تشعر وكأنها بيت حقيقي.
+We planted our first crops today. It's a new beginning.=زرعنا أول محاصيلنا اليوم. إنها بداية جديدة.
+The children asked me what "growing old" means. I couldn't answer.=الأطفال سألوني ماذا يعني "الشيخوخة". لم أستطع الإجابة.
+We need to learn so many things. Cooking, farming, building...=نحتاج أن نتعلم أشياء كثيرة. الطبخ، الزراعة، البناء...
+The Nopon offered to teach us about trade. It's been helpful.=النوبون عرضوا تعليمنا عن التجارة. كان ذلك مفيداً.
+I'm learning to play the flute. Noah inspired me.=أتعلم العزف على الناي. نوح ألهمني.
+We held our first celebration yesterday. Everyone was smiling.=أقمنا أول احتفال لنا بالأمس. الجميع كانوا يبتسمون.
+For the first time, I'm thinking about tomorrow. Not just today.=لأول مرة، أفكر في الغد. ليس فقط اليوم.
+
+# ============================================================
+# القسم 314: حوارات NPC - حياة يومية
+# Section 314: NPC Dialogues - Daily Life
+# ============================================================
+
+Good morning! Another beautiful day in Aionios.=صباح الخير! يوم جميل آخر في أيونيوس.
+The weather's nice today. Perfect for gathering materials.=الطقس جميل اليوم. مثالي لجمع المواد.
+Did you try the new dish at the canteen? It's delicious!=هل جربتم الطبق الجديد في المقصف؟ إنه لذيذ!
+I've been training hard. I want to protect everyone.=كنت أتدرب بجد. أريد حماية الجميع.
+The sunset from the watchtower is beautiful. You should see it.=غروب الشمس من برج المراقبة جميل. يجب أن تروه.
+Rest well. Tomorrow's another day.=استريحوا جيداً. الغد يوم آخر.
+I wonder what's beyond the horizon...=أتساءل ما الذي وراء الأفق...
+Living freely... it still doesn't feel real sometimes.=العيش بحرية... لا يزال لا يبدو حقيقياً أحياناً.
+
+# ============================================================
+# القسم 315: حوارات NPC - تأملات في الحرية
+# Section 315: NPC Dialogues - Reflections on Freedom
+# ============================================================
+
+We used to count our days by the Flame Clock. Now we count them by memories.=كنا نعد أيامنا بساعة اللهب. الآن نعدها بالذكريات.
+I never thought freedom could be so... complicated.=لم أظن أن الحرية يمكن أن تكون بهذا... التعقيد.
+Some days I miss the certainty of the old ways. But I'd never go back.=بعض الأيام أفتقد يقين الطرق القديمة. لكنني لن أعود أبداً.
+My comrade fell in battle before we were freed. I wish he could see this.=رفيقي سقط في المعركة قبل أن نتحرر. أتمنى لو يستطيع رؤية هذا.
+The Off-Seer's melody carries the memories of those who came before us.=لحن مُنشد الوداع يحمل ذكريات من سبقونا.
+We fight now not because we have to, but because we choose to.=نقاتل الآن لا لأننا مضطرون، بل لأننا نختار ذلك.
+Every new life born in the colony is proof that tomorrow exists.=كل حياة جديدة تولد في المستعمرة هي دليل على وجود الغد.
+This world may not be perfect, but it's ours to shape.=هذا العالم قد لا يكون مثالياً، لكنه لنا لنشكله.
+
+# ============================================================
+# القسم 316: مهام DLC - Future Redeemed (الجزء 1)
+# Section 316: DLC Quests - Future Redeemed (Part 1)
+# ============================================================
+
+The Architect's Legacy=إرث المهندس
+Echoes of the Conduit=أصداء القناة
+Bridging Two Worlds=ربط عالمَين
+The Boundary Weakens=الحدود تضعف
+Rex's Final Mission=مهمة ريكس الأخيرة
+Shulk's Discovery=اكتشاف شولك
+Memories of Bionis=ذكريات البيونيس
+Memories of Alrest=ذكريات ألريست
+A's True Identity=هوية A الحقيقية
+The Founders' Will=إرادة المؤسسين
+The Origin of Aionios=أصل أيونيوس
+Uniting Past and Future=توحيد الماضي والمستقبل
+The Final Boundary=الحدود الأخيرة
+Beyond the Rift=ما وراء الشق
+Truth of the World=حقيقة العالم
+
+# ============================================================
+# القسم 317: مهام DLC - Future Redeemed (الجزء 2)
+# Section 317: DLC Quests - Future Redeemed (Part 2)
+# ============================================================
+
+Matthew's Resolve=عزيمة ماثيو
+Nikol's Analysis=تحليل نيكول
+Glimmer's Courage=شجاعة غليمر
+Companion Quest: Shulk=مهمة رفيق: شولك
+Companion Quest: Rex=مهمة رفيق: ريكس
+Companion Quest: Fiora=مهمة رفيق: فيورا
+Companion Quest: Nia=مهمة رفيق: نيا
+Companion Quest: Melia=مهمة رفيق: ميليا
+The Nopon Archives=أرشيف النوبون
+Ancient Rift Exploration=استكشاف الشق القديم
+Temporal Disturbance=اضطراب زمني
+The Conduit's Echo=صدى القناة
+Rebuilding the Bridge=إعادة بناء الجسر
+Last Stand at the Boundary=الموقف الأخير عند الحدود
+A Promise Across Time=وعد عبر الزمن
+
+# ============================================================
+# القسم 318: حوارات مهام DLC
+# Section 318: DLC Quest Dialogues
+# ============================================================
+
+The worlds of Bionis and Alrest... they were never truly separate.=عوالم البيونيس وألريست... لم تكن منفصلة حقاً أبداً.
+The Conduit connected everything. Past, present, and future.=القناة ربطت كل شيء. الماضي والحاضر والمستقبل.
+Shulk, your Monado... it resonates with this place.=شولك، الموناريد الخاص بك... يتردد صداه مع هذا المكان.
+Rex, the power of the Aegis still flows within you.=ريكس، قوة الدرع لا تزال تتدفق بداخلك.
+Matthew, you carry the hopes of both worlds on your shoulders.=ماثيو، أنت تحمل آمال العالمَين على كتفيك.
+The Architect... Klaus... his final gift was this chance to set things right.=المهندس... كلاوس... هديته الأخيرة كانت هذه الفرصة لإصلاح الأمور.
+We may be from different eras, but our goal is the same.=قد نكون من حِقَب مختلفة، لكن هدفنا واحد.
+The boundary between worlds is weakening. We must act now.=الحدود بين العوالم تضعف. يجب أن نتصرف الآن.
+
+# ============================================================
+# القسم 319: حوارات مهام DLC - مواجهات
+# Section 319: DLC Quest Dialogues - Encounters
+# ============================================================
+
+This rift... it's leaking monsters from another dimension.=هذا الشق... يُسرّب وحوشاً من بُعد آخر.
+The Nopon say there's an ancient archive hidden here.=النوبون يقولون إن هناك أرشيفاً قديماً مخفياً هنا.
+I sense a strong presence ahead. Everyone, stay on guard.=أحس بوجود قوي أمامنا. الجميع، ابقوا متيقظين.
+This technology... it's from the Mechonis era!=هذه التقنية... من عصر الميكونيس!
+The Flamebringer's memories... they're still resonating here.=ذكريات حامل اللهب... لا تزال تتردد هنا.
+We found another fragment. The puzzle is coming together.=وجدنا شظية أخرى. الأحجية تتكامل.
+Alpha was here. I can feel the traces of its power.=ألفا كان هنا. أستطيع الشعور بآثار قوته.
+The final piece of the puzzle lies beyond this door.=القطعة الأخيرة من الأحجية تقع وراء هذا الباب.
+
+# ============================================================
+# القسم 320: ملخص وفهرس المهام
+# Section 320: Quest Summary & Index
+# ============================================================
+
+Total Side Quests=إجمالي المهام الجانبية
+Total Hero Quests=إجمالي مهام الأبطال
+Total Colony Quests=إجمالي مهام المستعمرات
+Total DLC Quests=إجمالي مهام المحتوى الإضافي
+Quest Completion Rate=معدل إكمال المهام
+Quests Completed: %1/%2=المهام المكتملة: %1/%2
+All Quests Complete!=جميع المهام مكتملة!
+Quest Reward=مكافأة المهمة
+Quest Difficulty: Easy=صعوبة المهمة: سهلة
+Quest Difficulty: Normal=صعوبة المهمة: عادية
+Quest Difficulty: Hard=صعوبة المهمة: صعبة
+Quest Difficulty: Very Hard=صعوبة المهمة: صعبة جداً
+
+# ============================================================
+# القسم 321: أسماء NPCs - المستعمرات 1-9
+# Section 321: NPC Names - Colonies 1-9
+# ============================================================
+
+Soldier Hark=الجندي هارك
+Soldier Mika=الجندية ميكا
+Soldier Renzo=الجندي رينزو
+Medic Clara=المسعفة كلارا
+Engineer Voss=المهندس فوس
+Scout Lyra=الكشافة ليرا
+Cook Greta=الطاهية غريتا
+Guard Tormund=الحارس تورموند
+Trainee Sol=المتدرب سول
+Trainee Luna=المتدربة لونا
+Veteran Aldric=المخضرم ألدريك
+Quartermaster Petra=أمينة المستودع بيترا
+Smithy Bron=الحداد برون
+Farmer Milo=المزارع ميلو
+Healer Iris=المعالجة إيريس
+Captain Varen=النقيب فارين
+Lieutenant Kira=الملازمة كيرا
+Sergeant Odin=الرقيب أودين
+Corporal Yuki=العريف يوكي
+Private Finn=الجندي فِن
+
+# ============================================================
+# القسم 322: أسماء NPCs - المستعمرات لامدا وغاما و0
+# Section 322: NPC Names - Colonies Lambda, Gamma & 0
+# ============================================================
+
+Researcher Nadia=الباحثة ناديا
+Analyst Kael=المحلل كايل
+Operator Zephyr=المشغّل زيفر
+Tactician Ines=التكتيكية إينيس
+Ether Specialist Rune=أخصائي الأثير رون
+Combat Instructor Vera=مدربة القتال فيرا
+Supply Officer Dax=ضابط الإمداد داكس
+Navigation Officer Stella=ضابطة الملاحة ستيلا
+Communications Officer Rex=ضابط الاتصالات ريكس
+Medical Officer Sage=الضابط الطبي سيج
+Archives Keeper Tome=حارس الأرشيف توم
+Weapon Smith Garn=صانع الأسلحة غارن
+Colony 0 Elder=شيخ المستعمرة 0
+Colony 0 Guide=مرشد المستعمرة 0
+Colony 0 Historian=مؤرخ المستعمرة 0
+
+# ============================================================
+# القسم 323: أسماء NPCs - المستعمرات الإضافية
+# Section 323: NPC Names - Additional Colonies
+# ============================================================
+
+Commander Tau=القائد تاو
+Lieutenant Sigma=الملازم سيغما
+Soldier Alpha=الجندي ألفا
+Soldier Beta=الجندي بيتا
+Engineer Omega=المهندس أوميغا
+Medic Delta=المسعف دلتا
+Scout Epsilon=الكشاف إبسلون
+Cook Zeta=الطاهي زيتا
+Guard Eta=الحارس إيتا
+Trainee Theta=المتدرب ثيتا
+Veteran Iota=المخضرم إيوتا
+Supply Kappa=مسؤول الإمداد كابا
+Colony 11 Leader=قائد المستعمرة 11
+Colony 15 Leader=قائد المستعمرة 15
+Colony 30 Leader=قائد المستعمرة 30
+
+# ============================================================
+# القسم 324: أسماء NPCs - المدينة
+# Section 324: NPC Names - The City
+# ============================================================
+
+Elder Geon=الشيخ غيون
+Councilor Reina=المستشارة رينا
+Councilor Marcus=المستشار ماركوس
+City Guard Ash=حارس المدينة آش
+City Guard Willow=حارسة المدينة ويلو
+Merchant Hazel=التاجرة هازل
+Blacksmith Forge=الحداد فورج
+Innkeeper Dawn=صاحبة النزل داون
+Teacher Sage=المعلم سيج
+Librarian Script=أمينة المكتبة سكريبت
+Doctor Pine=الطبيب باين
+Farmer Brook=المزارع بروك
+Chef Basil=الطاهي باسيل
+Artist Canvas=الفنانة كانفاس
+Historian Lore=المؤرخ لور
+Child Star=الطفل ستار
+Child Bloom=الطفلة بلوم
+Child Ray=الطفل راي
+Elderly Wisdom=المسن ويزدوم
+Elderly Grace=المسنة غريس
+
+# ============================================================
+# القسم 325: أسماء NPCs - تجار النوبون
+# Section 325: NPC Names - Nopon Merchants
+# ============================================================
+
+Nopon Trader Riku=تاجر النوبون ريكو
+Nopon Trader Manana=تاجرة النوبون مانانا
+Nopon Merchant Bana=تاجر النوبون بانا
+Nopon Merchant Kino=تاجر النوبون كينو
+Nopon Merchant Nene=تاجرة النوبون نيني
+Nopon Sage Popolo=حكيم النوبون بوبولو
+Nopon Smith Hamham=حداد النوبون هامهام
+Nopon Chef Yuyu=طاهي النوبون يويو
+Nopon Explorer Titi=مستكشف النوبون تيتي
+Nopon Scholar Bobo=عالم النوبون بوبو
+Nopon Caravan Leader=قائد قافلة النوبون
+Nopon Exchange Attendant=مسؤول مبادلة النوبون
+Nopon Secret Seller=بائع أسرار النوبون
+Nopon Collector=جامع النوبون
+Nopon Information Broker=وسيط معلومات النوبون
+
+# ============================================================
+# القسم 326: حوارات NPCs العامة في المستعمرات
+# Section 326: General Colony NPC Dialogues
+# ============================================================
+
+Welcome to our colony. Make yourselves at home.=مرحباً بكم في مستعمرتنا. اعتبروها بيتكم.
+Things have changed so much since the liberation.=الأمور تغيرت كثيراً منذ التحرير.
+I still can't believe we're free from the Flame Clock.=لا أزال لا أصدق أننا أحرار من ساعة اللهب.
+The commander is in the war room if you need anything.=القائد في غرفة الحرب إذا احتجتم أي شيء.
+Our colony is getting stronger every day.=مستعمرتنا تزداد قوة كل يوم.
+Have you visited the marketplace? We have new goods.=هل زرتم السوق؟ لدينا بضائع جديدة.
+The children are learning to read. It's amazing to see.=الأطفال يتعلمون القراءة. إنه مشهد رائع.
+Stay safe out there. The monsters have been restless lately.=ابقوا آمنين هناك. الوحوش كانت مضطربة مؤخراً.
+
+# ============================================================
+# القسم 327: حوارات NPCs التجار والحرفيين
+# Section 327: Merchant & Artisan NPC Dialogues
+# ============================================================
+
+Welcome! Take a look at my wares.=مرحباً! ألقِ نظرة على بضائعي.
+Finest goods in all of Aionios, friend!= أفضل البضائع في أيونيوس كلها، يا صديق!
+Need supplies for your journey? I've got you covered.=تحتاجون إمدادات لرحلتكم؟ أنا أغطيكم.
+I craft the finest weapons in the colony. Want to see?=أصنع أفضل الأسلحة في المستعمرة. تريدون أن تروا؟
+This armor will keep you safe against anything.=هذا الدرع سيحميكم من أي شيء.
+Fresh ingredients, straight from the garden!=مكونات طازجة، مباشرة من الحديقة!
+I've got rare materials you won't find anywhere else.=لدي مواد نادرة لن تجدوها في أي مكان آخر.
+Come back anytime. I'll have new stock soon.=عودوا في أي وقت. سيكون لدي مخزون جديد قريباً.
+
+# ============================================================
+# القسم 328: حوارات أطفال المستعمرات
+# Section 328: Colony Children Dialogues
+# ============================================================
+
+Are you the Ouroboros? You're so cool!=هل أنتم الأوروبوروس؟ أنتم رائعون جداً!
+When I grow up, I want to be a hero like you!=عندما أكبر، أريد أن أكون بطلاً مثلكم!
+What's it like to Interlink? Does it hurt?=كيف يبدو الترابط؟ هل يؤلم؟
+Teacher said we get to live past ten terms now. Is that true?=المعلم قال إننا سنعيش بعد عشر فترات الآن. هل هذا صحيح؟
+I drew a picture of you fighting a monster! Want to see?=رسمت صورة لكم تقاتلون وحشاً! تريدون أن تروا؟
+Mom and Dad... those are words I just learned. What do they mean?=ماما وبابا... هذه كلمات تعلمتها للتو. ماذا تعنيان؟
+The other kids and I play "Ouroboros" every day!=أنا والأطفال الآخرون نلعب "الأوروبوروس" كل يوم!
+I'm not scared of monsters anymore. Because you'll protect us, right?=لم أعد أخاف من الوحوش. لأنكم ستحموننا، صحيح؟
+
+# ============================================================
+# القسم 329: حوارات NPCs ما بعد تحرير المستعمرة
+# Section 329: Post-Liberation NPC Dialogues
+# ============================================================
+
+The colony feels different now. Lighter, somehow.=المستعمرة تشعر بأنها مختلفة الآن. أخف، بطريقة ما.
+We're learning to cook! No more ration packs.=نتعلم الطبخ! لا مزيد من حصص الإعاشة.
+The first baby was born in our colony yesterday. Everyone cried.=أول طفل وُلد في مستعمرتنا بالأمس. الجميع بكوا.
+We planted a tree in the center of the colony. A symbol of growth.=زرعنا شجرة في وسط المستعمرة. رمز للنمو.
+Some soldiers struggle with peace. Fighting was all they knew.=بعض الجنود يعانون مع السلام. القتال كان كل ما يعرفونه.
+We started a music class. The flute is popular, thanks to Noah.=بدأنا فصل موسيقى. الناي شائع، بفضل نوح.
+The former enemies now eat at the same table. It's beautiful.=الأعداء السابقون يأكلون الآن على نفس الطاولة. إنه جميل.
+We're writing our history for the first time. Our own story.=نكتب تاريخنا لأول مرة. قصتنا الخاصة.
+
+# ============================================================
+# القسم 330: NPCs في DLC - Future Redeemed (الجزء 1)
+# Section 330: DLC NPCs - Future Redeemed (Part 1)
+# ============================================================
+
+Boundary Villager Haze=ساكن الحدود هيز
+Boundary Villager Mist=ساكنة الحدود ميست
+Rift Explorer Dawn=مستكشفة الشق داون
+Rift Explorer Dusk=مستكشف الشق دسك
+Ancient City Survivor=ناجٍ من المدينة القديمة
+Memory Keeper=حافظ الذاكرة
+Timeline Observer=مراقب الخط الزمني
+Dimensional Scholar=عالم الأبعاد
+Rift Merchant=تاجر الشق
+Boundary Guard=حارس الحدود
+
+# ============================================================
+# القسم 331: NPCs في DLC - Future Redeemed (الجزء 2)
+# Section 331: DLC NPCs - Future Redeemed (Part 2)
+# ============================================================
+
+Nopon Archivist=أمين أرشيف النوبون
+Nopon Time Scholar=عالم زمن النوبون
+Mechonis Descendant=سليل الميكونيس
+Bionis Descendant=سليل البيونيس
+Alrest Descendant=سليل ألريست
+Founder's Heir=وريث المؤسسين
+Ancient Smith=حداد قديم
+Memory Fragment Entity=كيان شظية الذاكرة
+Echo of Klaus=صدى كلاوس
+Echo of Galea=صدى غاليا
+
+# ============================================================
+# القسم 332: حوارات NPCs في DLC (الجزء 1)
+# Section 332: DLC NPC Dialogues (Part 1)
+# ============================================================
+
+You're from beyond the boundary? We thought we were alone.=أنتم من وراء الحدود؟ ظننا أننا وحدنا.
+The rift has been growing. More creatures are coming through.=الشق يتسع. المزيد من المخلوقات تعبر منه.
+Rex and Shulk... the heroes of legend? They're real?=ريكس وشولك... أبطال الأساطير؟ هم حقيقيون؟
+The Architect left this place as a final safeguard.=المهندس ترك هذا المكان كصمام أمان أخير.
+Time flows differently near the boundary. Be careful.=الزمن يتدفق بشكل مختلف بالقرب من الحدود. كونوا حذرين.
+We've preserved the knowledge of both worlds here.=حفظنا معرفة العالمَين هنا.
+The Conduit's echo still resonates in this place.=صدى القناة لا يزال يتردد في هذا المكان.
+Your arrival was foretold in the ancient records.=وصولكم كان متنبأً به في السجلات القديمة.
+
+# ============================================================
+# القسم 333: حوارات NPCs في DLC (الجزء 2)
+# Section 333: DLC NPC Dialogues (Part 2)
+# ============================================================
+
+The memories of Bionis and Alrest... they're fading.=ذكريات البيونيس وألريست... تتلاشى.
+If the boundary breaks, both worlds will cease to exist.=إذا انكسرت الحدود، كلا العالمَين سيتوقفان عن الوجود.
+Matthew, you have your grandfather's determination.=ماثيو، لديك عزيمة جدك.
+The Nopon archives contain secrets even we don't fully understand.=أرشيفات النوبون تحتوي على أسرار حتى نحن لا نفهمها بالكامل.
+The dimensional rift is unstable. We need to seal it.=الشق البُعدي غير مستقر. نحتاج إلى إغلاقه.
+Both Monado and Aegis... their powers are needed to save everything.=كل من الموناريد والدرع... قوتاهما مطلوبتان لإنقاذ كل شيء.
+The Architect's final experiment... Aionios itself.=تجربة المهندس الأخيرة... أيونيوس نفسها.
+Hope is the one thing that transcends time and space.=الأمل هو الشيء الوحيد الذي يتجاوز الزمان والمكان.
+
+# ============================================================
+# القسم 334: حوارات NPCs في DLC (الجزء 3)
+# Section 334: DLC NPC Dialogues (Part 3)
+# ============================================================
+
+The forge here was built by the same hands that created the Monado.=المسبك هنا بُني بنفس الأيدي التي صنعت الموناريد.
+We trade across the dimensional boundary. It keeps both sides alive.=نتاجر عبر الحدود البُعدية. هذا يبقي كلا الجانبين على قيد الحياة.
+The children here dream of a world without boundaries.=الأطفال هنا يحلمون بعالم بلا حدود.
+Every generation, we pass down the stories of Shulk and Rex.=كل جيل، ننقل قصص شولك وريكس.
+The Mechonis and Bionis... Alrest and its Titans... all connected.=الميكونيس والبيونيس... ألريست وتيتاناتها... كلها متصلة.
+When the boundary fades, a new world will be born. Or so they say.=عندما تتلاشى الحدود، سيولد عالم جديد. أو هكذا يقولون.
+We are the last keepers of both worlds' knowledge.=نحن آخر حافظي معرفة العالمَين.
+The future is not yet written. That's what makes it beautiful.=المستقبل لم يُكتب بعد. هذا ما يجعله جميلاً.
+
+# ============================================================
+# القسم 335: فهرس NPCs والشخصيات
+# Section 335: NPC & Character Directory
+# ============================================================
+
+Total Named NPCs=إجمالي الشخصيات المسماة
+Colony NPCs=شخصيات المستعمرات
+City NPCs=شخصيات المدينة
+Nopon NPCs=شخصيات النوبون
+DLC NPCs=شخصيات المحتوى الإضافي
+NPC Category: Soldier=فئة الشخصية: جندي
+NPC Category: Merchant=فئة الشخصية: تاجر
+NPC Category: Artisan=فئة الشخصية: حرفي
+NPC Category: Child=فئة الشخصية: طفل
+NPC Category: Elder=فئة الشخصية: شيخ
+NPC Category: Leader=فئة الشخصية: قائد
+NPC Location: Colony=موقع الشخصية: مستعمرة
+NPC Location: City=موقع الشخصية: المدينة
+NPC Location: Field=موقع الشخصية: الميدان
+NPC Location: DLC Area=موقع الشخصية: منطقة DLC
+
+# --- نهاية المهام والشخصيات ---
+# End of Quests & NPCs
+# Total sections: 301-335 (Quests & NPCs)
