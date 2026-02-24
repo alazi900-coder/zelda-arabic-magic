@@ -3205,3 +3205,76 @@ LOD=مستوى التفصيل
 Texture Quality=جودة النسيج
 Shadow Quality=جودة الظلال
 Anti-Aliasing=مكافحة التعرج
+# ═══════════════════════════════════════════════════
+# الموسيقى والمقطوعات الشهيرة (Iconic Soundtracks)
+# ═══════════════════════════════════════════════════
+# ─────────────────────────────────────────────────
+# مقطوعات Xenoblade Chronicles 3 الرئيسية
+# ─────────────────────────────────────────────────
+A Life Sent On=حياة أُرسلت
+Where We Belong=حيث ننتمي
+Millick Meadows=مروج ميليك
+Eagus Wilderness=برية إيغوس
+Erythia Sea=بحر إريثيا
+A Formidable Enemy=عدو هائل
+You Will Know Our Names - Finale=ستعرفون أسماءنا - الختام
+Chain Attack Theme=موسيقى هجوم السلسلة
+Keves Battle=معركة كيفيس
+Agnus Battle=معركة أغنوس
+Moebius Battle=معركة مويبيوس
+The Weight of Life=ثقل الحياة
+Off-Seer Melody=لحن مرشد الأرواح
+Mio's Off-Seer Melody=لحن ميو لإرشاد الأرواح
+Noah's Off-Seer Melody=لحن نوح لإرشاد الأرواح
+A Step Away=على بُعد خطوة
+Carrying the Weight of Life=حاملين ثقل الحياة
+The City=المدينة
+Colony 9 Theme=موسيقى المستعمرة 9
+Colony Gamma Theme=موسيقى مستعمرة غاما
+Ouroboros=أوروبوروس
+Levnis Battle=معركة ليفنيس
+Noah and Mio=نوح وميو
+Eunie and Taion=يوني وتايون
+Lanz and Sena=لانز وسينا
+Interlink=الترابط
+Unique Monster Battle=معركة الوحش الفريد
+The Real Enemy=العدو الحقيقي
+Something in Common=شيء مشترك
+Last Chapter=الفصل الأخير
+Origin Interior=داخل الأوريجن
+Moebius=مويبيوس
+Z Battle=معركة زد
+Life Together=الحياة معاً
+Hope Toward Tomorrow=الأمل نحو الغد
+# ─────────────────────────────────────────────────
+# مقطوعات الفلوت والمشاهد العاطفية
+# ─────────────────────────────────────────────────
+Flute Melody=لحن الفلوت
+Noah and Mio's Flute Duet=ثنائي فلوت نوح وميو
+Sena's Resolve=عزيمة سينا
+Lanz's Determination=إصرار لانز
+Eunie's Prayer=صلاة يوني
+Taion's Strategy=استراتيجية تايون
+Goodbye=الوداع
+See You=أراك لاحقاً
+Endless Days=أيام لا نهائية
+# ─────────────────────────────────────────────────
+# مقطوعات Future Redeemed
+# ─────────────────────────────────────────────────
+Future Redeemed Main Theme=الموسيقى الرئيسية لـ Future Redeemed
+Matthew's Theme=موسيقى ماثيو
+A New Battle=معركة جديدة
+Cent-Omnia Region=منطقة سنت-أومنيا
+The Great Crevasse=الصدع العظيم
+Origin Battle=معركة الأوريجن
+The Boundary=الحدود
+Alpha Battle=معركة ألفا
+Shulk and Rex=شالك وريكس
+Past and Future=الماضي والمستقبل
+Connected Futures=مستقبلات مترابطة
+Reconnecting Worlds=إعادة ربط العوالم
+The Weight We Carry=الثقل الذي نحمله
+New Battle - FR=معركة جديدة - FR
+Bionis and Alrest=بيونيس وأرست
+Hope Rekindled=أمل متجدد
+Uniting the Trinity=توحيد الثالوث
