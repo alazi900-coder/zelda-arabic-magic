@@ -4050,3 +4050,340 @@ Fusion Arts Used=الفنون المدمجة المستخدمة
 Perfect Cancels=الإلغاءات المثالية
 Critical Hits=الضربات الحرجة
 Revives Performed=الإنعاشات المنفذة
+# ═══════════════════════════════════════════════════
+# نظام الأسلحة والإكسسوارات (Weapons & Accessories)
+# ═══════════════════════════════════════════════════
+# ─────────────────────────────────────────────────
+# مصطلحات عامة للأسلحة (General Weapon Terms)
+# ─────────────────────────────────────────────────
+Weapon=سلاح
+Weapons=أسلحة
+Equip Weapon=تجهيز سلاح
+Weapon Type=نوع السلاح
+Weapon Level=مستوى السلاح
+Weapon Stats=إحصائيات السلاح
+Attack Power=قوة الهجوم
+Physical Attack=هجوم جسدي
+Ether Attack=هجوم أثيري
+Critical Rate=معدل الضربة الحرجة
+Block Rate=معدل الصد
+Weapon Enhancement=تعزيز السلاح
+Weapon Upgrade=ترقية السلاح
+Upgraded Weapon=سلاح مُرقّى
+Weapon Slot=خانة السلاح
+# ─────────────────────────────────────────────────
+# أنواع الأسلحة الرئيسية (Main Weapon Types)
+# ─────────────────────────────────────────────────
+Sword=سيف
+Dual Swords=سيفان مزدوجان
+Great Sword=سيف عظيم
+Greatsword=السيف العظيم
+Katana=كاتانا
+Blade=نصل
+Twin Blades=نصلان توأم
+Short Sword=سيف قصير
+Rapier=سيف رفيع
+Saber=صارم
+Nodachi=نوداتشي
+# ─────────────────────────────────────────────────
+# أسلحة ثقيلة (Heavy Weapons)
+# ─────────────────────────────────────────────────
+Hammer=مطرقة
+War Hammer=مطرقة حرب
+Mace=صولجان
+Axe=فأس
+Battle Axe=فأس المعركة
+Great Axe=فأس عظيم
+Shield=درع
+Tower Shield=درع برجي
+Buckler=ترس صغير
+Shield Hammer=مطرقة الدرع
+# ─────────────────────────────────────────────────
+# أسلحة بعيدة المدى (Ranged Weapons)
+# ─────────────────────────────────────────────────
+Gun=بندقية
+Ether Gun=بندقية أثيرية
+Dual Guns=بندقيتان مزدوجتان
+Cannon=مدفع
+Ether Cannon=مدفع أثيري
+Rifle=بندقية قنص
+Sniper Rifle=بندقية قنّاص
+Bow=قوس
+Crossbow=قوس نشّاب
+# ─────────────────────────────────────────────────
+# أسلحة سحرية ودعم (Magic & Support Weapons)
+# ─────────────────────────────────────────────────
+Staff=عصا
+Healing Staff=عصا شفاء
+Ether Staff=عصا أثيرية
+Rod=قضيب
+Wand=عصا سحرية
+Orb=جرم
+Ether Orb=جرم أثيري
+Ring=خاتم
+Ring Blade=نصل الخاتم
+Chakram=شاكرام
+Fan=مروحة
+War Fan=مروحة حرب
+# ─────────────────────────────────────────────────
+# أسلحة خاصة (Special Weapons)
+# ─────────────────────────────────────────────────
+Gauntlet=قفاز حديدي
+Knuckle=مفصل
+Power Gauntlet=قفاز القوة
+Claw=مخلب
+Lance=رمح
+Spear=حربة
+Halberd=مطرد
+Whip=سوط
+Whip Blade=نصل السوط
+Chain Weapon=سلاح السلسلة
+Boomerang=بومرنغ
+Throwing Blade=نصل رامي
+# ─────────────────────────────────────────────────
+# أسلحة حسب الفصل - المهاجمون (Attacker Class Weapons)
+# ─────────────────────────────────────────────────
+# المبارز بالسيف (Swordfighter) - سيف
+Swordfighter Blade=نصل المبارز بالسيف
+# الزفير (Zephyr) - نصلان مزدوجان
+Zephyr Blades=نصلا الزفير
+# الغول (Ogre) - مطرقة
+Ogre Hammer=مطرقة الغول
+# المستقل الخارق (Flash Fencer) - سيف رفيع
+Flash Fencer Rapier=سيف المبارز الخاطف الرفيع
+# المنفي الوحيد (Lone Exile) - سيف عظيم
+Lone Exile Greatsword=السيف العظيم للمنفي الوحيد
+# المقتحم (Incursor) - نصلان توأم
+Incursor Twin Blades=نصلا المقتحم التوأم
+# رقّاص السيف (Sword of Origin) - نصل الأوريجن
+Sword of Origin Blade=نصل سيف الأوريجن
+# كاسر الحدود (Stalker) - خنجران
+Stalker Daggers=خنجرا المتتبع
+# فارس التنين (Royal Summoner) - فنون استدعاء
+Royal Summoner Cane=عصا المستدعي الملكي
+# ─────────────────────────────────────────────────
+# أسلحة حسب الفصل - المدافعون (Defender Class Weapons)
+# ─────────────────────────────────────────────────
+# الحارس الثقيل (Heavy Guard) - درع ومطرقة
+Heavy Guard Shield=درع الحارس الثقيل
+# قائد الحراسة (Guardian Commander) - سيف ودرع
+Guardian Commander Sword=سيف قائد الحراسة
+Guardian Commander Shield=درع قائد الحراسة
+# المبارز العنيد (Lone Exile Defender) - سيف عظيم دفاعي
+Defender Greatsword=السيف العظيم الدفاعي
+# حداد يوم (Yumsmith) - مطرقة ميكانيكية
+Yumsmith Hammer=مطرقة حداد يوم
+# المؤذن (Signifer) - راية ودرع
+Signifer Banner=راية المؤذن
+# ─────────────────────────────────────────────────
+# أسلحة حسب الفصل - المعالجون (Healer Class Weapons)
+# ─────────────────────────────────────────────────
+# المسعف المدفعي (Medic Gunner) - بندقية أثيرية
+Medic Gunner Rifle=بندقية المسعف المدفعي
+# التكتيكي (Tactician) - حلقات أثيرية
+Tactician Rings=حلقات التكتيكي
+# طبيب الحرب (War Medic) - عصا شفاء
+War Medic Staff=عصا طبيب الحرب
+# الاستراتيجوس (Strategos) - قوس
+Strategos Bow=قوس الاستراتيجوس
+# مُطلق الحياة (Lifesage) - عصا الحياة
+Lifesage Staff=عصا مُطلق الحياة
+# ─────────────────────────────────────────────────
+# أسلحة أبطال خاصة (Hero-Specific Weapons)
+# ─────────────────────────────────────────────────
+Ethel's Blade=نصل إيثل
+Valdi's Tools=أدوات فالدي
+Zeon's Shield=درع زيون
+Teach's Fists=قبضتا تيتش
+Riku & Manana's Hammer=مطرقة ريكو ومنانا
+Juniper's Bow=قوس جونيبر
+Ashera's Spear=رمح أشيرا
+Alexandria's Greatsword=السيف العظيم لألكسندريا
+Isurd's Staff=عصا إسورد
+Fiona's Banner=راية فيونا
+Triton's Anchor=مرساة ترايتون
+Gray's Katana=كاتانا غراي
+Miyabi's Fan=مروحة مييابي
+Cammuravi's Lance=رمح كاموُرافي
+Segiri's Dual Guns=بندقيتا سيغيري المزدوجتان
+Monica's Sword=سيف مونيكا
+Ghondor's Gauntlets=قفازا غوندور
+Melia's Staff=عصا ميليا
+Nia's Rings=حلقات نيا
+# ─────────────────────────────────────────────────
+# أسلحة DLC Future Redeemed
+# ─────────────────────────────────────────────────
+Matthew's Sword=سيف ماثيو
+A's Blade=نصل إيه
+Nikol's Shield=درع نيكول
+Glimmer's Whip Blade=نصل سوط غليمر
+Shulk's Monado REX+=موناد شولك ريكس+
+Rex's Aegis Sword=سيف ريكس إيجيس
+Monado=موناد
+Monado REX+=موناد ريكس+
+Aegis Sword=سيف إيجيس
+Pyra's Sword=سيف بايرا
+Mythra's Sword=سيف ميثرا
+# ═══════════════════════════════════════════════════
+# الإكسسوارات (Accessories)
+# ═══════════════════════════════════════════════════
+# ─────────────────────────────────────────────────
+# مصطلحات عامة للإكسسوارات (General Accessory Terms)
+# ─────────────────────────────────────────────────
+Accessory=إكسسوار
+Accessories=إكسسوارات
+Equip Accessory=تجهيز إكسسوار
+Accessory Slot=خانة الإكسسوار
+Accessory Effect=تأثير الإكسسوار
+Accessory Stats=إحصائيات الإكسسوار
+Accessory Enhancement=تعزيز الإكسسوار
+Unique Accessory=إكسسوار فريد
+Rare Accessory=إكسسوار نادر
+Common Accessory=إكسسوار عادي
+# ─────────────────────────────────────────────────
+# إكسسوارات هجومية (Attack Accessories)
+# ─────────────────────────────────────────────────
+Power Ring=خاتم القوة
+Attack Brooch=بروش الهجوم
+Strength Bangle=سوار القوة
+Critical Scope=منظار الضربة الحرجة
+Warrior's Emblem=شعار المحارب
+Fighter's Badge=شارة المقاتل
+Berserker Charm=تعويذة الفارسي
+Fury Earring=قرط الغضب
+Assault Belt=حزام الهجوم
+Blade Pendant=قلادة النصل
+Ether Amplifier=مُضخّم الأثير
+Power Gloves=قفازات القوة
+Sharpshooter's Ring=خاتم القنّاص
+Aggression Charm=تعويذة العدوان
+Brutal Necklace=عقد الوحشية
+# ─────────────────────────────────────────────────
+# إكسسوارات دفاعية (Defense Accessories)
+# ─────────────────────────────────────────────────
+Guard Ring=خاتم الحراسة
+Defense Brooch=بروش الدفاع
+Iron Bangle=سوار الحديد
+Shield Emblem=شعار الدرع
+Guardian Charm=تعويذة الحارس
+Fortified Belt=حزام محصّن
+Resilience Earring=قرط المرونة
+Protector's Badge=شارة الحامي
+Endurance Ring=خاتم التحمل
+Blocker's Pendant=قلادة الصاد
+HP Booster=مُعزّز نقاط الصحة
+Defense Gloves=قفازات الدفاع
+Aegis Charm=تعويذة إيجيس
+Ironclad Necklace=عقد مدرّع
+Stalwart Amulet=تميمة الصامد
+# ─────────────────────────────────────────────────
+# إكسسوارات شفاء ودعم (Healing & Support Accessories)
+# ─────────────────────────────────────────────────
+Healing Ring=خاتم الشفاء
+Recovery Brooch=بروش الاستعادة
+Medic's Bangle=سوار المسعف
+Healer's Emblem=شعار المعالج
+Vitality Charm=تعويذة الحيوية
+Restoration Earring=قرط الترميم
+Support Badge=شارة الدعم
+Revive Pendant=قلادة الإنعاش
+Ether Shield=درع أثيري
+Regeneration Ring=خاتم التجدد
+Blessing Amulet=تميمة البركة
+Lifeforce Gloves=قفازات قوة الحياة
+Sanctuary Charm=تعويذة الملاذ
+Spirit Necklace=عقد الروح
+Miracle Earring=قرط المعجزة
+# ─────────────────────────────────────────────────
+# إكسسوارات سرعة ومراوغة (Speed & Evasion Accessories)
+# ─────────────────────────────────────────────────
+Speed Ring=خاتم السرعة
+Agility Brooch=بروش الرشاقة
+Dodge Bangle=سوار المراوغة
+Evasion Charm=تعويذة التفادي
+Swift Earring=قرط الخفة
+Dash Belt=حزام الاندفاع
+Fleet Badge=شارة السرعة
+Acrobat Pendant=قلادة البهلوان
+Nimble Gloves=قفازات الخفة
+Wind Amulet=تميمة الريح
+Haste Ring=خاتم العجلة
+Quick Step Charm=تعويذة الخطوة السريعة
+# ─────────────────────────────────────────────────
+# إكسسوارات أثيرية ومقاومة (Ether & Resistance Accessories)
+# ─────────────────────────────────────────────────
+Ether Ring=خاتم الأثير
+Ether Defense Brooch=بروش دفاع الأثير
+Resistance Bangle=سوار المقاومة
+Anti-Blaze Charm=تعويذة مضاد اللهب
+Anti-Freeze Charm=تعويذة مضاد التجمد
+Anti-Spark Charm=تعويذة مضاد الشرارة
+Anti-Aqua Charm=تعويذة مضاد الماء
+Anti-Wind Charm=تعويذة مضاد الريح
+Anti-Earth Charm=تعويذة مضاد الأرض
+Debuff Resistance Ring=خاتم مقاومة الإضعاف
+Status Guard Pendant=قلادة حراسة الحالة
+Purify Earring=قرط التطهير
+Cleanse Amulet=تميمة التنقية
+Null Element Charm=تعويذة إلغاء العنصر
+# ─────────────────────────────────────────────────
+# إكسسوارات خاصة ونادرة (Special & Rare Accessories)
+# ─────────────────────────────────────────────────
+Nopon Charm=تعويذة النوبون
+Nopon's Secret=سر النوبون
+Colony Badge=شارة المستعمرة
+Hero's Medal=ميدالية البطل
+Champion's Crown=تاج البطل
+Ancient Amulet=تميمة قديمة
+Founder's Ring=خاتم المؤسس
+Origin Fragment=شظية الأوريجن
+Ouroboros Pendant=قلادة الأوروبوروس
+Lucky Charm=تعويذة الحظ
+Rare Drop Booster=مُعزّز الغنائم النادرة
+EXP Booster=مُعزّز نقاط الخبرة
+Gold Booster=مُعزّز الذهب
+AP Booster=مُعزّز نقاط القدرة
+SP Booster=مُعزّز نقاط المهارة
+CP Booster=مُعزّز نقاط الفصل
+# ─────────────────────────────────────────────────
+# إكسسوارات DLC Future Redeemed
+# ─────────────────────────────────────────────────
+Community Ring=خاتم المجتمع
+Unity Pendant=قلادة الوحدة
+Archsage Amulet=تميمة حكيم القوس
+Settlement Badge=شارة المستوطنة
+Liberator's Charm=تعويذة المحرر
+Monado Replica Charm=تعويذة نسخة الموناد
+Aegis Core Pendant=قلادة نواة إيجيس
+Relic Accessory=إكسسوار أثري
+Ancient Weapon=سلاح قديم
+Legendary Accessory=إكسسوار أسطوري
+# ─────────────────────────────────────────────────
+# ندرة الأسلحة والإكسسوارات (Rarity Tiers)
+# ─────────────────────────────────────────────────
+Common=عادي
+Rare=نادر
+Legendary=أسطوري
+Unique=فريد
+Common Weapon=سلاح عادي
+Rare Weapon=سلاح نادر
+Legendary Weapon=سلاح أسطوري
+Unique Weapon=سلاح فريد
+Rarity=الندرة
+Rarity Level=مستوى الندرة
+# ─────────────────────────────────────────────────
+# تحسين وصياغة الأسلحة (Weapon Forging & Enhancement)
+# ─────────────────────────────────────────────────
+Forge=صياغة
+Weapon Forge=صياغة السلاح
+Enhance=تعزيز
+Enhancement Material=مادة التعزيز
+Weapon Material=مادة السلاح
+Upgrade Material=مادة الترقية
+Refine Weapon=تنقية السلاح
+Max Enhancement=أقصى تعزيز
+Enhancement Level=مستوى التعزيز
+Forging Cost=تكلفة الصياغة
+Dismantle=تفكيك
+Dismantle Weapon=تفكيك السلاح
+Salvage Parts=أجزاء الإنقاذ
