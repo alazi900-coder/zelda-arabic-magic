@@ -19777,3 +19777,1275 @@ NPC Location: DLC Area=موقع الشخصية: منطقة DLC
 # --- نهاية المهام والشخصيات ---
 # End of Quests & NPCs
 # Total sections: 301-335 (Quests & NPCs)
+
+# ============================================================
+# القسم 336: شجرة الروح - أوصاف العقد
+# Section 336: Soul Tree - Node Descriptions
+# ============================================================
+
+Soul Tree=شجرة الروح
+Soul Points=نقاط الروح
+Soul Level=مستوى الروح
+Unlock Node=فتح العقدة
+Node Locked=العقدة مقفلة
+Node Unlocked=العقدة مفتوحة
+Insufficient Soul Points=نقاط الروح غير كافية
+Branch: Combat=الفرع: القتال
+Branch: Exploration=الفرع: الاستكشاف
+Branch: Interlink=الفرع: الترابط
+Branch: Affinity=الفرع: الألفة
+Branch: Special=الفرع: خاص
+Increases base ATK by %1%.=يزيد الهجوم الأساسي بنسبة %1%.
+Increases base DEF by %1%.=يزيد الدفاع الأساسي بنسبة %1%.
+Increases base HP by %1%.=يزيد نقاط الصحة الأساسية بنسبة %1%.
+Extends Interlink duration by %1 seconds.=يمدد مدة الترابط بمقدار %1 ثانية.
+Increases Chain Attack damage by %1%.=يزيد ضرر الهجوم المتسلسل بنسبة %1%.
+Unlocks new Ouroboros form.=يفتح هيئة أوروبوروس جديدة.
+Increases Interlink level cap.=يزيد الحد الأقصى لمستوى الترابط.
+Reduces cooldown between Interlinks by %1 seconds.=يقلل زمن الانتظار بين الترابطات بمقدار %1 ثانية.
+Enhances Ouroboros Arts damage by %1%.=يعزز ضرر فنون الأوروبوروس بنسبة %1%.
+Soul Tree Complete!=اكتملت شجرة الروح!
+
+# ============================================================
+# القسم 337: مخطط الألفة
+# Section 337: Affinity Chart
+# ============================================================
+
+Affinity Chart=مخطط الألفة
+Affinity Level=مستوى الألفة
+Affinity Rank=رتبة الألفة
+Bond Strength=قوة الرابطة
+Noah ↔ Mio=نوح ↔ ميو
+Lanz ↔ Sena=لانز ↔ سينا
+Eunie ↔ Taion=يوني ↔ تايون
+Party ↔ Colony=الفريق ↔ المستعمرة
+Party ↔ Hero=الفريق ↔ البطل
+Affinity increased!=زادت الألفة!
+Affinity maxed out!=بلغت الألفة حدها الأقصى!
+New conversation unlocked.=محادثة جديدة مُفتَحَت.
+Heart-to-Heart event available.=حدث قلب إلى قلب متاح.
+Interlink bonus unlocked.=مكافأة الترابط مُفتَحَت.
+Colony affinity increased with %1.=زادت ألفة المستعمرة مع %1.
+Hero affinity maxed: %1.=بلغت ألفة البطل حدها الأقصى: %1.
+Affinity Growth Rate Up=زيادة معدل نمو الألفة
+Bond Level 1: Acquaintance=مستوى الرابطة 1: معرفة
+Bond Level 2: Companion=مستوى الرابطة 2: رفيق
+Bond Level 3: Friend=مستوى الرابطة 3: صديق
+Bond Level 4: Close Friend=مستوى الرابطة 4: صديق مقرب
+Bond Level 5: Soulmate=مستوى الرابطة 5: توأم الروح
+
+# ============================================================
+# القسم 338: الدروس التعليمية - أساسيات
+# Section 338: Tutorials - Basics
+# ============================================================
+
+Tutorial=درس تعليمي
+New Tutorial Available=درس تعليمي جديد متاح
+Tutorial Complete=اكتمل الدرس التعليمي
+Basic Controls=التحكم الأساسي
+Camera Controls=التحكم بالكاميرا
+Movement=الحركة
+Sprint=الركض السريع
+Jump=القفز
+Interact=التفاعل
+Menu Navigation=التنقل في القائمة
+Map Usage=استخدام الخريطة
+Fast Travel=التنقل السريع
+Save/Load=الحفظ/التحميل
+System Settings=إعدادات النظام
+The left stick controls character movement.=العصا اليسرى تتحكم بحركة الشخصية.
+Press B to jump. Hold B to sprint.=اضغط B للقفز. أمسك B للركض السريع.
+Press A near objects or people to interact.=اضغط A بالقرب من الأشياء أو الأشخاص للتفاعل.
+Open the map with the minus button.=افتح الخريطة بزر الناقص.
+Fast travel to any previously visited landmark.=انتقل سريعاً إلى أي معلم زرته سابقاً.
+
+# ============================================================
+# القسم 339: دروس القتال
+# Section 339: Combat Tutorials
+# ============================================================
+
+Auto-Attack=الهجوم التلقائي
+Battle Arts=فنون المعركة
+Talent Art=فن الموهبة
+Master Art=فن الإتقان
+Cancel Attack=هجوم الإلغاء
+Positional Arts=فنون الموقع
+Role: Attacker=الدور: مهاجم
+Role: Defender=الدور: مدافع
+Role: Healer=الدور: معالج
+Aggro Management=إدارة الاستفزاز
+Chain Attack=الهجوم المتسلسل
+Burst=الانفجار
+Overkill=القتل المفرط
+Combo Routes=مسارات التوليفة
+Break > Topple > Launch > Smash=كسر > إسقاط > إطلاق > تحطيم
+Daze > Burst=ذهول > انفجار
+Your character automatically attacks nearby enemies.=شخصيتك تهاجم الأعداء القريبين تلقائياً.
+Use Arts by pressing the corresponding button when they're charged.=استخدم الفنون بالضغط على الزر المقابل عندما تكون مشحونة.
+Cancel attacks deal extra damage by timing them with auto-attacks.=هجمات الإلغاء تسبب ضرراً إضافياً بتوقيتها مع الهجمات التلقائية.
+Position yourself behind or to the side of enemies for bonus effects.=ضع نفسك خلف أو بجانب الأعداء لتأثيرات إضافية.
+Attackers deal damage. Defenders draw aggro. Healers restore HP.=المهاجمون يسببون الضرر. المدافعون يجذبون الاستفزاز. المعالجون يستعيدون الصحة.
+
+# ============================================================
+# القسم 340: دروس الاستكشاف
+# Section 340: Exploration Tutorials
+# ============================================================
+
+Field Skills=مهارات الميدان
+Climbing=التسلق
+Swimming=السباحة
+Rope Sliding=الانزلاق بالحبل
+Wall Running=الركض على الجدران
+Ether Surfing=ركوب أمواج الأثير
+Container=حاوية
+Collectible Spot=نقطة تجميع
+Landmark Discovered=تم اكتشاف معلم
+Secret Area Found=تم اكتشاف منطقة سرية
+Rest Spot=نقطة راحة
+Unique Monster Spotted=تم رصد وحش فريد
+Approach containers to collect their contents.=اقترب من الحاويات لجمع محتوياتها.
+Some areas require specific field skills to access.=بعض المناطق تتطلب مهارات ميدان محددة للوصول إليها.
+Discover landmarks to unlock fast travel points.=اكتشف المعالم لفتح نقاط التنقل السريع.
+Secret areas contain rare treasures and powerful enemies.=المناطق السرية تحتوي على كنوز نادرة وأعداء أقوياء.
+Rest at camps to cook meals and level up.=استرح في المعسكرات لطبخ الوجبات ورفع المستوى.
+
+# ============================================================
+# القسم 341: دروس الأوروبوروس والترابط
+# Section 341: Interlink & Ouroboros Tutorials
+# ============================================================
+
+Interlink=الترابط
+Ouroboros Form=هيئة الأوروبوروس
+Interlink Level=مستوى الترابط
+Heat Gauge=مقياس الحرارة
+Overheat=فرط الحرارة
+Interlink Arts=فنون الترابط
+Interlink Skill=مهارة الترابط
+Pair: Noah & Mio=الزوج: نوح وميو
+Pair: Lanz & Sena=الزوج: لانز وسينا
+Pair: Eunie & Taion=الزوج: يوني وتايون
+Press the left bumper to Interlink with your partner.=اضغط المصد الأيسر للترابط مع شريكك.
+The Heat Gauge fills during Interlink. If it maxes out, you'll revert.=مقياس الحرارة يمتلئ أثناء الترابط. إذا امتلأ، ستعود لهيئتك الأصلية.
+Use Interlink Arts for devastating attacks.=استخدم فنون الترابط لهجمات مدمرة.
+Higher Interlink levels unlock more powerful Ouroboros forms.=مستويات ترابط أعلى تفتح هيئات أوروبوروس أقوى.
+Both partners share HP during Interlink.=كلا الشريكين يتشاركان نقاط الصحة أثناء الترابط.
+Switch the dominant partner to access different Arts and abilities.=بدّل الشريك المسيطر للوصول إلى فنون وقدرات مختلفة.
+
+# ============================================================
+# القسم 342: دروس الهجوم المتسلسل
+# Section 342: Chain Attack Tutorials
+# ============================================================
+
+Chain Attack=الهجوم المتسلسل
+Chain Gauge=مقياس السلسلة
+Chain Order=ترتيب السلسلة
+Tactical Points (TP)=النقاط التكتيكية (TP)
+Completion Bonus=مكافأة الإكمال
+Overkill Bonus=مكافأة القتل المفرط
+Brave Order=أمر الشجاعة
+Heroic Chain=سلسلة بطولية
+Chain Combo=توليفة السلسلة
+The Chain Gauge fills as you fight. When full, activate a Chain Attack.=مقياس السلسلة يمتلئ أثناء القتال. عندما يمتلئ، فعّل الهجوم المتسلسل.
+Choose party members to attack in sequence for massive damage.=اختر أعضاء الفريق للهجوم بالتسلسل لضرر هائل.
+Each character's Order adds TP. Reach 100% to complete a round.=أمر كل شخصية يضيف TP. اوصل لـ 100% لإكمال جولة.
+Completing multiple rounds increases damage significantly.=إكمال جولات متعددة يزيد الضرر بشكل كبير.
+Heroes can perform special Heroic Chain attacks.=الأبطال يستطيعون تنفيذ هجمات سلسلة بطولية خاصة.
+Overkill damage earns bonus EXP and rewards.=ضرر القتل المفرط يكسب خبرة ومكافآت إضافية.
+
+# ============================================================
+# القسم 343: دروس صناعة الأحجار الكريمة
+# Section 343: Gem Crafting Tutorials
+# ============================================================
+
+Gem Crafting=صناعة الأحجار الكريمة
+Gem Workshop=ورشة الأحجار الكريمة
+Gem Rank=رتبة الجوهرة
+Gem Effect=تأثير الجوهرة
+Gem Slot=خانة الجوهرة
+Crafting Materials=مواد الصناعة
+Craft Gem=صناعة جوهرة
+Upgrade Gem=ترقية الجوهرة
+Visit a Gem Workshop at any colony to craft gems.=زُر ورشة أحجار كريمة في أي مستعمرة لصناعة الأحجار.
+Higher-rank gems require rarer materials.=الأحجار ذات الرتب الأعلى تتطلب مواداً أندر.
+Each character can equip up to 3 gems.=كل شخصية يمكنها تجهيز حتى 3 أحجار كريمة.
+Gems provide passive bonuses to combat stats.=الأحجار الكريمة توفر مكافآت سلبية لإحصائيات القتال.
+Some gems enhance specific class roles.=بعض الأحجار الكريمة تعزز أدواراً محددة للفئات.
+Combine materials to discover new gem recipes.=ادمج المواد لاكتشاف وصفات أحجار جديدة.
+
+# ============================================================
+# القسم 344: دروس الطبخ والراحة
+# Section 344: Cooking & Rest Tutorials
+# ============================================================
+
+Cooking=الطبخ
+Rest=الراحة
+Camp=المعسكر
+Meal Effect=تأثير الوجبة
+Cooking Bonus=مكافأة الطبخ
+Recipe Unlocked=تم فتح وصفة
+Meal Duration=مدة تأثير الوجبة
+Rest at a camp to cook meals and manage your party.=استرح في المعسكر لطبخ الوجبات وإدارة فريقك.
+Meals provide temporary stat boosts for battle.=الوجبات توفر تعزيزات مؤقتة للإحصائيات في المعركة.
+Better ingredients produce more powerful meal effects.=مكونات أفضل تنتج تأثيرات وجبات أقوى.
+Discover new recipes by trying different ingredient combinations.=اكتشف وصفات جديدة بتجريب تركيبات مكونات مختلفة.
+You can also level up, change classes, and craft gems while resting.=يمكنك أيضاً رفع المستوى وتغيير الفئات وصناعة الأحجار أثناء الراحة.
+Resting triggers conversations between party members.=الراحة تُفعّل محادثات بين أعضاء الفريق.
+
+# ============================================================
+# القسم 345: أحداث القلب إلى القلب
+# Section 345: Heart-to-Heart Events
+# ============================================================
+
+Heart-to-Heart=قلب إلى قلب
+Heart-to-Heart Event=حدث قلب إلى قلب
+New Heart-to-Heart Available=حدث قلب إلى قلب جديد متاح
+Choose a Response=اختر رداً
+Response Selected=تم اختيار الرد
+Affinity Changed=تغيرت الألفة
+I understand how you feel.=أفهم شعورك.
+That's a tough situation.=هذا موقف صعب.
+Let's figure it out together.=لنكتشف ذلك معاً.
+I think you should follow your heart.=أظن أنه عليك اتباع قلبك.
+There's no wrong answer here.=لا توجد إجابة خاطئة هنا.
+What matters is that we're together.=المهم أننا معاً.
+We've come so far. Don't give up now.=قطعنا شوطاً طويلاً. لا تستسلم الآن.
+The future is ours to decide.=المستقبل لنا نحن لنقرره.
+I believe in you. Always have.=أؤمن بك. دائماً آمنت.
+That's what friends are for, right?=هذا ما يفعله الأصدقاء، أليس كذلك؟
+
+# ============================================================
+# القسم 346: مواضيع النقاش في الراحة
+# Section 346: Rest Discussion Topics
+# ============================================================
+
+Discussion Topic=موضوع نقاش
+New Discussion Available=نقاش جديد متاح
+About the Colony=عن المستعمرة
+About the Future=عن المستقبل
+About Our Journey=عن رحلتنا
+About Freedom=عن الحرية
+About the Off-Seers=عن مُنشدي الوداع
+About Moebius=عن الميبيوس
+About the City=عن المدينة
+About the Flame Clocks=عن ساعات اللهب
+About Origin=عن الأوريجن
+About Interlink=عن الترابط
+About the Heroes=عن الأبطال
+About Cooking=عن الطبخ
+About the War=عن الحرب
+Fond Memories=ذكريات جميلة
+Hopes and Dreams=آمال وأحلام
+Regrets=ندم
+What Comes After=ما يأتي بعد ذلك
+
+# ============================================================
+# القسم 347: رسائل تطور الفئات
+# Section 347: Class Rank Up Messages
+# ============================================================
+
+Class Rank Up!=ترقية رتبة الفئة!
+%1 reached Rank %2 in %3.=%1 وصل إلى الرتبة %2 في %3.
+New Art Unlocked: %1=فن جديد مُفتَح: %1
+New Skill Unlocked: %1=مهارة جديدة مُفتَحَت: %1
+Class Mastered!=تم إتقان الفئة!
+%1 has mastered the %2 class!=%1 أتقن فئة %2!
+Master Art now available for other classes.=فن الإتقان متاح الآن للفئات الأخرى.
+Master Skill now available for other classes.=مهارة الإتقان متاحة الآن للفئات الأخرى.
+You can now inherit this Art to other classes.=يمكنك الآن توريث هذا الفن لفئات أخرى.
+Class CP earned: %1=نقاط فئة مكتسبة: %1
+Bonus CP earned from affinity: %1=نقاط فئة إضافية من الألفة: %1
+
+# ============================================================
+# القسم 348: فتح المهارات والفنون الجديدة
+# Section 348: New Skills & Arts Unlock Messages
+# ============================================================
+
+New Art Learned!=تم تعلم فن جديد!
+New Skill Learned!=تم تعلم مهارة جديدة!
+Art Upgraded!=تم ترقية الفن!
+Skill Upgraded!=تم ترقية المهارة!
+%1 learned the Art: %2=%1 تعلم الفن: %2
+%1 learned the Skill: %2=%1 تعلم المهارة: %2
+Art Level increased to %1.=ارتفع مستوى الفن إلى %1.
+Skill Level increased to %1.=ارتفع مستوى المهارة إلى %1.
+Master Art available: %1=فن الإتقان متاح: %1
+Master Skill available: %1=مهارة الإتقان متاحة: %1
+Set this Art in the Art Palette.=ضع هذا الفن في لوحة الفنون.
+Equip this Skill in the Skill slots.=جهّز هذه المهارة في خانات المهارات.
+
+# ============================================================
+# القسم 349: رسائل الإنجاز والتقدم
+# Section 349: Achievement & Progress Messages
+# ============================================================
+
+Achievement Unlocked!=تم فتح إنجاز!
+Achievement: %1=الإنجاز: %1
+Progress: %1/%2=التقدم: %1/%2
+Milestone Reached!=تم بلوغ مرحلة!
+New Title Earned: %1=لقب جديد مكتسب: %1
+Quest Completion: %1%=إكمال المهام: %1%
+Map Completion: %1%=إكمال الخريطة: %1%
+Bestiary Completion: %1%=إكمال سجل الوحوش: %1%
+Collectopaedia Completion: %1%=إكمال الموسوعة: %1%
+Total Play Time: %1=إجمالي وقت اللعب: %1
+Enemies Defeated: %1=أعداء مهزومون: %1
+Steps Taken: %1=خطوات مُتخذة: %1
+Items Collected: %1=أغراض مجموعة: %1
+Meals Cooked: %1=وجبات مطبوخة: %1
+Gems Crafted: %1=أحجار كريمة مصنوعة: %1
+
+# ============================================================
+# القسم 350: نصوص حفظ/تحميل وخيارات النظام
+# Section 350: Save/Load & System Options
+# ============================================================
+
+Save Game=حفظ اللعبة
+Load Game=تحميل اللعبة
+Auto Save=حفظ تلقائي
+Quick Save=حفظ سريع
+Save Slot %1=خانة الحفظ %1
+Overwrite Save?=استبدال الحفظ؟
+Save Complete=اكتمل الحفظ
+Load Complete=اكتمل التحميل
+Are you sure you want to load this save?=هل أنت متأكد أنك تريد تحميل هذا الحفظ؟
+Unsaved progress will be lost.=التقدم غير المحفوظ سيُفقد.
+Brightness=السطوع
+Sound Volume=مستوى الصوت
+BGM Volume=مستوى الموسيقى
+SFX Volume=مستوى المؤثرات الصوتية
+Voice Volume=مستوى الأصوات
+Subtitle Size=حجم الترجمة
+Camera Sensitivity=حساسية الكاميرا
+Minimap Rotation=دوران الخريطة المصغرة
+Controller Vibration=اهتزاز وحدة التحكم
+Language=اللغة
+
+# ============================================================
+# القسم 351: أنظمة DLC - مقياس الوحدة
+# Section 351: DLC Systems - Unity Gauge
+# ============================================================
+
+Unity Gauge=مقياس الوحدة
+Unity Level=مستوى الوحدة
+Unity Points=نقاط الوحدة
+Unity Bonus=مكافأة الوحدة
+Unity increased!=زادت الوحدة!
+The Unity Gauge measures the bond between worlds.=مقياس الوحدة يقيس الرابطة بين العوالم.
+Higher Unity unlocks new abilities and story content.=وحدة أعلى تفتح قدرات جديدة ومحتوى قصة.
+Complete quests and defeat enemies to increase Unity.=أكمل المهام واهزم الأعداء لزيادة الوحدة.
+Unity Level Up! New content available.=ارتفع مستوى الوحدة! محتوى جديد متاح.
+Maximum Unity reached!=تم بلوغ الوحدة القصوى!
+
+# ============================================================
+# القسم 352: أنظمة DLC - مجتمع الحدود
+# Section 352: DLC Systems - Boundary Community
+# ============================================================
+
+Community Level=مستوى المجتمع
+Community Points=نقاط المجتمع
+Community Upgrade=ترقية المجتمع
+Build Structure=بناء هيكل
+Upgrade Structure=ترقية هيكل
+Community Shop=متجر المجتمع
+Community Workshop=ورشة المجتمع
+Community Barracks=ثكنة المجتمع
+Community Farm=مزرعة المجتمع
+Community complete! All structures built.=اكتمل المجتمع! جميع الهياكل بُنيت.
+
+# ============================================================
+# القسم 353: أنظمة DLC - نمو الألفة المتقدم
+# Section 353: DLC Systems - Advanced Affinity Growth
+# ============================================================
+
+Cross-Era Bond=رابطة عبر العصور
+Shulk ↔ Rex Bond=رابطة شولك ↔ ريكس
+Shulk ↔ Matthew Bond=رابطة شولك ↔ ماثيو
+Rex ↔ Matthew Bond=رابطة ريكس ↔ ماثيو
+Fiora ↔ Nia Bond=رابطة فيورا ↔ نيا
+Melia ↔ A Bond=رابطة ميليا ↔ A
+Cross-Era Bond Strengthened!=تعززت رابطة عبر العصور!
+Legacy Skill unlocked through cross-era bond.=مهارة الإرث مُفتَحَت عبر رابطة عبر العصور.
+The heroes of different eras resonate with each other.=أبطال العصور المختلفة يتناغمون مع بعضهم.
+A new technique born from the fusion of two eras.=تقنية جديدة وُلدت من اندماج عصرين.
+
+# ============================================================
+# القسم 354: أنظمة DLC - تقنيات حصرية
+# Section 354: DLC Systems - Exclusive Techniques
+# ============================================================
+
+Monado Enchant=سحر الموناريد
+Aegis Burst=انفجار الدرع
+Cross Slash=القطع المتقاطع
+Pneuma Drive=دافع بنيوما
+Monado Shield=درع الموناريد
+Predictive Art=فن التنبؤ
+Conduit Resonance=رنين القناة
+Boundary Break=كسر الحدود
+Dimensional Strike=ضربة بُعدية
+Era Fusion=اندماج العصور
+These techniques combine powers from different eras.=هذه التقنيات تجمع قوى من عصور مختلفة.
+Only available when cross-era bonds are strong enough.=متاحة فقط عندما تكون روابط عبر العصور قوية بما يكفي.
+
+# ============================================================
+# القسم 355: ملخص الأنظمة والواجهات
+# Section 355: Systems & UI Summary
+# ============================================================
+
+Total Tutorials Completed=إجمالي الدروس المكتملة
+Total Heart-to-Hearts=إجمالي أحداث القلب
+Total Discussions=إجمالي النقاشات
+Soul Tree Completion: %1%=إكمال شجرة الروح: %1%
+Affinity Chart Completion: %1%=إكمال مخطط الألفة: %1%
+System Category: Combat=فئة النظام: القتال
+System Category: Exploration=فئة النظام: الاستكشاف
+System Category: Social=فئة النظام: اجتماعي
+System Category: Crafting=فئة النظام: الصناعة
+System Category: DLC=فئة النظام: المحتوى الإضافي
+
+# --- نهاية الأنظمة والواجهات ---
+# End of Systems & UI
+# Total sections: 336-355 (Systems & UI)
+
+# ============================================================
+# القسم 356: مقطوعات القصة الرئيسية
+# Section 356: Main Story BGM Tracks
+# ============================================================
+
+Main Theme - Xenoblade Chronicles 3=الموضوع الرئيسي - Xenoblade Chronicles 3
+Title Screen=شاشة العنوان
+A Life Sent On=حياة أُرسلت
+Where We Belong=حيث ننتمي
+Carrying the Weight of Life=حمل ثقل الحياة
+The Weight of Life=ثقل الحياة
+A Step Away=خطوة واحدة
+Moebius Battle=معركة الميبيوس
+Z Battle Theme=موضوع معركة Z
+The God-Slaying Sword=سيف قاتل الآلهة
+Noah and N=نوح و إن
+Endings and Beginnings=نهايات وبدايات
+A Fading Memory=ذكرى تتلاشى
+The Sound of Your Flute=صوت نايك
+Walking Together=نسير معاً
+See You Tomorrow=أراك غداً
+A World With You=عالم معك
+Our Endless Now=الآن اللانهائي لنا
+Credits Theme=موضوع الأرصدة
+
+# ============================================================
+# القسم 357: مقطوعات القتال
+# Section 357: Battle BGM Tracks
+# ============================================================
+
+You Will Know Our Names - Finale=ستعرفون أسماءنا - الخاتمة
+Battle!! (Keves)=معركة!! (كيفيس)
+Battle!! (Agnus)=معركة!! (أغنوس)
+Agnus Battle Theme=موضوع معركة أغنوس
+Keves Battle Theme=موضوع معركة كيفيس
+Chain Attack Theme=موضوع الهجوم المتسلسل
+Boss Battle=معركة الرئيس
+Unique Monster Battle=معركة الوحش الفريد
+Colony Liberation Battle=معركة تحرير المستعمرة
+Ouroboros Awakening=يقظة الأوروبوروس
+Interlink Battle=معركة الترابط
+Final Boss Phase 1=الرئيس النهائي - المرحلة 1
+Final Boss Phase 2=الرئيس النهائي - المرحلة 2
+Challenge Battle Theme=موضوع معركة التحدي
+Superboss Battle=معركة الرئيس الخارق
+DLC Battle Theme=موضوع معركة المحتوى الإضافي
+
+# ============================================================
+# القسم 358: مقطوعات المناطق
+# Section 358: Area BGM Tracks
+# ============================================================
+
+Aetia - Day=أيتيا - نهار
+Aetia - Night=أيتيا - ليل
+Fornis Region - Day=منطقة فورنيس - نهار
+Fornis Region - Night=منطقة فورنيس - ليل
+Pentelas Region - Day=منطقة بينتولاس - نهار
+Pentelas Region - Night=منطقة بينتولاس - ليل
+Cadensia Region - Day=منطقة كادنسيا - نهار
+Cadensia Region - Night=منطقة كادنسيا - ليل
+Maktha Wildwood - Day=غابة ماكثا - نهار
+Maktha Wildwood - Night=غابة ماكثا - ليل
+The City=المدينة
+Colony Theme=موضوع المستعمرة
+Origin Interior=داخل الأوريجن
+Keves Castle=قلعة كيفيس
+Agnus Castle=قلعة أغنوس
+Prison Island (Revisited)=جزيرة السجن (معاد زيارتها)
+DLC Area - Day=منطقة المحتوى الإضافي - نهار
+DLC Area - Night=منطقة المحتوى الإضافي - ليل
+
+# ============================================================
+# القسم 359: مقطوعات المشاهد السينمائية
+# Section 359: Cutscene BGM Tracks
+# ============================================================
+
+A Moment of Calm=لحظة هدوء
+Sorrow and Resolve=حزن وعزيمة
+Bonds Eternal=روابط أبدية
+Confrontation=المواجهة
+Dawn of a New Day=فجر يوم جديد
+Despair's Edge=حافة اليأس
+Hope Rising=الأمل يتصاعد
+Liberation=التحرير
+Memory of the Lost=ذكرى الضائعين
+Promise of Reunion=وعد اللقاء
+The Truth Revealed=الحقيقة تُكشف
+Tragedy Strikes=المأساة تضرب
+Unwavering Will=إرادة لا تتزعزع
+Victory Fanfare=نشيد النصر
+World's End=نهاية العالم
+
+# ============================================================
+# القسم 360: مقطوعات DLC
+# Section 360: DLC BGM Tracks
+# ============================================================
+
+Future Redeemed - Main Theme=المستقبل المُستردّ - الموضوع الرئيسي
+Future Redeemed - Battle=المستقبل المُستردّ - المعركة
+Future Redeemed - Boss=المستقبل المُستردّ - الرئيس
+Future Redeemed - Exploration=المستقبل المُستردّ - الاستكشاف
+Future Redeemed - Final Battle=المستقبل المُستردّ - المعركة النهائية
+Monado Awakening=يقظة الموناريد
+Aegis Resonance=رنين الدرع
+Cross-Era Battle Theme=موضوع معركة عبر العصور
+Boundary Theme=موضوع الحدود
+A Future Redeemed=مستقبل مُستردّ
+
+# ============================================================
+# القسم 361: أغاني مُنشد الوداع
+# Section 361: Off-Seer Songs
+# ============================================================
+
+Off-Seer Melody=لحن مُنشد الوداع
+Noah's Flute Song=أغنية ناي نوح
+Mio's Flute Song=أغنية ناي ميو
+Duet: Noah & Mio=ثنائي: نوح وميو
+The Melody of Farewell=لحن الوداع
+Sending the Departed=توديع الراحلين
+Song for the Fallen=أغنية للذين سقطوا
+A Prayer for Peace=صلاة من أجل السلام
+The Last Song=الأغنية الأخيرة
+Melody of Memory=لحن الذاكرة
+The flute carries the souls of the fallen to their rest.=الناي يحمل أرواح الذين سقطوا إلى راحتهم.
+An Off-Seer's duty is to send the fallen with honor.=واجب مُنشد الوداع هو توديع الذين سقطوا بشرف.
+The melody connects the living to those who came before.=اللحن يربط الأحياء بمن سبقوهم.
+Two flutes, one song. A bridge between Keves and Agnus.=نايان، أغنية واحدة. جسر بين كيفيس وأغنوس.
+
+# ============================================================
+# القسم 362: أوصاف المقطوعات في مشغل الصوت
+# Section 362: Sound Player Descriptions
+# ============================================================
+
+Sound Player=مشغل الصوت
+Now Playing: %1=يُشغَّل الآن: %1
+Track %1 of %2=المقطوعة %1 من %2
+Category: Story=الفئة: القصة
+Category: Battle=الفئة: القتال
+Category: Area=الفئة: المنطقة
+Category: Cutscene=الفئة: المشهد السينمائي
+Category: DLC=الفئة: المحتوى الإضافي
+Category: Off-Seer=الفئة: مُنشد الوداع
+Unlocked by progressing through the story.=يُفتح بالتقدم في القصة.
+Unlocked by discovering the area.=يُفتح باكتشاف المنطقة.
+Unlocked by completing the quest.=يُفتح بإكمال المهمة.
+Play=تشغيل
+Pause=إيقاف مؤقت
+Stop=إيقاف
+Repeat=إعادة
+Shuffle=ترتيب عشوائي
+
+# ============================================================
+# القسم 363: صور المعرض
+# Section 363: Gallery Images
+# ============================================================
+
+Gallery=المعرض
+Image Gallery=معرض الصور
+Event Gallery=معرض الأحداث
+Character Art=رسوم الشخصيات
+Promotional Art=رسوم ترويجية
+Image Unlocked=تم فتح صورة
+New Gallery Image=صورة معرض جديدة
+Chapter 1 Gallery=معرض الفصل 1
+Chapter 2 Gallery=معرض الفصل 2
+Chapter 3 Gallery=معرض الفصل 3
+Chapter 4 Gallery=معرض الفصل 4
+Chapter 5 Gallery=معرض الفصل 5
+Chapter 6 Gallery=معرض الفصل 6
+Chapter 7 Gallery=معرض الفصل 7
+DLC Gallery=معرض المحتوى الإضافي
+Ending Gallery=معرض النهاية
+
+# ============================================================
+# القسم 364: أوصاف الرسوم المفاهيمية
+# Section 364: Concept Art Descriptions
+# ============================================================
+
+Concept Art=رسوم مفاهيمية
+Character Design: %1=تصميم الشخصية: %1
+Location Design: %1=تصميم الموقع: %1
+Monster Design: %1=تصميم الوحش: %1
+Weapon Design: %1=تصميم السلاح: %1
+Early concept of the main cast.=مفهوم مبكر للمجموعة الرئيسية.
+Design evolution of Noah's Ouroboros form.=تطور تصميم هيئة أوروبوروس نوح.
+Concept art for the Aionios landscape.=رسوم مفاهيمية لمشهد أيونيوس.
+Design sketches for the Flame Clocks.=رسومات تصميم ساعات اللهب.
+Ferronis mech design variations.=تنويعات تصميم آلة الفيرونيس.
+Origin interior concept exploration.=استكشاف مفهوم داخل الأوريجن.
+Moebius character design development.=تطوير تصميم شخصيات الميبيوس.
+Colony architecture style guide.=دليل أسلوب هندسة المستعمرات.
+
+# ============================================================
+# القسم 365: مسرح الأحداث
+# Section 365: Event Theater
+# ============================================================
+
+Event Theater=مسرح الأحداث
+Replay Event=إعادة تشغيل الحدث
+Story Events=أحداث القصة
+Side Story Events=أحداث القصص الجانبية
+Heart-to-Heart Events=أحداث قلب إلى قلب
+DLC Events=أحداث المحتوى الإضافي
+Colony Events=أحداث المستعمرات
+Event %1 of %2=الحدث %1 من %2
+Unlocked by completing Chapter %1.=يُفتح بإكمال الفصل %1.
+Replay events from the comfort of your camp.=أعد تشغيل الأحداث من راحة معسكرك.
+Some events have multiple outcomes based on your choices.=بعض الأحداث لها نتائج متعددة بناءً على اختياراتك.
+
+# ============================================================
+# القسم 366: وسائط DLC - مقاطع الأحداث
+# Section 366: DLC Media - Event Scenes
+# ============================================================
+
+Future Redeemed Opening=افتتاحية المستقبل المُستردّ
+Meeting Rex=لقاء ريكس
+Meeting Shulk=لقاء شولك
+The Architect's Message=رسالة المهندس
+The Conduit Awakens=القناة تستيقظ
+Boundary Collapse=انهيار الحدود
+Final Confrontation=المواجهة النهائية
+Future Redeemed Ending=نهاية المستقبل المُستردّ
+A Promise Kept=وعد تم الوفاء به
+Two Worlds, One Future=عالمان، مستقبل واحد
+
+# ============================================================
+# القسم 367: وسائط DLC - محتوى إضافي
+# Section 367: DLC Media - Additional Content
+# ============================================================
+
+Challenge Mode Cutscenes=مشاهد وضع التحدي
+Bonus Character Events=أحداث الشخصيات الإضافية
+Swimsuit Episodes=حلقات ملابس السباحة
+Heroes Reunion=لمّ شمل الأبطال
+NG+ Exclusive Scenes=مشاهد NG+ الحصرية
+Alternative Ending=النهاية البديلة
+Post-Credits Scene=مشهد ما بعد الأرصدة
+Developer Commentary=تعليق المطورين
+Making Of=كيف صُنعت
+Behind the Scenes=خلف الكواليس
+
+# ============================================================
+# القسم 368: أسماء فنانين وملحنين
+# Section 368: Artist & Composer Credits
+# ============================================================
+
+Music Composed by=تأليف موسيقي بواسطة
+Character Design by=تصميم الشخصيات بواسطة
+Art Director=المدير الفني
+Sound Director=مدير الصوت
+Voice Acting=الأداء الصوتي
+Japanese Voice Cast=طاقم الأصوات الياباني
+English Voice Cast=طاقم الأصوات الإنجليزي
+Main Theme Vocalist=مغنية الموضوع الرئيسي
+Orchestra Performance=أداء الأوركسترا
+Sound Effects=المؤثرات الصوتية
+
+# ============================================================
+# القسم 369: وسائط - رسائل خاصة
+# Section 369: Media - Special Messages
+# ============================================================
+
+Thank you for playing!=شكراً على اللعب!
+The adventure continues...=المغامرة تستمر...
+New Game+ Unlocked!=تم فتح لعبة جديدة+!
+All content has been unlocked.=تم فتح جميع المحتوى.
+100% Completion achieved!=تم تحقيق الإكمال 100%!
+You have experienced everything this world has to offer.=لقد اختبرتم كل ما يقدمه هذا العالم.
+But the memories will last forever.=لكن الذكريات ستدوم إلى الأبد.
+Until we meet again...=حتى نلتقي مرة أخرى...
+
+# ============================================================
+# القسم 370: ملخص الموسيقى والوسائط
+# Section 370: Music & Media Summary
+# ============================================================
+
+Total BGM Tracks=إجمالي المقطوعات الموسيقية
+Total Gallery Images=إجمالي صور المعرض
+Total Event Scenes=إجمالي مشاهد الأحداث
+Music Completion: %1%=إكمال الموسيقى: %1%
+Gallery Completion: %1%=إكمال المعرض: %1%
+Event Theater Completion: %1%=إكمال مسرح الأحداث: %1%
+All media unlocked!=تم فتح جميع الوسائط!
+
+# --- نهاية الموسيقى والوسائط ---
+# End of Music & Media
+# Total sections: 356-370 (Music & Media)
+
+# ============================================================
+# القسم 371: حوارات قافلة النوبون
+# Section 371: Nopon Caravan Dialogues
+# ============================================================
+
+Welcome to Nopon Caravan! Best deals in all Aionios!=مرحباً بقافلة النوبون! أفضل الصفقات في أيونيوس كلها!
+Nopon have finest goods, friend! Take look-look!=النوبون لديهم أفضل البضائع، يا صديق! ألقِ نظرة-نظرة!
+You want trade? Nopon always ready for good deal!=تريد مبادلة؟ النوبون دائماً مستعد لصفقة جيدة!
+Meh-meh! That item very rare. Price go up-up!=ميه-ميه! هذا الغرض نادر جداً. السعر يرتفع-يرتفع!
+Nopon Caravan travel between all colonies. We bring goods from everywhere!=قافلة النوبون تسافر بين جميع المستعمرات. نجلب بضائع من كل مكان!
+Secret Nopon merchandise? Only for best-best customers!=بضائع النوبون السرية؟ فقط لأفضل-أفضل الزبائن!
+Nopon hear rumors about Ouroboros. Very impressive-impressive!=النوبون سمع شائعات عن الأوروبوروس. مثير للإعجاب-الإعجاب جداً!
+Come back soon! Nopon always have new stock!=عودوا قريباً! النوبون دائماً لديه مخزون جديد!
+Nopon wisdom say: "Never go to battle on empty stomach!"=حكمة النوبون تقول: "لا تذهب أبداً للمعركة بمعدة فارغة!"
+Meh-meh-meh! You drive hard bargain. Nopon respect that!=ميه-ميه-ميه! أنت مفاوض صعب. النوبون يحترم ذلك!
+
+# ============================================================
+# القسم 372: حوارات استكشاف هياكل الفيرونيس
+# Section 372: Ferronis Hulk Exploration Dialogues
+# ============================================================
+
+This Ferronis... it's been abandoned for a long time.=هذا الفيرونيس... مهجور منذ زمن طويل.
+The machinery here is still functional. We might be able to use it.=الآلات هنا لا تزال تعمل. قد نتمكن من استخدامها.
+Look at these markings. This Ferronis belonged to a colony that no longer exists.=انظروا إلى هذه العلامات. هذا الفيرونيس كان تابعاً لمستعمرة لم تعد موجودة.
+There might be supplies left inside. Let's investigate.=قد تكون هناك إمدادات متبقية في الداخل. لنتحقق.
+The Flame Clock is shattered. This colony was liberated... or destroyed.=ساعة اللهب محطمة. هذه المستعمرة تحررت... أو دُمرت.
+I can feel the echoes of battle here. Many lives were lost.=أستطيع الشعور بأصداء المعركة هنا. أرواح كثيرة فُقدت.
+This place could serve as a forward base for our operations.=هذا المكان يمكن أن يخدم كقاعدة أمامية لعملياتنا.
+We should salvage what we can and move on.=يجب أن نُنقذ ما نستطيع ونمضي قدماً.
+
+# ============================================================
+# القسم 373: حوارات صناعة الأحجار الكريمة
+# Section 373: Gem Crafting Dialogues
+# ============================================================
+
+Let's see what we can craft with these materials.=لنرَ ما يمكننا صنعه بهذه المواد.
+Excellent! A high-quality gem. This will be useful in battle.=ممتاز! جوهرة عالية الجودة. ستكون مفيدة في المعركة.
+Hmm, the materials aren't quite right. We need something better.=حسناً، المواد ليست مناسبة تماماً. نحتاج شيئاً أفضل.
+This gem should boost our defense significantly.=هذه الجوهرة يجب أن تعزز دفاعنا بشكل كبير.
+Riku knows all about gem crafting. He's a natural!=ريكو يعرف كل شيء عن صناعة الأحجار. إنه موهوب طبيعي!
+The gem resonates with ether energy. It's perfect for healers.=الجوهرة تتناغم مع طاقة الأثير. مثالية للمعالجين.
+We need rare ether crystals for the highest-ranked gems.=نحتاج كريستالات أثير نادرة للأحجار ذات الرتبة الأعلى.
+Gem crafting complete! Let's equip it right away.=صناعة الجوهرة مكتملة! لنجهزها فوراً.
+
+# ============================================================
+# القسم 374: حوارات النقاش في المعسكر
+# Section 374: Camp Discussion Dialogues
+# ============================================================
+
+The stars are beautiful tonight. Hard to believe there's a war going on.=النجوم جميلة الليلة. يصعب تصديق أن هناك حرباً دائرة.
+What do you think our lives would be like without the Flame Clocks?=ماذا تظنون ستكون حياتنا بدون ساعات اللهب؟
+I've been thinking about what "home" really means.=كنت أفكر في ما يعنيه "الوطن" حقاً.
+Do you ever wonder what happens after we... you know?=هل تساءلتم يوماً ماذا يحدث بعد أن... تعرفون؟
+The meal was great! Nothing beats eating together after a long day.=الوجبة كانت رائعة! لا شيء يضاهي الأكل معاً بعد يوم طويل.
+Tomorrow we head into enemy territory. Everyone ready?=غداً ننطلق إلى أراضي العدو. الجميع مستعد؟
+I'm grateful for every moment we spend together like this.=أنا ممتن لكل لحظة نقضيها معاً هكذا.
+Let's rest well tonight. We've earned it.=لنسترح جيداً الليلة. نحن نستحق ذلك.
+
+# ============================================================
+# القسم 375: حوارات تبديل الفئة والتطور
+# Section 375: Class Change & Evolution Dialogues
+# ============================================================
+
+I want to try a new fighting style. Time for a class change!=أريد تجربة أسلوب قتال جديد. حان وقت تغيير الفئة!
+This class suits me well. I feel stronger already.=هذه الفئة تناسبني جيداً. أشعر بالقوة بالفعل.
+Mastering multiple classes makes us more versatile in battle.=إتقان فئات متعددة يجعلنا أكثر مرونة في المعركة.
+I've inherited a new Art from this class. Let me show you!=ورثت فناً جديداً من هذه الفئة. دعوني أريكم!
+The more classes we master, the stronger our team becomes.=كلما أتقنا فئات أكثر، أصبح فريقنا أقوى.
+This Master Skill will be useful even when I switch classes.=مهارة الإتقان هذه ستكون مفيدة حتى عندما أبدّل الفئات.
+I never thought I'd be good at healing. This class changed my perspective.=لم أظن أنني سأكون جيداً في الشفاء. هذه الفئة غيرت منظوري.
+Class mastered! Time to move on to the next challenge.=تم إتقان الفئة! حان وقت الانتقال إلى التحدي التالي.
+
+# ============================================================
+# القسم 376: حوارات اكتشاف المواقع الجديدة
+# Section 376: New Location Discovery Dialogues
+# ============================================================
+
+What an incredible view! I've never seen anything like this.=يا لها من إطلالة مذهلة! لم أرَ شيئاً كهذا من قبل.
+This place... I can feel the ether flowing strongly here.=هذا المكان... أستطيع الشعور بالأثير يتدفق بقوة هنا.
+A landmark! Let's register it on the map.=معلم! لنسجله على الخريطة.
+Secret area discovered! I wonder what treasures await us.=منطقة سرية مُكتشَفة! أتساءل أي كنوز تنتظرنا.
+This must be the place the old soldier was talking about.=هذا يجب أن يكون المكان الذي كان الجندي العجوز يتحدث عنه.
+The ruins here predate both Keves and Agnus. How old are they?=الآثار هنا أقدم من كيفيس وأغنوس. كم عمرها؟
+Let's set up camp here. It's a good vantage point.=لنقم بمعسكر هنا. إنها نقطة مراقبة جيدة.
+I can see the whole region from up here. Beautiful.=أستطيع رؤية المنطقة بأكملها من هنا. جميلة.
+
+# ============================================================
+# القسم 377: حوارات الطقس والوقت
+# Section 377: Weather & Time Dialogues
+# ============================================================
+
+Looks like rain. We should find shelter.=يبدو أنها ستمطر. يجب أن نجد مأوى.
+The sandstorm is picking up! We can barely see!=العاصفة الرملية تشتد! بالكاد نستطيع الرؤية!
+Snow... I've never seen it before. It's beautiful.=ثلج... لم أره من قبل. إنه جميل.
+The fog is thick tonight. Stay close, everyone.=الضباب كثيف الليلة. ابقوا قريبين، جميعاً.
+What a beautiful sunset. Let's watch it for a while.=يا له من غروب جميل. لنشاهده لبرهة.
+The stars are out. I wonder which ones are real.=النجوم ظهرت. أتساءل أيها حقيقية.
+Dawn is breaking. A new day, a new chance.=الفجر يبزغ. يوم جديد، فرصة جديدة.
+The moonlight makes the landscape look ethereal.=ضوء القمر يجعل المشهد يبدو أثيرياً.
+
+# ============================================================
+# القسم 378: حوارات التنقل وركوب الحاويات
+# Section 378: Travel & Container Riding Dialogues
+# ============================================================
+
+The container is ready. Hop on!=الحاوية جاهزة. اقفزوا!
+Ether surfing is the fastest way to travel!=ركوب أمواج الأثير أسرع طريقة للتنقل!
+This rope slide connects to the lower area. Let's go!=هذا الحبل المنزلق يصل إلى المنطقة السفلى. هيا!
+The wall running skill lets us reach new areas.=مهارة الركض على الجدران تتيح لنا الوصول إلى مناطق جديدة.
+I can see a shortcut through that cave.=أستطيع رؤية طريق مختصر عبر ذلك الكهف.
+Let's fast travel. We don't have time to walk.=لننتقل سريعاً. ليس لدينا وقت للمشي.
+The path ahead is blocked. We need to find another way.=الطريق أمامنا مسدود. نحتاج إيجاد طريق آخر.
+This field skill should clear the obstacle.=مهارة الميدان هذه يجب أن تزيل العقبة.
+
+# ============================================================
+# القسم 379: حوارات NG+ الحصرية
+# Section 379: NG+ Exclusive Dialogues
+# ============================================================
+
+The Consuls have returned... but this time, we know their weakness.=القناصل عادوا... لكن هذه المرة، نعرف نقطة ضعفهم.
+Everything feels different this time. We're stronger, wiser.=كل شيء يبدو مختلفاً هذه المرة. نحن أقوى، وأحكم.
+The memories from our previous journey guide us.=ذكريات رحلتنا السابقة ترشدنا.
+N... I understand your pain now. But I've found a better way.=إن... أفهم ألمك الآن. لكنني وجدت طريقاً أفضل.
+This time, we'll save everyone. No exceptions.=هذه المرة، سننقذ الجميع. بلا استثناء.
+The world is the same, but we are not. That makes all the difference.=العالم نفسه، لكننا لسنا كذلك. هذا يصنع كل الفرق.
+I can see the threads of fate more clearly now.=أستطيع رؤية خيوط القدر بوضوح أكبر الآن.
+Let's rewrite this story with our own hands.=لنعد كتابة هذه القصة بأيدينا.
+
+# ============================================================
+# القسم 380: حوارات وضع التحدي
+# Section 380: Challenge Battle Mode Dialogues
+# ============================================================
+
+Challenge Mode activated! Prepare for intense battles!=تم تفعيل وضع التحدي! استعدوا لمعارك شديدة!
+This challenge pits you against the strongest foes in Aionios.=هذا التحدي يضعكم في مواجهة أقوى الأعداء في أيونيوس.
+New challenge available! Think you can handle it?=تحدٍّ جديد متاح! تظنون أنكم تستطيعون التعامل معه؟
+Your record has been saved. Can you beat it next time?=سجلكم تم حفظه. هل تستطيعون التغلب عليه المرة القادمة؟
+Incredible! You've cleared all challenge stages!=مذهل! لقد تجاوزتم جميع مراحل التحدي!
+The legendary warriors of Aionios acknowledge your strength.=المحاربون الأسطوريون في أيونيوس يعترفون بقوتكم.
+Challenge rewards have been updated. New items available!=مكافآت التحدي تم تحديثها. أغراض جديدة متاحة!
+The ultimate challenge awaits. Are you truly ready?=التحدي النهائي ينتظر. هل أنتم مستعدون حقاً؟
+
+# ============================================================
+# القسم 381: حوارات Superboss (الجزء 1)
+# Section 381: Superboss Dialogues (Part 1)
+# ============================================================
+
+This creature's power... it's beyond anything we've faced!=قوة هذا المخلوق... تتجاوز أي شيء واجهناه!
+Everyone, stay focused! One mistake and we're done for!=الجميع، ابقوا مركزين! خطأ واحد وسننتهي!
+Its attacks are devastating. We need to time our Interlinks perfectly.=هجماته مدمرة. نحتاج أن نوقّت ترابطاتنا بدقة تامة.
+Now! Chain Attack while it's recovering!=الآن! هجوم متسلسل بينما يتعافى!
+It's charging up something massive. Brace yourselves!=يشحن شيئاً هائلاً. تأهبوا!
+We've weakened it! Keep up the pressure!=أضعفناه! استمروا بالضغط!
+That was close! Healers, keep everyone alive!=كان ذلك قريباً! المعالجون، أبقوا الجميع أحياء!
+We did it! We actually defeated it!=فعلناها! هزمناه فعلاً!
+
+# ============================================================
+# القسم 382: حوارات Superboss (الجزء 2)
+# Section 382: Superboss Dialogues (Part 2)
+# ============================================================
+
+This beast has guarded this territory since before Aionios existed.=هذا الوحش حرس هذه المنطقة قبل وجود أيونيوس.
+Legends say it was created by the Architect himself.=الأساطير تقول إنه صُنع بيد المهندس نفسه.
+Its ether signature is off the charts. Be very careful.=بصمة الأثير الخاصة به تتجاوز المقاييس. كونوا حذرين جداً.
+We need a specific strategy. Brute force won't work here.=نحتاج استراتيجية محددة. القوة الغاشمة لن تنفع هنا.
+It regenerates! We need to deal enough damage in one burst.=يتجدد! نحتاج أن نسبب ضرراً كافياً في انفجار واحد.
+The ground is shaking... it's getting serious now.=الأرض تهتز... الأمور تزداد جدية الآن.
+That attack nearly wiped us out. Regroup!=ذلك الهجوم كاد يقضي علينا. أعيدوا التجمع!
+Victory! The legendary beast has fallen!=نصر! الوحش الأسطوري سقط!
+
+# ============================================================
+# القسم 383: حوارات Superboss (الجزء 3)
+# Section 383: Superboss Dialogues (Part 3)
+# ============================================================
+
+I've never felt power like this before. It's incredible.=لم أشعر بقوة كهذه من قبل. مذهلة.
+This creature has been here since the time of the Bionis and Mechonis.=هذا المخلوق كان هنا منذ زمن البيونيس والميكونيس.
+Even the Consuls feared this beast. Now I understand why.=حتى القناصل خافوا من هذا الوحش. الآن أفهم لماذا.
+Our teamwork is the only reason we survived that fight.=عملنا الجماعي هو السبب الوحيد لنجاتنا من تلك المعركة.
+The rare materials from this monster are invaluable.=المواد النادرة من هذا الوحش لا تُقدّر بثمن.
+Let's not fight that thing again anytime soon...=لنتجنب قتال ذلك الشيء مرة أخرى في القريب العاجل...
+
+# ============================================================
+# القسم 384: حوارات Superboss (الجزء 4)
+# Section 384: Superboss Dialogues (Part 4)
+# ============================================================
+
+The dimensional rift spawned something terrible.=الشق البُعدي أنتج شيئاً رهيباً.
+This entity exists outside of time itself.=هذا الكيان موجود خارج الزمن نفسه.
+We're fighting the manifestation of the world's fear.=نحارب تجسيد خوف العالم.
+It adapts to our attacks. We need to keep changing tactics.=يتكيف مع هجماتنا. نحتاج أن نستمر بتغيير التكتيكات.
+The final Superboss... the ultimate test of our strength.=الرئيس الخارق الأخير... الاختبار النهائي لقوتنا.
+We've conquered every challenge Aionios has to offer!=غلبنا كل تحدٍّ يقدمه أيونيوس!
+
+# ============================================================
+# القسم 385: حوارات Superboss (الجزء 5) - مكافآت
+# Section 385: Superboss Dialogues (Part 5) - Rewards
+# ============================================================
+
+Rare Drop acquired!=تم الحصول على سقطة نادرة!
+Superboss Material obtained!=تم الحصول على مادة الرئيس الخارق!
+Achievement unlocked: Legendary Monster Slayer=تم فتح إنجاز: قاتل الوحوش الأسطوري
+New title earned: World's Strongest=لقب جديد مكتسب: الأقوى في العالم
+Unique weapon material obtained. Visit the forge.=تم الحصول على مادة سلاح فريدة. زُر المسبك.
+Superboss entry added to Bestiary.=تمت إضافة مدخل الرئيس الخارق لسجل الوحوش.
+Challenge reward: Supreme Gem unlocked.=مكافأة التحدي: الجوهرة العليا مُفتَحَت.
+All Superbosses defeated! True Warrior title earned.=جميع الرؤساء الخوارق مهزومون! لقب المحارب الحقيقي مكتسب.
+
+# ============================================================
+# القسم 386: حوارات الأحداث الخاصة - المهرجانات
+# Section 386: Special Event Dialogues - Festivals
+# ============================================================
+
+The first inter-colony festival! Everyone's invited!=أول مهرجان بين المستعمرات! الجميع مدعوون!
+Look at all the decorations! The colonies really came together.=انظروا إلى كل الزينة! المستعمرات اتحدت حقاً.
+The food stalls are amazing! Every colony brought their specialty.=أكشاك الطعام مذهلة! كل مستعمرة جلبت تخصصها.
+Music, laughter, and smiles... this is what peace looks like.=موسيقى وضحك وابتسامات... هذا ما يبدو عليه السلام.
+The children are dancing! They've never seen a festival before.=الأطفال يرقصون! لم يروا مهرجاناً من قبل.
+Noah and Mio are playing a duet for everyone. Beautiful.=نوح وميو يعزفان ثنائياً للجميع. جميل.
+Former enemies sharing drinks and stories. This is real.=أعداء سابقون يتشاركون المشروبات والقصص. هذا حقيقي.
+Let's make this an annual tradition. A celebration of life!=لنجعل هذا تقليداً سنوياً. احتفال بالحياة!
+
+# ============================================================
+# القسم 387: حوارات الأحداث الخاصة - الاحتفالات
+# Section 387: Special Event Dialogues - Celebrations
+# ============================================================
+
+Today marks one year since our liberation. One whole year!=اليوم يصادف سنة واحدة منذ تحريرنا. سنة كاملة!
+The colony's first harvest! Let's feast!=أول حصاد للمستعمرة! لنحتفل بوليمة!
+A wedding! The first in our colony's history!=عرس! الأول في تاريخ مستعمرتنا!
+The new school is complete. The children finally have a place to learn.=المدرسة الجديدة مكتملة. الأطفال أخيراً لديهم مكان للتعلم.
+Our colony's population has doubled since liberation!=سكان مستعمرتنا تضاعفوا منذ التحرير!
+The memorial for the fallen is finished. We'll never forget them.=النصب التذكاري للذين سقطوا انتهى. لن ننساهم أبداً.
+Peace treaty signed between all colonies! History has been made!=معاهدة سلام وُقعت بين جميع المستعمرات! التاريخ صُنع!
+A statue of the Ouroboros, in the center of the City. Our heroes.=تمثال الأوروبوروس، في وسط المدينة. أبطالنا.
+
+# ============================================================
+# القسم 388: حوارات أحداث خاصة - المواسم
+# Section 388: Special Event Dialogues - Seasons
+# ============================================================
+
+Spring has come to Aetia. The flowers are blooming everywhere.=الربيع جاء لأيتيا. الأزهار تتفتح في كل مكان.
+Summer in Fornis is brutal. Make sure to stay hydrated.=الصيف في فورنيس قاسٍ. تأكدوا من شرب الماء.
+Autumn in Pentelas. The leaves are turning golden.=خريف في بينتولاس. الأوراق تتحول إلى الذهبي.
+Winter has arrived. The snow covers everything in white.=الشتاء وصل. الثلج يغطي كل شيء بالأبيض.
+The seasonal change brings new collectibles. Time to explore!=تغير الموسم يجلب مقتنيات جديدة. حان وقت الاستكشاف!
+Some monsters only appear during certain seasons.=بعض الوحوش تظهر فقط خلال مواسم معينة.
+The landscape looks completely different in this season.=المشهد يبدو مختلفاً تماماً في هذا الموسم.
+Nature finds a way, even in a world like ours.=الطبيعة تجد طريقاً، حتى في عالم مثل عالمنا.
+
+# ============================================================
+# القسم 389: حوارات أحداث خاصة - لحظات هادئة
+# Section 389: Special Event Dialogues - Quiet Moments
+# ============================================================
+
+Sometimes the most important battles are the ones we fight within ourselves.=أحياناً أهم المعارك هي التي نخوضها مع أنفسنا.
+The sunset reminds me that every ending is also a beginning.=الغروب يذكرني أن كل نهاية هي أيضاً بداية.
+I used to fear the silence. Now I find peace in it.=كنت أخاف الصمت. الآن أجد السلام فيه.
+Do you think the people who came before us would be proud?=هل تظنون أن من سبقونا سيكونون فخورين؟
+The wind carries the scent of flowers. When did that start?=الريح تحمل رائحة الأزهار. متى بدأ ذلك؟
+I want to remember this moment forever. All of us, together.=أريد أن أتذكر هذه اللحظة للأبد. جميعنا، معاً.
+The world is so much bigger than I ever imagined.=العالم أكبر بكثير مما تخيلت.
+Peace isn't the absence of conflict. It's the presence of understanding.=السلام ليس غياب الصراع. إنه وجود التفاهم.
+
+# ============================================================
+# القسم 390: حوارات أحداث خاصة - مجمّعة
+# Section 390: Special Event Dialogues - Compilation
+# ============================================================
+
+We're not just soldiers anymore. We're builders, farmers, teachers, artists.=لم نعد مجرد جنود. نحن بنّاؤون ومزارعون ومعلمون وفنانون.
+The library is growing. Knowledge is the greatest weapon.=المكتبة تنمو. المعرفة هي أعظم سلاح.
+Music brings us together in ways words can't.=الموسيقى تجمعنا بطرق لا تستطيعها الكلمات.
+Every child born free is a victory against Moebius.=كل طفل يُولد حراً هو نصر ضد الميبيوس.
+We chose the uncertain future over the eternal present. And we'd choose it again.=اخترنا المستقبل غير المؤكد على الحاضر الأبدي. وسنختاره مرة أخرى.
+The Flame Clocks are gone, but the fire in our hearts burns brighter.=ساعات اللهب ذهبت، لكن النار في قلوبنا تشتعل بشكل أسطع.
+This is our world now. And we'll make it beautiful.=هذا عالمنا الآن. وسنجعله جميلاً.
+The future is not something to fear. It's something to embrace.=المستقبل ليس شيئاً للخوف منه. إنه شيء لاحتضانه.
+
+# ============================================================
+# القسم 391: عبارات فلسفية - الحياة والموت
+# Section 391: Philosophical Quotes - Life & Death
+# ============================================================
+
+Life is precious because it ends. That's what gives it meaning.=الحياة ثمينة لأنها تنتهي. هذا ما يمنحها المعنى.
+Death is not the opposite of life. It's a part of it.=الموت ليس نقيض الحياة. إنه جزء منها.
+To live is to change. Those who refuse to change refuse to live.=أن تعيش هو أن تتغير. من يرفض التغيير يرفض الحياة.
+Every life touches other lives. That's how we become eternal.=كل حياة تلمس حيوات أخرى. هكذا نصبح أبديين.
+The flame that burns twice as bright burns half as long.=الشعلة التي تشتعل بسطوع مضاعف تحترق بنصف المدة.
+We don't live to die. We die having lived.=لا نعيش لنموت. نموت وقد عشنا.
+Life without death is not life. It's merely existence.=الحياة بدون موت ليست حياة. إنها مجرد وجود.
+The tears we shed for the departed water the seeds of tomorrow.=الدموع التي نذرفها على الراحلين تسقي بذور الغد.
+In the face of death, we find the courage to truly live.=في مواجهة الموت، نجد الشجاعة للعيش حقاً.
+Every ending writes the first word of a new beginning.=كل نهاية تكتب الكلمة الأولى لبداية جديدة.
+
+# ============================================================
+# القسم 392: عبارات فلسفية - الزمن والدورة
+# Section 392: Philosophical Quotes - Time & The Cycle
+# ============================================================
+
+Time is not our enemy. Stagnation is.=الزمن ليس عدونا. الركود هو العدو.
+The cycle of life and death is not a prison. It's a promise.=دورة الحياة والموت ليست سجناً. إنها وعد.
+Those who fear the passage of time miss the beauty of each moment.=الذين يخافون مرور الزمن يفوّتون جمال كل لحظة.
+An eternity without change is just a moment repeated endlessly.=أبدية بدون تغيير هي مجرد لحظة تتكرر بلا نهاية.
+The past shapes us. The present defines us. The future awaits us.=الماضي يشكلنا. الحاضر يعرّفنا. المستقبل ينتظرنا.
+To break the cycle is not to destroy it, but to evolve beyond it.=كسر الدورة ليس تدميرها، بل التطور إلى ما وراءها.
+Every second counts when you know time is finite.=كل ثانية مهمة عندما تعرف أن الزمن محدود.
+The endless now was a lie. True eternity lives in the hearts we touch.=الآن اللانهائي كان كذبة. الأبدية الحقيقية تعيش في القلوب التي نلمسها.
+Time flows forward. And so must we.=الزمن يتدفق للأمام. ونحن كذلك يجب أن نفعل.
+The clock stops, but life goes on. That's the miracle.=الساعة تتوقف، لكن الحياة تستمر. هذه هي المعجزة.
+
+# ============================================================
+# القسم 393: عبارات فلسفية - الحرية والاختيار
+# Section 393: Philosophical Quotes - Freedom & Choice
+# ============================================================
+
+Freedom is not the absence of responsibility. It is the courage to bear it.=الحرية ليست غياب المسؤولية. إنها الشجاعة لتحملها.
+We are defined by our choices, not our circumstances.=نحن نُعرَّف باختياراتنا، لا بظروفنا.
+True freedom means accepting the consequences of your actions.=الحرية الحقيقية تعني قبول عواقب أفعالك.
+To choose is to be human. Even choosing wrong is better than not choosing at all.=أن تختار هو أن تكون إنساناً. حتى الاختيار الخاطئ أفضل من عدم الاختيار أبداً.
+They gave up their freedom for safety. We chose danger for our freedom.=تخلوا عن حريتهم من أجل الأمان. نحن اخترنا الخطر من أجل حريتنا.
+The hardest chains to break are the ones we put on ourselves.=أصعب القيود لكسرها هي تلك التي نضعها على أنفسنا.
+Liberation of the body means nothing without liberation of the mind.=تحرير الجسد لا يعني شيئاً بدون تحرير العقل.
+We walk our own path. That's what it means to be free.=نسير في طريقنا الخاص. هذا ما يعنيه أن تكون حراً.
+Freedom is terrifying. But the alternative is unbearable.=الحرية مرعبة. لكن البديل لا يُحتمل.
+Every step forward is a choice. Every choice is an act of courage.=كل خطوة للأمام هي اختيار. كل اختيار هو عمل شجاعة.
+
+# ============================================================
+# القسم 394: عبارات فلسفية - الروابط والصداقة
+# Section 394: Philosophical Quotes - Bonds & Friendship
+# ============================================================
+
+The bonds we forge are the truest measure of our lives.=الروابط التي نكوّنها هي المقياس الأصدق لحياتنا.
+No one walks alone. Even in the darkest times, someone walks beside you.=لا أحد يسير وحده. حتى في أحلك الأوقات، أحد يسير بجانبك.
+Friendship is the bridge between two hearts that the world cannot break.=الصداقة هي الجسر بين قلبين لا يستطيع العالم كسره.
+We fight together, we fall together, we rise together.=نقاتل معاً، نسقط معاً، ننهض معاً.
+The strength of our bond is our greatest weapon.=قوة رابطتنا هي أعظم سلاح لنا.
+Love isn't weakness. It's the source of our greatest strength.=الحب ليس ضعفاً. إنه مصدر أعظم قوتنا.
+Even when worlds end, the connections between hearts endure.=حتى عندما تنتهي العوالم، الروابط بين القلوب تصمد.
+To fight for someone is to tell them: your life matters.=أن تقاتل من أجل شخص هو أن تقول له: حياتك مهمة.
+The people we love become part of us. They live on in our memories.=الناس الذين نحبهم يصبحون جزءاً منا. يعيشون في ذكرياتنا.
+In the Interlink, two become one. That's the power of trust.=في الترابط، يصبح اثنان واحداً. تلك هي قوة الثقة.
+
+# ============================================================
+# القسم 395: حوارات النهاية البديلة والسرية
+# Section 395: Alternative & Secret Ending Dialogues
+# ============================================================
+
+What if we could have saved everyone? What if there was another way?=ماذا لو كنا نستطيع إنقاذ الجميع؟ ماذا لو كان هناك طريق آخر؟
+The worlds don't have to separate. We can forge a new path.=العوالم لا يجب أن تنفصل. يمكننا شق طريق جديد.
+This isn't goodbye. It's "see you later."=هذا ليس وداعاً. إنه "أراك لاحقاً."
+Even if we forget, our hearts will remember.=حتى لو نسينا، قلوبنا ستتذكر.
+The melody... I've heard it before. In another life, perhaps.=اللحن... سمعته من قبل. في حياة أخرى، ربما.
+No matter how far apart we are, we'll find each other again.=مهما ابتعدنا عن بعضنا، سنجد بعضنا مرة أخرى.
+This world may end, but a new one will be born from its ashes.=هذا العالم قد ينتهي، لكن عالماً جديداً سيُولد من رماده.
+Our story doesn't end here. It continues in the hearts of those who remember.=قصتنا لا تنتهي هنا. تستمر في قلوب من يتذكرون.
+The light of our bonds will guide us through the darkness.=نور روابطنا سيرشدنا عبر الظلام.
+See you tomorrow. Definitely.=أراك غداً. بالتأكيد.
+
+# ============================================================
+# القسم 396: شاشة العناوين والأرصدة
+# Section 396: Title Screen & Credits
+# ============================================================
+
+Xenoblade Chronicles 3=زينوبليد كرونيكلز 3
+Press Any Button=اضغط أي زر
+New Game=لعبة جديدة
+Continue=متابعة
+New Game+=لعبة جديدة+
+Options=خيارات
+DLC=محتوى إضافي
+Expansion Pass=بطاقة التوسع
+MONOLITH SOFT=مونوليث سوفت
+NINTENDO=نينتندو
+Directed by=إخراج
+Produced by=إنتاج
+Executive Producer=المنتج التنفيذي
+Scenario=السيناريو
+Character Design=تصميم الشخصيات
+Music=الموسيقى
+Programming=البرمجة
+Art Direction=الإدارة الفنية
+Game Design=تصميم اللعبة
+Sound Design=تصميم الصوت
+Quality Assurance=ضمان الجودة
+Special Thanks=شكر خاص
+The End=النهاية
+Fin=انتهى
+
+# ============================================================
+# القسم 397: رسائل المطورين وشكر خاص
+# Section 397: Developer Messages & Special Thanks
+# ============================================================
+
+Thank you for playing Xenoblade Chronicles 3.=شكراً على لعب Xenoblade Chronicles 3.
+We hope this story touched your heart.=نأمل أن هذه القصة لمست قلبكم.
+The themes of life, connection, and moving forward are central to this experience.=مواضيع الحياة والتواصل والمضي قدماً هي جوهر هذه التجربة.
+We wanted to create a world where every moment matters.=أردنا خلق عالم تهم فيه كل لحظة.
+The characters' journey is a reflection of our own.=رحلة الشخصيات هي انعكاس لرحلتنا الخاصة.
+Thank you for walking this path with Noah and his friends.=شكراً لسيركم في هذا الطريق مع نوح وأصدقائه.
+This game was made possible by the dedication of hundreds of talented individuals.=هذه اللعبة أصبحت ممكنة بتفاني مئات الأفراد الموهوبين.
+Until we meet again in another adventure...=حتى نلتقي مرة أخرى في مغامرة أخرى...
+
+# ============================================================
+# القسم 398: مصطلحات فنية متقدمة
+# Section 398: Advanced Technical Gaming Terms
+# ============================================================
+
+DPS (Damage Per Second)=الضرر في الثانية (DPS)
+AoE (Area of Effect)=منطقة التأثير (AoE)
+DoT (Damage over Time)=ضرر مستمر عبر الزمن (DoT)
+HoT (Heal over Time)=شفاء مستمر عبر الزمن (HoT)
+Buff=تعزيز
+Debuff=إضعاف
+Cooldown=زمن الانتظار
+Aggro=الاستفزاز
+Tank=الحامي
+DPS Role=دور الضرر
+Healer Role=دور المعالج
+Crowd Control=التحكم بالحشود
+Stagger=ترنح
+Knockback=دفع للخلف
+i-frames=إطارات المناعة
+Hitbox=منطقة الإصابة
+RNG (Random Number Generation)=التوليد العشوائي للأرقام
+Speedrun=اللعب السريع
+Min-Max=التحسين الأقصى
+Meta=الاستراتيجية المثلى
+Tier List=قائمة التصنيف
+Build=البناء/التجهيز
+
+# ============================================================
+# القسم 399: مصطلحات مشتركة مع XC1 وXC2
+# Section 399: Cross-Game Terms (XC1 & XC2)
+# ============================================================
+
+Monado=الموناريد
+Bionis=البيونيس
+Mechonis=الميكونيس
+High Entia=هاي إنتيا
+Nopon=نوبون
+Colony 6=المستعمرة 6
+Shulk=شولك
+Reyn=رين
+Fiora=فيورا
+Dunban=دنبان
+Sharla=شارلا
+Melia=ميليا
+Riki=ريكي
+Alrest=ألريست
+Titan=تيتان
+Aegis=الدرع
+Blade=شفرة
+Driver=سائق
+Rex=ريكس
+Pyra=بايرا
+Mythra=ميثرا
+Nia=نيا
+Brighid=بريجيد
+Pandoria=باندوريا
+Zeke=زيك
+Tora=تورا
+Poppi=بوبي
+Pneuma=بنيوما
+Logos=اللوغوس
+Ontos=الأونتوس
+Architect=المهندس
+Klaus=كلاوس
+Galea=غاليا
+Zanza=زانزا
+Meyneth=مينيث
+Conduit=القناة
+Zohar=الزوهار
+Aether=الأثير
+Ether (XC series)=الأثير (سلسلة XC)
+
+# ============================================================
+# القسم 400: الفهرس الشامل والمراجع
+# Section 400: Master Index & References
+# ============================================================
+
+# --- فهرس الأقسام الرئيسية ---
+# Master Section Index
+
+# الأقسام 1-50: الشخصيات والفئات والفنون والمهارات
+# Sections 1-50: Characters, Classes, Arts & Skills
+
+# الأقسام 51-100: الأحجار الكريمة والأوروبوروس وشجرة الروح
+# Sections 51-100: Gems, Ouroboros & Soul Tree
+
+# الأقسام 101-150: حوارات القصة (الفصول 1-7)
+# Sections 101-150: Story Dialogues (Chapters 1-7)
+
+# الأقسام 151-175: محتوى DLC - Future Redeemed
+# Sections 151-175: DLC Content - Future Redeemed
+
+# الأقسام 176-200: المهام الجانبية ومهام الأبطال
+# Sections 176-200: Side Quests & Hero Quests
+
+# الأقسام 201-227: حوارات الطبخ ونصائح التحميل وإنجازات
+# Sections 201-227: Cooking, Loading Tips & Achievements
+
+# الأقسام 228-250: المواقع والمعالم والمصطلحات العامة
+# Sections 228-250: Locations, Landmarks & General Terms
+
+# الأقسام 251-270: الوحوش والأعداء
+# Sections 251-270: Monsters & Enemies
+
+# الأقسام 271-285: الأسلحة والمعدات
+# Sections 271-285: Weapons & Equipment
+
+# الأقسام 286-300: المقتنيات والمواد
+# Sections 286-300: Collectibles & Materials
+
+# الأقسام 301-335: المهام الجانبية والشخصيات غير اللاعبة
+# Sections 301-335: Side Quests & NPCs
+
+# الأقسام 336-355: الأنظمة والواجهات
+# Sections 336-355: Systems & UI
+
+# الأقسام 356-370: الموسيقى والوسائط
+# Sections 356-370: Music & Media
+
+# الأقسام 371-400: حوارات متقدمة وفلسفة وفهرس
+# Sections 371-400: Advanced Dialogues, Philosophy & Index
+
+# --- معايير الترجمة المعتمدة ---
+# Translation Standards Reference
+
+Ether=الأثير
+Off-Seer=مُنشد الوداع
+Consul=القنصل
+Origin=الأوريجن
+Ouroboros=الأوروبوروس
+Interlink=الترابط
+Flame Clock=ساعة اللهب
+Chain Attack=الهجوم المتسلسل
+Moebius=الميبيوس
+Aionios=أيونيوس
+Master Art=فن الإتقان
+Master Skill=مهارة الإتقان
+Soul Tree=شجرة الروح
+Affinity Chart=مخطط الألفة
+Collectopaedia=موسوعة المقتنيات
+Ferronis=فيرونيس
+Kevesi=كيفيسي
+Agnian=أغنوسي
+The City=المدينة
+Colony=مستعمرة
+
+# ============================================================
+# --- نهاية القاموس الشامل ---
+# End of Comprehensive Glossary
+# Total: 400 sections covering ALL content of Xenoblade Chronicles 3
+# Including: Main Game, DLC Future Redeemed, NG+, Challenge Mode
+# ============================================================
