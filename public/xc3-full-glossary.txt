@@ -2029,3 +2029,245 @@ Memory Shard=شريحة ذاكرة
 Boundary Stone=حجر الحدود
 Void Crystal=بلورة الفراغ
 Unity Shard=شريحة الوحدة
+# ═══════════════════════════════════════════════════
+# نظام الهجوم المتسلسل المتقدم (Chain Attack System)
+# ═══════════════════════════════════════════════════
+Chain Attack=هجوم متسلسل
+Chain Order=أمر السلسلة
+Tactical Points=نقاط تكتيكية
+TP=ن.ت
+Chain Gauge=مقياس السلسلة
+Overkill=قتل مبالغ
+Overkill Bonus=مكافأة القتل المبالغ
+Completion Bonus=مكافأة الإكمال
+Chain Rating=تصنيف السلسلة
+Chain Link=حلقة السلسلة
+Brave Order=أمر شجاع
+# ─────────────────────────────────────────────────
+# أوامر الأبطال في السلسلة (Hero Chain Orders)
+# ─────────────────────────────────────────────────
+Isurugi Order=أمر إيسوروغي
+Ashera Order=أمر أشيرا
+Zeon Order=أمر زيون
+Ethel Order=أمر إيثيل
+Valdi Order=أمر فالدي
+Fiona Order=أمر فيونا
+Triton Order=أمر ترايتون
+Cammuravi Order=أمر كامورافي
+Shijima Order=أمر شيجيما
+Moraine Order=أمر مورين
+Ghondor Order=أمر غوندور
+Isora Order=أمر إيسورا
+Zor Order=أمر زور
+Kotora Order=أمر كوتورا
+Strider Order=أمر سترايدر
+Gray Order=أمر غراي
+Segiri Order=أمر سيغيري
+Miyabi Order=أمر ميابي
+Teach Order=أمر تيتش
+Riku & Manana Order=أمر ريكو ومانانا
+# ─────────────────────────────────────────────────
+# شروط إكمال أوامر السلسلة (Chain Order Completion)
+# ─────────────────────────────────────────────────
+Complete=إكمال
+100% Completion=إكمال 100%
+150% Completion=إكمال 150%
+200% Completion=إكمال 200%
+Excellent Rating=تصنيف ممتاز
+Amazing Rating=تصنيف مذهل
+Bravo Rating=تصنيف أحسنت
+Round=جولة
+First Round=الجولة الأولى
+Second Round=الجولة الثانية
+Third Round=الجولة الثالثة
+Final Round=الجولة الأخيرة
+Reactivation=إعادة التفعيل
+# ═══════════════════════════════════════════════════
+# مهارات الحقل والاستكشاف (Field Skills & Exploration)
+# ═══════════════════════════════════════════════════
+Field Skill=مهارة حقلية
+Wall Climbing=تسلق الجدران
+Rope Sliding=الانزلاق على الحبال
+Scree Walking=المشي على الحصى
+Hazard Neutralization=تحييد المخاطر
+Ether Slide=انزلاق أثيري
+Zip Line=الحبل المنزلق
+Sand Gliding=الانزلاق على الرمال
+Ether Channel=قناة الأثير
+Unlockable Route=مسار قابل للفتح
+Hidden Path=مسار مخفي
+Shortcut=اختصار
+Breakable Wall=جدار قابل للكسر
+Breakable Rock=صخرة قابلة للكسر
+Climbable Vine=كرمة قابلة للتسلق
+Ether Vent=فوهة أثيرية
+Updraft=تيار صاعد
+Wind Current=تيار هوائي
+Swimming=السباحة
+Diving=الغوص
+Boat Travel=السفر بالقارب
+Container=حاوية
+Ether Container=حاوية أثيرية
+Treasure Chest=صندوق كنز
+Sparkle Point=نقطة لمعان
+Nopon Coin Cache=مخبأ عملات النوبون
+Information Board=لوحة معلومات
+# ═══════════════════════════════════════════════════
+# فصول القصة الرئيسية (Main Story Chapters)
+# ═══════════════════════════════════════════════════
+Chapter 1=الفصل 1
+Chapter 2=الفصل 2
+Chapter 3=الفصل 3
+Chapter 4=الفصل 4
+Chapter 5=الفصل 5
+Chapter 6=الفصل 6
+Chapter 7=الفصل 7
+Prologue=المقدمة
+Epilogue=الخاتمة
+Chapter 1: Ouroboros=الفصل 1: أوروبوروس
+Chapter 2: Moebius=الفصل 2: موبيوس
+Chapter 3: Swordmarch=الفصل 3: مسيرة السيوف
+Chapter 4: Life=الفصل 4: الحياة
+Chapter 5: Eclipse=الفصل 5: الكسوف
+Chapter 6: The Real Enemy=الفصل 6: العدو الحقيقي
+Chapter 7: The Future We Walk Toward=الفصل 7: المستقبل الذي نسير نحوه
+Cutscene=مشهد سينمائي
+Event Theater=مسرح الأحداث
+# ═══════════════════════════════════════════════════
+# وضع التحدي - DLC (Challenge Mode)
+# ═══════════════════════════════════════════════════
+Challenge Mode=وضع التحدي
+Challenge Battle=معركة التحدي
+Archsage's Gauntlet=تحدي كبير الحكماء
+Nopon Archsage=كبير حكماء النوبون
+Challenge Reward=مكافأة التحدي
+Challenge Level=مستوى التحدي
+Time Attack=هجوم الوقت
+Survival Mode=وضع البقاء
+Score Attack=هجوم النقاط
+High Score=أعلى نقاط
+Rank S=المرتبة S
+Rank A=المرتبة A
+Rank B=المرتبة B
+Rank C=المرتبة C
+Wave=موجة
+Wave Battle=معركة الموجات
+Arena=الحلبة
+Bonus Reward=مكافأة إضافية
+# ─────────────────────────────────────────────────
+# الأزياء - DLC (Costumes / Outfits)
+# ─────────────────────────────────────────────────
+Outfit=زي
+Costume=زي تنكري
+Swimsuit=لباس السباحة
+Casual Wear=ملابس عادية
+Colony 9 Outfit=زي المستعمرة 9
+Military Uniform=زي عسكري
+Formal Wear=ملابس رسمية
+Color Variation=تنويع اللون
+Appearance Change=تغيير المظهر
+# ═══════════════════════════════════════════════════
+# عبارات ولغة النوبون (Nopon Phrases)
+# ═══════════════════════════════════════════════════
+Meh-meh-meh!=ميه ميه ميه!
+Heropon=بطل النوبون
+Littlepon=نوبون صغير
+Dadapon=أبو نوبون
+Mamapon=أم نوبون
+Friendpon=صديق النوبون
+Masterpon=سيد النوبون
+Meh=ميه
+Nopon=النوبون
+Nopon Language=لغة النوبون
+Noponic=نوبوني
+Tasty-tasty=لذيذ لذيذ
+Yum-yum=نيام نيام
+Meh-meh=ميه ميه
+Bird bird=طائر طائر
+Dinobeast=الديناصور الوحشي
+# ═══════════════════════════════════════════════════
+# أسماء القناصل / موبيوس (Consul Names - Moebius)
+# ═══════════════════════════════════════════════════
+Consul A=القنصل A
+Consul B=القنصل B
+Consul C=القنصل C
+Consul D=القنصل D
+Consul E=القنصل E
+Consul F=القنصل F
+Consul G=القنصل G
+Consul H=القنصل H
+Consul I=القنصل I
+Consul J=القنصل J
+Consul K=القنصل K
+Consul L=القنصل L
+Consul M=القنصل M
+Consul N=القنصل N
+Consul O=القنصل O
+Consul P=القنصل P
+Consul Q=القنصل Q
+Consul R=القنصل R
+Consul S=القنصل S
+Consul T=القنصل T
+Consul U=القنصل U
+Consul V=القنصل V
+Consul W=القنصل W
+Consul X=القنصل X
+Consul Y=القنصل Y
+Consul Z=القنصل Z
+# ─────────────────────────────────────────────────
+# شخصيات موبيوس الرئيسية (Key Moebius Characters)
+# ─────────────────────────────────────────────────
+Z=زد
+X=إكس
+N=إن
+M=إم
+S=إس
+D=دي
+J=جاي
+K=كاي
+P=بي
+Shania=شانيا
+Joran=جوران
+Dirk=ديرك
+Blackblaze=اللهب الأسود
+Silvercoat=المعطف الفضي
+# ═══════════════════════════════════════════════════
+# مصطلحات الإنجازات والتحديات (Achievements & Challenges)
+# ═══════════════════════════════════════════════════
+Achievement=إنجاز
+Challenge=تحدي
+Completion Rate=نسبة الإكمال
+Game Completion=إكمال اللعبة
+100% Completion=إكمال 100%
+Play Time=وقت اللعب
+Total Battles=إجمالي المعارك
+Enemies Defeated=الأعداء المهزومون
+Unique Monsters Slain=الوحوش الفريدة المقتولة
+Quests Completed=المهمات المكتملة
+Collectibles Found=المقتنيات المكتشفة
+Landmarks Discovered=المعالم المكتشفة
+Secret Areas Found=المناطق السرية المكتشفة
+Max Level Reached=تم بلوغ أقصى مستوى
+All Classes Mastered=تم إتقان جميع الفصول
+All Heroes Recruited=تم تجنيد جميع الأبطال
+Colony Liberation Rate=نسبة تحرير المستعمرات
+Total Overkills=إجمالي القتل المبالغ
+Highest Chain Attack Damage=أعلى ضرر هجوم متسلسل
+# ═══════════════════════════════════════════════════
+# مصطلحات Amiibo والمحتوى الإضافي
+# ═══════════════════════════════════════════════════
+Amiibo=أميبو
+Amiibo Bonus=مكافأة أميبو
+Scan Amiibo=مسح أميبو
+Shulk Amiibo=أميبو شولك
+DLC=محتوى إضافي قابل للتنزيل
+Expansion Pass=بطاقة التوسعة
+Wave 1=الموجة 1
+Wave 2=الموجة 2
+Wave 3=الموجة 3
+Wave 4=الموجة 4
+Helpful Items Set=مجموعة عناصر مساعدة
+Color Variation Pack=حزمة تنويع الألوان
+Challenge Battle Pack=حزمة معارك التحدي
+New Hero Pack=حزمة بطل جديد
+New Story Pack=حزمة قصة جديدة
