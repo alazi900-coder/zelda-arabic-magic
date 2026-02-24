@@ -2271,3 +2271,767 @@ Color Variation Pack=حزمة تنويع الألوان
 Challenge Battle Pack=حزمة معارك التحدي
 New Hero Pack=حزمة بطل جديد
 New Story Pack=حزمة قصة جديدة
+# ═══════════════════════════════════════════════════
+# فنون القتال حسب الفصل (Class-Specific Arts)
+# ═══════════════════════════════════════════════════
+# ─────────────────────────────────────────────────
+# فنون المبارز بالسيف (Swordfighter Arts)
+# ─────────────────────────────────────────────────
+Ground Beat=ضربة الأرض
+Sword Strike=ضربة السيف
+Edge Thrust=طعنة الحد
+Air Slash=شرطة الهواء
+Shadow Eye=عين الظل
+Overclock Buster=محطم التسريع
+Streaming Attack=هجوم متدفق
+# ─────────────────────────────────────────────────
+# فنون زفير (Zephyr Arts)
+# ─────────────────────────────────────────────────
+Butterfly Blade=نصل الفراشة
+Gemini Strike=ضربة الجوزاء
+Speed Demon=شيطان السرعة
+Wide Slash=شرطة واسعة
+Evasion Stance=وضعية التفادي
+Cross Impact=تأثير متقاطع
+# ─────────────────────────────────────────────────
+# فنون المسعف المدفعي (Medic Gunner Arts)
+# ─────────────────────────────────────────────────
+Ether Cannon Burst=انفجار مدفع الإيثير
+Heal Bullet=رصاصة شفاء
+Group Heal=شفاء جماعي
+Ether Blast=انفجار أثيري
+Power Bullet=رصاصة قوة
+Myopic Screen=شاشة قصر النظر
+# ─────────────────────────────────────────────────
+# فنون التكتيكي (Tactician Arts)
+# ─────────────────────────────────────────────────
+Noise=ضوضاء
+Tidal Wave=موجة مدّية
+Stormy Skies=سماء عاصفة
+Shadow Stitch=خياطة الظل
+Silent Mist=ضباب صامت
+Dark Banner=راية مظلمة
+# ─────────────────────────────────────────────────
+# فنون الحارس الثقيل (Heavy Guard Arts)
+# ─────────────────────────────────────────────────
+Bull Rush=اندفاع الثور
+Crash Out=تحطم خارجي
+Mad Taunt=استفزاز جنوني
+Shield Bash=ضربة الدرع
+War Cry=صرخة الحرب
+Solid Stance=وضعية صلبة
+# ─────────────────────────────────────────────────
+# فنون الغول (Ogre Arts)
+# ─────────────────────────────────────────────────
+Uppercut=لكمة علوية
+Giant Swing=أرجحة عملاقة
+Body Press=ضغط الجسم
+Demolition=الهدم
+Power Smash=تحطيم قوي
+Berserker Rage=غضب الفارسي
+# ─────────────────────────────────────────────────
+# فنون حداد يوم (Yumsmith Arts)
+# ─────────────────────────────────────────────────
+Overclock=التسريع الفائق
+Hammerhead=رأس المطرقة
+Chrome Armor=درع الكروم
+Quick Draw=سحب سريع
+Variable Turret=برج متغير
+Bomb Toss=رمي القنبلة
+# ─────────────────────────────────────────────────
+# فنون قائد الحراسة (Guardian Commander Arts)
+# ─────────────────────────────────────────────────
+Noble Taunt=استفزاز نبيل
+Grand Protection=حماية عظيمة
+Chivalrous Order=أمر فروسي
+Imperial Sword=سيف إمبراطوري
+Rally Cry=نداء الحشد
+Brave Assault=هجوم شجاع
+# ─────────────────────────────────────────────────
+# فنون طبيب الحرب (War Medic Arts)
+# ─────────────────────────────────────────────────
+Vitalizer=المنشّط
+Medical Rhodon=روضة طبية
+Force Field=حقل قوة
+Emergency Heal=شفاء طارئ
+Antibody System=نظام الأجسام المضادة
+Supportive Aura=هالة داعمة
+# ─────────────────────────────────────────────────
+# فنون الاستراتيجوس (Strategos Arts)
+# ─────────────────────────────────────────────────
+Hazy Figure=شكل ضبابي
+Stratagem=حيلة
+Feather Arrow=سهم الريشة
+Phantom Strike=ضربة شبحية
+Mind Blast=انفجار ذهني
+Trick Yarn=خيط الحيلة
+# ─────────────────────────────────────────────────
+# فنون المنفي الوحيد (Lone Exile Arts)
+# ─────────────────────────────────────────────────
+Thunder Fury=غضب الرعد
+Lightning Lance=رمح البرق
+Tempest Kick=ركلة العاصفة
+Wild Charge=شحنة برية
+Storm Surge=هجمة العاصفة
+Exile's End=نهاية المنفي
+# ─────────────────────────────────────────────────
+# فنون المقتحم (Incursor Arts)
+# ─────────────────────────────────────────────────
+Rapid Strike=ضربة سريعة
+Shadow Step=خطوة الظل
+Lethal Edge=حد قاتل
+Phantom Blade=نصل شبحي
+Backstab=طعنة خلفية
+Fatal Blow=ضربة قاتلة
+# ═══════════════════════════════════════════════════
+# مهارات الفصول (Class Skills)
+# ═══════════════════════════════════════════════════
+First Move Advantage=ميزة الحركة الأولى
+Covert Attack=هجوم خفي
+Swelling Blessing=بركة متصاعدة
+Quick Cooldown=تبريد سريع
+Sharp Eye=عين حادة
+Muscle Memory=ذاكرة عضلية
+Dogged Defense=دفاع عنيد
+Emergency Guard=حراسة طارئة
+Swift Retreat=انسحاب سريع
+Life-Saving Guard=حراسة إنقاذ الحياة
+Arts Heal=شفاء الفنون
+Healing Expertise=خبرة الشفاء
+Protective Arts=فنون حماية
+Ether Mastery=إتقان الأثير
+Physical Mastery=إتقان الجسدي
+Enhanced Critical=ضربة حرجة معززة
+Dual Wielding=قتال مزدوج
+Counter Stance=وضعية المضاد
+Shield Wall=جدار الدروع
+Rallying Cry=صيحة الحشد
+Steady Aim=تصويب ثابت
+Combo Master=سيد التتابع
+Chain Striker=ضارب السلسلة
+# ═══════════════════════════════════════════════════
+# أحوال الطقس (Weather Types)
+# ═══════════════════════════════════════════════════
+Weather=الطقس
+Clear=صافٍ
+Cloudy=غائم
+Rain=مطر
+Heavy Rain=مطر غزير
+Thunderstorm=عاصفة رعدية
+Snow=ثلج
+Blizzard=عاصفة ثلجية
+Fog=ضباب
+Dense Fog=ضباب كثيف
+Sandstorm=عاصفة رملية
+Heatwave=موجة حر
+Aurora=شفق قطبي
+Ether Miasma=وباء الأثير
+# ═══════════════════════════════════════════════════
+# أوقات اليوم (Time of Day)
+# ═══════════════════════════════════════════════════
+Time=الوقت
+Dawn=الفجر
+Morning=الصباح
+Noon=الظهيرة
+Afternoon=بعد الظهر
+Evening=المساء
+Dusk=الغسق
+Night=الليل
+Midnight=منتصف الليل
+Day/Night Cycle=دورة الليل والنهار
+# ═══════════════════════════════════════════════════
+# نظام المحادثات (Discussion System)
+# ═══════════════════════════════════════════════════
+Discussion=مناقشة
+Campfire Discussion=مناقشة نار المخيم
+Topic=الموضوع
+New Topic Available=موضوع جديد متاح
+Topic Unlocked=تم فتح الموضوع
+Heart-to-Heart=حوار من القلب
+Overheard Conversation=محادثة مسموعة
+# ═══════════════════════════════════════════════════
+# مصطلحات الحفظ والتحميل (Save/Load Terms)
+# ═══════════════════════════════════════════════════
+Save=حفظ
+Load=تحميل
+Auto-Save=حفظ تلقائي
+Manual Save=حفظ يدوي
+Save Slot=خانة الحفظ
+Save Data=بيانات الحفظ
+Overwrite Save=الكتابة فوق الحفظ
+Delete Save=حذف الحفظ
+Save Successful=تم الحفظ بنجاح
+Loading...=جارٍ التحميل...
+Now Loading=جارٍ التحميل الآن
+# ═══════════════════════════════════════════════════
+# رسائل تأكيد النظام (System Confirmation Messages)
+# ═══════════════════════════════════════════════════
+Yes=نعم
+No=لا
+Confirm=تأكيد
+Cancel=إلغاء
+OK=حسناً
+Back=رجوع
+Close=إغلاق
+Accept=قبول
+Decline=رفض
+Retry=إعادة المحاولة
+Return to Title=العودة إلى العنوان
+Quit Game=إنهاء اللعبة
+Are you sure?=هل أنت متأكد؟
+# ═══════════════════════════════════════════════════
+# مصطلحات الشرح التعليمي (Tutorial Terms)
+# ═══════════════════════════════════════════════════
+Tutorial=شرح تعليمي
+Tips=نصائح
+Tip=نصيحة
+How to Play=كيف تلعب
+Controls=أزرار التحكم
+Basic Controls=التحكم الأساسي
+Advanced Controls=التحكم المتقدم
+Combat Tutorial=شرح القتال
+Exploration Tutorial=شرح الاستكشاف
+Menu Tutorial=شرح القائمة
+Battle Basics=أساسيات المعركة
+Arts Tutorial=شرح الفنون
+Chain Attack Tutorial=شرح الهجوم المتسلسل
+Interlink Tutorial=شرح الاندماج
+Gem Crafting Tutorial=شرح صناعة الجواهر
+Class Change Tutorial=شرح تغيير الفصل
+# ═══════════════════════════════════════════════════
+# مصطلحات التجارة والمتاجر (Trade & Shops)
+# ═══════════════════════════════════════════════════
+Shop=متجر
+Buy=شراء
+Sell=بيع
+Price=السعر
+Gold=ذهب
+G=ذ
+Buying Price=سعر الشراء
+Selling Price=سعر البيع
+Stock=المخزون
+Out of Stock=نفد المخزون
+Shop Inventory=مخزون المتجر
+Nopon Coin Exchange=تبادل عملة النوبون
+Colony Shop=متجر المستعمرة
+Traveling Merchant=تاجر متجول
+Special Offer=عرض خاص
+Discount=تخفيض
+Limited Stock=مخزون محدود
+# ═══════════════════════════════════════════════════
+# مصطلحات الملاحة والتوجيه (Navigation & Guidance)
+# ═══════════════════════════════════════════════════
+Waypoint=نقطة الإرشاد
+Navigation=الملاحة
+Objective Marker=علامة الهدف
+Destination=الوجهة
+Distance=المسافة
+Direction=الاتجاه
+North=الشمال
+South=الجنوب
+East=الشرق
+West=الغرب
+Compass=البوصلة
+Arrow=السهم
+Follow=اتبع
+Navigate to=انتقل إلى
+# ═══════════════════════════════════════════════════
+# مصطلحات الكوليبيديا (Collectopaedia System)
+# ═══════════════════════════════════════════════════
+Collectopaedia=كوليبيديا
+Collectopaedia Card=بطاقة كوليبيديا
+Card Reward=مكافأة البطاقة
+Register Item=تسجيل عنصر
+Card Complete=بطاقة مكتملة
+Card Progress=تقدم البطاقة
+Region Card=بطاقة المنطقة
+Colony Card=بطاقة المستعمرة
+Special Card=بطاقة خاصة
+Card Exchange=تبادل البطاقات
+Card Stand=منصة البطاقات
+# ═══════════════════════════════════════════════════
+# هياكل الفيرونيس (Ferronis Hulks)
+# ═══════════════════════════════════════════════════
+Ferronis Hulk=هيكل فيرونيس
+Cascade Ferronis Hulk=هيكل فيرونيس الشلال
+Searoute Ferronis Hulk=هيكل فيرونيس طريق البحر
+Fyborg Ferronis Hulk=هيكل فيرونيس فايبورغ
+Colony 4 Ferronis=فيرونيس المستعمرة 4
+Colony 9 Ferronis=فيرونيس المستعمرة 9
+Colony 11 Ferronis=فيرونيس المستعمرة 11
+Colony 30 Ferronis=فيرونيس المستعمرة 30
+Colony Lambda Ferronis=فيرونيس مستعمرة لامبدا
+Colony Tau Ferronis=فيرونيس مستعمرة تاو
+Deactivated Ferronis=فيرونيس معطل
+Active Ferronis=فيرونيس نشط
+Ferronis Cockpit=قمرة فيرونيس
+Ferronis Core=نواة الفيرونيس
+# ═══════════════════════════════════════════════════
+# نداءات المعركة الصوتية (Battle Voice Lines)
+# ═══════════════════════════════════════════════════
+Let's go!=هيا بنا!
+Take this!=خذ هذا!
+Now!=الآن!
+Nice!=رائع!
+Amazing!=مذهل!
+Hear that?!=أسمعت ذلك؟!
+I'll cover you!=سأغطيك!
+Fall back!=تراجع!
+Switch!=تبديل!
+Full power!=قوة كاملة!
+We can do this!=نستطيع فعلها!
+Don't give up!=لا تستسلم!
+Ready for a chain attack!=جاهزون لهجوم متسلسل!
+Interlink now!=الاندماج الآن!
+Ouroboros!=أوروبوروس!
+Fusion art!=فن مدمج!
+Talent art!=فن الموهبة!
+Watch out!=انتبه!
+Dodge!=تفادَ!
+Stay focused!=حافظ على التركيز!
+We won!=فزنا!
+Good work, everyone!=عمل جيد يا جميع!
+That was close!=كانت قريبة!
+Lend me your power!=أعرني قوتك!
+# ═══════════════════════════════════════════════════
+# مصطلحات النقل والمركبات (Transportation)
+# ═══════════════════════════════════════════════════
+Boat=قارب
+Boat Travel=السفر بالقارب
+Auto-Levnis=ليفنيس آلي
+Levnis=ليفنيس
+Ride=ركوب
+Mount=ركوب
+Dismount=نزول
+Fast Travel=سفر سريع
+Skip Travel=سفر فوري
+Warp=انتقال آني
+Teleport=نقل آني
+# ═══════════════════════════════════════════════════
+# مستعمرات إضافية (Additional Colonies)
+# ═══════════════════════════════════════════════════
+Colony Gamma=مستعمرة غاما
+Colony Iota=مستعمرة يوتا
+Colony 7=المستعمرة 7
+Colony Gamma Camp=مخيم مستعمرة غاما
+Colony Iota Camp=مخيم مستعمرة يوتا
+# ═══════════════════════════════════════════════════
+# شخصيات غير قابلة للعب إضافية (Additional NPCs)
+# ═══════════════════════════════════════════════════
+Gray=غراي
+Segiri=سيغيري
+Miyabi=ميابي
+Teach=تيتش
+Nimue=نيمو
+Mwamba=موامبا
+Hackt=هاكت
+Bolearis=بولياريس
+Nimue=نيمو
+Consul D=القنصل دي
+Consul J=القنصل جاي
+Consul K=القنصل كاي
+Consul P=القنصل بي
+Shania=شانيا
+Dirk=ديرك
+Silvercoat=المعطف الفضي
+Blackblaze=اللهب الأسود
+# ═══════════════════════════════════════════════════
+# مصطلحات مسرح الأحداث (Event Theater Terms)
+# ═══════════════════════════════════════════════════
+Event Theater=مسرح الأحداث
+Cutscene=مشهد سينمائي
+Story Cutscene=مشهد قصة
+Quest Cutscene=مشهد مهمة
+Heart-to-Heart=حوار من القلب
+Replay Cutscene=إعادة مشهد
+Scene Select=اختيار المشهد
+Chapter Select=اختيار الفصل
+All Cutscenes=جميع المشاهد
+Unlock Condition=شرط الفتح
+# ═══════════════════════════════════════════════════
+# مصطلحات نظام EXP والمستويات (EXP & Level System)
+# ═══════════════════════════════════════════════════
+Experience Points=نقاط الخبرة
+EXP=خبرة
+Bonus EXP=خبرة إضافية
+EXP Gained=الخبرة المكتسبة
+Level Up=ارتقاء المستوى
+Max Level=أقصى مستوى
+Level Cap=سقف المستوى
+Rest EXP=خبرة الراحة
+Bonus EXP Pool=رصيد الخبرة الإضافية
+Class EXP=خبرة الفصل
+Art Points=نقاط الفنون
+AP=ن.ف
+Skill Points=نقاط المهارة
+SP=ن.م
+CP=نقاط المجتمع
+# ═══════════════════════════════════════════════════
+# تأثيرات حالات القتال (Status Effect Details)
+# ═══════════════════════════════════════════════════
+Poison=سم
+Burn=حرق
+Freeze=تجميد
+Paralysis=شلل
+Stun=صعق
+Confusion=تشويش
+Blind=عمى
+Silence=صمت
+Doom=هلاك
+Instant Death=موت فوري
+Regeneration=تجدد
+Invincibility=مناعة
+Stealth=تخفّي
+Taunt=استفزاز
+Power Up=تقوية
+Power Down=إضعاف
+Speed Up=تسريع
+Speed Down=إبطاء
+Physical Immunity=مناعة جسدية
+Ether Immunity=مناعة أثيرية
+Reflect=انعكاس
+Absorb=امتصاص
+Resist=مقاومة
+Vulnerable=معرّض
+# ═══════════════════════════════════════════════════
+# مصطلحات Soul Hacker (مخترق الأرواح)
+# ═══════════════════════════════════════════════════
+Soul Hacker=مخترق الأرواح
+Soulhacker=مخترق الأرواح
+Steal Art=سرقة فن
+Stolen Art=فن مسروق
+Monster Art=فن الوحش
+Soul List=قائمة الأرواح
+Registered Soul=روح مسجلة
+Soul Capacity=سعة الأرواح
+Equip Soul=تجهيز روح
+Monster Species=فصيلة الوحش
+Species Bonus=مكافأة الفصيلة
+Complete Species=فصيلة مكتملة
+# ═══════════════════════════════════════════════════
+# مصطلحات نظام الأزياء (Appearance System)
+# ═══════════════════════════════════════════════════
+Fashion=الأزياء
+Fashion Equipment=معدات الأزياء
+Change Appearance=تغيير المظهر
+Show Fashion=إظهار الأزياء
+Hide Fashion=إخفاء الأزياء
+Default Outfit=الزي الافتراضي
+Colony Outfit=زي المستعمرة
+DLC Outfit=زي المحتوى الإضافي
+Swimwear=ملابس السباحة
+Armor Appearance=مظهر الدرع
+Weapon Appearance=مظهر السلاح
+# ═══════════════════════════════════════════════════
+# مصطلحات قتالية متقدمة (Advanced Combat Terms)
+# ═══════════════════════════════════════════════════
+Positional Advantage=ميزة الموقع
+Flanking=التطويق
+Rear Attack=هجوم خلفي
+Side Attack=هجوم جانبي
+Front Attack=هجوم أمامي
+Aggro Management=إدارة الاستفزاز
+Tank=الصمّاد
+DPS=الضرر في الثانية
+Support=الدعم
+Party Formation=تشكيلة الفريق
+Party Leader=قائد الفريق
+Switch Leader=تبديل القائد
+AI Behavior=سلوك الذكاء الاصطناعي
+Follow Leader=اتباع القائد
+Focus Target=التركيز على الهدف
+Spread Out=التفرق
+Guard Target=حراسة الهدف
+# ═══════════════════════════════════════════════════
+# مصطلحات الإعدادات المتقدمة (Advanced Settings)
+# ═══════════════════════════════════════════════════
+Auto-Battle=قتال تلقائي
+Auto-Battle Settings=إعدادات القتال التلقائي
+Battle Speed=سرعة المعركة
+Camera Auto-Adjust=تعديل تلقائي للكاميرا
+Target Line=خط الهدف
+Damage Numbers=أرقام الضرر
+Show Tutorials=إظهار الشرح
+Skip Cutscenes=تخطي المشاهد
+Text Speed=سرعة النص
+Auto Text=نص تلقائي
+Subtitles=ترجمة نصية
+Navigation Guide=دليل الملاحة
+Minimap Rotation=دوران الخريطة المصغرة
+Enemy Level Display=عرض مستوى العدو
+Party Member Display=عرض أعضاء الفريق
+Status Icon Display=عرض أيقونات الحالة
+# ═══════════════════════════════════════════════════
+# مصطلحات لعبة جديدة+ (New Game Plus Terms)
+# ═══════════════════════════════════════════════════
+New Game Plus=لعبة جديدة+
+NG+=ل.ج+
+Carry Over=النقل
+Carried Over Data=البيانات المنقولة
+Reset=إعادة ضبط
+Difficulty Select=اختيار الصعوبة
+Level Reduction=تقليل المستوى
+Bonus Content=محتوى إضافي
+Unlock All Classes=فتح جميع الفصول
+Unlock All Heroes=فتح جميع الأبطال
+Unique Monster Tombstones=شواهد قبور الوحوش الفريدة
+Clear Save Data=بيانات حفظ إكمال اللعبة
+Post-Game=ما بعد اللعبة
+End-Game Content=محتوى نهاية اللعبة
+Superboss=زعيم خارق
+Hidden Boss=زعيم مخفي
+# ═══════════════════════════════════════════════════
+# مصطلحات المعالجة العربية (Arabic Processing Terms)
+# ═══════════════════════════════════════════════════
+Right-to-Left=من اليمين لليسار
+RTL=ي.ل.ي
+Arabic Script=الخط العربي
+Tashkeel=التشكيل
+Harakat=الحركات
+Fatha=الفتحة
+Damma=الضمة
+Kasra=الكسرة
+Shadda=الشدة
+Sukun=السكون
+Tanwin=التنوين
+# ═══════════════════════════════════════════════════
+# مصطلحات أغاني الوداع (Off-Seeing Songs)
+# ═══════════════════════════════════════════════════
+Off-Seeing=إنشاد الوداع
+Off-Seer=مُنشد الوداع
+Flute=الناي
+Song=أغنية
+Melody=لحن
+Requiem=مرثية
+Farewell=وداع
+Send Off=توديع
+Husks=الأجساد الفارغة
+Mote of Light=ذرة ضوء
+Return to the Flow=العودة إلى التيار
+The Flow=التيار
+Life Energy=طاقة الحياة
+# ═══════════════════════════════════════════════════
+# مصطلحات إضافية للعالم (Additional World Terms)
+# ═══════════════════════════════════════════════════
+Aionios=أيونيوس
+Endless Now=الآن الأبدي
+Cycle of Life=دورة الحياة
+Rebirth=إعادة الميلاد
+Reincarnation=التقمص
+Memory=الذاكرة
+Lost Memory=ذاكرة مفقودة
+Homecoming=العودة إلى الديار
+The Queen=الملكة
+Queen of Keves=ملكة كيفيس
+Queen of Agnus=ملكة أغنوس
+Castle Annihilator=مبيد القلعة
+Mechanical Keyboard=لوحة مفاتيح ميكانيكية
+Iris Recognition=التعرف على القزحية
+Data Recovery=استعادة البيانات
+Memory Recovery=استعادة الذاكرة
+Terminal=الطرفية
+Main Terminal=الطرفية الرئيسية
+Sub-Terminal=الطرفية الفرعية
+Access Point=نقطة الوصول
+# ═══════════════════════════════════════════════════
+# مصطلحات نظام التحدث (Talk System)
+# ═══════════════════════════════════════════════════
+Talk=التحدث
+Talk to NPC=التحدث مع شخصية
+Dialogue=حوار
+Dialogue Choice=خيار الحوار
+Response=الرد
+Auto-Talk=حوار تلقائي
+Info=معلومات
+Rumor=إشاعة
+Story Info=معلومات القصة
+World Info=معلومات العالم
+# ═══════════════════════════════════════════════════
+# مصطلحات قائمة النصائح (Tips List)
+# ═══════════════════════════════════════════════════
+Tips Category=فئة النصائح
+Battle Tips=نصائح المعركة
+Exploration Tips=نصائح الاستكشاف
+System Tips=نصائح النظام
+Character Tips=نصائح الشخصيات
+Quest Tips=نصائح المهمات
+Colony Tips=نصائح المستعمرات
+New Tip=نصيحة جديدة
+Read Tip=قراءة النصيحة
+Unread Tips=نصائح غير مقروءة
+# ═══════════════════════════════════════════════════
+# المزيد من مصطلحات الطبخ (Additional Cooking Terms)
+# ═══════════════════════════════════════════════════
+Cook=طبخ
+Recipe=وصفة
+Recipe List=قائمة الوصفات
+New Recipe=وصفة جديدة
+Recipe Unlocked=تم فتح الوصفة
+Cooking Success=طبخ ناجح
+Cooking Failed=فشل الطبخ
+Main Dish=الطبق الرئيسي
+Side Dish=طبق جانبي
+Dessert=حلوى
+Drink=مشروب
+Cooking Bonus=مكافأة الطبخ
+Meal Duration=مدة الوجبة
+Meal Effect=تأثير الوجبة
+# ═══════════════════════════════════════════════════
+# المزيد من أسماء الشخصيات الثانوية (More NPCs)
+# ═══════════════════════════════════════════════════
+Saibara=سايبارا
+Tarou=تارو
+Touma=توما
+Shuuri=شوري
+Jhodor=جودور
+Raizou=رايزو
+Mikage=ميكاجي
+Sekiei=سيكيي
+Fugen=فوجين
+Shidou=شيدو
+Niina=نينا
+Kotori=كوتوري
+Joulietta=جولييتا
+Shiki=شيكي
+Oleg=أوليغ
+Dorrick=دوريك
+Jake=جيك
+Tiian=تيان
+# ═══════════════════════════════════════════════════
+# مصطلحات قتال الزعماء (Boss Battle Terms)
+# ═══════════════════════════════════════════════════
+Boss=زعيم
+Boss Battle=معركة زعيم
+Phase=مرحلة
+Phase 1=المرحلة 1
+Phase 2=المرحلة 2
+Phase 3=المرحلة 3
+Final Phase=المرحلة الأخيرة
+Boss Mechanic=آلية الزعيم
+Rage Mode=وضع الغضب
+Shield Phase=مرحلة الدرع
+Weak Point=نقطة ضعف
+Enrage Timer=مؤقت الهيجان
+Add Phase=مرحلة التعزيزات
+Minion=تابع
+Summon Minions=استدعاء التوابع
+Area Attack=هجوم مساحي
+Instant Kill Attack=هجوم قتل فوري
+QTE Event=حدث أزرار سريعة
+Button Prompt=إشارة الزر
+# ═══════════════════════════════════════════════════
+# مصطلحات الخريطة التفصيلية (Detailed Map Terms)
+# ═══════════════════════════════════════════════════
+Elevation=الارتفاع
+Underground=تحت الأرض
+Upper Level=المستوى العلوي
+Lower Level=المستوى السفلي
+Indoor=داخلي
+Outdoor=خارجي
+Cave=كهف
+Ruin=أطلال
+Tower=برج
+Bridge=جسر
+Gate=بوابة
+Cliff=جرف
+Waterfall=شلال
+Lake=بحيرة
+River=نهر
+Ocean=محيط
+Desert=صحراء
+Forest=غابة
+Mountain=جبل
+Valley=وادي
+Plain=سهل
+Marsh=مستنقع
+Volcano=بركان
+Glacier=نهر جليدي
+Island=جزيرة
+Shore=شاطئ
+# ═══════════════════════════════════════════════════
+# مصطلحات أزرار التحكم (Control Button Terms)
+# ═══════════════════════════════════════════════════
+A Button=زر A
+B Button=زر B
+X Button=زر X
+Y Button=زر Y
+L Button=زر L
+R Button=زر R
+ZL Button=زر ZL
+ZR Button=زر ZR
+Left Stick=العصا اليسرى
+Right Stick=العصا اليمنى
+D-Pad=لوحة الاتجاهات
+Plus Button=زر +
+Minus Button=زر -
+Home Button=زر الصفحة الرئيسية
+Screenshot Button=زر لقطة الشاشة
+# ═══════════════════════════════════════════════════
+# مصطلحات النهاية والملحق (Ending & Epilogue Terms)
+# ═══════════════════════════════════════════════════
+Ending=النهاية
+True Ending=النهاية الحقيقية
+Credits=شارة النهاية
+Staff Credits=أسماء فريق العمل
+Post-Credits Scene=مشهد ما بعد النهاية
+Epilogue=الخاتمة
+Final Boss=الزعيم النهائي
+Last Dungeon=الزنزانة الأخيرة
+Point of No Return=نقطة اللاعودة
+Final Chapter=الفصل الأخير
+# ═══════════════════════════════════════════════════
+# عبارات شائعة في حوارات اللعبة (Common Dialogue Phrases)
+# ═══════════════════════════════════════════════════
+We'll make it!=سننجح!
+I promise!=أعدك!
+That's the way!=هذا هو الطريق!
+Don't worry about it!=لا تقلق بشأن ذلك!
+Leave it to me!=اتركها لي!
+Let's move out!=لننطلق!
+Roger that!=حاضر!
+Understood!=مفهوم!
+What's going on?!=ما الذي يحدث؟!
+Everyone, listen up!=الجميع، استمعوا!
+We have no choice!=لا خيار لدينا!
+This is our fight!=هذه معركتنا!
+For the future!=من أجل المستقبل!
+Together!=معاً!
+I won't let you!=لن أسمح لك!
+How dare you!=كيف تجرؤ!
+It can't be!=لا يمكن!
+Impossible!=مستحيل!
+Watch and learn!=شاهد وتعلم!
+Not bad!=ليس سيئاً!
+Impressive!=مثير للإعجاب!
+# ═══════════════════════════════════════════════════
+# مصطلحات الموسيقى والصوت (Music & Sound Terms)
+# ═══════════════════════════════════════════════════
+BGM=موسيقى الخلفية
+Background Music=موسيقى الخلفية
+Battle Theme=موسيقى المعركة
+Boss Theme=موسيقى الزعيم
+Field Theme=موسيقى الحقل
+Colony Theme=موسيقى المستعمرة
+Night Theme=موسيقى الليل
+Cutscene Music=موسيقى المشهد
+Victory Fanfare=نغمة النصر
+Game Over=انتهت اللعبة
+Sound Effect=مؤثر صوتي
+Voice Acting=الأداء الصوتي
+Japanese Voice=صوت ياباني
+English Voice=صوت إنجليزي
+Dual Audio=صوت مزدوج
+# ═══════════════════════════════════════════════════
+# مصطلحات الأداء والتقنية (Performance & Technical)
+# ═══════════════════════════════════════════════════
+Frame Rate=معدل الإطارات
+Resolution=الدقة
+Docked Mode=وضع الإرساء
+Handheld Mode=الوضع المحمول
+Loading Time=وقت التحميل
+Pop-in=ظهور مفاجئ
+Draw Distance=مسافة الرسم
+LOD=مستوى التفصيل
+Texture Quality=جودة النسيج
+Shadow Quality=جودة الظلال
+Anti-Aliasing=مكافحة التعرج
