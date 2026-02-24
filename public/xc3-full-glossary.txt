@@ -4387,3 +4387,210 @@ Forging Cost=تكلفة الصياغة
 Dismantle=تفكيك
 Dismantle Weapon=تفكيك السلاح
 Salvage Parts=أجزاء الإنقاذ
+# ═══════════════════════════════════════════════════
+# نظام النقل السريع والخريطة (Fast Travel & Map System)
+# ═══════════════════════════════════════════════════
+# ─────────────────────────────────────────────────
+# مصطلحات عامة للخريطة (General Map Terms)
+# ─────────────────────────────────────────────────
+Map=الخريطة
+World Map=خريطة العالم
+Area Map=خريطة المنطقة
+Region Map=خريطة الإقليم
+Mini Map=الخريطة المصغرة
+Minimap=الخريطة المصغرة
+Open Map=فتح الخريطة
+Close Map=إغلاق الخريطة
+Zoom In=تكبير
+Zoom Out=تصغير
+Rotate Map=تدوير الخريطة
+Map Legend=مفتاح الخريطة
+Map Filter=تصفية الخريطة
+Show All Icons=إظهار جميع الأيقونات
+Hide All Icons=إخفاء جميع الأيقونات
+Toggle Icons=تبديل الأيقونات
+Map Completion=إكمال الخريطة
+Map Completion Rate=نسبة إكمال الخريطة
+Explored Area=منطقة مستكشفة
+Unexplored Area=منطقة غير مستكشفة
+Fog of War=ضباب الحرب
+Current Location=الموقع الحالي
+Set Destination=تحديد الوجهة
+Destination Marker=علامة الوجهة
+Navigation Line=خط الملاحة
+Distance=المسافة
+Waypoint=نقطة مرجعية
+Set Waypoint=تحديد نقطة مرجعية
+Remove Waypoint=إزالة النقطة المرجعية
+# ─────────────────────────────────────────────────
+# النقل السريع (Fast Travel)
+# ─────────────────────────────────────────────────
+Fast Travel=نقل سريع
+Skip Travel=نقل سريع
+Travel=انتقال
+Warp=انتقال فوري
+Teleport=نقل آني
+Fast Travel Point=نقطة نقل سريع
+Travel Point=نقطة انتقال
+Unlock Fast Travel=فتح النقل السريع
+Travel to Location=الانتقال إلى موقع
+Select Destination=اختيار الوجهة
+Cannot Fast Travel=لا يمكن النقل السريع
+Fast Travel Unavailable=النقل السريع غير متاح
+Now Traveling...=جارٍ الانتقال...
+Travel Confirmed=تم تأكيد الانتقال
+Return to Last Location=العودة إلى آخر موقع
+# ─────────────────────────────────────────────────
+# المعالم ونقاط الاهتمام (Landmarks & Points of Interest)
+# ─────────────────────────────────────────────────
+Landmark=معلم
+Landmarks=معالم
+Landmark Discovered=تم اكتشاف معلم
+New Landmark=معلم جديد
+Rest Spot=نقطة استراحة
+Rest Spots=نقاط استراحة
+Camp=مخيم
+Campsite=موقع المخيم
+Campfire=نار المخيم
+Rest at Camp=الاستراحة في المخيم
+Named Location=موقع مسمّى
+Location Discovered=تم اكتشاف موقع
+Secret Area=منطقة سرية
+Secret Area Discovered=تم اكتشاف منطقة سرية
+Hidden Area=منطقة مخفية
+Viewpoint=نقطة مراقبة
+Scenic Viewpoint=نقطة مراقبة خلابة
+Elevated Location=موقع مرتفع
+# ─────────────────────────────────────────────────
+# أيقونات الخريطة - شخصيات ومواقع (Map Icons - Characters & Locations)
+# ─────────────────────────────────────────────────
+Party Icon=أيقونة الفريق
+Player Icon=أيقونة اللاعب
+NPC Icon=أيقونة شخصية غير لاعبة
+Quest Giver Icon=أيقونة مانح المهمة
+Hero Icon=أيقونة البطل
+Colony Icon=أيقونة المستعمرة
+Colony Leader Icon=أيقونة قائد المستعمرة
+Enemy Icon=أيقونة العدو
+Unique Monster Icon=أيقونة وحش فريد
+Elite Monster Icon=أيقونة وحش نخبة
+Tombstone Icon=أيقونة شاهد القبر
+# ─────────────────────────────────────────────────
+# أيقونات الخريطة - مرافق (Map Icons - Facilities)
+# ─────────────────────────────────────────────────
+Shop Icon=أيقونة المتجر
+Nopon Coin Exchange Icon=أيقونة تبادل عملة النوبون
+Gem Crafting Icon=أيقونة صناعة الجواهر
+Rest Spot Icon=أيقونة نقطة الاستراحة
+Campfire Icon=أيقونة نار المخيم
+Container Icon=أيقونة الحاوية
+Canteen Icon=أيقونة المقصف
+Information Icon=أيقونة المعلومات
+Save Point Icon=أيقونة نقطة الحفظ
+# ─────────────────────────────────────────────────
+# أيقونات الخريطة - مهمات وأنشطة (Map Icons - Quests & Activities)
+# ─────────────────────────────────────────────────
+Quest Icon=أيقونة المهمة
+Main Quest Icon=أيقونة المهمة الرئيسية
+Side Quest Icon=أيقونة المهمة الفرعية
+Hero Quest Icon=أيقونة مهمة البطل
+Standard Quest Icon=أيقونة مهمة عادية
+Quest Available=مهمة متاحة
+Quest In Progress=مهمة جارية
+Quest Complete=مهمة مكتملة
+Exclamation Mark=علامة تعجب
+Question Mark=علامة استفهام
+Star Icon=أيقونة النجمة
+Heart-to-Heart Icon=أيقونة حوار القلب
+Discussion Icon=أيقونة المناقشة
+Challenge Battle Icon=أيقونة معركة التحدي
+# ─────────────────────────────────────────────────
+# أيقونات الخريطة - استكشاف وموارد (Map Icons - Exploration & Resources)
+# ─────────────────────────────────────────────────
+Collectible Icon=أيقونة المقتنى
+Collection Point Icon=أيقونة نقطة الجمع
+Ether Channel Icon=أيقونة قناة الأثير
+Ether Deposit=رواسب الأثير
+Material Spot=نقطة المواد
+Gathering Point=نقطة الجمع
+Mining Point=نقطة التعدين
+Fishing Spot=نقطة الصيد
+Harvest Point=نقطة الحصاد
+Rare Resource=مورد نادر
+Sparkle=بريق
+Sparkling Item=عنصر لامع
+# ─────────────────────────────────────────────────
+# أيقونات الخريطة - تنقل وعوائق (Map Icons - Traversal & Obstacles)
+# ─────────────────────────────────────────────────
+Wall Climb Icon=أيقونة تسلق الجدار
+Rope Slide Icon=أيقونة الانزلاق بالحبل
+Zip Line Icon=أيقونة الحبل المنزلق
+Boat Icon=أيقونة القارب
+Raft=طوف
+Boat Launch=مرسى القارب
+Climbing Wall=جدار التسلق
+Vine=كرمة
+Climbable Surface=سطح قابل للتسلق
+Rope=حبل
+Slide=منزلق
+Sand Slide=منزلق رملي
+Ladder=سلم
+Bridge=جسر
+Broken Bridge=جسر مكسور
+Locked Door=باب مقفل
+Blocked Path=مسار مسدود
+Barrier=حاجز
+Ether Barrier=حاجز أثيري
+Removable Obstacle=عائق قابل للإزالة
+# ─────────────────────────────────────────────────
+# أيقونات الخريطة - حدود وبوابات (Map Icons - Boundaries & Gates)
+# ─────────────────────────────────────────────────
+Area Boundary=حدود المنطقة
+Region Boundary=حدود الإقليم
+Gate=بوابة
+Locked Gate=بوابة مقفلة
+Unlocked Gate=بوابة مفتوحة
+Passage=ممر
+Tunnel=نفق
+Cave Entrance=مدخل الكهف
+Exit=مخرج
+Entrance=مدخل
+Transition Point=نقطة الانتقال
+Loading Zone=منطقة التحميل
+# ─────────────────────────────────────────────────
+# أيقونات الخريطة - DLC Future Redeemed
+# ─────────────────────────────────────────────────
+Settlement Icon=أيقونة المستوطنة
+Community Board Icon=أيقونة لوحة المجتمع
+Founder Icon=أيقونة المؤسس
+Origin Interior Icon=أيقونة داخل الأوريجن
+Archsage Icon=أيقونة حكيم القوس
+Affinity Link Icon=أيقونة رابط الألفة
+DLC Landmark=معلم المحتوى الإضافي
+DLC Rest Spot=نقطة استراحة المحتوى الإضافي
+# ─────────────────────────────────────────────────
+# مصطلحات تضاريس الخريطة (Map Terrain Terms)
+# ─────────────────────────────────────────────────
+Elevation=الارتفاع
+Altitude=العلو
+Sea Level=مستوى البحر
+Cliff=جرف
+Valley=وادي
+Mountain=جبل
+Peak=قمة
+Plateau=هضبة
+Plain=سهل
+Forest=غابة
+Lake=بحيرة
+River=نهر
+Ocean=محيط
+Desert=صحراء
+Swamp=مستنقع
+Beach=شاطئ
+Waterfall=شلال
+Hot Spring=ينبوع ساخن
+Ruins=أطلال
+Cave=كهف
+Cavern=مغارة
+Underground=تحت الأرض
+Floating Island=جزيرة عائمة
