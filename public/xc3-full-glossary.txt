@@ -6111,3 +6111,737 @@ Accept=قبول
 Decline=رفض
 Retry=إعادة المحاولة
 Loading...=جارٍ التحميل...
+
+# ═══════════════════════════════════════════════════════════════
+# نظام الطقس والوقت (Weather & Time System)
+# ═══════════════════════════════════════════════════════════════
+
+# --- أحوال الطقس (Weather Conditions) ---
+Weather=الطقس
+Clear=صافٍ
+Sunny=مشمس
+Cloudy=غائم
+Overcast=ملبد بالغيوم
+Rain=مطر
+Heavy Rain=مطر غزير
+Thunderstorm=عاصفة رعدية
+Lightning=برق
+Thunder=رعد
+Snow=ثلج
+Snowfall=تساقط الثلوج
+Blizzard=عاصفة ثلجية
+Fog=ضباب
+Dense Fog=ضباب كثيف
+Mist=رذاذ
+Haze=ضبابة خفيفة
+Sandstorm=عاصفة رملية
+Dust Storm=عاصفة ترابية
+Wind=رياح
+Strong Wind=رياح قوية
+Gale=عاصفة هوائية
+Hail=بَرَد
+Drizzle=رذاذ خفيف
+Aurora=شفق قطبي
+Ether Mist=ضباب الأثير
+Ether Rain=مطر الأثير
+Ether Storm=عاصفة الأثير
+
+# --- أوقات اليوم (Time of Day) ---
+Time=الوقت
+Clock=الساعة
+Day=نهار
+Night=ليل
+Dawn=فجر
+Sunrise=شروق الشمس
+Morning=صباح
+Midday=منتصف النهار
+Noon=ظهيرة
+Afternoon=بعد الظهر
+Dusk=غسق
+Sunset=غروب الشمس
+Evening=مساء
+Twilight=شفق
+Midnight=منتصف الليل
+Current Time=الوقت الحالي
+Time of Day=وقت اليوم
+Change Time=تغيير الوقت
+Wait Until=الانتظار حتى
+Rest Until Morning=الراحة حتى الصباح
+Rest Until Evening=الراحة حتى المساء
+Rest Until Night=الراحة حتى الليل
+
+# --- تأثيرات الطقس على اللعب (Weather Effects) ---
+Weather Effect=تأثير الطقس
+Weather Changes=تغيرات الطقس
+Weather Forecast=توقعات الطقس
+Visibility=الرؤية
+Low Visibility=رؤية منخفضة
+Slippery=زلق
+Wet=مبلل
+Frozen=متجمد
+Temperature=درجة الحرارة
+Hot=حار
+Cold=بارد
+Humidity=رطوبة
+Weather-dependent=يعتمد على الطقس
+Appears in Rain=يظهر في المطر
+Appears at Night=يظهر في الليل
+Appears in Fog=يظهر في الضباب
+Night-only=في الليل فقط
+Day-only=في النهار فقط
+Weather Bonus=مكافأة الطقس
+Environmental Hazard=خطر بيئي
+
+# ═══════════════════════════════════════════════════════════════
+# رسائل النظام والإشعارات الموسعة (System Messages & Notifications)
+# ═══════════════════════════════════════════════════════════════
+
+# --- إشعارات الإنجازات (Achievement Notifications) ---
+Achievement=إنجاز
+Achievement Unlocked=تم فتح الإنجاز
+New Record=رقم قياسي جديد
+Congratulations=تهانينا
+Trophy=جائزة
+Milestone=إنجاز مرحلي
+Challenge Complete=تم إكمال التحدي
+Bonus Unlocked=تم فتح المكافأة
+Reward Obtained=تم الحصول على المكافأة
+Item Obtained=تم الحصول على الغرض
+New Item=غرض جديد
+Rare Item=غرض نادر
+Accessory Obtained=تم الحصول على الإكسسوار
+Equipment Obtained=تم الحصول على المعدات
+Material Obtained=تم الحصول على المادة
+Recipe Learned=تم تعلم الوصفة
+Skill Learned=تم تعلم المهارة
+Art Learned=تم تعلم الفن
+Class Unlocked=تم فتح الفصل
+Hero Unlocked=تم فتح البطل
+Hero Joined=انضم البطل
+New Area Discovered=تم اكتشاف منطقة جديدة
+Landmark Discovered=تم اكتشاف المعلم
+Secret Area Found=تم العثور على منطقة سرية
+Location Discovered=تم اكتشاف الموقع
+
+# --- رسائل القتال (Battle Messages) ---
+Battle Start=بدء المعركة
+Victory=انتصار
+Defeat=هزيمة
+You Win=فزت
+You Lose=خسرت
+Game Over=انتهت اللعبة
+Battle Results=نتائج المعركة
+EXP Earned=الخبرة المكتسبة
+Gold Earned=الذهب المكتسب
+Level Up=ارتفاع المستوى
+Level Up!=ارتفع المستوى!
+Class Rank Up=ارتفاع رتبة الفصل
+Affinity Increased=ازدادت الألفة
+Chain Attack!=هجوم تسلسلي!
+Interlink!=الربط البيني!
+Ouroboros Activated=تفعيل أوروبوروس
+Talent Art Ready=فن الموهبة جاهز
+Party Gauge Full=مقياس الفريق ممتلئ
+Limit Break=كسر الحدود
+Overkill=قتل مفرط
+Critical Hit=ضربة حرجة
+Miss=إخفاق
+Dodge=مراوغة
+Block=صد
+Counter=هجوم مضاد
+Topple=إسقاط
+Launch=إطلاق
+Daze=ذهول
+Burst=انفجار
+Smash=تحطيم
+Break=كسر
+Aggro=الاستفزاز
+Heal=شفاء
+Revive=إحياء
+Buff=تعزيز
+Debuff=إضعاف
+Status Effect=تأثير حالة
+Poisoned=مسموم
+Bleed=نزيف
+Burned=محروق
+Frozen=مجمّد
+Paralyzed=مشلول
+Sleep=نوم
+Bind=تقييد
+Slow=إبطاء
+Defense Down=انخفاض الدفاع
+Attack Up=ارتفاع الهجوم
+Power Charge=شحن القوة
+Aura=هالة
+Enrage=غضب
+Summon=استدعاء
+Retreat=انسحاب
+Flee=هروب
+Cannot Flee=لا يمكن الهروب
+Ambush=كمين
+Surprise Attack=هجوم مباغت
+Preemptive Strike=ضربة استباقية
+Reinforcements=تعزيزات
+Enemy Reinforcements=تعزيزات العدو
+Unique Monster=وحش فريد
+Named Enemy=عدو مُسمّى
+Boss=زعيم
+Mini Boss=زعيم صغير
+Field Boss=زعيم ميداني
+Superboss=زعيم خارق
+
+# --- رسائل المهام (Quest Messages) ---
+Quest Accepted=تم قبول المهمة
+Quest Complete=تم إكمال المهمة
+Quest Failed=فشلت المهمة
+Quest Updated=تم تحديث المهمة
+New Quest Available=مهمة جديدة متاحة
+Objective Complete=تم إكمال الهدف
+New Objective=هدف جديد
+Return to Quest Giver=العودة إلى مانح المهمة
+Quest Reward=مكافأة المهمة
+Quest Log Full=سجل المهام ممتلئ
+Side Quest=مهمة فرعية
+Hero Quest=مهمة بطل
+Standard Quest=مهمة عادية
+Collectopedia Card=بطاقة المجموعات
+Discussion=نقاش
+Affinity Chart Updated=تم تحديث مخطط الألفة
+Colony Affinity Up=ارتفعت ألفة المستعمرة
+Relationship Level Up=ارتفع مستوى العلاقة
+
+# --- رسائل التجارة والمتاجر (Trade & Shop Messages) ---
+Not Enough Gold=الذهب غير كافٍ
+Inventory Full=الحقيبة ممتلئة
+Cannot Carry More=لا يمكن حمل المزيد
+Item Sold=تم بيع الغرض
+Item Purchased=تم شراء الغرض
+New Stock Available=بضاعة جديدة متاحة
+Discount=خصم
+Limited Stock=مخزون محدود
+Out of Stock=نفد المخزون
+Exchange Complete=تم التبادل
+Trade Complete=تم التداول
+Gem Crafted=تم صنع الجوهرة
+Cooking Complete=تم الطبخ
+Dish Prepared=تم تحضير الطبق
+Meal Effect=تأثير الوجبة
+Meal Bonus Active=مكافأة الوجبة نشطة
+
+# --- رسائل الفريق والإدارة (Party Management Messages) ---
+Party Full=الفريق ممتلئ
+Party Member Changed=تم تغيير عضو الفريق
+Formation Changed=تم تغيير التشكيل
+Class Changed=تم تغيير الفصل
+Equipment Changed=تم تغيير المعدات
+Accessory Equipped=تم تجهيز الإكسسوار
+Gem Equipped=تم تجهيز الجوهرة
+Skill Equipped=تم تجهيز المهارة
+Art Set=تم تعيين الفن
+Master Art Set=تم تعيين فن الإتقان
+Master Skill Equipped=تم تجهيز مهارة الإتقان
+Outfit Changed=تم تغيير الزي
+Cannot Equip=لا يمكن التجهيز
+Already Equipped=مجهز بالفعل
+Requirements Not Met=الشروط غير مستوفاة
+Level Too Low=المستوى منخفض جداً
+
+# --- رسائل التقدم (Progress Messages) ---
+Chapter Complete=تم إكمال الفصل
+New Chapter=فصل جديد
+Chapter Start=بداية الفصل
+Story Progress=تقدم القصة
+Map Updated=تم تحديث الخريطة
+New Area Unlocked=تم فتح منطقة جديدة
+Fast Travel Unlocked=تم فتح النقل السريع
+Ferronis Hulk Discovered=تم اكتشاف هيكل الفيرونيس
+Rest Spot Discovered=تم اكتشاف نقطة راحة
+Container Found=تم العثور على حاوية
+Collectible Found=تم العثور على مقتنى
+Nopon Coin Found=تم العثور على عملة نوبون
+Ether Deposit Found=تم العثور على رواسب الأثير
+Unique Monster Defeated=تم هزيمة الوحش الفريد
+
+# --- تلميحات وتعليمات (Hints & Tutorials) ---
+Tutorial=درس تعليمي
+Hint=تلميح
+Tip=نصيحة
+Did You Know=هل تعلم
+How to Play=كيفية اللعب
+Controls=التحكم
+Button Guide=دليل الأزرار
+Tips & Tricks=نصائح وحيل
+Advanced Tips=نصائح متقدمة
+Beginner Guide=دليل المبتدئين
+Combat Tutorial=درس القتال
+Menu Tutorial=درس القوائم
+Exploration Tutorial=درس الاستكشاف
+Skip Tutorial=تخطي الدرس
+View Tutorial=عرض الدرس
+Tutorial List=قائمة الدروس
+
+# ═══════════════════════════════════════════════════════════════
+# حوارات ومقولات القصة الرئيسية (Main Story Dialogues & Quotes)
+# ═══════════════════════════════════════════════════════════════
+
+# --- الفصل 1: الاستيقاظ (Chapter 1: Awakening) ---
+We fight to live. We live to fight.=نقاتل لنعيش. نعيش لنقاتل.
+That's our purpose, right?=هذا هدفنا، أليس كذلك؟
+Off-seers send the dead to their rest.=مُنشدو الوداع يُودّعون الأموات إلى راحتهم.
+The flame clock... it's stopped.=ساعة اللهب... توقفت.
+We're not enemies. Not anymore.=لسنا أعداء. ليس بعد الآن.
+What is this power?=ما هذه القوة؟
+Ouroboros... that's what we are now.=أوروبوروس... هذا ما نحن عليه الآن.
+Vandham... he gave his life for us.=فاندام... بذل حياته من أجلنا.
+We have to keep going. For his sake.=علينا أن نواصل. من أجله.
+This world is not what we thought it was.=هذا العالم ليس كما ظنّناه.
+
+# --- الفصل 2: التواصل (Chapter 2: Connection) ---
+Keves and Agnus... we've been fighting each other for nothing.=كيفيس وأغنوس... كنا نتقاتل من أجل لا شيء.
+The real enemy is Moebius.=العدو الحقيقي هو موبيوس.
+Interlinking... our hearts become one.=الربط البيني... قلوبنا تصبح واحدة.
+I want to understand you. All of you.=أريد أن أفهمكم. كلكم.
+We're walking a different path now.=نسلك دربًا مختلفًا الآن.
+Colony 9... this was my home.=المستعمرة 9... هنا كان وطني.
+The Commander fell in battle.=القائد سقط في المعركة.
+Their flames were consumed by the clock.=لُهبهم ابتلعتها الساعة.
+How many more have to die?=كم من الأرواح يجب أن تسقط بعد؟
+There has to be a better way.=لا بد أن هناك طريقة أفضل.
+
+# --- الفصل 3: التشابك (Chapter 3: Entanglement) ---
+The colonies... they're all being used.=المستعمرات... كلها تُستغَل.
+Moebius feeds on our conflict.=موبيوس يتغذى على صراعنا.
+Every life that ends powers their machine.=كل حياة تنتهي تُغذّي آلتهم.
+We need to free as many colonies as we can.=علينا تحرير أكبر عدد ممكن من المستعمرات.
+The flame clocks must be destroyed.=يجب تدمير ساعات اللهب.
+This is what it means to live free.=هذا ما يعنيه أن تعيش حرًا.
+I won't let anyone else become a husk.=لن أدع أحدًا آخر يصبح جسدًا فارغًا.
+The Lost Numbers... they've been living outside the system.=الأرقام المفقودة... عاشوا خارج النظام.
+City... a place where people actually live.=المدينة... مكان يعيش فيه الناس حقًا.
+They grow old. They have children. That's... incredible.=يكبرون. ينجبون أطفالاً. هذا... لا يصدق.
+
+# --- الفصل 4: الحياة (Chapter 4: Life) ---
+Ten years. That's all we get.=عشر سنين. هذا كل ما نملك.
+But what if we could change that?=لكن ماذا لو استطعنا تغيير ذلك؟
+Origin... it holds the key to everything.=الأوريجن... يحمل مفتاح كل شيء.
+Melia and Nia built it together.=ميليا ونيا بنتاها معًا.
+Two worlds became one.=عالمان أصبحا واحدًا.
+Aionios... a world frozen in time.=أيونيوس... عالم متجمد في الزمن.
+Moebius wants it to stay this way forever.=موبيوس يريده أن يبقى هكذا للأبد.
+An endless now. No past, no future.=حاضر لا نهائي. بلا ماضٍ، ولا مستقبل.
+That's not living. That's just existing.=ذلك ليس حياة. ذلك مجرد وجود.
+We choose to move forward.=نختار أن نمضي قدمًا.
+
+# --- الفصل 5: البحث (Chapter 5: The Search) ---
+Z controls everything from Origin.=زد يتحكم بكل شيء من الأوريجن.
+He's the will of the people who feared the future.=إنه إرادة الذين خافوا من المستقبل.
+Fear of change... that's what created Moebius.=الخوف من التغيير... هذا ما خلق موبيوس.
+But we're not afraid anymore.=لكننا لم نعد خائفين.
+Every person we've met, every colony we've freed...=كل شخص قابلناه، كل مستعمرة حررناها...
+They're proof that people want to change.=هم دليل على أن الناس تريد التغيير.
+The Consuls... they were people once.=القناصل... كانوا بشرًا يومًا.
+They chose this because they were afraid to die.=اختاروا هذا لأنهم خافوا من الموت.
+I pity them. But I won't forgive them.=أشفق عليهم. لكنني لن أسامحهم.
+Our path leads to Origin.=دربنا يقود إلى الأوريجن.
+
+# --- الفصل 6: السيف وبندول الساعة (Chapter 6: Sword & Clock) ---
+The Sword of Origin... it's calling to us.=سيف الأوريجن... ينادينا.
+Two blades, two worlds, one purpose.=نصلان، عالمان، هدف واحد.
+Noah, your flute carries the weight of every soul.=نوح، نايُك يحمل ثقل كل روح.
+Mio, your melody gives them peace.=ميو، لحنُكِ يمنحهم السلام.
+The Interlink is our bond made manifest.=الربط البيني هو رابطنا المتجسّد.
+Together, we can reach Origin's core.=معًا، نستطيع الوصول إلى قلب الأوريجن.
+Moebius will throw everything at us.=موبيوس سيرمينا بكل ما لديه.
+Let them come. We're ready.=ليأتوا. نحن مستعدون.
+This is our final march.=هذا مسيرنا الأخير.
+For everyone who believed in us.=من أجل كل من آمن بنا.
+
+# --- الفصل 7: النهاية والبداية (Chapter 7: End & Beginning) ---
+Z... you are the fear of the unknown.=زد... أنت خوف المجهول.
+You stopped the world because you couldn't face tomorrow.=أوقفت العالم لأنك لم تستطع مواجهة الغد.
+But tomorrow is what gives life meaning.=لكن الغد هو ما يمنح الحياة معنى.
+Even if it's uncertain. Even if it's scary.=حتى لو كان غامضًا. حتى لو كان مخيفًا.
+That's what makes every moment precious.=هذا ما يجعل كل لحظة ثمينة.
+The worlds will separate again.=العالمان سينفصلان مجددًا.
+We might forget each other.=قد ننسى بعضنا.
+But the bonds we forged... they'll endure.=لكن الروابط التي صنعناها... ستبقى.
+I'll find you again. I promise.=سأجدكِ مجددًا. أعدكِ.
+Even if the world changes, we'll keep walking forward.=حتى لو تغير العالم، سنواصل المسير.
+
+# --- مقولات نوح (Noah's Quotes) ---
+I am the off-seer of Colony 9.=أنا مُنشد الوداع في المستعمرة 9.
+My flute sends souls to their rest.=ناي يودّع الأرواح إلى مثواها.
+I don't want to just exist. I want to live.=لا أريد مجرد الوجود. أريد أن أعيش.
+This melody... it connects us all.=هذا اللحن... يربطنا جميعًا.
+We'll carve a path to the future with our own hands.=سنشقّ طريقًا نحو المستقبل بأيدينا.
+I've seen enough death. It's time to fight for life.=رأيت كفاية من الموت. حان وقت القتال من أجل الحياة.
+Mio... I want you to see the future with me.=ميو... أريدكِ أن تري المستقبل معي.
+
+# --- مقولات ميو (Mio's Quotes) ---
+I am the off-seer of Colony Sigma.=أنا مُنشدة الوداع في مستعمرة سيجما.
+Time is precious because it's limited.=الوقت ثمين لأنه محدود.
+Even if I only have three months left...=حتى لو لم يبقَ لي سوى ثلاثة أشهر...
+I want to spend them walking this path with you.=أريد أن أقضيها سائرةً في هذا الدرب معكم.
+My flute plays for the living, not just the dead.=ناي يعزف للأحياء، لا للأموات فقط.
+Noah... let's keep walking. Together.=نوح... لنواصل المسير. معًا.
+
+# --- مقولات يوني (Eunie's Quotes) ---
+You lot are sparking mental, you know that?=أنتم مجانين بالفعل، تعلمون ذلك؟
+I swear on my wings, I'll protect you all.=أقسم بجناحيّ، سأحميكم جميعًا.
+Don't go getting all sappy on me now.=لا تبدأوا بالعاطفية الآن.
+Someone's gotta keep you grounded.=لا بد أن أحدًا يبقيكم على الأرض.
+Mwamba... I'll carry your will forward.=موامبا... سأحمل إرادتك للأمام.
+
+# --- مقولات تايون (Taion's Quotes) ---
+Logic and emotion... both have their place.=المنطق والعاطفة... كلاهما له مكانه.
+I've analyzed the situation thoroughly.=حللت الموقف بدقة.
+Trust isn't something I give easily.=الثقة ليست شيئًا أمنحه بسهولة.
+But you've earned it. All of you.=لكنكم استحقيتموها. كلكم.
+Isurd would have wanted us to keep going.=إيسورد كان سيريدنا أن نواصل.
+
+# --- مقولات لانز (Lanz's Quotes) ---
+I'll be your wall! Nothing's getting through me!=سأكون جداركم! لن يمر أحد من خلالي!
+Joran... I won't let your sacrifice be in vain.=جوران... لن أدع تضحيتك تذهب هباءً.
+I'm not the sharpest tool, but I'll fight twice as hard.=لست الأذكى، لكنني سأقاتل ضعف الجميع.
+Sena, you're stronger than you think.=سينا، أنتِ أقوى مما تظنين.
+Let's smash through whatever's in our way!=لنحطم كل ما يعترض طريقنا!
+
+# --- مقولات سينا (Sena's Quotes) ---
+I'm the girl with the gall!=أنا الفتاة الجريئة!
+I used to think strength was everything.=كنت أظن أن القوة هي كل شيء.
+But real strength is standing up for what you believe in.=لكن القوة الحقيقية هي الدفاع عما تؤمن به.
+Lanz, you big oaf... thanks for believing in me.=لانز، أيها الأحمق الكبير... شكرًا لإيمانك بي.
+I'll carry my own weight and then some!=سأحمل عبئي وأكثر!
+
+# --- مقولات ريكو ومانانا (Riku & Manana's Quotes) ---
+Riku is Riku. That is enough.=ريكو هو ريكو. هذا يكفي.
+Manana is bestest cook in whole of Aionios!=مانانا أفضل طباخة في كل أيونيوس!
+Meh-meh-meh!=مه-مه-مه!
+Heropon legacy lives on!=إرث هيروبون يستمر!
+Riku shall forge a new path.=ريكو سيصنع دربًا جديدًا.
+Manana cook victory feast when this is over!=مانانا ستطبخ وليمة نصر عند النهاية!
+
+# --- مقولات القناصل (Consul Quotes) ---
+This is the will of Moebius.=هذه إرادة موبيوس.
+You cannot defy the natural order.=لا تستطيعون تحدي النظام الطبيعي.
+The eternal now is all there needs to be.=الحاضر الأبدي هو كل ما يلزم.
+Change? Ha! Change means death.=التغيير؟ ها! التغيير يعني الموت.
+I chose immortality over uncertainty.=اخترت الخلود على الشك.
+You'll understand when you face your own end.=ستفهمون عندما تواجهون نهايتكم.
+Z is absolute. Z is eternal.=زد مطلق. زد أبدي.
+
+# --- مقولات زد (Z's Quotes) ---
+I am Z. I am the will of this world.=أنا زد. أنا إرادة هذا العالم.
+Humanity feared the future, and I answered.=البشرية خافت من المستقبل، وأنا أجبت.
+In my world, no one suffers the pain of loss.=في عالمي، لا أحد يعاني ألم الفقدان.
+Because nothing ever changes.=لأن لا شيء يتغير أبدًا.
+You would choose suffering over safety?=تختارون المعاناة على الأمان؟
+Then come. Show me this "future" of yours.=إذن تعالوا. أروني "مستقبلكم" هذا.
+
+# --- حوارات المعسكر والراحة (Camp & Rest Dialogues) ---
+Let's rest here for now.=لنرتح هنا الآن.
+Good idea. Everyone's exhausted.=فكرة جيدة. الجميع مرهقون.
+I'll prepare something to eat.=سأحضّر شيئًا للأكل.
+Manana's cooking is the best!=طبخ مانانا هو الأفضل!
+We should discuss our next move.=يجب أن نناقش خطوتنا التالية.
+The fire feels nice.=النار دافئة ومريحة.
+Can you play that song again?=هل تعزف تلك الأغنية مجددًا؟
+Your flute... it reminds me of home.=نايُك... يذكرني بالوطن.
+Tomorrow will be a tough day.=الغد سيكون يومًا صعبًا.
+Get some rest. We move at dawn.=خذوا قسطًا من الراحة. ننطلق عند الفجر.
+This view... it's beautiful.=هذا المنظر... جميل.
+I never noticed how big the sky is.=لم ألاحظ أبدًا كم السماء واسعة.
+When this is all over, what will you do?=عندما ينتهي كل هذا، ماذا ستفعلون؟
+I want to see the ocean one more time.=أريد أن أرى المحيط مرة أخرى.
+We'll get through this. I know it.=سنتجاوز هذا. أعرف ذلك.
+
+# --- حوارات المعركة أثناء القتال (In-Battle Dialogues) ---
+Here I go!=ها أنا قادم!
+Take this!=خذ هذه!
+Now!=الآن!
+Got it!=فهمت!
+Leave it to me!=اتركها لي!
+I'll cover you!=سأغطيك!
+Watch out!=انتبه!
+Behind you!=خلفك!
+Nice one!=أحسنت!
+We can do this!=نستطيع فعلها!
+Don't give up!=لا تستسلموا!
+Keep pushing!=واصلوا الضغط!
+Almost there!=أوشكنا!
+One more push!=دفعة أخيرة!
+They're tough!=إنهم أقوياء!
+Fall back!=تراجعوا!
+Heal me!=اشفني!
+I need healing!=أحتاج شفاء!
+I'm on it!=حاضر!
+Interlink, now!=الربط البيني، الآن!
+Let's go, partner!=هيا يا شريكي!
+Our power as one!=قوتنا كواحد!
+Chain Attack, ready!=الهجوم التسلسلي، جاهز!
+Finish them!=أنهوهم!
+This is the final blow!=هذه الضربة الأخيرة!
+We did it!=فعلناها!
+That was close...=كان قريبًا...
+Everyone okay?=هل الجميع بخير؟
+Good work, team.=عمل رائع يا فريق.
+
+# ═══════════════════════════════════════════════════════════════
+# فئات إضافية ناقصة (Additional Missing Categories)
+# ═══════════════════════════════════════════════════════════════
+
+# --- نظام الإنجازات والألقاب (Achievements & Titles System) ---
+Title=لقب
+Title Earned=تم الحصول على اللقب
+Explorer=المستكشف
+Warrior=المحارب
+Strategist=الاستراتيجي
+Collector=الجامع
+Gourmet=الذوّاق
+Liberator=المحرر
+Peacemaker=صانع السلام
+Legend=الأسطورة
+Hero of Aionios=بطل أيونيوس
+Colony Liberator=محرر المستعمرات
+Monster Slayer=قاتل الوحوش
+Master Chef=الطاهي الماهر
+Treasure Hunter=صائد الكنوز
+Walking Encyclopedia=الموسوعة المتنقلة
+Record Breaker=محطم الأرقام
+Speed Demon=شيطان السرعة
+Perfect Victory=نصر كامل
+No Damage=بدون ضرر
+Chain Master=سيد التسلسل
+Interlink Expert=خبير الربط البيني
+
+# --- نظام الإعدادات التفصيلية (Detailed Settings) ---
+Audio Settings=إعدادات الصوت
+Video Settings=إعدادات الفيديو
+Display Settings=إعدادات العرض
+Control Settings=إعدادات التحكم
+Camera Settings=إعدادات الكاميرا
+Difficulty Settings=إعدادات الصعوبة
+BGM Volume=مستوى الموسيقى
+SFX Volume=مستوى المؤثرات الصوتية
+Voice Volume=مستوى الأصوات
+Master Volume=مستوى الصوت الرئيسي
+Brightness=السطوع
+Gamma=جاما
+Resolution=الدقة
+Language=اللغة
+Voice Language=لغة الأصوات
+Text Language=لغة النصوص
+Subtitles=ترجمة مرئية
+Subtitle Size=حجم الترجمة المرئية
+Minimap Size=حجم الخريطة المصغرة
+Minimap Rotation=دوران الخريطة المصغرة
+Camera Distance=مسافة الكاميرا
+Camera Speed=سرعة الكاميرا
+Invert X Axis=عكس المحور الأفقي
+Invert Y Axis=عكس المحور العمودي
+Vibration=الاهتزاز
+Auto-Battle=قتال تلقائي
+Battle Speed=سرعة المعركة
+Skip Cutscenes=تخطي المشاهد
+Confirm Actions=تأكيد الإجراءات
+Show Tutorials=إظهار الدروس
+Show Damage Numbers=إظهار أرقام الضرر
+Show Status Effects=إظهار تأثيرات الحالة
+HUD Display=عرض الواجهة
+HUD Opacity=شفافية الواجهة
+Default Settings=الإعدادات الافتراضية
+Reset to Default=إعادة التعيين للافتراضي
+Apply Changes=تطبيق التغييرات
+Discard Changes=تجاهل التغييرات
+
+# --- نظام الصياغة والتطوير (Crafting & Enhancement) ---
+Craft=صنع
+Enhance=تطوير
+Upgrade=ترقية
+Refine=تنقية
+Synthesize=تركيب
+Dismantle=تفكيك
+Materials Required=المواد المطلوبة
+Insufficient Materials=المواد غير كافية
+Enhancement Level=مستوى التطوير
+Max Enhancement=أقصى تطوير
+Enhancement Success=نجح التطوير
+Enhancement Failed=فشل التطوير
+Weapon Enhancement=تطوير السلاح
+Armor Enhancement=تطوير الدرع
+Accessory Enhancement=تطوير الإكسسوار
+Gem Refinement=تنقية الجوهرة
+Gem Rank=رتبة الجوهرة
+Rank Up=ارتفاع الرتبة
+Rank Down=انخفاض الرتبة
+Nopon Coins Required=تتطلب عملات نوبون
+Silver Nopon Coins=عملات نوبون فضية
+Gold Nopon Coins=عملات نوبون ذهبية
+
+# --- نظام التحديات والسجلات (Challenge & Records) ---
+Challenge Mode=وضع التحدي
+Challenge Battle=معركة تحدي
+Time Attack=هجوم زمني
+Survival=البقاء
+Score Attack=هجوم النقاط
+Best Time=أفضل وقت
+High Score=أعلى نتيجة
+Ranking=الترتيب
+Personal Best=أفضل رقم شخصي
+S Rank=تقييم S
+A Rank=تقييم A
+B Rank=تقييم B
+C Rank=تقييم C
+Clear Time=وقت الإكمال
+Total Damage=إجمالي الضرر
+Max Combo=أقصى سلسلة
+Enemies Defeated=الأعداء المهزومين
+No KO=بدون سقوط
+Bonus Objective=هدف إضافي
+Challenge Reward=مكافأة التحدي
+New Challenger=منافس جديد
+Challenge Accepted=تم قبول التحدي
+Challenge Failed=فشل التحدي
+
+# --- DLC Future Redeemed - حوارات إضافية ---
+Matthew=ماثيو
+A=إيه
+Nikol=نيكول
+Glimmer=غليمر
+Shulk=شولك
+Rex=ريكس
+The Boundary=الحدود
+Alpha=ألفا
+The answer lies beyond Origin.=الجواب يكمن خلف الأوريجن.
+Shulk, Rex... we'll finish what you started.=شولك، ريكس... سننهي ما بدأتماه.
+Matthew, you carry the will of two worlds.=ماثيو، أنت تحمل إرادة عالمين.
+This isn't the end. It's a new beginning.=هذه ليست النهاية. إنها بداية جديدة.
+Alpha... you're what Moebius should have been.=ألفا... أنت ما كان يجب أن يكونه موبيوس.
+The Boundary holds the truth of Aionios.=الحدود تحمل حقيقة أيونيوس.
+Two worlds, two futures, one hope.=عالمان، مستقبلان، أمل واحد.
+We'll protect this future with everything we have.=سنحمي هذا المستقبل بكل ما نملك.
+
+# --- عبارات عامة متكررة في اللعبة (Common Recurring Phrases) ---
+Are you ready?=هل أنت مستعد؟
+Let's do this!=هيا بنا!
+Understood.=مفهوم.
+Roger that.=حاضر.
+Leave it to me.=اتركها لي.
+I'll handle it.=سأتولى الأمر.
+Be careful.=كن حذرًا.
+Stay alert.=ابقوا متيقظين.
+Look over there!=انظروا هناك!
+What's that?=ما هذا؟
+It's a monster!=إنه وحش!
+We should avoid that one.=يجب أن نتجنب ذلك الوحش.
+It's too strong for us right now.=إنه أقوى منا حاليًا.
+We need to get stronger.=نحتاج أن نصبح أقوى.
+Let's come back later.=لنعد لاحقًا.
+This path is blocked.=هذا الطريق مسدود.
+We need a field skill to get through.=نحتاج مهارة ميدانية لنمر.
+I found something!=وجدت شيئًا!
+Let's investigate.=لنتحقق.
+There's a container here.=هناك حاوية هنا.
+A rest spot! Perfect timing.=نقطة راحة! في الوقت المثالي.
+The enemies here are strong.=الأعداء هنا أقوياء.
+We should prepare before going further.=يجب أن نستعد قبل التقدم.
+Let's check the map.=لنتفحص الخريطة.
+Our objective is that way.=هدفنا في ذلك الاتجاه.
+We're getting close.=نحن نقترب.
+Almost at our destination.=أوشكنا على الوصول.
+We made it.=وصلنا.
+Mission accomplished.=تمت المهمة.
+
+# --- عبارات النوبون الشائعة (Common Nopon Phrases) ---
+Meh-meh!=مه-مه!
+Heropon=هيروبون
+Littlepon=ليتلبون
+Biggypon=بيجيبون
+Friendpon=فريندبون
+Daddypon=دادبون
+Mummypon=مامبون
+Bird Lady=سيدة الطيور
+Bunnit=بانيت
+Armu=أرمو
+Ponspectors=بونسبكتورز
+Nopon Archsage=حكيم النوبون الأعظم
+Riku forgey-forge!=ريكو يصنع-صنع!
+Manana cooky-cook!=مانانا تطبخ-طبخ!
+Is very important business, yes yes!=عمل مهم جدًا، نعم نعم!
+No worry! Nopon handle everything!=لا قلق! النوبون يتولون كل شيء!
+Meh... this no good.=مه... هذا ليس جيدًا.
+
+# --- أسماء الموسيقى والمقطوعات (Music & Soundtrack) ---
+Off-Seer's Melody=لحن مُنشد الوداع
+A Life Sent On=حياة في مهب الريح
+Battle Theme=موسيقى المعركة
+Boss Battle Theme=موسيقى معركة الزعيم
+Chain Attack Theme=موسيقى الهجوم التسلسلي
+Field Theme=موسيقى الميدان
+Colony Theme=موسيقى المستعمرة
+Tension Theme=موسيقى التوتر
+Cutscene Music=موسيقى المشاهد
+Rest Spot Music=موسيقى نقطة الراحة
+Event Music=موسيقى الحدث
+Credits Theme=موسيقى قائمة الشكر
+Title Screen Music=موسيقى شاشة العنوان
+Jukebox=صندوق الموسيقى
+Sound Player=مشغل الصوت
+Now Playing=يعزف الآن
+Track=مقطوعة
+Track List=قائمة المقطوعات
+Favorite Tracks=المقطوعات المفضلة
+
+# --- نظام الصور والمعرض (Gallery & Screenshot System) ---
+Screenshot=لقطة شاشة
+Photo Mode=وضع التصوير
+Take Photo=التقاط صورة
+Save Photo=حفظ الصورة
+Delete Photo=حذف الصورة
+Gallery=المعرض
+Album=الألبوم
+Filter=مرشح
+Brightness Filter=مرشح السطوع
+Contrast=التباين
+Saturation=التشبع
+Sepia=بني داكن
+Black & White=أبيض وأسود
+Zoom=تقريب
+Zoom In=تكبير
+Zoom Out=تصغير
+Camera Angle=زاوية الكاميرا
+Free Camera=كاميرا حرة
+Depth of Field=عمق الميدان
+Focus=التركيز
+Pose=وضعية
+Expression=تعبير
+Time of Day Filter=مرشح وقت اليوم
+Weather Filter=مرشح الطقس
+Hide HUD=إخفاء الواجهة
+Show Characters=إظهار الشخصيات
+Hide Characters=إخفاء الشخصيات
+
+# --- نظام المساعدة والدعم (Help & Support) ---
+Help=مساعدة
+Help Menu=قائمة المساعدة
+FAQ=الأسئلة الشائعة
+Glossary=القاموس
+Index=الفهرس
+Terms=المصطلحات
+Lore=التاريخ والأساطير
+Characters=الشخصيات
+Bestiary=سجل الوحوش
+Monster List=قائمة الوحوش
+Item List=قائمة الأغراض
+Quest List=قائمة المهام
+Class List=قائمة الفصول
+Art List=قائمة الفنون
+Skill List=قائمة المهارات
+Map List=قائمة الخرائط
+Collectopedia=موسوعة المقتنيات
+Affinity Chart=مخطط الألفة
+Battle Manual=دليل القتال
+System Manual=دليل النظام
+Play Guide=دليل اللعب
+Controller Guide=دليل جهاز التحكم
+Online Manual=الدليل الإلكتروني
