@@ -48,6 +48,7 @@ import IntegrityCheckDialog from "@/components/editor/IntegrityCheckDialog";
 import PreBuildDiagnostic from "@/components/editor/PreBuildDiagnostic";
 import CompareEnginesDialog from "@/components/editor/CompareEnginesDialog";
 import SentenceSplitPanel from "@/components/editor/SentenceSplitPanel";
+import ExportEnglishDialog from "@/components/editor/ExportEnglishDialog";
 
 const Editor = () => {
   const editor = useEditorState();
@@ -56,6 +57,7 @@ const Editor = () => {
   const [showDiffView, setShowDiffView] = React.useState(false);
   const [isDragging, setIsDragging] = React.useState(false);
   const [showDiagnostic, setShowDiagnostic] = React.useState(false);
+  const [showExportEnglishDialog, setShowExportEnglishDialog] = React.useState(false);
   const [compareEntry, setCompareEntry] = React.useState<import("@/components/editor/types").ExtractedEntry | null>(null);
   const gameType = "xenoblade";
   const processPath = "/process";
@@ -704,7 +706,7 @@ const Editor = () => {
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="sm" className="font-body text-xs"><Download className="w-3 h-3" /> تصدير / استيراد</Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="bg-card border-border z-[100] min-w-[220px]">
+                <DropdownMenuContent align="end" className="bg-card border-border z-[100] min-w-[220px] max-h-[60vh] overflow-y-auto">
                   <DropdownMenuLabel className="text-xs">📤 تصدير</DropdownMenuLabel>
                   <DropdownMenuItem onClick={editor.handleExportTranslations}><Download className="w-4 h-4" /> تصدير JSON{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleExportAllEnglishJson}><FileDown className="w-4 h-4" /> تصدير الكل JSON للترجمة الخارجية 🌍</DropdownMenuItem>
@@ -714,8 +716,7 @@ const Editor = () => {
                   <DropdownMenuSeparator />
                   <DropdownMenuLabel className="text-xs">📦 تصدير الإنجليزية غير المترجمة ({untranslatedCount})</DropdownMenuLabel>
                   <DropdownMenuItem onClick={() => editor.handleExportEnglishOnly()}><FileText className="w-4 h-4" /> ملف واحد</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => editor.handleExportEnglishOnly(1000)}><FileText className="w-4 h-4" /> 1000 نص/ملف</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => editor.handleExportEnglishOnly(500)}><FileText className="w-4 h-4" /> 500 نص/ملف</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setShowExportEnglishDialog(true)}><FileText className="w-4 h-4" /> تصدير مخصص (تقسيم + ZIP) ⚙️</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuLabel className="text-xs">📥 استيراد</DropdownMenuLabel>
                   <DropdownMenuItem onClick={editor.handleImportTranslations}><Upload className="w-4 h-4" /> استيراد JSON</DropdownMenuItem>
@@ -790,9 +791,7 @@ const Editor = () => {
                   <DropdownMenuSeparator />
                   <DropdownMenuLabel className="text-xs">📦 تصدير الإنجليزية غير المترجمة ({untranslatedCount})</DropdownMenuLabel>
                   <DropdownMenuItem onClick={() => editor.handleExportEnglishOnly()}>📄 ملف واحد</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => editor.handleExportEnglishOnly(1000)}>1000 نص لكل ملف</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => editor.handleExportEnglishOnly(500)}>500 نص لكل ملف</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => editor.handleExportEnglishOnly(200)}>200 نص لكل ملف</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setShowExportEnglishDialog(true)}>⚙️ تصدير مخصص (تقسيم + ZIP)</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuLabel className="text-xs">📥 استيراد</DropdownMenuLabel>
                   <DropdownMenuItem onClick={editor.handleImportTranslations}><Upload className="w-4 h-4" /> استيراد JSON{editor.isFilterActive ? ` (${editor.filterLabel})` : ''}</DropdownMenuItem>
@@ -1076,6 +1075,12 @@ const Editor = () => {
           glossary={editor.activeGlossary}
           userGeminiKey={editor.userGeminiKey}
           myMemoryEmail={editor.myMemoryEmail}
+        />
+        <ExportEnglishDialog
+          open={showExportEnglishDialog}
+          onOpenChange={setShowExportEnglishDialog}
+          totalCount={untranslatedCount}
+          onExport={(chunkSize) => editor.handleExportEnglishOnly(chunkSize)}
         />
       </div>
     </TooltipProvider>

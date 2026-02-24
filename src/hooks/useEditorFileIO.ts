@@ -260,7 +260,12 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     URL.revokeObjectURL(url);
   };
 
-  const handleExportEnglishOnly = (chunkSize?: number) => {
+  const getUntranslatedCount = (): number => {
+    if (!state) return 0;
+    return getUntranslatedGrouped().totalCount;
+  };
+
+  const handleExportEnglishOnly = async (chunkSize?: number) => {
     if (!state) return;
     const { groupedByFile, totalCount } = getUntranslatedGrouped();
     if (totalCount === 0) {
@@ -287,14 +292,23 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       downloadTxt(content, `english-only${suffix}_${date}.txt`);
       setLastSaved(`✅ تم تصدير ${totalCount} نص إنجليزي (${sortedFiles.length} ملف)`);
     } else {
-      // تقسيم إلى أجزاء
+      // تقسيم إلى أجزاء في ZIP
       const totalParts = Math.ceil(totalCount / chunkSize);
+      const JSZip = (await import("jszip")).default;
+      const zip = new JSZip();
       for (let i = 0; i < totalParts; i++) {
         const chunk = flatEntries.slice(i * chunkSize, (i + 1) * chunkSize);
         const content = buildEnglishTxt(chunk, '', totalParts, i + 1);
-        downloadTxt(content, `english-only${suffix}_part${i + 1}_of_${totalParts}_${date}.txt`);
+        zip.file(`english-only${suffix}_part${i + 1}_of_${totalParts}.txt`, content);
       }
-      setLastSaved(`✅ تم تصدير ${totalCount} نص في ${totalParts} ملفات (${chunkSize} لكل ملف)`);
+      const blob = await zip.generateAsync({ type: "blob" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `english-only${suffix}_${totalParts}files_${date}.zip`;
+      a.click();
+      URL.revokeObjectURL(url);
+      setLastSaved(`✅ تم تصدير ${totalCount} نص في ${totalParts} ملفات ZIP (${chunkSize} لكل ملف)`);
     }
     setTimeout(() => setLastSaved(""), 4000);
   };
@@ -1147,6 +1161,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
   return {
     handleExportTranslations,
     handleExportEnglishOnly,
+    getUntranslatedCount,
     handleImportTranslations,
     handleDropImport,
     processJsonImport,
