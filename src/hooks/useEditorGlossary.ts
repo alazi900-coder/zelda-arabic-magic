@@ -131,6 +131,7 @@ export function useEditorGlossary({
 
   const handleLoadXC3Glossary = useCallback(() => loadGlossary('/xc3-glossary.txt', 'قاموس Xenoblade Chronicles 3', true), [loadGlossary]);
   const handleLoadUIMenusGlossary = useCallback(() => loadGlossary('/xc3-ui-menus-glossary.txt', 'قاموس القوائم والواجهة', false), [loadGlossary]);
+  const handleLoadFullGlossary = useCallback(() => loadGlossary('/xc3-full-glossary.txt', 'القاموس الشامل', false), [loadGlossary]);
 
   // === Cloud glossary ===
   const handleSaveGlossaryToCloud = async () => {
@@ -220,7 +221,7 @@ export function useEditorGlossary({
     glossaryEnabled, setGlossaryEnabled,
     glossaryTermCount, activeGlossary,
     parseGlossaryMap,
-    handleImportGlossary, handleLoadXC3Glossary, handleLoadUIMenusGlossary,
+    handleImportGlossary, handleLoadXC3Glossary, handleLoadUIMenusGlossary, handleLoadFullGlossary,
     handleSaveGlossaryToCloud, handleLoadGlossaryFromCloud,
     handleGenerateGlossaryFromTranslations,
   };
