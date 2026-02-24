@@ -1294,7 +1294,7 @@ Swordmarch Camp=مخيم مسيرة السيوف
 Colony 5 Camp=مخيم المستعمرة 5
 Colony 7 Camp=مخيم المستعمرة 7
 Erythia Sea=بحر إريثيا
-Cent-Omnia Region=منطقة سنت أومنيا
+Cent-Omnia Region=منطقة سنت-أومنيا
 Cent-Omnia Camp=مخيم سنت أومنيا
 Last Lands=الأراضي الأخيرة
 Boundary Camp=مخيم الحدود
@@ -2009,7 +2009,7 @@ Architect=المهندس
 Blade=النصل
 Driver=السائق
 Aegis=إيجيس
-Pyra=بيرا
+Pyra=بايرا
 Mythra=ميثرا
 Fiora=فيورا
 Dunban=دانبان
@@ -3161,9 +3161,9 @@ Keves Battle=معركة كيفيس
 Agnus Battle=معركة أغنوس
 Moebius Battle=معركة مويبيوس
 The Weight of Life=ثقل الحياة
-Off-Seer Melody=لحن مرشد الأرواح
-Mio's Off-Seer Melody=لحن ميو لإرشاد الأرواح
-Noah's Off-Seer Melody=لحن نوح لإرشاد الأرواح
+Off-Seer Melody=لحن مُنشد الوداع
+Mio's Off-Seer Melody=لحن ميو لإنشاد الوداع
+Noah's Off-Seer Melody=لحن نوح لإنشاد الوداع
 A Step Away=على بُعد خطوة
 Carrying the Weight of Life=حاملين ثقل الحياة
 The City=المدينة
@@ -3207,13 +3207,13 @@ The Great Crevasse=الصدع العظيم
 Origin Battle=معركة الأوريجن
 The Boundary=الحدود
 Alpha Battle=معركة ألفا
-Shulk and Rex=شالك وريكس
+Shulk and Rex=شولك وريكس
 Past and Future=الماضي والمستقبل
 Connected Futures=مستقبلات مترابطة
 Reconnecting Worlds=إعادة ربط العوالم
 The Weight We Carry=الثقل الذي نحمله
 New Battle - FR=معركة جديدة - FR
-Bionis and Alrest=بيونيس وأرست
+Bionis and Alrest=بيونيس وألريست
 Hope Rekindled=أمل متجدد
 Uniting the Trinity=توحيد الثالوث
 # ═══════════════════════════════════════════════════
@@ -3316,7 +3316,7 @@ Matthew's Outfit=زي ماثيو
 A's Outfit=زي أيه
 Nikol's Outfit=زي نيكول
 Glimmer's Outfit=زي غليمر
-Shulk's Outfit=زي شالك
+Shulk's Outfit=زي شولك
 Rex's Outfit=زي ريكس
 Liberator Outfit=زي المحرر
 Resistance Outfit=زي المقاومة
@@ -7161,19 +7161,13 @@ Colony 9 Alcamoth=ألكاموث المستعمرة 9
 Ragmos=راغموس
 Llyn Nyddwr=لين نيدور
 New Colony 9=المستعمرة 9 الجديدة
-Prison Island=جزيرة السجن
-Amphitheatre=المدرج
 The Boundary=الحدود
 
 # --- أنظمة لعب ---
 Unity Combo=كومبو الوحدة
 Union Arts=فنون الاتحاد
-Community Development=تطوير المجتمع
-Affinity Growth=نمو الألفة
 Key of Passage=مفتاح الممر
 Founders' Seal=ختم المؤسسين
-Archsage=كبير الحكماء
-Brave Assault=هجوم شجاع
 Brave Combo=كومبو الشجاعة
 Unification=التوحيد
 
@@ -7198,7 +7192,7 @@ Then we share the same enemy.=إذن نتشارك نفس العدو.
 
 # --- لقاء شولك ---
 I've waited a long time for this moment.=انتظرت هذه اللحظة طويلاً.
-The Monado showed me the truth of this world.=أراني الموناد حقيقة هذا العالم.
+The Monado showed me the truth of this world.=أراني المونادو حقيقة هذا العالم.
 Visions... I used to see the future. Now I fight to change it.=الرؤى... كنت أرى المستقبل. الآن أقاتل لتغييره.
 This power... it's not just mine. It belongs to everyone.=هذه القوة... ليست ملكي وحدي. إنها ملك الجميع.
 I once faced a god who wanted to control everything.=واجهت ذات مرة إلهًا أراد التحكم بكل شيء.
@@ -7219,7 +7213,7 @@ All of you matter. Every single life in this world.=كلكم مهمون. كل ح
 
 # --- نيكول ---
 My father was Shulk. I carry his legacy.=أبي كان شولك. أحمل إرثه.
-I may not have the Monado, but I have his determination.=قد لا أملك الموناد، لكنني أملك عزيمته.
+I may not have the Monado, but I have his determination.=قد لا أملك المونادو، لكنني أملك عزيمته.
 I can feel it... the resonance of the Conduit.=أستطيع الشعور بها... رنين القناة.
 We can't let Alpha reach the Conduit. No matter what.=لا يمكننا السماح لألفا بالوصول للقناة. مهما حدث.
 Father told me about Mechonis, about Zanza.=أخبرني أبي عن ميكونيس، عن زانزا.
@@ -7308,9 +7302,9 @@ I've waited centuries for someone like you.=انتظرت قرونًا لشخص �
 
 # --- شولك في المعسكر ---
 Fiora would love this view. I'll bring her here someday.=فيورا ستحب هذا المنظر. سأحضرها هنا يومًا ما.
-The Monado taught me that the future is never fixed.=الموناد علمني أن المستقبل ليس ثابتًا أبدًا.
+The Monado taught me that the future is never fixed.=المونادو علمني أن المستقبل ليس ثابتًا أبدًا.
 Nikol... you've grown so much. I'm proud of you.=نيكول... لقد كبرت كثيرًا. أنا فخور بك.
-Even without the Monado, I can still see a future worth fighting for.=حتى بدون الموناد، لا أزال أرى مستقبلاً يستحق القتال.
+Even without the Monado, I can still see a future worth fighting for.=حتى بدون المونادو، لا أزال أرى مستقبلاً يستحق القتال.
 
 # --- ريكس في المعسكر ---
 Pyra, Mythra... I promised I'd protect this world. And I will.=بايرا، ميثرا... وعدت بحماية هذا العالم. وسأفعل.
@@ -7390,15 +7384,15 @@ Hmph. Too easy.=همف. سهل جدًا.
 
 # --- شولك ---
 I can see the future!=أستطيع رؤية المستقبل!
-Monado... lend me your power!=موناد... أعِرني قوتك!
-I'm really feeling it!=حقًا أشعر بها!
+Monado... lend me your power!=مونادو... أعِرني قوتك!
+I'm really feeling it!=أشعر بالحماس حقًا!
 Back Slash!=ضربة الظهر!
-This is the power of the Monado!=هذه قوة الموناد!
+This is the power of the Monado!=هذه قوة المونادو!
 
 # --- ريكس ---
 I'll show you the power of the Aegis!=سأريك قوة الإيجيس!
 Burning Sword!=السيف الملتهب!
-Don't forget me!=لا تنسوني!
+Don't forget me!=لا تنسني!
 Anchor Shot!=طلقة المرساة!
 Rolling Smash!=الضربة الدوّارة!
 
