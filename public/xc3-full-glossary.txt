@@ -7826,3 +7826,1028 @@ For the first time, I'm thinking about tomorrow.=لأول مرة، أفكر في
 The children don't know what war is. Let's keep it that way.=الأطفال لا يعرفون ما هي الحرب. لنبقِها هكذا.
 We're building something new here. Something worth protecting.=نحن نبني شيئًا جديدًا هنا. شيئًا يستحق الحماية.
 I heard there's a world beyond Aionios. Is that true?=سمعت أن هناك عالمًا وراء أيونيوس. هل هذا صحيح؟
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم السابع عشر: أوصاف الفنون والمهارات - من ملفات BDAT (Battle Arts & Skills - BDAT)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- أسماء الفنون القتالية (Art Names) ---
+Charge Split=شقّ الشحنة
+Energy Shield=درع الطاقة
+Battle Assist=مساعدة قتالية
+Relief Ace=بطل الإغاثة
+Provocation=استفزاز
+Armor Breaker=كاسر الدروع
+Protective Stance=وضعية الحماية
+Light Wave Slash=قطع الموجة الضوئية
+Cry Sound=صوت الصرخة
+Immovable Will=إرادة لا تتزعزع
+Weakening Shot=طلقة الإضعاف
+Enhancement Shot=طلقة التعزيز
+Kabutobat=كابوتوبات
+Shadow Strike=ضربة الظل
+Phantom Claw=مخلب الشبح
+Rising Blade=نصل الصعود
+Falling Slash=قطع السقوط
+Thunder Blade=نصل الرعد
+Spiral Edge=حافة الدوامة
+Wild Rush=اندفاع بري
+Crimson Lotus=لوتس قرمزية
+Storm Surge=عاصفة مدّية
+Flame Nova=نوفا اللهب
+Ice Lance=رمح الجليد
+Wind Cutter=قاطع الرياح
+Dark Matter=مادة مظلمة
+Light Heal=شفاء خفيف
+Mega Heal=شفاء كبير
+Area Heal=شفاء مساحي
+Life Drain=امتصاص الحياة
+Soul Burst=انفجار الروح
+Brave Assault=اقتحام شجاع
+Cross Impact=تأثير متقاطع
+Double Spin=دوران مزدوج
+Triple Strike=ضربة ثلاثية
+Mega Slash=قطع كبير
+Giga Impact=تأثير عملاق
+Tera Blast=انفجار تيرا
+Power Charge=شحن القوة
+Quick Draw=السحب السريع
+Counter Stance=وضعية الردع
+Shield Bash=ضربة الدرع
+War Cry=صرخة الحرب
+Taunt=سخرية
+Guard Shift=تحويل الحراسة
+Heavy Smash=سحق ثقيل
+Dive Bomb=قنبلة الغوص
+Sonic Slash=قطع صوتي
+Thunder Clap=صفعة الرعد
+Venom Slash=قطع السم
+Healing Ring=حلقة الشفاء
+Power Ring=حلقة القوة
+Speed Star=نجم السرعة
+Burst Edge=حافة الانفجار
+Accel Assault=اقتحام التسارع
+
+# --- أوصاف تأثيرات الفنون (Art Effect Descriptions) ---
+Gain charge on hit=اكتساب شحنة عند الإصابة
+AOE/Phys. Def. down=مساحي/خفض دفاع فيزيائي
+Side attack↑=هجوم جانبي↑
+Pierce/Dmg to self=اختراق/ضرر ذاتي
+Eva. up / Atk down=مراوغة↑ / هجوم↓
+High aggro=استفزاز عالٍ
+Eva. up / Faster aggro=مراوغة↑ / استفزاز أسرع
+Self KO↑=ضربة قاضية ذاتية↑
+Evade / High aggro=مراوغة / استفزاز عالٍ
+Evade / Self KO↑=مراوغة / ضربة قاضية ذاتية↑
+Area heal on hit=شفاء مساحي عند الإصابة
+AOE / Fast charge=مساحي / شحن سريع
+AOE / Slow charge=مساحي / شحن بطيء
+Field / Arts heal=ميداني / شفاء بالفنون
+Remove buffs=إزالة التعزيزات
+Front Blowdown=إسقاط أمامي
+Back attack↑=هجوم خلفي↑
+Side attack↓=هجوم جانبي↓
+Cancel hit↑=ضربة إلغاء↑
+Aggro up=استفزاز↑
+Aggro down=استفزاز↓
+Heal over time=شفاء مستمر
+Damage over time=ضرر مستمر
+Crit rate up=معدل حرج↑
+Evasion up=مراوغة↑
+Block rate up=معدل صد↑
+Phys. Def. down=دفاع فيزيائي↓
+Ether Def. down=دفاع أثيري↓
+Attack up=هجوم↑
+Accuracy up=دقة↑
+Piercing attack=هجوم خارق
+Single target / Strong=هدف واحد / قوي
+Multi-hit / Weak=ضربات متعددة / ضعيف
+Guaranteed critical=حرجة مضمونة
+Range attack=هجوم بعيد المدى
+Close range=قريب المدى
+Power Combo starter=بادئ توليفة القوة
+Power Combo ender=خاتم توليفة القوة
+Fusion Art bonus=مكافأة فن الدمج
+Position bonus=مكافأة الموقع
+Cancel bonus=مكافأة الإلغاء
+
+# --- أوصاف المهارات التفصيلية (Detailed Skill Descriptions) ---
+Boosts auto-attack damage by [ML:EnhanceParam paramtype=1 ]%.=يعزز ضرر الهجوم التلقائي بنسبة [ML:EnhanceParam paramtype=1 ]%.
+Boosts Critical Rate of auto-attacks by [ML:EnhanceParam paramtype=1 ]%.=يعزز معدل الضربات الحرجة للهجوم التلقائي بنسبة [ML:EnhanceParam paramtype=1 ]%.
+Boosts accuracy of auto-attacks by [ML:EnhanceParam paramtype=1 ]%.=يعزز دقة الهجوم التلقائي بنسبة [ML:EnhanceParam paramtype=1 ]%.
+Boosts damage dealt when attacking enemies targeting you by [ML:EnhanceParam paramtype=1 ]%.=يعزز الضرر عند مهاجمة أعداء يستهدفونك بنسبة [ML:EnhanceParam paramtype=1 ]%.
+Boosts damage dealt indoors by [ML:EnhanceParam paramtype=1 ]%.=يعزز الضرر في الأماكن المغلقة بنسبة [ML:EnhanceParam paramtype=1 ]%.
+Boosts damage dealt outdoors by [ML:EnhanceParam paramtype=1 ]%.=يعزز الضرر في الأماكن المفتوحة بنسبة [ML:EnhanceParam paramtype=1 ]%.
+Lowers attack targets' Break resistance by [ML:EnhanceParam paramtype=1 ] percentage points.=يخفض مقاومة الكسر للأهداف بمقدار [ML:EnhanceParam paramtype=1 ] نقطة مئوية.
+Boosts Critical Rate by [ML:EnhanceParam paramtype=1 ]%.=يعزز معدل الضربات الحرجة بنسبة [ML:EnhanceParam paramtype=1 ]%.
+When blocking, adds [ML:EnhanceParam paramtype=1 ]% chance to reduce damage to 0.=عند الصد، يضيف احتمال [ML:EnhanceParam paramtype=1 ]% لتقليل الضرر إلى 0.
+When blocking, adds [ML:EnhanceParam paramtype=1 ]% chance to absorb a physical attack.=عند الصد، يضيف احتمال [ML:EnhanceParam paramtype=1 ]% لامتصاص هجوم فيزيائي.
+When blocking, adds [ML:EnhanceParam paramtype=1 ]% chance to absorb an ether attack.=عند الصد، يضيف احتمال [ML:EnhanceParam paramtype=1 ]% لامتصاص هجوم أثيري.
+Absorb attacks taken while Art is active; also become stronger for a time.=امتصاص الهجمات أثناء تفعيل الفن؛ وكذلك تصبح أقوى لفترة.
+When blocking, deals [ML:EnhanceParam paramtype=1 ]% of Attack damage to enemy, drawing aggro.=عند الصد، يلحق [ML:EnhanceParam paramtype=1 ]% من ضرر الهجوم بالعدو مع جذب الاستفزاز.
+When blocking, adds [ML:EnhanceParam paramtype=1 ]% chance to reflect attack.=عند الصد، يضيف احتمال [ML:EnhanceParam paramtype=1 ]% لعكس الهجوم.
+Field Duration Up=زيادة مدة الميدان
+Longer Buff Timers=مدة تعزيزات أطول
+Slower Healing Aggro=استفزاز شفاء أبطأ
+Faster Art Recharge=إعادة شحن فنون أسرع
+Boost Crit on Topple=تعزيز الحرجة عند الإسقاط
+Boost Dmg on Launch=تعزيز الضرر عند الإطلاق
+Boost Dmg on Daze=تعزيز الضرر عند الذهول
+Boost Dmg on Burst=تعزيز الضرر عند الانفجار
+Boost Party Gauge fill=تعزيز ملء مقياس الفريق
+Reduce Arts cooldown=تقليل فترة انتظار الفنون
+Increase aggro generation=زيادة توليد الاستفزاز
+Reduce aggro generation=تقليل توليد الاستفزاز
+Boost heal amount=تعزيز كمية الشفاء
+Reduce damage taken=تقليل الضرر المتلقى
+Extend buff duration=تمديد مدة التعزيز
+Shorten debuff duration=تقصير مدة الإضعاف
+Increase Block Rate=زيادة معدل الصد
+Increase Evasion Rate=زيادة معدل المراوغة
+Physical damage boost=تعزيز الضرر الفيزيائي
+Ether damage boost=تعزيز الضرر الأثيري
+Auto-attack speed up=تسريع الهجوم التلقائي
+Combo damage multiplier=مضاعف ضرر التوليفة
+Chain Attack TP boost=تعزيز نقاط تكتيكية لهجوم السلسلة
+Interlink cooldown reduction=تقليل فترة انتظار الترابط
+Ouroboros form duration up=زيادة مدة شكل أوروبوروس
+Soul Tree unlock bonus=مكافأة فتح شجرة الروح
+Master Art slot unlock=فتح خانة فن الإتقان
+Class XP gain boost=تعزيز اكتساب خبرة الفئة
+
+# --- تأثيرات الحالة (Status Effects) ---
+Blaze=اشتعال
+Freeze=تجمد
+Shock=صدمة
+Poison=سم
+Bind=تقييد
+Blind=عمى
+Sleep=نوم
+Slow=إبطاء
+Strength Down=قوة↓
+Defense Down=دفاع↓
+Ether Defense Down=دفاع أثيري↓
+Accuracy Down=دقة↓
+Evasion Down=مراوغة↓
+Critical Down=حرجة↓
+HP Regen=تجديد HP
+Attack Regen=تجديد هجوم
+Arts Recharge=إعادة شحن الفنون
+Power Charge=شحن القوة
+Lucky Clover=نفل الحظ
+Awakening=صحوة
+Berserk=هيجان
+Invincible=منيع
+Doom=هلاك
+Taunt=سخرية
+Topple Lock=قفل الإسقاط
+Launch Lock=قفل الإطلاق
+Smash Lock=قفل السحق
+Burst Lock=قفل الانفجار
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم الثامن عشر: حوارات المستعمرات من BDAT (Colony Dialogues - BDAT autotalk)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- حوارات مستعمرة لامبدا (Colony Lambda) ---
+I don't know. I thought a different Consul had come, but I have no memory of what happened after that...=لا أعرف. ظننت أن قنصلًا مختلفًا قد جاء، لكن ليس لديّ ذاكرة لما حدث بعد ذلك...
+The Consul did a lot of crazy things, but the plan that Kouju was promoting hasn't been derailed, has it?=القنصل فعل أشياء مجنونة كثيرة، لكن الخطة التي كان كوجو يروّج لها لم تنحرف عن مسارها، أليس كذلك؟
+That seems to be fine. He said it was essential, considering the future of Lambda.=يبدو أن الأمر على ما يرام. قال إنه ضروري بالنظر إلى مستقبل لامبدا.
+We need autonomous Levnisters to carry out the Invidian Tunnels plan.=نحتاج إلى ليفنيسترات مستقلة لتنفيذ خطة أنفاق إنفيديا.
+There are some problems, but we are proceeding with the recovery.=هناك بعض المشاكل، لكننا نمضي قدمًا في عملية الاستعادة.
+You're aiming for the Great Sword, right?=أنتم تستهدفون السيف العظيم، أليس كذلك؟
+Once you leave the colony and cross the Moram Bridge, next you climb the Great Conté Falls. After that... it's still a long way to go.=بمجرد مغادرة المستعمرة وعبور جسر مورام، بعدها تتسلقون شلالات كونتيه العظمى. بعد ذلك... لا يزال الطريق طويلًا.
+There are mysterious ruins at the Great Conté Falls. Please let me investigate.=هناك أطلال غامضة عند شلالات كونتيه العظمى. من فضلكم دعوني أتحقق.
+I can't authorize an investigation there right now. First, we need to stabilize this colony. We have no support from our home country.=لا أستطيع الإذن بتحقيق هناك الآن. أولًا، نحتاج لاستقرار هذه المستعمرة. ليس لدينا دعم من وطننا.
+It feels strange having a Kevesi Levnister in our colony.=شعور غريب أن يكون لدينا ليفنيستر كيفيسي في مستعمرتنا.
+It's not just Levnisters, we'll be exchanging technology and people too, so it might become normal from now on.=ليسوا فقط الليفنيسترات، سنتبادل التكنولوجيا والأشخاص أيضًا، لذا قد يصبح الأمر طبيعيًا من الآن فصاعدًا.
+The Kevesi Levnister is suited for long-range. I suppose it's to counter Agnus.=الليفنيستر الكيفيسي مصمم للمدى البعيد. أعتقد أنه لمواجهة أغنوس.
+Hmm, I think the Kevesi ones are easier to maintain. It seems you can get parts for them anywhere.=أعتقد أن الكيفيسية أسهل في الصيانة. يبدو أنك تستطيع الحصول على قطع غيارها في أي مكان.
+
+# --- حوارات الواجبات والمهام (Duty & Assignment Dialogues) ---
+I had submitted a request for a change of assignment. I wanted to go to a colony further in the rear and contribute as a mechanic...=كنت قد قدمت طلبًا لتغيير المهمة. أردت الذهاب إلى مستعمرة في الخطوط الخلفية والمساهمة كميكانيكي...
+That's a shame. The environment has changed completely, so you should reconsider.=هذا مؤسف. البيئة تغيرت تمامًا، لذا عليك إعادة التفكير.
+When Commander Isurugi was on an expedition to Reebe Highlands, he was just staring blankly at a single tree.=عندما كان القائد إيسوروغي في بعثة إلى مرتفعات ريبي، كان يحدق فارغ النظر في شجرة واحدة.
+I think I understand what that means now... But I won't say it, because I'd probably get yelled at.=أظن أنني أفهم ما يعنيه ذلك الآن... لكنني لن أقوله، لأنني على الأرجح سأُوبَّخ.
+I need to prepare some onigiri for Commander Isurugi.=أحتاج أن أحضّر بعض الأونيغيري للقائد إيسوروغي.
+That guy eats about 10 a day, right...=ذلك الرجل يأكل حوالي 10 في اليوم، أليس كذلك...
+It seems the transport convoys are no longer being attacked by the mysterious Levnister.=يبدو أن قوافل النقل لم تعد تتعرض للهجوم من الليفنيستر الغامض.
+Yeah. There's no way we could drive away monsters that approach the Colony in this state.=أجل. لا توجد طريقة لطرد الوحوش التي تقترب من المستعمرة بهذه الحالة.
+It was a big help that the Yzana Plains has so many herbivorous monsters.=كان من المفيد جدًا أن سهول يزانا تحتوي على كثير من الوحوش العاشبة.
+
+# --- حوارات ما بعد التحرير (Post-Liberation Dialogues) ---
+I can't believe we don't have to fight anymore. What do we do with our time?=لا أصدق أننا لم نعد مضطرين للقتال. ماذا نفعل بوقتنا؟
+The Flame Clock is gone. I keep looking at where it used to be.=ساعة اللهب رحلت. أستمر في النظر إلى حيث كانت.
+Without the Consul's orders, we have to think for ourselves. It's... terrifying.=بدون أوامر القنصل، علينا أن نفكر بأنفسنا. هذا... مرعب.
+I want to see what's beyond the next hill. Just because I can.=أريد أن أرى ما وراء التلة القادمة. فقط لأنني أستطيع.
+Some of the soldiers are struggling. They don't know anything except fighting.=بعض الجنود يعانون. لا يعرفون شيئًا سوى القتال.
+We planted seeds today. Actual seeds, in actual soil. I never thought I'd do that.=زرعنا بذورًا اليوم. بذور حقيقية، في تربة حقيقية. لم أتخيل أبدًا أنني سأفعل ذلك.
+The children asked me what "peace" means. I didn't know how to answer.=الأطفال سألوني ماذا يعني "السلام". لم أعرف كيف أجيب.
+Our colony is trading with others now. Can you imagine? Trading, not fighting.=مستعمرتنا تتاجر مع الآخرين الآن. هل تتخيلون؟ تجارة، ليس قتال.
+The medic said my wound won't affect my new life. "New life"—what a strange phrase.=الطبيب قال إن جرحي لن يؤثر على حياتي الجديدة. "حياة جديدة"—يا لها من عبارة غريبة.
+I dreamed of the Flame Clock last night. Old habits die hard.=حلمت بساعة اللهب البارحة. العادات القديمة لا تموت بسهولة.
+For the first time, I chose what to eat. Not rations—actual food I picked.=لأول مرة، اخترت ما آكل. ليس حصصًا—طعام حقيقي اخترته بنفسي.
+A Kevesi soldier helped fix our water supply. Times really have changed.=جندي كيفيسي ساعد في إصلاح إمدادات مياهنا. الأزمنة تغيرت حقًا.
+We held a ceremony, but not for war. For remembrance. For those we lost.=أقمنا حفلًا، لكن ليس للحرب. للذكرى. لأولئك الذين فقدناهم.
+The world feels bigger now. Like the horizon opened up.=العالم يبدو أكبر الآن. وكأن الأفق انفتح.
+Commander says we'll build a school. A school! For children who've never seen one.=القائد يقول سنبني مدرسة. مدرسة! لأطفال لم يروا واحدة قط.
+
+# --- حوارات الإمدادات والمعدات (Supply & Equipment Dialogues) ---
+The ether supply is running low. We need to find a new source.=إمدادات الأثير تنخفض. نحتاج إيجاد مصدر جديد.
+These weapons are outdated. We need better equipment to survive.=هذه الأسلحة قديمة. نحتاج معدات أفضل للبقاء.
+The Levnister needs repairs, but we're short on parts.=الليفنيستر يحتاج إصلاحات، لكننا نعاني من نقص في القطع.
+I've been maintaining the defense perimeter. Monsters have been getting bolder.=كنت أحافظ على المحيط الدفاعي. الوحوش أصبحت أكثر جرأة.
+The supply route to the City has been established. Finally, some good news.=طريق الإمداد إلى المدينة تم إنشاؤه. أخيرًا، بعض الأخبار الجيدة.
+We've started gathering materials from the surrounding area. Self-sufficiency is the goal.=بدأنا بجمع المواد من المنطقة المحيطة. الاكتفاء الذاتي هو الهدف.
+
+# --- حوارات حفل بلوغ السن (Homecoming Dialogues) ---
+The Homecoming... I always thought it was an honor. Now I know the truth.=حفل بلوغ السن... كنت أظن دائمًا أنه شرف. الآن أعرف الحقيقة.
+Ten terms. That's all we were given. Ten terms to live and fight.=عشرة فصول. هذا كل ما مُنحنا. عشرة فصول لنعيش ونقاتل.
+They told us the Homecoming was a celebration. It was a lie.=أخبرونا أن حفل بلوغ السن كان احتفالًا. كانت كذبة.
+How many friends did I lose to the Homecoming? I stopped counting.=كم صديقًا فقدت بسبب حفل بلوغ السن؟ توقفت عن العدّ.
+Now that we know, we can never go back to how things were.=الآن بعد أن عرفنا، لا يمكننا العودة إلى ما كانت عليه الأمور.
+No more Flame Clocks. No more Homecomings. We decide our own fate.=لا مزيد من ساعات اللهب. لا مزيد من حفل بلوغ السن. نحن نقرر مصيرنا.
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم التاسع عشر: حوارات الاستكشاف الميدانية - من BDAT (Field Exploration - BDAT)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- حوارات جمع المواد والاكتشاف (Material Gathering & Discovery) ---
+It is better to collect it.=من الأفضل جمعها.
+Could it be...?=هل يمكن أن يكون...؟
+A good find.=اكتشاف جيد.
+That light...=ذلك الضوء...
+It's a punishment device...=إنه جهاز عقاب...
+An ether channel, as I thought.=قناة أثير، كما ظننت.
+I will go take a look.=سأذهب لإلقاء نظرة.
+A cave...? I wonder what is inside.=كهف...؟ أتساءل ما بداخله.
+Come here!=تعالوا هنا!
+A survivor from the City. Let's protect them.=ناجٍ من المدينة. لنحميه.
+Mm...?=مم...؟
+It seems they are in some trouble.=يبدو أنهم في مشكلة ما.
+Look.=انظروا.
+We might be able to use it if we repair it.=قد نتمكن من استخدامه إذا أصلحناه.
+Let's hurry.=هيا نسرع.
+That's all of them.=هذا كل شيء.
+Let us return for now.=لنعد في الوقت الحالي.
+Let's go and hear what they have to say.=لنذهب ونسمع ما لديهم.
+Alright, next.=حسنًا، التالي.
+Subjugation complete.=اكتملت عملية الإخضاع.
+A search...=بحث...
+Time to go back and report.=حان وقت العودة والإبلاغ.
+Think you'll find anything, Riku?=هل تظن أنك ستجد شيئًا يا ريكو؟
+
+# --- حوارات ريكو المميزة (Riku's Characteristic Dialogues) ---
+Riku will find something good, mo!=ريكو سيجد شيئًا جيدًا، مو!
+This looks useful, mo!=هذا يبدو مفيدًا، مو!
+Let's go, Manana, mo!=لنذهب يا مانانا، مو!
+Riku smells treasure, mo!=ريكو يشم رائحة الكنز، مو!
+Leave it to Riku, mo!=اتركوها لريكو، مو!
+Something shiny over there, mo!=شيء لامع هناك، مو!
+Riku is tired, mo...=ريكو متعب، مو...
+Don't worry, Riku will protect everyone, mo!=لا تقلقوا، ريكو سيحمي الجميع، مو!
+Riku has a bad feeling about this, mo...=ريكو لديه شعور سيء حيال هذا، مو...
+This is Riku's favorite spot, mo!=هذا مكان ريكو المفضل، مو!
+
+# --- حوارات الفريق أثناء الاستكشاف (Party Exploration Dialogues) ---
+The air feels different here. Stay alert.=الهواء يبدو مختلفًا هنا. ابقوا متيقظين.
+I've never seen this kind of landscape before.=لم أرَ هذا النوع من المناظر من قبل.
+There's a strong ether current nearby. Be careful.=هناك تيار أثيري قوي قريب. كونوا حذرين.
+The monsters here are much stronger than what we've faced before.=الوحوش هنا أقوى بكثير مما واجهناه من قبل.
+We should rest before going further.=يجب أن نستريح قبل المضي أبعد.
+This path looks dangerous. Should we find another way?=هذا المسار يبدو خطيرًا. هل نبحث عن طريق آخر؟
+I can hear water. There might be a campsite nearby.=أسمع ماءً. قد يكون هناك موقع مخيم قريب.
+Look at that view! You can see the whole valley from here.=انظروا لذلك المنظر! يمكنكم رؤية الوادي بأكمله من هنا.
+The fog is getting thicker. Stay close together.=الضباب يزداد كثافة. ابقوا قريبين من بعضكم.
+We've been walking for hours. Let's take a break.=كنا نمشي لساعات. لنأخذ استراحة.
+I sense something underground. Could it be ruins?=أحس بشيء تحت الأرض. هل يمكن أن تكون أطلال؟
+This area was affected by the Annihilation Event.=هذه المنطقة تأثرت بحدث الإبادة.
+The ether density here is abnormally high.=كثافة الأثير هنا مرتفعة بشكل غير طبيعي.
+Be careful of the cliff edge. One wrong step and...=احذروا حافة الجرف. خطوة واحدة خاطئة و...
+I think we've found a shortcut through the mountains.=أظن أننا وجدنا طريقًا مختصرًا عبر الجبال.
+There are signs of battle here. Recent ones.=هناك علامات معركة هنا. حديثة.
+The wind is picking up. A storm might be coming.=الرياح تشتد. قد تأتي عاصفة.
+I've marked this location on the map. We can fast travel here later.=وضعت علامة على هذا الموقع في الخريطة. يمكننا السفر السريع هنا لاحقًا.
+An enemy camp ahead. Should we engage or sneak past?=مخيم عدو أمامنا. هل نهاجم أم نتسلل؟
+The Ferronis Hulk over there... it's enormous.=هيكل الفيرونيس هناك... إنه ضخم.
+This region is Agnus-controlled. We should be cautious.=هذه المنطقة تحت سيطرة أغنوس. يجب أن نكون حذرين.
+This is Keves territory. Keep your guard up.=هذه أراضي كيفيس. أبقوا حذركم عاليًا.
+What a beautiful sunset. It's hard to believe there's a war going on.=يا له من غروب جميل. يصعب تصديق أن هناك حربًا دائرة.
+We need to find higher ground. The view will help us plan our route.=نحتاج إيجاد أرض مرتفعة. المنظر سيساعدنا في تخطيط مسارنا.
+There's a container here. Might have something useful inside.=هناك حاوية هنا. قد تحتوي على شيء مفيد بداخلها.
+
+# --- ردود فعل المعارك الميدانية (Field Battle Reactions) ---
+Enemies spotted! Get ready for battle!=رُصد أعداء! استعدوا للمعركة!
+We're surrounded! Watch each other's backs!=نحن محاصرون! راقبوا ظهور بعضكم!
+That was close. Is everyone alright?=كان ذلك قريبًا. هل الجميع بخير؟
+Good work, everyone. Let's keep moving.=عمل جيد، جميعًا. لنواصل التقدم.
+A Unique Monster! This one's going to be tough.=وحش فريد! هذا سيكون صعبًا.
+Don't let your guard down. There could be more.=لا تخفضوا حذركم. قد يكون هناك المزيد.
+Levnis approaching! Take defensive positions!=ليفنيس يقترب! اتخذوا مواقع دفاعية!
+Elite enemy! Focus fire on the leader!=عدو نخبوي! ركزوا النيران على القائد!
+We need to retreat! This fight is unwinnable right now.=نحتاج للتراجع! هذه المعركة غير قابلة للفوز حاليًا.
+Let's use the terrain to our advantage.=لنستخدم التضاريس لصالحنا.
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم العشرون: نصوص المهام من BDAT (Quest Data - BDAT)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- أسماء المهام الجانبية (Side Quest Names) ---
+Colony 15 Soldiers Missing=جنود المستعمرة 15 مفقودون
+Friendship=صداقة
+Colony 0's Future=مستقبل المستعمرة 0
+Life in Li Garte Prison=الحياة في سجن لي غارتي
+Prison Problems=مشاكل السجن
+Mystery Ferron=فيرون الغامض
+Sena and No. 9=سينا والرقم 9
+Colony 0 Duties=واجبات المستعمرة 0
+The Name "Nagiri"=اسم "ناغيري"
+A Need for Names=الحاجة إلى الأسماء
+Curious About Training=فضول حول التدريب
+Herding Monsters=رعي الوحوش
+Tactician's Plan=خطة التكتيكي
+Colony 4 Revitalized=تجديد المستعمرة 4
+The Poisoner=السمّام
+Irritation=تهيّج
+Tutor: Mio=معلمة: ميو
+Isora's Request=طلب إيسورا
+
+# --- أوصاف المهام (Quest Descriptions) ---
+The Colony 15 soldiers seem to have gone missing from the City. Stop by Michiba Canteen to find out more.=يبدو أن جنود المستعمرة 15 اختفوا من المدينة. توقفوا عند مقهى ميتشيبا لمعرفة المزيد.
+Thanks to the Colony 15 soldiers' sterling work as soldiers of the Lost Numbers, Triden has been given permission to enter the City.=بفضل عمل جنود المستعمرة 15 المتميز كجنود للأرقام المفقودة، مُنح ترايدن إذنًا بدخول المدينة.
+Find a Bright Fig in Morukuna Wildwood, and take it to Triden's drinking buddy, Jougo.=ابحثوا عن تين ساطع في برية موروكونا، وأوصلوه إلى رفيق شرب ترايدن، جوغو.
+Unfortunately, Jougo died as you were searching for a Bright Fig, leaving Triden with one fewer friend.=للأسف، مات جوغو بينما كنتم تبحثون عن تين ساطع، تاركًا ترايدن مع صديق أقل.
+Rest up at the Station Breakroom.=استريحوا في غرفة الاستراحة بالمحطة.
+Head for Captocorn Ridge, where the target was last spotted.=توجهوا إلى تلال كابتوكورن حيث رُصد الهدف آخر مرة.
+
+# --- أسماء المواقع في المهام (Quest Location Names) ---
+Michiba Canteen=مقهى ميتشيبا
+Sentridge Harbor=ميناء سنتريدج
+Pioneer's Inlet=مدخل الرواد
+High Morukuna Wildwood Area=منطقة برية موروكونا العليا
+Monument of Life=نصب الحياة
+Liberi Plaza=ساحة ليبري
+Station Breakroom=غرفة استراحة المحطة
+Captocorn Ridge=تلال كابتوكورن
+
+# --- أسماء مهام متنوعة (Miscellaneous Quest Names) ---
+A Fierce Battle=معركة شرسة
+The Lost Colony=المستعمرة المفقودة
+Monsters in the Mines=وحوش في المناجم
+Supply Run=مهمة الإمداد
+Border Patrol=دورية الحدود
+The Mechanic's Request=طلب الميكانيكي
+Salvage Operation=عملية الإنقاذ
+Missing Scouts=الكشافة المفقودون
+Ether Research=بحث الأثير
+The Nopon Merchant=تاجر النوبون
+Ancient Treasure=كنز قديم
+Forging Ahead=المضي قدمًا
+A New Dawn=فجر جديد
+The Path Forward=الطريق إلى الأمام
+Standing Together=الوقوف معًا
+Breaking Free=التحرر
+Hope Springs Eternal=الأمل أبدي
+What Lies Beneath=ما يكمن في الأعماق
+The Forgotten Cave=الكهف المنسي
+Signs of Life=علامات الحياة
+Enemy Territory=أراضي العدو
+The Final Push=الدفعة الأخيرة
+Old Friends=أصدقاء قدامى
+New Beginnings=بدايات جديدة
+The Greater Good=الصالح العام
+Soldier's Resolve=عزيمة الجندي
+A Moment's Rest=لحظة راحة
+The Healer's Burden=عبء المعالج
+Cooking for the Colony=الطهي للمستعمرة
+The First Harvest=الحصاد الأول
+Building Bridges=بناء الجسور
+Trust Exercise=تمرين الثقة
+Unexpected Allies=حلفاء غير متوقعين
+The Commander's Dilemma=معضلة القائد
+Into the Unknown=نحو المجهول
+A Helping Hand=يد المساعدة
+The Scholar's Theory=نظرية العالم
+Monster Ecology=بيئة الوحوش
+Weapon Maintenance=صيانة الأسلحة
+Training Day=يوم التدريب
+The Lookout Point=نقطة المراقبة
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم الحادي والعشرون: أسماء الوحوش - من BDAT (Monster Names - BDAT system)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- وحوش فارغا (Vvarga Monsters) ---
+Rogal Vvarga=روغال فارغا
+Rox Vvarga=روكس فارغا
+Obster Bunnit=أوبستر بونيت
+Testudo Scout=كشاف تيستودو
+
+# --- وحوش روبل (Ropl Monsters) ---
+Colnicas Ropl=كولنيكاس روبل
+Bemot Ropl=بيموت روبل
+Rockheart Ropl=روبل القلب الصخري
+Odolera Ropl=أودوليرا روبل
+
+# --- وحوش روغول (Rhogul Monsters) ---
+Sky Rhogul=روغول السماء
+Arogan Rhogul=أروغان روغول
+Brute Rhogul=روغول الوحشي
+Smart Rhogul=روغول الذكي
+
+# --- وحوش أنسل (Ansel Monsters) ---
+Brute Ansel=أنسل الوحشي
+Scarred Ansel=أنسل الموشّح بالندوب
+
+# --- وحوش كوادوينغ (Quadwing Monsters) ---
+Ruga Quadwing=روغا كوادوينغ
+Gegl Quadwing=غيغل كوادوينغ
+
+# --- وحوش أرييس (Aries Monsters) ---
+Mant Aries=مانت أرييس
+Mant Ories=مانت أورييس
+
+# --- وحوش أنلود (Anlood Monsters) ---
+Rudoni Anlood=رودوني أنلود
+Olkort Anlood=أولكورت أنلود
+Scape Anlood=سكيب أنلود
+
+# --- جنود وآليات (Soldiers & Automatons) ---
+Automaton Sentry=حارس آلي
+Agnus Defender=مدافع أغنوس
+Keves Soldier=جندي كيفيس
+Agnus Soldier=جندي أغنوس
+Keves Commander=قائد كيفيس
+Agnus Commander=قائد أغنوس
+Elite Soldier=جندي نخبوي
+Colony Guard=حارس المستعمرة
+
+# --- وحوش متنوعة أخرى (Additional Monsters) ---
+Frost Bunnit=بونيت الصقيع
+Flame Bunnit=بونيت اللهب
+Thunder Bunnit=بونيت الرعد
+Aqua Bunnit=بونيت المائي
+Elder Bunnit=بونيت العجوز
+Sand Piranhax=بيرانهاكس الرمال
+River Piranhax=بيرانهاكس النهر
+Deep Piranhax=بيرانهاكس الأعماق
+Cave Piranhax=بيرانهاكس الكهف
+Storm Ardun=أردون العاصفة
+Plains Ardun=أردون السهول
+Mountain Ardun=أردون الجبل
+Highland Ardun=أردون المرتفعات
+Swamp Ardun=أردون المستنقع
+Desert Krabble=كرابل الصحراء
+Shore Krabble=كرابل الشاطئ
+Cave Krabble=كرابل الكهف
+Giant Krabble=كرابل العملاق
+Fire Caterpile=كاتربايل النار
+Ice Caterpile=كاتربايل الجليد
+Toxic Caterpile=كاتربايل السام
+Forest Upa=أوبا الغابة
+Mountain Upa=أوبا الجبل
+Prairie Upa=أوبا البراري
+Snow Upa=أوبا الثلج
+Night Volff=فولف الليل
+Dire Volff=فولف المريع
+Alpha Volff=فولف الألفا
+Pack Volff=فولف القطيع
+Wasteland Antol=أنتول الأراضي القاحلة
+Jungle Antol=أنتول الأدغال
+Ridge Antol=أنتول التلال
+Coastal Antol=أنتول الساحل
+Deep Sea Kromar=كرومار أعماق البحر
+Shallow Kromar=كرومار المياه الضحلة
+Reef Kromar=كرومار الشعاب
+Trench Kromar=كرومار الخندق
+Fire Elemental=عنصري النار
+Ice Elemental=عنصري الجليد
+Thunder Elemental=عنصري الرعد
+Water Elemental=عنصري الماء
+Wind Elemental=عنصري الرياح
+Earth Elemental=عنصري الأرض
+Dark Elemental=عنصري الظلام
+Light Elemental=عنصري النور
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم الثاني والعشرون: أسماء المواقع - من BDAT (Location Names - BDAT system)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- جسور وممرات (Bridges & Passages) ---
+Travalga Bridge=جسر ترافالغا
+Moram Bridge=جسر مورام
+Basverg Belfry=برج باسفيرغ
+Prison Terrace=شرفة السجن
+The Dragongate=بوابة التنين
+Great Conté Falls=شلالات كونتيه العظمى
+Reebe Highlands=مرتفعات ريبي
+Yzana Plains=سهول يزانا
+Invidian Tunnels=أنفاق إنفيديا
+Li Garte Prison=سجن لي غارتي
+Morukuna Wildwood=برية موروكونا
+
+# --- مناطق رئيسية (Major Areas) ---
+Fornis Region=منطقة فورنيس
+Pentelas Region=منطقة بنتيلاس
+Cadensia Region=منطقة كادينسيا
+Aetia Region=منطقة آيتيا
+Keves Castle=قلعة كيفيس
+Agnus Castle=قلعة أغنوس
+Cloudkeep=حصن الغيوم
+The Great Sword=السيف العظيم
+Maktha Wildwood=برية ماكثا
+Erythia Sea=بحر إريثيا
+Dannagh Desert=صحراء دناخ
+Elaice Highway=طريق إيلايس السريع
+Ribbi Flats=سهول ريبي
+Millick Meadows=مروج ميلك
+Urayan Tunnels=أنفاق يوريا
+Colony Omega=مستعمرة أوميغا
+The City=المدينة
+Origin Interior=داخل الأوريجن
+Amphitheatre=المدرج
+Prison Island=جزيرة السجن
+Swordmarch=مسيرة السيوف
+Alcamoth=ألكاموث
+Mechonis Sword=سيف ميكونيس
+Aionios Castle=قلعة أيونيوس
+
+# --- معالم فرعية (Sub-Landmarks) ---
+Campsite Ridge=تلة المخيم
+Cliffside Path=مسار حافة الجرف
+Hidden Cove=خليج مخفي
+Ancient Ruins=أطلال قديمة
+Forgotten Shrine=ضريح منسي
+Windswept Plateau=هضبة عاصفة
+Crystal Cave=كهف البلور
+Ether Spring=نبع الأثير
+Watchtower Peak=قمة برج المراقبة
+Sunlit Clearing=فسحة مشمسة
+Moonlit Grotto=كهف مقمر
+Stormbreak Cliff=جرف كسر العاصفة
+Twilight Valley=وادي الشفق
+Ember Lake=بحيرة الجمر
+Starfall Peak=قمة سقوط النجوم
+Ironworks=مصنع الحديد
+Supply Depot=مستودع الإمداد
+Training Ground=ساحة التدريب
+Medical Bay=الخليج الطبي
+Command Center=مركز القيادة
+Assembly Hall=قاعة التجمع
+Armory=المخزن الحربي
+Mess Hall=قاعة الطعام
+Barracks=الثكنات
+Lookout Post=نقطة المراقبة
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم الثالث والعشرون: العناصر والإكسسوارات - من BDAT (Items & Accessories - BDAT system)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- إكسسوارات مشبك الشعر (Hairgrip Accessories) ---
+Divining Hairgrip=مشبك شعر التنبؤ
+Four Sea Hairgrip=مشبك شعر البحار الأربعة
+
+# --- خواتم (Rings) ---
+Friendship Ring=خاتم الصداقة
+Affection Ring=خاتم المودة
+Chain Ring=خاتم السلسلة
+Shackle Ring=خاتم القيد
+
+# --- أقراط (Earrings) ---
+Silver Earrings=أقراط فضية
+Crystal Earrings=أقراط بلورية
+
+# --- تمائم (Amulets) ---
+Activity Amulet=تميمة النشاط
+Healing Amulet=تميمة الشفاء
+
+# --- شارات (Badges) ---
+Friendship Badge=شارة الصداقة
+Fraternal Badge=شارة الإخاء
+
+# --- فوميزوكيتش (Fumizukich Items) ---
+Platinum Fumizukich=فوميزوكيتش بلاتيني
+Gold Fumizukich=فوميزوكيتش ذهبي
+Silver Fumizukich=فوميزوكيتش فضي
+Break Fumizukich=فوميزوكيتش الكسر
+
+# --- بلورات (Crystals) ---
+Cracked Crystal=بلورة متشققة
+Warped Crystal=بلورة ملتوية
+Beautiful Crystal=بلورة جميلة
+Flawless Crystal=بلورة لا تشوبها شائبة
+
+# --- ميداليات (Medals) ---
+Glowing Medal=ميدالية متوهجة
+Gleaming Medal=ميدالية متلألئة
+Glistening Medal=ميدالية لامعة
+
+# --- ذكريات ضوئية (Light Memories) ---
+Light Memory=ذكرى ضوئية
+
+# --- مواد وموارد (Materials & Resources) ---
+Walnut Grape=عنب الجوز
+Sour Gooseberry=عنب الثعلب الحامض
+Humming Plum=برقوق الطنين
+Red Durian=دوريان أحمر
+Ether Plum=برقوق الأثير
+Dry Lemon=ليمون جاف
+Sweet Wasabi=واسابي حلو
+Cool Potato=بطاطا باردة
+Baggy Swede=لفت فضفاض
+Amethyst Vanilla=فانيلا الجمشت
+Ice Cabbage=ملفوف الجليد
+Tootshroom=فطر الناب
+Clicky Topaz=توباز طقطاقي
+Icicle Marine=بحري الجليد
+Wool Rock=صخرة الصوف
+Orbshell=صدفة المدار
+Bright Fig=تين ساطع
+
+# --- عناصر شفاء وتعزيز (Healing & Boost Items) ---
+Small Potion=جرعة صغيرة
+Medium Potion=جرعة متوسطة
+Large Potion=جرعة كبيرة
+Mega Potion=جرعة كبرى
+Revival Herb=عشبة الإحياء
+Antidote Herb=عشبة الترياق
+Speed Fruit=فاكهة السرعة
+Power Fruit=فاكهة القوة
+Defense Fruit=فاكهة الدفاع
+Lucky Charm=تعويذة الحظ
+Rare Stone=حجر نادر
+Precious Stone=حجر ثمين
+Ancient Coin=عملة قديمة
+Iron Ore=خام الحديد
+Silver Ore=خام الفضة
+Gold Ore=خام الذهب
+Crystal Ore=خام البلور
+Ether Ore=خام الأثير
+Monster Fang=ناب الوحش
+Monster Claw=مخلب الوحش
+Monster Scale=حراشف الوحش
+Monster Hide=جلد الوحش
+Monster Horn=قرن الوحش
+Wing Feather=ريشة جناح
+Tough Sinew=وتر متين
+Soft Fur=فراء ناعم
+Sharp Bone=عظم حاد
+Thick Shell=صدفة سميكة
+Sticky Web=شبكة لزجة
+Luminous Moss=طحلب مضيء
+Iron Chain=سلسلة حديدية
+Copper Wire=سلك نحاسي
+Glass Lens=عدسة زجاجية
+Rubber Band=حزام مطاطي
+Woven Thread=خيط منسوج
+Steel Plate=صفيحة فولاذية
+Titanium Bolt=مسمار تيتانيوم
+Carbon Fiber=ألياف كربونية
+Energy Cell=خلية طاقة
+Power Core=نواة الطاقة
+Data Chip=شريحة بيانات
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم الرابع والعشرون: نصوص النظام والواجهة المتبقية (Remaining System & UI - BDAT)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- رسائل الحفظ والتحميل (Save & Load Messages) ---
+Save data created.=تم إنشاء بيانات الحفظ.
+Save data loaded.=تم تحميل بيانات الحفظ.
+Overwrite existing save data?=الكتابة فوق بيانات الحفظ الموجودة؟
+Are you sure you want to delete this save data?=هل أنت متأكد من حذف بيانات الحفظ هذه؟
+Auto-save complete.=اكتمل الحفظ التلقائي.
+Loading save data...=جارٍ تحميل بيانات الحفظ...
+Save failed. Please check available storage.=فشل الحفظ. يرجى التحقق من المساحة المتاحة.
+No save data found.=لم يتم العثور على بيانات حفظ.
+
+# --- رسائل النظام (System Messages) ---
+Connection error. Please try again.=خطأ في الاتصال. يرجى المحاولة مرة أخرى.
+An unexpected error occurred.=حدث خطأ غير متوقع.
+Please wait...=يرجى الانتظار...
+Processing...=جارٍ المعالجة...
+Download complete.=اكتمل التحميل.
+Update available. Please restart the application.=تحديث متاح. يرجى إعادة تشغيل التطبيق.
+Settings saved successfully.=تم حفظ الإعدادات بنجاح.
+Reset all settings to default?=إعادة تعيين جميع الإعدادات إلى الافتراضي؟
+Brightness=السطوع
+Contrast=التباين
+Volume=مستوى الصوت
+Music Volume=مستوى الموسيقى
+Sound Effects=المؤثرات الصوتية
+Voice Volume=مستوى الأصوات
+Subtitles=الترجمة النصية
+Camera Speed=سرعة الكاميرا
+Invert Y-Axis=عكس المحور العمودي
+Minimap Rotation=دوران الخريطة المصغرة
+HUD Display=عرض واجهة المعلومات
+Battle Speed=سرعة المعركة
+Auto-Battle=معركة تلقائية
+Skip Cutscenes=تخطي المشاهد السينمائية
+Difficulty=مستوى الصعوبة
+Easy Mode=الوضع السهل
+Normal Mode=الوضع العادي
+Hard Mode=الوضع الصعب
+Very Hard Mode=الوضع الصعب جدًا
+New Game Plus=لعبة جديدة+
+Continue=متابعة
+New Game=لعبة جديدة
+Load Game=تحميل لعبة
+Options=الخيارات
+Quit Game=الخروج من اللعبة
+Return to Title=العودة إلى الشاشة الرئيسية
+
+# --- رسائل الإنجاز (Achievement Messages) ---
+Achievement Unlocked!=تم فتح الإنجاز!
+New Title Acquired!=تم اكتساب لقب جديد!
+Bonus EXP earned!=تم كسب خبرة إضافية!
+New area discovered!=تم اكتشاف منطقة جديدة!
+New recipe learned!=تم تعلم وصفة جديدة!
+New class unlocked!=تم فتح فئة جديدة!
+Class rank increased!=ارتفعت رتبة الفئة!
+Colony affinity increased!=زادت ألفة المستعمرة!
+New hero joined the party!=بطل جديد انضم إلى الفريق!
+Collectopaedia card completed!=اكتملت بطاقة موسوعة المقتنيات!
+Quest completed!=اكتملت المهمة!
+Side quest available!=مهمة جانبية متاحة!
+Hero quest available!=مهمة بطل متاحة!
+Chain of events triggered!=تم تفعيل سلسلة أحداث!
+Affinity chart updated!=تم تحديث مخطط الألفة!
+Skill tree expanded!=تم توسيع شجرة المهارات!
+New gem recipe discovered!=تم اكتشاف وصفة جوهرة جديدة!
+Unique Monster defeated!=تم هزيمة وحش فريد!
+Challenge Battle available!=معركة تحدٍ متاحة!
+New Game Plus content unlocked!=تم فتح محتوى اللعبة الجديدة+!
+
+# --- نصائح شاشة التحميل الإضافية (Additional Loading Screen Tips) ---
+Different classes excel in different roles. Experiment to find your style.=الفئات المختلفة تتفوق في أدوار مختلفة. جرّبوا لإيجاد أسلوبكم.
+Fusion Arts combine two Arts for enhanced effects. Time them wisely.=فنون الدمج تجمع فنّين لتأثيرات معززة. وقّتوها بحكمة.
+The Interlink gauge fills during combat. Use it to trigger Ouroboros forms.=مقياس الترابط يمتلئ أثناء القتال. استخدموه لتفعيل أشكال أوروبوروس.
+Accessories provide passive bonuses. Equip them strategically.=الإكسسوارات توفر مكافآت سلبية. جهّزوها بشكل استراتيجي.
+Break → Topple → Launch → Smash: master this combo for devastating damage.=كسر → إسقاط → إطلاق → سحق: أتقنوا هذه التوليفة لضرر مدمر.
+Heart-to-Hearts reveal character relationships. Visit rest spots to trigger them.=أحداث القلب تكشف علاقات الشخصيات. زوروا نقاط الراحة لتفعيلها.
+Nopon Coins come in Silver and Gold varieties. Gold coins are much rarer.=عملات النوبون تأتي بنوعين فضي وذهبي. العملات الذهبية أندر بكثير.
+The Collectopaedia rewards you for gathering sets of collectibles.=موسوعة المقتنيات تكافئكم لجمع مجموعات من المقتنيات.
+Affinity between party members increases through combat and exploration.=الألفة بين أعضاء الفريق تزداد من خلال القتال والاستكشاف.
+Higher colony affinity unlocks better rewards and exclusive quests.=ألفة أعلى مع المستعمرات تفتح مكافآت أفضل ومهام حصرية.
+Some enemies are resistant to physical damage but weak to ether.=بعض الأعداء يقاومون الضرر الفيزيائي لكنهم ضعفاء أمام الأثير.
+Chain Attacks can turn the tide of any battle. Build TP wisely.=هجمات السلسلة يمكن أن تقلب موازين أي معركة. اجمعوا النقاط التكتيكية بحكمة.
+Levnis battles require different tactics than normal combat.=معارك الليفنيس تتطلب تكتيكات مختلفة عن القتال العادي.
+Explore off the beaten path—hidden areas often contain valuable treasures.=استكشفوا بعيدًا عن المسار المطروق—المناطق المخفية غالبًا تحتوي على كنوز ثمينة.
+Cooking at camp provides temporary stat boosts for your next battle.=الطهي في المخيم يوفر تعزيزات مؤقتة للإحصائيات لمعركتكم القادمة.
+Some quest objectives only appear at specific times of day.=بعض أهداف المهام تظهر فقط في أوقات محددة من اليوم.
+Fast travel is available from any discovered landmark.=السفر السريع متاح من أي معلم تم اكتشافه.
+Unique Monsters are significantly stronger than regular enemies. Prepare well.=الوحوش الفريدة أقوى بكثير من الأعداء العاديين. حضّروا جيدًا.
+Heropon Riku can craft powerful accessories at camp.=البطل النوبون ريكو يستطيع صنع إكسسوارات قوية في المخيم.
+Master all available classes to unlock powerful Master Skills.=أتقنوا جميع الفئات المتاحة لفتح مهارات إتقان قوية.
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم الخامس والعشرون: حوارات إضافية من ملفات BDAT (Extended BDAT Dialogues)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- حوارات قتالية موسعة (Extended Battle Dialogues) ---
+We can't lose here! Everyone, give it everything you've got!=لا يمكننا الخسارة هنا! جميعًا، أعطوا كل ما لديكم!
+This enemy is on another level entirely...=هذا العدو على مستوى مختلف تمامًا...
+Our formation is breaking! Regroup!=تشكيلتنا تنهار! أعيدوا التجمع!
+Now's our chance! Full assault!=هذه فرصتنا! هجوم شامل!
+The enemy is weakening! Don't let up!=العدو يضعف! لا تتراجعوا!
+We need to coordinate our Ouroboros forms!=نحتاج لتنسيق أشكال أوروبوروس!
+Save your Chain Attack for when it counts!=احفظوا هجوم السلسلة للوقت المناسب!
+Switch to defensive positions! The attack is too strong!=بدّلوا إلى مواقع دفاعية! الهجوم قوي جدًا!
+If we can break through their defense, we win!=إذا استطعنا اختراق دفاعهم، ننتصر!
+The Flame Clock is urging us to fight... resist it!=ساعة اللهب تحثنا على القتال... قاوموها!
+
+# --- حوارات المشاهد الإضافية (Additional Cutscene Dialogues) ---
+The world we knew was a lie. But the truth doesn't make it easier.=العالم الذي عرفناه كان كذبة. لكن الحقيقة لا تجعل الأمر أسهل.
+We were born to fight and die. But we chose something different.=وُلدنا لنقاتل ونموت. لكننا اخترنا شيئًا مختلفًا.
+Moebius feeds on conflict. As long as there's war, they thrive.=مويبيوس يتغذى على الصراع. طالما هناك حرب، يزدهرون.
+The Endless Now... a world frozen in time, repeating forever.=الآن الأبدي... عالم متجمد في الزمن، يتكرر إلى الأبد.
+Every life they've taken, every memory erased—we carry that burden.=كل حياة أخذوها، كل ذكرى محوها—نحن نحمل ذلك العبء.
+If we destroy Moebius, we destroy this world. But a new one will begin.=إذا دمرنا مويبيوس، ندمر هذا العالم. لكن عالمًا جديدًا سيبدأ.
+I don't want to forget you. Any of you. Not ever.=لا أريد أن أنساكم. أيًّا منكم. أبدًا.
+This flute... it connects us. Across time, across worlds.=هذا الناي... يربطنا. عبر الزمن، عبر العوالم.
+The off-seeing... it's not just for the dead. It's for the living, too.=إنشاد الوداع... ليس فقط للموتى. إنه للأحياء أيضًا.
+We'll meet again. I know it. As long as we remember.=سنلتقي مجددًا. أعرف ذلك. طالما نتذكر.
+
+# --- حوارات نقاط الراحة (Rest Spot Dialogues) ---
+Let's cook something before we move on. We'll need our strength.=لنطهُ شيئًا قبل أن نتحرك. سنحتاج قوتنا.
+I'll take first watch. Get some rest, everyone.=سأتولى المراقبة الأولى. استريحوا جميعًا.
+The stars here are beautiful. You'd never know there's a war going on.=النجوم هنا جميلة. لن تصدق أن هناك حربًا دائرة.
+Riku wants to sharpen everyone's weapons, mo!=ريكو يريد شحذ أسلحة الجميع، مو!
+Manana will cook something special tonight! Meh-meh-meh!=مانانا ستطهو شيئًا مميزًا الليلة! مي-مي-مي!
+This fire reminds me of home. Or what we called home, at least.=هذه النار تذكرني بالوطن. أو ما كنا نسميه وطنًا على الأقل.
+We should review our strategy before tomorrow's march.=يجب أن نراجع استراتيجيتنا قبل مسيرة الغد.
+Anyone else hear that? Something's moving in the bushes...=هل يسمع أحد غيري ذلك؟ شيء يتحرك في الأدغال...
+Time to craft some gems. We'll need every advantage we can get.=حان وقت صنع بعض الجواهر. سنحتاج كل ميزة يمكننا الحصول عليها.
+The campfire crackles. For a moment, everything feels peaceful.=النار تطقطق. للحظة، كل شيء يبدو سلميًا.
+
+# --- حوارات التسوق والتجارة (Shopping & Trade Dialogues) ---
+Welcome, welcome! Take a look at my wares!=أهلًا أهلًا! ألقوا نظرة على بضاعتي!
+Best prices in all of Aionios, guaranteed!=أفضل الأسعار في كل أيونيوس، مضمون!
+You need supplies? I've got everything you need.=تحتاجون إمدادات؟ لديّ كل ما تحتاجونه.
+That'll be 500 Gold. Fair price for quality goods.=سيكون ذلك 500 ذهبية. سعر عادل لبضاعة جيدة.
+Come back anytime! My shop is always open.=عودوا في أي وقت! متجري مفتوح دائمًا.
+I can upgrade that weapon for you. For a price, of course.=أستطيع ترقية ذلك السلاح لكم. بسعر، بالطبع.
+Rare goods just arrived! Limited stock, so act fast!=بضاعة نادرة وصلت للتو! مخزون محدود، فتصرفوا بسرعة!
+I trade in Nopon Coins too. Silver or Gold, I accept both.=أتاجر بعملات النوبون أيضًا. فضية أو ذهبية، أقبل كليهما.
+Need materials for gem crafting? I might have what you're looking for.=تحتاجون مواد لصنع الجواهر؟ قد يكون لديّ ما تبحثون عنه.
+Special discount for liberators! You've earned it.=خصم خاص للمحررين! لقد استحققتموه.
+
+# --- حوارات بين الشخصيات خارج القتال (Inter-Character Non-Combat Dialogues) ---
+Noah, your flute playing has improved. It moves me every time.=نوح، عزفك على الناي تحسّن. يحركني في كل مرة.
+Mio, how many moons have you watched from this spot?=ميو، كم قمرًا شاهدتِ من هذا المكان؟
+Lanz, stop eating all the rations! Save some for the rest of us.=لانز، توقف عن أكل كل الحصص! أبقِ بعضها لبقيتنا.
+Sena, you're stronger than you think. Never forget that.=سينا، أنتِ أقوى مما تظنين. لا تنسي ذلك أبدًا.
+Eunie, your aim is getting sharper. Those monsters didn't stand a chance.=يوني، تصويبك يتحسن. تلك الوحوش لم تكن لديها فرصة.
+Taion, have you finished analyzing the enemy patterns yet?=تايون، هل انتهيت من تحليل أنماط العدو بعد؟
+Riku and Manana make quite the team, don't they?=ريكو ومانانا يشكلان فريقًا رائعًا، أليس كذلك؟
+We've come so far. Let's not give up now.=لقد قطعنا شوطًا طويلًا. لا نستسلم الآن.
+Tomorrow could be our last day. Or our first real day of freedom.=الغد قد يكون يومنا الأخير. أو يومنا الأول الحقيقي من الحرية.
+Whatever happens, we face it together. All of us.=مهما حدث، نواجهه معًا. كلنا.
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم السادس والعشرون: أوصاف مهارات الجواهر والفئات (Gem & Class Skill Descriptions - BDAT)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- أوصاف الجواهر (Gem Descriptions) ---
+Steelcleaver: Boosts physical damage dealt.=شاقّ الفولاذ: يعزز الضرر الفيزيائي الملحق.
+Analyze Weakness: Increases damage to enemies with debuffs.=تحليل الضعف: يزيد الضرر للأعداء المصابين بإضعافات.
+Steady Striker: Boosts stability during auto-attacks.=الضارب الثابت: يعزز الثبات أثناء الهجوم التلقائي.
+Swelling Scourge: Boosts damage over time dealt to enemies.=الآفة المتزايدة: يعزز الضرر المستمر الملحق بالأعداء.
+Accurate Grace: Boosts healing accuracy and amount.=نعمة الدقة: يعزز دقة الشفاء وكميته.
+Disperse Bloodlust: Reduces aggro generated by healing Arts.=تشتيت شهوة الدم: يقلل الاستفزاز الناتج عن فنون الشفاء.
+Ironclad: Boosts physical defense.=حصين: يعزز الدفاع الفيزيائي.
+Brimming Spirit: Increases maximum HP.=روح فائضة: يزيد أقصى HP.
+Lifebearer: Restores HP gradually over time.=حامل الحياة: يستعيد HP تدريجيًا مع الوقت.
+Ultimate Counter: Increases counter damage when blocking.=الرد الأقصى: يزيد ضرر الرد عند الصد.
+Tail Wind: Boosts movement speed and evasion.=ريح المؤخرة: يعزز سرعة الحركة والمراوغة.
+Doublestrike: Adds chance for auto-attacks to hit twice.=ضربة مزدوجة: يضيف فرصة لضرب الهجوم التلقائي مرتين.
+Empowered Combo: Boosts Fusion Art damage.=توليفة ممكّنة: يعزز ضرر فن الدمج.
+Refined Incantation: Boosts ether damage dealt.=تعويذة محسّنة: يعزز الضرر الأثيري الملحق.
+Perilous Presence: Boosts aggro generation.=حضور خطر: يعزز توليد الاستفزاز.
+Guardian's Shield: Reduces damage taken while guarding allies.=درع الحارس: يقلل الضرر المتلقى أثناء حراسة الحلفاء.
+Steady Healer: Reduces recharge time for healing Arts.=المعالج الثابت: يقلل وقت إعادة شحن فنون الشفاء.
+Quick Charge: Reduces Art recharge time.=شحن سريع: يقلل وقت إعادة شحن الفنون.
+Critical Strike: Boosts critical hit damage.=ضربة حرجة: يعزز ضرر الضربة الحرجة.
+Chained Fury: Boosts Chain Attack damage.=غضب متسلسل: يعزز ضرر هجوم السلسلة.
+
+# --- أوصاف مهارات الفئات (Class Skill Descriptions) ---
+Swordfighter: A balanced attacker with versatile melee Arts.=المبارز: مهاجم متوازن بفنون قتال قريبة متنوعة.
+Zephyr: A nimble defender who evades attacks with grace.=الزفير: مدافع رشيق يراوغ الهجمات بأناقة.
+Medic Gunner: A healer who supports from the rear with ranged Arts.=المسعف المسلح: معالج يدعم من الخلف بفنون بعيدة المدى.
+Tactician: A strategic healer who controls the battlefield.=التكتيكي: معالج استراتيجي يتحكم في ساحة المعركة.
+Heavy Guard: A sturdy defender who absorbs massive damage.=الحارس الثقيل: مدافع صلب يمتص ضررًا هائلًا.
+Ogre: A powerful attacker who trades defense for raw damage.=الغول: مهاجم قوي يستبدل الدفاع بالضرر الخام.
+Flash Fencer: A swift attacker who chains rapid combos.=المبارز الخاطف: مهاجم سريع يسلسل توليفات متتابعة.
+War Medic: A combat healer who fights alongside the front line.=طبيب الحرب: معالج قتالي يقاتل جنبًا إلى جنب مع الخط الأمامي.
+Guardian Commander: A leader who boosts the entire party's defense.=قائد الحراسة: قائد يعزز دفاع الفريق بأكمله.
+Stalker: A stealthy attacker who strikes from the shadows.=المتسلل: مهاجم خفي يضرب من الظلال.
+Lone Exile: A self-sufficient fighter with powerful solo abilities.=المنفي الوحيد: مقاتل مكتفٍ ذاتيًا بقدرات فردية قوية.
+Incursor: An aggressive attacker who disrupts enemy formations.=الغازي: مهاجم عدواني يعطل تشكيلات العدو.
+Lost Vanguard: An elite defender from a forgotten era.=طليعة المفقودين: مدافع نخبوي من عصر منسي.
+Signifer: A support specialist who enhances ally performance.=حامل الراية: متخصص دعم يعزز أداء الحلفاء.
+Soulhacker: A versatile fighter who copies monster abilities.=قرصان الروح: مقاتل متعدد ينسخ قدرات الوحوش.
+Troubadour: A bard-like healer who uses music to support allies.=المنشد: معالج شبيه بالشاعر يستخدم الموسيقى لدعم الحلفاء.
+Seraph: A celestial attacker with devastating ether Arts.=السيراف: مهاجم سماوي بفنون أثيرية مدمرة.
+Machine Assassin: A precision striker who targets weak points.=قاتل الآلات: ضارب دقيق يستهدف نقاط الضعف.
+Royal Summoner: A powerful caster who summons ethereal allies.=المستدعي الملكي: ساحر قوي يستدعي حلفاء أثيريين.
+Lifesage: The ultimate healer who can revive fallen allies.=حكيم الحياة: المعالج الأقصى الذي يستطيع إحياء الحلفاء الساقطين.
+Noblesse: A refined fighter with both offensive and defensive mastery.=النبيل: مقاتل راقٍ يتقن الهجوم والدفاع معًا.
+Full Metal Jaguar: A dual-wielding speed demon who overwhelms with strikes.=الجاغوار المعدني: شيطان سرعة مزدوج السلاح يطغى بالضربات.
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم السابع والعشرون: حوارات أحداث القلب الإضافية (Extended Heart-to-Hearts - BDAT)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- نوح وميو (Noah & Mio) ---
+Mio, I want you to hear this melody. I composed it just for you.=ميو، أريدك أن تسمعي هذه اللحن. ألفته فقط من أجلك.
+Noah... time is something I never had enough of. But with you, every moment counts.=نوح... الوقت شيء لم أملك ما يكفي منه أبدًا. لكن معك، كل لحظة تُحتسب.
+When I play the flute, I think of all the lives we've sent off.=عندما أعزف على الناي، أفكر في كل الأرواح التي ودّعناها.
+Three months... that's all I have. But I won't waste a single day.=ثلاثة أشهر... هذا كل ما لديّ. لكنني لن أضيع يومًا واحدًا.
+Your music gives me strength, Noah. Don't ever stop playing.=موسيقاك تمنحني القوة يا نوح. لا تتوقف عن العزف أبدًا.
+I wish we had more time. But wishing won't change anything—acting will.=أتمنى لو كان لدينا وقت أكثر. لكن التمني لن يغير شيئًا—العمل سيفعل.
+
+# --- لانز وسينا (Lanz & Sena) ---
+Sena, you don't have to carry everything on your own. That's what teammates are for.=سينا، لستِ مضطرة لحمل كل شيء بمفردك. هذا ما يوجد من أجله زملاء الفريق.
+Lanz, I want to be strong. Not just physically, but here—in my heart.=لانز، أريد أن أكون قوية. ليس فقط جسديًا، بل هنا—في قلبي.
+You're the strongest person I know, Sena. And I'm not just talking about muscles.=أنتِ أقوى شخص أعرفه يا سينا. ولا أتحدث عن العضلات فقط.
+I used to think strength was everything. Now I know it's about who you fight for.=كنت أظن أن القوة هي كل شيء. الآن أعرف أن الأمر يتعلق بمن تقاتل من أجلهم.
+Together, we're unstoppable. I really believe that.=معًا، نحن لا نُوقف. أؤمن بذلك حقًا.
+Lanz, promise me we'll see this through to the end. No matter what.=لانز، وعدني أننا سنكمل هذا حتى النهاية. مهما حدث.
+
+# --- يوني وتايون (Eunie & Taion) ---
+Taion, do you ever stop overthinking? Just act on instinct for once.=تايون، هل تتوقف عن التفكير الزائد يومًا؟ تصرف بالغريزة ولو مرة.
+Eunie, your recklessness will get us killed one day. We need strategy.=يوني، تهورك سيقتلنا يومًا ما. نحتاج استراتيجية.
+Maybe I'm reckless, but at least I'm honest. Can you say the same?=ربما أنا متهورة، لكنني على الأقل صادقة. هل تستطيع قول المثل؟
+I... admire your directness. It's refreshing, actually.=أنا... أعجب بصراحتك. إنها منعشة، في الواقع.
+We're more alike than you think, Taion. We both care too much.=نحن أكثر تشابهًا مما تظن يا تايون. كلانا يهتم أكثر من اللازم.
+Fine, I'll admit it. Having you plan our strategies has saved us more than once.=حسنًا، سأعترف بذلك. وجودك لتخطيط استراتيجياتنا أنقذنا أكثر من مرة.
+
+# --- أحداث قلب مع الأبطال (Hero Heart-to-Hearts) ---
+Ethel, you're the reason Colony 4 survived as long as it did.=إيثل، أنتِ السبب في بقاء المستعمرة 4 طوال تلك المدة.
+Ashera, your fire is what drives this team forward. Don't ever lose it.=آشيرا، ناركِ هي ما يدفع هذا الفريق للأمام. لا تفقديها أبدًا.
+Zeon, your discipline is admirable. But even soldiers need rest.=زيون، انضباطك مثير للإعجاب. لكن حتى الجنود يحتاجون للراحة.
+Valdi, those machines of yours have saved our lives countless times.=فالدي، تلك الآلات الخاصة بك أنقذت حياتنا مرات لا تُحصى.
+Fiona, your kindness makes even the darkest days brighter.=فيونا، لطفك يجعل حتى أحلك الأيام أكثر إشراقًا.
+Monica, the City wouldn't exist without your leadership.=مونيكا، المدينة لما وُجدت بدون قيادتك.
+Gray, you don't talk much, but your actions speak volumes.=غراي، لا تتحدث كثيرًا، لكن أفعالك تقول الكثير.
+Teach, your students look up to you. Every single one of them.=تيتش، طلابك يتطلعون إليك. كل واحد منهم.
+Isurd, Colony Lambda's success is a testament to your vision.=إيسورد، نجاح مستعمرة لامبدا شاهد على رؤيتك.
+Juniper, your tracking skills are unmatched. Even Riku is impressed.=جونيبر، مهاراتك في التتبع لا مثيل لها. حتى ريكو معجب.
+Miyabi, your grace in battle is like a dance. Beautiful and deadly.=ميابي، رشاقتك في المعركة كالرقص. جميلة ومميتة.
+Cammuravi, your flames burn for justice. That's something worth fighting for.=كامورافي، نيرانك تشتعل من أجل العدالة. هذا شيء يستحق القتال من أجله.
+Segiri, you've come so far from what Moebius made you. Be proud.=سيغيري، لقد قطعتِ شوطًا بعيدًا عما صنعك مويبيوس. كوني فخورة.
+Triton, the sea is in your blood. And now it's in our story too.=ترايتون، البحر في دمك. والآن هو في قصتنا أيضًا.
+Alexandria, your blade cuts through lies as easily as enemies.=ألكسندريا، نصلك يقطع الأكاذيب بسهولة كما يقطع الأعداء.
+
+# ═══════════════════════════════════════════════════════════════════════
+# القسم الثامن والعشرون: أسماء إضافية من BDAT (Additional BDAT Names)
+# ═══════════════════════════════════════════════════════════════════════
+
+# --- أسماء وحوش فريدة إضافية (Additional Unique Monster Names) ---
+Territorial Rotbart=روتبارت الإقليمي
+Immovable Gonzalez=غونزاليز الراسخ
+Resentful Rockwell=روكويل الحاقد
+Avenging Rashidi=رشيدي المنتقم
+Perilous Gizmo=غيزمو الخطير
+Colossal Taos=تاوس العملاق
+Superboss Dino=الزعيم الأعلى دينو
+Guardian Lennox=الحارس لينوكس
+Ancient Daedala=دايدالا القديمة
+Winged Devastator=المدمر المجنح
+Thunder Serpent=ثعبان الرعد
+Frost Dragon=تنين الصقيع
+Shadow Beast=وحش الظل
+Crimson Emperor=الإمبراطور القرمزي
+Crystal Guardian=حارس البلور
+Storm Herald=نذير العاصفة
+Volcanic Titan=عملاق البركان
+Deep Sea Leviathan=تنين الأعماق
+Celestial Phoenix=طائر الفينيق السماوي
+Obsidian Knight=فارس السبج
+
+# --- أسماء NPCs مهمين (Important NPC Names) ---
+Commander Isurugi=القائد إيسوروغي
+Kouju=كوجو
+Triden=ترايدن
+Jougo=جوغو
+Isora=إيسورا
+Nagiri=ناغيري
+Ghondor=غوندور
+Nia=نيا
+Melia=ميليا
+Vandham=فاندام
+Guernica=غيرنيكا
+Crys=كريس
+Shulk=شولك
+Rex=ريكس
+Pyra=بايرا
+Mythra=ميثرا
+Riku=ريكو
+Manana=مانانا
+
+# --- أسماء القناصل (Consul Names) ---
+Consul D=القنصل د
+Consul J=القنصل ج
+Consul K=القنصل ك
+Consul X=القنصل إكس
+Consul Y=القنصل واي
+Consul Z=القنصل زد
+Consul N=القنصل ن
+Consul P=القنصل ب
+Consul O=القنصل أو
+Consul M=القنصل م
+
+# --- أسماء أطعمة الطهي (Cooking Recipe Names) ---
+Grilled Meat Skewer=سيخ لحم مشوي
+Vegetable Stew=يخنة الخضار
+Fried Rice Bowl=طبق أرز مقلي
+Fish Fillet=شرائح السمك
+Monster Steak=شريحة لحم الوحش
+Sweet Fruit Tart=فطيرة فواكه حلوة
+Spiced Noodles=نودلز متبّلة
+Cheese Platter=طبق الجبن
+Hearty Soup=حساء دسم
+Campfire Bread=خبز نار المخيم
+Herbed Chicken=دجاج بالأعشاب
+Smoked Fish=سمك مدخن
+Berry Jam Toast=توست مربى التوت
+Mushroom Risotto=ريزوتو الفطر
+Stuffed Pepper=فلفل محشي
+Golden Pancake=فطيرة ذهبية
+Crystal Clear Broth=مرق صافٍ كالبلور
+Warrior's Feast=وليمة المحارب
+Explorer's Rations=حصص المستكشف
+Commander's Special=طبق القائد المميز
+
+# --- وصفات الطهي التأثيرات (Cooking Effect Descriptions) ---
+Boosts HP recovery after battle.=يعزز استعادة HP بعد المعركة.
+Increases physical attack for a limited time.=يزيد الهجوم الفيزيائي لفترة محدودة.
+Boosts ether defense temporarily.=يعزز الدفاع الأثيري مؤقتًا.
+Reduces damage taken for 3 battles.=يقلل الضرر المتلقى لمدة 3 معارك.
+Increases critical hit rate temporarily.=يزيد معدل الضربات الحرجة مؤقتًا.
+Boosts EXP gained from the next battle.=يعزز الخبرة المكتسبة من المعركة التالية.
+Increases maximum HP temporarily.=يزيد أقصى HP مؤقتًا.
+Boosts evasion rate for a limited time.=يعزز معدل المراوغة لفترة محدودة.
+Reduces Art recharge time temporarily.=يقلل وقت إعادة شحن الفنون مؤقتًا.
+Increases item drop rate for the next battle.=يزيد معدل إسقاط العناصر للمعركة التالية.
