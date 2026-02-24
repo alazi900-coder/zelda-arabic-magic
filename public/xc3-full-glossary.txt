@@ -1,5 +1,7 @@
-# Xenoblade Chronicles 3 - قاموس المصطلحات الشامل
-# الشخصيات الرئيسية
+# Xenoblade Chronicles 3 - القاموس الشامل الكامل
+# ═══════════════════════════════════════════════════
+# الشخصيات الرئيسية (Main Party)
+# ═══════════════════════════════════════════════════
 Noah=نوح
 Mio=ميو
 Eunie=يوني
@@ -8,7 +10,9 @@ Lanz=لانز
 Sena=سينا
 Riku=ريكو
 Manana=مانانا
-# الشخصيات الثانوية والأبطال
+# ═══════════════════════════════════════════════════
+# الأبطال (Heroes)
+# ═══════════════════════════════════════════════════
 Isurugi=إيسوروغي
 Ashera=أشيرا
 Zeon=زيون
@@ -19,7 +23,6 @@ Mashiro=ماشيرو
 Shiro=شيرو
 Triton=ترايتون
 Cammuravi=كامورافي
-Moebius=موبيوس
 Kouju=كوجو
 Kite=كايت
 Shijima=شيجيما
@@ -34,6 +37,12 @@ Clad=كلاد
 Knockheart=نوكهارت
 Hexen=هكسن
 Easel=إيسل
+Kamunabi=كامونابي
+Isora=إيسورا
+Ghondor=غوندور
+# ═══════════════════════════════════════════════════
+# شخصيات رئيسية أخرى
+# ═══════════════════════════════════════════════════
 Melia=ميليا
 Nia=نيا
 Guernica Vandham=غيرنيكا فاندام
@@ -42,9 +51,43 @@ Triden=ترايدن
 Ichika=إيتشيكا
 Joran=جوران
 Crys=كريس
-# المستعمرات
-Colony 9=المستعمرة 9
+Moebius=موبيوس
+# ═══════════════════════════════════════════════════
+# شخصيات ثانوية (NPCs)
+# ═══════════════════════════════════════════════════
+Lucione=لوسيوني
+Fox=فوكس
+Camilla=كاميلا
+Harala=هارالا
+Trish=تريش
+Eilis=إيليس
+Mumba=مومبا
+Leonardo=ليوناردو
+Eastman=إيستمان
+Jango=جانغو
+Olivia=أوليفيا
+Marlon=مارلون
+Ist=إيست
+Yuzet=يوزيت
+Nagiri=ناغيري
+# ═══════════════════════════════════════════════════
+# الفصائل والأعراق
+# ═══════════════════════════════════════════════════
+Agnus=أغنوس
+Keves=كيفيس
+Kevesi=الكيفيسيون
+Agnian=الأغنوسيون
+Nopon=النوبون
+Lost Numbers=الأرقام المفقودة
+Ouroboros=أوروبوروس
+# ═══════════════════════════════════════════════════
+# المستعمرات (Colonies)
+# ═══════════════════════════════════════════════════
+Colony=المستعمرة
+Colony 0=المستعمرة 0
 Colony 4=المستعمرة 4
+Colony 5=المستعمرة 5
+Colony 9=المستعمرة 9
 Colony 11=المستعمرة 11
 Colony 15=المستعمرة 15
 Colony 30=المستعمرة 30
@@ -52,10 +95,14 @@ Colony Lambda=مستعمرة لامبدا
 Colony Tau=مستعمرة تاو
 Colony Mu=مستعمرة مو
 Colony Sigma=مستعمرة سيجما
-Colony 5=المستعمرة 5
 Colony Omega=مستعمرة أوميغا
-Colony=المستعمرة
-# المواقع الرئيسية
+Lambda=لامبدا
+Sigma=سيجما
+Tau=تاو
+Mu=مو
+# ═══════════════════════════════════════════════════
+# المواقع الرئيسية (Major Locations)
+# ═══════════════════════════════════════════════════
 Aionios=أيونيوس
 The Castle=القلعة
 Castle=القلعة
@@ -63,6 +110,15 @@ Agnus Castle=قلعة أغنوس
 City=المدينة
 Swordmarch=سوردمارش
 Origin=الأوريجن
+# ═══════════════════════════════════════════════════
+# المناطق (Regions)
+# ═══════════════════════════════════════════════════
+Pentelas Region=منطقة بنتيلاس
+Cadensia Region=منطقة كادينسيا
+Aetia=أيتيا
+# ═══════════════════════════════════════════════════
+# المواقع التفصيلية
+# ═══════════════════════════════════════════════════
 Yzana Plains=سهول يزانا
 Reebe Highlands=هضاب ريبي
 Great Conté Falls=شلالات كونتي العظيمة
@@ -76,8 +132,6 @@ Daedal Isle=جزيرة ديدال
 Isun Island=جزيرة إيسون
 Morukuna Wildwood=غابة موروكونا البرية
 Dannagh Desert=صحراء داناغ
-Pentelas Region=منطقة بنتيلاس
-Cadensia Region=منطقة كادينسيا
 Syra Hovering Reefs=الشعاب المرجانية الطائرة سيرا
 Hovering Reef 4=الشعاب المرجانية الطائرة 4
 First Ixian Bridge=جسر إكسيان الأول
@@ -85,14 +139,22 @@ Anu Shoals=ضحايا أنو
 Patulia Bay=خليج باتوليا
 Aegis Sea=بحر إيجيس
 Li Garte Prison Camp=معسكر لي غارت السجني
+Li Garte Prison=سجن لي غارت
 Levnister=ليفنيستر
 Autonomous Levnister=ليفنيستر مستقل
 Kevesi Levnister=ليفنيستر كيفيسي
-# مصطلحات عالم اللعبة
+Resonance Hill=تل الرنين
+Murmur Rise=مرتفع الهمس
+Flamii Watering Hole=حفرة ماء فلامي
+# ═══════════════════════════════════════════════════
+# مصطلحات عالم اللعبة (World Terms)
+# ═══════════════════════════════════════════════════
 Iron Giant God=إله العملاق الحديدي
 Ferronis=فيرونيس
+Ferron=فيرون
 Fire Clock of Life=ساعة الحياة النارية
 Flame Clock=ساعة اللهب
+Flame Clock Destruction=تدمير ساعة اللهب
 Annihilator=المبيد
 Annihilation Event=حدث الإبادة
 Ether=الإيثير
@@ -101,10 +163,13 @@ Ether Channel=قناة الإيثير
 Origin Shard=شظية الأوريجن
 Black Fog=الضباب الأسود
 Origin Attack=هجوم الأوريجن
-Flame Clock Destruction=تدمير ساعة اللهب
 Interference=التداخل
-Ouroboros=أوروبوروس
-# الرتب والمناصب
+Ether Extraction Site=موقع استخراج الإيثير
+Levnis=ليفنيس
+Husks=أجساد فارغة
+# ═══════════════════════════════════════════════════
+# الرتب والمناصب (Ranks & Titles)
+# ═══════════════════════════════════════════════════
 Commander=القائد
 Lieutenant=الملازم
 Officer=الضابط
@@ -113,14 +178,20 @@ Squad=الفرقة
 Squad Leader=قائد الفرقة
 Guard=الحرس
 Captain of the Guard=قائد الحرس
-Engineering Corps=فيق الهندسة
+Engineering Corps=فيلق الهندسة
 Supply Team=فريق الإمداد
 Logistics=الإمداد والتمويل
 Terrain Bureau=مكتب التضاريس
 Internal Affairs Bureau=مكتب الشؤون الداخلية
 Inspector=المفتش
 Consul=الكونسول
-# الأدوار القتالية
+Watchman=الحارس
+Armory Pilot=طيار المستودع
+Tutor=المعلم
+Captain=القبطان
+# ═══════════════════════════════════════════════════
+# الأدوار القتالية (Combat Roles)
+# ═══════════════════════════════════════════════════
 Defender=المدافع
 Offensive Defender=المدافع الهجومي
 Attacker=المهاجم
@@ -129,7 +200,9 @@ Dual Blade=سيفين مزدوجين
 Off-Seer=سيف المؤلف
 Sender=المرسل
 Great Sword=السيف العظيم
+# ═══════════════════════════════════════════════════
 # الرتب والفترات
+# ═══════════════════════════════════════════════════
 Death-seeker=طالب الموت
 Silver-rank=رتبة الفضة
 Bronze-rank=رتبة البرونز
@@ -137,18 +210,105 @@ Bronze-rank=رتبة البرونز
 Coming-of-Age Ceremony=حفل بلوغ السن القانونية
 3rd Term=الفترة الثالثة
 Term=فترة
-# الأعراق والفصائل
-Nopon=النوبون
-Kevesi=الكيفيسيون
-Agnian=الأغنوسيون
-Lost Numbers=الأرقام المفقودة
-Agnus=أغنوس
-Keves=كيفيس
-Lambda=لامبدا
-Sigma=سيجما
-Tau=تاو
-Mu=مو
-# الوحوش والمخلوقات
+# ═══════════════════════════════════════════════════
+# نظام القتال - حالات العدو (Battle States)
+# ═══════════════════════════════════════════════════
+Break=كسر
+Topple=إسقاط
+Launch=إطلاق
+Daze=ذهول
+Smash=تحطيم
+Blowdown=ضربة ساحقة
+Burst=انفجار
+Bind=تقييد
+Bleed=نزيف
+Sleep=نوم
+Resistance Down=خفض المقاومة
+# ═══════════════════════════════════════════════════
+# نظام القتال - إحصائيات (Battle Stats)
+# ═══════════════════════════════════════════════════
+HP=نقاط الصحة
+Attack=الهجوم
+Physical Defense=الدفاع الجسدي
+Ether Defense=الدفاع الإيثيري
+Agility=الرشاقة
+Dexterity=البراعة
+Critical Rate=نسبة الضربة الحرجة
+Block Rate=نسبة الصد
+Evasion=التفادي
+Accuracy=الدقة
+Aggro=الاستفزاز
+Damage=الضرر
+# ═══════════════════════════════════════════════════
+# نظام القتال - الفنون والمهارات (Arts & Skills)
+# ═══════════════════════════════════════════════════
+Art=فن
+Arts=فنون
+Fusion Arts=الفنون المدمجة
+Chain Attack=هجوم متسلسل
+Interlink=الترابط
+Ouroboros Order=أمر أوروبوروس
+Auto-Attack=هجوم تلقائي
+Talent Art=فن الموهبة
+Master Art=فن أسطوري
+Combo=كومبو
+Cancel=إلغاء
+Stance=وضعية
+Preemptive Attack=هجوم استباقي
+Side Attack=هجوم جانبي
+Back Attack=هجوم خلفي
+Front Blowdown=ضربة ساحقة أمامية
+# ═══════════════════════════════════════════════════
+# نظام القتال - التعزيزات والإضعاف (Buffs/Debuffs)
+# ═══════════════════════════════════════════════════
+Buff=تعزيز
+Debuff=إضعاف
+Attack Up=زيادة الهجوم
+Defense Up=زيادة الدفاع
+Damage Up=زيادة الضرر
+Dexterity Up=زيادة البراعة
+Auto-Attack Up=زيادة الهجوم التلقائي
+Auto-Attack Critical Rate Up=زيادة نسبة الحرجة للهجوم التلقائي
+Auto-Attack Accuracy Up=زيادة دقة الهجوم التلقائي
+Break Duration Up=زيادة مدة الكسر
+Topple Duration Up=زيادة مدة الإسقاط
+Launch Duration Up=زيادة مدة الإطلاق
+Daze Duration Up=زيادة مدة الذهول
+# ═══════════════════════════════════════════════════
+# نظام القتال - مهارات متقدمة (Advanced Skills)
+# ═══════════════════════════════════════════════════
+Avenger=المنتقم
+Unblockable=لا يُصد
+Kick-Starter=بداية قوية
+Enemy KO Damage Up=زيادة ضرر إسقاط العدو
+Pierce=اختراق
+AOE=هجوم مساحي
+Evade=تفادي
+KO=سقوط
+Absorb=امتصاص
+Reflect=انعكاس
+# ═══════════════════════════════════════════════════
+# الجواهر والصناعة (Gems & Crafting)
+# ═══════════════════════════════════════════════════
+Gem=جوهرة
+Gem Crafting=صناعة الجواهر
+Accessory=إكسسوار
+Friendship Ring=خاتم الصداقة
+Affection Ring=خاتم المودة
+Chain Ring=خاتم السلسلة
+Shackle Ring=خاتم القيد
+Silver Earrings=أقراط فضية
+Crystal Earrings=أقراط كريستالية
+Activity Amulet=تميمة النشاط
+Healing Amulet=تميمة الشفاء
+Friendship Badge=شارة الصداقة
+Fraternal Badge=شارة الأخوة
+Fumizukich=فوميزوكيتش
+Divining Hairgrip=مشبك الكهانة
+# ═══════════════════════════════════════════════════
+# الوحوش والمخلوقات (Monsters & Creatures)
+# ═══════════════════════════════════════════════════
+Monster=الوحش
 Bunnit=البانيت
 Armu=الأرمو
 Ardun=الأردون
@@ -163,27 +323,71 @@ Gogol=الغوغول
 Dardus=الداردوس
 Kilocorn Grandeps=كيلوكورن غرانديبس
 Levialord Empireo=ليفيالورد إمبيريو
-Monster=الوحش
-# الأطعمة والطبخ
+# أنواع الوحوش الفرعية
+Vvarga=فارغا
+Ropl=روبل
+Rhogul=روغول
+Ansel=أنسيل
+Scout=كشاف
+Sentry=حارس آلي
+Automaton Sentry=حارس آلي
+Aquatic Life=حياة مائية
+# ═══════════════════════════════════════════════════
+# المواد القابلة للجمع (Collectibles)
+# ═══════════════════════════════════════════════════
+Collectible=العنصر القابل للجمع
+Glittering Star Radish=فجل النجم اللامع
+Walnut Grape=عنب الجوز
+Sour Gooseberry=عنب الثعلب الحامض
+Humming Plum=البرقوق الطنان
+Red Durian=الدوريان الأحمر
+Ether Plum=برقوق الإيثير
+Dry Lemon=الليمون الجاف
+Sweet Wasabi=الوسابي الحلو
+Cool Potato=البطاطا الباردة
+Baggy Swede=اللفت الفضفاض
+Amethyst Vanilla=فانيلا الجمشت
+Ice Cabbage=الملفوف الجليدي
+Tootshroom=فطر الجذر
+Clicky Topaz=توباز النقر
+Icicle Marine=بحري الجليد
+Wool Rock=صخرة الصوف
+Magnet Clay=طين المغناطيس
+Pione Stone=حجر بيوني
+Lacquer Stone=حجر اللك
+Emerald Snow=ثلج الزمرد
+Rabbit Stone=حجر الأرنب
+Torta Fossil=أحفورة تورتا
+Orbshell=صدفة كروية
+Ink Mollusk=رخوي الحبر
+# ═══════════════════════════════════════════════════
+# الأطعمة والطبخ (Food & Cooking)
+# ═══════════════════════════════════════════════════
 Onigiri=الأونيجيري
 Redfish Grillwrap=لفائح السمك الأحمر
 Mild Game Stew=حساء الصيد المعتدل
+Mild Stew=حساء معتدل
 Spongy Spuds=البطاطس الإسفنجية
 Ninin Pie=فطيرة نينين
 Cured-Meat Vizzard=لحم مقدد فيزارد
 Michiba Canteen=مطعم ميشيبا
-# العناصر والأنظمة
+Canteen=المقصف
+# ═══════════════════════════════════════════════════
+# العناصر والأنظمة (Items & Systems)
+# ═══════════════════════════════════════════════════
 Tap-Dancing Nopon=النوبون الراقص
 Nopon Coin=عملة النوبون
-Glittering Star Radish=فجل النجم اللامع
-Collectible=العنصر القابل للجمع
 Nopon Caravan=قافلة النوبون
-Gem Crafting=صناعة الجواهر
 Boat=القارب
 Caravan=القافلة
-# المصطلحات العامة
+Communication Device=جهاز الاتصال
+Sensor=جهاز الاستشعار
+Probe=المسبار
+Power Assist=مساعدة القوة
+# ═══════════════════════════════════════════════════
+# المصطلحات العامة (General Terms)
+# ═══════════════════════════════════════════════════
 Home Country=الوطن الأم
-Canteen=المقصف
 Hot Spring=الينابيع الساخنة
 Field=الحقل
 Cradle=المهد
@@ -197,21 +401,26 @@ Brainwashed=مغسول الدماغ
 Deathmatch=مباراة حتى الموت
 Rampage=الهياج
 Vaporized=تبخر
-Ether Extraction Site=موقع استخراج الإيثير
-Communication Device=جهاز الاتصال
-Sensor=جهاز الاستشعار
-Probe=المسبار
-Power Assist=مساعدة القوة
 Auto-talk=الحوار التلقائي
-# مصطلحات تقنية
-BDAT=بي دي أي تي
-Label=التسمية
-Translation=الترجمة
+# ═══════════════════════════════════════════════════
+# مصطلحات المهمات (Quest Terms)
+# ═══════════════════════════════════════════════════
 Quest=المهمة
 Main Story=القصة الرئيسية
 Hero Quest=مهمة البطل
 Hero=بطل
-# تعبيرات صوتية
+Side Quest=مهمة جانبية
+Expedition=بعثة استكشافية
+Expeditionary Mission=مهمة استكشافية
+# ═══════════════════════════════════════════════════
+# مصطلحات تقنية (Technical Terms)
+# ═══════════════════════════════════════════════════
+BDAT=بي دي أي تي
+Label=التسمية
+Translation=الترجمة
+# ═══════════════════════════════════════════════════
+# تعبيرات صوتية (Vocal Expressions)
+# ═══════════════════════════════════════════════════
 Gahaha=جاهاها
 Muhahaha=موهاهاها
 Kukuku=كوكوكو
@@ -222,5 +431,7 @@ Hehehe=هيهيهي
 Tch=تتش
 mo=مو
 desu mo=ديس مو
-# أسماء مجموعات
+# ═══════════════════════════════════════════════════
+# أسماء المجموعات (Group Names)
+# ═══════════════════════════════════════════════════
 Three Ravens=الغربان الثلاثة
