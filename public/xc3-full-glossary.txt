@@ -5842,3 +5842,202 @@ Unity Points=نقاط الوحدة
 Affinity Growth=نمو الألفة
 Community Points=نقاط المجتمع
 Relationship Bonus=مكافأة العلاقة
+
+# ===== نظام النقل السريع والتنقل (Fast Travel & Navigation System) =====
+
+# --- النقل السريع (Fast Travel) ---
+Fast Travel=نقل سريع
+Skip Travel=نقل فوري
+Warp=انتقال فوري
+Teleport=انتقال آني
+Travel Point=نقطة انتقال
+Fast Travel Point=نقطة نقل سريع
+Unlocked Location=موقع مفتوح
+Locked Location=موقع مقفل
+Travel Confirmation=تأكيد الانتقال
+Travel to Location=الانتقال إلى الموقع
+Select Destination=اختر الوجهة
+Cannot Fast Travel=لا يمكن النقل السريع
+Fast Travel Disabled=النقل السريع معطّل
+Fast Travel During Combat=النقل السريع أثناء القتال
+
+# --- الخريطة (Map System) ---
+Map=الخريطة
+World Map=خريطة العالم
+Area Map=خريطة المنطقة
+Region Map=خريطة الإقليم
+Mini Map=الخريطة المصغرة
+Minimap=الخريطة المصغرة
+Open Map=فتح الخريطة
+Close Map=إغلاق الخريطة
+Zoom In=تكبير
+Zoom Out=تصغير
+Pan Map=تحريك الخريطة
+Rotate Map=تدوير الخريطة
+Map Legend=مفتاح الخريطة
+Map Icon=أيقونة الخريطة
+Map Filter=تصفية الخريطة
+Show All Icons=إظهار جميع الأيقونات
+Hide Icons=إخفاء الأيقونات
+Map Marker=علامة الخريطة
+Custom Marker=علامة مخصصة
+Place Marker=وضع علامة
+Remove Marker=إزالة العلامة
+Map Completion=إكمال الخريطة
+Fog of War=ضباب الحرب
+Unexplored Area=منطقة غير مستكشفة
+Explored Area=منطقة مستكشفة
+Current Location=الموقع الحالي
+Player Position=موقع اللاعب
+
+# --- المعالم ونقاط الاهتمام (Landmarks & Points of Interest) ---
+Landmark=معلم
+Location=موقع
+Rest Spot=نقطة راحة
+Campsite=مخيم
+Camp=مخيم
+Ferronis Hulk=هيكل الفيرونيس
+Colony=مستعمرة
+Secret Area=منطقة سرية
+Viewpoint=نقطة مشاهدة
+Named Location=موقع مُسمّى
+Discovered Location=موقع مُكتشف
+Undiscovered Location=موقع غير مُكتشف
+Point of Interest=نقطة اهتمام
+Destination=وجهة
+Waypoint=نقطة مسار
+Checkpoint=نقطة تفتيش
+Save Point=نقطة حفظ
+Ether Cylinder=أسطوانة الأثير
+
+# --- البوصلة والاتجاهات (Compass & Directions) ---
+Compass=البوصلة
+North=شمال
+South=جنوب
+East=شرق
+West=غرب
+Northeast=شمال شرق
+Northwest=شمال غرب
+Southeast=جنوب شرق
+Southwest=جنوب غرب
+Direction=اتجاه
+Distance=مسافة
+Altitude=ارتفاع
+Elevation=علو
+Above=أعلى
+Below=أسفل
+Nearby=قريب
+Far Away=بعيد
+
+# --- التنقل والحركة (Movement & Traversal) ---
+Walk=مشي
+Run=ركض
+Sprint=عدو سريع
+Jump=قفز
+Climb=تسلق
+Swim=سباحة
+Dive=غطس
+Slide=انزلاق
+Wall Climb=تسلق الجدار
+Rope Slide=انزلاق الحبل
+Zip Line=الحبل المنزلق
+Vine Climb=تسلق الكرمة
+Crawl=زحف
+Crouch=انحناء
+Field Movement=حركة ميدانية
+Auto-Run=ركض تلقائي
+Movement Speed=سرعة الحركة
+Dash=اندفاع
+
+# --- مهارات التنقل الميدانية (Field Skills) ---
+Field Skill=مهارة ميدانية
+Scree Walking=المشي على الحصى
+Wall Climbing=تسلق الجدران
+Rope Sliding=الانزلاق على الحبال
+Hazard Neutralization=تحييد الخطر
+Lockpicking=فتح الأقفال
+Ether Sight=بصيرة الأثير
+Noise Reduction=تقليل الضوضاء
+Forced Breakthrough=اختراق قسري
+Sandy Traversal=اجتياز الرمال
+Aquatic Traversal=اجتياز المياه
+
+# --- الملاحة والإرشاد (Navigation & Guidance) ---
+Navigation=الملاحة
+Navigate=تنقل
+Guide Line=خط الإرشاد
+Navigation Line=خط الملاحة
+Follow Path=اتبع المسار
+Quest Navigation=ملاحة المهمة
+Quest Marker=علامة المهمة
+Objective Marker=علامة الهدف
+Destination Marker=علامة الوجهة
+Active Quest Marker=علامة المهمة النشطة
+Follow Quest=تتبع المهمة
+Set as Active=تعيين كنشط
+Navigation Arrow=سهم الملاحة
+Direction Indicator=مؤشر الاتجاه
+Distance Indicator=مؤشر المسافة
+Waypoint Marker=علامة نقطة المسار
+Path Blocked=المسار مسدود
+Detour=التفاف
+Shortcut=اختصار
+Hidden Path=مسار مخفي
+Alternative Route=مسار بديل
+
+# --- المناطق والأقاليم (Areas & Regions) ---
+Region=إقليم
+Area=منطقة
+Zone=منطقة
+Field=حقل
+Dungeon=زنزانة
+Cave=كهف
+Ruins=أطلال
+Tower=برج
+Bridge=جسر
+Valley=وادي
+Mountain=جبل
+Forest=غابة
+Desert=صحراء
+Ocean=محيط
+Lake=بحيرة
+River=نهر
+Cliff=جرف
+Beach=شاطئ
+Swamp=مستنقع
+Plateau=هضبة
+Canyon=وادي ضيق
+Waterfall=شلال
+
+# --- واجهة التنقل (Navigation UI) ---
+Location Name=اسم الموقع
+Area Name=اسم المنطقة
+Region Name=اسم الإقليم
+Area Discovered=تم اكتشاف المنطقة
+New Location=موقع جديد
+Landmark Discovered=تم اكتشاف المعلم
+Secret Area Discovered=تم اكتشاف المنطقة السرية
+Rest Spot Discovered=تم اكتشاف نقطة الراحة
+EXP Earned=نقاط خبرة مُكتسبة
+Location Info=معلومات الموقع
+Area Info=معلومات المنطقة
+Recommended Level=المستوى الموصى به
+Danger Level=مستوى الخطر
+Enemy Level Range=نطاق مستوى الأعداء
+High Level Area=منطقة مستوى عالٍ
+Safe Zone=منطقة آمنة
+Battle Zone=منطقة قتال
+
+# --- التنقل في DLC Future Redeemed ---
+Bionis Shoulder=كتف البيونيس
+Land of Challenge=أرض التحدي
+Cent-Omnia Region=إقليم سنت أومنيا
+Mechonis Sword=سيف الميكونيس
+Origin Interior=داخل الأوريجن
+Prison Depths=أعماق السجن
+Boundary=الحدود
+Rift=الصدع
+Portal=البوابة
+Warp Portal=بوابة الانتقال
+Affinity Waypoint=نقطة مسار الألفة
+Unity Waypoint=نقطة مسار الوحدة
