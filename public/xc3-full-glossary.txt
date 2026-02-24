@@ -1705,3 +1705,186 @@ Off-Seer=مُنشد الوداع
 Off-Seeing=إنشاد الوداع
 Homecoming=العودة إلى الوطن
 Sending=التوديع
+# ═══════════════════════════════════════════════════
+# واجهة المستخدم والقوائم (UI & Menus)
+# ═══════════════════════════════════════════════════
+# ─────────────────────────────────────────────────
+# القائمة الرئيسية (Main Menu)
+# ─────────────────────────────────────────────────
+Main Menu=القائمة الرئيسية
+New Game=لعبة جديدة
+Continue=متابعة
+Load Game=تحميل لعبة
+Save Game=حفظ اللعبة
+Options=الخيارات
+System Settings=إعدادات النظام
+Title Screen=شاشة العنوان
+New Game Plus=لعبة جديدة+
+Difficulty=الصعوبة
+Easy Mode=الوضع السهل
+Normal Mode=الوضع العادي
+Hard Mode=الوضع الصعب
+# ─────────────────────────────────────────────────
+# قائمة اللعب (In-Game Menu)
+# ─────────────────────────────────────────────────
+Party=الفريق
+Characters=الشخصيات
+Equipment=المعدات
+Items=العناصر
+Quests=المهمات
+System=النظام
+Map=الخريطة
+Skip Travel=السفر السريع
+Event Theater=مسرح الأحداث
+Tips=نصائح
+Tutorial=الشرح التعليمي
+# ─────────────────────────────────────────────────
+# قائمة الشخصيات (Character Menu)
+# ─────────────────────────────────────────────────
+Status=الحالة
+Level=المستوى
+Experience Points=نقاط الخبرة
+EXP=خبرة
+HP=نقاط الصحة
+Attack=الهجوم
+Defense=الدفاع
+Agility=الرشاقة
+Dexterity=البراعة
+Luck=الحظ
+Healing Power=قوة الشفاء
+Block Rate=معدل الصد
+Critical Rate=معدل الضربات الحرجة
+Physical Defense=الدفاع الجسدي
+Ether Defense=الدفاع الأثيري
+Class=الفصل
+Class Rank=رتبة الفصل
+Master Art=فن المعلم
+Master Skill=مهارة المعلم
+Equipped Arts=الفنون المجهزة
+Equipped Skills=المهارات المجهزة
+# ─────────────────────────────────────────────────
+# قائمة المعدات (Equipment Menu)
+# ─────────────────────────────────────────────────
+Weapon=السلاح
+Accessory=الإكسسوار
+Gem Slot=خانة الجوهرة
+Equip=تجهيز
+Unequip=إزالة التجهيز
+Optimize=تحسين تلقائي
+Auto-Equip=تجهيز تلقائي
+Swap Equipment=تبديل المعدات
+Compare=مقارنة
+Stats Bonus=مكافأة الإحصائيات
+# ─────────────────────────────────────────────────
+# قائمة العناصر (Items Menu)
+# ─────────────────────────────────────────────────
+Inventory=المخزون
+Use Item=استخدام عنصر
+Discard=التخلص
+Sort=ترتيب
+Sort by Type=ترتيب حسب النوع
+Sort by Name=ترتيب حسب الاسم
+Sort by Value=ترتيب حسب القيمة
+Quantity=الكمية
+Owned=مملوك
+Key Items=العناصر المفتاحية
+Consumables=المستهلكات
+Accessories=الإكسسوارات
+Materials=المواد
+Collectibles=المقتنيات
+Cylinders=الأسطوانات
+# ─────────────────────────────────────────────────
+# قائمة المهمات (Quest Menu)
+# ─────────────────────────────────────────────────
+Active Quests=المهمات النشطة
+Completed Quests=المهمات المكتملة
+Main Story=القصة الرئيسية
+Side Quest=مهمة جانبية
+Hero Quest=مهمة بطل
+Colony Quest=مهمة مستعمرة
+Standard Quest=مهمة عادية
+Quest Objective=هدف المهمة
+Quest Reward=مكافأة المهمة
+Quest Giver=مُعطي المهمة
+Track Quest=تتبع المهمة
+Untrack Quest=إلغاء تتبع المهمة
+# ─────────────────────────────────────────────────
+# قائمة الخريطة (Map Menu)
+# ─────────────────────────────────────────────────
+World Map=خريطة العالم
+Area Map=خريطة المنطقة
+Zoom In=تكبير
+Zoom Out=تصغير
+Set Marker=وضع علامة
+Remove Marker=إزالة العلامة
+Show Icons=إظهار الأيقونات
+Hide Icons=إخفاء الأيقونات
+Landmark Icon=أيقونة المعلم
+Rest Spot Icon=أيقونة نقطة الاستراحة
+Colony Icon=أيقونة المستعمرة
+Secret Area Icon=أيقونة المنطقة السرية
+Container Icon=أيقونة الحاوية
+Enemy Icon=أيقونة العدو
+# ─────────────────────────────────────────────────
+# واجهة القتال (Battle HUD)
+# ─────────────────────────────────────────────────
+Battle HUD=واجهة القتال
+HP Bar=شريط الصحة
+Art Palette=لوحة الفنون
+Talent Art Gauge=مقياس فن الموهبة
+Chain Attack Gauge=مقياس الهجوم المتسلسل
+Interlink Gauge=مقياس الاندماج
+Party Gauge=مقياس الفريق
+Aggro=الاستفزاز
+Aggro Ring=حلقة الاستفزاز
+Target Lock=قفل الهدف
+Switch Target=تبديل الهدف
+Auto-Battle=قتال تلقائي
+Battle Speed=سرعة المعركة
+Flee=الهروب
+Warn=تحذير
+Engage=اشتباك
+# ─────────────────────────────────────────────────
+# الإخطارات والرسائل (Notifications & Messages)
+# ─────────────────────────────────────────────────
+Level Up!=ارتقاء مستوى!
+Quest Complete=مهمة مكتملة
+New Quest=مهمة جديدة
+Item Obtained=تم الحصول على عنصر
+Skill Learned=تم تعلم مهارة
+Art Learned=تم تعلم فن
+Class Unlocked=تم فتح الفصل
+Affinity Increased=ازدادت الألفة
+Colony Liberated=تم تحرير المستعمرة
+Area Discovered=تم اكتشاف المنطقة
+Landmark Discovered=تم اكتشاف المعلم
+Secret Area Found=تم العثور على منطقة سرية
+Unique Monster Defeated=تمت هزيمة الوحش الفريد
+Chain Attack Ready=الهجوم المتسلسل جاهز
+Interlink Ready=الاندماج جاهز
+Overkill=قتل مبالغ
+Excellent=ممتاز
+Bravo=أحسنت
+Amazing=مذهل
+# ─────────────────────────────────────────────────
+# إعدادات النظام (System Settings)
+# ─────────────────────────────────────────────────
+Camera Settings=إعدادات الكاميرا
+Camera Distance=مسافة الكاميرا
+Camera Speed=سرعة الكاميرا
+Invert Camera=عكس الكاميرا
+Audio Settings=إعدادات الصوت
+BGM Volume=مستوى صوت الموسيقى
+SFX Volume=مستوى المؤثرات الصوتية
+Voice Volume=مستوى صوت الأصوات
+Language=اللغة
+Voice Language=لغة الأصوات
+Text Language=لغة النصوص
+Subtitle=الترجمة
+Brightness=السطوع
+Minimap=الخريطة المصغرة
+HUD Display=عرض الواجهة
+Controller Settings=إعدادات وحدة التحكم
+Button Config=تكوين الأزرار
+Vibration=الاهتزاز
+Rumble=الارتجاج
