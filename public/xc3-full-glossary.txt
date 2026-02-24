@@ -15748,3 +15748,419 @@ Until we meet again.=حتى نلتقي مجدداً.
 # --- نهاية حوارات الراحة مع الأبطال ---
 # End of Hero Rest Conversations
 # Total sections: 146-164 (Hero Rest Conversations)
+
+# =============================================
+# القسم 165: مهام المستعمرة 9 (Colony 9) - زيون
+# =============================================
+
+# --- مهمة: The Winding Way ---
+We need to secure the supply route to Colony 9.=علينا تأمين طريق الإمداد إلى المستعمرة 9.
+The monsters along the path have been getting more aggressive.=الوحوش على طول الطريق أصبحت أكثر عدوانية.
+Zeon, what's the situation?=زيون، ما الوضع؟
+Our patrols have been pushed back three times this week.=دورياتنا أُجبرت على التراجع ثلاث مرات هذا الأسبوع.
+We'll clear the route. You have my word.=سنطهّر الطريق. لكم كلمتي.
+Without supplies, Colony 9 won't last another month.=بدون إمدادات، لن تصمد المستعمرة 9 شهراً آخر.
+Then we'd better get moving.=إذن من الأفضل أن نتحرك.
+The path is clear now. Thank you, Ouroboros.=الطريق واضح الآن. شكراً لكم، أوروبوروس.
+Don't thank us yet. We need to make sure it stays clear.=لا تشكرنا بعد. علينا التأكد أنه يبقى واضحاً.
+
+# --- مهمة: A Soldier's Worth ---
+What does it mean to be a soldier without a Flame Clock?=ماذا يعني أن تكون جندياً بدون ساعة لهب؟
+It means we fight for ourselves now. For what we believe in.=يعني أننا نقاتل لأنفسنا الآن. من أجل ما نؤمن به.
+Some of the troops are struggling with that idea.=بعض الجنود يعانون مع هذه الفكرة.
+They've known nothing but fighting for the Flame Clock their whole lives.=لم يعرفوا شيئاً سوى القتال من أجل ساعة اللهب طوال حياتهم.
+We need to show them there's more to life.=علينا أن نريهم أن هناك ما هو أكثر من الحياة.
+Training exercises. Something to give them purpose.=تدريبات. شيء يمنحهم هدفاً.
+I'll organize drills. Give them structure without the clock.=سأنظم تدريبات. أمنحهم نظاماً بدون الساعة.
+Look at them now. They're finding their own reasons to be strong.=انظر إليهم الآن. يجدون أسبابهم الخاصة ليكونوا أقوياء.
+
+# --- مهمة: Overcoming Regret ---
+I keep thinking about the soldiers I lost. Before the clock was destroyed.=أظل أفكر بالجنود الذين خسرتهم. قبل تدمير الساعة.
+That guilt you carry, Zeon... you don't have to carry it alone.=ذلك الذنب الذي تحمله، زيون... لا يجب أن تحمله وحدك.
+Every life that was taken to feed the Flame Clock... I was responsible.=كل حياة أُخذت لتغذية ساعة اللهب... كنت مسؤولاً.
+You did what you thought was right at the time.=فعلت ما ظننته صواباً في ذلك الوقت.
+That doesn't make it easier.=هذا لا يجعل الأمر أسهل.
+No. But honoring their memory by building something better does.=لا. لكن تكريم ذكراهم ببناء شيء أفضل يفعل.
+You're right. I'll make their sacrifice mean something.=أنت محق. سأجعل تضحيتهم تعني شيئاً.
+
+# =============================================
+# القسم 166: مهام المستعمرة 4 (Colony 4) - إيثل
+# =============================================
+
+# --- مهمة: The Price of Leadership ---
+Colony 4 has always been about strength. But now...=المستعمرة 4 كانت دائماً عن القوة. لكن الآن...
+Now you need a different kind of strength.=الآن تحتاجين نوعاً مختلفاً من القوة.
+Some of my soldiers want to go back to the old ways.=بعض جنودي يريدون العودة للطرق القديمة.
+Fighting other colonies for Flame Clock energy?=القتال ضد مستعمرات أخرى من أجل طاقة ساعة اللهب؟
+They don't know any other way to prove their worth.=لا يعرفون طريقة أخرى لإثبات قيمتهم.
+Then show them a new way, Ethel.=إذن أريهم طريقة جديدة، إيثل.
+I will. Even if it takes everything I have.=سأفعل. حتى لو تطلب كل ما لديّ.
+
+# --- مهمة: Rivals Reborn ---
+Ethel, Cammuravi sent a message.=إيثل، كاموراڤي أرسل رسالة.
+What does that flame-obsessed fool want now?=ماذا يريد ذلك الأحمق المهووس بالنيران الآن؟
+He's proposing a joint training exercise between Colony 4 and Colony Λ.=يقترح تمريناً تدريبياً مشتركاً بين المستعمرة 4 والمستعمرة لامدا.
+Training? Not a fight to the death?=تدريب؟ ليس قتالاً حتى الموت؟
+Times have changed, it seems.=يبدو أن الأزمنة تغيرت.
+Fine. But I'm not going easy on him.=حسناً. لكنني لن أتساهل معه.
+I wouldn't expect anything less from you.=لم أتوقع أقل من ذلك منكِ.
+That was... actually productive.=ذلك كان... مثمراً في الواقع.
+Don't tell Cammuravi I said that.=لا تخبروا كاموراڤي أنني قلت ذلك.
+
+# --- مهمة: A Colony United ---
+The injured soldiers need medical supplies we don't have.=الجنود المصابون يحتاجون إمدادات طبية ليست لدينا.
+Where can we find them?=أين يمكننا إيجادها؟
+There's an old Kevesi depot to the north. Abandoned after the clock fell.=هناك مستودع كيفيسي قديم في الشمال. مهجور بعد سقوط الساعة.
+It could be trapped or guarded.=قد يكون مفخخاً أو محروساً.
+I don't care. My soldiers need those supplies.=لا يهمني. جنودي يحتاجون تلك الإمدادات.
+We'll go together. Safety in numbers.=سنذهب معاً. الأمان في الأعداد.
+The supplies are secured. Colony 4 will recover.=الإمدادات مؤمّنة. المستعمرة 4 ستتعافى.
+
+# =============================================
+# القسم 167: مهام المستعمرة لامدا (Colony Λ) - كاموراڤي
+# =============================================
+
+# --- مهمة: The Eternal Flame ---
+The Flame Clock is gone, but my flames still burn.=ساعة اللهب ذهبت، لكن نيراني لا تزال تشتعل.
+That's the spirit, Cammuravi.=تلك هي الروح، كاموراڤي.
+But my soldiers... they feel lost without the clock's purpose.=لكن جنودي... يشعرون بالضياع بدون هدف الساعة.
+Then give them a new fire to follow.=إذن امنحهم ناراً جديدة ليتبعوها.
+I shall forge a new path. One lit by our own flames, not the clock's.=سأشق طريقاً جديداً. مضاءً بنيراننا الخاصة، ليس نيران الساعة.
+The colony burns bright once more. Not for war, but for life.=المستعمرة تشتعل ساطعة مجدداً. ليس للحرب، بل للحياة.
+
+# --- مهمة: Smoldering Ambitions ---
+Cammuravi, your soldiers are picking fights with Colony 4 again.=كاموراڤي، جنودك يتشاجرون مع المستعمرة 4 مجدداً.
+Old habits die hard, it seems.=العادات القديمة تموت بصعوبة، على ما يبدو.
+This has to stop. We're supposed to be allies now.=هذا يجب أن يتوقف. من المفترض أننا حلفاء الآن.
+You're right. I'll speak with them personally.=أنت محق. سأتحدث معهم شخصياً.
+Perhaps a joint project would help. Something constructive.=ربما مشروع مشترك يساعد. شيء بنّاء.
+Building instead of destroying... an interesting concept.=البناء بدل التدمير... مفهوم مثير.
+The bridge is complete. Colony Λ and Colony 4, connected.=الجسر اكتمل. المستعمرة لامدا والمستعمرة 4، متصلتان.
+
+# =============================================
+# القسم 168: مهام المستعمرة 30 (Colony 30) - ڤالدي
+# =============================================
+
+# --- مهمة: The Engineer's Dream ---
+I've been studying the old machines. Pre-war technology.=كنت أدرس الآلات القديمة. تقنية ما قبل الحرب.
+What did you find, Valdi?=ماذا وجدت، ڤالدي؟
+Water purification systems. Irrigation. Tools for growing food.=أنظمة تنقية مياه. ري. أدوات لزراعة الطعام.
+That could change everything for the colonies.=هذا قد يغير كل شيء للمستعمرات.
+If I can get them working again. The parts are scattered.=إن استطعت إصلاحها. القطع متناثرة.
+We'll help you find what you need.=سنساعدك بإيجاد ما تحتاجه.
+The irrigation system is operational. Colony 30 can grow its own food now.=نظام الري يعمل. المستعمرة 30 تستطيع زراعة طعامها الآن.
+This is just the beginning. Imagine what else we can rebuild.=هذه مجرد البداية. تخيلوا ماذا أيضاً يمكننا إعادة بنائه.
+
+# --- مهمة: Levnis Restoration ---
+The Levnises are breaking down without proper maintenance.=آليات الليفنيس تتعطل بدون صيانة مناسبة.
+Without the Flame Clock's energy, they're running on reserves.=بدون طاقة ساعة اللهب، تعمل على الاحتياطي.
+Can you convert them to run on a different power source?=هل تستطيع تحويلها لتعمل على مصدر طاقة مختلف؟
+Theoretically, yes. But I need rare ether crystals.=نظرياً، نعم. لكن أحتاج بلورات أثير نادرة.
+Where do we find those?=أين نجد تلك؟
+The Ether Mines in the Fornis Region. But they're infested.=مناجم الأثير في منطقة فورنيس. لكنها موبوءة.
+Then we clear them out. Your Levnises are too important to lose.=إذن نطهّرها. آليات الليفنيس أهم من أن نخسرها.
+Modifications complete. The Levnises will run cleaner and longer now.=التعديلات اكتملت. الليفنيس ستعمل بنظافة ولمدة أطول الآن.
+
+# =============================================
+# القسم 169: مهام المستعمرة 11 (Colony 11)
+# =============================================
+
+# --- مهمة: Missing Patrol ---
+A patrol from Colony 11 hasn't returned. It's been three days.=دورية من المستعمرة 11 لم تعد. مرت ثلاثة أيام.
+Three days? That's not like them.=ثلاثة أيام؟ هذا ليس من عادتهم.
+They were investigating reports of Moebius activity in the ruins.=كانوا يحققون في تقارير عن نشاط ميبيوس في الأطلال.
+Moebius? Even after everything we've done?=ميبيوس؟ حتى بعد كل ما فعلناه؟
+Their influence runs deep. Some remnants remain.=تأثيرهم عميق الجذور. بعض البقايا لا تزال.
+We found the patrol. They were trapped, not captured.=وجدنا الدورية. كانوا محاصرين، لم يُأسروا.
+The ruins collapsed around them. But they're safe now.=الأطلال انهارت حولهم. لكنهم بأمان الآن.
+Thank the Founders. Let's get them home.=حمداً للمؤسسين. لنعيدهم للوطن.
+
+# --- مهمة: Trade Routes ---
+Colony 11 wants to establish trade routes with the City.=المستعمرة 11 تريد إنشاء طرق تجارية مع المدينة.
+That's ambitious. The distance is considerable.=هذا طموح. المسافة كبيرة.
+But necessary. We have resources they need, and vice versa.=لكنه ضروري. لدينا موارد يحتاجونها، والعكس صحيح.
+The problem is the territory between us. It's dangerous.=المشكلة هي الأراضي بيننا. إنها خطرة.
+We could set up relay stations along the way.=يمكننا إقامة محطات ترحيل على طول الطريق.
+Supply caches, safe houses, signal points.=مخابئ إمدادات، بيوت آمنة، نقاط إشارة.
+The first trade caravan arrived safely. This is historic.=أول قافلة تجارية وصلت بأمان. هذا تاريخي.
+
+# =============================================
+# القسم 170: مهام المستعمرة 0 (Colony 0)
+# =============================================
+
+# --- مهمة: The Hidden Colony ---
+Colony 0... I didn't even know it existed.=المستعمرة 0... لم أكن أعلم بوجودها.
+Few do. It operates in the shadows.=قلة يعلمون. تعمل في الظلال.
+Why are they reaching out now?=لماذا يتواصلون الآن؟
+Because the Flame Clocks are falling. The old order is crumbling.=لأن ساعات اللهب تسقط. النظام القديم ينهار.
+They want to help rebuild. They have knowledge we need.=يريدون المساعدة في إعادة البناء. لديهم معرفة نحتاجها.
+Ancient techniques for farming, building, healing.=تقنيات قديمة للزراعة، البناء، الشفاء.
+Knowledge that was suppressed by Moebius.=معرفة كانت مكبوتة من قبل ميبيوس.
+Colony 0's archives are incredible. There's so much we've lost.=أرشيفات المستعمرة 0 مذهلة. هناك الكثير مما فقدناه.
+
+# =============================================
+# القسم 171: مهام المستعمرة غاما (Colony Γ) - آشيرا
+# =============================================
+
+# --- مهمة: Battle Scars ---
+Ashera, your colony is in rough shape.=آشيرا، مستعمرتكِ في حالة سيئة.
+We fight hard. That's what we do.=نقاتل بشراسة. هذا ما نفعله.
+Fighting hard and fighting smart aren't the same thing.=القتال بشراسة والقتال بذكاء ليسا نفس الشيء.
+You saying we're not smart?=أتقول أننا لسنا أذكياء؟
+I'm saying your soldiers are injured because they charge in without a plan.=أقول أن جنودكِ مصابون لأنهم يهاجمون بدون خطة.
+...Fine. Maybe we could use some tactical training.=...حسناً. ربما نحتاج بعض التدريب التكتيكي.
+The casualty rate has dropped by half. Ashera, well done.=معدل الإصابات انخفض للنصف. آشيرا، أحسنتِ.
+Don't get used to complimenting me. It's weird.=لا تعتاد على مدحي. إنه غريب.
+
+# --- مهمة: The Warrior's Heart ---
+I heard some of your soldiers want to leave Colony Γ.=سمعت أن بعض جنودكِ يريدون مغادرة المستعمرة غاما.
+Cowards, the lot of them.=جبناء، كلهم.
+They're not cowards. They just want a different life now.=ليسوا جبناء. فقط يريدون حياة مختلفة الآن.
+What life is there besides fighting?=أي حياة هناك غير القتال؟
+That's exactly the problem. You need to show them there's more.=هذه بالضبط المشكلة. عليكِ أن تريهم أن هناك المزيد.
+I'm a warrior. Not a... life counselor.=أنا محاربة. لست... مستشارة حياتية.
+Then learn to be both. A true leader serves all their people's needs.=إذن تعلمي أن تكوني كلاهما. القائد الحقيقي يخدم كل احتياجات شعبه.
+I talked to them. They're staying. Said they want to build something here.=تحدثت معهم. سيبقون. قالوا يريدون بناء شيء هنا.
+See? That wasn't so hard, was it?=أرأيتِ؟ لم يكن صعباً، أليس كذلك؟
+Shut up.=اصمت.
+
+# =============================================
+# القسم 172: مهام المستعمرة تاو (Colony Τ)
+# =============================================
+
+# --- مهمة: Knowledge Keepers ---
+Colony Τ has always been about knowledge and research.=المستعمرة تاو كانت دائماً عن المعرفة والبحث.
+What kind of research?=أي نوع من البحث؟
+Ether flow patterns, biological studies, weather prediction.=أنماط تدفق الأثير، دراسات بيولوجية، توقع الطقس.
+That's incredibly valuable.=هذا ذو قيمة عالية جداً.
+It was all for the war effort before. Now we can use it for peace.=كان كله لجهود الحرب قبلاً. الآن نستطيع استخدامه للسلام.
+Imagine predicting harvests, preventing natural disasters.=تخيلوا توقع المحاصيل، منع الكوارث الطبيعية.
+The first weather forecast was accurate. The crops are saved.=أول توقع للطقس كان دقيقاً. المحاصيل أُنقذت.
+
+# --- مهمة: The Lost Archives ---
+We've discovered a hidden archive beneath Colony Τ.=اكتشفنا أرشيفاً مخفياً تحت المستعمرة تاو.
+Hidden by whom?=مخفي من قبل من؟
+Researchers from before the war. They hid their findings from Moebius.=باحثون من قبل الحرب. أخفوا اكتشافاتهم عن ميبيوس.
+What kind of findings?=أي نوع من الاكتشافات؟
+Details about Origin. About the true nature of our world.=تفاصيل عن أوريجن. عن الطبيعة الحقيقية لعالمنا.
+This changes everything we thought we knew.=هذا يغير كل ما ظننا أننا نعرفه.
+The truth was buried. Now it can finally see the light.=الحقيقة كانت مدفونة. الآن يمكنها أخيراً أن ترى النور.
+
+# =============================================
+# القسم 173: مهام المستعمرة 15 (Colony 15)
+# =============================================
+
+# --- مهمة: The Forge Master ---
+Colony 15's forges have gone cold.=أفران المستعمرة 15 أصبحت باردة.
+Without the Flame Clock, we can't power them.=بدون ساعة اللهب، لا نستطيع تشغيلها.
+What did the forges produce?=ماذا كانت الأفران تنتج؟
+Weapons, tools, armor. Everything the colonies needed.=أسلحة، أدوات، دروع. كل ما احتاجته المستعمرات.
+Can we find an alternative heat source?=هل نستطيع إيجاد مصدر حرارة بديل؟
+There are volcanic vents in the mountains nearby.=هناك فوهات بركانية في الجبال القريبة.
+If we could channel that heat to the forges...=لو استطعنا توجيه تلك الحرارة إلى الأفران...
+The forges burn again! Hotter than ever before.=الأفران تشتعل مجدداً! أسخن من أي وقت مضى.
+New tools for a new era. Colony 15 is back in business.=أدوات جديدة لعصر جديد. المستعمرة 15 عادت للعمل.
+
+# =============================================
+# القسم 174: مهام المستعمرة 1 (Colony 1)
+# =============================================
+
+# --- مهمة: The Commander's Burden ---
+Colony 1 was the largest Kevesi colony. Now it's in chaos.=المستعمرة 1 كانت أكبر مستعمرة كيفيسية. الآن هي في فوضى.
+Without Queen Melia's orders, they don't know what to do.=بدون أوامر الملكة ميليا، لا يعرفون ماذا يفعلون.
+They need to learn to think for themselves.=يحتاجون لتعلم التفكير لأنفسهم.
+That's easier said than done when you've followed orders your whole life.=هذا أسهل قولاً من فعلاً عندما تتبع الأوامر طوال حياتك.
+Start small. Let them make decisions about daily life.=ابدأ صغيراً. دعهم يتخذون قرارات عن الحياة اليومية.
+What to eat, when to train, how to organize.=ماذا يأكلون، متى يتدربون، كيف ينظمون.
+It's working. They're starting to find their own rhythm.=إنها تنجح. بدأوا يجدون إيقاعهم الخاص.
+Freedom is a skill. It takes practice.=الحرية مهارة. تحتاج ممارسة.
+
+# --- مهمة: Remnants of Command ---
+We found a Kevesi command center intact. Full of old battle plans.=وجدنا مركز قيادة كيفيسي سليماً. مليء بخطط معارك قديمة.
+Burn them. We don't need reminders of the old war.=أحرقوها. لا نحتاج تذكيرات بالحرب القديمة.
+Wait. These plans show troop movements, supply lines, terrain data.=انتظر. هذه الخطط تُظهر تحركات قوات، خطوط إمداد، بيانات تضاريس.
+How is that useful now?=كيف هذا مفيد الآن؟
+The terrain data is invaluable. Safe passages, water sources, shelter locations.=بيانات التضاريس لا تقدر بثمن. ممرات آمنة، مصادر مياه، مواقع مأوى.
+Turn war maps into peace maps. I like it.=تحويل خرائط الحرب إلى خرائط سلام. يعجبني ذلك.
+
+# =============================================
+# القسم 175: مهام المستعمرة 2 (Colony 2)
+# =============================================
+
+# --- مهمة: The Sea Colony ---
+Colony 2 survives on fishing and ocean resources.=المستعمرة 2 تعيش على الصيد وموارد المحيط.
+But the sea has been restless lately.=لكن البحر كان مضطرباً مؤخراً.
+Massive creatures have surfaced near the colony.=مخلوقات ضخمة ظهرت على السطح قرب المستعمرة.
+Are they hostile?=هل هي عدائية؟
+Not yet. But they're scaring away the fish.=ليس بعد. لكنها تخيف الأسماك.
+Maybe they're migrating. Following the ether currents.=ربما تهاجر. تتبع تيارات الأثير.
+The creatures moved on. The fish are returning.=المخلوقات رحلت. الأسماك تعود.
+Nature has its own rhythm. We just need to learn it.=الطبيعة لها إيقاعها الخاص. فقط نحتاج لتعلمه.
+
+# --- مهمة: Tides of Change ---
+The old docks are crumbling. We need new ones.=الأرصفة القديمة تنهار. نحتاج أرصفة جديدة.
+Colony 2's entire livelihood depends on those docks.=رزق المستعمرة 2 بأكمله يعتمد على تلك الأرصفة.
+We've got the wood and the labor. Just need the expertise.=لدينا الخشب والعمالة. فقط نحتاج الخبرة.
+Valdi might be able to help with the engineering.=ڤالدي قد يستطيع المساعدة في الهندسة.
+I'll send word to Colony 30.=سأرسل كلمة إلى المستعمرة 30.
+The new docks are stronger than anything we've built before.=الأرصفة الجديدة أقوى من أي شيء بنيناه من قبل.
+Cooperation between colonies. This is what freedom looks like.=التعاون بين المستعمرات. هذا ما تبدو عليه الحرية.
+
+# =============================================
+# القسم 176: مهام المستعمرة 3 (Colony 3)
+# =============================================
+
+# --- مهمة: The Mountain Fortress ---
+Colony 3 sits atop the highest peak in the region.=المستعمرة 3 تقع فوق أعلى قمة في المنطقة.
+Impregnable from the outside. But isolation has its costs.=حصينة من الخارج. لكن العزلة لها ثمنها.
+Supplies are running low. The mountain paths are treacherous.=الإمدادات تنفد. مسارات الجبل غادرة.
+We need to build a safer route up the mountain.=نحتاج لبناء طريق أكثر أماناً صعوداً للجبل.
+The engineers say it's possible, but it'll take weeks.=المهندسون يقولون إنه ممكن، لكنه سيستغرق أسابيع.
+Then we start today. Colony 3 can't wait weeks for food.=إذن نبدأ اليوم. المستعمرة 3 لا تستطيع انتظار أسابيع للطعام.
+The new path is complete. Colony 3 is connected to the lowlands.=الطريق الجديد اكتمل. المستعمرة 3 متصلة بالأراضي المنخفضة.
+No more isolation. No more rationing.=لا مزيد من العزلة. لا مزيد من التقنين.
+
+# =============================================
+# القسم 177: مهام المستعمرة 5 (Colony 5)
+# =============================================
+
+# --- مهمة: Desert Survival ---
+Colony 5 is in the heart of the Fornis Desert.=المستعمرة 5 في قلب صحراء فورنيس.
+Water is our most precious resource.=الماء هو أثمن مواردنا.
+The underground aquifer is drying up.=المياه الجوفية تجف.
+There must be another water source somewhere.=لا بد أن هناك مصدر مياه آخر في مكان ما.
+The old maps show an oasis to the southeast.=الخرائط القديمة تُظهر واحة في الجنوب الشرقي.
+But the path is through Gogol territory.=لكن الطريق يمر عبر أراضي غوغول.
+We'll deal with the Gogols. Water is worth the fight.=سنتعامل مع الغوغول. الماء يستحق القتال.
+The oasis is secured. Colony 5 has water for generations.=الواحة مؤمّنة. المستعمرة 5 لديها ماء لأجيال.
+
+# --- مهمة: Sandstorm Shelter ---
+The sandstorms are getting worse.=العواصف الرملية تزداد سوءاً.
+Colony 5 needs better shelters.=المستعمرة 5 تحتاج مأوى أفضل.
+We could reinforce the existing structures with ether-hardened materials.=يمكننا تعزيز الهياكل الحالية بمواد مقواة بالأثير.
+Where do we get ether-hardened materials?=من أين نحصل على مواد مقواة بالأثير؟
+Colony Τ has been researching ether infusion techniques.=المستعمرة تاو كانت تبحث في تقنيات تشريب الأثير.
+Another colony collaboration. I love it.=تعاون مستعمرات آخر. أحب ذلك.
+The shelters held through the worst storm in memory. Not a scratch.=المآوي صمدت أمام أسوأ عاصفة في الذاكرة. ولا خدش.
+
+# =============================================
+# القسم 178: مهام المستعمرة 6 (Colony 6)
+# =============================================
+
+# --- مهمة: The Farming Colony ---
+Colony 6 has the most fertile land of any colony.=المستعمرة 6 تملك أخصب أرض بين جميع المستعمرات.
+Before, it all went to feeding Flame Clocks.=قبلاً، كله كان يذهب لتغذية ساعات اللهب.
+Now we can grow food for everyone.=الآن نستطيع زراعة الطعام للجميع.
+But we've never farmed for nutrition. Only for ether energy.=لكننا لم نزرع للتغذية أبداً. فقط لطاقة الأثير.
+Different crops, different techniques.=محاصيل مختلفة، تقنيات مختلفة.
+The City might have old farming knowledge.=المدينة قد تملك معرفة زراعية قديمة.
+We'll reach out to Monica. She'll know where to look.=سنتواصل مع مونيكا. ستعرف أين تبحث.
+The first real harvest. Food that nourishes the body, not the clock.=أول حصاد حقيقي. طعام يغذي الجسد، ليس الساعة.
+I never knew vegetables could taste this good.=لم أعرف أن الخضروات يمكن أن تكون بهذا المذاق.
+
+# =============================================
+# القسم 179: مهام المستعمرة 7 (Colony 7)
+# =============================================
+
+# --- مهمة: The Watchtower ---
+Colony 7 has always served as a lookout post.=المستعمرة 7 كانت دائماً بمثابة نقطة مراقبة.
+Eyes of the army, they called us.=عيون الجيش، هكذا سمّونا.
+Now that the war is over, what's our purpose?=الآن بعد انتهاء الحرب، ما هدفنا؟
+You can still watch. But for different things.=لا يزال بإمكانكم المراقبة. لكن لأشياء مختلفة.
+Weather patterns, wildlife migration, approaching travelers.=أنماط الطقس، هجرة الحياة البرية، مسافرين قادمين.
+Early warning for storms could save countless lives.=إنذار مبكر بالعواصف يمكن أن ينقذ أرواحاً لا حصر لها.
+Colony 7 spotted the storm three days before it hit.=المستعمرة 7 رصدت العاصفة قبل ثلاثة أيام من وصولها.
+Every colony was prepared. No casualties.=كل مستعمرة كانت مستعدة. لا خسائر.
+
+# =============================================
+# القسم 180: مهام المستعمرة 8 (Colony 8)
+# =============================================
+
+# --- مهمة: The Healers ---
+Colony 8 specializes in medical treatment.=المستعمرة 8 متخصصة في العلاج الطبي.
+Before, we only treated combat wounds.=قبلاً، كنا نعالج فقط جروح القتال.
+Now people are coming with... different problems.=الآن الناس يأتون بمشاكل... مختلفة.
+What kind of problems?=أي نوع من المشاكل؟
+Exhaustion. Anxiety. Nightmares about the war.=إرهاق. قلق. كوابيس عن الحرب.
+The wounds we can't see are often the deepest.=الجروح التي لا نراها غالباً هي الأعمق.
+We need to learn a new kind of healing.=نحتاج لتعلم نوع جديد من الشفاء.
+Healing the mind is just as important as healing the body.=شفاء العقل بنفس أهمية شفاء الجسد.
+Colony 8 has opened a counseling center. Soldiers are talking about their trauma.=المستعمرة 8 افتتحت مركز إرشاد. الجنود يتحدثون عن صدماتهم.
+It's a start. Healing takes time.=إنها بداية. الشفاء يحتاج وقتاً.
+
+# =============================================
+# القسم 181: مهام المدينة (The City)
+# =============================================
+
+# --- مهمة: City of Hope ---
+The City is the last bastion of those who live natural lives.=المدينة هي آخر معقل لمن يعيشون حياة طبيعية.
+Monica, how can we help?=مونيكا، كيف يمكننا المساعدة؟
+The City needs to expand. We're running out of space.=المدينة تحتاج للتوسع. ينفد لدينا المكان.
+With the Flame Clocks falling, more people are aging naturally.=مع سقوط ساعات اللهب، المزيد من الناس يشيخون طبيعياً.
+They need guidance. Support. Someone to show them it's okay to grow old.=يحتاجون إرشاداً. دعماً. شخصاً يريهم أنه لا بأس بالتقدم في العمر.
+The City's elders can teach them.=حكماء المدينة يستطيعون تعليمهم.
+Growing old is a privilege. One we fought hard to give everyone.=التقدم في العمر امتياز. واحد قاتلنا بشدة لمنحه للجميع.
+
+# --- مهمة: Bridges Between Worlds ---
+The colonies are reaching out to the City more and more.=المستعمرات تتواصل مع المدينة أكثر فأكثر.
+They want to learn. About families, about aging, about living.=يريدون التعلم. عن العائلات، عن الشيخوخة، عن الحياة.
+We should send teachers to every colony.=يجب أن نرسل معلمين إلى كل مستعمرة.
+And invite colony members to the City. Cultural exchange.=وندعو أعضاء المستعمرات إلى المدينة. تبادل ثقافي.
+This is what we've been fighting for. Connection. Understanding.=هذا ما كنا نقاتل من أجله. التواصل. التفاهم.
+A world where no one is a stranger.=عالم لا يكون فيه أحد غريباً.
+
+# =============================================
+# القسم 182: مهام مشتركة بين المستعمرات
+# =============================================
+
+# --- مهمة: The Grand Council ---
+Representatives from every colony have gathered.=ممثلون من كل مستعمرة تجمعوا.
+This is the first inter-colony council in history.=هذا أول مجلس بين المستعمرات في التاريخ.
+We need rules. Not to control, but to cooperate.=نحتاج قواعد. ليس للسيطرة، بل للتعاون.
+Trade agreements, mutual defense pacts, resource sharing.=اتفاقيات تجارية، مواثيق دفاع متبادل، مشاركة موارد.
+No colony should have to stand alone anymore.=لا يجب أن تقف أي مستعمرة وحيدة بعد الآن.
+The council's first resolution: every colony will share its food surplus.=أول قرار للمجلس: كل مستعمرة ستتقاسم فائض طعامها.
+No one goes hungry. That's the foundation of our new world.=لا أحد يجوع. هذا أساس عالمنا الجديد.
+
+# --- مهمة: The Anniversary ---
+It's been one year since the first Flame Clock fell.=مر عام منذ سقوط أول ساعة لهب.
+One year of freedom.=عام واحد من الحرية.
+We should celebrate. All the colonies together.=يجب أن نحتفل. كل المستعمرات معاً.
+A festival of freedom. Music, food, stories.=مهرجان الحرية. موسيقى، طعام، قصص.
+Let the world see what we've built from the ashes.=دعوا العالم يرى ما بنيناه من الرماد.
+Noah, play your flute. Let the music carry our hopes.=نوح، اعزف نايك. دع الموسيقى تحمل آمالنا.
+A melody for the future. For everyone who fought to get here.=لحن للمستقبل. لكل من قاتل ليصل إلى هنا.
+This is just the beginning. Our story is still being written.=هذه مجرد البداية. قصتنا لا تزال تُكتب.
+
+# --- مهمة: Rebuilding the World ---
+Every colony has something unique to offer.=كل مستعمرة لديها شيء فريد لتقدمه.
+Colony 15's forges, Colony 6's farms, Colony 8's healers.=أفران المستعمرة 15، مزارع المستعمرة 6، معالجو المستعمرة 8.
+Colony Τ's knowledge, Colony 7's watchfulness.=معرفة المستعمرة تاو، يقظة المستعمرة 7.
+Together, we're stronger than any Flame Clock ever made us.=معاً، نحن أقوى مما جعلتنا أي ساعة لهب.
+This is what Ouroboros truly means. Not just six people.=هذا ما يعنيه أوروبوروس حقاً. ليس فقط ستة أشخاص.
+It's everyone. Every colony. Every life.=إنه الجميع. كل مستعمرة. كل حياة.
+The cycle of destruction ends. A new cycle begins.=دورة الدمار تنتهي. دورة جديدة تبدأ.
+A cycle of life.=دورة الحياة.
+
+# --- مهمة: Monsters of the New Age ---
+With the Flame Clocks down, the monsters are behaving differently.=مع سقوط ساعات اللهب، الوحوش تتصرف بشكل مختلف.
+Some are more aggressive. Others are retreating.=بعضها أكثر عدوانية. وأخرى تنسحب.
+The ether flow has changed. It's affecting all living things.=تدفق الأثير تغير. إنه يؤثر على جميع الكائنات الحية.
+We need hunting parties to protect the trade routes.=نحتاج فرق صيد لحماية الطرق التجارية.
+Not just hunting. We need to understand these creatures.=ليس فقط الصيد. نحتاج لفهم هذه المخلوقات.
+Colony Τ can study their behavior patterns.=المستعمرة تاو تستطيع دراسة أنماط سلوكها.
+Understanding is the first step to coexistence.=الفهم هو الخطوة الأولى نحو التعايش.
+
+# --- مهمة: Legacy of Moebius ---
+Moebius is gone, but their influence remains.=ميبيوس رحل، لكن تأثيره باقٍ.
+Some soldiers still believe the old propaganda.=بعض الجنود لا يزالون يصدقون الدعاية القديمة.
+That Keves and Agnus are natural enemies.=أن كيفس وأغنوس أعداء طبيعيون.
+We were never enemies. We were puppets.=لم نكن أعداءً أبداً. كنا دمى.
+And now the strings are cut.=والآن الخيوط قُطعت.
+But old beliefs die hard. We need education, not just liberation.=لكن المعتقدات القديمة تموت بصعوبة. نحتاج تعليماً، ليس فقط تحريراً.
+The truth is our strongest weapon against Moebius's legacy.=الحقيقة هي أقوى سلاح لنا ضد إرث ميبيوس.
+When people understand what was done to them, they choose differently.=عندما يفهم الناس ما فُعل بهم، يختارون بشكل مختلف.
+
+# --- نهاية مهام المستعمرات ---
+# End of Colony Quests & Side Missions
+# Total sections: 165-182 (Colony Quests)
