@@ -740,6 +740,7 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleImportGlossary}><BookOpen className="w-4 h-4" /> قاموس مخصص (.txt)</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleLoadXC3Glossary}>🎮 قاموس Xenoblade المدمج</DropdownMenuItem>
                    <DropdownMenuItem onClick={editor.handleLoadUIMenusGlossary}>📋 قاموس القوائم والواجهة</DropdownMenuItem>
+                   <DropdownMenuItem onClick={editor.handleLoadFullGlossary}>📚 القاموس الشامل (شخصيات + مواقع + مصطلحات)</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuLabel className="text-xs">🔄 إنشاء تلقائي</DropdownMenuLabel>
                   <DropdownMenuItem onClick={editor.handleGenerateGlossaryFromTranslations}>✨ إنشاء قاموس من الترجمات</DropdownMenuItem>
@@ -816,6 +817,7 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleImportGlossary}><BookOpen className="w-4 h-4" /> تحميل قاموس مخصص (.txt)</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleLoadXC3Glossary}>🎮 قاموس Xenoblade المدمج</DropdownMenuItem>
                    <DropdownMenuItem onClick={editor.handleLoadUIMenusGlossary}>📋 قاموس القوائم والواجهة</DropdownMenuItem>
+                   <DropdownMenuItem onClick={editor.handleLoadFullGlossary}>📚 القاموس الشامل (شخصيات + مواقع + مصطلحات)</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuLabel className="text-xs">🔄 إنشاء تلقائي</DropdownMenuLabel>
                   <DropdownMenuItem onClick={editor.handleGenerateGlossaryFromTranslations}>✨ إنشاء قاموس من الترجمات</DropdownMenuItem>
