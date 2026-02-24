@@ -1888,3 +1888,144 @@ Controller Settings=إعدادات وحدة التحكم
 Button Config=تكوين الأزرار
 Vibration=الاهتزاز
 Rumble=الارتجاج
+# ═══════════════════════════════════════════════════
+# DLC: Future Redeemed - المستقبل المُفتدى
+# ═══════════════════════════════════════════════════
+Future Redeemed=المستقبل المُفتدى
+Expansion Pass=تذكرة التوسعة
+# ─────────────────────────────────────────────────
+# شخصيات Future Redeemed
+# ─────────────────────────────────────────────────
+Matthew=ماثيو
+A=إيه
+Nikol=نيكول
+Glimmer=غليمر
+Shulk=شولك
+Rex=ريكس
+Na'el=نائيل
+Alpha=ألفا
+# ─────────────────────────────────────────────────
+# مواقع ومناطق Future Redeemed
+# ─────────────────────────────────────────────────
+Cent-Omnia=سنت أومنيا
+New Colony 9=المستعمرة 9 الجديدة
+Colony 6=المستعمرة 6
+Colony 15=المستعمرة 15
+Bionis' Shoulder=كتف بيونيس
+Mechonis' Sword=سيف ميكونيس
+Prison Terrace=شرفة السجن
+Liberating Altar=مذبح التحرير
+Exhaust Tower=برج العادم
+Central Plaza=الساحة المركزية
+Remembrance Ground=أرض الذكرى
+Altar of Fate=مذبح القدر
+Infernal Gulch=وادي الجحيم
+Tower of Shadows=برج الظلال
+# ─────────────────────────────────────────────────
+# نظام Unity (الوحدة)
+# ─────────────────────────────────────────────────
+Unity=الوحدة
+Unity Link=رابط الوحدة
+Unity Combo=تتابع الوحدة
+Unity Level=مستوى الوحدة
+Unity Gauge=مقياس الوحدة
+Unity Art=فن الوحدة
+Unity Chain=سلسلة الوحدة
+Brave Assault=هجوم شجاع
+Brave Combo=تتابع شجاع
+Brave Order=أمر شجاع
+# ─────────────────────────────────────────────────
+# نظام Affinity Growth
+# ─────────────────────────────────────────────────
+Affinity Growth=نمو الألفة
+Community=المجتمع
+Community Development=تطوير المجتمع
+Community Level=مستوى المجتمع
+Community Effort=جهد المجتمع
+Settlement=المستوطنة
+Settlement Development=تطوير المستوطنة
+Ponspector=بونسبكتور
+Nopon Researcher=باحث نوبون
+Rescue=إنقاذ
+Rescued NPC=شخصية تم إنقاذها
+# ─────────────────────────────────────────────────
+# فصول Future Redeemed (Classes)
+# ─────────────────────────────────────────────────
+Martial Artist=فنان قتالي
+Mastermind=العقل المدبر
+Lapidarist=صائغ الجواهر
+Lifesage=حكيم الحياة
+Royal Summoner=المستدعي الملكي
+Grand Marshal=المارشال الأعظم
+Xenoblade=زينوبليد
+Combo Attacker=مهاجم تتابعي
+# ─────────────────────────────────────────────────
+# فنون ومهارات خاصة بـ Future Redeemed
+# ─────────────────────────────────────────────────
+Monado Arts=فنون مونادو
+Monado Buster=مونادو المحطم
+Monado Shield=درع مونادو
+Monado Speed=سرعة مونادو
+Monado Enchant=سحر مونادو
+Monado Cyclone=إعصار مونادو
+Monado Armor=درع مونادو المتين
+Pneuma Arts=فنون نيوما
+Burning Sword=السيف المشتعل
+Sacred Arrow=السهم المقدس
+Infinity Fan=مروحة اللانهاية
+Rolling Smash=تحطيم دوّار
+# ─────────────────────────────────────────────────
+# أعداء ورؤساء Future Redeemed
+# ─────────────────────────────────────────────────
+Fog Beast=وحش الضباب
+Fog King=ملك الضباب
+Fog Rifts=شقوق الضباب
+Origin Defender=مدافع الأصل
+Origin Guardian=حارس الأصل
+Boundary Sentinel=حارس الحدود
+Ancient Automaton=الآلة القديمة
+Alpha=ألفا
+Na'el True Form=شكل نائيل الحقيقي
+# ─────────────────────────────────────────────────
+# مصطلحات قصة Future Redeemed
+# ─────────────────────────────────────────────────
+Passage of Fate=ممر القدر
+Boundary=الحدود
+The Great Void=الفراغ العظيم
+Origin=الأصل
+Conduit=القناة
+Trinity Processor=المعالج الثلاثي
+Logos=لوغوس
+Pneuma=نيوما
+Ontos=أونتوس
+Alrest=ألريست
+Bionis=بيونيس
+Mechonis=ميكونيس
+Aionios=أيونيوس
+Klaus=كلاوس
+Zanza=زانزا
+Meyneth=ماينيث
+Architect=المهندس
+Blade=النصل
+Driver=السائق
+Aegis=إيجيس
+Pyra=بيرا
+Mythra=ميثرا
+Fiora=فيورا
+Dunban=دانبان
+Melia Antiqua=ميليا أنتيكوا
+Nia=نيا
+Poppi=بوبي
+Brighid=بريغيد
+Dromarch=درومارك
+# ─────────────────────────────────────────────────
+# مقتنيات ومواد Future Redeemed
+# ─────────────────────────────────────────────────
+Fog Fragment=شظية ضباب
+Purified Fragment=شظية مُطهّرة
+Ancient Artifact=أثر قديم
+Lost Technology=تكنولوجيا مفقودة
+Memory Shard=شريحة ذاكرة
+Boundary Stone=حجر الحدود
+Void Crystal=بلورة الفراغ
+Unity Shard=شريحة الوحدة
