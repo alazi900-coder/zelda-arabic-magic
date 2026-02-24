@@ -1217,3 +1217,121 @@ Earth Element=عنصر الأرض
 Electric Element=عنصر الكهرباء
 Light Element=عنصر النور
 Dark Element=عنصر الظلام
+# ═══════════════════════════════════════════════════
+# المعالم ونقاط الاستراحة (Landmarks & Rest Spots)
+# ═══════════════════════════════════════════════════
+Landmark=معلم
+Rest Spot=نقطة استراحة
+Secret Area=منطقة سرية
+Skip Travel=السفر السريع
+Camp=مخيم
+# ─────────────────────────────────────────────────
+# معالم منطقة إيتيا (Aetia Region Landmarks)
+# ─────────────────────────────────────────────────
+Colony 9 Camp=مخيم المستعمرة 9
+Hillside Vistas=مرتفعات التلال
+Alfeto Valley=وادي ألفيتو
+Everblight Plain=سهل النور الأبدي
+Yzana Plains=سهول يزانا
+Colony 9=المستعمرة 9
+Tephra Cave=كهف تيفرا
+Outlook Rock=صخرة المراقبة
+Colony 4 Camp=مخيم المستعمرة 4
+Saffronia Tree=شجرة سافرونيا
+Colony Gamma Camp=مخيم المستعمرة غاما
+Ribbi Flats=سهول ريبي
+Aetia Sea=بحر إيتيا
+Aetia Landmark Tower=برج معلم إيتيا
+Mill L'Ciela Landmark=معلم ميل لاسيلا
+Llyn Nyddwr Camp=مخيم لين نيدور
+Gura Flava Camp=مخيم غورا فلافا
+Battlescar Cove=خليج ندبة المعركة
+Cascade Ferronis Hulk=هيكل فيرونيس الشلال
+Titan of Bygone Days=عملاق الأيام الغابرة
+# ─────────────────────────────────────────────────
+# معالم منطقة فورنيس (Fornis Region Landmarks)
+# ─────────────────────────────────────────────────
+Colony Tau Camp=مخيم المستعمرة تاو
+Colony Lambda Camp=مخيم المستعمرة لامدا
+Great Desert=الصحراء الكبرى
+Dannagh Desert=صحراء دناخ
+Li Garte Prison Camp=مخيم سجن لي غارتي
+Lavi Sandfall=شلال لافي الرملي
+Oasis Camp=مخيم الواحة
+Tableland Camp=مخيم الهضبة
+Colony 30 Camp=مخيم المستعمرة 30
+Colony 15 Camp=مخيم المستعمرة 15
+Fornis Landmark Tower=برج معلم فورنيس
+Raptor Perch=مجثم الطيور الجارحة
+Searoute Ferronis Hulk=هيكل فيرونيس طريق البحر
+Cotte Landmark=معلم كوتي
+Aegis Gate=بوابة إيجيس
+Minoth Summit=قمة مينوث
+Anu Shoals=مياه أنو الضحلة
+# ─────────────────────────────────────────────────
+# معالم منطقة بينتيلاس (Pentelas Region Landmarks)
+# ─────────────────────────────────────────────────
+Colony 11 Camp=مخيم المستعمرة 11
+Colony Iota Camp=مخيم المستعمرة يوتا
+Maktha Wildwood=غابة ماكثا البرية
+Maktha Wildwood Camp=مخيم غابة ماكثا البرية
+Upper Maktha=ماكثا العليا
+Sage's Domicile=مسكن الحكيم
+Great Cotte Falls=شلالات كوتي الكبرى
+Colony 0 Camp=مخيم المستعمرة 0
+Vinisog Summit=قمة فينيسوج
+Pentelas Landmark Tower=برج معلم بينتيلاس
+Erythia Landmark=معلم إريثيا
+Fyborg Ferronis Hulk=هيكل فيرونيس فايبورغ
+Captocorn Peak=قمة كابتوكورن
+Elgares Glacier=نهر إلجاريس الجليدي
+Elgares Glacier Camp=مخيم نهر إلجاريس الجليدي
+Swordmarch=مسيرة السيوف
+Swordmarch Camp=مخيم مسيرة السيوف
+# ─────────────────────────────────────────────────
+# معالم منطقة كادينسيا (Cadensia Region Landmarks)
+# ─────────────────────────────────────────────────
+Colony 5 Camp=مخيم المستعمرة 5
+Colony 7 Camp=مخيم المستعمرة 7
+Erythia Sea=بحر إريثيا
+Cent-Omnia Region=منطقة سنت أومنيا
+Cent-Omnia Camp=مخيم سنت أومنيا
+Last Lands=الأراضي الأخيرة
+Boundary Camp=مخيم الحدود
+Prison Island=جزيرة السجن
+Amphitheatre=المدرج
+Spirit Crucible Elpis=بوتقة الأرواح إلبيس
+Elpis Camp=مخيم إلبيس
+Isle of Remorse=جزيرة الندم
+Cloudkeep=حصن الغيوم
+Origin=الأصل
+Origin Camp=مخيم الأصل
+Elma's Camp=مخيم إلما
+Loch Danan=بحيرة دانان
+# ─────────────────────────────────────────────────
+# معالم قلعتي كيفيس وأغنوس (Keves & Agnus Castle Landmarks)
+# ─────────────────────────────────────────────────
+Keves Castle=قلعة كيفيس
+Keves Castle Gate=بوابة قلعة كيفيس
+Keves Castle Camp=مخيم قلعة كيفيس
+Keves Castle Landmark=معلم قلعة كيفيس
+Throne Room=قاعة العرش
+Agnus Castle=قلعة أغنوس
+Agnus Castle Gate=بوابة قلعة أغنوس
+Agnus Castle Camp=مخيم قلعة أغنوس
+Agnus Castle Landmark=معلم قلعة أغنوس
+Queen's Chamber=غرفة الملكة
+# ─────────────────────────────────────────────────
+# نقاط السفر والمعالم الخاصة (Special Travel Points)
+# ─────────────────────────────────────────────────
+Ferronis Hulk=هيكل فيرونيس
+Landmark Tower=برج المعلم
+Nopon Caravan=قافلة النوبون
+Collectopaedia Card Stand=منصة بطاقات الموسوعة
+Rest Stop=محطة استراحة
+Campfire=نار المخيم
+Cooking Spot=موقع الطبخ
+Level Up=رفع المستوى
+Discussion=مناقشة
+Gem Crafting Station=محطة صناعة الجواهر
+Class Change=تغيير الفصل
