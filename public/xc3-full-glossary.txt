@@ -1441,3 +1441,177 @@ Ouroboros Stone=حجر أوروبوروس
 City=المدينة
 Liberator=المحرر
 Lost Numbers=الأرقام المفقودة
+# ═══════════════════════════════════════════════════
+# المقتنيات والمواد (Collectibles & Materials)
+# ═══════════════════════════════════════════════════
+Collectible=مقتنى
+Material=مادة
+Collection=مجموعة
+Collectopaedia=موسوعة المقتنيات
+Collectopaedia Card=بطاقة موسوعة المقتنيات
+Exchange=تبادل
+Gather=جمع
+Item Drop=إسقاط عنصر
+Rare Drop=إسقاط نادر
+# ─────────────────────────────────────────────────
+# الخامات والمعادن (Ores & Minerals)
+# ─────────────────────────────────────────────────
+Iron Ore=خام حديد
+Copper Ore=خام نحاس
+Silver Ore=خام فضة
+Gold Ore=خام ذهب
+Platinum Ore=خام بلاتين
+Crystal Ore=خام بلوري
+Lumina Ore=خام لومينا
+Abyss Ore=خام الهاوية
+Origin Ore=خام الأصل
+Rough Diamond=ماسة خام
+Glowing Ore=خام متوهج
+Sponge Iron=حديد إسفنجي
+Black Iron=حديد أسود
+White Iron=حديد أبيض
+Crimson Ore=خام قرمزي
+Azure Ore=خام لازوردي
+Mossy Ore=خام مطحلب
+# ─────────────────────────────────────────────────
+# الأحجار الكريمة والبلورات (Gems & Crystals)
+# ─────────────────────────────────────────────────
+Ruby=ياقوتة حمراء
+Sapphire=ياقوتة زرقاء
+Emerald=زمردة
+Topaz=توباز
+Amethyst=جمشت
+Opal=أوبال
+Garnet=عقيق
+Pearl=لؤلؤة
+Quartz=كوارتز
+Flame Crystal=بلورة لهب
+Frost Crystal=بلورة صقيع
+Thunder Crystal=بلورة رعد
+Wind Crystal=بلورة رياح
+Earth Crystal=بلورة أرض
+Water Crystal=بلورة ماء
+Light Crystal=بلورة نور
+Dark Crystal=بلورة ظلام
+# ─────────────────────────────────────────────────
+# مواد الوحوش (Monster Materials)
+# ─────────────────────────────────────────────────
+Monster Bone=عظم وحش
+Monster Fang=ناب وحش
+Monster Horn=قرن وحش
+Monster Claw=مخلب وحش
+Monster Hide=جلد وحش
+Monster Scale=حرشفة وحش
+Monster Shell=صدفة وحش
+Monster Wing=جناح وحش
+Monster Tail=ذيل وحش
+Monster Eye=عين وحش
+Monster Heart=قلب وحش
+Sharp Fang=ناب حاد
+Sturdy Horn=قرن متين
+Thick Hide=جلد سميك
+Shimmering Scale=حرشفة متلألئة
+Razor Claw=مخلب حاد
+Tough Shell=صدفة صلبة
+Ancient Bone=عظم قديم
+Giant Fang=ناب عملاق
+Dragon Scale=حرشفة تنين
+Pristine Horn=قرن نقي
+# ─────────────────────────────────────────────────
+# مواد نباتية (Plant Materials)
+# ─────────────────────────────────────────────────
+Medicinal Herb=عشبة طبية
+Healing Herb=عشبة شفاء
+Moonlight Herb=عشبة ضوء القمر
+Starlight Herb=عشبة ضوء النجوم
+Sunlight Herb=عشبة ضوء الشمس
+Dewdrop Herb=عشبة قطر الندى
+Wild Herb=عشبة برية
+Fragrant Herb=عشبة عطرة
+Bitter Herb=عشبة مرة
+Sweet Herb=عشبة حلوة
+Forest Mushroom=فطر الغابة
+Cave Mushroom=فطر الكهف
+Glowing Mushroom=فطر متوهج
+Giant Mushroom=فطر عملاق
+Rare Mushroom=فطر نادر
+Poison Mushroom=فطر سام
+Tree Bark=لحاء شجرة
+Aged Wood=خشب معتق
+Fragrant Wood=خشب عطر
+Petrified Wood=خشب متحجر
+Vine=كرمة
+Thick Vine=كرمة سميكة
+Flower Petal=بتلة زهرة
+Rare Flower=زهرة نادرة
+Moonflower=زهرة القمر
+Sunflower Seed=بذرة عباد الشمس
+Wild Berry=توت بري
+Sweet Berry=توت حلو
+Sour Berry=توت حامض
+Golden Berry=توت ذهبي
+Tree Sap=نسغ الشجرة
+Resin=راتنج
+Amber Resin=راتنج كهرماني
+# ─────────────────────────────────────────────────
+# مواد مائية وبحرية (Aquatic Materials)
+# ─────────────────────────────────────────────────
+Sea Shell=صدفة بحرية
+Coral=مرجان
+Red Coral=مرجان أحمر
+Blue Coral=مرجان أزرق
+Seaweed=أعشاب بحرية
+Sea Salt=ملح بحري
+Driftwood=خشب طاف
+Sea Urchin=قنفذ بحر
+Starfish=نجم بحر
+Abalone=أذن البحر
+Clam=محارة
+Conch Shell=صدفة محارة
+River Stone=حصاة نهرية
+Lake Crystal=بلورة البحيرة
+Deep Sea Pearl=لؤلؤة أعماق البحر
+# ─────────────────────────────────────────────────
+# مواد خاصة ونادرة (Special & Rare Materials)
+# ─────────────────────────────────────────────────
+Nopon Coin=عملة نوبون
+Nopon Coin Silver=عملة نوبون فضية
+Nopon Coin Gold=عملة نوبون ذهبية
+Bonus EXP=خبرة إضافية
+Affinity Material=مادة ألفة
+Colony Affinity Material=مادة ألفة المستعمرة
+Ancient Relic=أثر قديم
+Mysterious Fragment=شظية غامضة
+Ether Deposit=رواسب أثير
+Condensed Ether=أثير مكثف
+Pure Ether=أثير نقي
+Origin Fragment=شظية الأصل
+Origin Shard=شريحة الأصل
+Flame Fragment=شظية لهب
+Frost Fragment=شظية صقيع
+Thunder Fragment=شظية رعد
+Life Fragment=شظية حياة
+Spirit Fragment=شظية روح
+Celestial Fragment=شظية سماوية
+Rainbow Fragment=شظية قوس قزح
+# ─────────────────────────────────────────────────
+# مواد الصناعة والتبادل (Crafting & Trade Materials)
+# ─────────────────────────────────────────────────
+Crafting Material=مادة صناعة
+Trade Item=عنصر تبادل
+Quest Item=عنصر مهمة
+Key Item=عنصر مفتاحي
+Cylinder=أسطوانة
+Empty Cylinder=أسطوانة فارغة
+Filled Cylinder=أسطوانة ممتلئة
+Ether Cylinder=أسطوانة أثير
+Power Cylinder=أسطوانة طاقة
+Ferronis Part=قطعة فيرونيس
+Scrap Metal=خردة معدنية
+Mechanical Part=قطعة ميكانيكية
+Circuit Board=لوحة دارات
+Power Core=نواة طاقة
+Ether Core=نواة أثير
+Ancient Component=مكوّن قديم
+Rusty Part=قطعة صدئة
+Polished Part=قطعة مصقولة
