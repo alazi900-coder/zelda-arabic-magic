@@ -1254,7 +1254,7 @@ Titan of Bygone Days=عملاق الأيام الغابرة
 Colony Tau Camp=مخيم المستعمرة تاو
 Colony Lambda Camp=مخيم المستعمرة لامدا
 Great Desert=الصحراء الكبرى
-Dannagh Desert=صحراء دناخ
+Dannagh Desert=صحراء داناغ
 Li Garte Prison Camp=مخيم سجن لي غارتي
 Lavi Sandfall=شلال لافي الرملي
 Oasis Camp=مخيم الواحة
@@ -2511,7 +2511,7 @@ Berserker Rage=غضب الفارسي
 # ─────────────────────────────────────────────────
 # فنون حداد يوم (Yumsmith Arts)
 # ─────────────────────────────────────────────────
-Overclock=التسريع الفائق
+Overclock=تسريع فائق
 Hammerhead=رأس المطرقة
 Chrome Armor=درع الكروم
 Quick Draw=سحب سريع
@@ -3488,32 +3488,16 @@ Skewer=سيخ
 # ─────────────────────────────────────────────────
 # مصطلحات النظام العامة
 # ─────────────────────────────────────────────────
-Gem=جوهرة
+# (مصطلحات النظام العامة للجواهر - تم نقلها لتجنب التكرار مع الأقسام السابقة)
+# انظر قسم "الجواهر (Gems) وتأثيراتها" أعلاه للمصطلحات الأساسية
 Gems=جواهر
-Gem Crafting=صناعة الجواهر
 Craft Gem=صنع جوهرة
 Gem Rank=رتبة الجوهرة
-Rank 1=الرتبة 1
-Rank 2=الرتبة 2
-Rank 3=الرتبة 3
-Rank 4=الرتبة 4
-Rank 5=الرتبة 5
-Rank 6=الرتبة 6
-Rank 7=الرتبة 7
-Rank 8=الرتبة 8
-Rank 9=الرتبة 9
-Rank 10=الرتبة 10
-Gem Slot=خانة الجوهرة
 Equip Gem=تجهيز جوهرة
 Unequip Gem=إزالة جوهرة
-Gem Effect=تأثير الجوهرة
 Gem Materials=مواد الجوهرة
-Craft=صنع
 Upgrade Gem=ترقية الجوهرة
 Gem Upgrade=ترقية الجوهرة
-Cylinder=أسطوانة
-Cylinders=أسطوانات
-Ether Cylinder=أسطوانة الأثير
 Flame Cylinder=أسطوانة اللهب
 Ice Cylinder=أسطوانة الجليد
 Electric Cylinder=أسطوانة الكهرباء
@@ -3535,9 +3519,9 @@ Accurate Grace=نعمة الدقة
 # تزيد معدل الدقة
 Analyze Weakness=تحليل الضعف
 # تزيد الضرر ضد الأعداء ذوي العنصر الضعيف
-Disperse Bloodlust=تفريق عطش الدم
+Disperse Bloodlust=تشتيت عطش الدم
 # تقلل العداء المتولد
-Ultimate Counter=المضاد المطلق
+Ultimate Counter=صد مطلق
 # تزيد ضرر الهجمات المضادة
 # ─────────────────────────────────────────────────
 # جواهر الشفاء (Healer Gems)
@@ -3546,11 +3530,11 @@ Lifesaving Expertise=خبرة إنقاذ الحياة
 # تعزز قوة الشفاء
 Lifeblood=دم الحياة
 # تزيد أقصى نقاط الصحة
-Steady Striker=الضارب الثابت
+Steady Striker=ضارب ثابت
 # تقلل تبريد فنون الشفاء
-Empowered Combo=تتابع معزز
+Empowered Combo=كومبو معزز
 # تزيد ضرر التتابعات
-Ironclad=مُدرّع
+Ironclad=درع حديدي
 # تقلل الضرر من الضربات الحرجة المتلقاة
 Perilous Presence=حضور خطير
 # تزيد الضرر عندما تكون صحة المستخدم منخفضة
@@ -3559,7 +3543,7 @@ Refined Incantation=تعويذة مصقولة
 # ─────────────────────────────────────────────────
 # جواهر الدفاع (Defender Gems)
 # ─────────────────────────────────────────────────
-Non-Stickستيل=فولاذ لاصق
+# (تمت إزالة سطر تالف)
 Steelcleaver=شاطر الفولاذ
 # تزيد العداء المتولد
 Steady Mind=عقل ثابت
@@ -3589,34 +3573,10 @@ Abundant Spoils=غنائم وفيرة
 # تزيد معدل سقوط العناصر
 Refined Blessing=بركة مصقولة
 # تعزز تأثيرات التقوية المتلقاة
-# ─────────────────────────────────────────────────
-# مواد صناعة الجواهر
-# ─────────────────────────────────────────────────
-Ore=خام
-Iron Ore=خام الحديد
-Silver Ore=خام الفضة
-Gold Ore=خام الذهب
-Crystal=بلورة
-Ether Crystal=بلورة الأثير
-Flame Crystal=بلورة اللهب
-Ice Crystal=بلورة الجليد
-Electric Crystal=بلورة الكهرباء
-Water Crystal=بلورة الماء
-Wind Crystal=بلورة الرياح
-Earth Crystal=بلورة الأرض
+# (مواد صناعة الجواهر - تم إزالة التكرارات، انظر أقسام المواد والمعادن أعلاه)
+# المصطلحات الفريدة فقط:
 Gemstone=حجر كريم
-Ruby=ياقوت أحمر
-Sapphire=ياقوت أزرق
-Emerald=زمرد
-Diamond=ألماس
-Amethyst=جمشت
-Topaz=توباز
-Opal=أوبال
-Pearl=لؤلؤة
 Monster Material=مادة وحش
-Rare Material=مادة نادرة
-Common Material=مادة شائعة
-Unique Material=مادة فريدة
 Salvage Item=عنصر إنقاذ
 Collectible Material=مادة قابلة للجمع
 # ═══════════════════════════════════════════════════
@@ -3710,7 +3670,7 @@ Campfire Chat=دردشة المخيم
 Meal Together=وجبة مشتركة
 Battle Together=قتال مشترك
 Quest Completion=إتمام المهمة
-Side Quest=مهمة فرعية
+Side Quest=مهمة جانبية
 Hero Quest=مهمة بطل
 Collectopaedia Card Delivery=تسليم بطاقة كوليبيديا
 Item Delivery=تسليم عنصر
@@ -3740,7 +3700,7 @@ Skill Node=عقدة المهارة
 Skill Branch=فرع المهارة
 Skill Slot=خانة المهارة
 Skill Set=مجموعة المهارات
-Master Skill=مهارة خبيرة
+Master Skill=مهارة الإتقان
 Equipped Skill=مهارة مجهزة
 Passive Skill=مهارة خاملة
 Active Skill=مهارة نشطة
@@ -3752,7 +3712,7 @@ Skill Compatibility=توافق المهارة
 # ─────────────────────────────────────────────────
 Art Slot=خانة الفن
 Art Set=مجموعة الفنون
-Master Art=فن خبير
+Master Art=فن الإتقان
 Class Art=فن الفصل
 Talent Art=فن الموهبة
 Fusion Art=فن مدمج
@@ -6556,22 +6516,17 @@ I want to see the ocean one more time.=أريد أن أرى المحيط مرة 
 We'll get through this. I know it.=سنتجاوز هذا. أعرف ذلك.
 
 # --- حوارات المعركة أثناء القتال (In-Battle Dialogues) ---
+# (الحوارات الأساسية موجودة في قسم "نداءات المعركة الصوتية" أعلاه)
+# الإضافات الفريدة فقط:
 Here I go!=ها أنا قادم!
-Take this!=خذ هذه!
-Now!=الآن!
 Got it!=فهمت!
 Leave it to me!=اتركها لي!
-I'll cover you!=سأغطيك!
-Watch out!=انتبه!
 Behind you!=خلفك!
 Nice one!=أحسنت!
-We can do this!=نستطيع فعلها!
-Don't give up!=لا تستسلموا!
 Keep pushing!=واصلوا الضغط!
 Almost there!=أوشكنا!
 One more push!=دفعة أخيرة!
 They're tough!=إنهم أقوياء!
-Fall back!=تراجعوا!
 Heal me!=اشفني!
 I need healing!=أحتاج شفاء!
 I'm on it!=حاضر!
