@@ -288,6 +288,49 @@ KO=سقوط
 Absorb=امتصاص
 Reflect=انعكاس
 # ═══════════════════════════════════════════════════
+# الفصول (Classes)
+# ═══════════════════════════════════════════════════
+# فصول كيفيس الأساسية
+Swordfighter=المبارز بالسيف
+Zephyr=زفير
+Medic Gunner=المسعف المدفعي
+Tactician=التكتيكي
+Heavy Guard=الحارس الثقيل
+Ogre=الغول
+# فصول أغنوس الأساسية
+Yumsmith=حداد يوم
+Guardian Commander=قائد الحراسة
+War Medic=طبيب الحرب
+Strategos=الاستراتيجوس
+Lone Exile=المنفي الوحيد
+Incursor=المقتحم
+# فصول الأبطال
+Flash Fencer=المبارز الخاطف
+Stalker=المتعقب
+Full Metal Jaguar=الجاغوار المعدني
+Thaumaturge=المعجزاتي
+Martial Artist=فنان القتال
+Troubadour=التروبادور
+Seraph=السيراف
+Machine Assassin=قاتل الآلات
+Lost Vanguard=الطليعة المفقودة
+Soulhacker=مخترق الأرواح
+Royal Summoner=المستدعي الملكي
+Lifesage=حكيم الحياة
+Signifer=حامل اللواء
+Nines=التاسع
+Lapidarist=صانع الأحجار
+# فصول DLC
+Ino=إينو
+Lucky Seven=السبعة المحظوظة
+# مصطلحات عامة للفصول
+Class=الفصل
+Master Art=فن الإتقان
+Master Skill=مهارة الإتقان
+Class Rank=رتبة الفصل
+Class Change=تغيير الفصل
+Inheritable Skill=مهارة قابلة للتوريث
+# ═══════════════════════════════════════════════════
 # الجواهر والصناعة (Gems & Crafting)
 # ═══════════════════════════════════════════════════
 Gem=جوهرة
