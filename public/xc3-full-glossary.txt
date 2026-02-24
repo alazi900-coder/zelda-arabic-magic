@@ -12040,3 +12040,1519 @@ This is our world now. Let's make it one worth living in.=هذا عالمنا ا
 The Ouroboros showed us the way. Now we have to walk it ourselves.=الأوروبوروس أرونا الطريق. الآن علينا أن نسير فيه بأنفسنا.
 No more Flame Clocks. No more Consuls. Just us and our choices.=لا مزيد من ساعات اللهب. لا مزيد من القناصل. فقط نحن وخياراتنا.
 And I choose hope.=وأنا أختار الأمل.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 75: تأثيرات الحالة التفصيلية (Detailed Status Effects)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- تأثيرات الإسقاط (Knockdown Chain) ---
+Break reduces the target's stability.=الكسر يُقلل من ثبات الهدف.
+Topple knocks the target to the ground.=الإسقاط يطرح الهدف أرضاً.
+Daze stuns the target, preventing all action.=الذهول يصعق الهدف ويمنعه من أي فعل.
+Burst deals massive damage and scatters the enemy.=الانفجار يُلحق ضرراً هائلاً ويبعثر العدو.
+Launch sends the target skyward.=الإطلاق يقذف الهدف نحو السماء.
+Smash slams a launched target into the ground.=السحق يضرب الهدف المُطلق بالأرض.
+A successful Break opens up combo opportunities.=الكسر الناجح يفتح فرص السلاسل الهجومية.
+Follow up a Topple with Launch or Daze for more damage.=تابع الإسقاط بالإطلاق أو الذهول لمزيد من الضرر.
+Burst finishers deal the most damage in a combo.=ضربات الانفجار الختامية تُلحق أكبر ضرر في السلسلة.
+The Break-Topple-Launch-Smash combo is devastating.=سلسلة كسر-إسقاط-إطلاق-سحق مدمرة.
+The Break-Topple-Daze-Burst combo focuses on damage.=سلسلة كسر-إسقاط-ذهول-انفجار تركز على الضرر.
+Some enemies are resistant to Break effects.=بعض الأعداء مقاومون لتأثيرات الكسر.
+Higher-level enemies require more hits to Break.=الأعداء ذوو المستوى الأعلى يحتاجون ضربات أكثر للكسر.
+Topple duration varies by enemy type.=مدة الإسقاط تختلف حسب نوع العدو.
+Launch height affects Smash damage.=ارتفاع الإطلاق يؤثر على ضرر السحق.
+
+# --- تأثيرات العناصر (Elemental Effects) ---
+Blaze deals fire damage over time.=اللهيب يُلحق ضرر نار مستمراً.
+Frostbite deals ice damage over time.=لسعة الصقيع تُلحق ضرر جليد مستمراً.
+Blaze can spread to nearby enemies.=اللهيب يمكن أن ينتشر للأعداء القريبين.
+Frostbite slows enemy movement speed.=لسعة الصقيع تُبطئ سرعة حركة العدو.
+Blaze damage increases with Ether stat.=ضرر اللهيب يزداد مع إحصائية الأثير.
+Frostbite duration increases with level difference.=مدة لسعة الصقيع تزداد مع فارق المستوى.
+Some accessories boost Blaze damage.=بعض الإكسسوارات تُعزز ضرر اللهيب.
+Frostbite-immune enemies exist in icy regions.=أعداء محصنون ضد لسعة الصقيع موجودون في المناطق الجليدية.
+
+# --- تأثيرات الإضعاف (Debuff Effects) ---
+Doom causes instant death after a countdown.=الهلاك يُسبب موتاً فورياً بعد عد تنازلي.
+Bind prevents the target from moving.=التقييد يمنع الهدف من الحركة.
+Blowdown knocks the target backward.=الصدمة تدفع الهدف للخلف.
+Sleep puts the target into a deep slumber.=النوم يُدخل الهدف في سبات عميق.
+Paralysis randomly prevents actions.=الشلل يمنع الأفعال عشوائياً.
+Poison deals continuous HP damage.=السُم يُلحق ضرر نقاط صحة مستمراً.
+Strength Down reduces physical attack power.=انخفاض القوة يُقلل من قوة الهجوم الجسدي.
+Ether Defense Down reduces ether resistance.=انخفاض دفاع الأثير يُقلل من مقاومة الأثير.
+Accuracy Down reduces hit chance.=انخفاض الدقة يُقلل من فرصة الإصابة.
+Evasion Down reduces dodge chance.=انخفاض المراوغة يُقلل من فرصة التفادي.
+Doom countdown can be slowed with certain skills.=عد الهلاك التنازلي يمكن إبطاؤه بمهارات معينة.
+Bind duration depends on the user's Ether stat.=مدة التقييد تعتمد على إحصائية أثير المستخدم.
+Sleep is broken by taking damage.=النوم يُكسر بتلقي الضرر.
+Paralysis chance decreases over time.=فرصة الشلل تتناقص مع الوقت.
+
+# --- تأثيرات التعزيز (Buff Effects) ---
+Attack Up boosts physical damage dealt.=تعزيز الهجوم يرفع الضرر الجسدي.
+Defense Up reduces physical damage taken.=تعزيز الدفاع يُقلل الضرر الجسدي المتلقى.
+Ether Up boosts ether damage dealt.=تعزيز الأثير يرفع ضرر الأثير.
+Accuracy Up increases hit chance.=تعزيز الدقة يزيد فرصة الإصابة.
+Evasion Up increases dodge chance.=تعزيز المراوغة يزيد فرصة التفادي.
+Critical Up increases critical hit rate.=تعزيز الحرجة يزيد معدل الضربات الحرجة.
+Regeneration restores HP over time.=التجدد يستعيد نقاط الصحة مع الوقت.
+Awakening boosts all stats temporarily.=الصحوة تُعزز جميع الإحصائيات مؤقتاً.
+Power Charge boosts the next Art's damage.=شحنة القوة تُعزز ضرر الفن التالي.
+Arts Plus reduces Art cooldown time.=تعزيز الفنون يُقلل وقت تهدئة الفنون.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 76: فئات الفنون القتالية (Art Categories)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- أنواع الفنون (Art Types) ---
+Talent Art=فن الموهبة
+Master Art=فن الإتقان
+Fusion Art=فن الدمج
+Physical Art=فن جسدي
+Ether Art=فن أثيري
+Healing Art=فن علاجي
+Support Art=فن دعم
+Field Art=فن ميداني
+Talent Arts are unique to each class.=فنون الموهبة فريدة لكل فئة.
+Master Arts can be used from any learned class.=فنون الإتقان يمكن استخدامها من أي فئة مُتعلمة.
+Fusion Arts combine two Arts for enhanced effects.=فنون الدمج تجمع بين فنين لتأثيرات مُعززة.
+Physical Arts deal damage based on the Attack stat.=الفنون الجسدية تُلحق ضرراً بناءً على إحصائية الهجوم.
+Ether Arts deal damage based on the Ether stat.=الفنون الأثيرية تُلحق ضرراً بناءً على إحصائية الأثير.
+Healing Arts restore HP to allies.=فنون العلاج تستعيد نقاط الصحة للحلفاء.
+Position Arts require specific positioning.=فنون الموضع تتطلب تموضعاً محدداً.
+Back Attack deals bonus damage from behind.=الهجوم الخلفي يُلحق ضرراً إضافياً من الخلف.
+Side Attack deals bonus damage from the side.=الهجوم الجانبي يُلحق ضرراً إضافياً من الجنب.
+Front Attack has the highest base damage.=الهجوم الأمامي يملك أعلى ضرر أساسي.
+Cancel Arts gain bonus effects when timed correctly.=فنون الإلغاء تكتسب تأثيرات إضافية عند التوقيت الصحيح.
+Art Recharge speeds up with auto-attacks.=إعادة شحن الفنون تتسارع بالهجمات التلقائية.
+Some Arts have positional bonuses.=بعض الفنون تملك مكافآت تموضعية.
+Combine a physical and ether Art for a Fusion Art.=اجمع بين فن جسدي وأثيري لفن دمج.
+Talent Arts charge through specific actions.=فنون الموهبة تُشحن من خلال أفعال محددة.
+Each role has different Art types available.=كل دور يملك أنواع فنون مختلفة متاحة.
+Attackers focus on damage-dealing Arts.=المهاجمون يركزون على فنون إلحاق الضرر.
+Defenders use aggro-generating Arts.=المدافعون يستخدمون فنون توليد الأغرو.
+Healers specialize in restorative Arts.=المعالجون يتخصصون في الفنون الاستعادية.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 77: أسماء وأوصاف مهام المستعمرات (Colony Quest Names & Descriptions)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- مهام المستعمرة 9 (Colony 9 Quests) ---
+Colony 15 Soldiers Missing=جنود المستعمرة 15 مفقودون
+Several soldiers from Colony 15 have gone missing during a routine patrol.=اختفى عدة جنود من المستعمرة 15 خلال دورية روتينية.
+Search the Maktha Wildwood for any trace of the missing soldiers.=ابحث في غابة ماكثا البرية عن أي أثر للجنود المفقودين.
+The missing soldiers were last seen heading toward the old ruins.=آخر مشاهدة للجنود المفقودين كانت وهم يتجهون نحو الأطلال القديمة.
+We need to find them before the monsters do.=نحتاج إيجادهم قبل الوحوش.
+Farewell Melody=لحن الوداع
+Leonardo's squad is preparing for their final mission.=فرقة ليوناردو تستعد لمهمتهم الأخيرة.
+Leonardo wants to hear one last melody before departing.=يريد ليوناردو سماع لحن أخير قبل الرحيل.
+See off Leonardo's squad at the Colony 9 gate.=ودّع فرقة ليوناردو عند بوابة المستعمرة 9.
+The farewell was bittersweet, but necessary.=كان الوداع حلواً ومراً، لكنه ضروري.
+Forgotten Supplies=إمدادات منسية
+Noah's squad left a supply container behind during their last mission.=تركت فرقة نوح حاوية إمدادات خلفها في مهمتهم الأخيرة.
+The container was left somewhere near Alfeto Valley.=الحاوية تُركت في مكان ما قرب وادي ألفيتو.
+We need those supplies for the colony's survival.=نحتاج تلك الإمدادات لبقاء المستعمرة.
+The party found the unrecovered container in a hidden cave.=وجد الفريق الحاوية غير المستردة في كهف مخفي.
+Shared Secret=سر مشترك
+Leonardo and Eastman share a secret from their past lives.=ليوناردو وإيستمان يتشاركان سراً من حيواتهما الماضية.
+They remember fragments of a previous life together.=يتذكران شظايا من حياة سابقة معاً.
+The secret involves a promise made long ago.=السر يتضمن وعداً قُطع منذ زمن بعيد.
+Friendship=صداقة
+Trayden and Jougo have been friends since their earliest days.=ترايدن وجوغو كانا صديقين منذ أيامهما الأولى.
+Their bond was tested when Jougo fell ill.=رابطتهما اختُبرت عندما مرض جوغو.
+Unfortunately, Jougo died as you were searching for medicine.=للأسف، توفي جوغو بينما كنتم تبحثون عن الدواء.
+Trayden vowed to honor Jougo's memory by living fully.=أقسم ترايدن أن يُكرم ذكرى جوغو بأن يعيش بالكامل.
+
+# --- مهام المستعمرة لامبدا (Colony Lambda Quests) ---
+Lambda's New Path=مسار لامبدا الجديد
+Colony Lambda is charting a new course after liberation.=المستعمرة لامبدا ترسم مساراً جديداً بعد التحرير.
+Kouju needs help establishing trade routes.=كوجو يحتاج مساعدة لإنشاء طرق تجارية.
+The new trade route will connect Lambda to Colony 9.=طريق التجارة الجديد سيربط لامبدا بالمستعمرة 9.
+Escort the supply caravan through Millick Meadows safely.=رافق قافلة الإمدادات عبر مروج ميليك بأمان.
+The caravan arrived without incident. Lambda thrives.=وصلت القافلة بدون حوادث. لامبدا تزدهر.
+Voices of Change=أصوات التغيير
+Not everyone in Lambda agrees with the new direction.=ليس الجميع في لامبدا يوافق على الاتجاه الجديد.
+Some soldiers still long for the old ways.=بعض الجنود لا يزالون يشتاقون للطرق القديمة.
+Kouju must address the dissent before it tears the colony apart.=على كوجو معالجة المعارضة قبل أن تمزق المستعمرة.
+Through dialogue, the dissenters found common ground with Kouju.=من خلال الحوار، وجد المعارضون أرضية مشتركة مع كوجو.
+
+# --- مهام المستعمرة تاو (Colony Tau Quests) ---
+Supply Shortage=نقص الإمدادات
+Colony Tau's supplies are running dangerously low.=إمدادات المستعمرة تاو تنخفض بشكل خطير.
+We need food, medicine, and ether cylinders urgently.=نحتاج طعاماً ودواءً وأسطوانات أثير بشكل عاجل.
+Find ether cylinders in the abandoned Ferronis hulk.=ابحث عن أسطوانات أثير في هيكل الفيرونيس المهجور.
+The medical supplies are hidden in a collapsed tunnel.=الإمدادات الطبية مخفية في نفق منهار.
+With these supplies, Colony Tau can survive another month.=بهذه الإمدادات، المستعمرة تاو تستطيع البقاء شهراً آخر.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 78: أسماء المواقع والمعالم (Location & Landmark Names)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- مواقع منطقة أيتيا (Aetia Region Locations) ---
+Michiba Canteen=مطعم ميشيبا
+Sentridge Harbor=مرفأ سينتريدج
+Pioneer's Inlet=مدخل الرواد
+Resonance Hill=تلة الرنين
+Murmur Rise=صعود الهمس
+High Morukuna Wildwood Area=منطقة غابة موروكونا البرية العليا
+Monument of Life=نُصب الحياة
+Liberi Plaza=ساحة ليبيري
+Station Breakroom=غرفة استراحة المحطة
+Alfeto Valley Campsite=مخيم وادي ألفيتو
+Colony 9 Main Gate=البوابة الرئيسية للمستعمرة 9
+Hillside Approach=ممر سفح التل
+Upper Aetia Cliffs=منحدرات أيتيا العليا
+Lower Aetia Basin=حوض أيتيا السفلي
+Aetia Sea Outlook=مطل بحر أيتيا
+Ribbi Flats Campsite=مخيم سهول ريبي
+Colony 4 Surroundings=محيط المستعمرة 4
+Everblight Plain=سهل الضوء الأبدي
+Everblight Plain Campsite=مخيم سهل الضوء الأبدي
+Rae-Bel Tableland=هضبة ري-بل
+Rae-Bel Summit=قمة ري-بل
+Hillside Ferronis Hulk=هيكل فيرونيس سفح التل
+Decayed Ferronis Hulk=هيكل الفيرونيس المتحلل
+Llyn Nyddwr Camp=مخيم لين نيدور
+Colony Iota Entrance=مدخل المستعمرة أيوتا
+Aetia Southern Gate=البوابة الجنوبية لأيتيا
+
+# --- مواقع منطقة فورنيس (Fornis Region Locations) ---
+Maktha Wildwood Entrance=مدخل غابة ماكثا البرية
+Maktha Wildwood Depths=أعماق غابة ماكثا البرية
+Colony 30 Perimeter=محيط المستعمرة 30
+Raptor Perch=مجثم الطائر الجارح
+Titan Rock Lookout=مطل صخرة العملاق
+Tableland Campsite=مخيم الهضبة
+Fornis Desert Oasis=واحة صحراء فورنيس
+Eastern Fornis Gate=البوابة الشرقية لفورنيس
+Western Fornis Approach=ممر فورنيس الغربي
+Desert Ruins Entrance=مدخل أطلال الصحراء
+Sandswept Crossing=معبر الرمال
+Colony Mu Canteen=مطعم المستعمرة مو
+Colony Mu Barracks=ثكنات المستعمرة مو
+Colony Mu Training Ground=ساحة تدريب المستعمرة مو
+Great Crevasse Overlook=مطل الصدع الكبير
+Upper Great Crevasse=الصدع الكبير العلوي
+Lower Great Crevasse=الصدع الكبير السفلي
+Crevasse Floor=أرضية الصدع
+Millick Meadows Campsite=مخيم مروج ميليك
+Cascade Falls Camp=مخيم شلالات الانحدار
+Sage's Domicile=مسكن الحكيم
+Fornis Ether Mine=منجم أثير فورنيس
+
+# --- مواقع منطقة بنتلاس (Pentelas Region Locations) ---
+Colony Lambda Gate=بوابة المستعمرة لامبدا
+Lambda Command Center=مركز قيادة لامبدا
+Lambda Armory=مستودع أسلحة لامبدا
+Lambda Infirmary=مستوصف لامبدا
+Pentelas Highlands=مرتفعات بنتلاس
+Urayan Tunnels Entrance=مدخل أنفاق أوراي
+Urayan Tunnels Depths=أعماق أنفاق أوراي
+Erythia Sea Approach=ممر بحر إريثيا
+Erythia Sea Overlook=مطل بحر إريثيا
+Swordmarch Campsite=مخيم مسيرة السيف
+Great Sword Base=قاعدة السيف العظيم
+Keves Castle Gate=بوابة قلعة كيفس
+Castle Outer Ward=الساحة الخارجية للقلعة
+Castle Inner Ward=الساحة الداخلية للقلعة
+Castle Throne Room=قاعة العرش بالقلعة
+Castle Prison Block=جناح سجن القلعة
+Prison Yard=ساحة السجن
+Li Garte Prison Camp=معسكر سجن لي غارتي
+Li Garte Upper Level=المستوى العلوي لسجن لي غارتي
+Li Garte Lower Level=المستوى السفلي لسجن لي غارتي
+
+# --- مواقع منطقة كادينسيا (Cadensia Region Locations) ---
+Cadensia Docks=أرصفة كادينسيا
+Cadensia Overlook Camp=مخيم مطل كادينسيا
+Floating Reef Campsite=مخيم الشعاب العائمة
+Origin Interior - Entrance=داخل الأوريجن - المدخل
+Origin Interior - Core=داخل الأوريجن - النواة
+Origin Interior - Upper Deck=داخل الأوريجن - السطح العلوي
+Origin Interior - Lower Deck=داخل الأوريجن - السطح السفلي
+Origin Exterior - Platform=خارج الأوريجن - المنصة
+Cloudkeep Entrance=مدخل حصن السحاب
+Cloudkeep Summit=قمة حصن السحاب
+Agnus Castle Gate=بوابة قلعة أغنس
+Agnus Castle Grounds=أرض قلعة أغنس
+Agnus Castle Interior=داخل قلعة أغنس
+Agnus Castle Balcony=شرفة قلعة أغنس
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 79: أهداف المهام التفصيلية (Detailed Quest Objectives)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- أهداف مهام الجمع (Collection Objectives) ---
+Make a Spongy Spud supper at the Colony Mu Canteen.=اصنع عشاء بطاطا إسفنجية في مطعم المستعمرة مو.
+Find a Bright Fig in Morukuna Wildwood.=ابحث عن تينة مشرقة في غابة موروكونا البرية.
+Collect 3 Ether Plums from the highland trees.=اجمع 3 برقوقات أثير من أشجار المرتفعات.
+Gather medicinal herbs from Millick Meadows.=اجمع أعشاباً طبية من مروج ميليك.
+Find a Walnut Grape in the Fornis Desert Oasis.=ابحث عن عنبة الجوز في واحة صحراء فورنيس.
+Collect monster parts for Camilla's repairs.=اجمع أجزاء وحوش لإصلاحات كاميلا.
+Gather Wool Rock samples from the cliffs.=اجمع عينات صخر الصوف من المنحدرات.
+Find an Orbshell near the Erythia Sea.=ابحث عن صدفة المدار قرب بحر إريثيا.
+Harvest Cool Potatoes from the underground farm.=احصد بطاطا باردة من المزرعة الجوفية.
+Collect Amethyst Vanilla from the forest floor.=اجمع فانيلا الجمشت من أرضية الغابة.
+
+# --- أهداف مهام القتال (Combat Objectives) ---
+Defeat the Tirkin raiders threatening Colony 4.=اهزم غزاة التيركين الذين يهددون المستعمرة 4.
+Slay the Unique Monster terrorizing the trade route.=اقتل الوحش الفريد الذي يُرعب طريق التجارة.
+Clear the monster nest in the abandoned mine.=طهّر عرين الوحوش في المنجم المهجور.
+Defeat the rogue Agnian soldiers near the border.=اهزم الجنود الأغنسيين المارقين قرب الحدود.
+Protect the caravan from monster attacks.=احمِ القافلة من هجمات الوحوش.
+Eliminate the Skeeter swarm near the colony.=أبد سرب السكيتر قرب المستعمرة.
+Defeat the Rhogul alpha blocking the mountain pass.=اهزم زعيم الروغول الذي يسد ممر الجبل.
+Clear the Ropl infestation in the caves.=طهّر إصابة الروبل في الكهوف.
+
+# --- أهداف مهام الاستكشاف (Exploration Objectives) ---
+Head for Captocorn Ridge.=توجه إلى حافة كابتوكورن.
+Reach the southern Aetia region.=اوصل إلى منطقة أيتيا الجنوبية.
+Explore the ruins in the Maktha Wildwood.=استكشف الأطلال في غابة ماكثا البرية.
+Find a path through the Great Crevasse.=ابحث عن ممر عبر الصدع الكبير.
+Scout the area around the old Ferronis hulk.=استكشف المنطقة حول هيكل الفيرونيس القديم.
+Investigate the mysterious signal from the east.=حقق في الإشارة الغامضة من الشرق.
+Cross the Erythia Sea to reach the new continent.=اعبر بحر إريثيا للوصول إلى القارة الجديدة.
+Find the hidden entrance to the underground city.=ابحث عن المدخل المخفي للمدينة الجوفية.
+Reach the summit of Rae-Bel Tableland.=اوصل إلى قمة هضبة ري-بل.
+Discover the old Kevesi outpost in the mountains.=اكتشف المخفر الكيفسي القديم في الجبال.
+
+# --- أهداف مهام الحوار (Dialogue Objectives) ---
+Talk to Kouju about the colony's future.=تحدث مع كوجو عن مستقبل المستعمرة.
+Report back to Zeon at the Colony 9 barracks.=أبلغ زيون في ثكنات المستعمرة 9.
+Discuss the supply situation with the quartermaster.=ناقش وضع الإمدادات مع أمين المخزن.
+Check in with the medic about Jougo's condition.=تفقد حالة جوغو مع الطبيب.
+Deliver Mio's message to the Castle guards.=أوصل رسالة ميو لحراس القلعة.
+Speak with the Nopon merchant about rare goods.=تحدث مع تاجر النوبون عن البضائع النادرة.
+Ask Valdi about repairing the broken equipment.=اسأل فالدي عن إصلاح المعدات المعطلة.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 80: أوصاف نتائج المهام (Quest Results & Outcomes)
+# ═══════════════════════════════════════════════════════════════════
+
+Thanks to the Colony 15 soldiers' sterling work, the area is safe once more.=بفضل عمل جنود المستعمرة 15 المتميز، المنطقة آمنة مرة أخرى.
+The missing patrol was found sheltering in a cave.=الدورية المفقودة عُثر عليها تحتمي في كهف.
+All soldiers returned safely to Colony 15.=جميع الجنود عادوا بأمان إلى المستعمرة 15.
+Leonardo's squad departed with smiles on their faces.=رحلت فرقة ليوناردو بابتسامات على وجوههم.
+The melody echoed across the colony as they left.=تردد صدى اللحن عبر المستعمرة وهم يغادرون.
+The supplies will last the colony through winter.=الإمدادات ستكفي المستعمرة خلال الشتاء.
+Kouju's leadership has united the colony.=قيادة كوجو وحّدت المستعمرة.
+The trade route between Lambda and Colony 9 is now open.=طريق التجارة بين لامبدا والمستعمرة 9 مفتوح الآن.
+Colony Tau received the emergency supplies just in time.=المستعمرة تاو تلقت إمدادات الطوارئ في الوقت المناسب.
+The monster threat has been neutralized for now.=تهديد الوحوش تم تحييده حالياً.
+The ruins held secrets from a civilization long past.=الأطلال احتوت أسراراً من حضارة ولّت منذ زمن.
+Peace between the colonies grows stronger each day.=السلام بين المستعمرات يزداد قوة كل يوم.
+The new farming techniques are producing results.=تقنيات الزراعة الجديدة تُنتج نتائج.
+Colony morale has improved significantly.=معنويات المستعمرة تحسنت بشكل ملحوظ.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 81: آثار وتتبع ميداني (Field Tracking & Traces)
+# ═══════════════════════════════════════════════════════════════════
+
+Somebody's Tracks=آثار شخص ما
+Herbivore Tracks=آثار حيوان عشبي
+Monster Tracks=آثار وحش
+Deserters' Footprints=آثار أقدام الفارين
+Deserters' Trail=درب الفارين
+Fugitive's Footprints=آثار أقدام الهارب
+Gin's Tracks=آثار جين
+Burebure's Tracks=آثار بوريبوري
+Levnis Tracks=آثار ليفنيس
+Mystery Agnian Trail=درب أغنسي غامض
+Child's Footprints=آثار أقدام طفل
+Unidentified Tracks=آثار مجهولة
+Robobuddy's Log=سجل الروبوبادي
+Trace Clock Energy=تتبع طاقة الساعة
+Faded Footprints=آثار أقدام باهتة
+Fresh Monster Droppings=فضلات وحش طازجة
+Broken Branches=أغصان مكسورة
+Scattered Supplies=إمدادات مبعثرة
+Abandoned Campfire=نار مخيم مهجورة
+Tire Marks=علامات إطارات
+Battle Scars=ندوب معركة
+Discarded Weapon=سلاح ملقى
+Torn Clothing=ملابس ممزقة
+Strange Markings=علامات غريبة
+Ether Residue=بقايا أثير
+Unusual Plant Growth=نمو نباتي غير عادي
+Corroded Metal=معدن متآكل
+Ancient Inscription=نقش قديم
+Signal Flare Remains=بقايا شعلة إشارة
+Collapsed Tunnel Entrance=مدخل نفق منهار
+Hidden Stash=مخبأ مخفي
+Warning Sign=لافتة تحذيرية
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 82: عناوين أحداث الروابط (Link Event Titles)
+# ═══════════════════════════════════════════════════════════════════
+
+Tutor: Mio=المُعلمة: ميو
+Isora's Request=طلب إيسورا
+Colony 0's Future=مستقبل المستعمرة 0
+Life in Li Garte Prison=الحياة في سجن لي غارتي
+Prison Problems=مشاكل السجن
+Mystery Ferron=فيرون الغامض
+Sena and No. 9=سينا والرقم 9
+Colony 0 Duties=واجبات المستعمرة 0
+The Name "Nagiri"=الاسم "ناغيري"
+A Need for Names=الحاجة إلى أسماء
+Herding Monsters=رعي الوحوش
+Tactician's Plan=خطة التكتيكي
+Colony 4 Revitalized=المستعمرة 4 تنتعش
+The Poisoner=المُسمم
+Curious About Training=فضول حول التدريب
+Irritation=انزعاج
+Taion's Analysis=تحليل تايون
+Eunie's Determination=عزيمة يوني
+Noah's Resolve=تصميم نوح
+Lanz's Growth=نمو لانز
+Sena's Strength=قوة سينا
+Mio's Melody=لحن ميو
+A Moment of Peace=لحظة سلام
+Cooking Together=الطبخ معاً
+Training at Dawn=التدريب عند الفجر
+Star Gazing=مراقبة النجوم
+The Weight of Command=ثقل القيادة
+Childhood Memories=ذكريات الطفولة
+A Promise Kept=وعد مُلتزم
+The Road Ahead=الطريق أمامنا
+Bonds That Transcend=روابط تتجاوز
+Lost and Found=مفقود وموجود
+The Healer's Burden=عبء المُعالج
+A Soldier's Pride=فخر جندي
+Unspoken Words=كلمات غير منطوقة
+The Last Sunset=الغروب الأخير
+Tomorrow's Promise=وعد الغد
+Together We Stand=معاً نقف
+Fighting for Tomorrow=نقاتل من أجل الغد
+The Path We Choose=الطريق الذي نختاره
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 83: عائلات الأعداء - التيركين (Enemy Families - Tirkin)
+# ═══════════════════════════════════════════════════════════════════
+
+Arrow Tirkin=تيركين السهام
+Bard Tirkin=تيركين الشاعر
+Squire Tirkin=تيركين المُبارز
+Lancer Tirkin=تيركين الرمّاح
+Archer Tirkin=تيركين الرامي
+Musical Tirkin=تيركين الموسيقى
+Knightlord Tirkin=تيركين سيد الفرسان
+Pikelord Tirkin=تيركين سيد الرماح
+Bowlord Tirkin=تيركين سيد الأقواس
+Bardlord Tirkin=تيركين سيد الشعراء
+Archknight Tirkin=تيركين الفارس الأعلى
+Archpike Tirkin=تيركين الرمح الأعلى
+Archbow Tirkin=تيركين القوس الأعلى
+Scout Tirkin=تيركين الكشّاف
+Shaman Tirkin=تيركين الشامان
+Chieftain Tirkin=تيركين زعيم القبيلة
+Guard Tirkin=تيركين الحارس
+Elite Tirkin=تيركين النخبة
+Veteran Tirkin=تيركين المحارب القديم
+Raider Tirkin=تيركين المُغير
+Berserker Tirkin=تيركين الهائج
+Warlord Tirkin=تيركين سيد الحرب
+Mage Tirkin=تيركين الساحر
+Healer Tirkin=تيركين المُعالج
+Tirkin Nest=عرين التيركين
+Tirkin Camp=مخيم التيركين
+Tirkin Patrol=دورية التيركين
+Tirkin Raiding Party=مجموعة غارة التيركين
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 84: عائلات الأعداء - السكيتر والروغول (Skeeter & Rhogul Families)
+# ═══════════════════════════════════════════════════════════════════
+
+Selurine Skeeter=سكيتر سيلوريني
+Baruka Skeeter=سكيتر باروكا
+Venomtail Skeeter=سكيتر ذيل السم
+Highland Skeeter=سكيتر المرتفعات
+Desert Skeeter=سكيتر الصحراء
+Swamp Skeeter=سكيتر المستنقع
+Giant Skeeter=سكيتر عملاق
+Queen Skeeter=ملكة السكيتر
+Drone Skeeter=سكيتر عامل
+Soldier Skeeter=سكيتر جندي
+Elder Skeeter=سكيتر مُسن
+Toxic Skeeter=سكيتر سام
+Sky Rhogul=روغول السماء
+Arogan Rhogul=روغول أروغان
+Brute Rhogul=روغول وحشي
+Smart Rhogul=روغول ذكي
+Mountain Rhogul=روغول الجبل
+Coastal Rhogul=روغول الساحل
+Canyon Rhogul=روغول الوادي
+Alpha Rhogul=روغول ألفا
+Elder Rhogul=روغول مُسن
+Pack Rhogul=روغول القطيع
+Lone Rhogul=روغول وحيد
+Scarred Rhogul=روغول مُنذَب
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 85: عائلات الأعداء - الأنسل والروبل (Ansel & Ropl Families)
+# ═══════════════════════════════════════════════════════════════════
+
+Brute Ansel=أنسل وحشي
+Scarred Ansel=أنسل مُنذَب
+Plains Ansel=أنسل السهول
+Forest Ansel=أنسل الغابة
+Mountain Ansel=أنسل الجبل
+Elder Ansel=أنسل مُسن
+Alpha Ansel=أنسل ألفا
+Young Ansel=أنسل صغير
+Giant Ansel=أنسل عملاق
+Armored Ansel=أنسل مُدرع
+Swift Ansel=أنسل سريع
+Colnicas Ropl=روبل كولنيكاس
+Bemot Ropl=روبل بيموت
+Rockheart Ropl=روبل قلب الصخر
+Odolera Ropl=روبل أودوليرا
+Cave Ropl=روبل الكهف
+Crystal Ropl=روبل الكريستال
+Ancient Ropl=روبل قديم
+Giant Ropl=روبل عملاق
+Mossy Ropl=روبل طُحلُبي
+Iron Ropl=روبل حديدي
+Volcanic Ropl=روبل بركاني
+Frost Ropl=روبل الصقيع
+Deep Ropl=روبل الأعماق
+
+# --- عائلات أعداء إضافية (Additional Enemy Families) ---
+Flamii=فلامي
+Young Flamii=فلامي صغير
+Elder Flamii=فلامي مُسن
+Burning Flamii=فلامي ملتهب
+Peaceful Flamii=فلامي مسالم
+Armu=أرمو
+Wild Armu=أرمو بري
+Domesticated Armu=أرمو مُدجَّن
+Giant Armu=أرمو عملاق
+Bunnit=بانيت
+Forest Bunnit=بانيت الغابة
+Snow Bunnit=بانيت الثلج
+Desert Bunnit=بانيت الصحراء
+Cave Bunnit=بانيت الكهف
+Krabble=كرابل
+Shore Krabble=كرابل الشاطئ
+Rock Krabble=كرابل الصخر
+Giant Krabble=كرابل عملاق
+Armored Krabble=كرابل مُدرع
+Feris=فيريس
+Plains Feris=فيريس السهول
+Mountain Feris=فيريس الجبل
+Alpha Feris=فيريس ألفا
+Pack Feris=فيريس القطيع
+Volff=فولف
+Lone Volff=فولف وحيد
+Alpha Volff=فولف ألفا
+Pack Volff=فولف القطيع
+Highland Volff=فولف المرتفعات
+Caterpile=كاتربايل
+Silk Caterpile=كاتربايل الحرير
+Giant Caterpile=كاتربايل عملاق
+Leaf Caterpile=كاتربايل الورقة
+Upa=أوبا
+Mountain Upa=أوبا الجبل
+Singing Upa=أوبا المغني
+Baby Upa=أوبا صغير
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 86: المواد والفواكه والخضروات (Materials, Fruits & Vegetables)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- فواكه (Fruits) ---
+Walnut Grape=عنبة الجوز
+Sour Gooseberry=كشمش حامض
+Humming Plum=برقوقة طنانة
+Red Durian=دوريان أحمر
+Ether Plum=برقوقة الأثير
+Dry Lemon=ليمون جاف
+Bright Fig=تينة مشرقة
+Star Melon=بطيخ النجم
+Moon Berry=توت القمر
+Sun Peach=خوخة الشمس
+Wind Apple=تفاحة الريح
+Cloud Cherry=كرزة السحاب
+Thunder Grape=عنبة الرعد
+Crystal Pear=إجاصة الكريستال
+Shadow Plum=برقوقة الظل
+Golden Mango=مانجو ذهبية
+Silver Kiwi=كيوي فضي
+Bronze Fig=تينة برونزية
+Iron Berry=توت الحديد
+Frost Banana=موز الصقيع
+
+# --- خضروات (Vegetables) ---
+Sweet Wasabi=وسابي حلو
+Cool Potato=بطاطا باردة
+Baggy Swede=لفت فضفاض
+Amethyst Vanilla=فانيلا الجمشت
+Ice Cabbage=ملفوف الجليد
+Tootshroom=فطر الطوط
+Flame Pepper=فلفل اللهب
+Storm Carrot=جزرة العاصفة
+Crystal Onion=بصلة الكريستال
+Ancient Turnip=لفت قديم
+Giant Radish=فجل عملاق
+Magic Mushroom=فطر سحري
+Ether Root=جذر الأثير
+Wind Celery=كرفس الريح
+Thunder Ginger=زنجبيل الرعد
+Moon Garlic=ثوم القمر
+Star Spinach=سبانخ النجم
+Sun Tomato=طماطم الشمس
+Cloud Lettuce=خس السحاب
+Shadow Yam=بطاطا حلوة الظل
+Iron Beet=شمندر الحديد
+Frost Corn=ذرة الصقيع
+Ancient Squash=قرع قديم
+Crystal Herb=عشبة الكريستال
+
+# --- معادن وأحجار (Minerals & Stones) ---
+Clicky Topaz=توباز طقطاق
+Icicle Marine=بحرية الجليد
+Wool Rock=صخرة الصوف
+Orbshell=صدفة المدار
+Fire Opal=أوبال النار
+Thunder Quartz=كوارتز الرعد
+Moon Pearl=لؤلؤة القمر
+Star Diamond=ألماسة النجم
+Shadow Onyx=عقيق الظل
+Wind Sapphire=ياقوت الريح
+Earth Amber=كهرمان الأرض
+Crystal Jade=يشب الكريستال
+Ancient Ruby=ياقوت قديم
+Frost Emerald=زمرد الصقيع
+Iron Garnet=عقيق الحديد
+Ether Amethyst=جمشت الأثير
+Golden Citrine=سترين ذهبي
+Silver Moonstone=حجر القمر الفضي
+Bronze Pyrite=بيريت برونزي
+Volcanic Obsidian=سبج بركاني
+
+# --- مواد وحوش (Monster Materials) ---
+Tirkin Feather=ريشة تيركين
+Skeeter Wing=جناح سكيتر
+Rhogul Fang=ناب روغول
+Ropl Shell Fragment=شظية صدفة روبل
+Ansel Hide=جلد أنسل
+Flamii Flame Sac=كيس لهب فلامي
+Armu Horn=قرن أرمو
+Bunnit Fur=فراء بانيت
+Krabble Claw=مخلب كرابل
+Feris Mane=لبدة فيريس
+Volff Pelt=جلد فولف
+Caterpile Silk=حرير كاتربايل
+Upa Wool=صوف أوبا
+Monster Bone=عظم وحش
+Monster Eye=عين وحش
+Monster Fang=ناب وحش
+Monster Scale=حرشفة وحش
+Monster Core=نواة وحش
+Monster Blood=دم وحش
+Ether Crystal=بلورة أثير
+Rare Drop=غنيمة نادرة
+Common Drop=غنيمة عادية
+Unique Drop=غنيمة فريدة
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 87: الأحجار الكريمة والإكسسوارات (Gems & Accessories)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- أحجار كريمة قتالية (Combat Gems) ---
+Steady Striker=الضارب الثابت
+Brimming Spirit=الروح المتدفقة
+Analyze Weakness=تحليل نقاط الضعف
+Disperse Bloodlust=تبديد عطش الدم
+Steelcleaver=شاق الفولاذ
+Tail Wind=ريح خلفية
+Swelling Scourge=الآفة المتصاعدة
+Accurate Grace=الأناقة الدقيقة
+Ultimate Counter=الصد النهائي
+Iron Wall=الجدار الحديدي
+Guardian Soul=روح الحارس
+Perilous Presence=الحضور الخطر
+Lifesaving Expertise=خبرة إنقاذ الحياة
+Healing Wisdom=حكمة الشفاء
+Empowered Combo=السلسلة المُعززة
+Doublestrike=الضربة المزدوجة
+Overfall=الانهيار
+Queueing Leap=القفزة المتتابعة
+Sappy Drainer=الماص النشط
+Swelling Blessing=البركة المتصاعدة
+
+# --- إكسسوارات (Accessories) ---
+Silver Belt=حزام فضي
+Golden Gauntlets=قفازات ذهبية
+Crystal Necklace=قلادة كريستالية
+Iron Ring=خاتم حديدي
+Ether Pendant=قلادة أثيرية
+Flame Bracelet=سوار اللهب
+Frost Earring=قرط الصقيع
+Thunder Anklet=خلخال الرعد
+Wind Circlet=طوق الريح
+Shadow Brooch=بروش الظل
+Star Tiara=تاج النجم
+Moon Amulet=تميمة القمر
+Ancient Medal=وسام قديم
+Hero's Badge=شارة البطل
+Commander's Insignia=شارة القائد
+Warrior's Token=رمز المحارب
+Healer's Charm=تعويذة المُعالج
+Defender's Crest=شعار المدافع
+Scout's Compass=بوصلة الكشّاف
+Merchant's Seal=ختم التاجر
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 88: أطباق ووصفات الطبخ (Dishes & Cooking Recipes)
+# ═══════════════════════════════════════════════════════════════════
+
+Mild Game Stew=يخنة الطرائد اللطيفة
+Acqua Pazza a la City=أكوا بازا على طريقة المدينة
+Spongy Spud Supper=عشاء البطاطا الإسفنجية
+Grilled Armu Steak=شريحة أرمو مشوية
+Tirkin Egg Omelet=عجة بيض التيركين
+Monster Bone Broth=مرق عظام الوحش
+Ether-Infused Tea=شاي مُشبع بالأثير
+Flame-Roasted Vegetables=خضروات مشوية باللهب
+Frost Berry Parfait=بارفيه توت الصقيع
+Spicy Wasabi Rice=أرز بالوسابي الحار
+Sweet Potato Pie=فطيرة البطاطا الحلوة
+Crystal Clear Soup=حساء الكريستال الصافي
+Mushroom Medley=تشكيلة الفطر
+Hearty Hunter's Stew=يخنة الصياد الشهية
+Colony Special Curry=كاري المستعمرة الخاص
+Nopon Deluxe Platter=طبق النوبون الفاخر
+Ancient Recipe Bread=خبز الوصفة القديمة
+Seafarer's Chowder=حساء البحّار
+Mountain Herb Salad=سلطة أعشاب الجبل
+Desert Oasis Punch=عصير واحة الصحراء
+Refreshing Ether Drink=مشروب أثير منعش
+Commander's Feast=مأدبة القائد
+Celebration Cake=كعكة الاحتفال
+Field Ration Pack=حصة تموين ميدانية
+Quick Energy Bar=قالب طاقة سريع
+Medicinal Herb Brew=مشروب أعشاب طبية
+Stamina Recovery Soup=حساء استعادة القدرة
+Focus-Enhancing Tea=شاي تعزيز التركيز
+Battle-Ready Meal=وجبة جاهزة للقتال
+Victory Feast=مأدبة النصر
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 89: أسماء الشخصيات غير القابلة للعب (NPC Names)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- أسماء NPCs بارزة (Notable NPCs) ---
+Mamimaa=ماميما
+Siljil=سيلجيل
+Napapa=ناباب
+Koma=كوما
+Momama=موماما
+Harala=هارالا
+Camilla=كاميلا
+Fox=فوكس
+Zeon=زيون
+Kate=كايت
+Isurd=إيسورد
+Teach=تيتش
+Ashera=آشيرا
+Alexandria=الإسكندرية
+Fiona=فيونا
+Juniper=جونيبر
+Triton=ترايتن
+Segiri=سيغيري
+Monica=مونيكا
+Gray=غراي
+Cammuravi=كاموراڤي
+Ethel=إيثل
+Nimue=نيميو
+Consul N=القنصل ن
+Consul D=القنصل د
+Consul X=القنصل إكس
+Consul K=القنصل ك
+Consul J=القنصل ج
+Consul O=القنصل و
+Consul P=القنصل ب
+Consul R=القنصل ر
+Consul Y=القنصل ي
+Consul Z=القنصل ز
+
+# --- جنود وعسكريون (Soldiers & Military) ---
+Keves Soldier A=جندي كيفس أ
+Keves Soldier B=جندي كيفس ب
+Keves Soldier C=جندي كيفس ج
+Agnus Soldier A=جندي أغنس أ
+Agnus Soldier B=جندي أغنس ب
+Agnus Soldier C=جندي أغنس ج
+Lost Numbers Soldier A=جندي الأعداد المفقودة أ
+Lost Numbers Soldier B=جندي الأعداد المفقودة ب
+Colony 9 Soldier=جندي المستعمرة 9
+Colony 4 Soldier=جندي المستعمرة 4
+Colony Lambda Soldier=جندي مستعمرة لامبدا
+Colony Tau Soldier=جندي المستعمرة تاو
+Colony Mu Soldier=جندي المستعمرة مو
+Agnus Captain=قائد أغنس
+Keves Captain=قائد كيفس
+Agnus Commander=قائد أغنس أعلى
+Keves Commander=قائد كيفس أعلى
+Armory Pilot=طيار المستودع
+Supply Officer=ضابط التموين
+Medic=طبيب
+Quartermaster=أمين المخزن
+Guard Captain=قائد الحرس
+Patrol Leader=قائد الدورية
+Scout Leader=قائد الكشّافة
+Training Instructor=مدرب التدريب
+
+# --- تجار النوبون (Nopon Merchants) ---
+Nopon Merchant=تاجر نوبون
+Nopon Blacksmith=حداد نوبون
+Nopon Cook=طباخ نوبون
+Nopon Healer=مُعالج نوبون
+Nopon Scholar=عالم نوبون
+Nopon Traveler=مسافر نوبون
+Nopon Elder=كبير النوبون
+Nopon Child=طفل نوبون
+Nopon Guard=حارس نوبون
+Nopon Caravan Leader=قائد قافلة نوبون
+Nopon Explorer=مستكشف نوبون
+Nopon Inventor=مخترع نوبون
+Nopon Storyteller=راوي قصص نوبون
+Manana=مانانا
+Riku=ريكو
+Nene=نيني
+Kino=كينو
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 90: حوارات الاستكشاف والاكتشاف (Exploration & Discovery Dialogues)
+# ═══════════════════════════════════════════════════════════════════
+
+It is better to collect it.=من الأفضل جمعها.
+Could it be...?=هل يمكن أن تكون...؟
+A good find.=اكتشاف جيد.
+That light...=ذلك الضوء...
+An ether channel, as I thought.=قناة أثير، كما ظننت.
+A cave...? I wonder what is inside.=كهف...؟ أتساءل ما بداخله.
+Come here!=تعال إلى هنا!
+A survivor from the City. Let's protect them.=ناجٍ من المدينة. لنحميه.
+There's something shining over there.=هناك شيء يلمع هناك.
+This looks like an old battlefield.=هذا يبدو كساحة معركة قديمة.
+I sense a strong ether current nearby.=أحس بتيار أثير قوي قريب.
+Look, a hidden path!=انظر، ممر مخفي!
+This structure... it's ancient.=هذا البناء... إنه قديم.
+We should investigate that sound.=يجب أن نتحقق من ذلك الصوت.
+Something doesn't feel right here.=شيء ما لا يبدو صحيحاً هنا.
+The air is different in this area.=الهواء مختلف في هذه المنطقة.
+These markings... they're from before the Flame Clocks.=هذه العلامات... إنها من قبل ساعات اللهب.
+An old campsite. Someone was here recently.=مخيم قديم. شخص ما كان هنا مؤخراً.
+The view from here is incredible.=المنظر من هنا مذهل.
+This path leads deeper into the mountain.=هذا الممر يؤدي أعمق في الجبل.
+Careful, the ground is unstable.=احذر، الأرض غير مستقرة.
+There are tracks everywhere. Something big passed through.=هناك آثار في كل مكان. شيء كبير مر من هنا.
+I can hear water flowing underground.=أستطيع سماع مياه تتدفق تحت الأرض.
+This crystal formation is unusual.=تشكيل الكريستال هذا غير عادي.
+The ether concentration here is off the charts.=تركيز الأثير هنا خارج المخططات.
+We've never been to this part of the map before.=لم نكن في هذا الجزء من الخريطة من قبل.
+This must be one of the old Moebius strongholds.=هذا يجب أن يكون أحد معاقل موبيوس القديمة.
+Careful! There's a powerful monster nearby.=احذر! هناك وحش قوي قريب.
+Let's set up camp here for the night.=لنُقم المخيم هنا لليلة.
+The stars are beautiful tonight.=النجوم جميلة الليلة.
+We've covered a lot of ground today.=قطعنا مسافة كبيرة اليوم.
+This area is rich in resources.=هذه المنطقة غنية بالموارد.
+We should mark this location on the map.=يجب أن نُعلّم هذا الموقع على الخريطة.
+Look, a rest spot!=انظر، نقطة استراحة!
+The weather is changing. We should hurry.=الطقس يتغير. يجب أن نُسرع.
+I've never seen plants like these before.=لم أرَ نباتات كهذه من قبل.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 91: حوارات الإمدادات والتموين (Supply & Logistics Dialogues)
+# ═══════════════════════════════════════════════════════════════════
+
+The remaining stock in the storehouse is... only 20% left.=المخزون المتبقي في المستودع... فقط 20% متبقية.
+Aren't our supplies dwindling too quickly?=ألا تتناقص إمداداتنا بسرعة كبيرة؟
+It just means our allies are in trouble.=هذا يعني فقط أن حلفاءنا في ورطة.
+It's a real pain not having supplies from the Castle.=من المؤلم حقاً عدم وجود إمدادات من القلعة.
+We're actually doing pretty well. We have a stockpile.=نحن في الواقع نبلي بلاءً حسناً. لدينا مخزون.
+We need to ration our food carefully.=نحتاج لتقنين طعامنا بعناية.
+The ether cylinder reserves are running low.=احتياطيات أسطوانات الأثير تنخفض.
+Has the supply convoy arrived yet?=هل وصلت قافلة الإمدادات بعد؟
+We sent a resupply request three days ago.=أرسلنا طلب إعادة تموين قبل ثلاثة أيام.
+Without new supplies, we won't last the month.=بدون إمدادات جديدة، لن نصمد الشهر.
+The Nopon traders haven't come by in weeks.=تجار النوبون لم يمروا منذ أسابيع.
+Who's in charge of inventory this week?=من المسؤول عن الجرد هذا الأسبوع؟
+We've been recycling everything we can.=كنا نُعيد تدوير كل ما نستطيع.
+The medicine stocks are critically low.=مخزون الأدوية منخفض بشكل حرج.
+We need more ether cylinders for the Levnises.=نحتاج المزيد من أسطوانات الأثير لليفنيسات.
+Food preservation has improved since we learned new techniques.=حفظ الطعام تحسن منذ أن تعلمنا تقنيات جديدة.
+The water purification system needs maintenance.=نظام تنقية المياه يحتاج صيانة.
+Our blacksmith needs more ore to forge weapons.=حدادنا يحتاج المزيد من الخام لتشكيل الأسلحة.
+The armory is well-stocked for now.=المستودع ممتلئ جيداً حالياً.
+We should stockpile food before winter arrives.=يجب أن نُخزّن الطعام قبل وصول الشتاء.
+The farming yields have been better than expected.=محاصيل الزراعة كانت أفضل مما توقعنا.
+Rationing keeps everyone fed, but morale is low.=التقنين يُبقي الجميع يتغذون، لكن المعنويات منخفضة.
+We found a natural spring nearby. Fresh water at last!=وجدنا نبع طبيعي قريب. مياه عذبة أخيراً!
+The trade agreement with Colony Mu is helping.=اتفاقية التجارة مع المستعمرة مو تساعد.
+Can we send someone to forage in the wildwood?=هل يمكننا إرسال أحد للبحث عن طعام في الغابة البرية؟
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 92: حوارات ما بعد التحرير (Post-Liberation Dialogues)
+# ═══════════════════════════════════════════════════════════════════
+
+This mission is different from the usual. Be careful.=هذه المهمة مختلفة عن المعتاد. كن حذراً.
+Equipment and ether cylinders... They're lacking everything.=المعدات وأسطوانات الأثير... ينقصهم كل شيء.
+About the supplies we're sending to Colony Tau...=بخصوص الإمدادات التي نُرسلها للمستعمرة تاو...
+That can wait! The schedule has changed.=هذا يمكن أن ينتظر! الجدول تغير.
+Now that the Flame Clock is gone, we decide our own fate.=الآن بعد زوال ساعة اللهب، نحن نقرر مصيرنا.
+It's strange not having someone tell us what to do.=من الغريب ألّا يخبرنا أحد ماذا نفعل.
+Freedom is scary, but I wouldn't trade it for anything.=الحرية مخيفة، لكنني لن أستبدلها بأي شيء.
+Some of the older soldiers are struggling to adjust.=بعض الجنود الأقدم يكافحون للتكيف.
+Without the Consul, we have to think for ourselves.=بدون القنصل، علينا أن نُفكر بأنفسنا.
+The children born now will never know the Flame Clock.=الأطفال المولودون الآن لن يعرفوا ساعة اللهب أبداً.
+I still check my timer out of habit... but it's not there.=لا أزال أتحقق من مؤقتي بدافع العادة... لكنه ليس هناك.
+For the first time, we can plan for the future.=لأول مرة، يمكننا التخطيط للمستقبل.
+Growing old... is that what awaits us now?=الشيخوخة... هل هذا ما ينتظرنا الآن؟
+I want to see what lies beyond our tenth term.=أريد أن أرى ما يقع بعد فترتنا العاشرة.
+The colonies that were enemies are now our neighbors.=المستعمرات التي كانت أعداءً هي الآن جيراننا.
+Trade routes between colonies are growing every day.=طرق التجارة بين المستعمرات تنمو كل يوم.
+We need farmers more than soldiers now.=نحتاج مزارعين أكثر من جنود الآن.
+Building homes instead of fighting... what a concept.=بناء المنازل بدلاً من القتال... يا لها من فكرة.
+The repair crews have been working nonstop.=طواقم الإصلاح تعمل بلا توقف.
+Education programs are starting for the young ones.=برامج التعليم بدأت للصغار.
+Medicine is our top priority alongside food.=الدواء أولويتنا القصوى إلى جانب الطعام.
+The old war machines are being repurposed for construction.=آلات الحرب القديمة يتم إعادة تخصيصها للبناء.
+We're not just surviving anymore. We're living.=لم نعد فقط نبقى على قيد الحياة. نحن نعيش.
+Cooperation between Keves and Agnus is still fragile.=التعاون بين كيفس وأغنس لا يزال هشاً.
+But it's a start. That's what matters.=لكنها بداية. هذا ما يهم.
+Some people want revenge for the years of war.=بعض الناس يريدون انتقاماً لسنوات الحرب.
+We have to break the cycle of hatred.=علينا كسر دائرة الكراهية.
+The Ouroboros team showed us it's possible.=فريق الأوروبوروس أرونا أن ذلك ممكن.
+Keves and Agnus working together... who would've thought?=كيفس وأغنس يعملون معاً... من كان ليظن؟
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 93: حوارات القلعة والحرس (Castle & Guard Dialogues)
+# ═══════════════════════════════════════════════════════════════════
+
+The Guard temporarily closed the entrance and exit.=الحرس أغلق المدخل والمخرج مؤقتاً.
+Did some subversive elements sneak in?=هل تسللت بعض العناصر التخريبية؟
+The Captain of the Guard has it tough.=قائد الحرس يمر بوقت صعب.
+It was more peaceful when the Consuls were around.=كان الأمر أكثر هدوءاً عندما كان القناصل موجودين.
+Security has been tightened since the incident.=الأمن شُدد منذ الحادثة.
+No one enters or leaves without authorization.=لا أحد يدخل أو يخرج بدون تصريح.
+The Queen's safety is our top priority.=سلامة الملكة أولويتنا القصوى.
+Report any suspicious activity immediately.=أبلغ عن أي نشاط مشبوه فوراً.
+The night patrol has been doubled.=الدورية الليلية تضاعفت.
+We found signs of intrusion near the eastern wall.=وجدنا علامات اقتحام قرب الجدار الشرقي.
+The prison block is at full capacity.=جناح السجن بطاقته القصوى.
+Some prisoners are requesting transfers to the labor corps.=بعض السجناء يطلبون نقلاً إلى فيلق العمل.
+The Castle's defenses have been reinforced.=دفاعات القلعة تم تعزيزها.
+New guard rotations start tomorrow.=تناوبات الحرس الجديدة تبدأ غداً.
+The training grounds are being expanded.=ساحات التدريب يتم توسيعها.
+Visitors must register at the main gate.=الزوار يجب أن يُسجلوا عند البوابة الرئيسية.
+The armory needs restocking urgently.=المستودع يحتاج إعادة تخزين عاجلة.
+Patrol routes have been updated for the new sector.=مسارات الدوريات حُدّثت للقطاع الجديد.
+The watchtower needs repairs after the storm.=برج المراقبة يحتاج إصلاحات بعد العاصفة.
+Communication between outposts is unreliable.=الاتصالات بين المخافر غير موثوقة.
+We need faster messenger routes to the colonies.=نحتاج مسارات رسل أسرع للمستعمرات.
+The secret passage beneath the Castle is sealed.=الممر السري تحت القلعة مختوم.
+Only the Captain knows the code to the vault.=القائد وحده يعرف رمز القبو.
+Guard morale has improved since the liberation.=معنويات الحرس تحسنت منذ التحرير.
+But vigilance is still necessary.=لكن اليقظة لا تزال ضرورية.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 94: حوارات الإصلاح والصيانة (Repair & Maintenance Dialogues)
+# ═══════════════════════════════════════════════════════════════════
+
+Even if I wanted to fix it, Camilla doesn't have any parts.=حتى لو أردت إصلاحها، كاميلا لا تملك أي قطع.
+Oh no... It finally broke, huh...=يا إلهي... أخيراً تعطلت، هاه...
+Let's take that over to Harala's place.=لنأخذ ذلك إلى مكان هارالا.
+We might be able to use it if we repair it.=قد نتمكن من استخدامه إذا أصلحناه.
+This Ferronis needs a complete overhaul.=هذا الفيرونيس يحتاج إصلاحاً شاملاً.
+The ether lines are corroded beyond repair.=خطوط الأثير متآكلة بما يتجاوز الإصلاح.
+We need replacement parts from the old battlefields.=نحتاج قطع غيار من ساحات المعارك القديمة.
+The Levnis armor plating is cracked.=صفائح درع الليفنيس متشققة.
+Without proper tools, this repair will take weeks.=بدون أدوات مناسبة، هذا الإصلاح سيستغرق أسابيع.
+Valdi said he could fix it if we find the right materials.=قال فالدي إنه يستطيع إصلاحه إذا وجدنا المواد المناسبة.
+The water system broke down again.=نظام المياه تعطل مرة أخرى.
+We've been patching it together with whatever we can find.=كنا نُرقعه بأي شيء نجده.
+This equipment is from before the war. It's ancient.=هذه المعدات من قبل الحرب. إنها قديمة.
+The forge needs new bellows before we can smelt anything.=الحدادة تحتاج منفاخاً جديداً قبل أن نصهر أي شيء.
+Our stockpile of spare parts is almost gone.=مخزون قطع الغيار لدينا كاد ينفد.
+Can we salvage anything from the wrecked Ferronis?=هل يمكننا إنقاذ أي شيء من حطام الفيرونيس؟
+The communication array needs calibration.=مصفوفة الاتصالات تحتاج معايرة.
+These old machines still have life in them.=هذه الآلات القديمة لا تزال فيها حياة.
+With some ingenuity, we can make it work.=ببعض الحيلة، يمكننا جعله يعمل.
+Recycling old parts is our only option right now.=إعادة تدوير القطع القديمة هي خيارنا الوحيد الآن.
+The bridge collapse will take months to fix.=انهيار الجسر سيستغرق أشهراً لإصلاحه.
+We need engineers, not just fighters.=نحتاج مهندسين، ليس فقط مقاتلين.
+The younger soldiers are learning repair skills.=الجنود الأصغر يتعلمون مهارات الإصلاح.
+Every broken item has potential for reuse.=كل عنصر مكسور فيه إمكانية لإعادة الاستخدام.
+Innovation is born from necessity.=الابتكار يولد من الحاجة.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 95: حوارات متنوعة من المستعمرات (Miscellaneous Colony Dialogues)
+# ═══════════════════════════════════════════════════════════════════
+
+It's a punishment device...=إنه جهاز عقوبة...
+Let's hurry.=لنسرع.
+It seems they are in some trouble.=يبدو أنهم في مشكلة ما.
+Look.=انظر.
+Mm...?=مم...؟
+This isn't the time to be fighting amongst ourselves.=ليس هذا الوقت لنتقاتل فيما بيننا.
+Stay focused on the mission.=ابقَ مركزاً على المهمة.
+We can discuss this later.=يمكننا مناقشة هذا لاحقاً.
+Everyone to their positions!=الجميع إلى مواقعهم!
+Hold the line!=حافظوا على الخط!
+Fall back! Regroup!=تراجعوا! أعيدوا التجمع!
+Covering fire!=نيران تغطية!
+Medic! We need a medic here!=طبيب! نحتاج طبيباً هنا!
+The enemy is retreating!=العدو ينسحب!
+Victory is ours!=النصر لنا!
+Well fought, everyone.=أحسنتم القتال، جميعكم.
+Let's tend to the wounded first.=لنعتنِ بالجرحى أولاً.
+Collect any useful supplies from the battlefield.=اجمعوا أي إمدادات مفيدة من ساحة المعركة.
+Report casualties to the Commander.=أبلغوا القائد بالخسائر.
+Set up a perimeter. We camp here tonight.=أقيموا محيطاً أمنياً. نخيم هنا الليلة.
+First watch starts in one hour.=الحراسة الأولى تبدأ في ساعة واحدة.
+Get some rest while you can.=احصلوا على بعض الراحة ما استطعتم.
+Tomorrow we move at dawn.=غداً نتحرك عند الفجر.
+The mission objective remains unchanged.=هدف المهمة لم يتغير.
+Stay alert. We don't know what's out there.=ابقوا يقظين. لا نعرف ما هناك.
+I have a bad feeling about this.=لدي شعور سيء حول هذا.
+Trust your training. We've prepared for this.=ثقوا بتدريبكم. لقد استعددنا لهذا.
+Remember what we're fighting for.=تذكروا ما نقاتل من أجله.
+For our homes. For our future.=من أجل ديارنا. من أجل مستقبلنا.
+No soldier gets left behind.=لا جندي يُترك خلفنا.
+We move as one.=نتحرك كواحد.
+Signal when you're in position.=أشِر عندما تكون في موقعك.
+Watch your flanks.=انتبهوا لأجنابكم.
+The terrain gives us an advantage here.=التضاريس تمنحنا ميزة هنا.
+Use the high ground wisely.=استخدموا الأرض المرتفعة بحكمة.
+Keep communication lines open.=أبقوا خطوط الاتصال مفتوحة.
+Ammunition check. How are we looking?=فحص الذخيرة. كيف حالنا؟
+We have enough for one more engagement.=لدينا ما يكفي لاشتباك آخر.
+Make every shot count.=اجعلوا كل طلقة محسوبة.
+The civilians need to be evacuated first.=المدنيون يجب إجلاؤهم أولاً.
+Protect the non-combatants at all costs.=احموا غير المقاتلين بأي ثمن.
+The evacuation route is clear.=طريق الإجلاء واضح.
+Guide the civilians to the safe zone.=أرشدوا المدنيين إلى المنطقة الآمنة.
+We hold this position until everyone is safe.=نحافظ على هذا الموقع حتى يكون الجميع بأمان.
+Reinforcements are on the way.=التعزيزات في الطريق.
+ETA on backup?=ما الوقت المتوقع للنجدة؟
+We can handle this ourselves.=يمكننا التعامل مع هذا بأنفسنا.
+Don't underestimate the enemy.=لا تستهينوا بالعدو.
+They're smarter than they look.=إنهم أذكى مما يبدون.
+Adapt to the situation. Improvise if needed.=تكيّفوا مع الموقف. ارتجلوا إذا لزم الأمر.
+Our training is our greatest weapon.=تدريبنا هو أعظم أسلحتنا.
+Discipline wins battles. Remember that.=الانضباط يربح المعارك. تذكروا ذلك.
+After this, drinks are on me.=بعد هذا، المشروبات عليّ.
+I'll hold you to that promise.=سأُلزمك بذلك الوعد.
+We've been through worse. We'll get through this too.=مررنا بأسوأ من هذا. سنتجاوز هذا أيضاً.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 96: مصطلحات القوائم والواجهة الإضافية (Additional UI & Menu Terms)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- واجهة الخريطة (Map Interface) ---
+Fast Travel=انتقال سريع
+Landmark=معلم
+Secret Area=منطقة سرية
+Rest Spot=نقطة استراحة
+Colony Location=موقع المستعمرة
+Camp Location=موقع المخيم
+Ferronis Location=موقع الفيرونيس
+Quest Marker=علامة المهمة
+Enemy Territory=أرض العدو
+Unexplored Area=منطقة غير مستكشفة
+Discovered Location=موقع مكتشف
+Current Position=الموقع الحالي
+Destination=الوجهة
+Distance=المسافة
+Elevation=الارتفاع
+Region Name=اسم المنطقة
+Sub-Region=منطقة فرعية
+Map Legend=دليل الخريطة
+Zoom In=تكبير
+Zoom Out=تصغير
+Toggle Labels=تبديل العلامات
+Show All Markers=إظهار جميع العلامات
+Hide Completed=إخفاء المكتمل
+Filter By Type=تصفية حسب النوع
+
+# --- واجهة المعدات (Equipment Interface) ---
+Equip=تجهيز
+Unequip=إزالة التجهيز
+Compare=مقارنة
+Swap=تبديل
+Optimize=تحسين
+Auto-Equip=تجهيز تلقائي
+Sort By=ترتيب حسب
+Attack Power=قوة الهجوم
+Defense Rating=تصنيف الدفاع
+Ether Power=قوة الأثير
+Weight=الوزن
+Durability=المتانة
+Rarity=الندرة
+Set Bonus=مكافأة الطقم
+Enhancement Level=مستوى التحسين
+Max Enhancement=التحسين الأقصى
+Gem Slot=فتحة حجر
+Empty Slot=فتحة فارغة
+Locked Slot=فتحة مقفلة
+Special Effect=تأثير خاص
+Passive Ability=قدرة سلبية
+Active Ability=قدرة نشطة
+Cooldown=وقت التهدئة
+Duration=المدة
+
+# --- واجهة الفريق (Party Interface) ---
+Party Formation=تشكيلة الفريق
+Front Line=الصف الأمامي
+Back Line=الصف الخلفي
+Reserve Members=أعضاء الاحتياط
+Class Change=تغيير الفئة
+Available Classes=الفئات المتاحة
+Class Rank=رتبة الفئة
+Class Mastery=إتقان الفئة
+Inherited Skills=مهارات موروثة
+Skill Slots=فتحات المهارات
+Art Slots=فتحات الفنون
+Accessory Slots=فتحات الإكسسوارات
+Character Stats=إحصائيات الشخصية
+Level Up=ارتقاء المستوى
+Experience Points=نقاط الخبرة
+Next Level=المستوى التالي
+Affinity Chart=مخطط الألفة
+Soul Points=نقاط الروح
+Bonus EXP=خبرة إضافية
+Chain Attack Gauge=مقياس الهجوم المتسلسل
+
+# --- واجهة التجارة (Trade Interface) ---
+Buy=شراء
+Sell=بيع
+Trade=مقايضة
+Asking Price=السعر المطلوب
+Sell Price=سعر البيع
+Quantity=الكمية
+In Stock=متوفر
+Out of Stock=غير متوفر
+Limited Stock=مخزون محدود
+Restocks Daily=يتجدد يومياً
+Special Offer=عرض خاص
+Rare Item=عنصر نادر
+New Arrival=وصول جديد
+Best Seller=الأكثر مبيعاً
+Discount=خصم
+Bundle Deal=صفقة حزمة
+Haggle=مساومة
+Final Price=السعر النهائي
+Confirm Purchase=تأكيد الشراء
+Insufficient Funds=أموال غير كافية
+Gold=ذهب
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 97: حوارات شخصيات DLC المتقدمة (Advanced DLC Character Dialogues)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- حوارات ماثيو (Matthew's Dialogues) ---
+We can't let them get away with this.=لا يمكننا السماح لهم بالإفلات بهذا.
+There has to be another way.=يجب أن يكون هناك طريقة أخرى.
+I won't give up. Not now, not ever.=لن أستسلم. ليس الآن، ولا أبداً.
+Shulk trusted us with this mission. We can't fail.=شولك وثق بنا في هذه المهمة. لا يمكننا الفشل.
+Rex, what would you do in my shoes?=ريكس، ماذا كنت ستفعل مكاني؟
+The Boundary... we have to find a way through.=الحد... علينا إيجاد طريقة لعبوره.
+A said the key lies in our connection.=قال أ أن المفتاح يكمن في ترابطنا.
+I can feel it... the power of the Founders.=أستطيع الشعور بها... قوة المؤسسين.
+This world deserves better than what Alpha is offering.=هذا العالم يستحق أفضل مما يُقدمه ألفا.
+We'll create a future where both worlds can coexist.=سنُنشئ مستقبلاً حيث يمكن للعالمين التعايش.
+
+# --- حوارات أ (A's Dialogues) ---
+The Founders created me for a purpose.=المؤسسون خلقوني لغرض ما.
+My existence is tied to Origin itself.=وجودي مرتبط بالأوريجن نفسه.
+I've watched over this place for so long...=لقد راقبت هذا المكان لفترة طويلة جداً...
+Alpha's approach will destroy everything.=نهج ألفا سيُدمر كل شيء.
+There is a gentler path forward.=هناك مسار ألطف للأمام.
+The memories of Shulk and Rex live within me.=ذكريات شولك وريكس تعيش بداخلي.
+You remind me of them, Matthew.=أنت تُذكرني بهم، ماثيو.
+The Conduit's power flows through Origin.=قوة القناة تتدفق عبر الأوريجن.
+We must prevent Alpha from accessing the Core.=يجب أن نمنع ألفا من الوصول إلى النواة.
+Together, we can reset the cycle.=معاً، يمكننا إعادة ضبط الدورة.
+
+# --- حوارات نيكول (Nikol's Dialogues) ---
+Being Rex's son is a heavy burden sometimes.=كوني ابن ريكس عبء ثقيل أحياناً.
+But I wouldn't trade my family for anything.=لكنني لن أستبدل عائلتي بأي شيء.
+Glimmer and I make a good team, don't you think?=غليمر وأنا نُشكل فريقاً جيداً، ألا تظن؟
+My father always said to follow your heart.=أبي دائماً قال أن أتبع قلبي.
+The power of the Aegis... I can feel it awakening.=قوة الإيجس... أستطيع الشعور بها تستيقظ.
+I want to protect everyone, just like Dad did.=أريد حماية الجميع، تماماً كما فعل أبي.
+This fight isn't just about us. It's about everyone.=هذه المعركة ليست عنا فقط. إنها عن الجميع.
+
+# --- حوارات غليمر (Glimmer's Dialogues) ---
+My parents saved two worlds. Now it's our turn.=والداي أنقذا عالمين. الآن دورنا.
+The Monado responds to my will. I can feel it.=المونادو يستجيب لإرادتي. أستطيع الشعور به.
+Shulk's legacy... I carry it with pride.=إرث شولك... أحمله بفخر.
+We Homs have always been resilient.=نحن الهومس كنا دائماً صامدين.
+The future isn't written in stone. We shape it.=المستقبل ليس محفوراً في الحجر. نحن نشكّله.
+I won't let Alpha erase everything my parents fought for.=لن أدع ألفا يمحو كل ما قاتل والداي من أجله.
+Matthew, don't try to do everything alone.=ماثيو، لا تحاول فعل كل شيء وحدك.
+We're stronger together. That's what Shulk taught us.=نحن أقوى معاً. هذا ما علمنا إياه شولك.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 98: مصطلحات نظام الأوروبوروس المتقدم (Advanced Ouroboros System Terms)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- مهارات شجرة الروح (Soul Tree Skills) ---
+Interlink Level=مستوى الترابط
+Soul Tree=شجرة الروح
+Soul Points=نقاط الروح
+Unlock Node=فتح عقدة
+Soul Tree Branch=فرع شجرة الروح
+Active Soul Skills=مهارات الروح النشطة
+Passive Soul Skills=مهارات الروح السلبية
+Noah-Mio Interlink=ترابط نوح-ميو
+Lanz-Sena Interlink=ترابط لانز-سينا
+Eunie-Taion Interlink=ترابط يوني-تايون
+Ouroboros Form A=شكل الأوروبوروس أ
+Ouroboros Form B=شكل الأوروبوروس ب
+Heat Gauge=مقياس الحرارة
+Overheat Warning=تحذير الحرارة الزائدة
+Interlink Cooldown=تهدئة الترابط
+Soul Hack=اختراق الروح
+Ouroboros Order=ترتيب الأوروبوروس
+Chain Order=ترتيب السلسلة
+Tactical Points=نقاط تكتيكية
+Completion Bonus=مكافأة الإكمال
+Mastery Reward=مكافأة الإتقان
+Interlink Arts=فنون الترابط
+Ouroboros Arts=فنون الأوروبوروس
+Rising Blade=الشفرة الصاعدة
+Falling Impact=التأثير الهابط
+Cross Smash=السحق المتقاطع
+Spiral Drive=الاندفاع الحلزوني
+Nova Strike=ضربة النوفا
+Omega Burst=انفجار أوميغا
+Infinity Blade=شفرة اللانهاية
+Eternity Flash=وميض الأبدية
+
+# --- مراتب ربط الأوروبوروس (Ouroboros Link Ranks) ---
+Interlink Rank 1=رتبة الترابط 1
+Interlink Rank 2=رتبة الترابط 2
+Interlink Rank 3=رتبة الترابط 3
+Maximum Interlink=الترابط الأقصى
+Interlink Duration Up=زيادة مدة الترابط
+Interlink Recharge Speed=سرعة إعادة شحن الترابط
+Heat Resistance=مقاومة الحرارة
+Enhanced Ouroboros=أوروبوروس مُعزز
+Ouroboros Awakening=صحوة الأوروبوروس
+Full Interlink=ترابط كامل
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 99: حوارات القصة المتقدمة - الفصل 6 و7 (Advanced Story - Ch.6 & 7)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- حوارات مواجهة موبيوس (Moebius Confrontation) ---
+Z... You're the one behind all of this.=ز... أنت من يقف وراء كل هذا.
+This endless cycle of war serves only you.=هذه الدورة اللانهائية من الحرب تخدمك وحدك.
+The people deserve to live their own lives.=الناس يستحقون أن يعيشوا حياتهم الخاصة.
+We won't let you reset Origin again.=لن ندعك تُعيد ضبط الأوريجن مرة أخرى.
+Your fear of change is what traps everyone.=خوفك من التغيير هو ما يحبس الجميع.
+We choose the unknown over your false eternity.=نختار المجهول على أبديتك الزائفة.
+Even if the future is uncertain, it's ours to shape.=حتى لو كان المستقبل غير مؤكد، فهو ملكنا لنشكّله.
+Moebius feeds on people's desire to stop time.=موبيوس يتغذى على رغبة الناس في إيقاف الزمن.
+But time must flow. That's what makes life precious.=لكن الزمن يجب أن يتدفق. هذا ما يجعل الحياة ثمينة.
+The Annihilation Events were caused by Moebius's interference.=أحداث الفناء سببها تدخل موبيوس.
+Origin was meant to save both worlds, not trap them.=الأوريجن كان مخصصاً لإنقاذ كلا العالمين، لا لحبسهما.
+The Queens sacrificed everything for this plan.=الملكتان ضحتا بكل شيء من أجل هذه الخطة.
+Nia and Melia... their courage inspires us.=نيا وميليا... شجاعتهما تُلهمنا.
+Z is not invincible. He's just afraid.=ز ليس لا يُقهر. إنه فقط خائف.
+Fear of ending... that's what created Moebius.=الخوف من النهاية... هذا ما أنشأ موبيوس.
+We'll end this eternal now and restore the flow of time.=سننهي هذه الأبدية ونستعيد تدفق الزمن.
+
+# --- حوارات الوداع الأخيرة (Final Farewell Dialogues) ---
+When the worlds separate... we won't remember each other.=عندما ينفصل العالمان... لن نتذكر بعضنا.
+That's a price I'm willing to pay for a real future.=هذا ثمن أنا مستعد لدفعه من أجل مستقبل حقيقي.
+The bonds we've forged... they transcend memory.=الروابط التي صنعناها... تتجاوز الذاكرة.
+Even if we forget, our hearts will remember.=حتى لو نسينا، قلوبنا ستتذكر.
+Mio... I'll find you again. I promise.=ميو... سأجدك مرة أخرى. أعدك.
+Noah... play that song for me one more time.=نوح... اعزف تلك الأغنية لي مرة أخرى.
+The Off-Seeing... it was our way of saying goodbye.=إنشاد الوداع... كان طريقتنا لقول وداعاً.
+But this time, it's not goodbye. It's see you later.=لكن هذه المرة، ليست وداعاً. إنها إلى اللقاء.
+Lanz, you big softie. Don't cry.=لانز، يا طيب القلب. لا تبكِ.
+I'm not crying! My eyes are just... sweating.=لستُ أبكي! عيناي فقط... تتعرقان.
+Sena... you were the strongest of us all.=سينا... كنتِ الأقوى بيننا جميعاً.
+Not in muscle. In heart.=ليس بالعضلات. بالقلب.
+Eunie, Taion... take care of each other.=يوني، تايون... اعتنيا ببعضكما.
+We always did. And we always will.=لطالما فعلنا. وسنفعل دائماً.
+Riku and Manana will remember for everyone!=ريكو ومانانا سيتذكران عن الجميع!
+Nopon memory is bestest! Never forget friends!=ذاكرة النوبون هي الأفضل! لا ننسى الأصدقاء أبداً!
+The future awaits us on the other side.=المستقبل ينتظرنا على الجانب الآخر.
+Walk on. Keep moving forward.=امشِ. استمر في المضي قدماً.
+This world... our world... let's make it worth living in.=هذا العالم... عالمنا... لنجعله يستحق العيش فيه.
+The flute melody echoed across both worlds.=لحن الناي تردد صداه عبر العالمين.
+And for a moment, everyone remembered.=ولبرهة، تذكر الجميع.
+That feeling... of being connected.=ذلك الشعور... بالترابط.
+The worlds are separating. It's time.=العالمان ينفصلان. حان الوقت.
+Don't look back. Only forward.=لا تنظر للخلف. فقط للأمام.
+Thank you... for everything.=شكراً... على كل شيء.
+Until we meet again.=إلى أن نلتقي مجدداً.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 100: مصطلحات شاشات التحميل الإضافية (Additional Loading Screen Tips)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- نصائح قتالية متقدمة (Advanced Combat Tips) ---
+Chain Attacks can turn the tide of any battle.=الهجمات المتسلسلة يمكنها قلب مجرى أي معركة.
+Build the Party Gauge by performing combos.=ابنِ مقياس الفريق بتنفيذ السلاسل الهجومية.
+Each Ouroboros pair has unique Interlink Arts.=كل زوج أوروبوروس يملك فنون ترابط فريدة.
+Master Arts from one class can be used in another.=فنون الإتقان من فئة يمكن استخدامها في أخرى.
+Gems can dramatically change your battle strategy.=الأحجار الكريمة يمكنها تغيير استراتيجية قتالك بشكل كبير.
+Position matters! Side and back attacks deal more damage.=الموقع مهم! الهجمات الجانبية والخلفية تُلحق ضرراً أكبر.
+Defenders draw enemy attention away from Healers.=المدافعون يسحبون انتباه العدو بعيداً عن المعالجين.
+Healers should stay at range when possible.=المعالجون يجب أن يبقوا على مسافة عندما يكون ذلك ممكناً.
+Attackers deal the most damage but are fragile.=المهاجمون يُلحقون أكبر ضرر لكنهم هشون.
+Balance your party with all three roles.=وازن فريقك بالأدوار الثلاثة جميعها.
+Switching classes regularly builds versatility.=تبديل الفئات بانتظام يبني التنوع.
+High-level enemies can use devastating Arts.=الأعداء ذوو المستوى العالي يمكنهم استخدام فنون مدمرة.
+Watch for enemy Art telegraphs and dodge accordingly.=راقب تلميحات فنون العدو وتفادَ وفقاً لذلك.
+Some enemies are weak to specific damage types.=بعض الأعداء ضعفاء أمام أنواع ضرر محددة.
+The Talent Art gauge fills differently for each class.=مقياس فن الموهبة يمتلئ بشكل مختلف لكل فئة.
+
+# --- نصائح الاستكشاف (Exploration Tips) ---
+Rest Spots fully restore HP and allow cooking.=نقاط الاستراحة تستعيد نقاط الصحة بالكامل وتسمح بالطبخ.
+Landmarks serve as Fast Travel points.=المعالم تعمل كنقاط انتقال سريع.
+Secret Areas contain rare monsters and treasures.=المناطق السرية تحتوي وحوشاً نادرة وكنوزاً.
+Explore at night to find different monsters.=استكشف في الليل لتجد وحوشاً مختلفة.
+Weather affects which monsters appear in an area.=الطقس يؤثر على الوحوش التي تظهر في المنطقة.
+Swimming allows access to hidden areas.=السباحة تسمح بالوصول إلى مناطق مخفية.
+Look for sparkles on the ground to find items.=ابحث عن اللمعان على الأرض لتجد العناصر.
+Colony Affinity affects available quests and shops.=ألفة المستعمرة تؤثر على المهام والمتاجر المتاحة.
+Raise Colony Affinity by completing quests.=ارفع ألفة المستعمرة بإكمال المهام.
+Some areas are only accessible after story progression.=بعض المناطق لا يمكن الوصول إليها إلا بعد تقدم القصة.
+Containers hold valuable supplies and materials.=الحاويات تحتوي إمدادات ومواد قيمة.
+Nopon Coins can be used for Gem crafting.=عملات النوبون يمكن استخدامها لصياغة الأحجار.
+Silver Nopon Coins are rarer and more valuable.=عملات النوبون الفضية أندر وأثمن.
+Unique Monsters drop rare accessories and materials.=الوحوش الفريدة تُسقط إكسسوارات ومواد نادرة.
+Check the map regularly for new quest markers.=تفقد الخريطة بانتظام لعلامات مهام جديدة.
+
+# --- نصائح عامة (General Tips) ---
+Save often! You never know what's around the corner.=احفظ كثيراً! لا تعرف ما ينتظرك.
+Cooking at Rest Spots provides useful battle buffs.=الطبخ في نقاط الاستراحة يوفر تعزيزات قتالية مفيدة.
+Different recipes provide different stat bonuses.=الوصفات المختلفة توفر مكافآت إحصائيات مختلفة.
+Keep a variety of classes leveled for flexibility.=حافظ على تنوع الفئات المرتقية للمرونة.
+Accessories can make or break a build.=الإكسسوارات يمكنها صنع أو كسر بنية الشخصية.
+Don't forget to upgrade your Gems regularly.=لا تنسَ ترقية أحجارك الكريمة بانتظام.
+The Soul Tree offers powerful permanent upgrades.=شجرة الروح تُقدم ترقيات دائمة قوية.
+Invest Soul Points wisely based on your playstyle.=استثمر نقاط الروح بحكمة حسب أسلوب لعبك.
+Higher Interlink Levels unlock stronger Ouroboros Arts.=مستويات الترابط الأعلى تفتح فنون أوروبوروس أقوى.
+Chain Attacks become more powerful with higher TP.=الهجمات المتسلسلة تصبح أقوى مع نقاط تكتيكية أعلى.
+Explore thoroughly to find all Secret Areas.=استكشف بدقة لتجد جميع المناطق السرية.
+Side quests often reward unique items and Skills.=المهام الجانبية غالباً تُكافئ بعناصر ومهارات فريدة.
+Hero Quests unlock new playable Heroes.=مهام الأبطال تفتح أبطالاً جدداً قابلين للعب.
+Each Hero brings a unique class to your party.=كل بطل يجلب فئة فريدة لفريقك.
+Affinity between characters grows through battle.=الألفة بين الشخصيات تنمو من خلال القتال.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 101: حوارات الاستراحة والأحداث اليومية (Rest & Daily Event Dialogues)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- حوارات الاستراحة (Rest Dialogues) ---
+Let's rest here for a while.=لنستريح هنا لبعض الوقت.
+I'll cook something for everyone.=سأطبخ شيئاً للجميع.
+Manana make bestest dinner ever!=مانانا تصنع أفضل عشاء على الإطلاق!
+What should we cook tonight?=ماذا نطبخ الليلة؟
+The fire is warm. It feels safe here.=النار دافئة. نشعر بالأمان هنا.
+Everyone did great today.=الجميع أبدعوا اليوم.
+Let's discuss our next move.=لنناقش خطوتنا التالية.
+Has anyone been injured? Let me check.=هل أُصيب أحد؟ دعوني أتحقق.
+We should sharpen our weapons before tomorrow.=يجب أن نُسن أسلحتنا قبل الغد.
+I'll take first watch tonight.=سأتولى الحراسة الأولى الليلة.
+The stars are beautiful from here.=النجوم جميلة من هنا.
+Tell me a story, Riku.=احكِ لي قصة، ريكو.
+Riku know many tales of ancient heroes!=ريكو يعرف قصصاً كثيرة عن أبطال قدماء!
+Once upon a time, in a world called Bionis...=في قديم الزمان، في عالم يُسمى بيونيس...
+That sounds like a fairy tale.=هذا يبدو كقصة خيالية.
+It's not a tale. It's history.=ليست قصة. إنها تاريخ.
+The Founders... they were real people, weren't they?=المؤسسون... كانوا أشخاصاً حقيقيين، أليس كذلك؟
+Real people who saved the world. Twice.=أشخاص حقيقيون أنقذوا العالم. مرتين.
+And now it's our turn to carry that torch.=والآن دورنا لنحمل تلك الشعلة.
+No pressure, right?=لا ضغط، صح؟
+Ha. Just the fate of two worlds, no big deal.=ها. مجرد مصير عالمين، لا شيء مهم.
+We can handle it. Together.=يمكننا التعامل معه. معاً.
+
+# --- حوارات صباحية (Morning Dialogues) ---
+Good morning, everyone.=صباح الخير، جميعاً.
+Rise and shine! Big day ahead.=انهضوا! يوم كبير أمامنا.
+Did everyone sleep well?=هل نام الجميع جيداً؟
+I heard strange noises last night.=سمعت أصواتاً غريبة البارحة.
+Probably just the wind.=ربما مجرد الرياح.
+Or a very large monster.=أو وحش كبير جداً.
+...Let's not think about that.=...لا نفكر في ذلك.
+Breakfast is ready!= الإفطار جاهز!
+Manana's special morning stew!=يخنة مانانا الصباحية الخاصة!
+It tastes... unique.=طعمها... فريد.
+Riku think it delicious!= ريكو يظنها لذيذة!
+We should head out before it gets too hot.=يجب أن نرحل قبل أن يشتد الحر.
+Everyone, check your equipment.=الجميع، تفقدوا معداتكم.
+The weather looks clear. Good for traveling.=الطقس يبدو صافياً. جيد للسفر.
+Let's make the most of today.=لنستغل اليوم أفضل استغلال.
+
+# --- حوارات مسائية (Evening Dialogues) ---
+The sun is setting. We should find a place to camp.=الشمس تغرب. يجب أن نجد مكاناً للتخييم.
+Another day survived.=يوم آخر نجونا فيه.
+We made good progress today.=أحرزنا تقدماً جيداً اليوم.
+I'm exhausted. Let's call it a day.=أنا منهك. لننهِ اليوم.
+Tomorrow we reach the next colony.=غداً نصل إلى المستعمرة التالية.
+The journey has been long, but we're almost there.=الرحلة كانت طويلة، لكننا وصلنا تقريباً.
+Look at that sunset. It's breathtaking.=انظروا لذلك الغروب. إنه أخاذ.
+Moments like these make everything worth it.=لحظات كهذه تجعل كل شيء يستحق.
+I wonder what tomorrow will bring.=أتساءل ماذا سيجلب الغد.
+Whatever it is, we'll face it together.=مهما كان، سنواجهه معاً.
+The moon is full tonight. It's so bright.=القمر مكتمل الليلة. إنه ساطع جداً.
+Perfect for night exploration, if anyone's interested.=مثالي لاستكشاف الليل، إذا كان أحد مهتماً.
+I think I'll pass. Sleep sounds better.=أظن سأمتنع. النوم يبدو أفضل.
+Fair enough. Rest well, everyone.=عادل بما فيه الكفاية. ارتاحوا جيداً، جميعاً.
+Sweet dreams.=أحلام سعيدة.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 102: مصطلحات الحالة والإحصائيات (Stats & Status Terms)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- إحصائيات الشخصية (Character Stats) ---
+HP=نقاط الصحة
+Attack=الهجوم
+Healing Power=قوة الشفاء
+Dexterity=البراعة
+Agility=الرشاقة
+Critical Rate=معدل الحرجة
+Block Rate=معدل الصد
+Physical Defense=الدفاع الجسدي
+Ether Defense=الدفاع الأثيري
+Base Stats=الإحصائيات الأساسية
+Bonus Stats=الإحصائيات الإضافية
+Total Stats=الإحصائيات الإجمالية
+Level=المستوى
+EXP=الخبرة
+Next Level EXP=خبرة المستوى التالي
+Class Level=مستوى الفئة
+Class EXP=خبرة الفئة
+Affinity Level=مستوى الألفة
+Trust=الثقة
+Lucky=الحظ
+
+# --- حالات المعركة (Battle States) ---
+In Battle=في المعركة
+Out of Battle=خارج المعركة
+Incapacitated=معطّل
+Reviving=إحياء
+Guarding=حراسة
+Evading=مراوغة
+Casting=ينشد
+Charging=يشحن
+Interlinking=ترابط
+Chain Attack Active=هجوم متسلسل نشط
+Burst Mode=وضع الانفجار
+Overdrive=القيادة المفرطة
+Limit Break=كسر الحد
+Second Wind=النفس الثاني
+Last Stand=الصمود الأخير
+Critical HP=نقاط صحة حرجة
+Full HP=نقاط صحة كاملة
+Status Clear=إزالة الحالة
+Full Heal=شفاء كامل
+Resurrection=إحياء
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 103: حوارات الأبطال المتقدمة (Advanced Hero Dialogues)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- حوارات آشيرا (Ashera's Dialogues) ---
+A real warrior doesn't need words. Actions speak louder.=المحارب الحقيقي لا يحتاج كلمات. الأفعال أبلغ.
+Strength is earned through endless training.=القوة تُكتسب من خلال التدريب اللامتناهي.
+I fight not for glory, but for those I protect.=أقاتل ليس من أجل المجد، بل من أجل من أحميهم.
+The battlefield is where I feel most alive.=ساحة المعركة هي حيث أشعر بأنني أكثر حيوية.
+Don't mistake my silence for weakness.=لا تخلط صمتي بالضعف.
+Every scar tells a story of survival.=كل ندبة تحكي قصة بقاء.
+I'll cut down anyone who threatens my comrades.=سأقطع أي شخص يهدد رفاقي.
+Train harder. Fight smarter. That's the way.=تدرب بجدية أكبر. قاتل بذكاء أكثر. هذه هي الطريقة.
+
+# --- حوارات فيونا (Fiona's Dialogues) ---
+Healing isn't just about mending wounds.=الشفاء ليس مجرد ترقيع الجروح.
+It's about restoring hope.=إنه عن استعادة الأمل.
+Everyone in the colony is family to me.=كل شخص في المستعمرة هو عائلتي.
+I became a healer because I hate seeing people suffer.=أصبحت مُعالجة لأنني أكره رؤية الناس يعانون.
+Even in war, kindness is our greatest weapon.=حتى في الحرب، اللطف هو أعظم أسلحتنا.
+A gentle touch can heal more than any medicine.=لمسة لطيفة يمكنها شفاء أكثر من أي دواء.
+The colony children call me "big sister." I love it.=أطفال المستعمرة ينادونني "الأخت الكبيرة." أحب ذلك.
+As long as I'm here, no one dies on my watch.=طالما أنا هنا، لا أحد يموت تحت رقابتي.
+
+# --- حوارات ترايتن (Triton's Dialogues) ---
+The sea holds many secrets. I've seen some of them.=البحر يحمل أسراراً كثيرة. رأيت بعضها.
+A captain's duty is to bring everyone home safe.=واجب القائد هو إعادة الجميع لديارهم بأمان.
+I've navigated storms worse than this battle.=أبحرت في عواصف أسوأ من هذه المعركة.
+Trust the current. It knows where to go.=ثق بالتيار. إنه يعرف أين يذهب.
+Every journey begins with a single step... or in my case, a wave.=كل رحلة تبدأ بخطوة... أو في حالتي، بموجة.
+The horizon calls to me. Always has.=الأفق يناديني. دائماً كان كذلك.
+My crew is the finest on any sea.=طاقمي هو الأفضل في أي بحر.
+When the waves are calm, that's when you should worry.=عندما تهدأ الأمواج، حينها يجب أن تقلق.
+
+# --- حوارات مونيكا (Monica's Dialogues) ---
+The City has survived for centuries. We won't fall now.=المدينة صمدت لقرون. لن نسقط الآن.
+My ancestors fought alongside the Founders.=أجدادي قاتلوا جنباً إلى جنب مع المؤسسين.
+Legacy isn't about blood. It's about conviction.=الإرث ليس عن الدم. إنه عن القناعة.
+I carry the hopes of every City dweller with me.=أحمل آمال كل ساكن في المدينة معي.
+The young ones need guidance. That's my role.=الصغار يحتاجون توجيهاً. هذا دوري.
+War is ugly. But sometimes it's necessary.=الحرب قبيحة. لكن أحياناً تكون ضرورية.
+I've lost many soldiers. Each one weighs on my heart.=فقدت جنوداً كثيرين. كل واحد يثقل على قلبي.
+But their sacrifices will not be in vain.=لكن تضحياتهم لن تذهب سدى.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 104: مصطلحات الإنجازات والجوائز (Achievements & Rewards)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- إنجازات القصة (Story Achievements) ---
+Chapter 1 Complete=الفصل 1 مكتمل
+Chapter 2 Complete=الفصل 2 مكتمل
+Chapter 3 Complete=الفصل 3 مكتمل
+Chapter 4 Complete=الفصل 4 مكتمل
+Chapter 5 Complete=الفصل 5 مكتمل
+Chapter 6 Complete=الفصل 6 مكتمل
+Chapter 7 Complete=الفصل 7 مكتمل
+Future Redeemed Complete=المستقبل المُستعاد مكتمل
+All Heroes Recruited=جميع الأبطال مُجندون
+All Colonies Liberated=جميع المستعمرات مُحررة
+True Ending Achieved=النهاية الحقيقية مُحققة
+
+# --- إنجازات القتال (Combat Achievements) ---
+First Chain Attack=أول هجوم متسلسل
+100 Combo Chain=سلسلة 100 كومبو
+Defeat 1000 Enemies=اهزم 1000 عدو
+Defeat All Unique Monsters=اهزم جميع الوحوش الفريدة
+Master All Classes=أتقن جميع الفئات
+Reach Level 99=اوصل للمستوى 99
+Perfect Chain Attack=هجوم متسلسل مثالي
+Max Interlink Level=مستوى ترابط أقصى
+All Gems Crafted=جميع الأحجار مصنوعة
+Full Party Awakening=صحوة الفريق الكاملة
+
+# --- إنجازات الاستكشاف (Exploration Achievements) ---
+All Landmarks Discovered=جميع المعالم مكتشفة
+All Secret Areas Found=جميع المناطق السرية موجودة
+100% Map Completion=اكتمال الخريطة 100%
+All Rest Spots Found=جميع نقاط الاستراحة موجودة
+All Containers Opened=جميع الحاويات مفتوحة
+Complete Bestiary=سجل وحوش كامل
+All Materials Collected=جميع المواد مجموعة
+Master Explorer=مستكشف ماهر
+Cartographer=رسام الخرائط
+World Traveler=مسافر العالم
+
+# --- جوائز (Rewards) ---
+Bonus Experience=خبرة إضافية
+Rare Accessory=إكسسوار نادر
+Unique Weapon=سلاح فريد
+Cosmetic Outfit=زي تجميلي
+Title Unlocked=لقب مفتوح
+Gallery Image=صورة المعرض
+Music Track Unlocked=مقطع موسيقي مفتوح
+Character Art Unlocked=رسم شخصية مفتوح
+Concept Art Unlocked=رسم مفاهيمي مفتوح
+Behind the Scenes=خلف الكواليس
