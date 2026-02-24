@@ -16164,3 +16164,377 @@ When people understand what was done to them, they choose differently.=عندم�
 # --- نهاية مهام المستعمرات ---
 # End of Colony Quests & Side Missions
 # Total sections: 165-182 (Colony Quests)
+
+# =============================================
+# القسم 183: مهمة بطل - إيثل (Ethel) - No Want of Courage
+# =============================================
+
+# --- الفصل الأول: الاستدعاء ---
+Commander Ethel, we've received a distress signal from the eastern front.=القائدة إيثل، تلقينا إشارة استغاثة من الجبهة الشرقية.
+How many soldiers are trapped?=كم عدد الجنود المحاصرين؟
+An entire platoon. They were ambushed by a Moebius remnant force.=فصيلة كاملة. نُصب لهم كمين من قوة بقايا ميبيوس.
+Moebius remnants? I thought we dealt with them.=بقايا ميبيوس؟ ظننت أننا تعاملنا معهم.
+Their influence runs deeper than we thought, Ethel.=تأثيرهم أعمق مما ظننا، إيثل.
+Then Colony 4 moves out. Every last one of us.=إذن المستعمرة 4 تتحرك. كل واحد منا.
+Wait. Charging in blindly is what they expect.=انتظري. الهجوم الأعمى هو ما يتوقعونه.
+You're right. We need a plan.=أنتَ محق. نحتاج خطة.
+
+# --- الفصل الثاني: المواجهة ---
+The enemy position is fortified. Direct assault won't work.=موقع العدو محصّن. الهجوم المباشر لن ينجح.
+Then we flank them. Two teams, converging from north and south.=إذن نطوقهم. فريقان، يتقاربان من الشمال والجنوب.
+Ethel, you take the north. We'll handle the south.=إيثل، خذي الشمال. سنتولى الجنوب.
+Don't underestimate them. These aren't ordinary soldiers.=لا تستهينوا بهم. هؤلاء ليسوا جنوداً عاديين.
+They fight like they have nothing to lose.=يقاتلون كأن ليس لديهم ما يخسرونه.
+Because they don't. They're the last of the true believers.=لأنهم لا يملكون. هم آخر المؤمنين الحقيقيين.
+The platoon is safe. But at what cost?=الفصيلة بأمان. لكن بأي ثمن؟
+
+# --- الفصل الثالث: الحقيقة ---
+Ethel, the soldiers we fought... they were from Colony 4.=إيثل، الجنود الذين قاتلناهم... كانوا من المستعمرة 4.
+What? That's impossible.=ماذا؟ هذا مستحيل.
+Deserters. They left before the Flame Clock fell.=منشقون. غادروا قبل سقوط ساعة اللهب.
+They chose Moebius over freedom?=اختاروا ميبيوس على الحرية؟
+They chose certainty over the unknown. Can you blame them?=اختاروا اليقين على المجهول. هل تلومينهم؟
+Yes. No. I don't know.=نعم. لا. لا أعرف.
+Being a leader means facing truths like this.=أن تكوني قائدة يعني مواجهة حقائق كهذه.
+I won't give up on them. Any of them.=لن أتخلى عنهم. أي واحد منهم.
+
+# --- الخاتمة ---
+Ethel, those deserters... they came back.=إيثل، أولئك المنشقون... عادوا.
+All of them?=كلهم؟
+Every single one. They said your courage inspired them.=كل واحد منهم. قالوا إن شجاعتكِ ألهمتهم.
+It wasn't courage. It was stubbornness.=لم تكن شجاعة. كانت عناداً.
+Sometimes that's the same thing.=أحياناً يكون ذلك نفس الشيء.
+Colony 4 is whole again. That's all that matters.=المستعمرة 4 مكتملة مجدداً. هذا كل ما يهم.
+
+# =============================================
+# القسم 184: مهمة بطل - كاموراڤي (Cammuravi) - A Twist of Fate
+# =============================================
+
+# --- الفصل الأول: نيران الشك ---
+The flames of Colony Λ burn differently now.=نيران المستعمرة لامدا تشتعل بشكل مختلف الآن.
+What do you mean, Cammuravi?=ماذا تعني، كاموراڤي؟
+Before, they burned with fury. With the need to consume.=قبلاً، كانت تشتعل بحنق. بحاجة الالتهام.
+And now?=والآن؟
+Now they burn with... uncertainty. As do I.=الآن تشتعل بـ... شك. وأنا كذلك.
+A warrior unsure of his purpose. That's dangerous.=محارب غير متأكد من هدفه. هذا خطير.
+Or it's the beginning of wisdom.=أو إنها بداية الحكمة.
+
+# --- الفصل الثاني: المنافس القديم ---
+Ethel has challenged me to a duel. For old times' sake, she says.=إيثل تحدتني لمبارزة. لأجل الأيام القديمة، تقول.
+Are you going to accept?=هل ستقبل؟
+A flame that doesn't test itself grows cold.=النار التي لا تختبر نفسها تبرد.
+Just... don't destroy anything this time.=فقط... لا تدمر أي شيء هذه المرة.
+No promises.=لا وعود.
+That was... the finest battle I've ever witnessed.=تلك كانت... أروع معركة شاهدتها على الإطلاق.
+We are rivals no longer. We are partners.=لم نعد منافسين. نحن شركاء.
+Ethel, your flame burns as bright as ever.=إيثل، نارك تشتعل ساطعة كما كانت دائماً.
+And yours could use some refinement.=ونارك يمكن أن تستفيد من بعض الصقل.
+
+# --- الفصل الثالث: النار الجديدة ---
+My soldiers have found a new purpose, Noah.=جنودي وجدوا هدفاً جديداً، نوح.
+What is it?=ما هو؟
+They want to be the forge of the new world. Crafters, builders, creators.=يريدون أن يكونوا مسبك العالم الجديد. حرفيون، بناؤون، مبدعون.
+The flames of war becoming the flames of creation.=نيران الحرب تصبح نيران الإبداع.
+Poetic, isn't it? Even for a brute like me.=شاعري، أليس كذلك؟ حتى لغليظ مثلي.
+You're no brute, Cammuravi. You never were.=لستَ غليظاً، كاموراڤي. لم تكن أبداً.
+The forge burns bright. Colony Λ creates rather than destroys.=المسبك يشتعل ساطعاً. المستعمرة لامدا تبدع بدل أن تدمر.
+
+# =============================================
+# القسم 185: مهمة بطل - زيون (Zeon) - Knowing Me, Knowing You
+# =============================================
+
+# --- الفصل الأول: الماضي ---
+I keep seeing their faces. The soldiers I sent to their deaths.=أظل أرى وجوههم. الجنود الذين أرسلتهم لحتفهم.
+Zeon, you did what you had to do.=زيون، فعلت ما كان عليك فعله.
+Did I? Or did I just follow orders blindly?=هل فعلت؟ أم فقط اتبعت الأوامر بشكل أعمى؟
+There's a difference between following orders and being responsible.=هناك فرق بين اتباع الأوامر وتحمل المسؤولية.
+I was both. I followed orders AND I was responsible.=كنت كلاهما. اتبعت الأوامر وكنت مسؤولاً.
+Then honor their memory by being a better leader now.=إذن أكرم ذكراهم بأن تكون قائداً أفضل الآن.
+
+# --- الفصل الثاني: الاختبار ---
+A group of young soldiers is challenging my authority.=مجموعة من الجنود الشباب تتحدى سلطتي.
+They say the old commanders should step aside.=يقولون إن القادة القدامى يجب أن يتنحوا.
+Maybe they have a point.=ربما لديهم وجهة نظر.
+You're agreeing with them?=أنت توافقهم؟
+I'm saying new leadership isn't always bad. But experience matters too.=أقول أن القيادة الجديدة ليست دائماً سيئة. لكن الخبرة مهمة أيضاً.
+Show them what experience looks like. Not through force, through example.=أرهم ما تبدو عليه الخبرة. ليس بالقوة، بالقدوة.
+They want to learn from me now. Not because I demanded it.=يريدون التعلم مني الآن. ليس لأنني طالبت بذلك.
+Because you earned their respect. That's true leadership.=لأنك كسبت احترامهم. تلك هي القيادة الحقيقية.
+
+# =============================================
+# القسم 186: مهمة بطل - آشيرا (Ashera) - The Weight of Expectations
+# =============================================
+
+# --- الفصل الأول: المحاربة ---
+Fight me. Right now.=قاتلني. الآن.
+Ashera, we're not your enemies.=آشيرا، لسنا أعداءكِ.
+I know that! I just... need to hit something.=أعرف ذلك! أنا فقط... أحتاج لضرب شيء.
+What's wrong?=ما الخطب؟
+My soldiers think I've gone soft since the Flame Clock fell.=جنودي يظنون أنني أصبحت ليّنة منذ سقوط ساعة اللهب.
+Have you?=هل أصبحتِ؟
+NO! I'm just... trying to be a different kind of strong.=لا! أنا فقط... أحاول أن أكون نوعاً مختلفاً من القوة.
+That's the hardest fight of all.=تلك أصعب معركة على الإطلاق.
+
+# --- الفصل الثاني: التحدي ---
+There's a Unique Monster near Colony Γ. The soldiers are terrified.=هناك وحش فريد قرب المستعمرة غاما. الجنود مرعوبون.
+Then we kill it. Simple.=إذن نقتله. بسيط.
+Or we could study it first. Understand why it's here.=أو يمكننا دراسته أولاً. فهم لماذا هو هنا.
+Study it? It's a monster!=ندرسه؟ إنه وحش!
+Ashera, not everything needs to be solved with violence.=آشيرا، ليس كل شيء يحتاج للحل بالعنف.
+...Fine. But if it attacks, I'm punching it first.=...حسناً. لكن إن هاجم، سأضربه أولاً.
+The creature was protecting its young. We relocated them safely.=المخلوق كان يحمي صغاره. أعدنا توطينهم بأمان.
+I can't believe I'm saying this, but... that was better than fighting.=لا أصدق أنني أقول هذا، لكن... ذلك كان أفضل من القتال.
+
+# --- الخاتمة ---
+Ashera, Colony Γ is thriving.=آشيرا، المستعمرة غاما مزدهرة.
+Yeah, well... don't make a big deal out of it.=نعم، حسناً... لا تبالغوا في الأمر.
+Your soldiers respect you more than ever.=جنودكِ يحترمونكِ أكثر من أي وقت مضى.
+Because I stopped punching everything?=لأنني توقفت عن ضرب كل شيء؟
+Because you showed them strength isn't just about fists.=لأنكِ أريتِهم أن القوة ليست فقط عن القبضات.
+Don't get sentimental on me, Noah.=لا تتعاطف معي، نوح.
+
+# =============================================
+# القسم 187: مهمة بطل - ڤالدي (Valdi) - Completing the Mechanic
+# =============================================
+
+# --- الفصل الأول: المخترع ---
+I've designed something incredible. A machine that can purify water.=صممت شيئاً مذهلاً. آلة يمكنها تنقية المياه.
+That could change everything, Valdi.=هذا قد يغير كل شيء، ڤالدي.
+But I need parts. Specific parts from the old Agnian factories.=لكن أحتاج قطعاً. قطع محددة من مصانع أغنوس القديمة.
+Those factories are deep in hostile territory.=تلك المصانع في عمق أراضي معادية.
+I know. That's why I need your help.=أعرف. لهذا أحتاج مساعدتكم.
+For clean water? We'll go to the ends of Aionios.=من أجل مياه نظيفة؟ سنذهب إلى أقاصي أيونيوس.
+
+# --- الفصل الثاني: المصنع ---
+This factory is massive. The Agnians built on a grand scale.=هذا المصنع ضخم. الأغنوسيون بنوا على نطاق واسع.
+Look at these machines. Some of them are still operational.=انظروا إلى هذه الآلات. بعضها لا يزال يعمل.
+Valdi, focus. We need the purification components.=ڤالدي، ركّز. نحتاج مكونات التنقية.
+Right, right. But look at this ether converter! It's beautiful.=صحيح، صحيح. لكن انظروا إلى محوّل الأثير هذا! إنه جميل.
+You can admire it later. We've got company.=يمكنك الإعجاب به لاحقاً. لدينا زوار.
+Automated defense systems. Still running after all this time.=أنظمة دفاع آلية. لا تزال تعمل بعد كل هذا الوقت.
+I can shut them down. Just give me thirty seconds.=أستطيع إيقافها. فقط امنحوني ثلاثين ثانية.
+Done. The components are ours.=تم. المكونات لنا.
+
+# --- الخاتمة ---
+The water purifier is working. Clean water for every colony.=منقي المياه يعمل. مياه نظيفة لكل مستعمرة.
+Valdi, you're a genius.=ڤالدي، أنت عبقري.
+I'm just an engineer who likes fixing things.=أنا مجرد مهندس يحب إصلاح الأشياء.
+You're fixing the world, Valdi. One machine at a time.=أنت تصلح العالم، ڤالدي. آلة تلو آلة.
+
+# =============================================
+# القسم 188: مهمة بطل - ألكسندريا (Alexandria) - Her Reasons
+# =============================================
+
+# --- الفصل الأول: الشك ---
+Alexandria, you've been quiet lately.=ألكسندريا، كنتِ هادئة مؤخراً.
+I've been thinking. About who I was before.=كنت أفكر. بمن كنت قبلاً.
+Before what?=قبل ماذا؟
+Before I broke free from Moebius's control.=قبل أن أتحرر من سيطرة ميبيوس.
+That wasn't you. You know that.=لم تكوني أنتِ. تعرفين ذلك.
+Do I? The memories feel like mine.=أعرف ذلك؟ الذكريات تبدو كأنها ذكرياتي.
+Then make new ones. Better ones.=إذن اصنعي ذكريات جديدة. أفضل.
+
+# --- الفصل الثاني: التكفير ---
+I want to help the colonies I hurt.=أريد مساعدة المستعمرات التي آذيتها.
+Alexandria, they might not welcome you.=ألكسندريا، قد لا يرحبون بكِ.
+I know. But I have to try.=أعرف. لكن يجب أن أحاول.
+Then we'll go with you. You don't have to face this alone.=إذن سنذهب معكِ. لا يجب أن تواجهي هذا وحدكِ.
+The people of Colony 11... they forgave me.=سكان المستعمرة 11... سامحوني.
+Because they could see the truth in your eyes.=لأنهم استطاعوا رؤية الحقيقة في عينيكِ.
+Forgiveness isn't about deserving it. It's about choosing to move forward.=المسامحة ليست عن الاستحقاق. إنها عن اختيار المضي قدماً.
+
+# --- الخاتمة ---
+I've visited every colony I wronged. Made amends where I could.=زرت كل مستعمرة ظلمتها. عوّضت ما استطعت.
+How do you feel?=كيف تشعرين؟
+Lighter. Like a weight has been lifted.=أخف. كأن ثقلاً رُفع.
+That's what redemption feels like, Alexandria.=هكذا يبدو الفداء، ألكسندريا.
+I'm not the person I was. And I never will be again.=لست الشخص الذي كنته. ولن أكون أبداً مجدداً.
+Good. Because the person you are now is someone worth fighting alongside.=جيد. لأن الشخص الذي أنتِ عليه الآن يستحق القتال إلى جانبه.
+
+# =============================================
+# القسم 189: مهمة بطل - مونيكا (Monica) - The Defenders
+# =============================================
+
+# --- الحوارات الرئيسية ---
+The City has stood for generations. But it's never been this vulnerable.=المدينة صمدت لأجيال. لكنها لم تكن بهذا الضعف من قبل.
+Vulnerable? You have walls, weapons, experience.=ضعيفة؟ لديكم جدران، أسلحة، خبرة.
+We have old walls and older weapons. The world is changing faster than we can adapt.=لدينا جدران قديمة وأسلحة أقدم. العالم يتغير أسرع مما نستطيع التكيف.
+Then let us help. The colonies can contribute.=إذن دعونا نساعد. المستعمرات تستطيع المساهمة.
+You'd do that? Help the City that hid while you fought?=ستفعلون ذلك؟ تساعدون المدينة التي اختبأت بينما كنتم تقاتلون؟
+The City preserved something precious. The knowledge of what life could be.=المدينة حفظت شيئاً ثميناً. معرفة ما يمكن أن تكون عليه الحياة.
+Monica, the defenses are reinforced. The City is safe.=مونيكا، الدفاعات مُعززة. المدينة آمنة.
+Safe isn't enough. I want it to be a home. For everyone.=الأمان لا يكفي. أريدها أن تكون وطناً. للجميع.
+
+# =============================================
+# القسم 190: مهمة بطل - غراي (Gray) - Unknown Soldier
+# =============================================
+
+# --- الحوارات الرئيسية ---
+Gray, no one knows where you came from.=غراي، لا أحد يعرف من أين أتيت.
+Does it matter?=هل يهم؟
+Doesn't it bother you? Not knowing?=ألا يزعجك؟ عدم المعرفة؟
+I know what I am now. That's enough.=أعرف ما أنا عليه الآن. هذا كافٍ.
+A lone wolf who fights for others.=ذئب وحيد يقاتل من أجل الآخرين.
+I found records. About a soldier matching your description.=وجدت سجلات. عن جندي يطابق وصفك.
+Burn them.=أحرقها.
+Gray, don't you want to know?=غراي، ألا تريد أن تعرف؟
+The past is a chain. I choose to be free.=الماضي قيد. أختار أن أكون حراً.
+Then at least let us be your present.=إذن على الأقل دعنا نكون حاضرك.
+...Fine. But I'm still not sharing my cooking secrets.=...حسناً. لكنني لا أزال لن أشارك أسرار طبخي.
+
+# =============================================
+# القسم 191: مهمة بطل - فيونا (Fiona) - Colony's Duty
+# =============================================
+
+# --- الحوارات الرئيسية ---
+Colony Μ has always been about duty and faith.=المستعمرة مو كانت دائماً عن الواجب والإيمان.
+Faith in what, Fiona?=إيمان بماذا، فيونا؟
+In something greater than ourselves. In purpose.=بشيء أعظم من أنفسنا. بالهدف.
+Even without the Flame Clock?=حتى بدون ساعة اللهب؟
+Especially without it. Now our faith is truly our own.=خاصة بدونها. الآن إيماننا حقاً ملكنا.
+The people of Colony Μ are confused. They need guidance.=سكان المستعمرة مو مرتبكون. يحتاجون إرشاداً.
+Not guidance. They need permission to find their own answers.=ليس إرشاداً. يحتاجون إذناً لإيجاد إجاباتهم الخاصة.
+You're wise beyond your terms, Fiona.=أنتِ حكيمة أبعد من فتراتكِ، فيونا.
+I've had good teachers. All of you.=كان لديّ معلمون جيدون. أنتم جميعاً.
+
+# =============================================
+# القسم 192: مهمة بطل - إيزل (Isurd) - Reasons to Serve
+# =============================================
+
+# --- الحوارات الرئيسية ---
+As a medic, I've seen the worst of what war does to people.=كطبيب، رأيت أسوأ ما تفعله الحرب بالناس.
+And now, Isurd?=والآن، إيزل؟
+Now I see a different kind of suffering. The kind that comes from freedom.=الآن أرى نوعاً مختلفاً من المعاناة. النوع الذي يأتي من الحرية.
+Freedom causes suffering?=الحرية تسبب معاناة؟
+When you've never had to choose before, every choice is terrifying.=عندما لم يسبق لك الاختيار، كل خيار مرعب.
+Paralysis of choice. I've seen it in the colonies.=شلل الاختيار. رأيته في المستعمرات.
+We need to heal minds as well as bodies.=نحتاج لشفاء العقول كما الأجساد.
+Colony 8's expertise could help. Mental health training for every colony.=خبرة المستعمرة 8 قد تساعد. تدريب صحة نفسية لكل مستعمرة.
+The healing has begun. It won't be quick, but it's a start.=الشفاء بدأ. لن يكون سريعاً، لكنها بداية.
+
+# =============================================
+# القسم 193: مهمة بطل - جونيبر (Juniper) - A Forest's Secrets
+# =============================================
+
+# --- الحوارات الرئيسية ---
+The forest speaks to those who listen.=الغابة تتحدث لمن يستمع.
+What does it say, Juniper?=ماذا تقول، جونيبر؟
+That the ether currents are shifting. The land is healing.=أن تيارات الأثير تتحول. الأرض تتعافى.
+Healing from the Flame Clocks?=تتعافى من ساعات اللهب؟
+From centuries of exploitation. The clocks drained the land as much as the people.=من قرون من الاستغلال. الساعات استنزفت الأرض بقدر ما استنزفت الناس.
+Can we help the process?=هل نستطيع مساعدة العملية؟
+Stop taking more than you need. Let the forest breathe.=توقفوا عن أخذ أكثر مما تحتاجون. دعوا الغابة تتنفس.
+There are new saplings growing where the old Flame Clock stood.=هناك شتلات جديدة تنمو حيث كانت ساعة اللهب القديمة.
+Life always finds a way. Even in the darkest places.=الحياة تجد طريقاً دائماً. حتى في أحلك الأماكن.
+
+# =============================================
+# القسم 194: مهمة بطل - ريكو ومانانا (Riku & Manana) - Offseeing the Future
+# =============================================
+
+# --- الحوارات الرئيسية ---
+Riku has been thinking about something important.=ريكو كان يفكر بشيء مهم.
+That's new. Usually you just build things.=هذا جديد. عادة فقط تبني أشياء.
+Riku builds, yes. But Riku also dreams.=ريكو يبني، نعم. لكن ريكو أيضاً يحلم.
+What do you dream about?=بماذا تحلم؟
+A world where Nopon and hom-hom live together in harmony.=عالم حيث النوبون والهوم-هوم يعيشون معاً بانسجام.
+Don't we already?=ألا نعيش كذلك بالفعل؟
+On surface, yes. But Nopon have secrets too. Old ones.=على السطح، نعم. لكن النوبون لديهم أسرار أيضاً. قديمة.
+Manana agrees! Nopon history is much longer than hom-hom think.=مانانا توافق! تاريخ النوبون أطول بكثير مما يظن الهوم-هوم.
+Then share it with us. All of it.=إذن شاركاه معنا. كله.
+Riku will. When the time is right.=ريكو سيفعل. عندما يحين الوقت.
+Meh meh! Manana can keep secret no longer! Nopon were there at the beginning!=مه مه! مانانا لا تستطيع إبقاء السر أكثر! النوبون كانوا هناك في البداية!
+Manana! Riku said when the time is right!=مانانا! ريكو قال عندما يحين الوقت!
+
+# =============================================
+# القسم 195: مهمة بطل - تيتش (Teach) - Strength and Smarts
+# =============================================
+
+# --- الحوارات الرئيسية ---
+Teaching isn't just about knowledge. It's about inspiration.=التعليم ليس فقط عن المعرفة. إنه عن الإلهام.
+Teach, the soldiers don't want lectures.=تيتش، الجنود لا يريدون محاضرات.
+Then I'll show them instead. Learning by doing.=إذن سأريهم بدلاً من ذلك. التعلم بالممارسة.
+Survival skills, ether theory, basic engineering.=مهارات البقاء، نظرية الأثير، هندسة أساسية.
+You want to turn warriors into scholars?=تريد تحويل المحاربين إلى علماء؟
+I want to turn soldiers into citizens. There's a difference.=أريد تحويل الجنود إلى مواطنين. هناك فرق.
+The first class graduated today. They can read, write, and repair a Levnis.=أول فصل تخرج اليوم. يستطيعون القراءة والكتابة وإصلاح ليفنيس.
+Knowledge is the one weapon that grows stronger when shared.=المعرفة هي السلاح الوحيد الذي يقوى عند مشاركته.
+
+# =============================================
+# القسم 196: مهمة بطل - ماشيرو (Mashiro) - The Blade's Edge
+# =============================================
+
+# --- الحوارات الرئيسية ---
+My blade has tasted too much blood.=نصلي ذاق الكثير من الدماء.
+Then let it rest, Mashiro.=إذن دعه يرتاح، ماشيرو.
+A blade that rests grows dull. And a dull blade is dangerous.=النصل الذي يرتاح يصبح كليلاً. والنصل الكليل خطير.
+Then use it for something else. Carving wood. Cutting rope. Harvesting grain.=إذن استخدمه لشيء آخر. نحت الخشب. قطع الحبال. حصاد الحبوب.
+You want me to... farm? With a sword?=تريدني أن... أزرع؟ بسيف؟
+The best swords can cut anything. Even a new path forward.=أفضل السيوف تستطيع قطع أي شيء. حتى طريقاً جديداً للأمام.
+I taught the children how to whittle. They made me this.=علّمت الأطفال كيف ينحتون. صنعوا لي هذا.
+A wooden flower. From a blade that only knew destruction.=زهرة خشبية. من نصل لم يعرف سوى الدمار.
+Perhaps there's hope for this old sword yet.=ربما لا يزال هناك أمل لهذا السيف القديم.
+
+# =============================================
+# القسم 197: مهمة بطل - مياب (Miyabi) - The Art of Living
+# =============================================
+
+# --- الحوارات الرئيسية ---
+Art is not a luxury. It is a necessity.=الفن ليس ترفاً. إنه ضرورة.
+Miyabi, the colonies need food and shelter first.=مياب، المستعمرات تحتاج الطعام والمأوى أولاً.
+And what feeds the soul? What shelters the spirit?=وما الذي يغذي الروح؟ ما الذي يؤوي الوجدان؟
+You have a point.=لديكِ وجهة نظر.
+I want to teach art to every colony. Painting, music, dance.=أريد تعليم الفن لكل مستعمرة. الرسم، الموسيقى، الرقص.
+Beauty in a world that's only known war.=الجمال في عالم لم يعرف سوى الحرب.
+The children of Colony 6 painted a mural. Their first artwork ever.=أطفال المستعمرة 6 رسموا جدارية. أول عمل فني لهم على الإطلاق.
+It's... beautiful. All those colors.=إنها... جميلة. كل تلك الألوان.
+They painted the world they want to live in. A world of color and light.=رسموا العالم الذي يريدون العيش فيه. عالم من الألوان والنور.
+That's the most powerful weapon against despair. Hope, made visible.=هذا أقوى سلاح ضد اليأس. الأمل، مجسّداً.
+
+# =============================================
+# القسم 198: مهمة بطل - تريتون (Triton) - The Sea's Memory
+# =============================================
+
+# --- الحوارات الرئيسية ---
+The ocean remembers everything.=المحيط يتذكر كل شيء.
+What do you mean, Triton?=ماذا تعني، تريتون؟
+Every battle fought on these waters. Every ship that sank.=كل معركة خيضت على هذه المياه. كل سفينة غرقت.
+The seafloor is littered with the remnants of war.=قاع البحر مليء ببقايا الحرب.
+We should recover what we can. Salvage the materials.=يجب أن نستعيد ما نستطيع. ننقذ المواد.
+And honor the fallen. They deserve to be remembered.=ونكرم الساقطين. يستحقون أن يُتذكروا.
+We built a memorial on the shore. For every soldier lost at sea.=بنينا نصباً تذكارياً على الشاطئ. لكل جندي فُقد في البحر.
+The waves carry their names now. They'll never be forgotten.=الأمواج تحمل أسماءهم الآن. لن يُنسوا أبداً.
+
+# =============================================
+# القسم 199: مهمة بطل - سيغموند (Segmund) - Old Soldier's New War
+# =============================================
+
+# --- الحوارات الرئيسية ---
+I've fought in more battles than I can count.=قاتلت في معارك أكثر مما أستطيع عدّه.
+And now there are no more battles, Segmund.=والآن لا مزيد من المعارك، سيغموند.
+That's the problem. I don't know who I am without war.=تلك هي المشكلة. لا أعرف من أنا بدون الحرب.
+You're a protector. That doesn't change.=أنت حامٍ. هذا لا يتغير.
+What am I protecting now?=ماذا أحمي الآن؟
+The future. The children who'll never have to fight.=المستقبل. الأطفال الذين لن يضطروا للقتال أبداً.
+I trained the young ones today. Not for war. For survival.=دربت الصغار اليوم. ليس للحرب. للبقاء.
+How to find water, build shelter, navigate by the stars.=كيف يجدون الماء، يبنون مأوى، يتنقلون بالنجوم.
+Skills for living, not killing. I think I like this new war better.=مهارات للعيش، ليس للقتل. أظن أنني أحب هذه الحرب الجديدة أكثر.
+
+# =============================================
+# القسم 200: مهمة بطل - غوندور (Ghondor) - Reckless to Righteous
+# =============================================
+
+# --- الحوارات الرئيسية ---
+Gramps keeps telling me to be more careful.=جدي يظل يقول لي أن أكون أكثر حذراً.
+Monica has a point, Ghondor.=مونيكا لديها وجهة نظر، غوندور.
+I'm careful! I just... have a different definition of careful.=أنا حذرة! أنا فقط... لديّ تعريف مختلف للحذر.
+Charging headfirst into enemy lines isn't careful by any definition.=الهجوم رأساً على عقب نحو خطوط العدو ليس حذراً بأي تعريف.
+It is if you're fast enough.=هو كذلك إن كنتِ سريعة بما يكفي.
+Ghondor...=غوندور...
+Fine, fine! I'll make a plan next time. Maybe. Probably. No promises.=حسناً، حسناً! سأضع خطة المرة القادمة. ربما. على الأرجح. لا وعود.
+She actually made a plan. And it worked.=وضعت خطة فعلاً. ونجحت.
+Don't look so surprised! I can be smart when I want to be.=لا تبدوا متفاجئين! أستطيع أن أكون ذكية عندما أريد.
+The City is lucky to have you, Ghondor. Plans and all.=المدينة محظوظة بكِ، غوندور. بخططكِ وكل شيء.
+
+# --- نهاية مهام الأبطال ---
+# End of Hero Quests
+# Total sections: 183-200 (Hero Quests)
