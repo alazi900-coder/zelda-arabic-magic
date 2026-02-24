@@ -14091,3 +14091,599 @@ Fog Zone enemies drop rare materials=أعداء منطقة الضباب يُسق
 Stronghold battles grant bonus experience=معارك الحصون تمنح خبرة إضافية
 Dimensional Rift encounters increase=مواجهات الشقوق البُعدية تزداد
 Tri-World Strike power scales with bonds=قوة ضربة الثلاث عوالم تتناسب مع الروابط
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 117: المشاهد السينمائية - الفصل الأول (Chapter 1: Ouroboros)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- المشهد الافتتاحي: ساحة المعركة ---
+We fight so that we may live!=نُقاتل حتى نعيش!
+Today, we fight for our Colony!=اليوم، نُقاتل من أجل مستعمرتنا!
+Colony 9, move out!=المستعمرة 9، تحركوا!
+Roger!=حاضر!
+All troops, advance!=جميع القوات، تقدّموا!
+Don't let them break through!=لا تدعوهم يخترقون الصفوف!
+Garvel! Cover the left flank!=غارفيل! غطِّ الجناح الأيسر!
+On it!=على الفور!
+Enemies incoming from the right!=أعداء قادمون من اليمين!
+I see them. I'll handle it!=أراهم. سأتولّى أمرهم!
+Noah! Lanz! On me!=نوح! لانز! معي!
+Let's do this!=هيّا نفعلها!
+They're Agnus soldiers... This is a big force.=إنهم جنود أغنس... هذه قوة كبيرة.
+Doesn't matter how many there are. We just have to fight.=لا يهم كم عددهم. علينا فقط أن نُقاتل.
+That's right. We fight to live another day.=هذا صحيح. نُقاتل لنعيش يوماً آخر.
+For the Colony!=من أجل المستعمرة!
+
+# --- مشهد مُنشد الوداع ---
+Noah... It's time.=نوح... حان الوقت.
+Yeah. I know.=أجل. أعلم.
+An Off-Seer's duty... to send off the fallen.=واجب مُنشد الوداع... أن يُودّع الساقطين.
+May your flames return to the cycle of life.=لتعُد ألسنة لهبكم إلى دورة الحياة.
+This melody... It's so sad.=هذه الألحان... إنها حزينة جداً.
+It's not just sadness. There's something else in it.=ليس مجرد حزن. هناك شيء آخر فيها.
+Noah, you play so beautifully.=نوح، أنت تعزف بجمالٍ فائق.
+I just... want to send them off properly.=أنا فقط... أريد أن أودّعهم كما يليق.
+Each life is precious. Every single one.=كل حياة ثمينة. كل واحدة منها.
+That's why we play. So they're not forgotten.=لهذا نعزف. حتى لا يُنسَوا.
+
+# --- مشهد لقاء الفريقين ---
+What...? You're an Agnus soldier?!=ماذا...؟ أنتِ جندية أغنسية؟!
+And you're from Keves. We should be fighting.=وأنت من كيفس. يُفترض أن نتقاتل.
+Wait. Something's not right here.=انتظري. هناك شيء غير صحيح هنا.
+What do you mean?=ماذا تعني؟
+That light... Did you see it too?=ذلك الضوء... هل رأيتِه أيضاً؟
+Yes. It was... calling to us.=نعم. كان... ينادينا.
+I don't understand what's happening.=لا أفهم ما يحدث.
+Neither do I. But I don't think we're enemies right now.=ولا أنا. لكنني لا أعتقد أننا أعداء الآن.
+Eunie, Lanz... stand down.=يوني، لانز... اخفضا أسلحتكما.
+Noah, you can't be serious!=نوح، لا يمكنك أن تكون جاداً!
+Just... trust me on this.=فقط... ثقوا بي في هذا.
+
+# --- مشهد الاندماج الأول (Interlink) ---
+What's happening to us?!=ما الذي يحدث لنا؟!
+Our bodies... they're merging!=أجسادنا... إنها تندمج!
+This power... It's incredible!=هذه القوة... إنها مذهلة!
+We've become... Ouroboros.=لقد أصبحنا... أوروبوروس.
+Ouroboros? What does that mean?=أوروبوروس؟ ماذا يعني ذلك؟
+I don't know. But this power... it changed everything.=لا أعلم. لكن هذه القوة... غيّرت كل شيء.
+The Consuls won't let this stand. We're marked now.=القناصل لن يتسامحوا مع هذا. أصبحنا مُستهدفين الآن.
+Then we run. Together.=إذن نهرب. معاً.
+Six of us... from two different nations... running together.=ستة منّا... من أمتين مختلفتين... نهرب معاً.
+It's crazy when you put it that way.=يبدو جنونياً حين تقوله هكذا.
+Maybe. But it's our only choice.=ربما. لكنه خيارنا الوحيد.
+
+# --- مشهد القنصل ---
+Consul... What are you?=القنصل... ما أنت؟
+We are Moebius. We are eternal.=نحن مويبيوس. نحن أبديون.
+Moebius...?=مويبيوس...؟
+You've committed a grave sin, children.=لقد ارتكبتم خطيئة جسيمة، أيها الأطفال.
+Interlink was never meant for the likes of you.=الربط البيني لم يكن مُعدّاً لأمثالكم.
+What do you mean? We didn't choose this!=ماذا تعني؟ لم نختر هذا!
+It doesn't matter. You are now enemies of the world itself.=لا يهم. أنتم الآن أعداء العالم ذاته.
+Enemies of the world? That's absurd!=أعداء العالم؟ هذا سخيف!
+Run while you can. It won't save you, but it might amuse us.=اهربوا ما استطعتم. لن ينقذكم ذلك، لكنه قد يُسلّينا.
+
+# --- مشهد الهروب والتعارف ---
+I'm Noah. Keves Colony 9.=أنا نوح. المستعمرة 9، كيفس.
+Mio. Agnus Colony Gamma.=ميو. مستعمرة غاما، أغنس.
+Eunie. Same as Noah.=يوني. من نفس مستعمرة نوح.
+Taion. Agnus Colony Gamma, Tactical Commander.=تايون. مستعمرة غاما، أغنس، القائد التكتيكي.
+Name's Lanz. Colony 9's best fighter.=اسمي لانز. أفضل مقاتل في المستعمرة 9.
+I'm Sena! Agnus Colony Gamma!=أنا سينا! مستعمرة غاما، أغنس!
+So three from Keves, three from Agnus.=إذن ثلاثة من كيفس، ثلاثة من أغنس.
+Yesterday we were killing each other. Today we're allies.=بالأمس كنا نقتل بعضنا. اليوم نحن حلفاء.
+The world's gone mad.=العالم جُنّ جنونه.
+Maybe it was always mad. We just didn't see it.=ربما كان مجنوناً دائماً. نحن فقط لم نرَ ذلك.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 118: المشاهد السينمائية - الفصل الثاني (Chapter 2: Colony Liberation)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- مشهد وصول المستعمرة 9 ---
+This is... my Colony.=هذه هي... مستعمرتي.
+Noah! You're alive!=نوح! أنت حيّ!
+Yeah. I'm back. But things have changed.=أجل. عُدت. لكن الأمور تغيّرت.
+Who are these Agnus soldiers?! What's going on?!=مَن هؤلاء جنود أغنس؟! ما الذي يجري؟!
+It's a long story. But they're not our enemies.=إنها قصة طويلة. لكنهم ليسوا أعداءنا.
+Not enemies? Have you lost your mind?!=ليسوا أعداء؟ هل فقدت عقلك؟!
+Listen to me! The war... it's all a lie.=اسمعوني! الحرب... كلها كذبة.
+A lie...? What are you saying?=كذبة...؟ ماذا تقول؟
+The Consuls, Moebius... they're using us. All of us.=القناصل، مويبيوس... يستغلوننا. جميعنا.
+Our life force... they're feeding on it.=طاقة حياتنا... يتغذّون عليها.
+
+# --- مشهد تحرير المستعمرة ---
+The Flame Clock... It controls everything.=ساعة اللهب... تتحكم في كل شيء.
+If we destroy it, the Colony will be free.=إذا دمّرناها، ستتحرر المستعمرة.
+Free? Free from what?=أحرار؟ أحرار من ماذا؟
+Free from the cycle. Free from fighting and dying for nothing.=أحرار من الدورة. أحرار من القتال والموت من أجل لا شيء.
+But without the Flame Clock, how will we survive?=لكن بدون ساعة اللهب، كيف سنعيش؟
+We'll find a way. We always do.=سنجد طريقة. كما نفعل دائماً.
+Noah... If you're wrong about this...=نوح... إذا كنت مُخطئاً في هذا...
+I'm not. Trust me.=لست كذلك. ثقوا بي.
+Then let's do it. Let's break the clock.=إذن فلنفعلها. لنحطّم الساعة.
+Everyone ready? This is it.=الجميع مستعدون؟ هذه هي اللحظة.
+The Flame Clock is destroyed... We're free!=ساعة اللهب دُمّرت... نحن أحرار!
+I can feel it... The chain is broken.=أستطيع أن أشعر بذلك... القيد انكسر.
+
+# --- مشهد إيثيل ---
+Ethel... You're the Commander of Colony 4.=إيثيل... أنتِ قائدة المستعمرة 4.
+Noah. I've heard what you've been doing.=نوح. سمعت بما تفعلونه.
+Then you know why we're here.=إذن تعرفين لماذا نحن هنا.
+You want to destroy our Flame Clock too.=تريدون تدمير ساعة اللهب الخاصة بنا أيضاً.
+It's the only way to free your people.=إنها الطريقة الوحيدة لتحرير شعبك.
+My people... Some of them won't understand.=شعبي... بعضهم لن يفهم.
+They will, in time.=سيفهمون، مع الوقت.
+Ethel... you don't have much time left, do you?=إيثيل... لم يتبقَّ لك الكثير من الوقت، أليس كذلك؟
+My term is almost up. Ten terms... and it ends.=مدّتي على وشك الانتهاء. عشر مُدد... وتنتهي.
+Then let your final act be one of liberation.=إذن ليكن فعلك الأخير فعل تحرير.
+You're right. I won't let my people remain in chains.=أنتَ محقّ. لن أدع شعبي يبقى في القيود.
+Ethel, Commander of Colony 4... I release you all.=إيثيل، قائدة المستعمرة 4... أُحرّركم جميعاً.
+
+# --- مشهد كامورافي ---
+Cammuravi... The Silver Consul spoke of you.=كامورافي... القنصل الفضي تحدّث عنك.
+Hmph. And what did that worm say?=هه. وماذا قال تلك الدودة؟
+That you're dangerous. The strongest in Agnus.=أنك خطير. الأقوى في أغنس.
+I have no love for the Consuls. But I fight for my Colony.=لا أكنّ أي حب للقناصل. لكنني أقاتل من أجل مستعمرتي.
+Your Colony is enslaved, just like the rest.=مستعمرتك مُستعبَدة، مثل الباقي.
+Enslaved...? Watch your tongue, boy.=مُستعبَدة...؟ انتبه لكلامك، يا فتى.
+The Flame Clock feeds on your soldiers' lives. Is that freedom?=ساعة اللهب تتغذّى على أرواح جنودك. هل هذه حرية؟
+You... speak truth. I can see it in your eyes.=أنت... تقول الحقيقة. أستطيع رؤيتها في عينيك.
+Then join us. Help us break the cycle.=إذن انضمّ إلينا. ساعدنا في كسر الدورة.
+Very well. But know this: I fight my own way.=حسناً. لكن اعلم هذا: أنا أقاتل بطريقتي الخاصة.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 119: المشاهد السينمائية - الفصل الثالث (Chapter 3: Swordmarch)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- مشهد رؤية نوح ---
+I keep seeing it... A vision of destruction.=أستمر في رؤيتها... رؤيا الدمار.
+Noah? What's wrong?=نوح؟ ما الخطب؟
+There's a place... where everything converges.=هناك مكان... حيث يتلاقى كل شيء.
+What kind of place?=أي نوع من الأماكن؟
+A sword. A giant sword, piercing the land.=سيف. سيف عملاق، يخترق الأرض.
+The Swordmarch...=مسيرة السيف...
+You've heard of it?=هل سمعتِ عنه؟
+It's an Agnian legend. The blade that divided the world.=إنها أسطورة أغنسية. النصل الذي قسم العالم.
+It's not just a legend. It's real. And we need to go there.=ليست مجرد أسطورة. إنه حقيقي. وعلينا الذهاب إلى هناك.
+Why? What's at the Swordmarch?=لماذا؟ ماذا يوجد في مسيرة السيف؟
+Answers. About Ouroboros, about Moebius... about everything.=إجابات. عن أوروبوروس، عن مويبيوس... عن كل شيء.
+
+# --- مشهد الأعداد المفقودة (Lost Numbers) ---
+Welcome to the City. We've been waiting for you.=مرحباً في المدينة. كنّا ننتظركم.
+The City...? People live here?=المدينة...؟ يعيش الناس هنا؟
+We are the Lost Numbers. Those who escaped the cycle.=نحن الأعداد المفقودة. أولئك الذين هربوا من الدورة.
+Escaped...? You mean you're free from the Flame Clocks?=هربتم...؟ تقصدون أنكم أحرار من ساعات اللهب؟
+We were never bound by them. We were born free.=لم نكن مُقيّدين بها أبداً. وُلدنا أحراراً.
+Born free... That's possible?=وُلدتم أحراراً... هل هذا ممكن؟
+It was how things used to be, before the Flame Clocks.=هكذا كانت الأمور، قبل ساعات اللهب.
+A world without Flame Clocks... What was it like?=عالم بدون ساعات اللهب... كيف كان؟
+Beautiful. And terrible. Like any world.=جميل. ومُرعب. كأي عالم.
+We've been fighting Moebius for generations.=كنّا نحارب مويبيوس لأجيال.
+Generations... You live that long?=أجيال... تعيشون لهذه المدة؟
+Without the Flame Clocks, we age naturally. We grow old and die.=بدون ساعات اللهب، نشيخ طبيعياً. نكبر ونموت.
+Growing old... I've never seen anyone grow old.=أن نكبر... لم أرَ أحداً يكبر من قبل.
+That's the tragedy of your world.=هذه هي مأساة عالمكم.
+
+# --- مشهد الملكة نيا ---
+I am Nia. Queen of Agnus.=أنا نيا. ملكة أغنس.
+The Queen...?! But you're here, with the Lost Numbers?=الملكة...؟! لكنك هنا، مع الأعداد المفقودة؟
+The Queen you know is a puppet. A shell of Moebius.=الملكة التي تعرفونها دمية. قوقعة من مويبيوس.
+Then who are you?=إذن من أنتِ؟
+I am the real Nia. A Blade... from another time.=أنا نيا الحقيقية. سيف... من زمن آخر.
+Another time...?=زمن آخر...؟
+There were two worlds, long ago. They should never have merged.=كان هناك عالمان، منذ زمن بعيد. ما كان يجب أن يندمجا أبداً.
+Two worlds... merging into one?=عالمان... يندمجان في واحد؟
+The merging created this twisted reality. And Moebius was born from it.=الاندماج خلق هذا الواقع المشوّه. ومويبيوس وُلد منه.
+Then to defeat Moebius, we need to fix what was broken.=إذن للقضاء على مويبيوس، علينا إصلاح ما انكسر.
+Yes. That is your mission, Ouroboros.=نعم. هذه هي مهمتكم، يا أوروبوروس.
+
+# --- مشهد ميليا ---
+Melia... Queen of Keves.=ميليا... ملكة كيفس.
+Another queen in hiding?=ملكة أخرى في الخفاء؟
+I've been watching over my people from afar.=كنت أراقب شعبي من بعيد.
+Watching? While they fight and die?=تراقبين؟ بينما يقاتلون ويموتون؟
+I could not act directly. Moebius has eyes everywhere.=لم أستطع التصرّف مباشرة. مويبيوس لديه عيون في كل مكان.
+But now, with Ouroboros...=لكن الآن، مع أوروبوروس...
+Now there is hope. For the first time in ages.=الآن يوجد أمل. للمرة الأولى منذ عصور.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 120: المشاهد السينمائية - الفصل الرابع (Chapter 4: Moebius Revealed)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- مشهد كشف حقيقة مويبيوس ---
+Moebius... They're not gods. They're people.=مويبيوس... ليسوا آلهة. إنهم بشر.
+People? Those monsters?=بشر؟ تلك الوحوش؟
+People who chose eternity over life.=بشر اختاروا الأبدية على الحياة.
+They feed on conflict. On the cycle of war.=يتغذّون على الصراع. على دورة الحرب.
+As long as Keves and Agnus fight, Moebius grows stronger.=طالما كيفس وأغنس يتقاتلان، مويبيوس يزداد قوة.
+So the war... it was designed. From the beginning.=إذن الحرب... كانت مُصمَّمة. منذ البداية.
+Every battle, every death... it all feeds them.=كل معركة، كل موت... كله يُغذّيهم.
+That's monstrous...=هذا وحشي...
+And we were part of it. Willingly.=وكنّا جزءاً منه. عن طيب خاطر.
+Not willingly. We didn't know.=ليس عن طيب خاطر. لم نكن نعلم.
+But now we do. And that changes everything.=لكننا نعلم الآن. وهذا يُغيّر كل شيء.
+
+# --- مشهد D وJ (القناصل) ---
+Well, well. The little Ouroboros are growing up.=حسناً، حسناً. أوروبوروس الصغار يكبرون.
+D... and J. Two of Moebius's strongest.=دي... وجي. اثنان من أقوى مويبيوس.
+You know, we used to be just like you.=تعلمون، كنّا مثلكم تماماً.
+Like us...?=مثلنا...؟
+Fighters. Dreamers. People with something to lose.=مقاتلين. حالمين. أشخاص لديهم ما يخسرونه.
+And then you chose Moebius.=ثم اخترتم مويبيوس.
+We chose to live forever. What would you choose?=اخترنا أن نعيش للأبد. ماذا ستختارون أنتم؟
+A real life, even if it's short. That's what I choose.=حياة حقيقية، حتى لو كانت قصيرة. هذا ما أختاره.
+How naive. You'll learn... when you watch everyone you love die.=يا لَلسذاجة. ستتعلّمون... حين تُشاهدون كل مَن تحبون يموت.
+Maybe. But at least we'll have loved.=ربما. لكن على الأقل سنكون قد أحببنا.
+
+# --- مشهد N (نوح المظلم) ---
+Who... are you?=مَن... أنت؟
+Can't you tell? I'm you, Noah.=ألا تستطيع أن تُخمّن؟ أنا أنتَ، نوح.
+Me...? That's impossible!=أنا...؟ هذا مستحيل!
+I am N. What you become when despair wins.=أنا إن. ما تصبحه حين ينتصر اليأس.
+Despair...?=اليأس...؟
+I've lived this cycle thousands of times, Noah.=عشتُ هذه الدورة آلاف المرات، يا نوح.
+Watched her die. Again and again and again.=شاهدتُها تموت. مراراً وتكراراً وتكراراً.
+Her...? You mean Mio?=هي...؟ تقصد ميو؟
+Every cycle, we find each other. Every cycle, she dies.=كل دورة، نجد بعضنا. كل دورة، تموت.
+And eventually, the pain became too much.=وفي النهاية، أصبح الألم أكبر من أن يُحتمل.
+So you surrendered. You became Moebius.=إذن استسلمتَ. أصبحتَ مويبيوس.
+I chose to freeze this moment. To keep her alive, even in this twisted way.=اخترت تجميد هذه اللحظة. لإبقائها حيّة، حتى بهذه الطريقة المشوّهة.
+That's not life, N. That's a prison.=هذه ليست حياة، إن. إنها سجن.
+You'll understand someday. When you hold her as she fades.=ستفهم يوماً ما. حين تحتضنها وهي تتلاشى.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 121: المشاهد السينمائية - الفصل الخامس (Chapter 5: The Weight of Life)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- مشهد مدّة ميو ---
+Mio... How many terms do you have left?=ميو... كم مُدّة بقي لك؟
+Noah...=نوح...
+Please. I need to know.=أرجوكِ. أحتاج أن أعرف.
+Less than three months.=أقل من ثلاثة أشهر.
+Three months...=ثلاثة أشهر...
+I didn't want to tell you. I didn't want it to change anything.=لم أرد أن أخبرك. لم أرد أن يُغيّر ذلك شيئاً.
+How can it not change things?! Mio...=كيف لا يُغيّر الأمور؟! ميو...
+I've accepted it, Noah. I've had a good life.=تقبّلت الأمر، يا نوح. عشت حياة جيدة.
+Don't say that. We'll find a way.=لا تقولي ذلك. سنجد طريقة.
+Maybe there is no way. Maybe some things can't be changed.=ربما لا توجد طريقة. ربما بعض الأشياء لا يمكن تغييرها.
+I refuse to accept that!=أرفض أن أقبل ذلك!
+Noah... This is why N became what he is.=نوح... هذا هو السبب في أن إن أصبح ما هو عليه.
+What...?=ماذا...؟
+He couldn't let go. Don't make the same mistake.=لم يستطع أن يتخلّى. لا ترتكب نفس الخطأ.
+
+# --- مشهد سينا ولانز ---
+Lanz... Can I ask you something?=لانز... هل يمكنني أن أسألك شيئاً؟
+Sure, Sena. What's up?=بالتأكيد، سينا. ما الأمر؟
+Am I strong enough? For what's coming?=هل أنا قوية بما يكفي؟ لِما هو قادم؟
+Are you kidding? You're the toughest person I know.=هل تمزحين؟ أنتِ أقوى شخص أعرفه.
+That's not what I mean. Physical strength is easy.=ليس هذا ما أعنيه. القوة الجسدية سهلة.
+Then what do you mean?=إذن ماذا تعنين؟
+I mean... the strength to keep going when everything falls apart.=أعني... القوة لمواصلة المضيّ حين ينهار كل شيء.
+Hey. None of us can do this alone. That's why we have each other.=هيّ. لا أحد منّا يستطيع فعل هذا وحده. لهذا لدينا بعضنا.
+Yeah... You're right. Thanks, Lanz.=أجل... أنت محقّ. شكراً، لانز.
+Don't mention it. We're partners, right?=لا تذكريها. نحن شريكان، صحيح؟
+
+# --- مشهد يوني وتايون ---
+Taion, your planning is always spot-on.=تايون، تخطيطك دائماً دقيق.
+It has to be. One mistake could cost us everything.=يجب أن يكون كذلك. خطأ واحد قد يُكلّفنا كل شيء.
+Don't you ever get tired? Of carrying all that weight?=ألا تتعب أبداً؟ من حمل كل هذا الثقل؟
+Of course I do. But someone has to think ahead.=بالطبع أتعب. لكن على أحدهم أن يفكّر مُسبقاً.
+You know, it's okay to lean on others sometimes.=تعلم، لا بأس بالاتّكاء على الآخرين أحياناً.
+Says the most stubborn person in the group.=تقول أعند شخص في المجموعة.
+Ha! Fair point. But I'm serious.=ها! نقطة عادلة. لكنني جادة.
+I know. And I appreciate it, Eunie. Truly.=أعلم. وأنا أُقدّر ذلك، يوني. حقاً.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 122: المشاهد السينمائية - الفصل السادس (Chapter 6: Origin)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- مشهد اكتشاف الأوريجن ---
+This is it... Origin.=هذا هو... الأوريجن.
+It's massive...=إنه ضخم...
+Origin was built to preserve both worlds when they collided.=الأوريجن بُني للحفاظ على كلا العالمين حين تصادما.
+A machine to save everything...=آلة لإنقاذ كل شيء...
+But Moebius corrupted it. Stopped the worlds from separating again.=لكن مويبيوس أفسده. أوقف العالمين عن الانفصال مجدداً.
+So they could keep feeding on the cycle.=حتى يتمكّنوا من الاستمرار في التغذّي على الدورة.
+If we can restart Origin, we can undo everything Moebius has done.=إذا استطعنا إعادة تشغيل الأوريجن، يمكننا إلغاء كل ما فعله مويبيوس.
+But that means... the worlds will separate.=لكن ذلك يعني... أن العالمين سينفصلان.
+Yes. Keves and Agnus will become two worlds again.=نعم. كيفس وأغنس سيعودان عالمين مرة أخرى.
+And we... we'll be separated too.=ونحن... سنُفصَل أيضاً.
+Noah... Mio...=نوح... ميو...
+We know. But it's the right thing to do.=نحن نعلم. لكنه الشيء الصحيح الذي يجب فعله.
+
+# --- مشهد مواجهة إن (N) ---
+N! This ends here!=إن! ينتهي الأمر هنا!
+You still don't understand, do you?=لا تزال لا تفهم، أليس كذلك؟
+I understand perfectly. You're afraid.=أفهم تماماً. أنت خائف.
+Afraid?! I am beyond fear!=خائف؟! أنا فوق الخوف!
+No. You're terrified of losing her. Just like I was.=لا. أنت مرعوب من فقدانها. تماماً كما كنت.
+I AM you! I know what awaits!=أنا أنتَ! أعلم ما ينتظرنا!
+You were me. But I choose differently.=كنتَ أنا. لكنني أختار بشكل مختلف.
+You choose pain! You choose to watch her die!=أنت تختار الألم! تختار أن تُشاهدها تموت!
+I choose to live honestly. With whatever time we have.=أختار أن أعيش بصدق. مع أي وقت لدينا.
+You're a fool, Noah.=أنت أحمق، يا نوح.
+Maybe. But I'm a free fool.=ربما. لكنني أحمق حُر.
+
+# --- مشهد M (ميو المظلمة) ---
+You must be M.=لا بد أنكِ إم.
+Mio... or should I say, the current me.=ميو... أو هل أقول، أنا الحالية.
+Why did you join Moebius?=لماذا انضممتِ إلى مويبيوس؟
+N begged me to. He said it was the only way to stay together.=إن توسّل إليّ. قال إنها الطريقة الوحيدة للبقاء معاً.
+And you believed him?=وصدّقتِه؟
+When you've died a thousand times... you'll believe anything.=حين تموتين ألف مرة... ستصدّقين أي شيء.
+But this isn't living, M. You know that.=لكن هذه ليست حياة، إم. أنتِ تعلمين ذلك.
+I do. I've known for a long time.=أعلم. أعلم ذلك منذ وقت طويل.
+Then help us. Help us end this.=إذن ساعدينا. ساعدينا في إنهاء هذا.
+I will. For both of us.=سأفعل. من أجل كلتينا.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 123: المشاهد السينمائية - الفصل السابع (Chapter 7: The Final Battle)
+# ═══════════════════════════════════════════════════════════════════
+
+# --- مشهد التجمع الأخير ---
+Everyone... This is it. The final battle.=الجميع... هذه هي. المعركة الأخيرة.
+We've come so far. From six strangers to...=قطعنا شوطاً طويلاً. من ستة غرباء إلى...
+To family.=إلى عائلة.
+Whatever happens in there, I want you all to know...=مهما حدث هناك، أريدكم جميعاً أن تعلموا...
+You don't have to say it, Noah. We know.=لا تحتاج أن تقولها، نوح. نحن نعلم.
+We've been through everything together. That says enough.=عشنا كل شيء معاً. ذلك يقول الكفاية.
+Then let's go. Let's take our future back.=إذن لنذهب. لنستعيد مستقبلنا.
+For everyone who believed in us!=من أجل كل من آمن بنا!
+For the Colonies!=من أجل المستعمرات!
+For the City!=من أجل المدينة!
+For the world!=من أجل العالم!
+
+# --- مشهد مواجهة Z ---
+So, you've finally arrived. The great Ouroboros.=إذن، وصلتم أخيراً. أوروبوروس العظيم.
+Z... The one behind everything.=زد... العقل المدبّر وراء كل شيء.
+Behind everything? I AM everything.=وراء كل شيء؟ أنا كل شيء.
+You're nothing but a parasite feeding on people's lives.=لست سوى طفيلي يتغذّى على حيوات الناس.
+A parasite? I am the will of the world itself.=طفيلي؟ أنا إرادة العالم ذاته.
+The will of the world doesn't trap people in endless cycles of death.=إرادة العالم لا تحبس الناس في دورات لا نهائية من الموت.
+You misunderstand. People WANT this. They fear the future.=أنتم لا تفهمون. الناس يُريدون هذا. إنهم يخشون المستقبل.
+Maybe they do. But fear isn't a reason to stop living.=ربما يفعلون. لكن الخوف ليس سبباً للتوقف عن الحياة.
+You would doom them all to uncertainty?=أتحكمون عليهم جميعاً بالغموض؟
+We would give them the freedom to choose.=نمنحهم حرية الاختيار.
+Choice... How quaint. Let me show you the weight of that choice.=الاختيار... كم هو ساذج. دعوني أُريكم ثقل ذلك الاختيار.
+
+# --- المواجهة النهائية مع Z ---
+Is this all you have, Ouroboros?=أهذا كل ما لديكم، يا أوروبوروس؟
+Not even close!=لسنا قريبين من ذلك حتى!
+I've existed since the beginning. I cannot be destroyed.=وُجدت منذ البداية. لا يمكن تدميري.
+Everything can end. That's what makes it precious.=كل شيء يمكن أن ينتهي. هذا ما يجعله ثميناً.
+You would end eternity for the sake of... what? Fleeting moments?=أتُنهون الأبدية من أجل... ماذا؟ لحظات عابرة؟
+Those fleeting moments ARE life! That's what you never understood!=تلك اللحظات العابرة هي الحياة! هذا ما لم تفهمه أبداً!
+The pain of loss, the joy of meeting, the struggle to grow...=ألم الفقدان، فرحة اللقاء، الكفاح من أجل النموّ...
+That's what it means to be alive!=هذا ما يعنيه أن تكون حيّاً!
+Enough! I will erase you from existence!=كفى! سأمحوكم من الوجود!
+Noah! Everyone! Together!=نوح! الجميع! معاً!
+Our lives are our own! We're taking them back!=حيواتنا ملكنا! نحن نستعيدها!
+This is the power of Ouroboros! The power of life itself!=هذه هي قوة أوروبوروس! قوة الحياة ذاتها!
+
+# --- مشهد سقوط Z ---
+Impossible... Defeated by... mortals...?=مستحيل... هُزمت من قِبَل... فانين...؟
+We're not just mortals. We're people who chose to live.=لسنا مجرد فانين. نحن بشر اختاروا أن يعيشوا.
+Even knowing it will end...?=حتى مع علمكم أنها ستنتهي...؟
+Especially because it will end.=خاصةً لأنها ستنتهي.
+I see... Perhaps... that is strength I never had...=أرى... ربما... تلك قوة لم أملكها أبداً...
+Z is fading...=زد يتلاشى...
+It's over. It's finally over.=انتهى. انتهى أخيراً.
+
+# --- مشهد الوداع الأخير ---
+Origin is activating. The worlds will separate now.=الأوريجن يتفعّل. العالمان سينفصلان الآن.
+So this is goodbye...=إذن هذا هو الوداع...
+Not goodbye. Just... see you later.=ليس وداعاً. فقط... أراكِ لاحقاً.
+Noah...=نوح...
+Mio, I want you to know... meeting you was the best thing that ever happened to me.=ميو، أريدكِ أن تعلمي... لقاؤكِ كان أفضل شيء حدث لي.
+Me too, Noah. In every lifetime... I'll find you again.=وأنا أيضاً، نوح. في كل حياة... سأجدك مجدداً.
+Promise?=تعديننني؟
+Promise.=أعِدُك.
+Lanz... Take care, you big lug.=لانز... اعتنِ بنفسك، أيها الضخم.
+You too, Sena. Don't go lifting any mountains without me.=وأنتِ أيضاً، سينا. لا ترفعي أي جبال بدوني.
+Taion... It was an honor strategizing with you.=تايون... كان شرفاً أن أُخطّط معك.
+The honor was mine, Eunie. Truly.=الشرف كان لي، يوني. حقاً.
+Everyone... Thank you. For everything.=الجميع... شكراً لكم. على كل شيء.
+We'll meet again. I know we will.=سنلتقي مجدداً. أعلم أننا سنلتقي.
+
+# --- مشهد الفلوت الأخير ---
+Noah raised his flute one final time.=رفع نوح نايه للمرة الأخيرة.
+The melody drifted across the fading landscape.=انساب اللحن عبر المشهد المتلاشي.
+A song not of sorrow, but of hope.=أغنية ليست من حزن، بل من أمل.
+For all the lives they'd touched, and all the lives yet to come.=من أجل كل الأرواح التي لمسوها، وكل الأرواح التي ستأتي.
+The worlds began to separate, slowly, gently.=بدأ العالمان بالانفصال، ببطء، بلطف.
+And in that moment, six hearts beat as one.=وفي تلك اللحظة، نبضت ستة قلوب كقلب واحد.
+Not an ending. A beginning.=ليست نهاية. بل بداية.
+The light embraced them all.=احتضنهم الضوء جميعاً.
+And the future... was theirs to write.=والمستقبل... كان ملكهم ليكتبوه.
+
+# --- مشهد ما بعد النهاية ---
+A busy street. A modern city. Another world entirely.=شارع مزدحم. مدينة حديثة. عالم آخر تماماً.
+Among the crowds, a young man walks, flute case in hand.=بين الحشود، يمشي شاب حاملاً حافظة ناي.
+He stops. Something caught his ear.=يتوقف. شيء ما لفت سمعه.
+A melody... familiar, yet distant.=لحن... مألوف، لكن بعيد.
+He turns.=يلتفت.
+And there she is.=وهناك هي.
+Their eyes meet.=تلتقي أنظارهما.
+No words needed. They already know.=لا حاجة للكلمات. يعلمان بالفعل.
+A smile. A step forward. A new beginning.=ابتسامة. خطوة للأمام. بداية جديدة.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 124: حوارات سينمائية إضافية - مشاهد الأبطال والمعسكر
+# ═══════════════════════════════════════════════════════════════════
+
+# --- مشاهد المعسكر الليلي ---
+Can't sleep either?=لا تستطيع النوم أيضاً؟
+Too much on my mind.=الكثير يشغل بالي.
+Want to talk about it?=هل تريد التحدث عن ذلك؟
+Do you ever wonder what it's like? Growing old?=هل تتساءل أحياناً كيف يكون الأمر؟ أن تكبر في السن؟
+The Lost Numbers... they showed us a different way to live.=الأعداد المفقودة... أرونا طريقة مختلفة للحياة.
+A life with memories that span decades, not just terms.=حياة بذكريات تمتد لعقود، وليس مجرد مُدد.
+I want that. I want to remember everything.=أريد ذلك. أريد أن أتذكّر كل شيء.
+Then we'll make it happen. That's what we're fighting for.=إذن سنجعل ذلك يحدث. هذا ما نقاتل من أجله.
+
+# --- مشاهد الطبخ مع مانانا ---
+Manana is cooking masterpiece tonight!=مانانا تطبخ تحفة الليلة!
+What are you making?=ماذا تحضّرين؟
+Secret recipe! Manana no tell!=وصفة سرية! مانانا لا تقول!
+It smells amazing...=رائحتها مذهلة...
+Of course! Manana is best chef in whole Aionios!=طبعاً! مانانا أفضل طبّاخة في كل أيونيوس!
+Riku think Manana should add more spice.=ريكو يعتقد أن مانانا يجب أن تُضيف المزيد من التوابل.
+Riku not allowed in Manana's kitchen!=ريكو غير مسموح له في مطبخ مانانا!
+Everypon calm down...=الجميع يهدأ...
+
+# --- مشاهد ريكو الحكيم ---
+Riku has seen many things in long Nopon life.=ريكو رأى أشياء كثيرة في حياة النوبون الطويلة.
+How old are you, Riku?=كم عمرك، يا ريكو؟
+Nopon secret! But Riku remember when stars were different.=سر النوبون! لكن ريكو يتذكّر حين كانت النجوم مختلفة.
+Different stars...?=نجوم مختلفة...؟
+World changed many times. Riku watched it all.=العالم تغيّر مرات كثيرة. ريكو شاهد كل ذلك.
+You're more than you seem, aren't you?=أنت أكثر مما تبدو، أليس كذلك؟
+Riku is just Riku. Nothing more, nothing less.=ريكو هو فقط ريكو. لا أكثر، ولا أقل.
+
+# --- حوارات أشيرا ---
+I used to think fighting was everything.=اعتدت أن أظن أن القتال هو كل شيء.
+And now?=والآن؟
+Now I know there's more to life than swinging a blade.=الآن أعلم أن هناك أكثر في الحياة من تأرجح نصل.
+That's surprisingly philosophical for you, Ashera.=هذا فلسفي بشكل مفاجئ بالنسبة لك، يا أشيرا.
+Hey! I can be deep too, you know!=هيّ! يمكنني أن أكون عميقة أيضاً، أتعلم!
+Meeting you all changed me. I won't forget that.=لقاؤكم جميعاً غيّرني. لن أنسى ذلك.
+
+# --- حوارات زيون ---
+Commander Zeon reporting.=القائد زيون يُبلّغ.
+At ease, Zeon. We're not on duty.=استرخِ، يا زيون. لسنا في الخدمة.
+Old habits. Colony 9 discipline runs deep.=عادات قديمة. انضباط المستعمرة 9 عميق.
+You were a great leader, Zeon. The Colony looks up to you.=كنت قائداً عظيماً، يا زيون. المستعمرة تحترمك.
+I only did what I thought was right.=فقط فعلت ما اعتقدت أنه صحيح.
+That's what makes you great.=هذا ما يجعلك عظيماً.
+
+# --- حوارات فالدي ---
+I've been fixing things my whole life.=كنت أُصلح الأشياء طوال حياتي.
+And you're incredible at it, Valdi.=وأنت مذهل في ذلك، يا فالدي.
+Machines are easy. People are harder.=الآلات سهلة. الناس أصعب.
+Maybe that's why you're so good with both.=ربما لهذا أنت ماهر مع كليهما.
+You think so? I always felt awkward around people.=تعتقد ذلك؟ دائماً شعرت بالحرج حول الناس.
+Your kindness speaks louder than words, Valdi.=لطفك يتحدث أعلى من الكلمات، يا فالدي.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 125: حوارات سينمائية - مشاهد القصة المحورية
+# ═══════════════════════════════════════════════════════════════════
+
+# --- مشهد حقيقة الأوروبوروس ---
+Ouroboros... the power to interlink Keves and Agnus.=أوروبوروس... قوة الربط البيني بين كيفس وأغنس.
+It was created by the Queens themselves.=صنعتها الملكتان بنفسيهما.
+Nia and Melia... They gave us this power?=نيا وميليا... هما مَن منحانا هذه القوة؟
+As a weapon against Moebius. Their last hope.=كسلاح ضد مويبيوس. أملهما الأخير.
+We carry the hopes of two worlds on our shoulders.=نحمل آمال عالمين على أكتافنا.
+Then we'd better not drop them.=إذن من الأفضل ألا نُسقطها.
+
+# --- مشهد اكتشاف حلقة الزمن ---
+The cycle repeats. Every ten terms, the world resets.=الدورة تتكرر. كل عشر مُدد، العالم يُعاد ضبطه.
+Resets...? You mean everything starts over?=يُعاد ضبطه...؟ تقصد أن كل شيء يبدأ من جديد؟
+Memories wiped. Relationships erased. Bonds forgotten.=تُمحى الذكريات. تُمحى العلاقات. تُنسى الروابط.
+How many times has this happened?=كم مرة حدث هذا؟
+Thousands. Perhaps more.=آلاف. ربما أكثر.
+And no one remembers...=ولا أحد يتذكّر...
+A few do. Those touched by Origin's light. Like Riku.=القليلون يتذكّرون. أولئك الذين لمسهم ضوء الأوريجن. مثل ريكو.
+That's why he seems so wise. He's lived through all of it.=لهذا يبدو حكيماً جداً. لقد عاش كل ذلك.
+
+# --- مشهد تضحية إيثيل ---
+Noah... Take care of Colony 4 for me.=نوح... اعتنِ بالمستعمرة 4 من أجلي.
+Ethel! Don't talk like that!=إيثيل! لا تتحدثي هكذا!
+My flame is almost out. I can feel it.=شعلتي كادت تنطفئ. أستطيع أن أشعر بذلك.
+There has to be something we can do!=لا بد أن هناك شيئاً يمكننا فعله!
+You already did it. You freed my people. That's enough.=فعلتموه بالفعل. حرّرتم شعبي. هذا يكفي.
+Ethel...=إيثيل...
+Play for me, Noah. One last song.=اعزف لي، يا نوح. أغنية أخيرة.
+I... I will.=سأ... سأفعل.
+It's beautiful... Thank you... for everything...=إنها جميلة... شكراً... على كل شيء...
+Ethel's flame returned to the world. But her spirit lives on.=عادت شعلة إيثيل إلى العالم. لكن روحها تعيش.
+
+# --- مشهد نوح ضد إن - المواجهة الأخيرة ---
+This is the last time we meet, N.=هذه آخر مرة نلتقي فيها، إن.
+You still think you can save her?=لا تزال تعتقد أنك تستطيع إنقاذها؟
+I'm not trying to save her. I'm trying to live honestly.=لا أحاول إنقاذها. أحاول أن أعيش بصدق.
+Honestly?! What good is honesty when she'll die?!=بصدق؟! ما فائدة الصدق حين ستموت؟!
+Because pretending otherwise isn't love. It's fear.=لأن التظاهر بخلاف ذلك ليس حباً. إنه خوف.
+You dare...!=كيف تجرؤ...!
+I was you, N. But I won't become you again.=كنتُ أنت، إن. لكنني لن أصبحك مجدداً.
+Then show me! Show me your resolve!=إذن أرني! أرني عزيمتك!
+With pleasure. This blade carries everyone's hopes!=بكل سرور. هذا النصل يحمل آمال الجميع!
+N falls. Not in defeat, but in acceptance.=إن يسقط. ليس هزيمة، بل قبولاً.
+I see it now... What I should have chosen...=أراه الآن... ما كان يجب أن أختاره...
+It's not too late, N.=ليس بعد فوات الأوان، إن.
+No... for me, it is. But for you... live well, Noah.=لا... بالنسبة لي، فات الأوان. لكن بالنسبة لك... عِش جيداً، يا نوح.
+
+# --- مشهد ميو وإم - المصالحة ---
+M... I don't blame you.=إم... لا ألومكِ.
+How can you say that? I chose Moebius.=كيف تقولين ذلك؟ اخترت مويبيوس.
+You chose out of love. I understand that now.=اخترتِ بدافع الحب. أفهم ذلك الآن.
+Love... Is that what it was?=الحب... هل كان ذلك ما كان؟
+It was. A twisted version, but love nonetheless.=كان كذلك. نسخة مشوّهة، لكنه حب مع ذلك.
+Will you... forgive me?=هل... تسامحينني؟
+There's nothing to forgive. We're the same person, after all.=لا يوجد ما يُغتفر. نحن نفس الشخص، في النهاية.
+The same person... Yes. I suppose we are.=نفس الشخص... نعم. أعتقد أننا كذلك.
+Then let's end this together. As one.=إذن لننهِ هذا معاً. كواحدة.
+
+# ═══════════════════════════════════════════════════════════════════
+# القسم 126: حوارات سينمائية - لحظات مؤثرة ومشاهد رئيسية
+# ═══════════════════════════════════════════════════════════════════
+
+# --- مشهد خطاب نوح الأخير ---
+I used to think life was about surviving. Making it to the next day.=اعتدت أن أظن أن الحياة تدور حول البقاء. الوصول إلى اليوم التالي.
+But that's not living. That's just... existing.=لكن تلك ليست حياة. ذلك مجرد... وجود.
+Real life is messy. It hurts. It ends.=الحياة الحقيقية فوضوية. إنها مؤلمة. إنها تنتهي.
+But that's exactly what makes it beautiful.=لكن هذا بالتحديد ما يجعلها جميلة.
+Every moment matters because it won't last forever.=كل لحظة مهمة لأنها لن تدوم إلى الأبد.
+Every bond is precious because it can be broken.=كل رابطة ثمينة لأنه يمكن أن تُقطع.
+That's the truth Moebius could never understand.=هذه هي الحقيقة التي لم يستطع مويبيوس فهمها أبداً.
+And that's why we'll win.=ولهذا سننتصر.
+Because we're not afraid to live!=لأننا لسنا خائفين من أن نعيش!
+
+# --- مشهد العودة إلى الأمل ---
+It's strange... Knowing the world will change.=إنه غريب... أن تعلم أن العالم سيتغيّر.
+Are you scared?=هل أنت خائف؟
+A little. But mostly... excited.=قليلاً. لكن في الغالب... متحمّس.
+Excited for what?=متحمّس لماذا؟
+For whatever comes next.=لأي شيء يأتي بعد ذلك.
+The unknown... It used to terrify me.=المجهول... كان يُرعبني.
+And now?=والآن؟
+Now I think that's where the best things are hiding.=الآن أعتقد أن هناك حيث تختبئ أفضل الأشياء.
+Heh. When did you get so wise?=هه. متى أصبحت حكيماً هكذا؟
+I had good teachers.=كان لديّ معلّمون جيدون.
+
+# --- مشهد لحظة التحول (Interlink Evolution) ---
+Our Interlink is evolving!=الربط البيني يتطوّر!
+I can feel it too! The power is growing!=أستطيع الشعور بذلك أيضاً! القوة تنمو!
+This is the full power of Ouroboros!=هذه هي القوة الكاملة لأوروبوروس!
+Six hearts, beating as one. Six wills, united!=ستة قلوب، تنبض كواحدة. ست إرادات، متحدة!
+Let's show Moebius what we're made of!=لنُري مويبيوس مما نحن مصنوعون!
+Together, there's nothing we can't overcome!=معاً، لا يوجد شيء لا نستطيع تجاوزه!
+
+# --- مشهد الوداع مع الأبطال ---
+Noah, everyone... Thank you for freeing us.=نوح، يا جميع... شكراً لتحريرنا.
+We couldn't have done it without you.=ما كنا لنستطيع فعلها بدونكم.
+The Colonies will remember what you did. Always.=المستعمرات ستتذكر ما فعلتموه. دائماً.
+Don't remember us. Build something new. Something better.=لا تتذكرونا. ابنوا شيئاً جديداً. شيئاً أفضل.
+We will. That's a promise.=سنفعل. هذا وعد.
+Go. Save the world. We'll hold things down here.=اذهبوا. أنقذوا العالم. سنتدبّر الأمور هنا.
+Thank you. All of you. From the bottom of our hearts.=شكراً لكم. لكم جميعاً. من أعماق قلوبنا.
+
+# --- حوارات ختامية عاطفية ---
+Mio... Do you believe we'll find each other? In the next world?=ميو... هل تؤمنين أننا سنجد بعضنا؟ في العالم القادم؟
+I don't just believe it, Noah. I know it.=لا أؤمن بذلك فحسب، يا نوح. أنا أعرفه.
+How can you be so sure?=كيف يمكنك أن تكوني واثقة هكذا؟
+Because our bond isn't something a world can break.=لأن رابطتنا ليست شيئاً يستطيع عالم كسره.
+Even across dimensions... across time itself...=حتى عبر الأبعاد... عبر الزمن ذاته...
+I'll find you. I'll always find you.=سأجدك. سأجدك دائماً.
+Then I'll be waiting. However long it takes.=إذن سأنتظر. مهما طال الوقت.
+It won't be long. I promise.=لن يطول. أعِدُك.
+I love you, Noah.=أحبك، يا نوح.
+I love you too, Mio. In this life and every life after.=وأنا أحبكِ أيضاً، ميو. في هذه الحياة وكل حياة بعدها.
+
+# --- السطر الأخير: رسالة اللعبة ---
+The future is ours to create. Not to fear.=المستقبل ملكنا لنصنعه. لا لنخافه.
+Walk on. To a bright tomorrow.=امضوا. نحو غدٍ مشرق.
+The story of Aionios ends here. But their story continues.=قصة أيونيوس تنتهي هنا. لكن قصتهم تستمر.
+For as long as there are hearts that beat, there is hope.=طالما هناك قلوب تنبض، يوجد أمل.
+And that hope will light the way forward.=وذلك الأمل سيُنير الطريق للأمام.
+Always.=دائماً.
