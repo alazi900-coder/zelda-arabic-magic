@@ -16538,3 +16538,294 @@ The City is lucky to have you, Ghondor. Plans and all.=المدينة محظوظ
 # --- نهاية مهام الأبطال ---
 # End of Hero Quests
 # Total sections: 183-200 (Hero Quests)
+
+# =============================================
+# القسم 201: حوارات الطبخ - مانانا الطاهية الرئيسية
+# =============================================
+
+# --- أساسيات الطبخ ---
+Manana is best cook in all of Aionios!=مانانا أفضل طاهية في كل أيونيوس!
+That's... debatable.=هذا... قابل للنقاش.
+Meh meh! Who else can make Gogol steak taste like heaven?=مه مه! من غيرها يستطيع جعل شريحة غوغول بطعم الجنة؟
+You do have a talent, Manana.=لديكِ موهبة، مانانا.
+Talent? Talent is for amateurs! Manana has SKILL.=موهبة؟ الموهبة للهواة! مانانا لديها مهارة.
+What's on the menu tonight?=ماذا في قائمة الطعام الليلة؟
+Manana's special surprise stew! Secret recipe!=يخنة مانانا المفاجئة الخاصة! وصفة سرية!
+Last time your "surprise" was still moving.=آخر مرة "مفاجأتكِ" كانت لا تزال تتحرك.
+That means it fresh! Freshest ingredients!=هذا يعني أنها طازجة! أطزج المكونات!
+
+# --- الوصفات الأساسية ---
+Today Manana teach everyone basic field cooking!=اليوم مانانا تعلّم الجميع طبخ الميدان الأساسي!
+First rule: never eat anything that glows purple.=القاعدة الأولى: لا تأكلوا أي شيء يتوهج بالبنفسجي أبداً.
+What about blue?=ماذا عن الأزرق؟
+Blue is fine. Blue means ether-infused. Extra nutrition!=الأزرق لا بأس. الأزرق يعني مشبّع بالأثير. تغذية إضافية!
+And red?=والأحمر؟
+Red means spicy. Very spicy. Manana love spicy!=الأحمر يعني حار. حار جداً. مانانا تحب الحار!
+
+# =============================================
+# القسم 202: وصفات مانانا المميزة
+# =============================================
+
+# --- وصفة: يخنة أردون المدخنة ---
+Ardun Smoked Stew=يخنة أردون المدخنة
+First, catch Ardun. This is hard part.=أولاً، اصطادي أردون. هذا الجزء الصعب.
+Then smoke meat over low flame for three hours.=ثم دخّني اللحم على نار هادئة لثلاث ساعات.
+Add root vegetables from Maktha Wildwood.=أضيفي خضروات جذرية من غابة ماكثا البرية.
+Season with crushed ether herbs.=تبّلي بأعشاب الأثير المطحونة.
+The stew should shimmer slightly. That means ether is releasing flavor.=اليخنة يجب أن تتلألأ قليلاً. هذا يعني أن الأثير يُطلق النكهة.
+This is incredible, Manana. Best thing I've ever eaten.=هذا مذهل، مانانا. أفضل شيء أكلته في حياتي.
+Meh meh meh! Manana knew you would love it!=مه مه مه! مانانا عرفت أنكم ستحبونه!
+
+# --- وصفة: كعكة الأثير الملكية ---
+Royal Ether Cake=كعكة الأثير الملكية
+This recipe is Nopon family secret! Passed down for generations!=هذه الوصفة سر عائلة نوبون! متوارثة عبر الأجيال!
+You need pure ether crystals, ground very fine.=تحتاجين بلورات أثير نقية، مطحونة ناعماً جداً.
+Mix with Saffron Wheat flour and Cloud Sea milk.=اخلطيها مع دقيق قمح الزعفران وحليب بحر السحاب.
+Bake until golden. The cake should float slightly.=اخبزيها حتى تصبح ذهبية. الكعكة يجب أن تطفو قليلاً.
+It's... floating. Is that normal?=إنها... تطفو. هل هذا طبيعي؟
+If cake not float, Manana did something wrong!=إن لم تطفُ الكعكة، مانانا فعلت شيئاً خاطئاً!
+It tastes like sunshine and happiness.=مذاقها كأشعة الشمس والسعادة.
+That is ether flavor! Good for body AND soul!=هذه نكهة الأثير! جيدة للجسد والروح!
+
+# --- وصفة: حساء المحارب ---
+Warrior's Broth=حساء المحارب
+This soup give strength for whole day of fighting!=هذا الحساء يمنح قوة ليوم كامل من القتال!
+Gogol bone marrow, simmered overnight.=نخاع عظام غوغول، يُطهى على نار هادئة طوال الليل.
+Add Mountain Sage and Fire Peppers.=أضيفي ميرمية الجبل وفلفل النار.
+Warning: very hot. Even Ashera cried.=تحذير: حار جداً. حتى آشيرا بكت.
+I did NOT cry! My eyes were just... sweating.=لم أبكِ! عيناي كانتا فقط... تتعرقان.
+Sure, Ashera. Sure.=بالتأكيد، آشيرا. بالتأكيد.
+
+# =============================================
+# القسم 203: حوارات الطبخ مع نوح
+# =============================================
+
+Noah, you want to learn cooking?=نوح، تريد تعلم الطبخ؟
+I thought it might be useful. For the group.=ظننت أنه قد يكون مفيداً. للمجموعة.
+Noble idea! But Noah must promise not to burn water again.=فكرة نبيلة! لكن نوح يجب أن يعد بألا يحرق الماء مجدداً.
+That was ONE time, Manana.=تلك كانت مرة واحدة، مانانا.
+One time too many! Riku still talk about it.=مرة أكثر من اللازم! ريكو لا يزال يتحدث عنها.
+Fine. Start me with something simple.=حسناً. ابدئي معي بشيء بسيط.
+Simple? Okay. Boil water. WITHOUT burning it.=بسيط؟ حسناً. اغلِ الماء. بدون حرقه.
+I... actually did it. The water is boiling.=أنا... فعلتها فعلاً. الماء يغلي.
+Meh meh! Progress! Tomorrow we add ingredients!=مه مه! تقدم! غداً نضيف المكونات!
+Noah made soup today. It was actually edible.=نوح صنع حساءً اليوم. كان صالحاً للأكل فعلاً.
+"Actually edible" is the best compliment I've ever gotten.="صالح للأكل فعلاً" أفضل إطراء حصلت عليه.
+
+# =============================================
+# القسم 204: حوارات الطبخ مع ميو
+# =============================================
+
+Mio, you help Manana cook?=ميو، تساعدين مانانا بالطبخ؟
+I'd love to. I used to cook for Colony Γ sometimes.=أحب ذلك. كنت أطبخ للمستعمرة غاما أحياناً.
+Ooh! What Mio make?=أوه! ماذا تصنع ميو؟
+Simple things. Rice balls, dried meat, basic rations.=أشياء بسيطة. كرات أرز، لحم مجفف، حصص أساسية.
+Manana can teach Mio real cooking! Not just survival food!=مانانا تستطيع تعليم ميو الطبخ الحقيقي! ليس فقط طعام البقاء!
+I'd like that. Cooking feels... peaceful.=أود ذلك. الطبخ يبدو... مسالماً.
+That because cooking is love made visible!=لأن الطبخ حب مرئي!
+Mio's rice balls are the best I've ever had.=كرات أرز ميو أفضل ما أكلت على الإطلاق.
+She add secret ingredient. Manana not even know what it is!=أضافت مكوناً سرياً. حتى مانانا لا تعرف ما هو!
+It's just a little bit of care, Manana.=إنها فقط القليل من العناية، مانانا.
+
+# =============================================
+# القسم 205: حوارات الطبخ مع لانز
+# =============================================
+
+FOOD! When's dinner?=طعام! متى العشاء؟
+Lanz always hungry! Lanz eat enough for three people!=لانز دائماً جائع! لانز يأكل كفاية ثلاثة أشخاص!
+A man needs fuel. Especially a man my size.=الرجل يحتاج وقوداً. خاصة رجل بحجمي.
+Lanz want to help cook?=لانز يريد المساعدة بالطبخ؟
+Help cook? I want to help EAT.=أساعد بالطبخ؟ أريد المساعدة بالأكل.
+No help, no eat! Manana's rule!=لا مساعدة، لا أكل! قاعدة مانانا!
+Fine, fine. What do I do?=حسناً، حسناً. ماذا أفعل؟
+Stir pot. Gently! GENTLY! Not like fighting!=حرّك القِدر. بلطف! بلطف! ليس مثل القتال!
+Sorry! I don't know my own strength sometimes.=آسف! لا أعرف قوتي أحياناً.
+Pot is dented now. But stew taste good somehow.=القِدر منبعج الآن. لكن اليخنة لذيذة بطريقة ما.
+Lanz's secret: aggressive stirring adds flavor.=سر لانز: التحريك العنيف يضيف نكهة.
+That not how cooking work! But Manana not complain about results.=هذا ليس كيف يعمل الطبخ! لكن مانانا لا تشتكي من النتائج.
+
+# =============================================
+# القسم 206: حوارات الطبخ مع سينا
+# =============================================
+
+Sena, you want to learn Manana's recipes?=سينا، تريدين تعلم وصفات مانانا؟
+Yes! I want to cook something special for everyone.=نعم! أريد طبخ شيء مميز للجميع.
+Special? What occasion?=مميز؟ لأي مناسبة؟
+No occasion. Just... because I care.=بلا مناسبة. فقط... لأنني أهتم.
+Meh meh! That best reason to cook!=مه مه! هذا أفضل سبب للطبخ!
+Sena strong! Can knead dough very well!=سينا قوية! تستطيع عجن العجين جيداً جداً!
+I'm worried I'll mess it up.=أنا قلقة أنني سأفسده.
+No such thing as mess up in cooking! Only "happy accidents."=لا يوجد شيء اسمه إفساد في الطبخ! فقط "حوادث سعيدة."
+The bread Sena made... it's perfect.=الخبز الذي صنعته سينا... مثالي.
+I put my heart into it. Literally kneaded it for an hour.=وضعت قلبي فيه. عجنته لمدة ساعة حرفياً.
+Sena-bread is now Colony favorite! Everyone asking for recipe!=خبز سينا الآن مفضل المستعمرة! الجميع يسأل عن الوصفة!
+
+# =============================================
+# القسم 207: حوارات الطبخ مع يوني
+# =============================================
+
+Eunie, want to help in kitchen?=يوني، تريدين المساعدة في المطبخ؟
+Last time I cooked, three people got sick.=آخر مرة طبخت، ثلاثة أشخاص مرضوا.
+Meh meh! That because Eunie use wrong mushroom!=مه مه! ذلك لأن يوني استخدمت فطراً خاطئاً!
+They all looked the same to me!=كلها بدت متشابهة لي!
+Purple mushroom: delicious. Red mushroom: deadly.=الفطر البنفسجي: لذيذ. الفطر الأحمر: مميت.
+...Maybe I should stick to taste-testing.=...ربما يجب أن ألتزم بتذوق الطعام.
+Eunie is excellent taste-tester! Very honest opinions!=يوني ممتازة بتذوق الطعام! آراء صادقة جداً!
+This needs more salt. And more everything, honestly.=هذا يحتاج ملحاً أكثر. وكل شيء أكثر، بصراحة.
+See? Honest! Manana appreciate honest feedback!=أرأيتم؟ صادقة! مانانا تقدّر الملاحظات الصادقة!
+
+# =============================================
+# القسم 208: حوارات الطبخ مع تايون
+# =============================================
+
+Taion, you have recipe suggestions?=تايون، لديك اقتراحات وصفات؟
+I've been analyzing our nutritional needs. We're deficient in several areas.=كنت أحلل احتياجاتنا الغذائية. لدينا نقص في عدة مجالات.
+Manana not need analysis! Manana cook from heart!=مانانا لا تحتاج تحليلاً! مانانا تطبخ من القلب!
+The heart doesn't know about vitamin deficiencies, Manana.=القلب لا يعرف عن نقص الفيتامينات، مانانا.
+Hmph! Fine. What Taion suggest?=همف! حسناً. ماذا يقترح تايون؟
+More leafy greens. Varied protein sources. Less sugar.=خضروات ورقية أكثر. مصادر بروتين متنوعة. سكر أقل.
+Less sugar?! Manana refuse! Sugar is happiness!=سكر أقل؟! مانانا ترفض! السكر سعادة!
+How about a compromise? Balanced meals with ONE dessert.=ما رأيكِ بحل وسط؟ وجبات متوازنة مع حلوى واحدة.
+...Two desserts. Final offer.=...حلويان. عرض نهائي.
+Deal.=اتفقنا.
+
+# =============================================
+# القسم 209: حوارات الطبخ مع ريكو
+# =============================================
+
+Riku, you help Manana cook tonight?=ريكو، تساعد مانانا بالطبخ الليلة؟
+Riku is better at building than cooking.=ريكو أفضل في البناء من الطبخ.
+Nonsense! Riku make excellent fire! Best campfire in Aionios!=كلام فارغ! ريكو يصنع ناراً ممتازة! أفضل نار مخيم في أيونيوس!
+Riku can build fire. Yes. Riku can also build oven.=ريكو يستطيع بناء نار. نعم. ريكو يستطيع أيضاً بناء فرن.
+Oven?! Manana always wanted real oven!=فرن؟! مانانا دائماً أرادت فرناً حقيقياً!
+Then Riku will build one. With proper ventilation and temperature control.=إذن ريكو سيبني واحداً. بتهوية مناسبة وتحكم بالحرارة.
+Riku built oven! It's beautiful! Manana can bake now!=ريكو بنى فرناً! إنه جميل! مانانا تستطيع الخبز الآن!
+The bread from the new oven is incredible.=الخبز من الفرن الجديد مذهل.
+Riku and Manana: best team. One builds, one cooks.=ريكو ومانانا: أفضل فريق. واحد يبني، وواحدة تطبخ.
+
+# =============================================
+# القسم 210: حوارات الطبخ الجماعية
+# =============================================
+
+# --- مسابقة الطبخ ---
+Manana declares: cooking competition! Everyone must participate!=مانانا تعلن: مسابقة طبخ! الجميع يجب أن يشارك!
+Even me? I can barely boil water.=حتى أنا؟ بالكاد أستطيع غلي الماء.
+ESPECIALLY you, Noah!=خاصة أنت، نوح!
+What are the rules?=ما القواعد؟
+Each person make one dish. Manana judge. No complaints!=كل شخص يصنع طبقاً واحداً. مانانا تحكم. لا شكاوى!
+That doesn't seem fair. You're the judge AND a competitor?=هذا لا يبدو عادلاً. أنتِ الحكمة ومتسابقة؟
+Manana is fair judge! Very objective!=مانانا حكمة عادلة! موضوعية جداً!
+She gave herself first place.=أعطت نفسها المركز الأول.
+Manana's dish WAS the best! Not Manana's fault!=طبق مانانا كان الأفضل! ليس ذنب مانانا!
+
+# --- العشاء الجماعي ---
+Everyone, gather round! Dinner is ready!=الجميع، تجمعوا! العشاء جاهز!
+What did you make tonight, Manana?=ماذا صنعتِ الليلة، مانانا؟
+Feast of Liberation! Special meal for special people!=وليمة التحرير! وجبة مميزة لأشخاص مميزين!
+There's so much food. How did you make all this?=هناك طعام كثير جداً. كيف صنعتِ كل هذا؟
+Manana had help! Mio made rice, Sena made bread, Riku built bigger fire!=مانانا حصلت على مساعدة! ميو صنعت الأرز، سينا صنعت الخبز، ريكو بنى ناراً أكبر!
+Everyone contributed something.=الجميع ساهم بشيء.
+That's what makes it special. Not just the food, but the people.=هذا ما يجعله مميزاً. ليس فقط الطعام، بل الأشخاص.
+Eating together like this... it feels like family.=الأكل معاً هكذا... يبدو كعائلة.
+We ARE family. Weird, mismatched family. But family.=نحن عائلة. عائلة غريبة، غير متطابقة. لكن عائلة.
+Manana happy. Happiest Nopon in world right now.=مانانا سعيدة. أسعد نوبون في العالم الآن.
+
+# --- اكتشاف مكونات جديدة ---
+Look what Manana found! New ingredient!=انظروا ماذا وجدت مانانا! مكون جديد!
+What is it? It's... glowing.=ما هذا؟ إنه... يتوهج.
+Ether Truffle! Rarest mushroom in Aionios!=كمأة الأثير! أندر فطر في أيونيوس!
+Is it safe to eat?=هل هو آمن للأكل؟
+Safe? It's DIVINE! One bite and you feel the ether flowing through you!=آمن؟ إنه إلهي! قضمة واحدة وتشعر بالأثير يتدفق فيك!
+Manana, last time you said something was safe, Eunie turned green.=مانانا، آخر مرة قلتِ أن شيئاً آمن، يوني أصبحت خضراء.
+That was DIFFERENT mushroom! Manana learned from mistake!=ذلك كان فطراً مختلفاً! مانانا تعلمت من الخطأ!
+The Ether Truffle risotto was... transcendent.=ريزوتو كمأة الأثير كان... متسامياً.
+See?! Manana always right about food! ALWAYS!=أرأيتم؟! مانانا دائماً محقة بشأن الطعام! دائماً!
+
+# --- الطبخ للمستعمرات ---
+Manana has big dream.=مانانا لديها حلم كبير.
+What dream?=ما الحلم؟
+Open restaurant! First restaurant in new world!=افتتاح مطعم! أول مطعم في العالم الجديد!
+A restaurant? That's actually brilliant.=مطعم؟ هذه فكرة رائعة في الواقع.
+Manana cook for everyone! Not just friends, but all colonies!=مانانا تطبخ للجميع! ليس فقط الأصدقاء، بل كل المستعمرات!
+Food brings people together better than any treaty.=الطعام يجمع الناس أفضل من أي معاهدة.
+Manana's Kitchen is open! First customers are lining up!=مطبخ مانانا مفتوح! أول الزبائن يصطفون!
+The Kevesi soldier and the Agnian soldier... they're sharing a table.=الجندي الكيفيسي والجندي الأغنوسي... يتشاركان طاولة.
+Food not care about Keves or Agnus. Food is for everyone!=الطعام لا يهتم بكيفس أو أغنوس. الطعام للجميع!
+This might be your greatest achievement, Manana. Greater than any battle.=هذا قد يكون أعظم إنجازاتكِ، مانانا. أعظم من أي معركة.
+Meh meh meh! Manana KNEW food would save the world!=مه مه مه! مانانا عرفت أن الطعام سينقذ العالم!
+
+# =============================================
+# القسم 211: وصفات خاصة بالمناطق
+# =============================================
+
+# --- وصفات منطقة إيزيا ---
+Aetia Valley Herb Soup=حساء أعشاب وادي إيزيا
+The herbs from Aetia grow nowhere else.=أعشاب إيزيا لا تنمو في أي مكان آخر.
+They give a warm, earthy flavor that reminds you of home.=تمنح نكهة دافئة ترابية تذكرك بالوطن.
+
+# --- وصفات منطقة فورنيس ---
+Fornis Desert Flatbread=خبز صحراء فورنيس المسطح
+Baked on heated stones under the desert sun.=يُخبز على حجارة ساخنة تحت شمس الصحراء.
+The heat gives it a unique crispy texture.=الحرارة تمنحه ملمساً مقرمشاً فريداً.
+Colony 5 soldiers live on this bread during patrols.=جنود المستعمرة 5 يعيشون على هذا الخبز خلال الدوريات.
+
+# --- وصفات منطقة بحر السحاب ---
+Cloud Sea Salt Fish=سمك ملح بحر السحاب
+Caught fresh from the Cloud Sea and salted immediately.=يُصطاد طازجاً من بحر السحاب ويُملّح فوراً.
+The Cloud Sea salt has ether properties that preserve flavor.=ملح بحر السحاب له خصائص أثيرية تحفظ النكهة.
+Best served with seaweed from the Erythia coast.=يُقدم بشكل أفضل مع أعشاب بحرية من ساحل إريثيا.
+
+# --- وصفات منطقة ماكثا ---
+Maktha Wildwood Mushroom Stew=يخنة فطر غابة ماكثا البرية
+The forest provides dozens of edible mushroom varieties.=الغابة توفر عشرات أنواع الفطر الصالح للأكل.
+Manana knows which ones are safe. Mostly.=مانانا تعرف أيها آمن. غالباً.
+The purple-capped ones give the stew its distinctive glow.=ذات القبعة البنفسجية تمنح اليخنة توهجها المميز.
+Eat under moonlight for the full experience.=كُلوها تحت ضوء القمر للتجربة الكاملة.
+
+# --- وصفات منطقة كيفس ---
+Keves Military Rations (Improved)=حصص كيفس العسكرية (محسّنة)
+The old rations were tasteless blocks of compressed nutrients.=الحصص القديمة كانت كتلاً عديمة الطعم من مغذيات مضغوطة.
+Manana has improved them. Same nutrition, actual flavor now!=مانانا حسّنتها. نفس التغذية، نكهة حقيقية الآن!
+The soldiers actually smile when they eat now.=الجنود يبتسمون فعلاً عندما يأكلون الآن.
+That might be the biggest victory of the whole war.=ذلك قد يكون أكبر انتصار في الحرب كلها.
+
+# --- وصفات منطقة أغنوس ---
+Agnus Flame-Grilled Kebabs=كباب أغنوس المشوي على اللهب
+The Agnian tradition of flame-cooking goes back generations.=تقليد أغنوس في الطبخ على اللهب يعود لأجيال.
+Cammuravi himself taught Manana the technique.=كاموراڤي نفسه علّم مانانا التقنية.
+The key is controlling the flame's intensity with ether.=المفتاح هو التحكم بشدة اللهب بالأثير.
+Too hot and it burns. Too cool and the flavor doesn't develop.=حار جداً ويحترق. بارد جداً والنكهة لا تتطور.
+Perfect. Just like Cammuravi's flames.=مثالي. تماماً مثل نيران كاموراڤي.
+
+# =============================================
+# القسم 212: حوارات الوجبات الخاصة
+# =============================================
+
+# --- وجبة ما قبل المعركة الكبرى ---
+Everyone, eat well tonight. Tomorrow we face Moebius.=الجميع، كلوا جيداً الليلة. غداً نواجه ميبيوس.
+Manana made everyone's favorite dishes.=مانانا صنعت الأطباق المفضلة لكل شخص.
+Noah gets simple soup. Lanz gets triple portions.=نوح يحصل على حساء بسيط. لانز يحصل على حصص ثلاثية.
+Mio gets rice balls. Eunie gets anything without mushrooms.=ميو تحصل على كرات أرز. يوني تحصل على أي شيء بدون فطر.
+Taion gets nutritionally balanced plate. Sena gets fresh bread.=تايون يحصل على طبق متوازن غذائياً. سينا تحصل على خبز طازج.
+You remembered everyone's preferences.=تذكرتِ تفضيلات الجميع.
+Of course! Manana is cook! Cook remembers what people love!=بالطبع! مانانا طاهية! الطاهية تتذكر ما يحبه الناس!
+This might be our last meal together.=هذه قد تكون آخر وجبة لنا معاً.
+Don't say that! After battle, Manana make even BIGGER feast!=لا تقل ذلك! بعد المعركة، مانانا تصنع وليمة أكبر!
+Promise?=وعد؟
+Promise. Biggest feast Aionios ever seen.=وعد. أكبر وليمة شهدتها أيونيوس.
+
+# --- وجبة الاحتفال بالنصر ---
+WE WON! Time for feast!=فزنا! وقت الوليمة!
+Manana has been preparing for this for days.=مانانا كانت تُعد لهذا منذ أيام.
+Every dish from every region. Aetia herbs, Fornis spices, Maktha mushrooms.=كل طبق من كل منطقة. أعشاب إيزيا، توابل فورنيس، فطر ماكثا.
+Cloud Sea fish, Kevesi bread, Agnian kebabs.=سمك بحر السحاب، خبز كيفس، كباب أغنوس.
+A feast that represents all of Aionios.=وليمة تمثل كل أيونيوس.
+Every colony, every region, every flavor.=كل مستعمرة، كل منطقة، كل نكهة.
+This is what peace tastes like.=هكذا يكون طعم السلام.
+Manana crying. Not sad crying. Happy crying.=مانانا تبكي. ليس بكاء حزيناً. بكاء سعيداً.
+The best meals are the ones shared with people you love.=أفضل الوجبات هي التي تُشارك مع أشخاص تحبهم.
+And Manana love all of you. Every single one.=ومانانا تحب كلكم. كل واحد منكم.
+
+# --- نهاية حوارات الطعام والوصفات ---
+# End of Cooking Dialogues & Recipes
+# Total sections: 201-212 (Cooking & Recipes)
