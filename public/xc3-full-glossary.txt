@@ -1223,7 +1223,7 @@ Dark Element=عنصر الظلام
 Landmark=معلم
 Rest Spot=نقطة استراحة
 Secret Area=منطقة سرية
-Skip Travel=السفر السريع
+Skip Travel=الانتقال السريع
 Camp=مخيم
 # ─────────────────────────────────────────────────
 # معالم منطقة إيتيا (Aetia Region Landmarks)
@@ -8127,7 +8127,7 @@ Be careful of the cliff edge. One wrong step and...=احذروا حافة الج
 I think we've found a shortcut through the mountains.=أظن أننا وجدنا طريقًا مختصرًا عبر الجبال.
 There are signs of battle here. Recent ones.=هناك علامات معركة هنا. حديثة.
 The wind is picking up. A storm might be coming.=الرياح تشتد. قد تأتي عاصفة.
-I've marked this location on the map. We can fast travel here later.=وضعت علامة على هذا الموقع في الخريطة. يمكننا السفر السريع هنا لاحقًا.
+I've marked this location on the map. We can fast travel here later.=وضعت علامة على هذا الموقع في الخريطة. يمكننا الانتقال السريع هنا لاحقًا.
 An enemy camp ahead. Should we engage or sneak past?=مخيم عدو أمامنا. هل نهاجم أم نتسلل؟
 The Ferronis Hulk over there... it's enormous.=هيكل الفيرونيس هناك... إنه ضخم.
 This region is Agnus-controlled. We should be cautious.=هذه المنطقة تحت سيطرة أغنوس. يجب أن نكون حذرين.
@@ -8596,7 +8596,7 @@ Levnis battles require different tactics than normal combat.=معارك اللي
 Explore off the beaten path—hidden areas often contain valuable treasures.=استكشفوا بعيدًا عن المسار المطروق—المناطق المخفية غالبًا تحتوي على كنوز ثمينة.
 Cooking at camp provides temporary stat boosts for your next battle.=الطهي في المخيم يوفر تعزيزات مؤقتة للإحصائيات لمعركتكم القادمة.
 Some quest objectives only appear at specific times of day.=بعض أهداف المهام تظهر فقط في أوقات محددة من اليوم.
-Fast travel is available from any discovered landmark.=السفر السريع متاح من أي معلم تم اكتشافه.
+Fast travel is available from any discovered landmark.=الانتقال السريع متاح من أي معلم تم اكتشافه.
 Unique Monsters are significantly stronger than regular enemies. Prepare well.=الوحوش الفريدة أقوى بكثير من الأعداء العاديين. حضّروا جيدًا.
 Heropon Riku can craft powerful accessories at camp.=البطل النوبون ريكو يستطيع صنع إكسسوارات قوية في المخيم.
 Master all available classes to unlock powerful Master Skills.=أتقنوا جميع الفصول المتاحة لفتح مهارات إتقان قوية.
@@ -16924,7 +16924,7 @@ Ferronis are mobile fortresses that house each Colony.=الفيرونيس حصو
 Each Colony has a Commander who leads its soldiers.=كل مستعمرة لها قائد يقود جنودها.
 
 # =============================================
-# القسم 219: نصائح التحميل - الأحجار الكريمة والتجهيزات
+# القسم 219: نصائح التحميل - الأحجار الكريمة والمعدات
 # =============================================
 
 # --- Gems & Equipment ---
@@ -17130,7 +17130,7 @@ Craft Gems=صناعة الأحجار الكريمة
 Discuss=المناقشة
 Level Up=رفع المستوى
 Change Class=تغيير الفصل
-Change Equipment=تغيير التجهيزات
+Change Equipment=تغيير المعدات
 View Skills=عرض المهارات
 Set Arts=تعيين الفنون
 Set Master Arts=تعيين فنون الإتقان
