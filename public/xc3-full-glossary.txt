@@ -108,7 +108,7 @@ The Castle=القلعة
 Castle=القلعة
 Agnus Castle=قلعة أغنوس
 City=المدينة
-Swordmarch=سوردمارش
+Swordmarch=مسيرة السيوف
 Origin=الأوريجن
 # ═══════════════════════════════════════════════════
 # المناطق (Regions)
@@ -547,8 +547,8 @@ Prison Problems=مشاكل السجن
 Mystery Ferron=فيرون الغامض
 Sena and No. 9=سينا والرقم 9
 Colony 0 Duties=واجبات المستعمرة 0
-The Name "Nagiri"=الاسم "ناجيري"
-A Need for Names=الحاجة للأسماء
+The Name "Nagiri"=الاسم "ناغيري"
+A Need for Names=الحاجة إلى الأسماء
 Herding Monsters=رعي الوحوش
 All-Slayer Oleg=أوليغ قاتل الجميع
 No. 9's Flute=ناي الرقم 9
@@ -577,7 +577,7 @@ Reading=القراءة
 Six Houses' Enmity=عداوة البيوت الستة
 Painting on Display=لوحة معروضة
 Tutor: Sender=معلم: المرسل
-Tutor: Mio=معلم: ميو
+Tutor: Mio=المُعلمة: ميو
 Isora's Request=طلب إيسورا
 Delicious Cooking=الطبخ اللذيذ
 Nicknames=الألقاب
@@ -8161,7 +8161,7 @@ Prison Problems=مشاكل السجن
 Mystery Ferron=فيرون الغامض
 Sena and No. 9=سينا والرقم 9
 Colony 0 Duties=واجبات المستعمرة 0
-The Name "Nagiri"=اسم "ناغيري"
+The Name "Nagiri"=الاسم "ناغيري"
 A Need for Names=الحاجة إلى الأسماء
 Curious About Training=فضول حول التدريب
 Herding Monsters=رعي الوحوش
@@ -8169,7 +8169,7 @@ Tactician's Plan=خطة التكتيكي
 Colony 4 Revitalized=تجديد المستعمرة 4
 The Poisoner=السمّام
 Irritation=تهيّج
-Tutor: Mio=معلمة: ميو
+Tutor: Mio=المُعلمة: ميو
 Isora's Request=طلب إيسورا
 
 # --- أوصاف المهام (Quest Descriptions) ---
@@ -8355,7 +8355,7 @@ Keves Castle=قلعة كيفيس
 Agnus Castle=قلعة أغنوس
 Cloudkeep=حصن الغيوم
 The Great Sword=السيف العظيم
-Maktha Wildwood=برية ماكثا
+Maktha Wildwood=غابة ماكثا البرية
 Erythia Sea=بحر إريثيا
 Dannagh Desert=صحراء دناخ
 Elaice Highway=طريق إيلايس السريع
@@ -9223,12 +9223,12 @@ Good fight. Let's collect any materials they dropped.=معركة جيدة. لن�
 
 # --- أسماء المهام الجانبية (Side Quest Names) ---
 Colony 15 Soldiers Missing=جنود المستعمرة 15 مفقودون
-Tutor: Mio=المعلمة: ميو
+Tutor: Mio=المُعلمة: ميو
 Isora's Request=طلب إيسورا
 Colony 0's Future=مستقبل المستعمرة 0
 Life in Li Garte Prison=الحياة في سجن لي غارت
 Prison Problems=مشاكل السجن
-Mystery Ferron=الفيرون الغامض
+Mystery Ferron=فيرون الغامض
 Sena and No. 9=سينا والرقم 9
 Colony 0 Duties=واجبات المستعمرة 0
 The Nopon Merchant's Plea=رجاء تاجر النوبون
@@ -9298,7 +9298,7 @@ Sigma Training Grounds=ساحات تدريب سيجما
 Tau Ether Springs=ينابيع أثير تاو
 Omega Research Lab=مختبر أبحاث أوميغا
 City Central Plaza=ساحة المدينة المركزية
-Swordmarch Overlook=مطل سوردمارش
+Swordmarch Overlook=مطل مسيرة السيوف
 Keves Castle Gate=بوابة قلعة كيفيس
 Agnus Castle Terrace=شرفة قلعة أغنوس
 
@@ -11400,7 +11400,7 @@ Pentelas Command Post=نقطة قيادة بينتيلاس
 Aetia Watchtower=برج مراقبة إيتيا
 Cadensia Wharf=رصيف كادينسيا
 Underground Market=السوق السفلي
-Swordmarch Staging Area=منطقة تجمع سوردمارش
+Swordmarch Staging Area=منطقة تجمع مسيرة السيوف
 Erythia Sea Port=ميناء بحر إريثيا
 Keves Castle Town=بلدة قلعة كيفيس
 Agnus Capital Plaza=ساحة عاصمة أغنوس
@@ -11410,7 +11410,7 @@ Colony Iota Workshop=ورشة المستعمرة إيوتا
 Colony Gamma Barracks=ثكنات المستعمرة غاما
 Origin Interior=داخل الأوريجن
 Cloudkeep Courtyard=فناء كلاودكيب
-Great Cotte Falls Overlook=مطل شلالات كوتيه العظيمة
+Great Cotte Falls Overlook=مطل شلالات كوتي الكبرى
 Maktha Wildwood Clearing=فسحة غابة ماكثا البرية
 
 # ═══════════════════════════════════════════════════════════════════
@@ -11507,7 +11507,7 @@ Patrol Route Marker=علامة مسار الدورية
 # القسم 82: عناوين أحداث الروابط (Affinity Event Titles)
 # ═══════════════════════════════════════════════════════════════════
 
-Tutor: Mio=معلمة: ميو
+Tutor: Mio=المُعلمة: ميو
 Isora's Request=طلب إيسورا
 Colony 0's Future=مستقبل المستعمرة 0
 Life in Li Garte Prison=الحياة في سجن لي غارت
@@ -11516,7 +11516,7 @@ Mystery Ferron=فيرون الغامض
 Sena and No. 9=سينا والرقم 9
 Colony 0 Duties=واجبات المستعمرة 0
 The Name "Nagiri"=الاسم "ناغيري"
-A Need for Names=الحاجة للأسماء
+A Need for Names=الحاجة إلى الأسماء
 Herding Monsters=رعي الوحوش
 Tactician's Plan=خطة التكتيكي
 Colony 4 Revitalized=المستعمرة 4 تتجدد
@@ -12394,7 +12394,7 @@ Mystery Ferron=فيرون الغامض
 Sena and No. 9=سينا والرقم 9
 Colony 0 Duties=واجبات المستعمرة 0
 The Name "Nagiri"=الاسم "ناغيري"
-A Need for Names=الحاجة إلى أسماء
+A Need for Names=الحاجة إلى الأسماء
 Herding Monsters=رعي الوحوش
 Tactician's Plan=خطة التكتيكي
 Colony 4 Revitalized=المستعمرة 4 تنتعش
@@ -14241,11 +14241,11 @@ Noah? What's wrong?=نوح؟ ما الخطب؟
 There's a place... where everything converges.=هناك مكان... حيث يتلاقى كل شيء.
 What kind of place?=أي نوع من الأماكن؟
 A sword. A giant sword, piercing the land.=سيف. سيف عملاق، يخترق الأرض.
-The Swordmarch...=مسيرة السيف...
+The Swordmarch...=مسيرة السيوف...
 You've heard of it?=هل سمعتِ عنه؟
 It's an Agnian legend. The blade that divided the world.=إنها أسطورة أغنوسية. النصل الذي قسم العالم.
 It's not just a legend. It's real. And we need to go there.=ليست مجرد أسطورة. إنه حقيقي. وعلينا الذهاب إلى هناك.
-Why? What's at the Swordmarch?=لماذا؟ ماذا يوجد في مسيرة السيف؟
+Why? What's at the Swordmarch?=لماذا؟ ماذا يوجد في مسيرة السيوف؟
 Answers. About Ouroboros, about Moebius... about everything.=إجابات. عن أوروبوروس، عن موبيوس... عن كل شيء.
 
 # --- مشهد الأعداد المفقودة (Lost Numbers) ---
@@ -17303,7 +17303,7 @@ Fornis Campsite=موقع تخييم فورنيس
 Pentelas Region=منطقة بينتولاس
 Colony 30=المستعمرة 30
 Colony Mu=المستعمرة مو
-Great Cotte Falls=شلالات كوته العظمى
+Great Cotte Falls=شلالات كوتي الكبرى
 Maktha Wildwood=غابة ماكثا البرية
 Urayan Tunnels=أنفاق أوريا
 Colony 15=المستعمرة 15
@@ -17314,7 +17314,7 @@ Lower Maktha=ماكثا السفلى
 Pentelas, Northern=بينتولاس الشمالية
 Pentelas, Southern=بينتولاس الجنوبية
 Maktha Forest Gate=بوابة غابة ماكثا
-Cotte Falls Summit=قمة شلالات كوته
+Cotte Falls Summit=قمة شلالات كوتي
 Ancient Shrine=المعبد القديم
 Urayan Tunnel Entrance=مدخل أنفاق أوريا
 Pentelas Arch=قوس بينتولاس
@@ -17326,14 +17326,14 @@ Waterfall Basin=حوض الشلال
 Temple of the Sages=معبد الحكماء
 Maktha Wildwood Depths=أعماق غابة ماكثا البرية
 Ancient Battlefield=ساحة المعركة القديمة
-Cotte River=نهر كوته
+Cotte River=نهر كوتي
 Sunken Hollow=الجوف الغارق
 
 # --- نقاط الراحة ---
 Colony 30 Canteen=مقصف المستعمرة 30
 Colony Mu Canteen=مقصف المستعمرة مو
 Maktha Campsite=موقع تخييم ماكثا
-Cotte Falls Campsite=موقع تخييم شلالات كوته
+Cotte Falls Campsite=موقع تخييم شلالات كوتي
 Urayan Campsite=موقع تخييم أوريا
 
 # ============================================================
