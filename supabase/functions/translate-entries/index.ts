@@ -37,40 +37,44 @@ interface TermLockResult {
 function lockTermsInText(text: string, glossaryMap: Map<string, string>): TermLockResult {
   if (glossaryMap.size === 0) return { lockedText: text, locks: [] };
 
-  // Sort terms by length (longest first) to prevent partial matches
-  const sortedTerms = Array.from(glossaryMap.entries())
-    .filter(([eng]) => eng.length >= 2) // Skip single-char terms
-    .sort((a, b) => b[0].length - a[0].length);
+  const textLower = text.toLowerCase();
+
+  // Pre-filter: only keep terms that actually appear in the text (fast string check)
+  const candidateTerms: [string, string][] = [];
+  for (const [eng, arab] of glossaryMap) {
+    if (eng.length < 2) continue;
+    if (textLower.includes(eng)) {
+      candidateTerms.push([eng, arab]);
+    }
+  }
+
+  if (candidateTerms.length === 0) return { lockedText: text, locks: [] };
+
+  // Sort by length (longest first) to prevent partial matches
+  candidateTerms.sort((a, b) => b[0].length - a[0].length);
 
   const locks: TermLockResult['locks'] = [];
   let lockedText = text;
   let lockCounter = 0;
 
-  for (const [eng, arab] of sortedTerms) {
-    // Build word-boundary regex for the English term
+  for (const [eng, arab] of candidateTerms) {
     const escaped = eng.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    // For short terms (2-3 chars), require strict word boundaries
     const pattern = eng.length <= 3
       ? new RegExp(`\\b${escaped}\\b`, 'gi')
       : new RegExp(`(?<![\\w-])${escaped}(?![\\w-])`, 'gi');
 
-    let match: RegExpExecArray | null;
     const regex = new RegExp(pattern.source, pattern.flags);
+    let match: RegExpExecArray | null;
     
-    // Find all matches (but check against already-locked regions)
     while ((match = regex.exec(lockedText)) !== null) {
-      // Check if this match overlaps with an existing lock placeholder
       const matchEnd = match.index + match[0].length;
       const surroundingSlice = lockedText.slice(match.index, matchEnd);
-      const isInsideLock = surroundingSlice.includes('⟪') || surroundingSlice.includes('⟫');
-      if (isInsideLock) continue;
+      if (surroundingSlice.includes('⟪') || surroundingSlice.includes('⟫')) continue;
 
       const placeholder = `⟪T${lockCounter}⟫`;
-      lockedText = lockedText.slice(0, match.index) + placeholder + lockedText.slice(match.index + match[0].length);
+      lockedText = lockedText.slice(0, match.index) + placeholder + lockedText.slice(matchEnd);
       locks.push({ placeholder, english: match[0], arabic: arab });
       lockCounter++;
-      
-      // Reset regex since string changed
       regex.lastIndex = match.index + placeholder.length;
     }
   }
@@ -89,7 +93,10 @@ function unlockTerms(translatedText: string, locks: TermLockResult['locks']): st
 // --- Apply glossary replacements to translated text (post-processing) ---
 function applyGlossaryPost(text: string, glossaryMap: Map<string, string>): string {
   let result = text;
+  const textLower = text.toLowerCase();
   for (const [eng, ara] of glossaryMap) {
+    if (eng.length < 2) continue;
+    if (!textLower.includes(eng)) continue; // Fast pre-filter
     const escaped = eng.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const regex = new RegExp(`\\b${escaped}\\b`, 'gi');
     result = result.replace(regex, ara);
