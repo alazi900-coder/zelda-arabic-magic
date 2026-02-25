@@ -2430,7 +2430,7 @@ Max Level Reached=تم بلوغ أقصى مستوى
 All Classes Mastered=تم إتقان جميع الفصول
 All Heroes Recruited=تم تجنيد جميع الأبطال
 Colony Liberation Rate=نسبة تحرير المستعمرات
-Total Overkills=إجمالي القتل المبالغ
+Total Overkills=إجمالي القتل المفرط
 Highest Chain Attack Damage=أعلى ضرر هجوم متسلسل
 # ═══════════════════════════════════════════════════
 # مصطلحات Amiibo والمحتوى الإضافي
@@ -3156,7 +3156,7 @@ Eagus Wilderness=برية إيغوس
 Erythia Sea=بحر إريثيا
 A Formidable Enemy=عدو هائل
 You Will Know Our Names - Finale=ستعرفون أسماءنا - الختام
-Chain Attack Theme=موسيقى هجوم السلسلة
+Chain Attack Theme=موسيقى الهجوم المتسلسل
 Keves Battle=معركة كيفيس
 Agnus Battle=معركة أغنوس
 Moebius Battle=معركة موبيوس
@@ -3614,7 +3614,7 @@ Eunie & Taion Bond=رابطة يوني وتايون
 Ouroboros Bond=رابطة أوروبوروس
 Ouroboros Level=مستوى أوروبوروس
 # ─────────────────────────────────────────────────
-# شجرة الروح - الأوروبوروس (Ouroboros Soul Tree)
+# شجرة الروح - أوروبوروس (Ouroboros Soul Tree)
 # ─────────────────────────────────────────────────
 Soul Tree Node=عقدة شجرة الروح
 Unlock Node=فتح العقدة
@@ -4115,10 +4115,10 @@ Matthew's Sword=سيف ماثيو
 A's Blade=نصل إيه
 Nikol's Shield=درع نيكول
 Glimmer's Whip Blade=نصل سوط غليمر
-Shulk's Monado REX+=موناد شولك ريكس+
+Shulk's Monado REX+=مونادو شولك ريكس+
 Rex's Aegis Sword=سيف ريكس إيجيس
-Monado=موناد
-Monado REX+=موناد ريكس+
+Monado=مونادو
+Monado REX+=مونادو ريكس+
 Aegis Sword=سيف إيجيس
 Pyra's Sword=سيف بايرا
 Mythra's Sword=سيف ميثرا
@@ -4235,7 +4235,7 @@ Champion's Crown=تاج البطل
 Ancient Amulet=تميمة قديمة
 Founder's Ring=خاتم المؤسس
 Origin Fragment=شظية الأوريجن
-Ouroboros Pendant=قلادة الأوروبوروس
+Ouroboros Pendant=قلادة أوروبوروس
 Lucky Charm=تعويذة الحظ
 Rare Drop Booster=مُعزّز الغنائم النادرة
 EXP Booster=مُعزّز نقاط الخبرة
@@ -4576,7 +4576,7 @@ Overheard Talk=حديث مسموع
 Incidental Dialogue=حوار عرضي
 Chain Attack Quote=اقتباس الهجوم المتسلسل
 Interlink Quote=اقتباس الإنترلينك
-Ouroboros Quote=اقتباس الأوروبوروس
+Ouroboros Quote=اقتباس أوروبوروس
 Level Up Quote=اقتباس رفع المستوى
 # ─────────────────────────────────────────────────
 # عناصر واجهة الحوار (Dialogue UI Elements)
@@ -4627,7 +4627,7 @@ Attack Shout=هتاف الهجوم
 Heal Call=نداء الشفاء
 Revive Call=نداء الإنعاش
 Chain Attack Initiation=بدء الهجوم المتسلسل
-Ouroboros Activation=تفعيل الأوروبوروس
+Ouroboros Activation=تفعيل أوروبوروس
 Art Call=نداء الفن
 Talent Art Call=نداء فن الموهبة
 Fusion Art Call=نداء الفن المدمج
@@ -4647,7 +4647,7 @@ Let's show them our power!=لنريهم قوتنا!
 We'll carve a path to the future!=سنشق طريقاً نحو المستقبل!
 I'll protect everyone!=سأحمي الجميع!
 This is our story!=هذه قصتنا!
-We are Ouroboros!=نحن الأوروبوروس!
+We are Ouroboros!=نحن أوروبوروس!
 The future is ours to decide!=المستقبل لنا لنقرره!
 I won't let anyone else die!=لن أدع أحداً آخر يموت!
 We walk on!=نحن نمضي قُدماً!
@@ -5265,7 +5265,7 @@ X=إكس
 Y=واي
 Z=زد
 Moebius Form=شكل موبيوس
-Annihilator=المُبيد
+Annihilator=المبيد
 Origin=الأوريجن
 # --- أعداء Fog Beast ---
 Fog Beast=وحش الضباب
@@ -6197,8 +6197,8 @@ Level Up=ارتفاع المستوى
 Level Up!=ارتفع المستوى!
 Class Rank Up=ارتفاع رتبة الفصل
 Affinity Increased=ازدادت الألفة
-Chain Attack!=هجوم تسلسلي!
-Interlink!=الربط البيني!
+Chain Attack!=هجوم متسلسل!
+Interlink!=الإنترلينك!
 Ouroboros Activated=تفعيل أوروبوروس
 Talent Art Ready=فن الموهبة جاهز
 Party Gauge Full=مقياس الفريق ممتلئ
@@ -6359,7 +6359,7 @@ This world is not what we thought it was.=هذا العالم ليس كما ظن
 # --- الفصل 2: التواصل (Chapter 2: Connection) ---
 Keves and Agnus... we've been fighting each other for nothing.=كيفيس وأغنوس... كنا نتقاتل من أجل لا شيء.
 The real enemy is Moebius.=العدو الحقيقي هو موبيوس.
-Interlinking... our hearts become one.=الربط البيني... قلوبنا تصبح واحدة.
+Interlinking... our hearts become one.=الإنترلينك... قلوبنا تصبح واحدة.
 I want to understand you. All of you.=أريد أن أفهمكم. كلكم.
 We're walking a different path now.=نسلك دربًا مختلفًا الآن.
 Colony 9... this was my home.=المستعمرة 9... هنا كان وطني.
@@ -6409,7 +6409,7 @@ The Sword of Origin... it's calling to us.=سيف الأوريجن... ينادي
 Two blades, two worlds, one purpose.=نصلان، عالمان، هدف واحد.
 Noah, your flute carries the weight of every soul.=نوح، نايُك يحمل ثقل كل روح.
 Mio, your melody gives them peace.=ميو، لحنُكِ يمنحهم السلام.
-The Interlink is our bond made manifest.=الربط البيني هو رابطنا المتجسّد.
+The Interlink is our bond made manifest.=الإنترلينك هو رابطنا المتجسّد.
 Together, we can reach Origin's core.=معًا، نستطيع الوصول إلى قلب الأوريجن.
 Moebius will throw everything at us.=موبيوس سيرمينا بكل ما لديه.
 Let them come. We're ready.=ليأتوا. نحن مستعدون.
@@ -6530,10 +6530,10 @@ They're tough!=إنهم أقوياء!
 Heal me!=اشفني!
 I need healing!=أحتاج شفاء!
 I'm on it!=حاضر!
-Interlink, now!=الربط البيني، الآن!
+Interlink, now!=الإنترلينك، الآن!
 Let's go, partner!=هيا يا شريكي!
 Our power as one!=قوتنا كواحد!
-Chain Attack, ready!=الهجوم التسلسلي، جاهز!
+Chain Attack, ready!=الهجوم المتسلسل، جاهز!
 Finish them!=أنهوهم!
 This is the final blow!=هذه الضربة الأخيرة!
 We did it!=فعلناها!
@@ -6566,8 +6566,8 @@ Record Breaker=محطم الأرقام
 Speed Demon=شيطان السرعة
 Perfect Victory=نصر كامل
 No Damage=بدون ضرر
-Chain Master=سيد التسلسل
-Interlink Expert=خبير الربط البيني
+Chain Master=سيد الهجوم المتسلسل
+Interlink Expert=خبير الإنترلينك
 
 # --- نظام الإعدادات التفصيلية (Detailed Settings) ---
 Audio Settings=إعدادات الصوت
@@ -6731,7 +6731,7 @@ Off-Seer's Melody=لحن مُنشد الوداع
 A Life Sent On=حياة في مهب الريح
 Battle Theme=موسيقى المعركة
 Boss Battle Theme=موسيقى معركة الزعيم
-Chain Attack Theme=موسيقى الهجوم التسلسلي
+Chain Attack Theme=موسيقى الهجوم المتسلسل
 Field Theme=موسيقى الميدان
 Colony Theme=موسيقى المستعمرة
 Tension Theme=موسيقى التوتر
@@ -6806,17 +6806,17 @@ Online Manual=الدليل الإلكتروني
 # ═══════════════════════════════════════════════════════════════
 
 # --- نصائح القتال ---
-Tip: Use Chain Attacks to deal massive damage!=نصيحة: استخدم الهجمات التسلسلية لإحداث ضرر هائل!
+Tip: Use Chain Attacks to deal massive damage!=نصيحة: استخدم الهجمات المتسلسلة لإحداث ضرر هائل!
 Tip: Switch between Attackers, Defenders, and Healers to adapt to battle!=نصيحة: بدّل بين المهاجمين والمدافعين والمعالجين للتكيّف مع المعركة!
 Tip: Cancel Arts into each other for bonus damage!=نصيحة: ألغِ الفنون ببعضها لضرر إضافي!
-Tip: Fill the Interlink gauge to unleash powerful Ouroboros forms!=نصيحة: املأ مقياس الترابط لإطلاق أشكال الأوروبوروس القوية!
-Tip: Master Arts can be used alongside your main class Arts!=نصيحة: يمكن استخدام الفنون الرئيسية مع فنون فصلك الأساسي!
+Tip: Fill the Interlink gauge to unleash powerful Ouroboros forms!=نصيحة: املأ مقياس الإنترلينك لإطلاق أشكال أوروبوروس القوية!
+Tip: Master Arts can be used alongside your main class Arts!=نصيحة: يمكن استخدام فنون الإتقان مع فنون فصلك الأساسي!
 Tip: Position yourself behind enemies for bonus damage with certain Arts!=نصيحة: تموضع خلف الأعداء لضرر إضافي مع بعض الفنون!
 Tip: Keep your Healer alive to maintain the party's HP!=نصيحة: حافظ على حياة المعالج لضمان صحة الفريق!
 Tip: Use Topple and Launch combos to disable tough enemies!=نصيحة: استخدم مجموعات الإسقاط والإطلاق لتعطيل الأعداء الأقوياء!
 Tip: Defenders draw enemy attention away from your Attackers and Healers!=نصيحة: المدافعون يجذبون انتباه الأعداء بعيدًا عن المهاجمين والمعالجين!
 Tip: Break an enemy's guard with Break Arts, then follow up with Topple!=نصيحة: حطّم دفاع العدو بفنون الكسر، ثم تابع بالإسقاط!
-Tip: Chain Attacks can turn the tide of any battle!=نصيحة: الهجمات التسلسلية قادرة على قلب موازين أي معركة!
+Tip: Chain Attacks can turn the tide of any battle!=نصيحة: الهجمات المتسلسلة قادرة على قلب موازين أي معركة!
 Tip: Accessories provide passive bonuses in battle!=نصيحة: الإكسسوارات توفر مكافآت سلبية في القتال!
 Tip: Gems can be crafted to enhance your party's abilities!=نصيحة: يمكن صياغة الجواهر لتعزيز قدرات فريقك!
 Tip: Heroes fight alongside your party as a seventh member!=نصيحة: الأبطال يقاتلون مع فريقك كعضو سابع!
@@ -6825,7 +6825,7 @@ Tip: Some enemies are much stronger than your level. Come back later!=نصيحة
 Tip: Fusion Arts combine two Arts for powerful effects!=نصيحة: الفنون المدمجة تجمع فنّين لتأثيرات قوية!
 Tip: Watch for enemy Art indicators to dodge or block in time!=نصيحة: راقب مؤشرات فنون العدو للمراوغة أو الصد في الوقت المناسب!
 Tip: Charge your Talent Art by fulfilling its role conditions!=نصيحة: اشحن فن الموهبة بتحقيق شروط دورك!
-Tip: Ouroboros forms have a time limit. Use them wisely!=نصيحة: لأشكال الأوروبوروس مهلة زمنية. استخدمها بحكمة!
+Tip: Ouroboros forms have a time limit. Use them wisely!=نصيحة: لأشكال أوروبوروس مهلة زمنية. استخدمها بحكمة!
 
 # --- نصائح الاستكشاف ---
 Tip: Rest at campfires to cook meals that boost your stats!=نصيحة: استرح عند نيران المعسكر لطهي وجبات تعزز إحصائياتك!
@@ -6878,13 +6878,13 @@ Cancelling an Art into another Art grants a damage bonus.=إلغاء فن بفن
 Attackers deal damage. Position behind enemies for extra damage.=المهاجمون يحدثون الضرر. تموضع خلف الأعداء لضرر إضافي.
 Defenders draw aggro and protect the party.=المدافعون يجذبون العداء ويحمون الفريق.
 Healers restore HP and provide buffs to allies.=المعالجون يستعيدون الصحة ويقدمون تعزيزات للحلفاء.
-Chain Attacks allow you to attack in sequence for massive damage.=الهجمات التسلسلية تتيح لك الهجوم بالتتابع لضرر هائل.
-The Chain gauge fills as you deal damage and heal allies.=مقياس التسلسل يمتلئ عند إحداث الضرر وشفاء الحلفاء.
-Ouroboros forms are powerful transformations shared between pairs.=أشكال الأوروبوروس تحولات قوية مشتركة بين الأزواج.
-The Interlink Level increases as you fight in Ouroboros form.=مستوى الترابط يزداد بالقتال في شكل الأوروبوروس.
+Chain Attacks allow you to attack in sequence for massive damage.=الهجمات المتسلسلة تتيح لك الهجوم بالتتابع لضرر هائل.
+The Chain gauge fills as you deal damage and heal allies.=مقياس الهجوم المتسلسل يمتلئ عند إحداث الضرر وشفاء الحلفاء.
+Ouroboros forms are powerful transformations shared between pairs.=أشكال أوروبوروس تحولات قوية مشتركة بين الأزواج.
+The Interlink Level increases as you fight in Ouroboros form.=مستوى الإنترلينك يزداد بالقتال في شكل أوروبوروس.
 Fusion Arts combine a Keves Art with an Agnus Art simultaneously.=الفنون المدمجة تجمع فن كيفيس مع فن أغنوس في آن واحد.
-Master Arts are Arts learned from other classes.=الفنون الرئيسية هي فنون مكتسبة من فصول أخرى.
-You can equip Master Arts in the Master Art slots.=يمكنك تجهيز الفنون الرئيسية في خانات الفنون الرئيسية.
+Master Arts are Arts learned from other classes.=فنون الإتقان هي فنون مكتسبة من فصول أخرى.
+You can equip Master Arts in the Master Art slots.=يمكنك تجهيز فنون الإتقان في خانات فنون الإتقان.
 
 # --- أنظمة النمو ---
 Classes can be changed at Rest Spots or from the menu.=يمكن تغيير الفصول عند نقاط الاستراحة أو من القائمة.
@@ -6893,8 +6893,8 @@ Skills carry over between classes once unlocked.=المهارات تنتقل ب�
 Gems provide passive stat boosts when equipped.=الجواهر توفر تعزيزات سلبية عند تجهيزها.
 Craft Gems at Rest Spots using materials and Nopon Coins.=اصنع الجواهر عند نقاط الاستراحة بالمواد وعملات النوبون.
 Accessories grant additional bonuses in battle.=الإكسسوارات تمنح مكافآت إضافية في القتال.
-The Soul Tree unlocks Ouroboros abilities for each pair.=شجرة الروح تفتح قدرات الأوروبوروس لكل زوج.
-Soul Points are earned by fighting in Ouroboros form.=نقاط الروح تُكتسب بالقتال في شكل الأوروبوروس.
+The Soul Tree unlocks Ouroboros abilities for each pair.=شجرة الروح تفتح قدرات أوروبوروس لكل زوج.
+Soul Points are earned by fighting in Ouroboros form.=نقاط الروح تُكتسب بالقتال في شكل أوروبوروس.
 Hero Quests unlock new Heroes to fight alongside you.=مهام الأبطال تفتح أبطالًا جددًا يقاتلون بجانبك.
 Completing Hero Quests also unlocks their class for your party.=إتمام مهام الأبطال يفتح فصلهم لفريقك أيضًا.
 
@@ -7720,7 +7720,7 @@ I could get used to this. Living without fighting.=يمكنني أن أعتاد 
 New Game+ unlocked!=تم فتح اللعبة الجديدة+!
 Carry your experience into a new journey.=احملوا خبرتكم إلى رحلة جديدة.
 New Game+ Started=بدأت اللعبة الجديدة+
-All classes and levels have been retained.=تم الاحتفاظ بجميع الفئات والمستويات.
+All classes and levels have been retained.=تم الاحتفاظ بجميع الفصول والمستويات.
 Previously locked content is now available.=المحتوى المقفل سابقًا متاح الآن.
 Hidden scenes unlocked in New Game+.=المشاهد المخفية مفتوحة في اللعبة الجديدة+.
 You can now access the full power of Ouroboros from the start.=يمكنكم الآن الوصول لقوة أوروبوروس الكاملة من البداية.
@@ -7780,10 +7780,10 @@ Update required to access online features.=مطلوب تحديث للوصول إ
 
 # --- نصائح شاشات التحميل المتقدمة ---
 Ouroboros forms can be enhanced through Soul Points.=يمكن تعزيز أشكال أوروبوروس من خلال نقاط الروح.
-Chain Attacks deal more damage with higher TP.=هجمات السلسلة تُلحق ضررًا أكبر مع نقاط تكتيكية أعلى.
+Chain Attacks deal more damage with higher TP.=الهجمات المتسلسلة تُلحق ضررًا أكبر مع نقاط تكتيكية أعلى.
 Explore every corner—hidden areas often contain rare items.=استكشفوا كل زاوية—المناطق المخفية غالبًا ما تحتوي على عناصر نادرة.
 Cooking at rest spots provides temporary stat boosts.=الطهي في نقاط الراحة يوفر تعزيزات مؤقتة للإحصائيات.
-Classes can be mastered by earning CP in battle.=يمكن إتقان الفئات بكسب نقاط الفئة في المعركة.
+Classes can be mastered by earning CP in battle.=يمكن إتقان الفصول بكسب نقاط الفصل في المعركة.
 Gems can be crafted using materials found in the field.=يمكن صنع الجواهر باستخدام مواد موجودة في الميدان.
 Some enemies are weak to specific element types.=بعض الأعداء ضعفاء أمام أنواع عناصر محددة.
 Filling the Party Gauge allows you to revive fallen allies.=ملء مقياس الفريق يسمح لكم بإحياء الحلفاء الساقطين.
@@ -7791,8 +7791,8 @@ Switching between attackers mid-battle can turn the tide.=التبديل بين 
 Field skills unlock new paths and hidden treasures.=مهارات الميدان تفتح مسارات جديدة وكنوزًا مخفية.
 Affinity with colonies unlocks new quests and rewards.=الألفة مع المستعمرات تفتح مهامًا ومكافآت جديدة.
 Rest at campfires to cook, craft, and discuss.=استريحوا عند نيران المخيم للطهي والصنع والنقاش.
-Interlink levels increase through battle experience.=مستويات الترابط تزداد من خلال خبرة المعركة.
-Master Arts can be mixed between classes for powerful combos.=فنون الإتقان يمكن مزجها بين الفئات لتوليفات قوية.
+Interlink levels increase through battle experience.=مستويات الإنترلينك تزداد من خلال خبرة المعركة.
+Master Arts can be mixed between classes for powerful combos.=فنون الإتقان يمكن مزجها بين الفصول لتوليفات قوية.
 Unique Monsters drop rare materials for crafting.=الوحوش الفريدة تُسقط مواد نادرة للصنع.
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -7968,12 +7968,12 @@ Physical damage boost=تعزيز الضرر الفيزيائي
 Ether damage boost=تعزيز الضرر الأثيري
 Auto-attack speed up=تسريع الهجوم التلقائي
 Combo damage multiplier=مضاعف ضرر التوليفة
-Chain Attack TP boost=تعزيز نقاط تكتيكية لهجوم السلسلة
-Interlink cooldown reduction=تقليل فترة انتظار الترابط
+Chain Attack TP boost=تعزيز نقاط تكتيكية للهجوم المتسلسل
+Interlink cooldown reduction=تقليل فترة انتظار الإنترلينك
 Ouroboros form duration up=زيادة مدة شكل أوروبوروس
 Soul Tree unlock bonus=مكافأة فتح شجرة الروح
 Master Art slot unlock=فتح خانة فن الإتقان
-Class XP gain boost=تعزيز اكتساب خبرة الفئة
+Class XP gain boost=تعزيز اكتساب خبرة الفصل
 
 # --- تأثيرات الحالة (Status Effects) ---
 Blaze=اشتعال
@@ -8580,9 +8580,9 @@ Challenge Battle available!=معركة تحدٍ متاحة!
 New Game Plus content unlocked!=تم فتح محتوى اللعبة الجديدة+!
 
 # --- نصائح شاشة التحميل الإضافية (Additional Loading Screen Tips) ---
-Different classes excel in different roles. Experiment to find your style.=الفئات المختلفة تتفوق في أدوار مختلفة. جرّبوا لإيجاد أسلوبكم.
+Different classes excel in different roles. Experiment to find your style.=الفصول المختلفة تتفوق في أدوار مختلفة. جرّبوا لإيجاد أسلوبكم.
 Fusion Arts combine two Arts for enhanced effects. Time them wisely.=فنون الدمج تجمع فنّين لتأثيرات معززة. وقّتوها بحكمة.
-The Interlink gauge fills during combat. Use it to trigger Ouroboros forms.=مقياس الترابط يمتلئ أثناء القتال. استخدموه لتفعيل أشكال أوروبوروس.
+The Interlink gauge fills during combat. Use it to trigger Ouroboros forms.=مقياس الإنترلينك يمتلئ أثناء القتال. استخدموه لتفعيل أشكال أوروبوروس.
 Accessories provide passive bonuses. Equip them strategically.=الإكسسوارات توفر مكافآت سلبية. جهّزوها بشكل استراتيجي.
 Break → Topple → Launch → Smash: master this combo for devastating damage.=كسر → إسقاط → إطلاق → سحق: أتقنوا هذه التوليفة لضرر مدمر.
 Heart-to-Hearts reveal character relationships. Visit rest spots to trigger them.=أحداث القلب تكشف علاقات الشخصيات. زوروا نقاط الراحة لتفعيلها.
@@ -8591,7 +8591,7 @@ The Collectopaedia rewards you for gathering sets of collectibles.=موسوعة 
 Affinity between party members increases through combat and exploration.=الألفة بين أعضاء الفريق تزداد من خلال القتال والاستكشاف.
 Higher colony affinity unlocks better rewards and exclusive quests.=ألفة أعلى مع المستعمرات تفتح مكافآت أفضل ومهام حصرية.
 Some enemies are resistant to physical damage but weak to ether.=بعض الأعداء يقاومون الضرر الفيزيائي لكنهم ضعفاء أمام الأثير.
-Chain Attacks can turn the tide of any battle. Build TP wisely.=هجمات السلسلة يمكن أن تقلب موازين أي معركة. اجمعوا النقاط التكتيكية بحكمة.
+Chain Attacks can turn the tide of any battle. Build TP wisely.=الهجمات المتسلسلة يمكن أن تقلب موازين أي معركة. اجمعوا النقاط التكتيكية بحكمة.
 Levnis battles require different tactics than normal combat.=معارك الليفنيس تتطلب تكتيكات مختلفة عن القتال العادي.
 Explore off the beaten path—hidden areas often contain valuable treasures.=استكشفوا بعيدًا عن المسار المطروق—المناطق المخفية غالبًا تحتوي على كنوز ثمينة.
 Cooking at camp provides temporary stat boosts for your next battle.=الطهي في المخيم يوفر تعزيزات مؤقتة للإحصائيات لمعركتكم القادمة.
@@ -8599,7 +8599,7 @@ Some quest objectives only appear at specific times of day.=بعض أهداف ا
 Fast travel is available from any discovered landmark.=السفر السريع متاح من أي معلم تم اكتشافه.
 Unique Monsters are significantly stronger than regular enemies. Prepare well.=الوحوش الفريدة أقوى بكثير من الأعداء العاديين. حضّروا جيدًا.
 Heropon Riku can craft powerful accessories at camp.=البطل النوبون ريكو يستطيع صنع إكسسوارات قوية في المخيم.
-Master all available classes to unlock powerful Master Skills.=أتقنوا جميع الفئات المتاحة لفتح مهارات إتقان قوية.
+Master all available classes to unlock powerful Master Skills.=أتقنوا جميع الفصول المتاحة لفتح مهارات إتقان قوية.
 
 # ═══════════════════════════════════════════════════════════════════════
 # القسم الخامس والعشرون: حوارات إضافية من ملفات BDAT (Extended BDAT Dialogues)
@@ -8612,7 +8612,7 @@ Our formation is breaking! Regroup!=تشكيلتنا تنهار! أعيدوا ا
 Now's our chance! Full assault!=هذه فرصتنا! هجوم شامل!
 The enemy is weakening! Don't let up!=العدو يضعف! لا تتراجعوا!
 We need to coordinate our Ouroboros forms!=نحتاج لتنسيق أشكال أوروبوروس!
-Save your Chain Attack for when it counts!=احفظوا هجوم السلسلة للوقت المناسب!
+Save your Chain Attack for when it counts!=احفظوا الهجوم المتسلسل للوقت المناسب!
 Switch to defensive positions! The attack is too strong!=بدّلوا إلى مواقع دفاعية! الهجوم قوي جدًا!
 If we can break through their defense, we win!=إذا استطعنا اختراق دفاعهم، ننتصر!
 The Flame Clock is urging us to fight... resist it!=ساعة اللهب تحثنا على القتال... قاوموها!
@@ -8666,7 +8666,7 @@ Tomorrow could be our last day. Or our first real day of freedom.=الغد قد 
 Whatever happens, we face it together. All of us.=مهما حدث، نواجهه معًا. كلنا.
 
 # ═══════════════════════════════════════════════════════════════════════
-# القسم السادس والعشرون: أوصاف مهارات الجواهر والفئات (Gem & Class Skill Descriptions - BDAT)
+# القسم السادس والعشرون: أوصاف مهارات الجواهر والفصول (Gem & Class Skill Descriptions - BDAT)
 # ═══════════════════════════════════════════════════════════════════════
 
 # --- أوصاف الجواهر (Gem Descriptions) ---
@@ -8689,9 +8689,9 @@ Guardian's Shield: Reduces damage taken while guarding allies.=درع الحار
 Steady Healer: Reduces recharge time for healing Arts.=المعالج الثابت: يقلل وقت إعادة شحن فنون الشفاء.
 Quick Charge: Reduces Art recharge time.=شحن سريع: يقلل وقت إعادة شحن الفنون.
 Critical Strike: Boosts critical hit damage.=ضربة حرجة: يعزز ضرر الضربة الحرجة.
-Chained Fury: Boosts Chain Attack damage.=غضب متسلسل: يعزز ضرر هجوم السلسلة.
+Chained Fury: Boosts Chain Attack damage.=غضب متسلسل: يعزز ضرر الهجوم المتسلسل.
 
-# --- أوصاف مهارات الفئات (Class Skill Descriptions) ---
+# --- أوصاف مهارات الفصول (Class Skill Descriptions) ---
 Swordfighter: A balanced attacker with versatile melee Arts.=المبارز: مهاجم متوازن بفنون قتال قريبة متنوعة.
 Zephyr: A nimble defender who evades attacks with grace.=الزفير: مدافع رشيق يراوغ الهجمات بأناقة.
 Medic Gunner: A healer who supports from the rear with ranged Arts.=المسعف المسلح: معالج يدعم من الخلف بفنون بعيدة المدى.
@@ -8991,7 +8991,7 @@ Slower Healing Aggro=عداوة شفاء أبطأ
 Quick Recharge=إعادة شحن سريعة
 Art Cancel Boost=تعزيز إلغاء الفن
 Fusion Boost=تعزيز الاندماج
-Chain Attack Boost=تعزيز هجوم السلسلة
+Chain Attack Boost=تعزيز الهجوم المتسلسل
 Interlink Boost=تعزيز الإنترلينك
 Soul Hack Boost=تعزيز اختراق الروح
 Aggro Up=زيادة العداوة
@@ -9071,7 +9071,7 @@ Reduces aggro generated by healing Arts.=يقلل العداوة الناتجة 
 Increases the recharge speed of all Arts.=يزيد سرعة إعادة شحن جميع الفنون.
 Boosts the damage of Art Cancel attacks.=يعزز ضرر هجمات إلغاء الفن.
 Boosts the damage bonus of Fusion Arts.=يعزز مكافأة ضرر الفنون المدمجة.
-Increases the TP gained from Chain Attacks.=يزيد نقاط الموهبة المكتسبة من هجمات السلسلة.
+Increases the TP gained from Chain Attacks.=يزيد نقاط الموهبة المكتسبة من الهجمات المتسلسلة.
 Boosts Interlink Level gain rate.=يعزز معدل اكتساب مستوى الإنترلينك.
 Boosts power of attacks that target enemy weaknesses.=يعزز قوة الهجمات التي تستهدف نقاط ضعف العدو.
 Increases aggro generated by attacks.=يزيد العداوة الناتجة عن الهجمات.
@@ -9703,7 +9703,7 @@ Item acquired.=تم الحصول على عنصر.
 Materials collected.=تم جمع المواد.
 Gem crafted successfully.=تم صنع الجوهرة بنجاح.
 Equipment upgraded.=تم ترقية المعدات.
-Chain Attack ready!=هجوم السلسلة جاهز!
+Chain Attack ready!=الهجوم المتسلسل جاهز!
 Interlink available.=الإنترلينك متاح.
 Ouroboros form unlocked.=تم فتح شكل أوروبوروس.
 Soul Tree expanded.=شجرة الروح توسعت.
@@ -10125,17 +10125,17 @@ Arts become available after auto-attacking. Use them to deal more damage.=الف
 Position yourself at the enemy's side or back for bonus damage.=ضع نفسك على جانب العدو أو خلفه لضرر إضافي.
 Cancel Arts by using one Art immediately after another for extra damage.=ألغِ الفنون باستخدام فن فورًا بعد آخر لضرر إضافي.
 Fusion Arts combine a Keves Art with an Agnus Art for powerful effects.=الفنون المدمجة تجمع فن كيفيسي مع فن أغنوسي لتأثيرات قوية.
-Chain Attacks stop time and let your party unleash devastating combos.=هجمات السلسلة توقف الزمن وتدع فريقك يطلق تعاقبات مدمرة.
+Chain Attacks stop time and let your party unleash devastating combos.=الهجمات المتسلسلة توقف الزمن وتدع فريقك يطلق تعاقبات مدمرة.
 Interlink lets two characters combine into a powerful Ouroboros form.=الإنترلينك يدع شخصيتين تندمجان في شكل أوروبوروس قوي.
-The Talent Art is a special move unique to each class.=فن الموهبة هو حركة خاصة فريدة لكل فئة.
+The Talent Art is a special move unique to each class.=فن الموهبة هو حركة خاصة فريدة لكل فصل.
 Switching targets mid-battle can help you prioritize dangerous enemies.=تبديل الأهداف أثناء المعركة يساعدك على تحديد أولوية الأعداء الخطرين.
 Guard by pressing the button at the right moment to reduce damage.=احرس بالضغط على الزر في اللحظة المناسبة لتقليل الضرر.
 
 # --- دروس النظام (System Tutorials) ---
 Visit a rest spot to cook, craft gems, and manage your party.=زر نقطة راحة للطهي وصنع الجواهر وإدارة فريقك.
 Gems enhance your stats. Craft better ones with rare materials.=الجواهر تعزز إحصائياتك. اصنع أفضل منها بمواد نادرة.
-Classes can be changed at any time. Experiment to find your style.=الفئات يمكن تغييرها في أي وقت. جرب لإيجاد أسلوبك.
-Master a class to unlock its skills for use with other classes.=أتقن فئة لفتح مهاراتها للاستخدام مع فئات أخرى.
+Classes can be changed at any time. Experiment to find your style.=الفصول يمكن تغييرها في أي وقت. جرب لإيجاد أسلوبك.
+Master a class to unlock its skills for use with other classes.=أتقن فصلاً لفتح مهاراته للاستخدام مع فصول أخرى.
 The Soul Tree lets you unlock passive abilities for each character.=شجرة الروح تسمح لك بفتح قدرات سلبية لكل شخصية.
 Collectopaedia entries reward you for gathering items from each area.=مداخل موسوعة المجموعات تكافئك على جمع العناصر من كل منطقة.
 Colony affinity increases as you help colonies and complete their quests.=ألفة المستعمرة تزداد كلما ساعدت المستعمرات وأكملت مهامها.
@@ -10240,22 +10240,22 @@ Heat Gauge: Increases during Ouroboros form. Overheating forces reversion.=مق�
 Interlink Charge: Build up charge through battle to unlock Ouroboros.=شحنة الإنترلينك: اجمع الشحنة عبر القتال لفتح أوروبوروس.
 Soul Tree: Upgrade Ouroboros abilities with Soul Points.=شجرة الروح: طوّر قدرات أوروبوروس بنقاط الروح.
 
-# --- تفاصيل نظام السلسلة (Chain Attack System Details) ---
-Chain Attack Phase 1: Select party members to attack in sequence.=هجوم السلسلة المرحلة 1: اختر أعضاء الفريق للهجوم بالتتابع.
-Chain Attack Phase 2: Build up the TP gauge for more powerful finishers.=هجوم السلسلة المرحلة 2: اجمع مقياس نقاط الموهبة لنهايات أقوى.
-Chain Attack Phase 3: Unleash the ultimate Chain Order finisher.=هجوم السلسلة المرحلة 3: أطلق نهاية ترتيب السلسلة المطلقة.
-Brave Order: Special Chain Attack commands from Hero characters.=أمر الشجاعة: أوامر هجوم سلسلة خاصة من شخصيات الأبطال.
+# --- تفاصيل نظام الهجوم المتسلسل (Chain Attack System Details) ---
+Chain Attack Phase 1: Select party members to attack in sequence.=الهجوم المتسلسل المرحلة 1: اختر أعضاء الفريق للهجوم بالتتابع.
+Chain Attack Phase 2: Build up the TP gauge for more powerful finishers.=الهجوم المتسلسل المرحلة 2: اجمع مقياس نقاط الموهبة لنهايات أقوى.
+Chain Attack Phase 3: Unleash the ultimate Chain Order finisher.=الهجوم المتسلسل المرحلة 3: أطلق نهاية ترتيب السلسلة المطلقة.
+Brave Order: Special Chain Attack commands from Hero characters.=أمر الشجاعة: أوامر هجوم متسلسل خاصة من شخصيات الأبطال.
 Completion Bonus: Fill the gauge completely for massive bonus damage.=مكافأة الإكمال: املأ المقياس بالكامل لضرر إضافي هائل.
 Overkill: Extra damage and rewards for exceeding the enemy's HP.=قتل مفرط: ضرر ومكافآت إضافية لتجاوز HP العدو.
 
-# --- تفاصيل نظام الفئات (Class System Details) ---
+# --- تفاصيل نظام الفصول (Class System Details) ---
 Attacker: High damage output. Position for side and back attacks.=المهاجم: ناتج ضرر عالي. تموضع لهجمات جانبية وخلفية.
 Defender: Draws enemy attention. High HP and defense.=المدافع: يجذب انتباه العدو. HP ودفاع مرتفعان.
 Healer: Restores HP and provides buffs. Stay in the back line.=المعالج: يستعيد HP ويقدم تعزيزات. ابقَ في الخط الخلفي.
-Class Rank 1-10: Higher ranks unlock more skills and Arts.=رتبة الفئة 1-10: الرتب الأعلى تفتح مزيدًا من المهارات والفنون.
-Class Rank 20: Maximum rank. Unlocks the Master Skill.=رتبة الفئة 20: الرتبة القصوى. يفتح مهارة الإتقان.
-Inherited Skills: Equip skills from mastered classes on any class.=المهارات الموروثة: جهز مهارات من الفئات المُتقنة على أي فئة.
-Master Skills: Passive abilities that work on any class once unlocked.=مهارات الإتقان: قدرات سلبية تعمل على أي فئة بعد فتحها.
+Class Rank 1-10: Higher ranks unlock more skills and Arts.=رتبة الفصل 1-10: الرتب الأعلى تفتح مزيدًا من المهارات والفنون.
+Class Rank 20: Maximum rank. Unlocks the Master Skill.=رتبة الفصل 20: الرتبة القصوى. يفتح مهارة الإتقان.
+Inherited Skills: Equip skills from mastered classes on any class.=المهارات الموروثة: جهز مهارات من الفصول المُتقنة على أي فصل.
+Master Skills: Passive abilities that work on any class once unlocked.=مهارات الإتقان: قدرات سلبية تعمل على أي فصل بعد فتحها.
 
 # --- مصطلحات التطوير (Development Terms) ---
 Colony Development Level 1: Basic facilities available.=مستوى تطوير المستعمرة 1: المرافق الأساسية متاحة.
@@ -11219,7 +11219,7 @@ Field Duration Up=زيادة مدة الحقل
 Longer Buff Timers=مؤقتات تعزيز أطول
 Longer Debuff Timers=مؤقتات إضعاف أطول
 Slower Healing Aggro=أغرو شفاء أبطأ
-Ouroboros Power Awakened=قوة الأوروبوروس مُستيقظة
+Ouroboros Power Awakened=قوة أوروبوروس مُستيقظة
 Right Back At You=أعيدها لك
 Natural Born Warrior=محارب بالفطرة
 Sword of Reprisal=سيف الانتقام
@@ -12037,7 +12037,7 @@ Tomorrow will be better than today. I have to believe that.=غداً سيكون 
 We carry the hopes of everyone who came before us.=نحمل آمال كل من سبقنا.
 Their sacrifices won't be in vain. I swear it.=تضحياتهم لن تذهب سدى. أقسم بذلك.
 This is our world now. Let's make it one worth living in.=هذا عالمنا الآن. لنجعله عالماً يستحق العيش فيه.
-The Ouroboros showed us the way. Now we have to walk it ourselves.=الأوروبوروس أرونا الطريق. الآن علينا أن نسير فيه بأنفسنا.
+The Ouroboros showed us the way. Now we have to walk it ourselves.=أوروبوروس أرونا الطريق. الآن علينا أن نسير فيه بأنفسنا.
 No more Flame Clocks. No more Consuls. Just us and our choices.=لا مزيد من ساعات اللهب. لا مزيد من القناصل. فقط نحن وخياراتنا.
 And I choose hope.=وأنا أختار الأمل.
 
@@ -12113,8 +12113,8 @@ Ether Art=فن أثيري
 Healing Art=فن علاجي
 Support Art=فن دعم
 Field Art=فن ميداني
-Talent Arts are unique to each class.=فنون الموهبة فريدة لكل فئة.
-Master Arts can be used from any learned class.=فنون الإتقان يمكن استخدامها من أي فئة مُتعلمة.
+Talent Arts are unique to each class.=فنون الموهبة فريدة لكل فصل.
+Master Arts can be used from any learned class.=فنون الإتقان يمكن استخدامها من أي فصل مُتعلم.
 Fusion Arts combine two Arts for enhanced effects.=فنون الدمج تجمع بين فنين لتأثيرات مُعززة.
 Physical Arts deal damage based on the Attack stat.=الفنون الجسدية تُلحق ضرراً بناءً على إحصائية الهجوم.
 Ether Arts deal damage based on the Ether stat.=الفنون الأثيرية تُلحق ضرراً بناءً على إحصائية الأثير.
@@ -12925,7 +12925,7 @@ Cooperation between Keves and Agnus is still fragile.=التعاون بين كي
 But it's a start. That's what matters.=لكنها بداية. هذا ما يهم.
 Some people want revenge for the years of war.=بعض الناس يريدون انتقاماً لسنوات الحرب.
 We have to break the cycle of hatred.=علينا كسر دائرة الكراهية.
-The Ouroboros team showed us it's possible.=فريق الأوروبوروس أرونا أن ذلك ممكن.
+The Ouroboros team showed us it's possible.=فريق أوروبوروس أرونا أن ذلك ممكن.
 Keves and Agnus working together... who would've thought?=كيفس وأغنس يعملون معاً... من كان ليظن؟
 
 # ═══════════════════════════════════════════════════════════════════
@@ -13109,10 +13109,10 @@ Party Formation=تشكيلة الفريق
 Front Line=الصف الأمامي
 Back Line=الصف الخلفي
 Reserve Members=أعضاء الاحتياط
-Class Change=تغيير الفئة
-Available Classes=الفئات المتاحة
-Class Rank=رتبة الفئة
-Class Mastery=إتقان الفئة
+Class Change=تغيير الفصل
+Available Classes=الفصول المتاحة
+Class Rank=رتبة الفصل
+Class Mastery=إتقان الفصل
 Inherited Skills=مهارات موروثة
 Skill Slots=فتحات المهارات
 Art Slots=فتحات الفنون
@@ -13197,7 +13197,7 @@ Matthew, don't try to do everything alone.=ماثيو، لا تحاول فعل �
 We're stronger together. That's what Shulk taught us.=نحن أقوى معاً. هذا ما علمنا إياه شولك.
 
 # ═══════════════════════════════════════════════════════════════════
-# القسم 98: مصطلحات نظام الأوروبوروس المتقدم (Advanced Ouroboros System Terms)
+# القسم 98: مصطلحات نظام أوروبوروس المتقدم (Advanced Ouroboros System Terms)
 # ═══════════════════════════════════════════════════════════════════
 
 # --- مهارات شجرة الروح (Soul Tree Skills) ---
@@ -13208,22 +13208,22 @@ Unlock Node=فتح عقدة
 Soul Tree Branch=فرع شجرة الروح
 Active Soul Skills=مهارات الروح النشطة
 Passive Soul Skills=مهارات الروح السلبية
-Noah-Mio Interlink=ترابط نوح-ميو
-Lanz-Sena Interlink=ترابط لانز-سينا
-Eunie-Taion Interlink=ترابط يوني-تايون
-Ouroboros Form A=شكل الأوروبوروس أ
-Ouroboros Form B=شكل الأوروبوروس ب
+Noah-Mio Interlink=إنترلينك نوح-ميو
+Lanz-Sena Interlink=إنترلينك لانز-سينا
+Eunie-Taion Interlink=إنترلينك يوني-تايون
+Ouroboros Form A=شكل أوروبوروس أ
+Ouroboros Form B=شكل أوروبوروس ب
 Heat Gauge=مقياس الحرارة
 Overheat Warning=تحذير الحرارة الزائدة
-Interlink Cooldown=تهدئة الترابط
+Interlink Cooldown=تهدئة الإنترلينك
 Soul Hack=اختراق الروح
-Ouroboros Order=ترتيب الأوروبوروس
+Ouroboros Order=أمر أوروبوروس
 Chain Order=ترتيب السلسلة
 Tactical Points=نقاط تكتيكية
 Completion Bonus=مكافأة الإكمال
 Mastery Reward=مكافأة الإتقان
-Interlink Arts=فنون الترابط
-Ouroboros Arts=فنون الأوروبوروس
+Interlink Arts=فنون الإنترلينك
+Ouroboros Arts=فنون أوروبوروس
 Rising Blade=الشفرة الصاعدة
 Falling Impact=التأثير الهابط
 Cross Smash=السحق المتقاطع
@@ -13233,7 +13233,7 @@ Omega Burst=انفجار أوميغا
 Infinity Blade=شفرة اللانهاية
 Eternity Flash=وميض الأبدية
 
-# --- مراتب ربط الأوروبوروس (Ouroboros Link Ranks) ---
+# --- مراتب الإنترلينك (Ouroboros Link Ranks) ---
 Interlink Rank 1=رتبة الإنترلينك 1
 Interlink Rank 2=رتبة الإنترلينك 2
 Interlink Rank 3=رتبة الإنترلينك 3
@@ -13242,8 +13242,8 @@ Interlink Duration Up=زيادة مدة الإنترلينك
 Interlink Recharge Speed=سرعة إعادة شحن الإنترلينك
 Heat Resistance=مقاومة الحرارة
 Enhanced Ouroboros=أوروبوروس مُعزز
-Ouroboros Awakening=صحوة الأوروبوروس
-Full Interlink=ترابط كامل
+Ouroboros Awakening=صحوة أوروبوروس
+Full Interlink=إنترلينك كامل
 
 # ═══════════════════════════════════════════════════════════════════
 # القسم 99: حوارات القصة المتقدمة - الفصل 6 و7 (Advanced Story - Ch.6 & 7)
@@ -13310,11 +13310,11 @@ Defenders draw enemy attention away from Healers.=المدافعون يسحبو�
 Healers should stay at range when possible.=المعالجون يجب أن يبقوا على مسافة عندما يكون ذلك ممكناً.
 Attackers deal the most damage but are fragile.=المهاجمون يُلحقون أكبر ضرر لكنهم هشون.
 Balance your party with all three roles.=وازن فريقك بالأدوار الثلاثة جميعها.
-Switching classes regularly builds versatility.=تبديل الفئات بانتظام يبني التنوع.
+Switching classes regularly builds versatility.=تبديل الفصول بانتظام يبني التنوع.
 High-level enemies can use devastating Arts.=الأعداء ذوو المستوى العالي يمكنهم استخدام فنون مدمرة.
 Watch for enemy Art telegraphs and dodge accordingly.=راقب تلميحات فنون العدو وتفادَ وفقاً لذلك.
 Some enemies are weak to specific damage types.=بعض الأعداء ضعفاء أمام أنواع ضرر محددة.
-The Talent Art gauge fills differently for each class.=مقياس فن الموهبة يمتلئ بشكل مختلف لكل فئة.
+The Talent Art gauge fills differently for each class.=مقياس فن الموهبة يمتلئ بشكل مختلف لكل فصل.
 
 # --- نصائح الاستكشاف (Exploration Tips) ---
 Rest Spots fully restore HP and allow cooking.=نقاط الاستراحة تستعيد نقاط الصحة بالكامل وتسمح بالطبخ.
@@ -13337,17 +13337,17 @@ Check the map regularly for new quest markers.=تفقد الخريطة بانت�
 Save often! You never know what's around the corner.=احفظ كثيراً! لا تعرف ما ينتظرك.
 Cooking at Rest Spots provides useful battle buffs.=الطبخ في نقاط الاستراحة يوفر تعزيزات قتالية مفيدة.
 Different recipes provide different stat bonuses.=الوصفات المختلفة توفر مكافآت إحصائيات مختلفة.
-Keep a variety of classes leveled for flexibility.=حافظ على تنوع الفئات المرتقية للمرونة.
+Keep a variety of classes leveled for flexibility.=حافظ على تنوع الفصول المرتقية للمرونة.
 Accessories can make or break a build.=الإكسسوارات يمكنها صنع أو كسر بنية الشخصية.
 Don't forget to upgrade your Gems regularly.=لا تنسَ ترقية أحجارك الكريمة بانتظام.
 The Soul Tree offers powerful permanent upgrades.=شجرة الروح تُقدم ترقيات دائمة قوية.
 Invest Soul Points wisely based on your playstyle.=استثمر نقاط الروح بحكمة حسب أسلوب لعبك.
-Higher Interlink Levels unlock stronger Ouroboros Arts.=مستويات الترابط الأعلى تفتح فنون أوروبوروس أقوى.
+Higher Interlink Levels unlock stronger Ouroboros Arts.=مستويات الإنترلينك الأعلى تفتح فنون أوروبوروس أقوى.
 Chain Attacks become more powerful with higher TP.=الهجمات المتسلسلة تصبح أقوى مع نقاط تكتيكية أعلى.
 Explore thoroughly to find all Secret Areas.=استكشف بدقة لتجد جميع المناطق السرية.
 Side quests often reward unique items and Skills.=المهام الجانبية غالباً تُكافئ بعناصر ومهارات فريدة.
 Hero Quests unlock new playable Heroes.=مهام الأبطال تفتح أبطالاً جدداً قابلين للعب.
-Each Hero brings a unique class to your party.=كل بطل يجلب فئة فريدة لفريقك.
+Each Hero brings a unique class to your party.=كل بطل يجلب فصلاً فريداً لفريقك.
 Affinity between characters grows through battle.=الألفة بين الشخصيات تنمو من خلال القتال.
 
 # ═══════════════════════════════════════════════════════════════════
@@ -14157,7 +14157,7 @@ Consul... What are you?=القنصل... ما أنت؟
 We are Moebius. We are eternal.=نحن موبيوس. نحن أبديون.
 Moebius...?=موبيوس...؟
 You've committed a grave sin, children.=لقد ارتكبتم خطيئة جسيمة، أيها الأطفال.
-Interlink was never meant for the likes of you.=الربط البيني لم يكن مُعدّاً لأمثالكم.
+Interlink was never meant for the likes of you.=الإنترلينك لم يكن مُعدّاً لأمثالكم.
 What do you mean? We didn't choose this!=ماذا تعني؟ لم نختر هذا!
 It doesn't matter. You are now enemies of the world itself.=لا يهم. أنتم الآن أعداء العالم ذاته.
 Enemies of the world? That's absurd!=أعداء العالم؟ هذا سخيف!
@@ -14568,8 +14568,8 @@ Your kindness speaks louder than words, Valdi.=لطفك يتحدث أعلى من
 # القسم 125: حوارات سينمائية - مشاهد القصة المحورية
 # ═══════════════════════════════════════════════════════════════════
 
-# --- مشهد حقيقة الأوروبوروس ---
-Ouroboros... the power to interlink Keves and Agnus.=أوروبوروس... قوة الربط البيني بين كيفس وأغنس.
+# --- مشهد حقيقة أوروبوروس ---
+Ouroboros... the power to interlink Keves and Agnus.=أوروبوروس... قوة الإنترلينك بين كيفس وأغنس.
 It was created by the Queens themselves.=صنعتها الملكتان بنفسيهما.
 Nia and Melia... They gave us this power?=نيا وميليا... هما مَن منحانا هذه القوة؟
 As a weapon against Moebius. Their last hope.=كسلاح ضد موبيوس. أملهما الأخير.
@@ -14652,7 +14652,7 @@ Heh. When did you get so wise?=هه. متى أصبحت حكيماً هكذا؟
 I had good teachers.=كان لديّ معلّمون جيدون.
 
 # --- مشهد لحظة التحول (Interlink Evolution) ---
-Our Interlink is evolving!=الربط البيني يتطوّر!
+Our Interlink is evolving!=الإنترلينك يتطوّر!
 I can feel it too! The power is growing!=أستطيع الشعور بذلك أيضاً! القوة تنمو!
 This is the full power of Ouroboros!=هذه هي القوة الكاملة لأوروبوروس!
 Six hearts, beating as one. Six wills, united!=ستة قلوب، تنبض كواحدة. ست إرادات، متحدة!
@@ -16848,23 +16848,23 @@ Attackers deal the most damage but draw less aggro.=المهاجمون يلحق�
 Defenders draw enemy attention and protect the party.=المدافعون يجذبون انتباه العدو ويحمون الفريق.
 Healers restore HP and provide support effects.=المعالجون يستعيدون نقاط الصحة ويوفرون تأثيرات دعم.
 A balanced party with all three roles is recommended.=يُنصح بفريق متوازن يضم الأدوار الثلاثة.
-Each character can change their class at any time outside of battle.=كل شخصية تستطيع تغيير فئتها في أي وقت خارج المعركة.
+Each character can change their class at any time outside of battle.=كل شخصية تستطيع تغيير فصلها في أي وقت خارج المعركة.
 
 # =============================================
-# القسم 214: نصائح التحميل - نظام الفئات
+# القسم 214: نصائح التحميل - نظام الفصول
 # =============================================
 
 # --- Class System ---
-Gain CP by defeating enemies to level up your class.=اكتسب نقاط الفئة بهزيمة الأعداء لترقية فئتك.
-Each class has a maximum rank of 20.=كل فئة لديها رتبة قصوى من 20.
-Reaching rank 10 in a class unlocks its Skills for use with other classes.=الوصول للرتبة 10 في فئة يفتح مهاراتها للاستخدام مع فئات أخرى.
-Reaching rank 20 in a class unlocks its Master Art for use with other classes.=الوصول للرتبة 20 في فئة يفتح فنها الرئيسي للاستخدام مع فئات أخرى.
-Try switching classes frequently to unlock a wide range of Arts and Skills.=جرب تبديل الفئات بشكل متكرر لفتح مجموعة واسعة من الفنون والمهارات.
-Hero characters join with a unique class that can be inherited by the party.=شخصيات الأبطال تنضم بفئة فريدة يمكن توريثها للفريق.
-Some classes are better suited for certain situations.=بعض الفئات أكثر ملاءمة لمواقف معينة.
+Gain CP by defeating enemies to level up your class.=اكتسب نقاط الفصل بهزيمة الأعداء لترقية فصلك.
+Each class has a maximum rank of 20.=كل فصل لديه رتبة قصوى من 20.
+Reaching rank 10 in a class unlocks its Skills for use with other classes.=الوصول للرتبة 10 في فصل يفتح مهاراته للاستخدام مع فصول أخرى.
+Reaching rank 20 in a class unlocks its Master Art for use with other classes.=الوصول للرتبة 20 في فصل يفتح فن الإتقان للاستخدام مع فصول أخرى.
+Try switching classes frequently to unlock a wide range of Arts and Skills.=جرب تبديل الفصول بشكل متكرر لفتح مجموعة واسعة من الفنون والمهارات.
+Hero characters join with a unique class that can be inherited by the party.=شخصيات الأبطال تنضم بفصل فريد يمكن توريثه للفريق.
+Some classes are better suited for certain situations.=بعض الفصول أكثر ملاءمة لمواقف معينة.
 
 # =============================================
-# القسم 215: نصائح التحميل - الإنترلينك والأوروبوروس
+# القسم 215: نصائح التحميل - الإنترلينك وأوروبوروس
 # =============================================
 
 # --- Interlink & Ouroboros ---
@@ -19798,12 +19798,12 @@ Branch: Special=الفرع: خاص
 Increases base ATK by %1%.=يزيد الهجوم الأساسي بنسبة %1%.
 Increases base DEF by %1%.=يزيد الدفاع الأساسي بنسبة %1%.
 Increases base HP by %1%.=يزيد نقاط الصحة الأساسية بنسبة %1%.
-Extends Interlink duration by %1 seconds.=يمدد مدة الترابط بمقدار %1 ثانية.
+Extends Interlink duration by %1 seconds.=يمدد مدة الإنترلينك بمقدار %1 ثانية.
 Increases Chain Attack damage by %1%.=يزيد ضرر الهجوم المتسلسل بنسبة %1%.
 Unlocks new Ouroboros form.=يفتح هيئة أوروبوروس جديدة.
-Increases Interlink level cap.=يزيد الحد الأقصى لمستوى الترابط.
-Reduces cooldown between Interlinks by %1 seconds.=يقلل زمن الانتظار بين الترابطات بمقدار %1 ثانية.
-Enhances Ouroboros Arts damage by %1%.=يعزز ضرر فنون الأوروبوروس بنسبة %1%.
+Increases Interlink level cap.=يزيد الحد الأقصى لمستوى الإنترلينك.
+Reduces cooldown between Interlinks by %1 seconds.=يقلل زمن الانتظار بين الإنترلينكات بمقدار %1 ثانية.
+Enhances Ouroboros Arts damage by %1%.=يعزز ضرر فنون أوروبوروس بنسبة %1%.
 Soul Tree Complete!=اكتملت شجرة الروح!
 
 # ============================================================
