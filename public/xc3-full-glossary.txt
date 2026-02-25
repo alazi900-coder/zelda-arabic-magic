@@ -1889,9 +1889,9 @@ Button Config=تكوين الأزرار
 Vibration=الاهتزاز
 Rumble=الارتجاج
 # ═══════════════════════════════════════════════════
-# DLC: Future Redeemed - المستقبل المُفتدى
+# DLC: Future Redeemed - المستقبل المُستعاد
 # ═══════════════════════════════════════════════════
-Future Redeemed=المستقبل المُفتدى
+Future Redeemed=المستقبل المُستعاد
 Expansion Pass=تذكرة التوسعة
 # ─────────────────────────────────────────────────
 # شخصيات Future Redeemed
@@ -13178,23 +13178,23 @@ We must prevent Alpha from accessing the Core.=يجب أن نمنع ألفا م�
 Together, we can reset the cycle.=معاً، يمكننا إعادة ضبط الدورة.
 
 # --- حوارات نيكول (Nikol's Dialogues) ---
-Being Rex's son is a heavy burden sometimes.=كوني ابن ريكس عبء ثقيل أحياناً.
+Being Shulk's son is a heavy burden sometimes.=كوني ابن شولك عبء ثقيل أحياناً.
 But I wouldn't trade my family for anything.=لكنني لن أستبدل عائلتي بأي شيء.
 Glimmer and I make a good team, don't you think?=غليمر وأنا نُشكل فريقاً جيداً، ألا تظن؟
 My father always said to follow your heart.=أبي دائماً قال أن أتبع قلبي.
-The power of the Aegis... I can feel it awakening.=قوة الإيجس... أستطيع الشعور بها تستيقظ.
+The power of the Monado... I can feel it awakening.=قوة مونادو... أستطيع الشعور بها تستيقظ.
 I want to protect everyone, just like Dad did.=أريد حماية الجميع، تماماً كما فعل أبي.
 This fight isn't just about us. It's about everyone.=هذه المعركة ليست عنا فقط. إنها عن الجميع.
 
 # --- حوارات غليمر (Glimmer's Dialogues) ---
 My parents saved two worlds. Now it's our turn.=والداي أنقذا عالمين. الآن دورنا.
-The Monado responds to my will. I can feel it.=المونادو يستجيب لإرادتي. أستطيع الشعور به.
-Shulk's legacy... I carry it with pride.=إرث شولك... أحمله بفخر.
-We Homs have always been resilient.=نحن الهومس كنا دائماً صامدين.
+The Aegis responds to my will. I can feel it.=الإيجيس تستجيب لإرادتي. أستطيع الشعور بها.
+Rex's legacy... I carry it with pride.=إرث ريكس... أحمله بفخر.
+We've always been resilient.=كنا دائماً صامدين.
 The future isn't written in stone. We shape it.=المستقبل ليس محفوراً في الحجر. نحن نشكّله.
 I won't let Alpha erase everything my parents fought for.=لن أدع ألفا يمحو كل ما قاتل والداي من أجله.
 Matthew, don't try to do everything alone.=ماثيو، لا تحاول فعل كل شيء وحدك.
-We're stronger together. That's what Shulk taught us.=نحن أقوى معاً. هذا ما علمنا إياه شولك.
+We're stronger together. That's what our parents taught us.=نحن أقوى معاً. هذا ما علمنا إياه والدانا.
 
 # ═══════════════════════════════════════════════════════════════════
 # القسم 98: مصطلحات نظام أوروبوروس المتقدم (Advanced Ouroboros System Terms)
@@ -13561,9 +13561,9 @@ Behind the Scenes=خلف الكواليس
 # القسم 105: شخصيات Future Redeemed الأساسية
 # ═══════════════════════════════════════════════════════════════════
 
-# --- متثيو وفريقه (Matthew's Party) ---
-Matthew=متثيو
-A=أ
+# --- ماثيو وفريقه (Matthew's Party) ---
+Matthew=ماثيو
+A=إيه
 Nikol=نيكول
 Glimmer=غليمر
 Na'el=نائيل
@@ -13588,34 +13588,34 @@ Moebius M=موبيوس إم
 Origin Moebius=موبيوس الأوريجن
 
 # --- مصطلحات Future Redeemed (FR Terms) ---
-Cent-Omnia Region=منطقة سينت-أومنيا
-The Great Crevasse=الشق العظيم
+Cent-Omnia Region=منطقة سنت-أومنيا
+The Great Crevasse=الصدع العظيم
 Boundary=الحدود
 Affinity Growth=نمو الألفة
 Affinity Link=رابط الألفة
 Unity Combo=كومبو الوحدة
 Union Art=فن الاتحاد
 Brave Assault=هجوم الشجاعة
-Monado Arts=فنون الموناندو
+Monado Arts=فنون مونادو
 Pneuma=نيوما
-True Monado=الموناندو الحقيقي
+True Monado=مونادو الحقيقي
 Conduit=القناة
 Logos=لوغوس
 Ontos=أونتوس
 
 # ═══════════════════════════════════════════════════════════════════
-# القسم 106: حوارات متثيو الأساسية (Matthew's Core Dialogues)
+# القسم 106: حوارات ماثيو الأساسية (Matthew's Core Dialogues)
 # ═══════════════════════════════════════════════════════════════════
 
-# --- حوارات متثيو عن هويته وهدفه ---
-I'm Matthew. I fight for the people of the City.=أنا متثيو. أقاتل من أجل أهل المدينة.
+# --- حوارات ماثيو عن هويته وهدفه ---
+I'm Matthew. I fight for the people of the City.=أنا ماثيو. أقاتل من أجل أهل المدينة.
 We can't just sit here and do nothing. Not while people are suffering.=لا يمكننا الجلوس هنا دون فعل شيء. ليس بينما الناس يعانون.
 I don't need some grand destiny. I just need to protect what's in front of me.=لا أحتاج قدراً عظيماً. أحتاج فقط أن أحمي ما أمامي.
 The City... it's all I've ever known. And I'll fight to keep it safe.=المدينة... هي كل ما عرفته. وسأقاتل لأبقيها آمنة.
 Don't call me a hero. I'm just doing what needs to be done.=لا تسمّني بطلاً. أنا فقط أفعل ما يجب فعله.
 I won't let anyone else die. Not on my watch.=لن أدع أي شخص آخر يموت. ليس في حراستي.
 My grandfather... he built something worth protecting.=جدي... بنى شيئاً يستحق الحماية.
-A... she's more than just a partner. She's family.=أ... هي أكثر من مجرد شريكة. إنها عائلة.
+A... she's more than just a partner. She's family.=إيه... هي أكثر من مجرد شريكة. إنها عائلة.
 Nikol, Glimmer... I couldn't do this without you two.=نيكول، غليمر... لا أستطيع فعل هذا بدونكما.
 If this is our last fight, then let's make it count.=إن كانت هذه معركتنا الأخيرة، فلنجعلها ذات قيمة.
 I'll carry everyone's hopes with me. Every single one.=سأحمل آمال الجميع معي. كل واحد منهم.
@@ -13624,14 +13624,14 @@ This world... it may be broken, but it's still worth saving.=هذا العالم
 I'm not fighting because I have to. I'm fighting because I want to.=لا أقاتل لأنني مضطر. أقاتل لأنني أريد ذلك.
 As long as there's someone to protect, I'll keep swinging this sword.=طالما هناك شخص لحمايته، سأستمر في تلويح هذا السيف.
 
-# --- حوارات متثيو في المعركة ---
+# --- حوارات ماثيو في المعركة ---
 Let's go! Everyone, together!=هيا! الجميع، معاً!
 I won't back down! Not now, not ever!=لن أتراجع! لا الآن، ولا أبداً!
 Is that all you've got?!=هذا كل ما لديك؟!
 We're not done yet!=لم ننتهِ بعد!
 Cover me! I'm going in!=غطّوني! أنا داخل!
 Take this! Full power!=خذ هذه! قوة كاملة!
-A, now! Unity Combo!=أ، الآن! كومبو الوحدة!
+A, now! Unity Combo!=إيه، الآن! كومبو الوحدة!
 That's teamwork right there!=هذا هو العمل الجماعي!
 We can do this! I believe in all of you!=نستطيع فعلها! أؤمن بكم جميعاً!
 Don't give up! We're almost there!=لا تستسلموا! نحن على وشك الوصول!
@@ -13640,17 +13640,17 @@ Don't give up! We're almost there!=لا تستسلموا! نحن على وشك �
 # القسم 107: حوارات شولك (Shulk's Dialogues)
 # ═══════════════════════════════════════════════════════════════════
 
-# --- حوارات شولك عن الموناندو والماضي ---
-The Monado... it's been a long time since I wielded it.=الموناندو... مضى وقت طويل منذ أن حملتها.
+# --- حوارات شولك عن مونادو والماضي ---
+The Monado... it's been a long time since I wielded it.=مونادو... مضى وقت طويل منذ أن حملتها.
 I once used this blade to reshape the future. Now... I must do it again.=ذات مرة استخدمت هذا النصل لإعادة تشكيل المستقبل. الآن... يجب أن أفعلها مجدداً.
 Fiora, stay close. I won't let anything happen to you.=فيورا، ابقي قريبة. لن أدع شيئاً يحدث لك.
 This world... it reminds me of Bionis. The same struggle, the same hope.=هذا العالم... يذكرني ببيونيس. نفس الصراع، نفس الأمل.
 I've seen what happens when gods play with people's lives. Never again.=رأيت ما يحدث عندما تلعب الآلهة بحياة الناس. لن يتكرر أبداً.
 The future is ours to decide. Not Zanza's. Not Klaus's. Ours.=المستقبل لنا لنقرره. ليس لزانزا. ليس لكلاوس. لنا.
-Matthew, you remind me of someone I once knew. Someone with unshakeable resolve.=متثيو، تذكرني بشخص عرفته. شخص ذو عزيمة لا تتزعزع.
+Matthew, you remind me of someone I once knew. Someone with unshakeable resolve.=ماثيو، تذكرني بشخص عرفته. شخص ذو عزيمة لا تتزعزع.
 I'm really feeling it!=أشعر بالحماس حقاً!
 Visions of the future... they used to guide me. But now, I choose my own path.=رؤى المستقبل... كانت ترشدني. لكن الآن، أختار طريقي بنفسي.
-The Monado's power isn't just about seeing the future. It's about changing it.=قوة الموناندو ليست فقط عن رؤية المستقبل. إنها عن تغييره.
+The Monado's power isn't just about seeing the future. It's about changing it.=قوة مونادو ليست فقط عن رؤية المستقبل. إنها عن تغييره.
 Rex, you and I... we've both carried the weight of worlds on our shoulders.=ريكس، أنت وأنا... كلانا حملنا ثقل العوالم على أكتافنا.
 I fought to create a world without gods. That dream... it still lives on.=قاتلت لأخلق عالماً بلا آلهة. ذلك الحلم... لا يزال حياً.
 Fiora... when this is over, let's go home. Together.=فيورا... عندما ينتهي هذا، لنعد للبيت. معاً.
@@ -13658,16 +13658,16 @@ There's always a way forward. Even when the future seems impossible.=هناك د
 I can see it... a future where everyone can live freely.=أستطيع رؤيتها... مستقبل يعيش فيه الجميع بحرية.
 
 # --- حوارات شولك القتالية ---
-Monado... lend me your power!=الموناندو... أعرني قوتك!
+Monado... lend me your power!=مونادو... أعرني قوتك!
 Back Slash!=ضربة الظهر!
 Stream Edge!=حافة التيار!
 I can see the future! Watch out!=أستطيع رؤية المستقبل! انتبهوا!
-Monado Shield!=درع الموناندو!
-Monado Enchant!=سحر الموناندو!
-Monado Buster!=مُحطم الموناندو!
-Monado Speed!=سرعة الموناندو!
-Monado Purge!=تطهير الموناندو!
-This is the power of the Monado!=هذه هي قوة الموناندو!
+Monado Shield!=درع مونادو!
+Monado Enchant!=سحر مونادو!
+Monado Buster!=مُحطم مونادو!
+Monado Speed!=سرعة مونادو!
+Monado Purge!=تطهير مونادو!
+This is the power of the Monado!=هذه هي قوة مونادو!
 I'll cut through any future that stands in our way!=سأقطع أي مستقبل يقف في طريقنا!
 Now it's Shulk time!=الآن حان وقت شولك!
 I can change the future!=أستطيع تغيير المستقبل!
@@ -13694,7 +13694,7 @@ This new world... it needs people who won't give up. Count me in.=هذا الع�
 I made a promise to reach Elysium. And I kept it. Now there's a new promise to keep.=قطعت وعداً بالوصول إلى الفردوس. ووفيت به. الآن هناك وعد جديد للوفاء به.
 Gramps always said the world is worth fighting for. He was right.=جدي كان يقول دائماً أن العالم يستحق القتال من أجله. كان محقاً.
 Shulk, I've heard stories about you. The hero who defied a god.=شولك، سمعت قصصاً عنك. البطل الذي تحدى إلهاً.
-Matthew, you've got guts. Reminds me of someone I know... me.=متثيو، عندك شجاعة. تذكرني بشخص أعرفه... أنا.
+Matthew, you've got guts. Reminds me of someone I know... me.=ماثيو، عندك شجاعة. تذكرني بشخص أعرفه... أنا.
 The Architect gave us a chance. We won't waste it.=المهندس أعطانا فرصة. لن نهدرها.
 Even if the world's falling apart, we can still put it back together.=حتى لو كان العالم ينهار، لا يزال بإمكاننا إعادة تجميعه.
 I believe in the power of life. Every person has a right to exist.=أؤمن بقوة الحياة. كل شخص له الحق في الوجود.
@@ -13708,7 +13708,7 @@ Don't forget me!=لا تنسوني!
 Burning Sword!=السيف المشتعل!
 Anchor Shot!=طلقة المرساة!
 Rolling Smash!=الضربة الدوارة!
-Pyra! Lend me your fire!=بيرا! أعيريني نارك!
+Pyra! Lend me your fire!=بايرا! أعيريني نارك!
 Mythra! Light the way!=ميثرا! أنيري الطريق!
 I'll show you the power of the Aegis!=سأريكم قوة الإيجيس!
 We can take 'em! Let's go!=نستطيع هزيمتهم! هيا!
@@ -13718,40 +13718,40 @@ Combo time! Hit 'em hard!=وقت الكومبو! اضربوهم بقوة!
 That's the power of a Driver and Blade!=هذه قوة السائق والنصل!
 This is our strength! United we stand!=هذه قوتنا! متحدون نقف!
 
-# --- حوارات ريكس مع بيرا وميثرا ---
-Pyra, your fire keeps us warm even in the darkest times.=بيرا، نارك تدفئنا حتى في أحلك الأوقات.
+# --- حوارات ريكس مع بايرا وميثرا ---
+Pyra, your fire keeps us warm even in the darkest times.=بايرا، نارك تدفئنا حتى في أحلك الأوقات.
 Mythra, I know you try to act tough. But I see the real you.=ميثرا، أعلم أنك تحاولين التصرف بصلابة. لكنني أرى حقيقتك.
 You two are the most important people in my life.=أنتما أهم شخصين في حياتي.
 I promised to take you to Elysium. And look where we are now.=وعدت بأخذكما إلى الفردوس. وانظرا أين نحن الآن.
-Pyra's cooking or Mythra's... well, Pyra's cooking.=طبخ بيرا أو طبخ ميثرا... حسناً، طبخ بيرا.
+Pyra's cooking or Mythra's... well, Pyra's cooking.=طبخ بايرا أو طبخ ميثرا... حسناً، طبخ بايرا.
 Together, we're unstoppable. The three of us.=معاً، لا يمكن إيقافنا. نحن الثلاثة.
 
 # ═══════════════════════════════════════════════════════════════════
-# القسم 109: حوارات أ (A's Dialogues)
+# القسم 109: حوارات إيه (A's Dialogues)
 # ═══════════════════════════════════════════════════════════════════
 
-# --- حوارات أ عن ذاتها وماضيها ---
-My name is A. That's all you need to know.=اسمي أ. هذا كل ما تحتاج معرفته.
+# --- حوارات إيه عن ذاتها وماضيها ---
+My name is A. That's all you need to know.=اسمي إيه. هذا كل ما تحتاج معرفته.
 I don't remember my past. But I know my purpose.=لا أتذكر ماضيّ. لكنني أعرف هدفي.
-Matthew... he gave me a name. A reason to fight.=متثيو... أعطاني اسماً. سبباً للقتال.
+Matthew... he gave me a name. A reason to fight.=ماثيو... أعطاني اسماً. سبباً للقتال.
 I'm not like the others. I'm... different.=لست مثل الآخرين. أنا... مختلفة.
 Memories... sometimes they come in fragments. Like shattered glass.=الذكريات... أحياناً تأتي كشظايا. كالزجاج المكسور.
-I will protect Matthew. No matter what.=سأحمي متثيو. مهما كان الثمن.
+I will protect Matthew. No matter what.=سأحمي ماثيو. مهما كان الثمن.
 The Boundary... I can feel it calling to me.=الحدود... أشعر بها تناديني.
 Am I human? Does it matter? I can still fight.=هل أنا بشرية؟ هل يهم ذلك؟ لا أزال أستطيع القتال.
 Na'el... there's something about her I can't explain.=نائيل... هناك شيء فيها لا أستطيع تفسيره.
 I don't need memories to know what's right.=لا أحتاج ذكريات لأعرف ما هو صواب.
 This power inside me... it's growing. I can feel it.=هذه القوة بداخلي... تنمو. أشعر بها.
-Matthew, don't worry about me. I'm stronger than I look.=متثيو، لا تقلق عليّ. أنا أقوى مما أبدو.
+Matthew, don't worry about me. I'm stronger than I look.=ماثيو، لا تقلق عليّ. أنا أقوى مما أبدو.
 I may not remember my past, but I can choose my future.=قد لا أتذكر ماضيّ، لكن يمكنني اختيار مستقبلي.
 The others... they accept me for who I am. That means everything.=الآخرون... يقبلونني كما أنا. هذا يعني كل شيء.
 I'll fight until the very end. That's my promise.=سأقاتل حتى النهاية. هذا وعدي.
 
-# --- حوارات أ القتالية ---
+# --- حوارات إيه القتالية ---
 Stay back! I'll handle this!=ابتعدوا! سأتولى هذا!
 You won't touch them!=لن تلمسهم!
 My power... it's surging!=قوتي... تتصاعد!
-Matthew! Together, now!=متثيو! معاً، الآن!
+Matthew! Together, now!=ماثيو! معاً، الآن!
 I won't hold back!=لن أتراجع!
 This is my fight too!=هذه معركتي أيضاً!
 Feel the power of the Boundary!=اشعر بقوة الحدود!
@@ -13766,7 +13766,7 @@ The name's Nikol. Nice to meet ya.=اسمي نيكول. سعيد بلقائك.
 I may not be the strongest, but I've got heart.=قد لا أكون الأقوى، لكن عندي عزيمة.
 My parents... they fought in the original war. I carry their legacy.=والدايَ... قاتلا في الحرب الأصلية. أحمل إرثهما.
 Glimmer, quit being so serious all the time!=غليمر، توقفي عن أن تكوني جادة طوال الوقت!
-Matthew, I've got your back. Always.=متثيو، أنا أحمي ظهرك. دائماً.
+Matthew, I've got your back. Always.=ماثيو، أنا أحمي ظهرك. دائماً.
 I want to see the world beyond the City walls.=أريد أن أرى العالم خارج أسوار المدينة.
 If we don't fight, who will?=إن لم نقاتل، فمن سيفعل؟
 Being scared doesn't mean you can't be brave.=الخوف لا يعني أنك لا تستطيع أن تكون شجاعاً.
@@ -13783,15 +13783,15 @@ I'm Glimmer. Daughter of two worlds.=أنا غليمر. ابنة عالمين.
 My mother and father... they brought peace to their world. Now it's my turn.=أمي وأبي... جلبا السلام لعالمهما. الآن جاء دوري.
 I can feel the ether flowing through me. It's... incredible.=أشعر بالأثير يتدفق عبري. إنه... مذهل.
 Nikol, stop goofing around. This is serious.=نيكول، توقف عن اللعب. هذا أمر جدي.
-Matthew, your determination inspires us all.=متثيو، عزيمتك تُلهمنا جميعاً.
+Matthew, your determination inspires us all.=ماثيو، عزيمتك تُلهمنا جميعاً.
 The light within me... it connects me to something greater.=النور بداخلي... يربطني بشيء أعظم.
 I won't let my parents' sacrifice be for nothing.=لن أدع تضحية والديّ تذهب سدى.
 Healing is my gift. And I'll use it to protect everyone.=الشفاء هو موهبتي. وسأستخدمها لحماية الجميع.
-A, I sense a connection between us. Can you feel it too?=أ، أشعر برابط بيننا. هل تشعرين به أيضاً؟
+A, I sense a connection between us. Can you feel it too?=إيه، أشعر برابط بيننا. هل تشعرين به أيضاً؟
 This world deserves a chance. Every world does.=هذا العالم يستحق فرصة. كل عالم يستحق.
 The ether here is different from what I'm used to. Denser, somehow.=الأثير هنا مختلف عما اعتدته. أكثف، بطريقة ما.
 I carry the blood of Keves and Agnus. Both sides flow through me.=أحمل دم كيفيس وأغنوس. كلا الجانبين يجريان في عروقي.
-Shulk, your Monado... I can feel its resonance with the ether.=شولك، الموناندو خاصتك... أشعر بصداها مع الأثير.
+Shulk, your Monado... I can feel its resonance with the ether.=شولك، مونادو خاصتك... أشعر بصداها مع الأثير.
 We fight not just for ourselves, but for every life that came before us.=نقاتل ليس فقط من أجلنا، بل من أجل كل حياة سبقتنا.
 Light... guide my hand.=النور... اهدِ يدي.
 
@@ -13804,13 +13804,13 @@ I am Na'el. I walk between light and shadow.=أنا نائيل. أسير بين 
 The truth... it's more painful than any blade.=الحقيقة... أكثر إيلاماً من أي نصل.
 Alpha must be stopped. Whatever the cost.=ألفا يجب إيقافه. مهما كان الثمن.
 I've seen what the Boundary does to this world. It must be sealed.=رأيت ما تفعله الحدود بهذا العالم. يجب إغلاقها.
-Matthew... you don't understand what you're getting into.=متثيو... لا تفهم فيما تورط نفسك.
+Matthew... you don't understand what you're getting into.=ماثيو... لا تفهم فيما تورط نفسك.
 My power is a curse. But today, I'll make it a blessing.=قوتي لعنة. لكن اليوم، سأجعلها نعمة.
 The worlds were never meant to merge this way.=العوالم لم يكن يُفترض أن تندمج بهذه الطريقة.
 I carry secrets that could shatter everything you believe.=أحمل أسراراً يمكنها أن تحطم كل ما تؤمنون به.
 Trust me or don't. But know that I fight for the same thing you do.=ثقوا بي أو لا. لكن اعلموا أنني أقاتل من أجل نفس الشيء.
 The price of knowledge is heavy. I've paid it many times over.=ثمن المعرفة ثقيل. دفعته مرات عديدة.
-A... there's something you need to know about yourself.=أ... هناك شيء يجب أن تعرفيه عن نفسك.
+A... there's something you need to know about yourself.=إيه... هناك شيء يجب أن تعرفيه عن نفسك.
 The Boundary is weakening. We don't have much time.=الحدود تضعف. ليس لدينا وقت كثير.
 Alpha's plan will consume everything. Both worlds. All of them.=خطة ألفا ستلتهم كل شيء. كلا العالمين. جميعهم.
 I once thought solitude was strength. I was wrong.=ظننت يوماً أن العزلة قوة. كنت مخطئة.
@@ -13837,9 +13837,9 @@ You cling to your pathetic existence. How... amusing.=تتشبثون بوجود�
 The Boundary exists because of weakness. Human weakness.=الحدود موجودة بسبب الضعف. ضعف البشر.
 Do you truly believe you can stop me? I am beyond your comprehension.=هل تؤمنون حقاً أنكم تستطيعون إيقافي؟ أنا خارج إدراككم.
 Origin was meant to be a vessel for my rebirth.=الأوريجن كان يُفترض أن يكون وعاءً لولادتي الجديدة.
-Shulk... your Monado is but a pale imitation of true power.=شولك... الموناندو خاصتك ليست سوى تقليد باهت للقوة الحقيقية.
+Shulk... your Monado is but a pale imitation of true power.=شولك... مونادو خاصتك ليست سوى تقليد باهت للقوة الحقيقية.
 Rex... the Aegis you carry? It belongs to me.=ريكس... الإيجيس الذي تحمله؟ إنه ملكي.
-Matthew, you inherited nothing but futility.=متثيو، لم ترث شيئاً سوى العبث.
+Matthew, you inherited nothing but futility.=ماثيو، لم ترث شيئاً سوى العبث.
 The three worlds will collide. And from the chaos, I will emerge supreme.=العوالم الثلاثة ستتصادم. ومن الفوضى، سأبرز عظيماً.
 Free will is an illusion. Everything leads to me.=الإرادة الحرة وهم. كل شيء يقود إليّ.
 You fight against the inevitable. How very... human.=تقاتلون ضد المحتوم. كم هذا... بشري.
@@ -13858,20 +13858,20 @@ This is the natural order. The strong consume the weak.=هذا هو النظام
 Shulk, your world... the Bionis and Mechonis. Tell me about them.=شولك، عالمك... البيونيس والمكونيس. حدثني عنهما.
 Rex, you sailed across an endless sea? That sounds incredible.=ريكس، أبحرت عبر بحر لا نهائي؟ هذا يبدو مذهلاً.
 We both destroyed gods to save our worlds. Now we save this one.=كلانا دمّر آلهة لإنقاذ عالمينا. الآن ننقذ هذا العالم.
-Your Monado and my Aegis... they resonate with each other.=الموناندو خاصتك والإيجيس خاصتي... يتردد صداهما معاً.
+Your Monado and my Aegis... they resonate with each other.=مونادو خاصتك والإيجيس خاصتي... يتردد صداهما معاً.
 Klaus... the Architect... Zanza. Different names, same being.=كلاوس... المهندس... زانزا. أسماء مختلفة، نفس الكائن.
-Shulk, can your Monado really see the future?=شولك، هل حقاً تستطيع الموناندو رؤية المستقبل؟
+Shulk, can your Monado really see the future?=شولك، هل حقاً تستطيع مونادو رؤية المستقبل؟
 Rex, the Aegis's power of creation... it's astounding.=ريكس، قوة الخلق لدى الإيجيس... مذهلة.
 Our worlds were split from the same source. Origin.=عالمانا انقسما من نفس المصدر. الأوريجن.
 If we combine our powers, even Alpha can't stand against us.=إن جمعنا قوانا، حتى ألفا لا يستطيع الصمود أمامنا.
 Two heroes from two worlds, fighting as one.=بطلان من عالمين، يقاتلان كواحد.
 
-# --- حوارات فيورا مع بيرا وميثرا ---
+# --- حوارات فيورا مع بايرا وميثرا ---
 Fiora, you were... turned into a machine?=فيورا، تم... تحويلك إلى آلة؟
-Pyra, your flames are warm. Like a hearth.=بيرا، ألسنة لهبك دافئة. كالموقد.
+Pyra, your flames are warm. Like a hearth.=بايرا، ألسنة لهبك دافئة. كالموقد.
 Mythra, you and I are more alike than you think. We both hide our pain.=ميثرا، أنتِ وأنا متشابهتان أكثر مما تظنين. كلتانا تخفيان ألمهما.
 I was reborn in a mechanical body. It taught me what it means to be alive.=وُلدت من جديد في جسد آلي. علّمني ما يعنيه أن تكون حياً.
-Pyra, Mythra... you're both amazing. Rex is lucky to have you.=بيرا، ميثرا... كلتاكما مذهلة. ريكس محظوظ بكما.
+Pyra, Mythra... you're both amazing. Rex is lucky to have you.=بايرا، ميثرا... كلتاكما مذهلة. ريكس محظوظ بكما.
 Cooking together? I'd love that! Let's make something special.=الطبخ معاً؟ أحب ذلك! لنصنع شيئاً مميزاً.
 
 # --- حوارات ريكو ومانانا ---
@@ -13888,13 +13888,13 @@ Manana no like scary monsters! But Manana brave for friends!=مانانا لا �
 # القسم 114: حوارات القصة الرئيسية لـ Future Redeemed
 # ═══════════════════════════════════════════════════════════════════
 
-# --- الفصل الأول: اللقاء في سينت-أومنيا ---
+# --- الفصل الأول: اللقاء في سنت-أومنيا ---
 The sky... it's different here. Like two worlds layered on top of each other.=السماء... مختلفة هنا. كأن عالمين متراكبين فوق بعضهما.
-Welcome to Cent-Omnia. What's left of it, anyway.=مرحباً بكم في سينت-أومنيا. ما تبقى منها، على أي حال.
+Welcome to Cent-Omnia. What's left of it, anyway.=مرحباً بكم في سنت-أومنيا. ما تبقى منها، على أي حال.
 This region exists between two realities. It's where the worlds touch.=هذه المنطقة موجودة بين واقعين. إنها حيث تتلامس العوالم.
 We've been fighting to survive here ever since the worlds began to merge.=كنا نقاتل للبقاء هنا منذ أن بدأت العوالم بالاندماج.
-The Great Crevasse... it appeared when the Boundary started breaking down.=الشق العظيم... ظهر عندما بدأت الحدود بالانهيار.
-Matthew, these people... Shulk and Rex. They're from the old worlds.=متثيو، هؤلاء الناس... شولك وريكس. إنهم من العوالم القديمة.
+The Great Crevasse... it appeared when the Boundary started breaking down.=الصدع العظيم... ظهر عندما بدأت الحدود بالانهيار.
+Matthew, these people... Shulk and Rex. They're from the old worlds.=ماثيو، هؤلاء الناس... شولك وريكس. إنهم من العوالم القديمة.
 How is that possible? The old worlds were supposed to be gone.=كيف هذا ممكن؟ العوالم القديمة كان يُفترض أنها اختفت.
 The Conduit... it's the key to everything. And Alpha controls it.=القناة... هي المفتاح لكل شيء. وألفا يسيطر عليها.
 
@@ -13902,8 +13902,8 @@ The Conduit... it's the key to everything. And Alpha controls it.=القناة..
 Origin wasn't just a vessel. It was a computer... designed by Klaus himself.=الأوريجن لم يكن مجرد وعاء. كان حاسوباً... صممه كلاوس بنفسه.
 The three cores: Logos, Pneuma, Ontos. They were the foundation of everything.=الأنوية الثلاث: لوغوس، نيوما، أونتوس. كانوا أساس كل شيء.
 Ontos disappeared from our world. It ended up... in yours, Shulk.=أونتوس اختفى من عالمنا. انتهى به المطاف... في عالمك، شولك.
-The Monado... it's connected to Ontos?=الموناندو... متصلة بأونتوس؟
-Everything is connected. The Monado, the Aegis, Origin. All of it.=كل شيء متصل. الموناندو، الإيجيس، الأوريجن. كل ذلك.
+The Monado... it's connected to Ontos?=مونادو... متصلة بأونتوس؟
+Everything is connected. The Monado, the Aegis, Origin. All of it.=كل شيء متصل. مونادو، الإيجيس، الأوريجن. كل ذلك.
 Alpha was born from the collapse. A consciousness formed within Origin itself.=ألفا وُلد من الانهيار. وعي تشكّل داخل الأوريجن نفسه.
 He wants to use Origin to absorb both worlds and recreate reality.=يريد استخدام الأوريجن لامتصاص كلا العالمين وإعادة خلق الواقع.
 We can't let that happen. We need to reach the core of Origin.=لا يمكننا السماح بحدوث ذلك. نحتاج الوصول إلى نواة الأوريجن.
@@ -13922,15 +13922,15 @@ Rex, your bond with the Aegis might be the key to crossing safely.=ريكس، ر
 Alpha! This ends here!=ألفا! هذا ينتهي هنا!
 You cannot stop what has already begun. Origin hungers.=لا تستطيعون إيقاف ما بدأ بالفعل. الأوريجن جائع.
 We don't need gods or machines to decide our fate!=لا نحتاج آلهة أو آلات لتقرير مصيرنا!
-Shulk... Rex... Matthew... your combined power means nothing against eternity.=شولك... ريكس... متثيو... قوتكم المجتمعة لا تعني شيئاً أمام الأبدية.
+Shulk... Rex... Matthew... your combined power means nothing against eternity.=شولك... ريكس... ماثيو... قوتكم المجتمعة لا تعني شيئاً أمام الأبدية.
 You're wrong! Our bonds are stronger than any force in this world!=أنت مخطئ! روابطنا أقوى من أي قوة في هذا العالم!
-Monado! Aegis! Respond to our call!=الموناندو! الإيجيس! استجيبا لندائنا!
-The True Monado... it's resonating with the Aegis!=الموناندو الحقيقي... يتردد صداه مع الإيجيس!
+Monado! Aegis! Respond to our call!=مونادو! الإيجيس! استجيبا لندائنا!
+The True Monado... it's resonating with the Aegis!=مونادو الحقيقي... يتردد صداه مع الإيجيس!
 This is it! The power of three worlds, combined!=هذه هي! قوة ثلاثة عوالم، مجتمعة!
 
 # --- النهاية: الاختيار الأخير ---
 The worlds... they're stabilizing. We did it.=العوالم... تستقر. نجحنا.
-No, Matthew. You did it. You chose to believe in a future.=لا، متثيو. أنت من نجحت. اخترت أن تؤمن بمستقبل.
+No, Matthew. You did it. You chose to believe in a future.=لا، ماثيو. أنت من نجحت. اخترت أن تؤمن بمستقبل.
 Shulk, Rex... will you return to your worlds?=شولك، ريكس... هل ستعودان إلى عالميكما؟
 Our worlds are part of this one now. There's nowhere to go back to.=عالمانا جزء من هذا العالم الآن. لا مكان للعودة إليه.
 Then stay. This is your home too. All of ours.=إذن ابقيا. هذا بيتكما أيضاً. بيتنا جميعاً.
@@ -13944,7 +13944,7 @@ This is our future. Redeemed.=هذا مستقبلنا. مُستعاد.
 # القسم 115: حوارات استكشافية ميدانية - Future Redeemed
 # ═══════════════════════════════════════════════════════════════════
 
-# --- حوارات الاستكشاف في سينت-أومنيا ---
+# --- حوارات الاستكشاف في سنت-أومنيا ---
 This area... the ether density is off the charts.=هذه المنطقة... كثافة الأثير خارج المقاييس.
 Careful. The ground here is unstable.=حذار. الأرض هنا غير مستقرة.
 Look at those ruins. They're from the old Keves capital.=انظروا لتلك الأطلال. إنها من عاصمة كيفيس القديمة.
@@ -13963,19 +13963,19 @@ There... an old campsite. Someone was here recently.=هناك... مخيم قدي
 
 # --- حوارات الاستراحة والمخيم ---
 Let's set up camp here. We all need rest.=لنُقم مخيماً هنا. كلنا نحتاج راحة.
-Fiora, Pyra... your cooking is keeping morale up. Thank you.=فيورا، بيرا... طبخكما يرفع المعنويات. شكراً لكما.
+Fiora, Pyra... your cooking is keeping morale up. Thank you.=فيورا، بايرا... طبخكما يرفع المعنويات. شكراً لكما.
 Manana help cook too! Manana best Nopon chef!=مانانا تساعد بالطبخ أيضاً! مانانا أفضل طاهية نوبون!
 Around the campfire... it's easy to forget we're in the middle of a war.=حول نار المخيم... من السهل نسيان أننا في وسط حرب.
 Shulk, tell us about Colony 9. The original one.=شولك، حدثنا عن المستعمرة 9. الأصلية.
 Rex, what was it like sailing on Gramps?=ريكس، كيف كان الإبحار على ظهر جدك؟
-Matthew, you grew up in the City, right? What was it like?=متثيو، كبرت في المدينة، صحيح؟ كيف كانت؟
+Matthew, you grew up in the City, right? What was it like?=ماثيو، كبرت في المدينة، صحيح؟ كيف كانت؟
 The stars here... they're different from both our worlds.=النجوم هنا... مختلفة عن كلا عالمينا.
 Tomorrow, we push forward. Everyone get some sleep.=غداً، نتقدم. الجميع ينام قليلاً.
 I'll take first watch. You all rest.=سآخذ الحراسة الأولى. استريحوا جميعاً.
 
 # --- حوارات بناء الروابط (Affinity Scenes) ---
-Matthew, I want to understand your world better. Tell me everything.=متثيو، أريد فهم عالمك أكثر. أخبرني كل شيء.
-Shulk, the Monado... did it ever scare you? Having that much power?=شولك، الموناندو... هل أخافتك يوماً؟ امتلاك كل تلك القوة؟
+Matthew, I want to understand your world better. Tell me everything.=ماثيو، أريد فهم عالمك أكثر. أخبرني كل شيء.
+Shulk, the Monado... did it ever scare you? Having that much power?=شولك، مونادو... هل أخافتك يوماً؟ امتلاك كل تلك القوة؟
 Rex, you mentioned Nia... Queen Nia. She's one of us, isn't she?=ريكس، ذكرت نيا... الملكة نيا. هي واحدة منا، أليس كذلك؟
 Our Affinity is growing. I can feel it strengthening our connection.=ألفتنا تنمو. أشعر بها تُقوّي ارتباطنا.
 This bond... it transcends worlds. That's something special.=هذه الرابطة... تتجاوز العوالم. هذا شيء مميز.
@@ -13983,7 +13983,7 @@ The stronger our bonds, the stronger our Unity Combo becomes.=كلما قويت 
 I never thought I'd fight alongside heroes from other dimensions.=لم أظن يوماً أنني سأقاتل بجانب أبطال من أبعاد أخرى.
 Glimmer, your healing... it feels like Nia's power.=غليمر، شفاؤك... يبدو كقوة نيا.
 Nikol, your fighting style... it's raw but effective. I like it.=نيكول، أسلوب قتالك... خام لكنه فعال. يعجبني.
-A, your power is growing faster than any of us expected.=أ، قوتك تنمو أسرع مما توقعنا جميعاً.
+A, your power is growing faster than any of us expected.=إيه، قوتك تنمو أسرع مما توقعنا جميعاً.
 
 # ═══════════════════════════════════════════════════════════════════
 # القسم 116: مصطلحات وأنظمة Future Redeemed
@@ -14012,7 +14012,7 @@ World Merge Event=حدث اندماج العوالم
 Dimensional Rift=شق بُعدي
 
 # --- أسماء المناطق الحصرية ---
-Cent-Omnia Region=منطقة سينت-أومنيا
+Cent-Omnia Region=منطقة سنت-أومنيا
 Central Plains=السهول المركزية
 Western Reaches=الأطراف الغربية
 Eastern Expanse=الامتداد الشرقي
@@ -14054,9 +14054,9 @@ Merged Unique Monster=وحش فريد مندمج
 Boundary Colossus=عملاق الحدود
 
 # --- مهارات وفنون حصرية ---
-Monado Cyclone=إعصار الموناندو
-Monado Eater=آكل الموناندو
-Monado Armor=درع الموناندو
+Monado Cyclone=إعصار مونادو
+Monado Eater=آكل مونادو
+Monado Armor=درع مونادو
 Sacred Arrow=السهم المقدس
 Final Cross=الصليب الأخير
 Infinity Blade=نصل اللانهاية
@@ -14081,7 +14081,7 @@ Extends Brave Assault duration=يُطيل مدة هجوم الشجاعة
 Boosts Affinity Growth rate=يُعزز معدل نمو الألفة
 Reduces Unity Combo cooldown=يُقلل فترة استرداد كومبو الوحدة
 Strengthens bonds between party members=يُقوّي الروابط بين أعضاء الفريق
-Monado Arts deal 20% more damage=فنون الموناندو تسبب ضرراً أكثر بنسبة 20%
+Monado Arts deal 20% more damage=فنون مونادو تسبب ضرراً أكثر بنسبة 20%
 Aegis attacks ignore 15% of defense=هجمات الإيجيس تتجاهل 15% من الدفاع
 Boundary power increases with Affinity level=قوة الحدود تزداد مع مستوى الألفة
 Union Arts charge 30% faster=فنون الاتحاد تُشحن أسرع بنسبة 30%
