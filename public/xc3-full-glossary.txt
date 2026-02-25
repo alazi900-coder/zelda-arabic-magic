@@ -4089,7 +4089,7 @@ Lifesage Staff=عصا مُطلق الحياة
 # ─────────────────────────────────────────────────
 # أسلحة أبطال خاصة (Hero-Specific Weapons)
 # ─────────────────────────────────────────────────
-Ethel's Blade=نصل إيثل
+Ethel's Blade=نصل إيثيل
 Valdi's Tools=أدوات فالدي
 Zeon's Shield=درع زيون
 Teach's Fists=قبضتا تيتش
@@ -7201,7 +7201,7 @@ A world where people decide their own future.=عالمًا يقرر فيه ال�
 
 # --- لقاء ريكس ---
 Pyra... Mythra... I carry their will with me.=بايرا... ميثرا... أحمل إرادتهما معي.
-I promised to take them to Elysium. And I did.=وعدت بأخذهما إلى الإليزيوم. وفعلت.
+I promised to take them to Elysium. And I did.=وعدت بأخذهما إلى الجنة. وفعلت.
 But the fight isn't over. Not while Alpha threatens everything.=لكن القتال لم ينتهِ. ليس بينما يهدد ألفا كل شيء.
 You can count on me. I never abandon my friends.=يمكنك الاعتماد عليّ. لا أتخلى عن أصدقائي أبدًا.
 The Aegis chose me for a reason. And I won't let it down.=اختارني الإيجيس لسبب. ولن أخذله.
@@ -7483,7 +7483,7 @@ Fiona has joined your party!=فيونا انضمت إلى فريقكم!
 Colony 0 answers to no one but the Consul.=المستعمرة 0 لا تخضع لأحد سوى القنصل.
 You dare challenge the strongest colony?=أتجرؤون على تحدي أقوى مستعمرة؟
 I see now. True strength isn't about domination.=أرى الآن. القوة الحقيقية ليست في السيطرة.
-Alexandria has joined your party!=الكسندريا انضمت إلى فريقكم!
+Alexandria has joined your party!=ألكسندريا انضمت إلى فريقكم!
 
 # --- مونيكا (Monica) - المدينة ---
 I'm Monica. I represent the City's interests.=أنا مونيكا. أمثّل مصالح المدينة.
@@ -13691,7 +13691,7 @@ I'm Rex. And I'm an Aegis Driver.=أنا ريكس. وأنا سائق الإيج�
 Pyra, Mythra... I'll always fight by your side.=بايرا، ميثرا... سأقاتل دائماً بجانبكما.
 I used to salvage for a living. Now I'm salvaging the future.=كنت أعمل في الإنقاذ لأعيش. الآن أنقذ المستقبل.
 This new world... it needs people who won't give up. Count me in.=هذا العالم الجديد... يحتاج أناساً لا يستسلمون. اعتبرني معكم.
-I made a promise to reach Elysium. And I kept it. Now there's a new promise to keep.=قطعت وعداً بالوصول إلى الفردوس. ووفيت به. الآن هناك وعد جديد للوفاء به.
+I made a promise to reach Elysium. And I kept it. Now there's a new promise to keep.=قطعت وعداً بالوصول إلى الجنة. ووفيت به. الآن هناك وعد جديد للوفاء به.
 Gramps always said the world is worth fighting for. He was right.=جدي كان يقول دائماً أن العالم يستحق القتال من أجله. كان محقاً.
 Shulk, I've heard stories about you. The hero who defied a god.=شولك، سمعت قصصاً عنك. البطل الذي تحدى إلهاً.
 Matthew, you've got guts. Reminds me of someone I know... me.=ماثيو، عندك شجاعة. تذكرني بشخص أعرفه... أنا.
@@ -13722,7 +13722,7 @@ This is our strength! United we stand!=هذه قوتنا! متحدون نقف!
 Pyra, your fire keeps us warm even in the darkest times.=بايرا، نارك تدفئنا حتى في أحلك الأوقات.
 Mythra, I know you try to act tough. But I see the real you.=ميثرا، أعلم أنك تحاولين التصرف بصلابة. لكنني أرى حقيقتك.
 You two are the most important people in my life.=أنتما أهم شخصين في حياتي.
-I promised to take you to Elysium. And look where we are now.=وعدت بأخذكما إلى الفردوس. وانظرا أين نحن الآن.
+I promised to take you to Elysium. And look where we are now.=وعدت بأخذكما إلى الجنة. وانظرا أين نحن الآن.
 Pyra's cooking or Mythra's... well, Pyra's cooking.=طبخ بايرا أو طبخ ميثرا... حسناً، طبخ بايرا.
 Together, we're unstoppable. The three of us.=معاً، لا يمكن إيقافنا. نحن الثلاثة.
 
@@ -16491,12 +16491,12 @@ They painted the world they want to live in. A world of color and light.=رسم�
 That's the most powerful weapon against despair. Hope, made visible.=هذا أقوى سلاح ضد اليأس. الأمل، مجسّداً.
 
 # =============================================
-# القسم 198: مهمة بطل - تريتون (Triton) - The Sea's Memory
+# القسم 198: مهمة بطل - ترايتون (Triton) - The Sea's Memory
 # =============================================
 
 # --- الحوارات الرئيسية ---
 The ocean remembers everything.=المحيط يتذكر كل شيء.
-What do you mean, Triton?=ماذا تعني، تريتون؟
+What do you mean, Triton?=ماذا تعني، ترايتون؟
 Every battle fought on these waters. Every ship that sank.=كل معركة خيضت على هذه المياه. كل سفينة غرقت.
 The seafloor is littered with the remnants of war.=قاع البحر مليء ببقايا الحرب.
 We should recover what we can. Salvage the materials.=يجب أن نستعيد ما نستطيع. ننقذ المواد.
