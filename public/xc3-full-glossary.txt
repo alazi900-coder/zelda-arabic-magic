@@ -1734,7 +1734,7 @@ Items=العناصر
 Quests=المهمات
 System=النظام
 Map=الخريطة
-Skip Travel=السفر السريع
+Skip Travel=الانتقال السريع
 Event Theater=مسرح الأحداث
 Tips=نصائح
 Tutorial=الشرح التعليمي
@@ -6261,7 +6261,7 @@ New Objective=هدف جديد
 Return to Quest Giver=العودة إلى مانح المهمة
 Quest Reward=مكافأة المهمة
 Quest Log Full=سجل المهام ممتلئ
-Side Quest=مهمة فرعية
+Side Quest=مهمة جانبية
 Hero Quest=مهمة بطل
 Standard Quest=مهمة عادية
 Collectopedia Card=بطاقة المجموعات
@@ -6787,8 +6787,8 @@ Lore=التاريخ والأساطير
 Characters=الشخصيات
 Bestiary=سجل الوحوش
 Monster List=قائمة الوحوش
-Item List=قائمة الأغراض
-Quest List=قائمة المهام
+Item List=قائمة العناصر
+Quest List=قائمة المهمات
 Class List=قائمة الفصول
 Art List=قائمة الفنون
 Skill List=قائمة المهارات
@@ -6847,7 +6847,7 @@ Tip: Cooking recipes unlock as you discover new ingredients!=نصيحة: وصف�
 Tip: Keep an eye on the weather — it affects enemy spawns!=نصيحة: راقب الطقس — فهو يؤثر على ظهور الأعداء!
 Tip: Auto-Battle can be toggled from the battle menu!=نصيحة: يمكن تفعيل القتال التلقائي من قائمة المعركة!
 Tip: You can replay cutscenes from the Event Theater!=نصيحة: يمكنك إعادة مشاهدة المقاطع من مسرح الأحداث!
-Tip: Nopon Coins can be used to craft Gems or enhance items!=نصيحة: عملات النوبون تُستخدم لصياغة الجواهر أو تعزيز الأغراض!
+Tip: Nopon Coins can be used to craft Gems or enhance items!=نصيحة: عملات النوبون تُستخدم لصياغة الجواهر أو تعزيز العناصر!
 Tip: Check the Battle Log for detailed combat information!=نصيحة: تفقّد سجل المعركة لمعلومات قتالية مفصلة!
 Tip: Unique Monsters drop rare materials for crafting!=نصيحة: الوحوش الفريدة تُسقط مواد نادرة للصياغة!
 
@@ -6902,7 +6902,7 @@ Completing Hero Quests also unlocks their class for your party.=إتمام مه�
 Landmarks serve as Skip Travel points. Discover them by exploring.=المعالم هي نقاط التنقل السريع. اكتشفها بالاستكشاف.
 Rest Spots let you cook, craft, discuss, and level up.=نقاط الاستراحة تتيح الطبخ والصياغة والنقاش ورفع المستوى.
 Field Skills help you access hidden areas and treasures.=المهارات الميدانية تساعدك على الوصول لمناطق وكنوز مخفية.
-Containers hold items. Some require Field Skills to open.=الحاويات تحوي أغراضًا. بعضها يتطلب مهارات ميدانية لفتحها.
+Containers hold items. Some require Field Skills to open.=الحاويات تحوي عناصر. بعضها يتطلب مهارات ميدانية لفتحها.
 The Collectopedia tracks collectibles found in each region.=موسوعة المقتنيات تتتبع ما جمعته في كل منطقة.
 Colony Affinity rises by completing quests and helping residents.=ألفة المستعمرة ترتفع بإتمام المهام ومساعدة السكان.
 Higher Colony Affinity unlocks more quests and rewards.=ألفة أعلى للمستعمرة تفتح مهامًا ومكافآت أكثر.
@@ -16905,7 +16905,7 @@ Use the Skip Travel menu to quickly return to visited locations.=استخدم ق
 Unique Monsters are marked with a special icon. They are very powerful.=الوحوش الفريدة معلّمة بأيقونة خاصة. إنها قوية جداً.
 Some areas are only accessible after progressing the main story.=بعض المناطق يمكن الوصول إليها فقط بعد التقدم في القصة الرئيسية.
 Nopon Coins come in two types: Silver and Gold. Gold coins are rarer.=عملات النوبون نوعان: فضية وذهبية. العملات الذهبية أندر.
-Use Nopon Coins to craft Gems or exchange for rare items.=استخدم عملات النوبون لصناعة الأحجار الكريمة أو استبدالها بأغراض نادرة.
+Use Nopon Coins to craft Gems or exchange for rare items.=استخدم عملات النوبون لصناعة الأحجار الكريمة أو استبدالها بعناصر نادرة.
 Ether Channels connect different regions. Use them to reach new areas.=قنوات الأثير تربط مناطق مختلفة. استخدمها للوصول إلى مناطق جديدة.
 
 # =============================================
@@ -17099,13 +17099,13 @@ Arts=الفنون
 Skills=المهارات
 Gems=الأحجار الكريمة
 Accessories=الإكسسوارات
-Equipment=التجهيزات
-Items=الأغراض
+Equipment=المعدات
+Items=العناصر
 Collectibles=المقتنيات
-Quests=المهام
-Side Quests=المهام الجانبية
-Hero Quests=مهام الأبطال
-Colony Quests=مهام المستعمرات
+Quests=المهمات
+Side Quests=المهمات الجانبية
+Hero Quests=مهمات الأبطال
+Colony Quests=مهمات المستعمرات
 Affinity Chart=مخطط الألفة
 Soul Tree=شجرة الروح
 Interlink=الإنترلينك
@@ -17147,7 +17147,7 @@ Weather affects battle conditions. Rain boosts Water Arts damage.=الطقس ي�
 Night-time enemies are often stronger than daytime ones.=أعداء الليل غالباً أقوى من أعداء النهار.
 Bonus EXP can be spent at rest spots to level up safely.=الخبرة الإضافية يمكن إنفاقها في نقاط الراحة للارتقاء بأمان.
 This allows you to control your level and avoid becoming too powerful.=هذا يسمح لك بالتحكم بمستواك وتجنب أن تصبح قوياً جداً.
-Side quests reward Affinity, items, and sometimes new Heroes.=المهام الجانبية تكافئ بالألفة، أغراض، وأحياناً أبطال جدد.
+Side quests reward Affinity, items, and sometimes new Heroes.=المهمات الجانبية تكافئ بالألفة، عناصر، وأحياناً أبطال جدد.
 Talk to NPCs with a "!" icon above their heads for new quests.=تحدث مع الشخصيات غير اللاعبة بأيقونة "!" فوق رؤوسها لمهام جديدة.
 Blue "?" icons indicate standard quests. Gold "!" icons indicate important quests.=أيقونات "?" الزرقاء تشير لمهام عادية. أيقونات "!" الذهبية تشير لمهام مهمة.
 Completing all of a Colony's quests unlocks special rewards.=إكمال جميع مهام مستعمرة يفتح مكافآت خاصة.
@@ -18603,7 +18603,7 @@ Reduces aggro generated by %1%.=يقلل الاستفزاز المُولَّد �
 Increases movement speed by %1%.=يزيد سرعة الحركة بنسبة %1%.
 Increases EXP gained by %1%.=يزيد نقاط الخبرة المكتسبة بنسبة %1%.
 Increases gold earned by %1%.=يزيد الذهب المكتسب بنسبة %1%.
-Increases drop rate of rare items by %1%.=يزيد معدل سقوط الأغراض النادرة بنسبة %1%.
+Increases drop rate of rare items by %1%.=يزيد معدل سقوط العناصر النادرة بنسبة %1%.
 Auto-revives once per battle with %1% HP.=إحياء تلقائي مرة واحدة لكل معركة مع %1% من الصحة.
 Restores %1% HP per second during combat.=يستعيد %1% من الصحة في الثانية أثناء القتال.
 Adds %1 element damage to attacks.=يضيف ضرر عنصر %1 للهجمات.
@@ -18749,7 +18749,7 @@ NG+ Exclusive Costume=زي حصري لـ NG+
 Total Weapons=إجمالي الأسلحة
 Total Accessories=إجمالي الإكسسوارات
 Total Armor Sets=إجمالي أطقم الدروع
-Total Fashion Items=إجمالي أغراض الموضة
+Total Fashion Items=إجمالي عناصر الموضة
 Weapon Type: Sword=نوع السلاح: سيف
 Weapon Type: Lance=نوع السلاح: رمح
 Weapon Type: Hammer=نوع السلاح: مطرقة
@@ -18930,7 +18930,7 @@ Nopon Special Catalyst=محفز النوبون الخاص
 Master Gem Material=مادة جوهرة الإتقان
 
 # ============================================================
-# القسم 292: أغراض الشفاء والدعم
+# القسم 292: عناصر الشفاء والدعم
 # Section 292: Healing & Support Items
 # ============================================================
 
@@ -18951,7 +18951,7 @@ Antidote=ترياق
 Remedy=علاج
 
 # ============================================================
-# القسم 293: الأغراض الرئيسية
+# القسم 293: العناصر الرئيسية
 # Section 293: Key Items
 # ============================================================
 
@@ -18977,7 +18977,7 @@ Rex's Journal=سجل ريكس
 Shulk's Research Notes=ملاحظات بحث شولك
 
 # ============================================================
-# القسم 294: أغراض المهام
+# القسم 294: عناصر المهمات
 # Section 294: Quest Items
 # ============================================================
 
@@ -19036,7 +19036,7 @@ Rare Truffle=كمأة نادرة
 A common plant found throughout the Aetia region.=نبتة شائعة توجد في جميع أنحاء منطقة أيتيا.
 This mineral is prized for its use in gem crafting.=يُقدَّر هذا المعدن لاستخدامه في صناعة الأحجار الكريمة.
 A rare creature found only in specific weather conditions.=مخلوق نادر يوجد فقط في ظروف جوية محددة.
-This material can be traded for valuable items at the Nopon Exchange.=يمكن مقايضة هذه المادة بأغراض قيّمة في مبادلة النوبون.
+This material can be traded for valuable items at the Nopon Exchange.=يمكن مقايضة هذه المادة بعناصر قيّمة في مبادلة النوبون.
 Highly sought after by collectors throughout Aionios.=مطلوبة بشدة من قبل الجامعين في أيونيوس.
 Found near bodies of water during rainy weather.=توجد بالقرب من المسطحات المائية أثناء الطقس الممطر.
 This specimen is unique to the Fornis desert region.=هذه العينة فريدة لمنطقة صحراء فورنيس.
@@ -19066,7 +19066,7 @@ Cadensia Collection=مجموعة كادنسيا
 Maktha Collection=مجموعة ماكثا
 
 # ============================================================
-# القسم 298: أغراض متجر النوبون
+# القسم 298: عناصر متجر النوبون
 # Section 298: Nopon Coin Exchange Items
 # ============================================================
 
@@ -19078,8 +19078,8 @@ Nopon Coin x10=عملة النوبون ×10
 Nopon Coin X x1=عملة النوبون إكس ×1
 Nopon Coin X x5=عملة النوبون إكس ×5
 Exchange for Gem Materials=مبادلة بمواد الأحجار
-Exchange for Rare Items=مبادلة بأغراض نادرة
-Exchange for Fashion Items=مبادلة بأغراض موضة
+Exchange for Rare Items=مبادلة بعناصر نادرة
+Exchange for Fashion Items=مبادلة بعناصر موضة
 Exchange for EXP=مبادلة بنقاط خبرة
 Exchange for Class Points=مبادلة بنقاط فئة
 Exchange for Cooking Ingredients=مبادلة بمكونات طبخ
@@ -19088,7 +19088,7 @@ Nopon Secret Stash=مخبأ النوبون السري
 Nopon Premium Selection=تشكيلة النوبون المميزة
 
 # ============================================================
-# القسم 299: أغراض DLC حصرية
+# القسم 299: عناصر DLC حصرية
 # Section 299: DLC Exclusive Items
 # ============================================================
 
@@ -19109,7 +19109,7 @@ Dimensional Key=مفتاح بُعدي
 Origin Blueprint=مخطط الأوريجن
 
 # ============================================================
-# القسم 300: أغراض NG+ الحصرية
+# القسم 300: عناصر NG+ الحصرية
 # Section 300: NG+ Exclusive Items
 # ============================================================
 
@@ -20090,7 +20090,7 @@ Collectopaedia Completion: %1%=إكمال الموسوعة: %1%
 Total Play Time: %1=إجمالي وقت اللعب: %1
 Enemies Defeated: %1=أعداء مهزومون: %1
 Steps Taken: %1=خطوات مُتخذة: %1
-Items Collected: %1=أغراض مجموعة: %1
+Items Collected: %1=عناصر مجموعة: %1
 Meals Cooked: %1=وجبات مطبوخة: %1
 Gems Crafted: %1=أحجار كريمة مصنوعة: %1
 
