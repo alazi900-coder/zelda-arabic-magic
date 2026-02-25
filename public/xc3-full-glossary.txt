@@ -1737,7 +1737,7 @@ Map=الخريطة
 Skip Travel=الانتقال السريع
 Event Theater=مسرح الأحداث
 Tips=نصائح
-Tutorial=الشرح التعليمي
+Tutorial=شرح تعليمي
 # ─────────────────────────────────────────────────
 # قائمة الشخصيات (Character Menu)
 # ─────────────────────────────────────────────────
@@ -4903,7 +4903,7 @@ Gameplay Settings=إعدادات اللعب
 Game Settings=إعدادات اللعبة
 Tutorial Pop-ups=نوافذ الشروحات
 Show Tutorials=إظهار الشروحات
-Tutorial=شرح
+Tutorial=شرح تعليمي
 Tutorials=الشروحات
 Tips=نصائح
 Helpful Tips=نصائح مفيدة
@@ -4990,7 +4990,7 @@ Cancel=إلغاء
 Back=رجوع
 Exit Game=الخروج من اللعبة
 Return to Title=العودة للعنوان
-Title Screen=الشاشة الرئيسية
+Title Screen=شاشة العنوان
 Main Menu=القائمة الرئيسية
 Continue=متابعة
 New Game=لعبة جديدة
@@ -5597,7 +5597,7 @@ Trade Value=قيمة التجارة
 Fair Trade=تجارة عادلة
 
 # --- نظام الصناعة والتصنيع (Crafting Economy) ---
-Craft=صناعة
+Craft=صنع
 Crafting=التصنيع
 Gem Crafting=صناعة الأحجار الكريمة
 Cooking=الطبخ
@@ -6611,7 +6611,7 @@ Discard Changes=تجاهل التغييرات
 
 # --- نظام الصياغة والتطوير (Crafting & Enhancement) ---
 Craft=صنع
-Enhance=تطوير
+Enhance=تعزيز
 Upgrade=ترقية
 Refine=تنقية
 Synthesize=تركيب
@@ -13422,7 +13422,7 @@ Attack=الهجوم
 Healing Power=قوة الشفاء
 Dexterity=البراعة
 Agility=الرشاقة
-Critical Rate=معدل الحرجة
+Critical Rate=معدل الضربات الحرجة
 Block Rate=معدل الصد
 Physical Defense=الدفاع الجسدي
 Ether Defense=الدفاع الأثيري
@@ -13430,7 +13430,7 @@ Base Stats=الإحصائيات الأساسية
 Bonus Stats=الإحصائيات الإضافية
 Total Stats=الإحصائيات الإجمالية
 Level=المستوى
-EXP=الخبرة
+EXP=خبرة
 Next Level EXP=خبرة المستوى التالي
 Class Level=مستوى الفصل
 Class EXP=خبرة الفصل
