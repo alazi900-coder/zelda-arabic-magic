@@ -223,8 +223,10 @@ export function useEditorTranslation({
           protectedMap.set(key, p);
           return { key, original: p.tags.length > 0 ? p.cleanText : e.original };
         });
+        // Build context: nearby entries + recently translated entries from this session for consistency
         const contextEntries: { key: string; original: string; translation?: string }[] = [];
         const contextKeys = new Set<string>();
+        // Nearby entries (positional context)
         for (const e of batch) {
           const idx = state.entries.indexOf(e);
           for (const offset of [-2, -1, 1, 2]) {
@@ -238,6 +240,16 @@ export function useEditorTranslation({
             }
           }
         }
+        // Add recently translated entries from this session (for term consistency across batches)
+        const recentKeys = Object.keys(allTranslations).slice(-20);
+        for (const rKey of recentKeys) {
+          if (contextKeys.has(rKey)) continue;
+          const entry = state.entries.find(e => `${e.msbtFile}:${e.index}` === rKey);
+          if (entry && allTranslations[rKey]?.trim()) {
+            contextKeys.add(rKey);
+            contextEntries.push({ key: rKey, original: entry.original, translation: allTranslations[rKey] });
+          }
+        }
 
         const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
         const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -245,7 +257,7 @@ export function useEditorTranslation({
           method: 'POST',
           headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
           signal: abortControllerRef.current.signal,
-           body: JSON.stringify({ entries, glossary: activeGlossary, context: contextEntries.length > 0 ? contextEntries.slice(0, 10) : undefined, userApiKey: userGeminiKey || undefined, provider: translationProvider, myMemoryEmail: myMemoryEmail || undefined }),
+           body: JSON.stringify({ entries, glossary: activeGlossary, context: contextEntries.length > 0 ? contextEntries.slice(0, 25) : undefined, userApiKey: userGeminiKey || undefined, provider: translationProvider, myMemoryEmail: myMemoryEmail || undefined }),
         });
         if (!response.ok) throw new Error(`خطأ ${response.status}`);
         const data = await response.json();
