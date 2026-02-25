@@ -32,6 +32,10 @@ export function useEditorTranslation({
   const [translating, setTranslating] = useState(false);
   const [translatingSingle, setTranslatingSingle] = useState<string | null>(null);
   const [tmStats, setTmStats] = useState<{ reused: number; sent: number } | null>(null);
+  const [glossarySessionStats, setGlossarySessionStats] = useState<{
+    directMatches: number; lockedTerms: number; contextTerms: number;
+    batchesCompleted: number; totalBatches: number; textsTranslated: number; freeTranslations: number;
+  }>({ directMatches: 0, lockedTerms: 0, contextTerms: 0, batchesCompleted: 0, totalBatches: 0, textsTranslated: 0, freeTranslations: 0 });
   const abortControllerRef = useRef<AbortController | null>(null);
 
   /** Auto-fix: restore protected tags then restore any remaining missing tags */
@@ -197,6 +201,8 @@ export function useEditorTranslation({
     const totalBatches = Math.ceil(needsAI.length / AI_BATCH_SIZE);
     let allTranslations: Record<string, string> = {};
     const totalGlossaryStats = { directMatches: 0, lockedTerms: 0, contextTerms: 0 };
+    const freeCount = Object.keys(freeTranslations).length;
+    setGlossarySessionStats({ directMatches: 0, lockedTerms: 0, contextTerms: 0, batchesCompleted: 0, totalBatches, textsTranslated: 0, freeTranslations: freeCount });
     abortControllerRef.current = new AbortController();
 
     try {
@@ -251,6 +257,16 @@ export function useEditorTranslation({
           totalGlossaryStats.lockedTerms += data.glossaryStats.lockedTerms || 0;
           totalGlossaryStats.contextTerms += data.glossaryStats.contextTerms || 0;
         }
+        // Update live session stats
+        const batchTranslated = data.translations ? Object.keys(data.translations).length : 0;
+        setGlossarySessionStats(prev => ({
+          ...prev,
+          directMatches: totalGlossaryStats.directMatches,
+          lockedTerms: totalGlossaryStats.lockedTerms,
+          contextTerms: totalGlossaryStats.contextTerms,
+          batchesCompleted: b + 1,
+          textsTranslated: prev.textsTranslated + batchTranslated,
+        }));
         if (data.translations) {
           const fixedTranslations = autoFixTags(data.translations, protectedMap);
           allTranslations = { ...allTranslations, ...fixedTranslations };
@@ -418,6 +434,7 @@ export function useEditorTranslation({
     translating,
     translatingSingle,
     tmStats,
+    glossarySessionStats,
     handleTranslateSingle,
     handleAutoTranslate,
     handleStopTranslate,

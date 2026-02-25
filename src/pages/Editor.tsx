@@ -50,6 +50,7 @@ import CompareEnginesDialog from "@/components/editor/CompareEnginesDialog";
 import SentenceSplitPanel from "@/components/editor/SentenceSplitPanel";
 import ExportEnglishDialog from "@/components/editor/ExportEnglishDialog";
 import GlossaryStatsPanel from "@/components/editor/GlossaryStatsPanel";
+import TranslationStatsPanel from "@/components/editor/TranslationStatsPanel";
 
 const Editor = () => {
   const editor = useEditorState();
@@ -473,6 +474,12 @@ const Editor = () => {
               </CardContent>
             </Card>
           )}
+
+          {/* Live Translation & Glossary Stats */}
+          <TranslationStatsPanel
+            stats={editor.glossarySessionStats}
+            translating={editor.translating}
+          />
 
           {/* Review Results */}
           <ReviewPanel
