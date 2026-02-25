@@ -829,9 +829,9 @@ Rare=نادر
 Legendary=أسطوري
 Unique=فريد
 # مصطلحات إحصائيات المعدات (Equipment Stats)
-Physical Attack=هجوم فيزيائي
+Physical Attack=هجوم جسدي
 Ether Attack=هجوم أثيري
-Physical Defense=دفاع فيزيائي
+Physical Defense=دفاع جسدي
 Ether Defense=دفاع أثيري
 Block Rate=معدل الصد
 Critical Rate=معدل الضربة الحرجة
@@ -1135,7 +1135,7 @@ Swelling Scourge=البلاء المتصاعد
 Empowered Combo=الكومبو المعزز
 Ultimate Counter=صد مطلق
 Analyze Weakness Effect=يزيد ضرر الضربات على نقاط الضعف
-Steelcleaver Effect=يزيد ضرر الهجمات الفيزيائية
+Steelcleaver Effect=يزيد ضرر الهجمات الجسدية
 Accurate Grace Effect=يزيد معدل الضربات الحرجة
 Spinning Edge Effect=يزيد ضرر الهجمات من الخلف والجانب
 Swelling Scourge Effect=يزيد ضرر حالات الإضعاف بمرور الوقت
@@ -1153,7 +1153,7 @@ Tailwind=ريح خلفية
 Steady Striker Effect=يزيد توليد الكراهية من الهجمات العادية
 Brimming Spirit Effect=يزيد توليد الكراهية عند استخدام الفنون
 Peeling Gate Effect=يسحب كراهية الأعداء من الحلفاء
-Steel Protection Effect=يقلل الضرر الفيزيائي المتلقى
+Steel Protection Effect=يقلل الضرر الجسدي المتلقى
 Ironclad Effect=يقلل الضرر الأثيري المتلقى
 Tailwind Effect=يزيد سرعة التهرب
 # ─────────────────────────────────────────────────
@@ -7890,7 +7890,7 @@ Accel Assault=اقتحام التسارع
 
 # --- أوصاف تأثيرات الفنون (Art Effect Descriptions) ---
 Gain charge on hit=اكتساب شحنة عند الإصابة
-AOE/Phys. Def. down=مساحي/خفض دفاع فيزيائي
+AOE/Phys. Def. down=مساحي/خفض دفاع جسدي
 Side attack↑=هجوم جانبي↑
 Pierce/Dmg to self=اختراق/ضرر ذاتي
 Eva. up / Atk down=مراوغة↑ / هجوم↓
@@ -7915,7 +7915,7 @@ Damage over time=ضرر مستمر
 Crit rate up=معدل حرج↑
 Evasion up=مراوغة↑
 Block rate up=معدل صد↑
-Phys. Def. down=دفاع فيزيائي↓
+Phys. Def. down=دفاع جسدي↓
 Ether Def. down=دفاع أثيري↓
 Attack up=هجوم↑
 Accuracy up=دقة↑
@@ -7941,7 +7941,7 @@ Boosts damage dealt outdoors by [ML:EnhanceParam paramtype=1 ]%.=يعزز الض
 Lowers attack targets' Break resistance by [ML:EnhanceParam paramtype=1 ] percentage points.=يخفض مقاومة الكسر للأهداف بمقدار [ML:EnhanceParam paramtype=1 ] نقطة مئوية.
 Boosts Critical Rate by [ML:EnhanceParam paramtype=1 ]%.=يعزز معدل الضربات الحرجة بنسبة [ML:EnhanceParam paramtype=1 ]%.
 When blocking, adds [ML:EnhanceParam paramtype=1 ]% chance to reduce damage to 0.=عند الصد، يضيف احتمال [ML:EnhanceParam paramtype=1 ]% لتقليل الضرر إلى 0.
-When blocking, adds [ML:EnhanceParam paramtype=1 ]% chance to absorb a physical attack.=عند الصد، يضيف احتمال [ML:EnhanceParam paramtype=1 ]% لامتصاص هجوم فيزيائي.
+When blocking, adds [ML:EnhanceParam paramtype=1 ]% chance to absorb a physical attack.=عند الصد، يضيف احتمال [ML:EnhanceParam paramtype=1 ]% لامتصاص هجوم جسدي.
 When blocking, adds [ML:EnhanceParam paramtype=1 ]% chance to absorb an ether attack.=عند الصد، يضيف احتمال [ML:EnhanceParam paramtype=1 ]% لامتصاص هجوم أثيري.
 Absorb attacks taken while Art is active; also become stronger for a time.=امتصاص الهجمات أثناء تفعيل الفن؛ وكذلك تصبح أقوى لفترة.
 When blocking, deals [ML:EnhanceParam paramtype=1 ]% of Attack damage to enemy, drawing aggro.=عند الصد، يلحق [ML:EnhanceParam paramtype=1 ]% من ضرر الهجوم بالعدو مع جذب الاستفزاز.
@@ -7964,7 +7964,7 @@ Extend buff duration=تمديد مدة التعزيز
 Shorten debuff duration=تقصير مدة الإضعاف
 Increase Block Rate=زيادة معدل الصد
 Increase Evasion Rate=زيادة معدل المراوغة
-Physical damage boost=تعزيز الضرر الفيزيائي
+Physical damage boost=تعزيز الضرر الجسدي
 Ether damage boost=تعزيز الضرر الأثيري
 Auto-attack speed up=تسريع الهجوم التلقائي
 Combo damage multiplier=مضاعف ضرر التوليفة
@@ -8590,7 +8590,7 @@ Nopon Coins come in Silver and Gold varieties. Gold coins are much rarer.=عمل
 The Collectopaedia rewards you for gathering sets of collectibles.=موسوعة المقتنيات تكافئكم لجمع مجموعات من المقتنيات.
 Affinity between party members increases through combat and exploration.=الألفة بين أعضاء الفريق تزداد من خلال القتال والاستكشاف.
 Higher colony affinity unlocks better rewards and exclusive quests.=ألفة أعلى مع المستعمرات تفتح مكافآت أفضل ومهام حصرية.
-Some enemies are resistant to physical damage but weak to ether.=بعض الأعداء يقاومون الضرر الفيزيائي لكنهم ضعفاء أمام الأثير.
+Some enemies are resistant to physical damage but weak to ether.=بعض الأعداء يقاومون الضرر الجسدي لكنهم ضعفاء أمام الأثير.
 Chain Attacks can turn the tide of any battle. Build TP wisely.=الهجمات المتسلسلة يمكن أن تقلب موازين أي معركة. اجمعوا النقاط التكتيكية بحكمة.
 Levnis battles require different tactics than normal combat.=معارك الليفنيس تتطلب تكتيكات مختلفة عن القتال العادي.
 Explore off the beaten path—hidden areas often contain valuable treasures.=استكشفوا بعيدًا عن المسار المطروق—المناطق المخفية غالبًا تحتوي على كنوز ثمينة.
@@ -8670,13 +8670,13 @@ Whatever happens, we face it together. All of us.=مهما حدث، نواجهه
 # ═══════════════════════════════════════════════════════════════════════
 
 # --- أوصاف الجواهر (Gem Descriptions) ---
-Steelcleaver: Boosts physical damage dealt.=شاطر الفولاذ: يعزز الضرر الفيزيائي الملحق.
+Steelcleaver: Boosts physical damage dealt.=شاطر الفولاذ: يعزز الضرر الجسدي الملحق.
 Analyze Weakness: Increases damage to enemies with debuffs.=تحليل الضعف: يزيد الضرر للأعداء المصابين بإضعافات.
 Steady Striker: Boosts stability during auto-attacks.=الضارب الثابت: يعزز الثبات أثناء الهجوم التلقائي.
 Swelling Scourge: Boosts damage over time dealt to enemies.=البلاء المتصاعد: يعزز الضرر المستمر الملحق بالأعداء.
 Accurate Grace: Boosts healing accuracy and amount.=نعمة الدقة: يعزز دقة الشفاء وكميته.
 Disperse Bloodlust: Reduces aggro generated by healing Arts.=تشتيت عطش الدم: يقلل الاستفزاز الناتج عن فنون الشفاء.
-Ironclad: Boosts physical defense.=المدرّع: يعزز الدفاع الفيزيائي.
+Ironclad: Boosts physical defense.=المدرّع: يعزز الدفاع الجسدي.
 Brimming Spirit: Increases maximum HP.=الروح الفائضة: يزيد أقصى HP.
 Lifebearer: Restores HP gradually over time.=حامل الحياة: يستعيد HP تدريجيًا مع الوقت.
 Ultimate Counter: Increases counter damage when blocking.=صد مطلق: يزيد ضرر الرد عند الصد.
@@ -8842,7 +8842,7 @@ Commander's Special=طبق القائد المميز
 
 # --- وصفات الطهي التأثيرات (Cooking Effect Descriptions) ---
 Boosts HP recovery after battle.=يعزز استعادة HP بعد المعركة.
-Increases physical attack for a limited time.=يزيد الهجوم الفيزيائي لفترة محدودة.
+Increases physical attack for a limited time.=يزيد الهجوم الجسدي لفترة محدودة.
 Boosts ether defense temporarily.=يعزز الدفاع الأثيري مؤقتًا.
 Reduces damage taken for 3 battles.=يقلل الضرر المتلقى لمدة 3 معارك.
 Increases critical hit rate temporarily.=يزيد معدل الضربات الحرجة مؤقتًا.
@@ -9000,7 +9000,7 @@ Critical Up=زيادة الحرجة
 Block Rate Up=زيادة معدل الصد
 Evasion Up=زيادة المراوغة
 Accuracy Up=زيادة الدقة
-Physical Defense Up=زيادة الدفاع الفيزيائي
+Physical Defense Up=زيادة الدفاع الجسدي
 Ether Defense Up=زيادة الدفاع الأثيري
 Attack Speed Up=زيادة سرعة الهجوم
 Healing Power Up=تعزيز قوة الشفاء
@@ -9080,7 +9080,7 @@ Increases critical hit rate.=يزيد معدل الضربات الحرجة.
 Increases the chance of blocking attacks.=يزيد فرصة صد الهجمات.
 Increases the chance of evading attacks.=يزيد فرصة مراوغة الهجمات.
 Increases the accuracy of attacks.=يزيد دقة الهجمات.
-Increases physical defense.=يزيد الدفاع الفيزيائي.
+Increases physical defense.=يزيد الدفاع الجسدي.
 Increases ether defense.=يزيد الدفاع الأثيري.
 Increases auto-attack speed.=يزيد سرعة الهجوم التلقائي.
 Boosts HP restored by healing.=يعزز الـHP المستعاد بالشفاء.
@@ -9099,7 +9099,7 @@ Single target=هدف واحد
 Multi-hit=ضربات متعددة
 Pierce through guard=اختراق الحراسة
 Ignore defense=تجاهل الدفاع
-AOE/Phys. Def. down=مساحي/خفض دفاع فيزيائي
+AOE/Phys. Def. down=مساحي/خفض دفاع جسدي
 AOE/Ether Def. down=مساحي/خفض دفاع أثيري
 Knockback=دفع للخلف
 Draw aggro=جذب العداوة
@@ -10180,7 +10180,7 @@ Starborn Light=نور مولود النجوم
 Aether Pulse=نبض الأثير
 
 # --- أوصاف الجواهر (Gem Descriptions) ---
-Increases physical attack power for Attackers.=يزيد قوة الهجوم الفيزيائي للمهاجمين.
+Increases physical attack power for Attackers.=يزيد قوة الهجوم الجسدي للمهاجمين.
 Boosts accuracy for all party members.=يعزز الدقة لجميع أعضاء الفريق.
 Increases damage dealt based on combo count.=يزيد الضرر بناءً على عدد التعاقب.
 Enhances ether-based Arts power.=يعزز قوة الفنون المبنية على الأثير.
@@ -10190,7 +10190,7 @@ Maximizes stats during critical health.=يزيد الإحصائيات للحد �
 Boosts damage when close to the target.=يعزز الضرر عند القرب من الهدف.
 Boosts damage when far from the target.=يعزز الضرر عند البعد عن الهدف.
 Increases threat generation for Defenders.=يزيد توليد التهديد للمدافعين.
-Boosts physical defense for all party members.=يعزز الدفاع الفيزيائي لجميع أعضاء الفريق.
+Boosts physical defense for all party members.=يعزز الدفاع الجسدي لجميع أعضاء الفريق.
 Increases movement speed in the field.=يزيد سرعة الحركة في الميدان.
 Boosts HP recovery from all healing sources.=يعزز استعادة HP من جميع مصادر الشفاء.
 Reveals enemy weakness for bonus damage.=يكشف ضعف العدو لضرر إضافي.
@@ -11090,7 +11090,7 @@ Back attack=هجوم خلفي
 Front Blowdown=ضربة إسقاط أمامية
 Gain charge on hit=الحصول على شحنة عند الإصابة
 AOE attack=هجوم منطقة
-AOE/Phys. Def. down=هجوم منطقة/خفض الدفاع الفيزيائي
+AOE/Phys. Def. down=هجوم منطقة/خفض الدفاع الجسدي
 Pierce attack=هجوم اختراق
 Pierce/Dmg to self=اختراق/ضرر ذاتي
 Multi-hit attack=هجوم متعدد الضربات
@@ -11126,7 +11126,7 @@ Shield ally from damage=حماية حليف من الضرر
 Increase party defense=زيادة دفاع الفريق
 Buff attack power=تعزيز قوة الهجوم
 Buff ether defense=تعزيز دفاع الأثير
-Buff physical defense=تعزيز الدفاع الفيزيائي
+Buff physical defense=تعزيز الدفاع الجسدي
 Reduce aggro=تقليل الأغرو
 Draw aggro to self=جذب الأغرو للذات
 
@@ -11195,7 +11195,7 @@ Increases Daze duration on enemies=يزيد مدة الذهول على الأع�
 # ═══════════════════════════════════════════════════════════════════
 
 When blocking, adds chance to reduce damage to 0=عند الصد، يضيف فرصة لتقليل الضرر إلى 0
-When blocking, adds chance to absorb a physical attack=عند الصد، يضيف فرصة لامتصاص هجوم فيزيائي
+When blocking, adds chance to absorb a physical attack=عند الصد، يضيف فرصة لامتصاص هجوم جسدي
 When blocking, adds chance to absorb an ether attack=عند الصد، يضيف فرصة لامتصاص هجوم أثيري
 Absorb attacks taken while Art is active=امتصاص الهجمات المتلقاة أثناء تفعيل الفن
 When blocking, deals Attack damage to enemy=عند الصد، يُلحق ضرر الهجوم بالعدو
@@ -11297,11 +11297,11 @@ Paralysis: Target may fail to act=الشلل: قد يفشل الهدف في ال
 Poison: Deals damage over time=السم: يُلحق ضرراً تدريجياً
 Sleep: Target cannot act until hit=النوم: الهدف لا يستطيع التصرف حتى يُضرب
 Confusion: Target may attack allies=الارتباك: قد يهاجم الهدف حلفاءه
-Bleed: Deals physical damage over time=النزيف: يُلحق ضرراً فيزيائياً تدريجياً
+Bleed: Deals physical damage over time=النزيف: يُلحق ضرراً جسدياً تدريجياً
 Shackle Arts: Target cannot use Arts=تقييد الفنون: الهدف لا يستطيع استخدام الفنون
 Shackle Talent: Target cannot use Talent Art=تقييد الموهبة: الهدف لا يستطيع استخدام فن الموهبة
 Strength Down: Reduces target's attack power=خفض القوة: يُقلل قوة هجوم الهدف
-Defense Down: Reduces target's physical defense=خفض الدفاع: يُقلل الدفاع الفيزيائي للهدف
+Defense Down: Reduces target's physical defense=خفض الدفاع: يُقلل الدفاع الجسدي للهدف
 Ether Defense Down: Reduces target's ether defense=خفض دفاع الأثير: يُقلل دفاع الأثير للهدف
 Accuracy Down: Reduces target's accuracy=خفض الدقة: يُقلل دقة الهدف
 Evasion Down: Reduces target's evasion=خفض المراوغة: يُقلل مراوغة الهدف
@@ -11314,7 +11314,7 @@ Critical Rate Down: Reduces target's critical rate=خفض معدل الحرجة:
 Talent Art=فن الموهبة
 Master Art=فن الإتقان
 Fusion Art=فن الدمج
-Physical Art=فن فيزيائي
+Physical Art=فن جسدي
 Ether Art=فن أثيري
 Healing Art=فن الشفاء
 Support Art=فن الدعم
