@@ -10835,20 +10835,20 @@ Kouju said we need to think for ourselves now.=قال كوجو أننا بحاج
 The Commander's orders are absolute. That hasn't changed.=أوامر القائد مطلقة. هذا لم يتغير.
 But now we get to decide what those orders mean for us.=لكن الآن نحن من يقرر ما تعنيه تلك الأوامر لنا.
 Lambda's been running smoother than ever, honestly.=لامبدا تعمل بسلاسة أكثر من أي وقت، بصراحة.
-I never thought I'd see the day we'd stop fighting Agnus.=لم أكن أظن أنني سأرى اليوم الذي نتوقف فيه عن قتال أغنس.
+I never thought I'd see the day we'd stop fighting Agnus.=لم أكن أظن أنني سأرى اليوم الذي نتوقف فيه عن قتال أغنوس.
 It still feels strange not having to report our kill count.=لا يزال الأمر غريباً ألّا نضطر للإبلاغ عن عدد قتلانا.
 We're growing our own food now. Can you believe it?=نحن نزرع طعامنا بأنفسنا الآن. هل تصدق ذلك؟
 Kouju has a vision for Lambda that goes beyond just survival.=لدى كوجو رؤية للامبدا تتجاوز مجرد البقاء.
 
-# --- حوارات عن الليفنيسترات الكيفسية (Kevesi Levnisters) ---
-The Kevesi Levnisters used to be our biggest threat.=الليفنيسترات الكيفسية كانت أكبر تهديد لنا.
+# --- حوارات عن الليفنيسترات الكيفيسية (Kevesi Levnisters) ---
+The Kevesi Levnisters used to be our biggest threat.=الليفنيسترات الكيفيسية كانت أكبر تهديد لنا.
 Now we're supposed to just... coexist with them?=الآن من المفترض أن نتعايش معهم فحسب؟
-I heard some of the Kevesi soldiers are actually decent people.=سمعت أن بعض جنود كيفس هم في الواقع أشخاص محترمون.
+I heard some of the Kevesi soldiers are actually decent people.=سمعت أن بعض جنود كيفيس هم في الواقع أشخاص محترمون.
 It's hard to forget all those years of fighting, though.=لكن من الصعب نسيان كل تلك السنوات من القتال.
-A Kevesi Levnister came by yesterday. Didn't cause any trouble.=جاء ليفنيستر كيفسي بالأمس. لم يُسبب أي مشاكل.
+A Kevesi Levnister came by yesterday. Didn't cause any trouble.=جاء ليفنيستر كيفيسي بالأمس. لم يُسبب أي مشاكل.
 Maybe peace isn't as impossible as I thought.=ربما السلام ليس مستحيلاً كما ظننت.
 Some of us still don't trust them. Can you blame us?=بعضنا لا يزال لا يثق بهم. هل تلومنا؟
-We lost a lot of good soldiers to the Kevesi.=فقدنا كثيراً من الجنود الأكفاء بسبب الكيفسيين.
+We lost a lot of good soldiers to the Kevesi.=فقدنا كثيراً من الجنود الأكفاء بسبب الكيفيسيين.
 But holding grudges won't help us build a future.=لكن حمل الضغائن لن يساعدنا في بناء مستقبل.
 The Commander says we need to look forward, not back.=يقول القائد أننا بحاجة للنظر إلى الأمام، لا إلى الخلف.
 
@@ -11044,10 +11044,10 @@ We're learning to live, not just survive.=نحن نتعلم أن نعيش، لا
 # القسم 69: حوارات النوبونجا التجارية (Nopon Commerce Dialogues)
 # ═══════════════════════════════════════════════════════════════════
 
-# --- حوارات بيع الطعام للجنود الأغنسيين ---
+# --- حوارات بيع الطعام للجنود الأغنوسيين ---
 Nopon have best prices in all of Aionios, friend!=النوبون لديهم أفضل الأسعار في كل أيونيوس، يا صديق!
-Agnian soldiers buy lots of food. Good customers, meh!=جنود أغنس يشترون الكثير من الطعام. زبائن جيدون، ميه!
-This special dried meat. Very popular with Kevesi troops!=هذا لحم مجفف خاص. شائع جداً لدى القوات الكيفسية!
+Agnian soldiers buy lots of food. Good customers, meh!=جنود أغنوس يشترون الكثير من الطعام. زبائن جيدون، ميه!
+This special dried meat. Very popular with Kevesi troops!=هذا لحم مجفف خاص. شائع جداً لدى القوات الكيفيسية!
 Nopon not take sides in war. Nopon take money from both sides!=النوبون لا ينحازون في الحرب. النوبون يأخذون المال من كلا الطرفين!
 Business is business. War is just... opportunity!=العمل عمل. الحرب مجرد... فرصة!
 Now that war over, Nopon must find new business model.=الآن بما أن الحرب انتهت، النوبون يجب أن يجدوا نموذج عمل جديد.
@@ -11402,8 +11402,8 @@ Cadensia Wharf=رصيف كادينسيا
 Underground Market=السوق السفلي
 Swordmarch Staging Area=منطقة تجمع سوردمارش
 Erythia Sea Port=ميناء بحر إريثيا
-Keves Castle Town=بلدة قلعة كيفس
-Agnus Capital Plaza=ساحة عاصمة أغنس
+Keves Castle Town=بلدة قلعة كيفيس
+Agnus Capital Plaza=ساحة عاصمة أغنوس
 Nopon Trading Post=مركز تجارة النوبون
 Colony Mu Canteen=مطعم المستعمرة مو
 Colony Iota Workshop=ورشة المستعمرة إيوتا
@@ -11481,7 +11481,7 @@ Fugitive's Footprints=آثار أقدام الهارب
 Gin's Tracks=آثار جين
 Burebure's Tracks=آثار بوريبوري
 Levnis Tracks=آثار ليفنيس
-Mystery Agnian Trail=مسار أغنسي غامض
+Mystery Agnian Trail=مسار أغنوسي غامض
 Child's Footprints=آثار أقدام طفل
 Unidentified Tracks=آثار مجهولة الهوية
 Robobuddy's Log=سجل الروبوصديق
@@ -11835,13 +11835,13 @@ Siljil=سيلجيل
 Napapa=ناپاپا
 Koma=كوما
 Momama=موماما
-Keves Soldier A=جندي كيفس أ
-Keves Soldier B=جندي كيفس ب
+Keves Soldier A=جندي كيفيس أ
+Keves Soldier B=جندي كيفيس ب
 Lost Nos. Soldier A=جندي الأعداد المفقودة أ
 Lost Nos. Soldier B=جندي الأعداد المفقودة ب
 Colony 9 Soldier=جندي المستعمرة 9
-Agnus Soldier=جندي أغنس
-Agnus Captain=قائد أغنس
+Agnus Soldier=جندي أغنوس
+Agnus Captain=قائد أغنوس
 Armory Pilot=طيار المستودع
 City Resident=ساكن المدينة
 City Elder=حكيم المدينة
@@ -12252,7 +12252,7 @@ Erythia Sea Approach=ممر بحر إريثيا
 Erythia Sea Overlook=مطل بحر إريثيا
 Swordmarch Campsite=مخيم مسيرة السيف
 Great Sword Base=قاعدة السيف العظيم
-Keves Castle Gate=بوابة قلعة كيفس
+Keves Castle Gate=بوابة قلعة كيفيس
 Castle Outer Ward=الساحة الخارجية للقلعة
 Castle Inner Ward=الساحة الداخلية للقلعة
 Castle Throne Room=قاعة العرش بالقلعة
@@ -12273,10 +12273,10 @@ Origin Interior - Lower Deck=داخل الأوريجن - السطح السفلي
 Origin Exterior - Platform=خارج الأوريجن - المنصة
 Cloudkeep Entrance=مدخل حصن السحاب
 Cloudkeep Summit=قمة حصن السحاب
-Agnus Castle Gate=بوابة قلعة أغنس
-Agnus Castle Grounds=أرض قلعة أغنس
-Agnus Castle Interior=داخل قلعة أغنس
-Agnus Castle Balcony=شرفة قلعة أغنس
+Agnus Castle Gate=بوابة قلعة أغنوس
+Agnus Castle Grounds=أرض قلعة أغنوس
+Agnus Castle Interior=داخل قلعة أغنوس
+Agnus Castle Balcony=شرفة قلعة أغنوس
 
 # ═══════════════════════════════════════════════════════════════════
 # القسم 79: أهداف المهام التفصيلية (Detailed Quest Objectives)
@@ -12298,7 +12298,7 @@ Collect Amethyst Vanilla from the forest floor.=اجمع فانيلا الجمش
 Defeat the Tirkin raiders threatening Colony 4.=اهزم غزاة التيركين الذين يهددون المستعمرة 4.
 Slay the Unique Monster terrorizing the trade route.=اقتل الوحش الفريد الذي يُرعب طريق التجارة.
 Clear the monster nest in the abandoned mine.=طهّر عرين الوحوش في المنجم المهجور.
-Defeat the rogue Agnian soldiers near the border.=اهزم الجنود الأغنسيين المارقين قرب الحدود.
+Defeat the rogue Agnian soldiers near the border.=اهزم الجنود الأغنوسيين المارقين قرب الحدود.
 Protect the caravan from monster attacks.=احمِ القافلة من هجمات الوحوش.
 Eliminate the Skeeter swarm near the colony.=أبد سرب السكيتر قرب المستعمرة.
 Defeat the Rhogul alpha blocking the mountain pass.=اهزم زعيم الروغول الذي يسد ممر الجبل.
@@ -12314,7 +12314,7 @@ Investigate the mysterious signal from the east.=حقق في الإشارة ال
 Cross the Erythia Sea to reach the new continent.=اعبر بحر إريثيا للوصول إلى القارة الجديدة.
 Find the hidden entrance to the underground city.=ابحث عن المدخل المخفي للمدينة الجوفية.
 Reach the summit of Rae-Bel Tableland.=اوصل إلى قمة هضبة ري-بل.
-Discover the old Kevesi outpost in the mountains.=اكتشف المخفر الكيفسي القديم في الجبال.
+Discover the old Kevesi outpost in the mountains.=اكتشف المخفر الكيفيسي القديم في الجبال.
 
 # --- أهداف مهام الحوار (Dialogue Objectives) ---
 Talk to Kouju about the colony's future.=تحدث مع كوجو عن مستقبل المستعمرة.
@@ -12357,7 +12357,7 @@ Fugitive's Footprints=آثار أقدام الهارب
 Gin's Tracks=آثار جين
 Burebure's Tracks=آثار بوريبوري
 Levnis Tracks=آثار ليفنيس
-Mystery Agnian Trail=درب أغنسي غامض
+Mystery Agnian Trail=درب أغنوسي غامض
 Child's Footprints=آثار أقدام طفل
 Unidentified Tracks=آثار مجهولة
 Robobuddy's Log=سجل الروبوبادي
@@ -12778,12 +12778,12 @@ Consul Y=القنصل ي
 Consul Z=القنصل ز
 
 # --- جنود وعسكريون (Soldiers & Military) ---
-Keves Soldier A=جندي كيفس أ
-Keves Soldier B=جندي كيفس ب
-Keves Soldier C=جندي كيفس ج
-Agnus Soldier A=جندي أغنس أ
-Agnus Soldier B=جندي أغنس ب
-Agnus Soldier C=جندي أغنس ج
+Keves Soldier A=جندي كيفيس أ
+Keves Soldier B=جندي كيفيس ب
+Keves Soldier C=جندي كيفيس ج
+Agnus Soldier A=جندي أغنوس أ
+Agnus Soldier B=جندي أغنوس ب
+Agnus Soldier C=جندي أغنوس ج
 Lost Numbers Soldier A=جندي الأعداد المفقودة أ
 Lost Numbers Soldier B=جندي الأعداد المفقودة ب
 Colony 9 Soldier=جندي المستعمرة 9
@@ -12791,10 +12791,10 @@ Colony 4 Soldier=جندي المستعمرة 4
 Colony Lambda Soldier=جندي مستعمرة لامبدا
 Colony Tau Soldier=جندي المستعمرة تاو
 Colony Mu Soldier=جندي المستعمرة مو
-Agnus Captain=قائد أغنس
-Keves Captain=قائد كيفس
-Agnus Commander=قائد أغنس أعلى
-Keves Commander=قائد كيفس أعلى
+Agnus Captain=قائد أغنوس
+Keves Captain=قائد كيفيس
+Agnus Commander=قائد أغنوس أعلى
+Keves Commander=قائد كيفيس أعلى
 Armory Pilot=طيار المستودع
 Supply Officer=ضابط التموين
 Medic=طبيب
@@ -12921,12 +12921,12 @@ Education programs are starting for the young ones.=برامج التعليم ب
 Medicine is our top priority alongside food.=الدواء أولويتنا القصوى إلى جانب الطعام.
 The old war machines are being repurposed for construction.=آلات الحرب القديمة يتم إعادة تخصيصها للبناء.
 We're not just surviving anymore. We're living.=لم نعد فقط نبقى على قيد الحياة. نحن نعيش.
-Cooperation between Keves and Agnus is still fragile.=التعاون بين كيفس وأغنس لا يزال هشاً.
+Cooperation between Keves and Agnus is still fragile.=التعاون بين كيفيس وأغنوس لا يزال هشاً.
 But it's a start. That's what matters.=لكنها بداية. هذا ما يهم.
 Some people want revenge for the years of war.=بعض الناس يريدون انتقاماً لسنوات الحرب.
 We have to break the cycle of hatred.=علينا كسر دائرة الكراهية.
 The Ouroboros team showed us it's possible.=فريق أوروبوروس أرونا أن ذلك ممكن.
-Keves and Agnus working together... who would've thought?=كيفس وأغنس يعملون معاً... من كان ليظن؟
+Keves and Agnus working together... who would've thought?=كيفيس وأغنوس يعملون معاً... من كان ليظن؟
 
 # ═══════════════════════════════════════════════════════════════════
 # القسم 93: حوارات القلعة والحرس (Castle & Guard Dialogues)
@@ -13790,7 +13790,7 @@ Healing is my gift. And I'll use it to protect everyone.=الشفاء هو مو�
 A, I sense a connection between us. Can you feel it too?=أ، أشعر برابط بيننا. هل تشعرين به أيضاً؟
 This world deserves a chance. Every world does.=هذا العالم يستحق فرصة. كل عالم يستحق.
 The ether here is different from what I'm used to. Denser, somehow.=الأثير هنا مختلف عما اعتدته. أكثف، بطريقة ما.
-I carry the blood of Keves and Agnus. Both sides flow through me.=أحمل دم كيفس وأغنوس. كلا الجانبين يجريان في عروقي.
+I carry the blood of Keves and Agnus. Both sides flow through me.=أحمل دم كيفيس وأغنوس. كلا الجانبين يجريان في عروقي.
 Shulk, your Monado... I can feel its resonance with the ether.=شولك، الموناندو خاصتك... أشعر بصداها مع الأثير.
 We fight not just for ourselves, but for every life that came before us.=نقاتل ليس فقط من أجلنا، بل من أجل كل حياة سبقتنا.
 Light... guide my hand.=النور... اهدِ يدي.
@@ -13947,8 +13947,8 @@ This is our future. Redeemed.=هذا مستقبلنا. مُستعاد.
 # --- حوارات الاستكشاف في سينت-أومنيا ---
 This area... the ether density is off the charts.=هذه المنطقة... كثافة الأثير خارج المقاييس.
 Careful. The ground here is unstable.=حذار. الأرض هنا غير مستقرة.
-Look at those ruins. They're from the old Keves capital.=انظروا لتلك الأطلال. إنها من عاصمة كيفس القديمة.
-And those buildings... they look Agnian in design.=وتلك المباني... تبدو أغنسية التصميم.
+Look at those ruins. They're from the old Keves capital.=انظروا لتلك الأطلال. إنها من عاصمة كيفيس القديمة.
+And those buildings... they look Agnian in design.=وتلك المباني... تبدو أغنوسية التصميم.
 Two architectures, merged together. Just like the worlds.=عمارتان، اندمجتا معاً. تماماً كالعالمين.
 There's a landmark up ahead. Let's investigate.=هناك معلم في الأمام. لنتحقق.
 The view from here... you can see where the two skies meet.=المنظر من هنا... يمكنك رؤية حيث تلتقي السماءان.
@@ -14021,7 +14021,7 @@ Southern Lowlands=الأراضي الجنوبية المنخفضة
 The Boundary Gate=بوابة الحدود
 Origin Core Access=مدخل نواة الأوريجن
 Merged Ruins=الأطلال المندمجة
-Keves Remnant District=حي بقايا كيفس
+Keves Remnant District=حي بقايا كيفيس
 Agnus Remnant District=حي بقايا أغنوس
 Fallen City=المدينة الساقطة
 Alpha's Domain=مملكة ألفا
@@ -14109,7 +14109,7 @@ Enemies incoming from the right!=أعداء قادمون من اليمين!
 I see them. I'll handle it!=أراهم. سأتولّى أمرهم!
 Noah! Lanz! On me!=نوح! لانز! معي!
 Let's do this!=هيّا نفعلها!
-They're Agnus soldiers... This is a big force.=إنهم جنود أغنس... هذه قوة كبيرة.
+They're Agnus soldiers... This is a big force.=إنهم جنود أغنوس... هذه قوة كبيرة.
 Doesn't matter how many there are. We just have to fight.=لا يهم كم عددهم. علينا فقط أن نُقاتل.
 That's right. We fight to live another day.=هذا صحيح. نُقاتل لنعيش يوماً آخر.
 For the Colony!=من أجل المستعمرة!
@@ -14127,8 +14127,8 @@ Each life is precious. Every single one.=كل حياة ثمينة. كل واحد
 That's why we play. So they're not forgotten.=لهذا نعزف. حتى لا يُنسَوا.
 
 # --- مشهد لقاء الفريقين ---
-What...? You're an Agnus soldier?!=ماذا...؟ أنتِ جندية أغنسية؟!
-And you're from Keves. We should be fighting.=وأنت من كيفس. يُفترض أن نتقاتل.
+What...? You're an Agnus soldier?!=ماذا...؟ أنتِ جندية أغنوسية؟!
+And you're from Keves. We should be fighting.=وأنت من كيفيس. يُفترض أن نتقاتل.
 Wait. Something's not right here.=انتظري. هناك شيء غير صحيح هنا.
 What do you mean?=ماذا تعني؟
 That light... Did you see it too?=ذلك الضوء... هل رأيتِه أيضاً؟
@@ -14164,13 +14164,13 @@ Enemies of the world? That's absurd!=أعداء العالم؟ هذا سخيف!
 Run while you can. It won't save you, but it might amuse us.=اهربوا ما استطعتم. لن ينقذكم ذلك، لكنه قد يُسلّينا.
 
 # --- مشهد الهروب والتعارف ---
-I'm Noah. Keves Colony 9.=أنا نوح. المستعمرة 9، كيفس.
-Mio. Agnus Colony Gamma.=ميو. مستعمرة غاما، أغنس.
+I'm Noah. Keves Colony 9.=أنا نوح. المستعمرة 9، كيفيس.
+Mio. Agnus Colony Gamma.=ميو. مستعمرة غاما، أغنوس.
 Eunie. Same as Noah.=يوني. من نفس مستعمرة نوح.
-Taion. Agnus Colony Gamma, Tactical Commander.=تايون. مستعمرة غاما، أغنس، القائد التكتيكي.
+Taion. Agnus Colony Gamma, Tactical Commander.=تايون. مستعمرة غاما، أغنوس، القائد التكتيكي.
 Name's Lanz. Colony 9's best fighter.=اسمي لانز. أفضل مقاتل في المستعمرة 9.
-I'm Sena! Agnus Colony Gamma!=أنا سينا! مستعمرة غاما، أغنس!
-So three from Keves, three from Agnus.=إذن ثلاثة من كيفس، ثلاثة من أغنس.
+I'm Sena! Agnus Colony Gamma!=أنا سينا! مستعمرة غاما، أغنوس!
+So three from Keves, three from Agnus.=إذن ثلاثة من كيفيس، ثلاثة من أغنوس.
 Yesterday we were killing each other. Today we're allies.=بالأمس كنا نقتل بعضنا. اليوم نحن حلفاء.
 The world's gone mad.=العالم جُنّ جنونه.
 Maybe it was always mad. We just didn't see it.=ربما كان مجنوناً دائماً. نحن فقط لم نرَ ذلك.
@@ -14183,7 +14183,7 @@ Maybe it was always mad. We just didn't see it.=ربما كان مجنوناً �
 This is... my Colony.=هذه هي... مستعمرتي.
 Noah! You're alive!=نوح! أنت حيّ!
 Yeah. I'm back. But things have changed.=أجل. عُدت. لكن الأمور تغيّرت.
-Who are these Agnus soldiers?! What's going on?!=مَن هؤلاء جنود أغنس؟! ما الذي يجري؟!
+Who are these Agnus soldiers?! What's going on?!=مَن هؤلاء جنود أغنوس؟! ما الذي يجري؟!
 It's a long story. But they're not our enemies.=إنها قصة طويلة. لكنهم ليسوا أعداءنا.
 Not enemies? Have you lost your mind?!=ليسوا أعداء؟ هل فقدت عقلك؟!
 Listen to me! The war... it's all a lie.=اسمعوني! الحرب... كلها كذبة.
@@ -14243,7 +14243,7 @@ What kind of place?=أي نوع من الأماكن؟
 A sword. A giant sword, piercing the land.=سيف. سيف عملاق، يخترق الأرض.
 The Swordmarch...=مسيرة السيف...
 You've heard of it?=هل سمعتِ عنه؟
-It's an Agnian legend. The blade that divided the world.=إنها أسطورة أغنسية. النصل الذي قسم العالم.
+It's an Agnian legend. The blade that divided the world.=إنها أسطورة أغنوسية. النصل الذي قسم العالم.
 It's not just a legend. It's real. And we need to go there.=ليست مجرد أسطورة. إنه حقيقي. وعلينا الذهاب إلى هناك.
 Why? What's at the Swordmarch?=لماذا؟ ماذا يوجد في مسيرة السيف؟
 Answers. About Ouroboros, about Moebius... about everything.=إجابات. عن أوروبوروس، عن موبيوس... عن كل شيء.
@@ -14265,7 +14265,7 @@ Growing old... I've never seen anyone grow old.=أن نكبر... لم أرَ أ�
 That's the tragedy of your world.=هذه هي مأساة عالمكم.
 
 # --- مشهد الملكة نيا ---
-I am Nia. Queen of Agnus.=أنا نيا. ملكة أغنس.
+I am Nia. Queen of Agnus.=أنا نيا. ملكة أغنوس.
 The Queen...?! But you're here, with the Lost Numbers?=الملكة...؟! لكنك هنا، مع الأعداد المفقودة؟
 The Queen you know is a puppet. A shell of Moebius.=الملكة التي تعرفونها دمية. قوقعة من موبيوس.
 Then who are you?=إذن من أنتِ؟
@@ -14278,7 +14278,7 @@ Then to defeat Moebius, we need to fix what was broken.=إذن للقضاء عل
 Yes. That is your mission, Ouroboros.=نعم. هذه هي مهمتكم، يا أوروبوروس.
 
 # --- مشهد ميليا ---
-Melia... Queen of Keves.=ميليا... ملكة كيفس.
+Melia... Queen of Keves.=ميليا... ملكة كيفيس.
 Another queen in hiding?=ملكة أخرى في الخفاء؟
 I've been watching over my people from afar.=كنت أراقب شعبي من بعيد.
 Watching? While they fight and die?=تراقبين؟ بينما يقاتلون ويموتون؟
@@ -14295,7 +14295,7 @@ Moebius... They're not gods. They're people.=موبيوس... ليسوا آلهة
 People? Those monsters?=بشر؟ تلك الوحوش؟
 People who chose eternity over life.=بشر اختاروا الأبدية على الحياة.
 They feed on conflict. On the cycle of war.=يتغذّون على الصراع. على دورة الحرب.
-As long as Keves and Agnus fight, Moebius grows stronger.=طالما كيفس وأغنس يتقاتلان، موبيوس يزداد قوة.
+As long as Keves and Agnus fight, Moebius grows stronger.=طالما كيفيس وأغنوس يتقاتلان، موبيوس يزداد قوة.
 So the war... it was designed. From the beginning.=إذن الحرب... كانت مُصمَّمة. منذ البداية.
 Every battle, every death... it all feeds them.=كل معركة، كل موت... كله يُغذّيهم.
 That's monstrous...=هذا وحشي...
@@ -14386,7 +14386,7 @@ But Moebius corrupted it. Stopped the worlds from separating again.=لكن مو�
 So they could keep feeding on the cycle.=حتى يتمكّنوا من الاستمرار في التغذّي على الدورة.
 If we can restart Origin, we can undo everything Moebius has done.=إذا استطعنا إعادة تشغيل الأوريجن، يمكننا إلغاء كل ما فعله موبيوس.
 But that means... the worlds will separate.=لكن ذلك يعني... أن العالمين سينفصلان.
-Yes. Keves and Agnus will become two worlds again.=نعم. كيفس وأغنس سيعودان عالمين مرة أخرى.
+Yes. Keves and Agnus will become two worlds again.=نعم. كيفيس وأغنوس سيعودان عالمين مرة أخرى.
 And we... we'll be separated too.=ونحن... سنُفصَل أيضاً.
 Noah... Mio...=نوح... ميو...
 We know. But it's the right thing to do.=نحن نعلم. لكنه الشيء الصحيح الذي يجب فعله.
@@ -14569,7 +14569,7 @@ Your kindness speaks louder than words, Valdi.=لطفك يتحدث أعلى من
 # ═══════════════════════════════════════════════════════════════════
 
 # --- مشهد حقيقة أوروبوروس ---
-Ouroboros... the power to interlink Keves and Agnus.=أوروبوروس... قوة الإنترلينك بين كيفس وأغنس.
+Ouroboros... the power to interlink Keves and Agnus.=أوروبوروس... قوة الإنترلينك بين كيفيس وأغنوس.
 It was created by the Queens themselves.=صنعتها الملكتان بنفسيهما.
 Nia and Melia... They gave us this power?=نيا وميليا... هما مَن منحانا هذه القوة؟
 As a weapon against Moebius. Their last hope.=كسلاح ضد موبيوس. أملهما الأخير.
@@ -16154,7 +16154,7 @@ Understanding is the first step to coexistence.=الفهم هو الخطوة ا�
 # --- مهمة: Legacy of Moebius ---
 Moebius is gone, but their influence remains.=موبيوس رحل، لكن تأثيره باقٍ.
 Some soldiers still believe the old propaganda.=بعض الجنود لا يزالون يصدقون الدعاية القديمة.
-That Keves and Agnus are natural enemies.=أن كيفس وأغنوس أعداء طبيعيون.
+That Keves and Agnus are natural enemies.=أن كيفيس وأغنوس أعداء طبيعيون.
 We were never enemies. We were puppets.=لم نكن أعداءً أبداً. كنا دمى.
 And now the strings are cut.=والآن الخيوط قُطعت.
 But old beliefs die hard. We need education, not just liberation.=لكن المعتقدات القديمة تموت بصعوبة. نحتاج تعليماً، ليس فقط تحريراً.
@@ -16750,7 +16750,7 @@ Manana cook for everyone! Not just friends, but all colonies!=مانانا تط�
 Food brings people together better than any treaty.=الطعام يجمع الناس أفضل من أي معاهدة.
 Manana's Kitchen is open! First customers are lining up!=مطبخ مانانا مفتوح! أول الزبائن يصطفون!
 The Kevesi soldier and the Agnian soldier... they're sharing a table.=الجندي الكيفيسي والجندي الأغنوسي... يتشاركان طاولة.
-Food not care about Keves or Agnus. Food is for everyone!=الطعام لا يهتم بكيفس أو أغنوس. الطعام للجميع!
+Food not care about Keves or Agnus. Food is for everyone!=الطعام لا يهتم بكيفيس أو أغنوس. الطعام للجميع!
 This might be your greatest achievement, Manana. Greater than any battle.=هذا قد يكون أعظم إنجازاتكِ، مانانا. أعظم من أي معركة.
 Meh meh meh! Manana KNEW food would save the world!=مه مه مه! مانانا عرفت أن الطعام سينقذ العالم!
 
@@ -16782,8 +16782,8 @@ Manana knows which ones are safe. Mostly.=مانانا تعرف أيها آمن.
 The purple-capped ones give the stew its distinctive glow.=ذات القبعة البنفسجية تمنح اليخنة توهجها المميز.
 Eat under moonlight for the full experience.=كُلوها تحت ضوء القمر للتجربة الكاملة.
 
-# --- وصفات منطقة كيفس ---
-Keves Military Rations (Improved)=حصص كيفس العسكرية (محسّنة)
+# --- وصفات منطقة كيفيس ---
+Keves Military Rations (Improved)=حصص كيفيس العسكرية (محسّنة)
 The old rations were tasteless blocks of compressed nutrients.=الحصص القديمة كانت كتلاً عديمة الطعم من مغذيات مضغوطة.
 Manana has improved them. Same nutrition, actual flavor now!=مانانا حسّنتها. نفس التغذية، نكهة حقيقية الآن!
 The soldiers actually smile when they eat now.=الجنود يبتسمون فعلاً عندما يأكلون الآن.
@@ -16818,7 +16818,7 @@ Promise. Biggest feast Aionios ever seen.=وعد. أكبر وليمة شهدته
 WE WON! Time for feast!=فزنا! وقت الوليمة!
 Manana has been preparing for this for days.=مانانا كانت تُعد لهذا منذ أيام.
 Every dish from every region. Aetia herbs, Fornis spices, Maktha mushrooms.=كل طبق من كل منطقة. أعشاب إيزيا، توابل فورنيس، فطر ماكثا.
-Cloud Sea fish, Kevesi bread, Agnian kebabs.=سمك بحر السحاب، خبز كيفس، كباب أغنوس.
+Cloud Sea fish, Kevesi bread, Agnian kebabs.=سمك بحر السحاب، خبز كيفيس، كباب أغنوس.
 A feast that represents all of Aionios.=وليمة تمثل كل أيونيوس.
 Every colony, every region, every flavor.=كل مستعمرة، كل منطقة، كل نكهة.
 This is what peace tastes like.=هكذا يكون طعم السلام.
@@ -16943,7 +16943,7 @@ Nopon Coins can substitute for missing materials when crafting Gems.=عملات 
 
 # --- Off-Seeing ---
 Off-Seers play a melody to send the fallen to their rest.=مُنشدو الوداع يعزفون لحناً لإرسال الساقطين إلى راحتهم.
-Noah is the Off-Seer for Keves. He plays the flute.=نوح مُنشد وداع كيفس. يعزف الناي.
+Noah is the Off-Seer for Keves. He plays the flute.=نوح مُنشد وداع كيفيس. يعزف الناي.
 Mio is the Off-Seer for Agnus. She also plays the flute.=ميو مُنشدة وداع أغنوس. هي أيضاً تعزف الناي.
 Off-Seeing is a sacred duty respected by both sides of the war.=إنشاد الوداع واجب مقدس يحترمه كلا طرفي الحرب.
 The melody carries the fallen's life force back into the cycle.=اللحن يحمل قوة حياة الساقطين عائداً إلى الدورة.
@@ -16957,7 +16957,7 @@ An Off-Seer's flute can be heard across great distances.=ناي مُنشد ال�
 
 # --- World of Aionios ---
 Aionios is a vast world where two nations wage an eternal war.=أيونيوس عالم شاسع حيث أمتان تخوضان حرباً أبدية.
-Keves specializes in mechanical weapons and technology.=كيفس تتخصص في الأسلحة الميكانيكية والتقنية.
+Keves specializes in mechanical weapons and technology.=كيفيس تتخصص في الأسلحة الميكانيكية والتقنية.
 Agnus excels in ether-based magic and abilities.=أغنوس تتفوق في السحر والقدرات القائمة على الأثير.
 Soldiers are born from Cradles and live for only ten terms.=الجنود يُولدون من المهود ويعيشون لعشر فترات فقط.
 A term is roughly equivalent to one year of life.=الفترة تعادل تقريباً سنة واحدة من الحياة.
