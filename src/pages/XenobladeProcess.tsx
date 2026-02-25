@@ -672,8 +672,20 @@ const XenobladeProcess = () => {
                 disabled={isProcessing}
               />
             </label>
+            <label className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-accent/10 border border-accent/30 text-sm font-display font-semibold cursor-pointer hover:bg-accent/20 transition-colors ${isProcessing ? 'opacity-50 pointer-events-none' : ''}`}>
+              <Upload className="w-4 h-4" />
+              رفع مجلد كامل
+              <input
+                type="file"
+                {...{ webkitdirectory: "", directory: "" } as any}
+                multiple
+                className="hidden"
+                onChange={e => handleFileSelect(e.target.files)}
+                disabled={isProcessing}
+              />
+            </label>
           </div>
-          <p className="text-xs text-muted-foreground mt-2">💡 استخدم "كل الأنواع" لاختيار عدة ملفات من مدير الملفات — سيتم تصفية .bdat و .msbt و .json تلقائياً</p>
+          <p className="text-xs text-muted-foreground mt-2">💡 استخدم "كل الأنواع" لاختيار عدة ملفات من مدير الملفات، أو "رفع مجلد كامل" لرفع مجلد يحتوي على ملفات .bdat تلقائياً</p>
           <input
             type="file"
             accept=".msbt,.json,.bdat"
