@@ -1264,7 +1264,7 @@ Colony 15 Camp=مخيم المستعمرة 15
 Fornis Landmark Tower=برج معلم فورنيس
 Raptor Perch=مجثم الطيور الجارحة
 Searoute Ferronis Hulk=هيكل فيرونيس طريق البحر
-Cotte Landmark=معلم كوتي
+Conté Landmark=معلم كونتيه
 Aegis Gate=بوابة إيجيس
 Minoth Summit=قمة مينوث
 Anu Shoals=مياه أنو الضحلة
@@ -2695,7 +2695,7 @@ Colony Tau Ferronis=فيرونيس مستعمرة تاو
 Deactivated Ferronis=فيرونيس معطل
 Active Ferronis=فيرونيس نشط
 Ferronis Cockpit=قمرة فيرونيس
-Ferronis Core=نواة الفيرونيس
+Ferronis Core=نواة فيرونيس
 # ═══════════════════════════════════════════════════
 # نداءات المعركة الصوتية (Battle Voice Lines)
 # ═══════════════════════════════════════════════════
@@ -10769,8 +10769,8 @@ The heat is getting to me. When can we find shade?=الحرارة تؤثر عل�
 The oasis! Thank goodness. I thought we'd never find water.=الواحة! الحمد لله. ظننت أننا لن نجد ماءً أبدًا.
 Fornis might be harsh, but the sunsets here are beautiful.=فورنيس قد تكون قاسية، لكن غروب الشمس هنا جميل.
 
-# --- منطقة بينتلاس (Pentelas Region) ---
-Pentelas is Agnus territory. We should be careful.=بينتلاس هي أرض أغنوس. يجب أن نكون حذرين.
+# --- منطقة بنتيلاس (Pentelas Region) ---
+Pentelas is Agnus territory. We should be careful.=بنتيلاس هي أرض أغنوس. يجب أن نكون حذرين.
 The architecture here is completely different from Keves.=العمارة هنا مختلفة تمامًا عن كيفيس.
 Agnus uses ether technology in ways Keves never imagined.=أغنوس تستخدم تقنية الأثير بطرق لم تتخيلها كيفيس أبدًا.
 The soldiers here fight differently too. More magic-focused.=الجنود هنا يقاتلون بشكل مختلف أيضًا. أكثر تركيزًا على السحر.
@@ -11410,7 +11410,7 @@ Colony Iota Workshop=ورشة المستعمرة يوتا
 Colony Gamma Barracks=ثكنات المستعمرة غاما
 Origin Interior=داخل الأوريجن
 Cloudkeep Courtyard=فناء كلاودكيب
-Great Cotte Falls Overlook=مطل شلالات كوتي الكبرى
+Great Conté Falls Overlook=مطل شلالات كونتيه الكبرى
 Maktha Wildwood Clearing=فسحة غابة ماكثا البرية
 
 # ═══════════════════════════════════════════════════════════════════
@@ -17326,7 +17326,7 @@ Waterfall Basin=حوض الشلال
 Temple of the Sages=معبد الحكماء
 Maktha Wildwood Depths=أعماق غابة ماكثا البرية
 Ancient Battlefield=ساحة المعركة القديمة
-Cotte River=نهر كوتي
+Conté River=نهر كونتيه
 Sunken Hollow=الجوف الغارق
 
 # --- نقاط الراحة ---
@@ -17389,18 +17389,18 @@ Agnus Castle Bridge=جسر قلعة أغنوس
 Agnus Memorial=نصب أغنوس التذكاري
 
 # ============================================================
-# القسم 233: منطقة كادنسيا (Cadensia Region Landmarks & Locations)
+# القسم 233: منطقة كادينسيا (Cadensia Region Landmarks & Locations)
 # Section 233: Cadensia Region Landmarks & Locations
 # ============================================================
 
-Cadensia Region=منطقة كادنسيا
+Cadensia Region=منطقة كادينسيا
 Erythia Sea=بحر إريثيا
 Colony 11=المستعمرة 11
 Colony 11 Dock=رصيف المستعمرة 11
-Great Sea of Cadensia=بحر كادنسيا العظيم
+Great Sea of Cadensia=بحر كادينسيا العظيم
 Erythia Island=جزيرة إريثيا
 Floating Reef=الشعاب العائمة
-Cadensia Viewpoint=نقطة مراقبة كادنسيا
+Cadensia Viewpoint=نقطة مراقبة كادينسيا
 Erythia Wharf=رصيف إريثيا
 Drifting Isle=الجزيرة الطائفة
 Azure Sea=البحر الأزرق
@@ -17409,12 +17409,12 @@ Seaside Overlook=مطل البحر
 Hidden Cove=الخليج المخفي
 Lighthouse Island=جزيرة المنارة
 Storm Shelter=ملجأ العاصفة
-Cadensia Ruins=أطلال كادنسيا
+Cadensia Ruins=أطلال كادينسيا
 Sunken Ship=السفينة الغارقة
 Tidal Pool=بركة المد
 Sea Cave=كهف البحر
 Erythia Cliffs=جروف إريثيا
-Cadensia Whirlpool=دوامة كادنسيا
+Cadensia Whirlpool=دوامة كادينسيا
 Isle of the Fallen=جزيرة الأبطال الراحلين
 
 # --- نقاط الراحة ---
@@ -18010,7 +18010,7 @@ Desert Phantom=شبح الصحراء
 Burning Chimera=الكايميرا المشتعلة
 
 # ============================================================
-# القسم 253: الوحوش الفريدة - بنتيلاس وكادنسيا
+# القسم 253: الوحوش الفريدة - بنتيلاس وكادينسيا
 # Section 253: Unique Monsters - Pentelas & Cadensia
 # ============================================================
 
@@ -18848,7 +18848,7 @@ Snow Ladybug=دعسوقة الثلج
 Aetia Cicada=زيز أيتيا
 Fornis Scarab=جعران فورنيس
 Pentelas Moth=عثة بنتيلاس
-Cadensia Beetle=خنفساء كادنسيا
+Cadensia Beetle=خنفساء كادينسيا
 Maktha Centipede=حريش ماكثا
 Luminous Worm=دودة مضيئة
 Ether Mite=سوسة الأثير
@@ -19062,7 +19062,7 @@ Reward: Gold Bonus=المكافأة: مكافأة ذهب
 Aetia Collection=مجموعة أيتيا
 Fornis Collection=مجموعة فورنيس
 Pentelas Collection=مجموعة بنتيلاس
-Cadensia Collection=مجموعة كادنسيا
+Cadensia Collection=مجموعة كادينسيا
 Maktha Collection=مجموعة ماكثا
 
 # ============================================================
@@ -19194,7 +19194,7 @@ The Smith's Apprentice=تلميذ الحداد
 Fornis United=فورنيس المتحدة
 
 # ============================================================
-# القسم 303: المهام الجانبية - بينتولاس
+# القسم 303: المهام الجانبية - بنتيلاس
 # Section 303: Side Quests - Pentelas Region
 # ============================================================
 
@@ -19210,7 +19210,7 @@ Highland Patrol=دورية المرتفعات
 Isurd's Research=بحث إيسورد
 Medicine for All=دواء للجميع
 Northern Alliance=تحالف الشمال
-Pentelas Expedition=بعثة بينتولاس
+Pentelas Expedition=بعثة بنتيلاس
 Scientific Discovery=اكتشاف علمي
 The Doctor's Oath=قسم الطبيب
 The Peak of Determination=قمة العزيمة
@@ -19220,7 +19220,7 @@ Wisdom of the Ancients=حكمة القدماء
 Yakumo's Request=طلب ياكومو
 
 # ============================================================
-# القسم 304: المهام الجانبية - كادنسيا وماكثا
+# القسم 304: المهام الجانبية - كادينسيا وماكثا
 # Section 304: Side Quests - Cadensia & Maktha
 # ============================================================
 
@@ -19344,7 +19344,7 @@ A festival to celebrate our new alliance? I love the idea!=مهرجان للاح
 The last Flame Clock in the region has been destroyed!=آخر ساعة لهب في المنطقة تم تدميرها!
 All colonies in Aetia are now free!=جميع مستعمرات أيتيا أصبحت حرة الآن!
 Fornis has been completely liberated!=فورنيس تحررت بالكامل!
-Pentelas stands united against Moebius!=بينتولاس تقف متحدة ضد موبيوس!
+Pentelas stands united against Moebius!=بنتيلاس تقف متحدة ضد موبيوس!
 The tide is turning. Moebius can no longer control us!=المد يتحول. موبيوس لم يعد يستطيع السيطرة علينا!
 Every colony freed is a step closer to true peace.=كل مستعمرة تتحرر هي خطوة أقرب إلى السلام الحقيقي.
 The Consuls are losing their grip on this world.=القناصل يفقدون قبضتهم على هذا العالم.
@@ -20262,10 +20262,10 @@ Aetia - Day=أيتيا - نهار
 Aetia - Night=أيتيا - ليل
 Fornis Region - Day=منطقة فورنيس - نهار
 Fornis Region - Night=منطقة فورنيس - ليل
-Pentelas Region - Day=منطقة بينتولاس - نهار
-Pentelas Region - Night=منطقة بينتولاس - ليل
-Cadensia Region - Day=منطقة كادنسيا - نهار
-Cadensia Region - Night=منطقة كادنسيا - ليل
+Pentelas Region - Day=منطقة بنتيلاس - نهار
+Pentelas Region - Night=منطقة بنتيلاس - ليل
+Cadensia Region - Day=منطقة كادينسيا - نهار
+Cadensia Region - Night=منطقة كادينسيا - ليل
 Maktha Wildwood - Day=غابة ماكثا - نهار
 Maktha Wildwood - Night=غابة ماكثا - ليل
 The City=المدينة
@@ -20737,7 +20737,7 @@ A statue of the Ouroboros, in the center of the City. Our heroes.=تمثال ا�
 
 Spring has come to Aetia. The flowers are blooming everywhere.=الربيع جاء لأيتيا. الأزهار تتفتح في كل مكان.
 Summer in Fornis is brutal. Make sure to stay hydrated.=الصيف في فورنيس قاسٍ. تأكدوا من شرب الماء.
-Autumn in Pentelas. The leaves are turning golden.=خريف في بينتولاس. الأوراق تتحول إلى الذهبي.
+Autumn in Pentelas. The leaves are turning golden.=خريف في بنتيلاس. الأوراق تتحول إلى الذهبي.
 Winter has arrived. The snow covers everything in white.=الشتاء وصل. الثلج يغطي كل شيء بالأبيض.
 The seasonal change brings new collectibles. Time to explore!=تغير الموسم يجلب مقتنيات جديدة. حان وقت الاستكشاف!
 Some monsters only appear during certain seasons.=بعض الوحوش تظهر فقط خلال مواسم معينة.
