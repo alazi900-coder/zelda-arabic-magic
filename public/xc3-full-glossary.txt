@@ -21333,8 +21333,258 @@ Nimue to Teach: Professor, your recklessness worries me!=نيميو لتيتش: 
 Teach to Nimue: Relax! The best lessons are hands-on!=تيتش لنيميو: استرخي! أفضل الدروس عملية!
 
 # ============================================================
+# القسم 421-432: حوارات معركة الشخصيات الرئيسية الستة
+# Sections 421-432: Main Cast Battle Dialogues (Combat, Interlink, Chain Attack)
+# ============================================================
+
+# --- القسم 421: Noah - حوارات القتال العامة ---
+# --- Section 421: Noah - General Combat Dialogues ---
+Noah: I'll carve a path forward!=نوح: سأشق طريقاً للأمام!
+Noah: This sword carries our will!=نوح: هذا السيف يحمل إرادتنا!
+Noah: I won't let anyone else die!=نوح: لن أدع أي شخص آخر يموت!
+Noah: We fight to live, not to destroy!=نوح: نقاتل لنعيش، لا لنُدمّر!
+Noah: Lucky Seven, guide my hand!=نوح: لاكي سيفن، وجّه يدي!
+Noah: For every life that was stolen!=نوح: من أجل كل حياة سُرقت!
+Noah: This is OUR future!=نوح: هذا هو مستقبلنا!
+Noah: I can hear it... the song of life!=نوح: أستطيع سماعها... أغنية الحياة!
+Noah: We did it... together!=نوح: فعلناها... معاً!
+Noah: The fighting's over. Let's move on!=نوح: انتهى القتال. لنمضِ قدماً!
+Noah: Every victory brings us closer to the truth!=نوح: كل نصر يقرّبنا من الحقيقة!
+Noah: I won't... stop here...!=نوح: لن... أتوقف هنا...!
+Noah: Everyone... keep going... without me...=نوح: الجميع... واصلوا... بدوني...
+Noah: Mio... I'm sorry...=نوح: ميو... أنا آسف...
+
+# --- القسم 422: Noah - حوارات الإنترلينك والاندماج ---
+# --- Section 422: Noah - Interlink & Ouroboros Dialogues ---
+Noah: Mio! Let's Interlink!=نوح: ميو! لنقم بالإنترلينك!
+Noah: Our hearts beat as one!=نوح: قلوبنا تنبض كواحد!
+Noah: Ouroboros, awaken!=نوح: أوروبوروس، استيقظ!
+Noah: I can feel your strength, Mio!=نوح: أستطيع الشعور بقوتك، ميو!
+Noah: Together, we transcend our limits!=نوح: معاً، نتخطى حدودنا!
+Noah: The power of Ouroboros flows through us!=نوح: قوة أوروبوروس تتدفق خلالنا!
+Noah: This form... it resonates with my soul!=نوح: هذا الشكل... يتردد صداه مع روحي!
+Noah: Interlink, release!=نوح: الإنترلينك، إطلاق!
+Noah: Full power! Ouroboros Order!=نوح: القوة الكاملة! أمر أوروبوروس!
+
+# --- القسم 423: Noah - حوارات الهجوم المتسلسل ---
+# --- Section 423: Noah - Chain Attack Dialogues ---
+Noah: Chain Attack, now!=نوح: الهجوم المتسلسل، الآن!
+Noah: Everyone, link up!=نوح: الجميع، اربطوا!
+Noah: This is our chance! Don't hold back!=نوح: هذه فرصتنا! لا تتراجعوا!
+Noah: Keep the chain going!=نوح: واصلوا السلسلة!
+Noah: Our bonds are our strength!=نوح: روابطنا هي قوتنا!
+Noah: Final order! Give it everything!=نوح: الأمر الأخير! أعطوها كل شيء!
+Noah: Brave Combo! Let's finish this!=نوح: كومبو الشجاعة! لننهِ هذا!
+Noah: Outstanding! The chain holds!=نوح: رائع! السلسلة صامدة!
+
+# --- القسم 424: Mio - حوارات القتال العامة ---
+# --- Section 424: Mio - General Combat Dialogues ---
+Mio: I'll protect what matters!=ميو: سأحمي ما يهم!
+Mio: My rings will shield us!=ميو: حلقاتي ستحمينا!
+Mio: I won't waste a single moment!=ميو: لن أُضيّع لحظة واحدة!
+Mio: Time is precious. Let's end this quickly!=ميو: الوقت ثمين. لننهِ هذا بسرعة!
+Mio: For the time we have left!=ميو: من أجل الوقت المتبقي لنا!
+Mio: I'll keep everyone safe!=ميو: سأبقي الجميع آمنين!
+Mio: Every second counts!=ميو: كل ثانية مهمة!
+Mio: We won! That's more time for us!=ميو: فزنا! هذا وقت إضافي لنا!
+Mio: Good. Nobody was hurt!=ميو: جيد. لم يُصب أحد!
+Mio: Another battle survived!=ميو: معركة أخرى نجونا منها!
+Mio: No... my time... can't be up yet...=ميو: لا... وقتي... لا يمكن أن ينتهي بعد...
+Mio: Noah... live on... for me...=ميو: نوح... عش... من أجلي...
+
+# --- القسم 425: Mio - حوارات الإنترلينك والاندماج ---
+# --- Section 425: Mio - Interlink & Ouroboros Dialogues ---
+Mio: Noah! Interlink, now!=ميو: نوح! الإنترلينك، الآن!
+Mio: I can feel our connection!=ميو: أستطيع الشعور بترابطنا!
+Mio: Ouroboros form, activated!=ميو: شكل أوروبوروس، مُفعّل!
+Mio: Our souls are synchronized!=ميو: أرواحنا متزامنة!
+Mio: This power... it's both of us!=ميو: هذه القوة... إنها كلانا!
+Mio: Noah, I trust you completely!=ميو: نوح، أثق بك تماماً!
+Mio: Interlink sustained! Keep pushing!=ميو: الإنترلينك مستمر! واصلوا الضغط!
+Mio: Release! Back to normal!=ميو: إطلاق! العودة للوضع الطبيعي!
+
+# --- القسم 426: Mio - حوارات الهجوم المتسلسل ---
+# --- Section 426: Mio - Chain Attack Dialogues ---
+Mio: Chain Attack! Let's make every hit count!=ميو: الهجوم المتسلسل! لنجعل كل ضربة مهمة!
+Mio: I'll support from here!=ميو: سأدعم من هنا!
+Mio: The chain is building! Keep going!=ميو: السلسلة تتصاعد! واصلوا!
+Mio: Our timing is perfect!=ميو: توقيتنا مثالي!
+Mio: Smash Combo! Now!=ميو: كومبو التحطيم! الآن!
+Mio: Beautiful coordination, everyone!=ميو: تنسيق رائع، الجميع!
+
+# --- القسم 427: Lanz - حوارات القتال العامة ---
+# --- Section 427: Lanz - General Combat Dialogues ---
+Lanz: Time to get stuck in!=لانز: حان وقت الانغماس!
+Lanz: I'm the man for this!=لانز: أنا الرجل المناسب لهذا!
+Lanz: My body IS a weapon!=لانز: جسدي هو السلاح!
+Lanz: Come on then! I can take it!=لانز: هيا إذاً! أستطيع تحمّله!
+Lanz: Don't think, just smash!=لانز: لا تفكر، فقط حطّم!
+Lanz: I'll be the shield! You lot attack!=لانز: سأكون الدرع! أنتم هاجموا!
+Lanz: Nobody touches my mates!=لانز: لا أحد يمس رفاقي!
+Lanz: Hah! Piece of cake!=لانز: ها! قطعة حلوى!
+Lanz: That's what you get for messing with us!=لانز: هذا ما تحصل عليه حين تعبث معنا!
+Lanz: Easy peasy! Who's next?=لانز: سهل جداً! من التالي؟
+Lanz: Not done yet! Come at me!=لانز: لم أنتهِ بعد! تعال إليّ!
+Lanz: Ugh... That actually hurt...=لانز: أخ... هذا آلم فعلاً...
+Lanz: No way... I'm supposed to be the tough one...=لانز: مستحيل... يُفترض أنني الصلب...
+Lanz: Sena... take over... for me...=لانز: سينا... تولّي... عني...
+
+# --- القسم 428: Lanz - حوارات الإنترلينك والاندماج ---
+# --- Section 428: Lanz - Interlink & Ouroboros Dialogues ---
+Lanz: Sena! Let's do this! Interlink!=لانز: سينا! لنفعلها! الإنترلينك!
+Lanz: Whoa! This power is insane!=لانز: واو! هذه القوة جنونية!
+Lanz: Ouroboros mode! Now we're talking!=لانز: وضع أوروبوروس! الآن نتكلم!
+Lanz: I can feel Sena's strength flowing into me!=لانز: أستطيع الشعور بقوة سينا تتدفق إليّ!
+Lanz: We're unstoppable together!=لانز: نحن لا نُوقَف معاً!
+Lanz: Interlink power, maxed out!=لانز: قوة الإنترلينك، في أقصاها!
+Lanz: Release! Phew, that's intense!=لانز: إطلاق! يا إلهي، هذا مكثّف!
+
+# --- القسم 429: Lanz - حوارات الهجوم المتسلسل ---
+# --- Section 429: Lanz - Chain Attack Dialogues ---
+Lanz: Chain Attack! Let's wreck 'em!=لانز: الهجوم المتسلسل! لنحطّمهم!
+Lanz: My turn! Watch this!=لانز: دوري! شاهدوا هذا!
+Lanz: I'll smash through anything!=لانز: سأحطّم أي شيء!
+Lanz: Keep it coming! Don't stop!=لانز: واصلوا! لا تتوقفوا!
+Lanz: FULL POWER! Take THIS!=لانز: القوة الكاملة! خذ هذه!
+Lanz: Hah! Did you see that combo?=لانز: ها! هل رأيتم ذلك الكومبو؟
+
+# --- القسم 430: Sena - حوارات القتال العامة ---
+# --- Section 430: Sena - General Combat Dialogues ---
+Sena: I'm the girl with the gall!=سينا: أنا الفتاة ذات الجرأة!
+Sena: My hammer speaks louder than words!=سينا: مطرقتي تتكلم بصوت أعلى من الكلمات!
+Sena: I'll smash everything in our way!=سينا: سأحطّم كل شيء في طريقنا!
+Sena: Don't let the size fool you!=سينا: لا تدع الحجم يخدعك!
+Sena: I'm stronger than I look!=سينا: أنا أقوى مما أبدو!
+Sena: This hammer carries my feelings!=سينا: هذه المطرقة تحمل مشاعري!
+Sena: I won't be a burden anymore!=سينا: لن أكون عبئاً بعد الآن!
+Sena: We did it! I actually helped!=سينا: فعلناها! لقد ساعدت فعلاً!
+Sena: Yay! Great teamwork, everyone!=سينا: رائع! عمل جماعي ممتاز، الجميع!
+Sena: That was all of us, not just me!=سينا: كان ذلك جهد الجميع، ليس أنا فقط!
+Sena: I... I can't swing anymore...=سينا: أنا... لا أستطيع التأرجح بعد الآن...
+Sena: Lanz... I'm sorry I wasn't strong enough...=سينا: لانز... أنا آسفة لم أكن قوية كفاية...
+
+# --- القسم 431: Sena - حوارات الإنترلينك والاندماج ---
+# --- Section 431: Sena - Interlink & Ouroboros Dialogues ---
+Sena: Lanz! Interlink time!=سينا: لانز! وقت الإنترلينك!
+Sena: Wow! I feel so powerful!=سينا: واو! أشعر بقوة هائلة!
+Sena: Ouroboros form! Let's go!=سينا: شكل أوروبوروس! هيا!
+Sena: Lanz's courage is flowing through me!=سينا: شجاعة لانز تتدفق خلالي!
+Sena: Together we're invincible!=سينا: معاً نحن لا نُقهر!
+Sena: I can feel it... our combined power!=سينا: أستطيع الشعور بها... قوتنا المُجمّعة!
+Sena: Interlink release! That was amazing!=سينا: إطلاق الإنترلينك! كان ذلك مذهلاً!
+
+# --- القسم 432: Sena - حوارات الهجوم المتسلسل ---
+# --- Section 432: Sena - Chain Attack Dialogues ---
+Sena: Chain Attack! Here I come!=سينا: الهجوم المتسلسل! ها أنا قادمة!
+Sena: Hammer time! No holding back!=سينا: وقت المطرقة! بلا تراجع!
+Sena: I'll give it everything I've got!=سينا: سأعطيها كل ما لدي!
+Sena: The chain is so strong!=سينا: السلسلة قوية جداً!
+Sena: Final smash! TAKE THIS!=سينا: التحطيم النهائي! خذ هذه!
+Sena: We're amazing when we work together!=سينا: نحن مذهلون حين نعمل معاً!
+
+# --- القسم 433: Taion - حوارات القتال العامة ---
+# --- Section 433: Taion - General Combat Dialogues ---
+Taion: I've already calculated our victory!=تايون: لقد حسبت نصرنا مسبقاً!
+Taion: Mondo will guide my strategy!=تايون: موندو سيوجّه استراتيجيتي!
+Taion: Think before you act. That's my motto!=تايون: فكّر قبل أن تتصرف. هذا شعاري!
+Taion: Every battle is a puzzle to solve!=تايون: كل معركة هي لغز يجب حلّه!
+Taion: My tactics are flawless!=تايون: تكتيكاتي بلا عيب!
+Taion: Knowledge is the greatest weapon!=تايون: المعرفة هي أعظم سلاح!
+Taion: I anticipated every move!=تايون: توقعت كل حركة!
+Taion: As planned. Precisely as planned!=تايون: كما هو مخطط. تماماً كما هو مخطط!
+Taion: Victory through superior intellect!=تايون: النصر عبر الذكاء المتفوق!
+Taion: A textbook result!=تايون: نتيجة مثالية كما في الكتب!
+Taion: This... wasn't in my calculations...=تايون: هذا... لم يكن في حساباتي...
+Taion: Impossible... my strategy was perfect...=تايون: مستحيل... استراتيجيتي كانت مثالية...
+Taion: Eunie... take command...=تايون: يوني... تولّي القيادة...
+
+# --- القسم 434: Taion - حوارات الإنترلينك والاندماج ---
+# --- Section 434: Taion - Interlink & Ouroboros Dialogues ---
+Taion: Eunie! Interlink formation!=تايون: يوني! تشكيل الإنترلينك!
+Taion: Our minds are synchronized!=تايون: عقولنا متزامنة!
+Taion: Ouroboros form, optimal configuration!=تايون: شكل أوروبوروس، التكوين الأمثل!
+Taion: I can process Eunie's instincts... fascinating!=تايون: أستطيع معالجة غرائز يوني... مذهل!
+Taion: Interlink efficiency at maximum!=تايون: كفاءة الإنترلينك في أقصاها!
+Taion: The data from this form is incredible!=تايون: البيانات من هذا الشكل لا تصدق!
+Taion: Interlink release. Analyzing results!=تايون: إطلاق الإنترلينك. جارٍ تحليل النتائج!
+
+# --- القسم 435: Taion - حوارات الهجوم المتسلسل ---
+# --- Section 435: Taion - Chain Attack Dialogues ---
+Taion: Chain Attack! Follow my lead!=تايون: الهجوم المتسلسل! اتبعوا قيادتي!
+Taion: The optimal chain sequence is clear!=تايون: تسلسل السلسلة الأمثل واضح!
+Taion: Mondo, calculate the next move!=تايون: موندو، احسب الحركة التالية!
+Taion: Tactical Combo! Execute!=تايون: كومبو تكتيكي! نفّذوا!
+Taion: The chain efficiency is remarkable!=تايون: كفاءة السلسلة ملحوظة!
+Taion: Precisely timed. Well done, everyone!=تايون: توقيت دقيق. أحسنتم، الجميع!
+
+# --- القسم 436: Eunie - حوارات القتال العامة ---
+# --- Section 436: Eunie - General Combat Dialogues ---
+Eunie: Who's the boss? ME!=يوني: من الرئيسة؟ أنا!
+Eunie: You lot are in for a world of hurt!=يوني: أنتم على موعد مع عالم من الألم!
+Eunie: I'll patch you up AND take them down!=يوني: سأرقّعكم وأُسقطهم في نفس الوقت!
+Eunie: Don't be a muppet! Get behind me!=يوني: لا تكن أحمقاً! قف خلفي!
+Eunie: My staff heals AND hurts!=يوني: عصاي تشفي وتؤلم!
+Eunie: I'm the best healer AND fighter here!=يوني: أنا أفضل معالجة ومقاتلة هنا!
+Eunie: Sparks! That was too close!=يوني: بالشرر! كان ذلك قريباً جداً!
+Eunie: Hah! Get wrecked!=يوني: ها! تحطّم!
+Eunie: That's what you get! Nobody messes with us!=يوني: هذا ما تستحقه! لا أحد يعبث معنا!
+Eunie: All healed up? Good. Let's move!=يوني: تم الشفاء؟ جيد. لنتحرك!
+Eunie: We smashed it! High fives all round!=يوني: حطّمناها! تصفيق للجميع!
+Eunie: Ugh... Even I have limits...=يوني: أخ... حتى أنا لديّ حدود...
+Eunie: Can't heal... myself... this time...=يوني: لا أستطيع شفاء... نفسي... هذه المرة...
+Eunie: Taion... don't you dare cry...=يوني: تايون... لا تجرؤ على البكاء...
+
+# --- القسم 437: Eunie - حوارات الإنترلينك والاندماج ---
+# --- Section 437: Eunie - Interlink & Ouroboros Dialogues ---
+Eunie: Taion! Interlink! Let's smash it!=يوني: تايون! الإنترلينك! لنحطّمها!
+Eunie: Whoa, I can feel your nerdy brain!=يوني: واو، أستطيع الشعور بعقلك المهووس!
+Eunie: Ouroboros power! This is brilliant!=يوني: قوة أوروبوروس! هذا رائع!
+Eunie: Your calculations plus my instincts? Unbeatable!=يوني: حساباتك مع غرائزي؟ لا يُهزم!
+Eunie: Interlink sustained! More power!=يوني: الإنترلينك مستمر! المزيد من القوة!
+Eunie: Release! Phew, what a rush!=يوني: إطلاق! يا إلهي، يا لها من اندفاعة!
+
+# --- القسم 438: Eunie - حوارات الهجوم المتسلسل ---
+# --- Section 438: Eunie - Chain Attack Dialogues ---
+Eunie: Chain Attack! Time to show off!=يوني: الهجوم المتسلسل! حان وقت الاستعراض!
+Eunie: Heal and deal! That's my speciality!=يوني: اشفِ واضرب! هذا تخصصي!
+Eunie: The chain's building! Don't slack off!=يوني: السلسلة تتصاعد! لا تتكاسلوا!
+Eunie: Mega combo! Eat THIS!=يوني: كومبو ضخم! كُل هذه!
+Eunie: Hah! Best chain attack ever!=يوني: ها! أفضل هجوم متسلسل على الإطلاق!
+Eunie: We're absolutely crushing it!=يوني: نحن نسحقهم تماماً!
+
+# --- القسم 439: حوارات Interlink مشتركة بين الأزواج ---
+# --- Section 439: Shared Interlink Pair Dialogues ---
+Noah & Mio: Our souls resonate as one!=نوح وميو: أرواحنا تتردد كواحد!
+Noah & Mio: Ouroboros, full power!=نوح وميو: أوروبوروس، القوة الكاملة!
+Noah & Mio: We see the same future!=نوح وميو: نرى المستقبل ذاته!
+Lanz & Sena: Double the power! Double the smash!=لانز وسينا: ضعف القوة! ضعف التحطيم!
+Lanz & Sena: Nobody can stop us now!=لانز وسينا: لا أحد يستطيع إيقافنا الآن!
+Lanz & Sena: Strength and courage, combined!=لانز وسينا: القوة والشجاعة، مجتمعتان!
+Taion & Eunie: Logic meets instinct!=تايون ويوني: المنطق يلتقي الغريزة!
+Taion & Eunie: The perfect combination!=تايون ويوني: التركيبة المثالية!
+Taion & Eunie: Mind and spirit, unified!=تايون ويوني: العقل والروح، متحدان!
+Interlink Level 3! Maximum Ouroboros!=مستوى الإنترلينك 3! أوروبوروس الأقصى!
+Interlink overheating! Disengage!=الإنترلينك يسخن بشدة! فك الارتباط!
+Interlink cooldown complete. Ready to go!=تبريد الإنترلينك مكتمل. جاهزون للانطلاق!
+
+# --- القسم 440: حوارات الهجوم المتسلسل المشتركة ---
+# --- Section 440: Shared Chain Attack Dialogues ---
+Chain Attack initiated!=تم بدء الهجوم المتسلسل!
+Tactical Points maxed!=نقاط التكتيك في أقصاها!
+Amazing chain! Keep it going!=سلسلة مذهلة! واصلوا!
+Combo rate increasing!=معدل الكومبو يتزايد!
+Brave Order! Attack!=أمر الشجاعة! هاجموا!
+Smash Order! Break through!=أمر التحطيم! اخترقوا!
+Tactical Order! Strategize!=أمر التكتيك! خطّطوا!
+Chain complete! Total party annihilation!=السلسلة مكتملة! إبادة حزبية شاملة!
+Overkill! Maximum damage!=قتل مفرط! أقصى ضرر!
+TP Bonus! Extra round!=مكافأة نقاط التكتيك! جولة إضافية!
+Perfect chain! Flawless execution!=سلسلة مثالية! تنفيذ بلا عيب!
+The chain broke... We need to regroup!=انكسرت السلسلة... نحتاج إعادة تجمّع!
+
+# ============================================================
 # --- نهاية القاموس الشامل ---
 # End of Comprehensive Glossary
-# Total: 420 sections covering ALL content of Xenoblade Chronicles 3
-# Including: Main Game, DLC Future Redeemed, NG+, Challenge Mode, Hero Battle Dialogues
+# Total: 440 sections covering ALL content of Xenoblade Chronicles 3
+# Including: Main Game, DLC Future Redeemed, NG+, Challenge Mode, All Battle Dialogues
 # ============================================================
