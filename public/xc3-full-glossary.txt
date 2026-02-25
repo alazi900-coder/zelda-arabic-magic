@@ -21716,8 +21716,131 @@ New Skills available!=مهارات جديدة متاحة!
 Inherited Skill slot unlocked!=تم فتح خانة مهارة موروثة!
 
 # ============================================================
+# القسم 449-456: حوارات صناعة الأحجار الكريمة (Gem Crafting)
+# Sections 449-456: Gem Crafting Dialogues per Character & Gem Type
+# ============================================================
+
+# --- القسم 449: Noah - حوارات صناعة الأحجار ---
+# --- Section 449: Noah - Gem Crafting Dialogues ---
+Noah: Let's see what we can craft!=نوح: لنرَ ما يمكننا صناعته!
+Noah: This gem will help us survive!=نوح: هذا الحجر سيساعدنا على البقاء!
+Noah: Steelcleaver... more cutting power!=نوح: شاطر الفولاذ... قوة قطع أكبر!
+Noah: Brimming Spirit... I can feel the ether surging!=نوح: الروح الفائضة... أشعر بالأثير يتدفق!
+Noah: Steady Striker crafted. Every hit will land true!=نوح: تم صناعة الضارب الثابت. كل ضربة ستصيب بدقة!
+Noah: Lifebearer gem... this will keep everyone going!=نوح: حجر حامل الحياة... سيبقي الجميع مستمرين!
+Noah: Excellent craftsmanship! Rank increased!=نوح: صناعة ممتازة! ارتفعت الرتبة!
+
+# --- القسم 450: Mio - حوارات صناعة الأحجار ---
+# --- Section 450: Mio - Gem Crafting Dialogues ---
+Mio: Gem crafting... making the most of our time!=ميو: صناعة الأحجار... نستفيد من وقتنا!
+Mio: Tail Wind gem! We'll move faster!=ميو: حجر ريح الذيل! سنتحرك أسرع!
+Mio: Swelling Scourge... poison will be our ally!=ميو: البلاء المتصاعد... السم سيكون حليفنا!
+Mio: Ironclad crafted! Our defenses are stronger!=ميو: تم صناعة المدرّع! دفاعاتنا أقوى!
+Mio: Disperse Bloodlust... keeping aggro balanced!=ميو: تشتيت شهوة الدم... الحفاظ على توازن الاستفزاز!
+Mio: A beautiful gem. Time well spent!=ميو: حجر جميل. وقت أُنفق جيداً!
+
+# --- القسم 451: Lanz - حوارات صناعة الأحجار ---
+# --- Section 451: Lanz - Gem Crafting Dialogues ---
+Lanz: Gem crafting? Smash the materials together!=لانز: صناعة الأحجار؟ اسحق المواد معاً!
+Lanz: Steel Protection! Make me even tougher!=لانز: حماية الفولاذ! اجعلني أصلب!
+Lanz: Brimming Spirit? More ether? Sure, why not!=لانز: الروح الفائضة؟ أثير أكثر؟ بالتأكيد، لمَ لا!
+Lanz: Ultimate Counter crafted! Hit me and I'll hit back HARDER!=لانز: تم صناعة الهجمة المضادة المطلقة! اضربني وسأضرب أقوى!
+Lanz: Peeling Gate... all eyes on me! Bring it!=لانز: بوابة التقشير... كل الأنظار عليّ! هيا!
+Lanz: Hah! This gem's as tough as I am!=لانز: ها! هذا الحجر صلب مثلي!
+
+# --- القسم 452: Sena - حوارات صناعة الأحجار ---
+# --- Section 452: Sena - Gem Crafting Dialogues ---
+Sena: Gem crafting! I'll do my best!=سينا: صناعة الأحجار! سأبذل قصارى جهدي!
+Sena: Steelcleaver! My hammer will hit even harder!=سينا: شاطر الفولاذ! مطرقتي ستضرب بقوة أكبر!
+Sena: Steady Striker... every swing will count!=سينا: الضارب الثابت... كل تأرجح سيكون مهماً!
+Sena: Empowered Combo crafted! Combo power up!=سينا: تم صناعة الكومبو المعزز! قوة الكومبو ترتفع!
+Sena: Refined Incantation... boosting our Arts!=سينا: التعويذة المصقولة... تعزيز فنوننا!
+Sena: I made a really good gem! ...Right?=سينا: صنعت حجراً جيداً حقاً! ...أليس كذلك؟
+
+# --- القسم 453: Taion - حوارات صناعة الأحجار ---
+# --- Section 453: Taion - Gem Crafting Dialogues ---
+Taion: Gem crafting is a science. Let me handle this!=تايون: صناعة الأحجار علم. دعوني أتولى الأمر!
+Taion: Analyze the catalyst ratio... perfect!=تايون: تحليل نسبة المحفّز... مثالي!
+Taion: Swelling Scourge. The debuff data is optimal!=تايون: البلاء المتصاعد. بيانات الإضعاف مثالية!
+Taion: Lifebearer crafted. HP regeneration maximized!=تايون: تم صناعة حامل الحياة. تجديد نقاط الصحة في أقصاه!
+Taion: Refined Incantation... Art recharge acceleration!=تايون: التعويذة المصقولة... تسريع شحن الفنون!
+Taion: Analyze materials... Hammering Gem... precise temperature...=تايون: تحليل المواد... طرق الحجر... درجة حرارة دقيقة...
+Taion: Rank 10 gem! The formula was flawless!=تايون: حجر من الرتبة 10! كانت المعادلة بلا عيب!
+
+# --- القسم 454: Eunie - حوارات صناعة الأحجار ---
+# --- Section 454: Eunie - Gem Crafting Dialogues ---
+Eunie: Gem crafting! Let's make something wicked!=يوني: صناعة الأحجار! لنصنع شيئاً خارقاً!
+Eunie: Healing Aura! My heals will be INSANE!=يوني: هالة الشفاء! شفائي سيكون جنونياً!
+Eunie: Lifebearer gem! Nobody's dying on MY watch!=يوني: حجر حامل الحياة! لا أحد يموت تحت مراقبتي!
+Eunie: Brimming Spirit crafted! Ether for days!=يوني: تم صناعة الروح الفائضة! أثير يكفي لأيام!
+Eunie: Disperse Bloodlust... tanking help from the healer!=يوني: تشتيت شهوة الدم... مساعدة في التحمل من المعالجة!
+Eunie: BOOM! Best gem ever! You're welcome!=يوني: بووم! أفضل حجر على الإطلاق! عفواً!
+
+# --- القسم 455: أنواع الأحجار الكريمة وتأثيراتها ---
+# --- Section 455: Gem Types and Effects ---
+Steelcleaver=شاطر الفولاذ
+Steel Protection=حماية الفولاذ
+Brimming Spirit=الروح الفائضة
+Steady Striker=الضارب الثابت
+Tail Wind=ريح الذيل
+Swelling Scourge=البلاء المتصاعد
+Ironclad=المدرّع
+Ultimate Counter=الهجمة المضادة المطلقة
+Peeling Gate=بوابة التقشير
+Disperse Bloodlust=تشتيت شهوة الدم
+Empowered Combo=الكومبو المعزز
+Refined Incantation=التعويذة المصقولة
+Lifebearer=حامل الحياة
+Healing Aura=هالة الشفاء
+Analyze Weakness=تحليل الضعف
+Accurate Grace=نعمة الدقة
+Non-Stick Nacelle=الحجرة غير اللاصقة
+Doublestrike=الضربة المزدوجة
+Lifesteal Amplifier=مضخّم سرقة الحياة
+Gem Rank 1=رتبة الحجر 1
+Gem Rank 5=رتبة الحجر 5
+Gem Rank 10=رتبة الحجر 10
+Increases physical attack power=يزيد قوة الهجوم الجسدي
+Increases physical defense=يزيد الدفاع الجسدي
+Increases ether attack power=يزيد قوة هجوم الأثير
+Increases critical hit rate=يزيد معدل الضربات الحرجة
+Increases movement speed=يزيد سرعة الحركة
+Extends debuff duration on enemies=يمدد مدة الإضعاف على الأعداء
+Reduces damage taken=يقلل الضرر المتلقى
+Counters when blocking=يهاجم عند الصد
+Draws enemy aggro=يجذب استفزاز العدو
+Reduces aggro generated=يقلل الاستفزاز المتولّد
+Boosts combo damage=يعزز ضرر الكومبو
+Reduces Art recharge time=يقلل وقت شحن الفن
+Regenerates HP over time=يجدد نقاط الصحة مع الوقت
+Boosts healing output=يعزز ناتج الشفاء
+Reveals enemy weaknesses=يكشف نقاط ضعف العدو
+
+# --- القسم 456: حوارات نظام صناعة الأحجار العامة ---
+# --- Section 456: General Gem Crafting System Dialogues ---
+Select a gem to craft=اختر حجراً لصناعته
+Select materials=اختر المواد
+Catalyst bonus applied!=تم تطبيق مكافأة المحفّز!
+Crafting in progress...=الصناعة جارية...
+Gem crafted successfully!=تم صناعة الحجر بنجاح!
+Gem rank increased!=ارتفعت رتبة الحجر!
+Not enough materials=المواد غير كافية
+Insufficient Nopon Coins=عملات النوبون غير كافية
+Use Nopon Coins to supplement?=هل تستخدم عملات النوبون للتعويض؟
+Silver Nopon Coins=عملات النوبون الفضية
+Gold Nopon Coins=عملات النوبون الذهبية
+Equip gem to character?=هل تُجهّز الحجر للشخصية؟
+Gem equipped!=تم تجهيز الحجر!
+Gem slot full. Replace existing gem?=خانة الحجر ممتلئة. هل تستبدل الحجر الحالي؟
+Replace gem=استبدل الحجر
+Cancel=إلغاء
+View gem effects=عرض تأثيرات الحجر
+Compare gems=مقارنة الأحجار
+Best materials selected automatically=تم اختيار أفضل المواد تلقائياً
+
+# ============================================================
 # --- نهاية القاموس الشامل ---
 # End of Comprehensive Glossary
-# Total: 448 sections covering ALL content of Xenoblade Chronicles 3
-# Including: Main Game, DLC Future Redeemed, NG+, Challenge Mode, All Battle & Class Dialogues
+# Total: 456 sections covering ALL content of Xenoblade Chronicles 3
+# Including: Main Game, DLC, NG+, Challenge Mode, Battle, Class & Gem Crafting Dialogues
 # ============================================================
