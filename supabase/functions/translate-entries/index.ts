@@ -431,6 +431,18 @@ interface GlossaryStats {
   contextTerms: number;
 }
 
+// --- Build translation memory map from context entries ---
+function buildTranslationMemory(context: { key: string; original: string; translation?: string }[] | undefined): Map<string, string> {
+  const tmMap = new Map<string, string>();
+  if (!context) return tmMap;
+  for (const c of context) {
+    if (!c.translation?.trim() || !c.original?.trim()) continue;
+    // Add full-text mapping (lowercased)
+    tmMap.set(c.original.trim().toLowerCase(), c.translation.trim());
+  }
+  return tmMap;
+}
+
 // --- AI translation (Gemini / Lovable gateway) ---
 async function translateWithAI(
   entries: { key: string; original: string }[],
@@ -440,9 +452,10 @@ async function translateWithAI(
   userApiKey: string | undefined,
 ): Promise<{ translations: Record<string, string>; glossaryStats: GlossaryStats }> {
   const glossaryMap = glossary ? parseGlossaryToMap(glossary) : new Map<string, string>();
+  const tmMap = buildTranslationMemory(context);
   const stats: GlossaryStats = { directMatches: 0, lockedTerms: 0, contextTerms: 0 };
 
-  // --- Step 1: Direct matches (exact full-string match from glossary) ---
+  // --- Step 1: Direct matches (exact full-string from glossary OR translation memory) ---
   const directResult: Record<string, string> = {};
   const needsAI: { entry: typeof entries[0]; pe: typeof protectedEntries[0]; termLocks: TermLockResult }[] = [];
 
@@ -450,16 +463,27 @@ async function translateWithAI(
     const entry = entries[i];
     const pe = protectedEntries[i];
     const norm = pe.cleaned.trim().toLowerCase();
-    const hit = glossaryMap.get(norm);
-    if (hit) {
-      directResult[entry.key] = restoreTags(hit, pe.tags);
+
+    // Priority 1: Glossary exact match
+    const glossaryHit = glossaryMap.get(norm);
+    if (glossaryHit) {
+      directResult[entry.key] = restoreTags(glossaryHit, pe.tags);
       stats.directMatches++;
-    } else {
-      // --- Step 2: Term locking for partial matches ---
-      const termLocks = lockTermsInText(pe.cleaned, glossaryMap);
-      stats.lockedTerms += termLocks.locks.length;
-      needsAI.push({ entry, pe, termLocks });
+      continue;
     }
+
+    // Priority 2: Translation memory exact match (previously translated identical text)
+    const tmHit = tmMap.get(norm);
+    if (tmHit) {
+      directResult[entry.key] = restoreTags(tmHit, pe.tags);
+      stats.directMatches++;
+      continue;
+    }
+
+    // --- Step 2: Term locking for partial matches (glossary terms inside text) ---
+    const termLocks = lockTermsInText(pe.cleaned, glossaryMap);
+    stats.lockedTerms += termLocks.locks.length;
+    needsAI.push({ entry, pe, termLocks });
   }
 
   if (needsAI.length === 0) {
@@ -477,19 +501,20 @@ async function translateWithAI(
       const termCount = relevantGlossary.split('\n').length;
       stats.contextTerms = termCount;
       console.log(`Glossary: ${stats.directMatches} direct, ${stats.lockedTerms} locked, ${termCount} context terms`);
-      glossarySection = `\n\nMANDATORY GLOSSARY (${termCount} terms) — You MUST use these exact Arabic translations:\n${relevantGlossary}\n`;
+      glossarySection = `\n\nMANDATORY GLOSSARY (${termCount} terms) — You MUST use these exact Arabic translations. Do NOT paraphrase, alter, or use synonyms for any glossary term:\n${relevantGlossary}\n`;
     }
   }
 
+  // Enhanced context section: show previous translations as mandatory consistency reference
   let contextSection = '';
   if (context && context.length > 0) {
     const contextLines = context
       .filter(c => c.translation?.trim())
       .map(c => `"${c.original}" → "${c.translation}"`)
-      .slice(0, 10)
+      .slice(0, 15)
       .join('\n');
     if (contextLines) {
-      contextSection = `\n\nHere are some nearby already-translated texts for context and consistency:\n${contextLines}\n`;
+      contextSection = `\n\nPREVIOUSLY TRANSLATED TEXTS (for mandatory consistency — if you encounter the same words/phrases, use the SAME Arabic translation):\n${contextLines}\n`;
     }
   }
 
@@ -504,17 +529,17 @@ async function translateWithAI(
 
   const categorySection = categoryHint ? `\n\n${categoryHint}` : '';
 
-  // Updated prompt: Xenoblade Chronicles 3 specific, with term locking instructions
   const prompt = `You are a professional game translator specializing in Xenoblade Chronicles 3 (ゼノブレイド3). Translate the following game texts from English to Arabic.
 
 CRITICAL RULES:
-1. Placeholders like ⟪T0⟫, ⟪T1⟫, etc. are LOCKED TERMS — copy them exactly as-is into your translation. Do NOT translate, modify, or remove them.
+1. Placeholders like ⟪T0⟫, ⟪T1⟫, etc. are LOCKED TERMS — copy them EXACTLY as-is into your translation. Do NOT translate, modify, or remove them.
 2. Keep TAG_0, TAG_1, etc. and special characters like \uFFFC intact in their exact positions.
 3. Keep the translation length close to the original to fit in-game text boxes.
-4. If a glossary term appears, you MUST use its exact Arabic translation — no alternatives, no paraphrasing.
-5. Use terminology consistent with the Arabic gaming community for Xenoblade Chronicles 3.
-6. Preserve proper nouns (Noah, Mio, Eunie, Taion, Lanz, Sena, Aionios) as-is or use their established Arabic equivalents from the glossary.
-7. Return ONLY a JSON array of strings in the same order. No explanations.${categorySection}${glossarySection}${contextSection}
+4. If a glossary term appears, you MUST use its EXACT Arabic translation — no alternatives, no synonyms, no paraphrasing. This is NON-NEGOTIABLE.
+5. CONSISTENCY IS MANDATORY: If a word or phrase was translated a certain way in the "Previously Translated Texts" section, you MUST translate it the same way. Never use different Arabic words for the same English term.
+6. Use terminology consistent with the Arabic gaming community for Xenoblade Chronicles 3.
+7. Preserve proper nouns (Noah, Mio, Eunie, Taion, Lanz, Sena, Aionios) as-is or use their established Arabic equivalents from the glossary.
+8. Return ONLY a JSON array of strings in the same order. No explanations.${categorySection}${glossarySection}${contextSection}
 
 Texts:
 ${textsBlock}`;
@@ -547,7 +572,7 @@ ${textsBlock}`;
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
-        systemInstruction: { parts: [{ text: 'You are a Xenoblade Chronicles 3 game text translator. Output only valid JSON arrays. Never modify ⟪T#⟫ placeholders.' }] },
+        systemInstruction: { parts: [{ text: 'You are a Xenoblade Chronicles 3 game text translator. Output only valid JSON arrays. Never modify ⟪T#⟫ placeholders. ALWAYS use glossary terms exactly. ALWAYS maintain consistency with previously translated texts — same English word = same Arabic translation.' }] },
         generationConfig: { temperature: 0.3 },
       }),
     });
@@ -585,7 +610,7 @@ ${textsBlock}`;
       body: JSON.stringify({
         model: 'google/gemini-2.5-flash',
         messages: [
-          { role: 'system', content: 'You are a Xenoblade Chronicles 3 game text translator. Output only valid JSON arrays. Never modify ⟪T#⟫ placeholders.' },
+          { role: 'system', content: 'You are a Xenoblade Chronicles 3 game text translator. Output only valid JSON arrays. Never modify ⟪T#⟫ placeholders. ALWAYS use glossary terms exactly. ALWAYS maintain consistency with previously translated texts — same English word = same Arabic translation.' },
           { role: 'user', content: prompt },
         ],
         temperature: 0.3,
