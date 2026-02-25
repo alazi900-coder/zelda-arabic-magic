@@ -5280,7 +5280,7 @@ Liberator=المحرر
 Ancient Automaton=الآلة القديمة
 Prison Guardian=حارس السجن
 Origin Guardian=حارس الأوريجن
-Origin Interior Enemy=عدو داخل الأصل
+Origin Interior Enemy=عدو داخل الأوريجن
 Ancient Levnis=ليفنيس قديم
 Boundary Enemy=عدو الحدود
 # --- معلومات المعركة (Battle Info) ---
@@ -5660,7 +5660,7 @@ Supply=إمداد
 Demand=طلب
 Colony Trade=تجارة المستعمرة
 Colony Shop Level=مستوى متجر المستعمرة
-Ferronis Hulk=هيكل الفيرونيس
+Ferronis Hulk=هيكل فيرونيس
 Rest Spot=نقطة استراحة
 Campsite=مخيم
 Container=حاوية
@@ -5772,7 +5772,7 @@ Location=موقع
 Rest Spot=نقطة استراحة
 Campsite=مخيم
 Camp=مخيم
-Ferronis Hulk=هيكل الفيرونيس
+Ferronis Hulk=هيكل فيرونيس
 Colony=المستعمرة
 Secret Area=منطقة سرية
 Viewpoint=نقطة مشاهدة
@@ -5893,7 +5893,7 @@ Area Discovered=تم اكتشاف المنطقة
 New Location=موقع جديد
 Landmark Discovered=تم اكتشاف المعلم
 Secret Area Discovered=تم اكتشاف المنطقة السرية
-Rest Spot Discovered=تم اكتشاف نقطة الراحة
+Rest Spot Discovered=تم اكتشاف نقطة الاستراحة
 EXP Earned=نقاط خبرة مُكتسبة
 Location Info=معلومات الموقع
 Area Info=معلومات المنطقة
@@ -6314,8 +6314,8 @@ Story Progress=تقدم القصة
 Map Updated=تم تحديث الخريطة
 New Area Unlocked=تم فتح منطقة جديدة
 Fast Travel Unlocked=تم فتح النقل السريع
-Ferronis Hulk Discovered=تم اكتشاف هيكل الفيرونيس
-Rest Spot Discovered=تم اكتشاف نقطة راحة
+Ferronis Hulk Discovered=تم اكتشاف هيكل فيرونيس
+Rest Spot Discovered=تم اكتشاف نقطة استراحة
 Container Found=تم العثور على حاوية
 Collectible Found=تم العثور على مقتنى
 Nopon Coin Found=تم العثور على عملة نوبون
@@ -6697,7 +6697,7 @@ We need a field skill to get through.=نحتاج مهارة ميدانية لن�
 I found something!=وجدت شيئًا!
 Let's investigate.=لنتحقق.
 There's a container here.=هناك حاوية هنا.
-A rest spot! Perfect timing.=نقطة راحة! في الوقت المثالي.
+A rest spot! Perfect timing.=نقطة استراحة! في الوقت المثالي.
 The enemies here are strong.=الأعداء هنا أقوياء.
 We should prepare before going further.=يجب أن نستعد قبل التقدم.
 Let's check the map.=لنتفحص الخريطة.
@@ -6736,7 +6736,7 @@ Field Theme=موسيقى الميدان
 Colony Theme=موسيقى المستعمرة
 Tension Theme=موسيقى التوتر
 Cutscene Music=موسيقى المشاهد
-Rest Spot Music=موسيقى نقطة الراحة
+Rest Spot Music=موسيقى نقطة الاستراحة
 Event Music=موسيقى الحدث
 Credits Theme=موسيقى قائمة الشكر
 Title Screen Music=موسيقى شاشة العنوان
@@ -8129,7 +8129,7 @@ There are signs of battle here. Recent ones.=هناك علامات معركة ه
 The wind is picking up. A storm might be coming.=الرياح تشتد. قد تأتي عاصفة.
 I've marked this location on the map. We can fast travel here later.=وضعت علامة على هذا الموقع في الخريطة. يمكننا الانتقال السريع هنا لاحقًا.
 An enemy camp ahead. Should we engage or sneak past?=مخيم عدو أمامنا. هل نهاجم أم نتسلل؟
-The Ferronis Hulk over there... it's enormous.=هيكل الفيرونيس هناك... إنه ضخم.
+The Ferronis Hulk over there... it's enormous.=هيكل فيرونيس هناك... إنه ضخم.
 This region is Agnus-controlled. We should be cautious.=هذه المنطقة تحت سيطرة أغنوس. يجب أن نكون حذرين.
 This is Keves territory. Keep your guard up.=هذه أراضي كيفيس. أبقوا حذركم عاليًا.
 What a beautiful sunset. It's hard to believe there's a war going on.=يا له من غروب جميل. يصعب تصديق أن هناك حربًا دائرة.
@@ -9936,7 +9936,7 @@ Standard Quest=مهمة عادية
 We need to keep moving. The mission isn't over yet.=علينا أن نستمر بالتحرك. المهمة لم تنتهِ بعد.
 This place... I feel like I've been here before.=هذا المكان... أشعر أنني كنت هنا من قبل.
 Everyone stay alert. I have a bad feeling about this area.=الجميع ابقوا متيقظين. لديّ شعور سيء حول هذه المنطقة.
-Look, a rest spot. Let's take a break and plan our next move.=انظروا، نقطة راحة. لنأخذ استراحة ونخطط لخطوتنا التالية.
+Look, a rest spot. Let's take a break and plan our next move.=انظروا، نقطة استراحة. لنأخذ استراحة ونخطط لخطوتنا التالية.
 The ether in the air is thick here. Be careful.=الأثير في الهواء كثيف هنا. كونوا حذرين.
 I can hear water. There must be a river or spring nearby.=أسمع ماءً. لا بد أن هناك نهرًا أو ينبوعًا قريبًا.
 These footprints are fresh. Someone passed through here recently.=هذه الآثار حديثة. شخص ما مرّ من هنا مؤخرًا.
@@ -12180,7 +12180,7 @@ Through dialogue, the dissenters found common ground with Kouju.=من خلال �
 Supply Shortage=نقص الإمدادات
 Colony Tau's supplies are running dangerously low.=إمدادات المستعمرة تاو تنخفض بشكل خطير.
 We need food, medicine, and ether cylinders urgently.=نحتاج طعاماً ودواءً وأسطوانات أثير بشكل عاجل.
-Find ether cylinders in the abandoned Ferronis hulk.=ابحث عن أسطوانات أثير في هيكل الفيرونيس المهجور.
+Find ether cylinders in the abandoned Ferronis hulk.=ابحث عن أسطوانات أثير في هيكل فيرونيس المهجور.
 The medical supplies are hidden in a collapsed tunnel.=الإمدادات الطبية مخفية في نفق منهار.
 With these supplies, Colony Tau can survive another month.=بهذه الإمدادات، المستعمرة تاو تستطيع البقاء شهراً آخر.
 
@@ -12211,7 +12211,7 @@ Everblight Plain Campsite=مخيم سهل الضوء الأبدي
 Rae-Bel Tableland=هضبة ري-بل
 Rae-Bel Summit=قمة ري-بل
 Hillside Ferronis Hulk=هيكل فيرونيس سفح التل
-Decayed Ferronis Hulk=هيكل الفيرونيس المتحلل
+Decayed Ferronis Hulk=هيكل فيرونيس المتحلل
 Llyn Nyddwr Camp=مخيم لين نيدور
 Colony Iota Entrance=مدخل المستعمرة يوتا
 Aetia Southern Gate=البوابة الجنوبية لأيتيا
@@ -12309,7 +12309,7 @@ Head for Captocorn Ridge.=توجه إلى حافة كابتوكورن.
 Reach the southern Aetia region.=اوصل إلى منطقة أيتيا الجنوبية.
 Explore the ruins in the Maktha Wildwood.=استكشف الأطلال في غابة ماكثا البرية.
 Find a path through the Great Crevasse.=ابحث عن ممر عبر الصدع الكبير.
-Scout the area around the old Ferronis hulk.=استكشف المنطقة حول هيكل الفيرونيس القديم.
+Scout the area around the old Ferronis hulk.=استكشف المنطقة حول هيكل فيرونيس القديم.
 Investigate the mysterious signal from the east.=حقق في الإشارة الغامضة من الشرق.
 Cross the Erythia Sea to reach the new continent.=اعبر بحر إريثيا للوصول إلى القارة الجديدة.
 Find the hidden entrance to the underground city.=ابحث عن المدخل المخفي للمدينة الجوفية.
