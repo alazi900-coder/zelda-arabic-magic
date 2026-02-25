@@ -830,9 +830,9 @@ Legendary=أسطوري
 Unique=فريد
 # مصطلحات إحصائيات المعدات (Equipment Stats)
 Physical Attack=هجوم فيزيائي
-Ether Attack=هجوم إيثيري
+Ether Attack=هجوم أثيري
 Physical Defense=دفاع فيزيائي
-Ether Defense=دفاع إيثيري
+Ether Defense=دفاع أثيري
 Block Rate=معدل الصد
 Critical Rate=معدل الضربة الحرجة
 Attack Speed=سرعة الهجوم
@@ -16963,7 +16963,7 @@ Soldiers are born from Cradles and live for only ten terms.=الجنود يُو�
 A term is roughly equivalent to one year of life.=الفترة تعادل تقريباً سنة واحدة من الحياة.
 Soldiers who reach their tenth term undergo the Homecoming ceremony.=الجنود الذين يبلغون فترتهم العاشرة يخضعون لحفل العودة.
 The truth about Homecoming is not what soldiers are told.=حقيقة العودة ليست ما يُقال للجنود.
-Moebius are the true rulers of Aionios, manipulating the war from the shadows.=ميبيوس هم الحكام الحقيقيون لأيونيوس، يتلاعبون بالحرب من الظلال.
+Moebius are the true rulers of Aionios, manipulating the war from the shadows.=موبيوس هم الحكام الحقيقيون لأيونيوس، يتلاعبون بالحرب من الظلال.
 The City is a hidden settlement where people live natural lives.=المدينة مستوطنة مخفية حيث يعيش الناس حياة طبيعية.
 
 # =============================================
@@ -17482,7 +17482,7 @@ Origin Bridge=جسر الأوريجن
 Origin Observation Deck=سطح مراقبة الأوريجن
 Z's Domain=عالم زِد
 Z's Throne=عرش زِد
-Moebius Domain=عالم ميبيوس
+Moebius Domain=عالم موبيوس
 Origin Pillar=عمود الأوريجن
 Origin Gate=بوابة الأوريجن
 Origin Archive=أرشيف الأوريجن
@@ -18890,7 +18890,7 @@ Ancient Beast Fossil=أحفورة وحش قديم
 Condensed Ether=أثير مكثف
 Refined Origin Metal=معدن أوريجن مُنقّى
 Ancient Relic=أثر قديم
-Moebius Fragment=شظية ميبيوس
+Moebius Fragment=شظية موبيوس
 Flame Clock Shard=شظية ساعة اللهب
 Ouroboros Crystal=كريستال الأوروبوروس
 Titan Heart=قلب التيتان
@@ -21701,8 +21701,8 @@ Sena (Full Metal Jaguar): Guns? But I like hitting things up close!=سينا (ج
 
 # --- القسم 448: حوارات إتقان الفئة الجديدة ---
 # --- Section 448: Class Mastery Dialogues ---
-Noah: I've mastered this class! The knowledge stays with me!=نوح: أتقنت هذه الفئة! المعرفة تبقى معي!
-Mio: Class mastered! Every experience makes me stronger!=ميو: أُتقنت الفئة! كل تجربة تجعلني أقوى!
+Noah: I've mastered this class! The knowledge stays with me!=نوح: أتقنت هذا الفصل! المعرفة تبقى معي!
+Mio: Class mastered! Every experience makes me stronger!=ميو: أُتقن الفصل! كل تجربة تجعلني أقوى!
 Lanz: Mastered! Ha! I'm a natural at everything!=لانز: أُتقنت! ها! أنا موهوب طبيعياً في كل شيء!
 Sena: I mastered it! I really did it!=سينا: أتقنتها! لقد فعلتها حقاً!
 Taion: Class mastery achieved. The data has been fully analyzed.=تايون: تم إتقان الفئة. تم تحليل البيانات بالكامل.
