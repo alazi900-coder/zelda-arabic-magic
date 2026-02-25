@@ -25,12 +25,71 @@ function restoreTags(text: string, tags: Map<string, string>): string {
   return result;
 }
 
+// --- Term Locking System ---
+// Replaces glossary terms in source text with locked placeholders before AI translation,
+// then swaps them back to the approved Arabic translations afterward.
+
+interface TermLockResult {
+  lockedText: string;
+  locks: { placeholder: string; english: string; arabic: string }[];
+}
+
+function lockTermsInText(text: string, glossaryMap: Map<string, string>): TermLockResult {
+  if (glossaryMap.size === 0) return { lockedText: text, locks: [] };
+
+  // Sort terms by length (longest first) to prevent partial matches
+  const sortedTerms = Array.from(glossaryMap.entries())
+    .filter(([eng]) => eng.length >= 2) // Skip single-char terms
+    .sort((a, b) => b[0].length - a[0].length);
+
+  const locks: TermLockResult['locks'] = [];
+  let lockedText = text;
+  let lockCounter = 0;
+
+  for (const [eng, arab] of sortedTerms) {
+    // Build word-boundary regex for the English term
+    const escaped = eng.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    // For short terms (2-3 chars), require strict word boundaries
+    const pattern = eng.length <= 3
+      ? new RegExp(`\\b${escaped}\\b`, 'gi')
+      : new RegExp(`(?<![\\w-])${escaped}(?![\\w-])`, 'gi');
+
+    let match: RegExpExecArray | null;
+    const regex = new RegExp(pattern.source, pattern.flags);
+    
+    // Find all matches (but check against already-locked regions)
+    while ((match = regex.exec(lockedText)) !== null) {
+      // Check if this match overlaps with an existing lock placeholder
+      const matchEnd = match.index + match[0].length;
+      const surroundingSlice = lockedText.slice(match.index, matchEnd);
+      const isInsideLock = surroundingSlice.includes('⟪') || surroundingSlice.includes('⟫');
+      if (isInsideLock) continue;
+
+      const placeholder = `⟪T${lockCounter}⟫`;
+      lockedText = lockedText.slice(0, match.index) + placeholder + lockedText.slice(match.index + match[0].length);
+      locks.push({ placeholder, english: match[0], arabic: arab });
+      lockCounter++;
+      
+      // Reset regex since string changed
+      regex.lastIndex = match.index + placeholder.length;
+    }
+  }
+
+  return { lockedText, locks };
+}
+
+function unlockTerms(translatedText: string, locks: TermLockResult['locks']): string {
+  let result = translatedText;
+  for (const lock of locks) {
+    result = result.replace(lock.placeholder, lock.arabic);
+  }
+  return result;
+}
+
 // --- Apply glossary replacements to translated text (post-processing) ---
 function applyGlossaryPost(text: string, glossaryMap: Map<string, string>): string {
   let result = text;
-  // Also build a reverse map: English term → Arabic term for post-replacement
   for (const [eng, ara] of glossaryMap) {
-    // Case-insensitive whole-word replacement of English terms left in translation
     const escaped = eng.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const regex = new RegExp(`\\b${escaped}\\b`, 'gi');
     result = result.replace(regex, ara);
@@ -59,22 +118,17 @@ async function fetchWithRetry(url: string, retries = 2, delayMs = 1000): Promise
 
 // --- Pick best translation from MyMemory matches ---
 function pickBestTranslation(data: any): string | null {
-  // Primary result
   const primary = data?.responseData?.translatedText;
   const primaryMatch = data?.responseData?.match;
   
-  // Check TM matches for higher quality
   const matches = data?.matches;
   if (Array.isArray(matches) && matches.length > 0) {
-    // Sort by quality (match score), prefer human translations
     const ranked = matches
       .filter((m: any) => m.translation?.trim() && m.segment?.trim())
       .sort((a: any, b: any) => {
-        // Prefer "human" created-by over "MT"
         const aHuman = a['created-by'] !== 'MT' ? 1 : 0;
         const bHuman = b['created-by'] !== 'MT' ? 1 : 0;
         if (aHuman !== bHuman) return bHuman - aHuman;
-        // Then by match quality
         return (b.match || 0) - (a.match || 0);
       });
     
@@ -83,7 +137,6 @@ function pickBestTranslation(data: any): string | null {
     }
   }
   
-  // Fallback to primary if quality is acceptable
   if (primary?.trim() && primaryMatch >= 0.3) {
     return primary;
   }
@@ -91,15 +144,16 @@ function pickBestTranslation(data: any): string | null {
   return primary?.trim() ? primary : null;
 }
 
-// --- MyMemory free translation (with email for 50k/day limit) ---
+// --- MyMemory free translation ---
 async function translateWithMyMemory(
   entries: { key: string; original: string }[],
   protectedEntries: { key: string; cleaned: string; tags: Map<string, string> }[],
   glossaryMap?: Map<string, string>,
   email?: string,
-): Promise<{ translations: Record<string, string>; charsUsed: number }> {
+): Promise<{ translations: Record<string, string>; charsUsed: number; glossaryStats: GlossaryStats }> {
   const result: Record<string, string> = {};
   let charsUsed = 0;
+  const stats: GlossaryStats = { directMatches: 0, lockedTerms: 0, contextTerms: 0 };
 
   for (let i = 0; i < entries.length; i++) {
     const entry = entries[i];
@@ -114,12 +168,22 @@ async function translateWithMyMemory(
       const hit = glossaryMap.get(norm);
       if (hit) {
         result[entry.key] = restoreTags(hit, pe.tags);
+        stats.directMatches++;
         continue;
       }
     }
 
+    // Term locking before translation
+    let textForTranslation = textToTranslate;
+    let termLocks: TermLockResult = { lockedText: textToTranslate, locks: [] };
+    if (glossaryMap && glossaryMap.size > 0) {
+      termLocks = lockTermsInText(textToTranslate, glossaryMap);
+      textForTranslation = termLocks.lockedText;
+      stats.lockedTerms += termLocks.locks.length;
+    }
+
     try {
-      let url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(textToTranslate)}&langpair=en|ar`;
+      let url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(textForTranslation)}&langpair=en|ar`;
       if (email?.trim()) {
         url += `&de=${encodeURIComponent(email.trim())}`;
       }
@@ -127,16 +191,19 @@ async function translateWithMyMemory(
       const response = await fetchWithRetry(url);
       if (!response.ok) {
         console.error(`MyMemory error for key ${entry.key}: ${response.status}`);
-        await response.text(); // consume body
+        await response.text();
         continue;
       }
       const data = await response.json();
       
-      // Pick best translation from primary + TM matches
       let translation = pickBestTranslation(data);
       
       if (translation?.trim()) {
-        // Post-process: apply glossary terms to fix any English words left
+        // Unlock terms first (replace placeholders with Arabic)
+        if (termLocks.locks.length > 0) {
+          translation = unlockTerms(translation, termLocks.locks);
+        }
+        // Then apply glossary post-processing for any remaining English terms
         if (glossaryMap) {
           translation = applyGlossaryPost(translation, glossaryMap);
         }
@@ -147,26 +214,24 @@ async function translateWithMyMemory(
       console.error(`MyMemory fetch error for key ${entry.key}:`, err);
     }
     
-    // Small delay between requests to avoid rate limiting
     if (i < entries.length - 1) {
       await new Promise(r => setTimeout(r, 150));
     }
   }
 
-  return { translations: result, charsUsed };
+  return { translations: result, charsUsed, glossaryStats: stats };
 }
 
-// --- Google Translate (unofficial free endpoint) ---
+// --- Google Translate ---
 async function translateWithGoogle(
   entries: { key: string; original: string }[],
   protectedEntries: { key: string; cleaned: string; tags: Map<string, string> }[],
   glossaryMap?: Map<string, string>,
-): Promise<{ translations: Record<string, string>; charsUsed: number }> {
+): Promise<{ translations: Record<string, string>; charsUsed: number; glossaryStats: GlossaryStats }> {
   const result: Record<string, string> = {};
   let charsUsed = 0;
+  const stats: GlossaryStats = { directMatches: 0, lockedTerms: 0, contextTerms: 0 };
 
-  // For small batches (≤5), translate individually for better accuracy
-  // For larger batches, use newline-joined batching for speed
   const useIndividual = entries.length <= 5;
 
   if (useIndividual) {
@@ -176,18 +241,27 @@ async function translateWithGoogle(
       const text = pe.cleaned.trim();
       if (!text) continue;
 
-      // Check glossary
       if (glossaryMap) {
         const norm = text.toLowerCase();
         const hit = glossaryMap.get(norm);
         if (hit) {
           result[entry.key] = restoreTags(hit, pe.tags);
+          stats.directMatches++;
           continue;
         }
       }
 
+      // Term locking
+      let textForTranslation = text;
+      let termLocks: TermLockResult = { lockedText: text, locks: [] };
+      if (glossaryMap && glossaryMap.size > 0) {
+        termLocks = lockTermsInText(text, glossaryMap);
+        textForTranslation = termLocks.lockedText;
+        stats.lockedTerms += termLocks.locks.length;
+      }
+
       try {
-        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ar&dt=t&q=${encodeURIComponent(text)}`;
+        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ar&dt=t&q=${encodeURIComponent(textForTranslation)}`;
         const response = await fetchWithRetry(url);
         if (!response.ok) {
           console.error(`Google Translate error for key ${entry.key}: ${response.status}`);
@@ -196,7 +270,6 @@ async function translateWithGoogle(
         }
         const data = await response.json();
 
-        // Parse Google's response: concatenate all segments
         let translation = '';
         if (Array.isArray(data) && Array.isArray(data[0])) {
           for (const segment of data[0]) {
@@ -208,6 +281,9 @@ async function translateWithGoogle(
         translation = translation.trim();
 
         if (translation) {
+          if (termLocks.locks.length > 0) {
+            translation = unlockTerms(translation, termLocks.locks);
+          }
           if (glossaryMap) {
             translation = applyGlossaryPost(translation, glossaryMap);
           }
@@ -218,19 +294,18 @@ async function translateWithGoogle(
         console.error(`Google Translate error for key ${entry.key}:`, err);
       }
 
-      // Small delay between requests
       if (i < entries.length - 1) {
         await new Promise(r => setTimeout(r, 100));
       }
     }
   } else {
-    // Batch mode for larger sets
+    // Batch mode
     const batchSize = 20;
     for (let start = 0; start < entries.length; start += batchSize) {
       const batchEntries = entries.slice(start, start + batchSize);
       const batchProtected = protectedEntries.slice(start, start + batchSize);
 
-      const toTranslate: { idx: number; text: string }[] = [];
+      const toTranslate: { idx: number; text: string; termLocks: TermLockResult }[] = [];
       for (let i = 0; i < batchEntries.length; i++) {
         const pe = batchProtected[i];
         const text = pe.cleaned.trim();
@@ -240,10 +315,17 @@ async function translateWithGoogle(
           const hit = glossaryMap.get(norm);
           if (hit) {
             result[batchEntries[i].key] = restoreTags(hit, pe.tags);
+            stats.directMatches++;
             continue;
           }
         }
-        toTranslate.push({ idx: i, text });
+        // Term locking per entry
+        let termLocks: TermLockResult = { lockedText: text, locks: [] };
+        if (glossaryMap && glossaryMap.size > 0) {
+          termLocks = lockTermsInText(text, glossaryMap);
+          stats.lockedTerms += termLocks.locks.length;
+        }
+        toTranslate.push({ idx: i, text: termLocks.lockedText, termLocks });
       }
 
       if (toTranslate.length === 0) continue;
@@ -275,6 +357,9 @@ async function translateWithGoogle(
           const t = toTranslate[j];
           let translation = translations[j]?.trim();
           if (translation) {
+            if (t.termLocks.locks.length > 0) {
+              translation = unlockTerms(translation, t.termLocks.locks);
+            }
             if (glossaryMap) {
               translation = applyGlossaryPost(translation, glossaryMap);
             }
@@ -292,7 +377,7 @@ async function translateWithGoogle(
     }
   }
 
-  return { translations: result, charsUsed };
+  return { translations: result, charsUsed, glossaryStats: stats };
 }
 
 // --- Parse glossary text into a map ---
@@ -322,9 +407,7 @@ function filterRelevantGlossary(glossary: string, texts: string[]): string {
     const eqIdx = trimmed.indexOf('=');
     if (eqIdx < 1) continue;
     const eng = trimmed.slice(0, eqIdx).trim();
-    // Check if the English term appears in any of the texts (case-insensitive word boundary)
     if (eng.length <= 2) {
-      // For very short terms, require exact word match
       const regex = new RegExp(`\\b${eng.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
       if (regex.test(combinedText)) relevantLines.push(trimmed);
     } else {
@@ -334,6 +417,13 @@ function filterRelevantGlossary(glossary: string, texts: string[]): string {
   return relevantLines.join('\n');
 }
 
+// --- Glossary usage statistics ---
+interface GlossaryStats {
+  directMatches: number;
+  lockedTerms: number;
+  contextTerms: number;
+}
+
 // --- AI translation (Gemini / Lovable gateway) ---
 async function translateWithAI(
   entries: { key: string; original: string }[],
@@ -341,18 +431,46 @@ async function translateWithAI(
   glossary: string | undefined,
   context: { key: string; original: string; translation?: string }[] | undefined,
   userApiKey: string | undefined,
-): Promise<Record<string, string>> {
-  const textsBlock = protectedEntries.map((e, i) => `[${i}] ${e.cleaned}`).join('\n');
+): Promise<{ translations: Record<string, string>; glossaryStats: GlossaryStats }> {
+  const glossaryMap = glossary ? parseGlossaryToMap(glossary) : new Map<string, string>();
+  const stats: GlossaryStats = { directMatches: 0, lockedTerms: 0, contextTerms: 0 };
+
+  // --- Step 1: Direct matches (exact full-string match from glossary) ---
+  const directResult: Record<string, string> = {};
+  const needsAI: { entry: typeof entries[0]; pe: typeof protectedEntries[0]; termLocks: TermLockResult }[] = [];
+
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i];
+    const pe = protectedEntries[i];
+    const norm = pe.cleaned.trim().toLowerCase();
+    const hit = glossaryMap.get(norm);
+    if (hit) {
+      directResult[entry.key] = restoreTags(hit, pe.tags);
+      stats.directMatches++;
+    } else {
+      // --- Step 2: Term locking for partial matches ---
+      const termLocks = lockTermsInText(pe.cleaned, glossaryMap);
+      stats.lockedTerms += termLocks.locks.length;
+      needsAI.push({ entry, pe, termLocks });
+    }
+  }
+
+  if (needsAI.length === 0) {
+    return { translations: directResult, glossaryStats: stats };
+  }
+
+  // --- Step 3: Build prompt with term-locked texts ---
+  const textsBlock = needsAI.map((item, i) => `[${i}] ${item.termLocks.lockedText}`).join('\n');
 
   let glossarySection = '';
   if (glossary?.trim()) {
-    // Filter glossary to only include terms relevant to the current batch
-    const batchTexts = protectedEntries.map(e => e.cleaned);
+    const batchTexts = needsAI.map(item => item.pe.cleaned);
     const relevantGlossary = filterRelevantGlossary(glossary, batchTexts);
     if (relevantGlossary.trim()) {
       const termCount = relevantGlossary.split('\n').length;
-      console.log(`Glossary: ${termCount} relevant terms sent to AI (filtered from full glossary)`);
-      glossarySection = `\n\nIMPORTANT - Use this glossary for consistent terminology (${termCount} relevant terms):\n${relevantGlossary}\n`;
+      stats.contextTerms = termCount;
+      console.log(`Glossary: ${stats.directMatches} direct, ${stats.lockedTerms} locked, ${termCount} context terms`);
+      glossarySection = `\n\nMANDATORY GLOSSARY (${termCount} terms) — You MUST use these exact Arabic translations:\n${relevantGlossary}\n`;
     }
   }
 
@@ -379,19 +497,42 @@ async function translateWithAI(
 
   const categorySection = categoryHint ? `\n\n${categoryHint}` : '';
 
-  const prompt = `You are a professional game translator specializing in The Legend of Zelda series. Translate the following game texts from English/Japanese to Arabic.
+  // Updated prompt: Xenoblade Chronicles 3 specific, with term locking instructions
+  const prompt = `You are a professional game translator specializing in Xenoblade Chronicles 3 (ゼノブレイド3). Translate the following game texts from English to Arabic.
 
 CRITICAL RULES:
-- Keep placeholder tags like \uFFFC and TAG_0, TAG_1, etc. intact in their exact positions.
-- Keep the translation length close to the original to fit in-game text boxes.
-- Use terminology consistent with the Arabic gaming community (e.g. تريفورس for Triforce, سيف الماستر for Master Sword).
-- Preserve proper nouns like Link, Zelda, Ganon, Hyrule as-is or use their well-known Arabic equivalents.
-- Return ONLY a JSON array of strings in the same order. No explanations.${categorySection}${glossarySection}${contextSection}
+1. Placeholders like ⟪T0⟫, ⟪T1⟫, etc. are LOCKED TERMS — copy them exactly as-is into your translation. Do NOT translate, modify, or remove them.
+2. Keep TAG_0, TAG_1, etc. and special characters like \uFFFC intact in their exact positions.
+3. Keep the translation length close to the original to fit in-game text boxes.
+4. If a glossary term appears, you MUST use its exact Arabic translation — no alternatives, no paraphrasing.
+5. Use terminology consistent with the Arabic gaming community for Xenoblade Chronicles 3.
+6. Preserve proper nouns (Noah, Mio, Eunie, Taion, Lanz, Sena, Aionios) as-is or use their established Arabic equivalents from the glossary.
+7. Return ONLY a JSON array of strings in the same order. No explanations.${categorySection}${glossarySection}${contextSection}
 
 Texts:
 ${textsBlock}`;
 
   const effectiveKey = userApiKey?.trim() || Deno.env.get('GEMINI_API_KEY') || '';
+  
+  const parseAndUnlock = (translations: string[]): Record<string, string> => {
+    const result: Record<string, string> = {};
+    for (let i = 0; i < Math.min(needsAI.length, translations.length); i++) {
+      let translated = translations[i]?.trim();
+      if (!translated) continue;
+      // Unlock term placeholders → Arabic
+      const item = needsAI[i];
+      if (item.termLocks.locks.length > 0) {
+        translated = unlockTerms(translated, item.termLocks.locks);
+      }
+      // Post-process: replace any remaining English glossary terms
+      if (glossaryMap.size > 0) {
+        translated = applyGlossaryPost(translated, glossaryMap);
+      }
+      result[item.entry.key] = restoreTags(translated, item.pe.tags);
+    }
+    return result;
+  };
+
   if (effectiveKey) {
     const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${effectiveKey}`;
     const geminiResponse = await fetch(geminiUrl, {
@@ -399,7 +540,7 @@ ${textsBlock}`;
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
-        systemInstruction: { parts: [{ text: 'You are a game text translator. Output only valid JSON arrays.' }] },
+        systemInstruction: { parts: [{ text: 'You are a Xenoblade Chronicles 3 game text translator. Output only valid JSON arrays. Never modify ⟪T#⟫ placeholders.' }] },
         generationConfig: { temperature: 0.3 },
       }),
     });
@@ -409,7 +550,6 @@ ${textsBlock}`;
       console.error('Gemini API error:', errText);
       if (geminiResponse.status === 429) {
         console.log('Gemini quota exceeded, falling back to Lovable AI...');
-        // Fall through to Lovable AI below
       } else {
         if (geminiResponse.status === 400) throw new Error('مفتاح API غير صالح — تحقق من المفتاح');
         if (geminiResponse.status === 403) throw new Error('مفتاح API محظور أو منتهي — أنشئ مفتاحاً جديداً من Google AI Studio');
@@ -422,18 +562,12 @@ ${textsBlock}`;
       if (!jsonMatch) throw new Error('فشل في تحليل استجابة Gemini');
       const sanitized = jsonMatch[0].replace(/[\x00-\x1F\x7F]/g, ' ');
       const translations: string[] = JSON.parse(sanitized);
-
-      const result: Record<string, string> = {};
-      for (let i = 0; i < Math.min(protectedEntries.length, translations.length); i++) {
-        if (translations[i]?.trim()) {
-          result[protectedEntries[i].key] = restoreTags(translations[i], protectedEntries[i].tags);
-        }
-      }
-      return result;
+      const aiResult = parseAndUnlock(translations);
+      return { translations: { ...directResult, ...aiResult }, glossaryStats: stats };
     }
   }
 
-  // Fallback to Lovable AI (when no Gemini key or Gemini quota exceeded)
+  // Fallback to Lovable AI
   {
     const apiKey = Deno.env.get('LOVABLE_API_KEY');
     if (!apiKey) throw new Error('Missing LOVABLE_API_KEY');
@@ -444,7 +578,7 @@ ${textsBlock}`;
       body: JSON.stringify({
         model: 'google/gemini-2.5-flash',
         messages: [
-          { role: 'system', content: 'You are a game text translator. Output only valid JSON arrays.' },
+          { role: 'system', content: 'You are a Xenoblade Chronicles 3 game text translator. Output only valid JSON arrays. Never modify ⟪T#⟫ placeholders.' },
           { role: 'user', content: prompt },
         ],
         temperature: 0.3,
@@ -465,14 +599,8 @@ ${textsBlock}`;
     if (!jsonMatch) throw new Error('Failed to parse AI response');
     const sanitized = jsonMatch[0].replace(/[\x00-\x1F\x7F]/g, ' ');
     const translations: string[] = JSON.parse(sanitized);
-
-    const result: Record<string, string> = {};
-    for (let i = 0; i < Math.min(protectedEntries.length, translations.length); i++) {
-      if (translations[i]?.trim()) {
-        result[protectedEntries[i].key] = restoreTags(translations[i], protectedEntries[i].tags);
-      }
-    }
-    return result;
+    const aiResult = parseAndUnlock(translations);
+    return { translations: { ...directResult, ...aiResult }, glossaryStats: stats };
   }
 }
 
@@ -498,7 +626,6 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Protect tags in brackets before translation
     const protectedEntries = entries.map(e => {
       const { cleaned, tags } = protectTags(e.original);
       return { ...e, cleaned, tags };
@@ -506,19 +633,19 @@ Deno.serve(async (req) => {
 
     if (provider === 'mymemory') {
       const glossaryMap = glossary ? parseGlossaryToMap(glossary) : undefined;
-      const { translations, charsUsed } = await translateWithMyMemory(entries, protectedEntries, glossaryMap, myMemoryEmail);
-      return new Response(JSON.stringify({ translations, charsUsed }), {
+      const { translations, charsUsed, glossaryStats } = await translateWithMyMemory(entries, protectedEntries, glossaryMap, myMemoryEmail);
+      return new Response(JSON.stringify({ translations, charsUsed, glossaryStats }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     } else if (provider === 'google') {
       const glossaryMap = glossary ? parseGlossaryToMap(glossary) : undefined;
-      const { translations, charsUsed } = await translateWithGoogle(entries, protectedEntries, glossaryMap);
-      return new Response(JSON.stringify({ translations, charsUsed }), {
+      const { translations, charsUsed, glossaryStats } = await translateWithGoogle(entries, protectedEntries, glossaryMap);
+      return new Response(JSON.stringify({ translations, charsUsed, glossaryStats }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     } else {
-      const result = await translateWithAI(entries, protectedEntries, glossary, context, userApiKey);
-      return new Response(JSON.stringify({ translations: result }), {
+      const { translations, glossaryStats } = await translateWithAI(entries, protectedEntries, glossary, context, userApiKey);
+      return new Response(JSON.stringify({ translations, glossaryStats }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }

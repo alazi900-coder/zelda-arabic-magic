@@ -196,6 +196,7 @@ export function useEditorTranslation({
     setTranslating(true);
     const totalBatches = Math.ceil(needsAI.length / AI_BATCH_SIZE);
     let allTranslations: Record<string, string> = {};
+    const totalGlossaryStats = { directMatches: 0, lockedTerms: 0, contextTerms: 0 };
     abortControllerRef.current = new AbortController();
 
     try {
@@ -244,6 +245,12 @@ export function useEditorTranslation({
         const data = await response.json();
         addAiRequest(1);
         if (data.charsUsed) addMyMemoryChars(data.charsUsed);
+        // Accumulate glossary stats
+        if (data.glossaryStats) {
+          totalGlossaryStats.directMatches += data.glossaryStats.directMatches || 0;
+          totalGlossaryStats.lockedTerms += data.glossaryStats.lockedTerms || 0;
+          totalGlossaryStats.contextTerms += data.glossaryStats.contextTerms || 0;
+        }
         if (data.translations) {
           const fixedTranslations = autoFixTags(data.translations, protectedMap);
           allTranslations = { ...allTranslations, ...fixedTranslations };
@@ -252,8 +259,13 @@ export function useEditorTranslation({
       }
       if (!abortControllerRef.current?.signal.aborted) {
         const total = Object.keys(allTranslations).length;
-        setTranslateProgress(`✅ تم ترجمة ${total} نص بنجاح${tmCount > 0 ? ` + ${tmCount} من الذاكرة` : ''}`);
-        setTimeout(() => setTranslateProgress(""), 5000);
+        const glossaryParts: string[] = [];
+        if (totalGlossaryStats.directMatches > 0) glossaryParts.push(`📖 ${totalGlossaryStats.directMatches} مطابقة مباشرة`);
+        if (totalGlossaryStats.lockedTerms > 0) glossaryParts.push(`🔒 ${totalGlossaryStats.lockedTerms} مصطلح مُقفَل`);
+        if (totalGlossaryStats.contextTerms > 0) glossaryParts.push(`📋 ${totalGlossaryStats.contextTerms} مصطلح سياقي`);
+        const glossaryInfo = glossaryParts.length > 0 ? ` | القاموس: ${glossaryParts.join(' + ')}` : '';
+        setTranslateProgress(`✅ تم ترجمة ${total} نص بنجاح${tmCount > 0 ? ` + ${tmCount} من الذاكرة` : ''}${glossaryInfo}`);
+        setTimeout(() => setTranslateProgress(""), 8000);
       }
     } catch (err) {
       if ((err as Error).name === 'AbortError') {
