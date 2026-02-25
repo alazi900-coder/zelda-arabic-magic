@@ -246,7 +246,7 @@ Art=فن
 Arts=فنون
 Fusion Arts=الفنون المدمجة
 Chain Attack=هجوم متسلسل
-Interlink=الترابط
+Interlink=الإنترلينك
 Ouroboros Order=أمر أوروبوروس
 Auto-Attack=هجوم تلقائي
 Talent Art=فن الموهبة
@@ -310,9 +310,9 @@ Stalker=المتعقب
 Full Metal Jaguar=الجاغوار المعدني
 Thaumaturge=المعجزاتي
 Martial Artist=فنان قتالي
-Troubadour=التروبادور
+Troubadour=المنشد
 Seraph=السيراف
-Machine Assassin=قاتل الآلات
+Machine Assassin=القاتل الآلي
 Lost Vanguard=الطليعة المفقودة
 Soulhacker=مخترق الأرواح
 Royal Summoner=المستدعي الملكي
@@ -1056,7 +1056,7 @@ Relentless Brutus=بروتوس القاسي
 # ═══════════════════════════════════════════════════
 # منطقة أصل (Origin)
 # ═══════════════════════════════════════════════════
-Absolute Moebius=مويبيوس المطلق
+Absolute Moebius=موبيوس المطلق
 Terminus Dreadking=ملك الرعب النهائي
 Omnipotent Zephyrus=زيفيروس القدير
 # ═══════════════════════════════════════════════════
@@ -1336,24 +1336,24 @@ Discussion=مناقشة
 Gem Crafting Station=محطة صناعة الجواهر
 Class Change=تغيير الفصل
 # ═══════════════════════════════════════════════════
-# نظام أوروبوروس والاندماج (Ouroboros & Interlink System)
+# نظام أوروبوروس والإنترلينك (Ouroboros & Interlink System)
 # ═══════════════════════════════════════════════════
 Ouroboros=أوروبوروس
-Interlink=الاندماج
-Interlink Level=مستوى الاندماج
+Interlink=الإنترلينك
+Interlink Level=مستوى الإنترلينك
 Ouroboros Form=شكل أوروبوروس
-Ouroboros Order=وسام أوروبوروس
-Interlink Pair=ثنائي الاندماج
+Ouroboros Order=أمر أوروبوروس
+Interlink Pair=ثنائي الإنترلينك
 Heat Gauge=مقياس الحرارة
 Overheat=فرط الحرارة
 Cooldown=فترة التبريد
-Interlink Arte=فن الاندماج
+Interlink Arte=فن الإنترلينك
 Talent Arte=فن الموهبة
 Ouroboros Arte=فن أوروبوروس
 Canceling=الإلغاء
 Fusion Arte=فن الدمج
 # ─────────────────────────────────────────────────
-# أشكال الاندماج (Interlink Forms)
+# أشكال الإنترلينك (Interlink Forms)
 # ─────────────────────────────────────────────────
 Noah-Mio Ouroboros=أوروبوروس نوح-ميو
 Lanz-Sena Ouroboros=أوروبوروس لانز-سينا
@@ -1415,9 +1415,9 @@ Awakened State=حالة الصحوة
 Full Power Mode=وضع القوة الكاملة
 Overclock=تسريع فائق
 Chain Attack Boost=تعزيز الهجوم المتسلسل
-Interlink Charge=شحن الاندماج
-Quick Interlink=اندماج سريع
-Sustained Interlink=اندماج مستدام
+Interlink Charge=شحن الإنترلينك
+Quick Interlink=إنترلينك سريع
+Sustained Interlink=إنترلينك مستدام
 # ─────────────────────────────────────────────────
 # مصطلحات قتالية متعلقة بأوروبوروس (Ouroboros Combat Terms)
 # ─────────────────────────────────────────────────
@@ -1425,10 +1425,10 @@ Pair Partner=شريك الثنائي
 Dominant=المهيمن
 Submissive=الخاضع
 Link Attack=هجوم الربط
-Combo Interlink=اندماج تتابعي
-Emergency Interlink=اندماج طارئ
-Interlink Transformation=تحول الاندماج
-De-Interlink=فك الاندماج
+Combo Interlink=إنترلينك تتابعي
+Emergency Interlink=إنترلينك طارئ
+Interlink Transformation=تحول الإنترلينك
+De-Interlink=فك الإنترلينك
 Reactivation=إعادة التفعيل
 Power Reversal=انعكاس القوة
 Moebius=موبيوس
@@ -1833,7 +1833,7 @@ HP Bar=شريط الصحة
 Art Palette=لوحة الفنون
 Talent Art Gauge=مقياس فن الموهبة
 Chain Attack Gauge=مقياس الهجوم المتسلسل
-Interlink Gauge=مقياس الاندماج
+Interlink Gauge=مقياس الإنترلينك
 Party Gauge=مقياس الفريق
 Aggro=الاستفزاز
 Aggro Ring=حلقة الاستفزاز
@@ -1861,8 +1861,8 @@ Landmark Discovered=تم اكتشاف المعلم
 Secret Area Found=تم العثور على منطقة سرية
 Unique Monster Defeated=تمت هزيمة الوحش الفريد
 Chain Attack Ready=الهجوم المتسلسل جاهز
-Interlink Ready=الاندماج جاهز
-Overkill=قتل مبالغ
+Interlink Ready=الإنترلينك جاهز
+Overkill=قتل مفرط
 Excellent=ممتاز
 Bravo=أحسنت
 Amazing=مذهل
@@ -2008,7 +2008,7 @@ Meyneth=ماينيث
 Architect=المهندس
 Blade=النصل
 Driver=السائق
-Aegis=إيجيس
+Aegis=الإيجيس
 Pyra=بايرا
 Mythra=ميثرا
 Fiora=فيورا
@@ -2216,8 +2216,8 @@ Chain Order=أمر السلسلة
 Tactical Points=نقاط تكتيكية
 TP=ن.ت
 Chain Gauge=مقياس السلسلة
-Overkill=قتل مبالغ
-Overkill Bonus=مكافأة القتل المبالغ
+Overkill=قتل مفرط
+Overkill Bonus=مكافأة القتل المفرط
 Completion Bonus=مكافأة الإكمال
 Chain Rating=تصنيف السلسلة
 Chain Link=حلقة السلسلة
@@ -2661,7 +2661,7 @@ Menu Tutorial=شرح القائمة
 Battle Basics=أساسيات المعركة
 Arts Tutorial=شرح الفنون
 Chain Attack Tutorial=شرح الهجوم المتسلسل
-Interlink Tutorial=شرح الاندماج
+Interlink Tutorial=شرح الإنترلينك
 Gem Crafting Tutorial=شرح صناعة الجواهر
 Class Change Tutorial=شرح تغيير الفصل
 # (تم نقل مصطلحات التجارة والملاحة إلى أقسام تفصيلية لاحقة)
@@ -2712,7 +2712,7 @@ Full power!=قوة كاملة!
 We can do this!=نستطيع فعلها!
 Don't give up!=لا تستسلم!
 Ready for a chain attack!=جاهزون لهجوم متسلسل!
-Interlink now!=الاندماج الآن!
+Interlink now!=الإنترلينك الآن!
 Ouroboros!=أوروبوروس!
 Fusion art!=فن مدمج!
 Talent art!=فن الموهبة!
@@ -3159,7 +3159,7 @@ You Will Know Our Names - Finale=ستعرفون أسماءنا - الختام
 Chain Attack Theme=موسيقى هجوم السلسلة
 Keves Battle=معركة كيفيس
 Agnus Battle=معركة أغنوس
-Moebius Battle=معركة مويبيوس
+Moebius Battle=معركة موبيوس
 The Weight of Life=ثقل الحياة
 Off-Seer Melody=لحن مُنشد الوداع
 Mio's Off-Seer Melody=لحن ميو لإنشاد الوداع
@@ -3174,13 +3174,13 @@ Levnis Battle=معركة ليفنيس
 Noah and Mio=نوح وميو
 Eunie and Taion=يوني وتايون
 Lanz and Sena=لانز وسينا
-Interlink=الترابط
+Interlink=الإنترلينك
 Unique Monster Battle=معركة الوحش الفريد
 The Real Enemy=العدو الحقيقي
 Something in Common=شيء مشترك
 Last Chapter=الفصل الأخير
 Origin Interior=داخل الأوريجن
-Moebius=مويبيوس
+Moebius=موبيوس
 Z Battle=معركة زد
 Life Together=الحياة معاً
 Hope Toward Tomorrow=الأمل نحو الغد
@@ -3605,8 +3605,8 @@ Friendship=صداقة
 Party Affinity=ألفة الفريق
 Character Bond=رابطة الشخصية
 Affinity Between Characters=الألفة بين الشخصيات
-Interlink Level=مستوى الاندماج
-Interlink Growth=نمو الاندماج
+Interlink Level=مستوى الإنترلينك
+Interlink Growth=نمو الإنترلينك
 Pair Bond=رابطة الثنائي
 Noah & Mio Bond=رابطة نوح وميو
 Lanz & Sena Bond=رابطة لانز وسينا
@@ -3639,8 +3639,8 @@ Luck Boost=تعزيز الحظ
 Healing Boost=تعزيز الشفاء
 Art Upgrade=ترقية الفن
 Skill Enhancement=تحسين المهارة
-Interlink Time Extension=تمديد وقت الاندماج
-Interlink Art Enhancement=تحسين فنون الاندماج
+Interlink Time Extension=تمديد وقت الإنترلينك
+Interlink Art Enhancement=تحسين فنون الإنترلينك
 Fusion Art Bonus=مكافأة الفن المدمج
 New Art Unlocked=فتح فن جديد
 New Skill Unlocked=فتح مهارة جديدة
@@ -3780,7 +3780,7 @@ No Damage Clear=إتمام دون ضرر
 Speed Kill=قتل سريع
 Overkill=قتل مفرط
 Chain Attack Challenge=تحدي الهجوم المتسلسل
-Interlink Challenge=تحدي الاندماج
+Interlink Challenge=تحدي الإنترلينك
 Ouroboros Challenge=تحدي أوروبوروس
 Fusion Art Challenge=تحدي الفن المدمج
 Cancel Attack Challenge=تحدي هجوم الإلغاء
@@ -3845,8 +3845,8 @@ Hero Recruited=بطل مُجنَّد
 All Heroes Recruited=جميع الأبطال مُجنَّدون
 Character Level 99=مستوى الشخصية 99
 All Characters Max Level=جميع الشخصيات بأقصى مستوى
-Max Interlink Level=أقصى مستوى اندماج
-All Interlinks Maxed=جميع الاندماجات بالحد الأقصى
+Max Interlink Level=أقصى مستوى إنترلينك
+All Interlinks Maxed=جميع الإنترلينكات بالحد الأقصى
 Soul Tree Complete=شجرة الروح مكتملة
 All Soul Trees Complete=جميع أشجار الروح مكتملة
 Skill Set Complete=مجموعة المهارات مكتملة
@@ -3942,7 +3942,7 @@ Steps Taken=الخطوات المقطوعة
 Jumps=القفزات
 Slide Distance=مسافة الانزلاق
 Chain Attacks Used=الهجمات المتسلسلة المستخدمة
-Interlinks Performed=الاندماجات المنفذة
+Interlinks Performed=الإنترلينكات المنفذة
 Talent Arts Used=فنون الموهبة المستخدمة
 Fusion Arts Used=الفنون المدمجة المستخدمة
 Perfect Cancels=الإلغاءات المثالية
@@ -4575,7 +4575,7 @@ Heart-to-Heart=حوار من القلب
 Overheard Talk=حديث مسموع
 Incidental Dialogue=حوار عرضي
 Chain Attack Quote=اقتباس الهجوم المتسلسل
-Interlink Quote=اقتباس الاندماج
+Interlink Quote=اقتباس الإنترلينك
 Ouroboros Quote=اقتباس الأوروبوروس
 Level Up Quote=اقتباس رفع المستوى
 # ─────────────────────────────────────────────────
@@ -4631,7 +4631,7 @@ Ouroboros Activation=تفعيل الأوروبوروس
 Art Call=نداء الفن
 Talent Art Call=نداء فن الموهبة
 Fusion Art Call=نداء الفن المدمج
-Interlink Call=نداء الاندماج
+Interlink Call=نداء الإنترلينك
 Enemy Spotted=تم رصد عدو
 Unique Monster Encounter=مواجهة وحش فريد
 Boss Battle Start=بدء معركة الزعيم
@@ -5023,8 +5023,8 @@ Highest Combo=أعلى سلسلة ضربات
 Max Damage Dealt=أعلى ضرر مُلحق
 Fastest Kill=أسرع قتل
 Chain Attack Count=عدد الهجمات المتسلسلة
-Overkill Count=عدد مرات الضرر الزائد
-Interlink Count=عدد مرات الترابط
+Overkill Count=عدد مرات القتل المفرط
+Interlink Count=عدد مرات الإنترلينك
 Total Gold Earned=إجمالي الذهب المكتسب
 Total Gold Spent=إجمالي الذهب المنفق
 Cooking Count=عدد مرات الطبخ
@@ -8620,10 +8620,10 @@ The Flame Clock is urging us to fight... resist it!=ساعة اللهب تحثن
 # --- حوارات المشاهد الإضافية (Additional Cutscene Dialogues) ---
 The world we knew was a lie. But the truth doesn't make it easier.=العالم الذي عرفناه كان كذبة. لكن الحقيقة لا تجعل الأمر أسهل.
 We were born to fight and die. But we chose something different.=وُلدنا لنقاتل ونموت. لكننا اخترنا شيئًا مختلفًا.
-Moebius feeds on conflict. As long as there's war, they thrive.=مويبيوس يتغذى على الصراع. طالما هناك حرب، يزدهرون.
+Moebius feeds on conflict. As long as there's war, they thrive.=موبيوس يتغذى على الصراع. طالما هناك حرب، يزدهرون.
 The Endless Now... a world frozen in time, repeating forever.=الآن الأبدي... عالم متجمد في الزمن، يتكرر إلى الأبد.
 Every life they've taken, every memory erased—we carry that burden.=كل حياة أخذوها، كل ذكرى محوها—نحن نحمل ذلك العبء.
-If we destroy Moebius, we destroy this world. But a new one will begin.=إذا دمرنا مويبيوس، ندمر هذا العالم. لكن عالمًا جديدًا سيبدأ.
+If we destroy Moebius, we destroy this world. But a new one will begin.=إذا دمرنا موبيوس، ندمر هذا العالم. لكن عالمًا جديدًا سيبدأ.
 I don't want to forget you. Any of you. Not ever.=لا أريد أن أنساكم. أيًّا منكم. أبدًا.
 This flute... it connects us. Across time, across worlds.=هذا الناي... يربطنا. عبر الزمن، عبر العوالم.
 The off-seeing... it's not just for the dead. It's for the living, too.=إنشاد الوداع... ليس فقط للموتى. إنه للأحياء أيضًا.
@@ -8704,12 +8704,12 @@ Guardian Commander: A leader who boosts the entire party's defense.=قائد ا�
 Stalker: A stealthy attacker who strikes from the shadows.=المتسلل: مهاجم خفي يضرب من الظلال.
 Lone Exile: A self-sufficient fighter with powerful solo abilities.=المنفي الوحيد: مقاتل مكتفٍ ذاتيًا بقدرات فردية قوية.
 Incursor: An aggressive attacker who disrupts enemy formations.=الغازي: مهاجم عدواني يعطل تشكيلات العدو.
-Lost Vanguard: An elite defender from a forgotten era.=طليعة المفقودين: مدافع نخبوي من عصر منسي.
+Lost Vanguard: An elite defender from a forgotten era.=الطليعة المفقودة: مدافع نخبوي من عصر منسي.
 Signifer: A support specialist who enhances ally performance.=حامل الراية: متخصص دعم يعزز أداء الحلفاء.
-Soulhacker: A versatile fighter who copies monster abilities.=قرصان الروح: مقاتل متعدد ينسخ قدرات الوحوش.
+Soulhacker: A versatile fighter who copies monster abilities.=مخترق الأرواح: مقاتل متعدد ينسخ قدرات الوحوش.
 Troubadour: A bard-like healer who uses music to support allies.=المنشد: معالج شبيه بالشاعر يستخدم الموسيقى لدعم الحلفاء.
 Seraph: A celestial attacker with devastating ether Arts.=السيراف: مهاجم سماوي بفنون أثيرية مدمرة.
-Machine Assassin: A precision striker who targets weak points.=قاتل الآلات: ضارب دقيق يستهدف نقاط الضعف.
+Machine Assassin: A precision striker who targets weak points.=القاتل الآلي: ضارب دقيق يستهدف نقاط الضعف.
 Royal Summoner: A powerful caster who summons ethereal allies.=المستدعي الملكي: ساحر قوي يستدعي حلفاء أثيريين.
 Lifesage: The ultimate healer who can revive fallen allies.=حكيم الحياة: المعالج الأقصى الذي يستطيع إحياء الحلفاء الساقطين.
 Noblesse: A refined fighter with both offensive and defensive mastery.=النبيل: مقاتل راقٍ يتقن الهجوم والدفاع معًا.
@@ -8756,7 +8756,7 @@ Isurd, Colony Lambda's success is a testament to your vision.=إيسورد، ن�
 Juniper, your tracking skills are unmatched. Even Riku is impressed.=جونيبر، مهاراتك في التتبع لا مثيل لها. حتى ريكو معجب.
 Miyabi, your grace in battle is like a dance. Beautiful and deadly.=ميابي، رشاقتك في المعركة كالرقص. جميلة ومميتة.
 Cammuravi, your flames burn for justice. That's something worth fighting for.=كامورافي، نيرانك تشتعل من أجل العدالة. هذا شيء يستحق القتال من أجله.
-Segiri, you've come so far from what Moebius made you. Be proud.=سيغيري، لقد قطعتِ شوطًا بعيدًا عما صنعك مويبيوس. كوني فخورة.
+Segiri, you've come so far from what Moebius made you. Be proud.=سيغيري، لقد قطعتِ شوطًا بعيدًا عما صنعك موبيوس. كوني فخورة.
 Triton, the sea is in your blood. And now it's in our story too.=ترايتون، البحر في دمك. والآن هو في قصتنا أيضًا.
 Alexandria, your blade cuts through lies as easily as enemies.=ألكسندريا، نصلك يقطع الأكاذيب بسهولة كما يقطع الأعداء.
 
@@ -8992,7 +8992,7 @@ Quick Recharge=إعادة شحن سريعة
 Art Cancel Boost=تعزيز إلغاء الفن
 Fusion Boost=تعزيز الاندماج
 Chain Attack Boost=تعزيز هجوم السلسلة
-Interlink Boost=تعزيز الرابط المتبادل
+Interlink Boost=تعزيز الإنترلينك
 Soul Hack Boost=تعزيز اختراق الروح
 Aggro Up=زيادة العداوة
 Aggro Down=خفض العداوة
@@ -9072,7 +9072,7 @@ Increases the recharge speed of all Arts.=يزيد سرعة إعادة شحن ج
 Boosts the damage of Art Cancel attacks.=يعزز ضرر هجمات إلغاء الفن.
 Boosts the damage bonus of Fusion Arts.=يعزز مكافأة ضرر الفنون المدمجة.
 Increases the TP gained from Chain Attacks.=يزيد نقاط الموهبة المكتسبة من هجمات السلسلة.
-Boosts Interlink Level gain rate.=يعزز معدل اكتساب مستوى الرابط المتبادل.
+Boosts Interlink Level gain rate.=يعزز معدل اكتساب مستوى الإنترلينك.
 Boosts power of attacks that target enemy weaknesses.=يعزز قوة الهجمات التي تستهدف نقاط ضعف العدو.
 Increases aggro generated by attacks.=يزيد العداوة الناتجة عن الهجمات.
 Reduces aggro generated by attacks.=يقلل العداوة الناتجة عن الهجمات.
@@ -9638,7 +9638,7 @@ Kromar Fang=ناب كرومار
 
 # --- حوارات نوح وميو الموسعة (Noah & Mio Extended) ---
 Noah, do you ever think about what comes after all this?=نوح، هل تفكر أبدًا فيما يأتي بعد كل هذا؟
-After we defeat Moebius, you mean? I try not to think too far ahead.=بعد هزيمة مويبيوس، تقصدين؟ أحاول ألا أفكر بعيدًا جدًا.
+After we defeat Moebius, you mean? I try not to think too far ahead.=بعد هزيمة موبيوس، تقصدين؟ أحاول ألا أفكر بعيدًا جدًا.
 That's very like you. Always focused on the present.=هذا يشبهك كثيرًا. دائمًا مركز على الحاضر.
 Is that a bad thing? I learned it from watching you play your flute.=هل هذا شيء سيء؟ تعلمته من مشاهدتك تعزفين الناي.
 My flute... it carries memories. Every note is someone we've lost.=ناي... يحمل ذكريات. كل نغمة هي شخص فقدناه.
@@ -9704,7 +9704,7 @@ Materials collected.=تم جمع المواد.
 Gem crafted successfully.=تم صنع الجوهرة بنجاح.
 Equipment upgraded.=تم ترقية المعدات.
 Chain Attack ready!=هجوم السلسلة جاهز!
-Interlink available.=الرابط المتبادل متاح.
+Interlink available.=الإنترلينك متاح.
 Ouroboros form unlocked.=تم فتح شكل أوروبوروس.
 Soul Tree expanded.=شجرة الروح توسعت.
 Talent Art unlocked.=تم فتح فن الموهبة.
@@ -9736,7 +9736,7 @@ Achievement: Quest Champion=إنجاز: بطل المهام
 Achievement: Cooking Expert=إنجاز: خبير الطهي
 Achievement: All Classes Mastered=إنجاز: إتقان جميع الفئات
 Achievement: Ouroboros Awakening=إنجاز: صحوة أوروبوروس
-Achievement: Interlink Pioneer=إنجاز: رائد الرابط المتبادل
+Achievement: Interlink Pioneer=إنجاز: رائد الإنترلينك
 Achievement: Colony Alliance=إنجاز: تحالف المستعمرات
 Achievement: Ultimate Off-Seer=إنجاز: مُنشد الوداع الأعلى
 Achievement: Aionios Savior=إنجاز: منقذ أيونيوس
@@ -9785,13 +9785,13 @@ The Consuls control everything. Or they did, until we came along.=القناصل
 Each Consul has their own twisted agenda. Don't trust any of them.=كل قنصل لديه أجندته الملتوية الخاصة. لا تثقوا بأي منهم.
 Consul D was the worst. The things he did to Colony Omega...=القنصل D كان الأسوأ. الأشياء التي فعلها بمستعمرة أوميغا...
 Some Consuls were once normal people. That makes it even worse.=بعض القناصل كانوا أشخاصًا عاديين ذات يوم. هذا يجعله أسوأ.
-Moebius gives them power in exchange for suffering. A terrible bargain.=مويبيوس يمنحهم القوة مقابل المعاناة. صفقة رهيبة.
+Moebius gives them power in exchange for suffering. A terrible bargain.=موبيوس يمنحهم القوة مقابل المعاناة. صفقة رهيبة.
 When we free a colony from its Consul, we give them hope.=عندما نحرر مستعمرة من قنصلها، نمنحهم الأمل.
 But hope isn't enough. They need food, shelter, purpose.=لكن الأمل لا يكفي. يحتاجون الطعام والمأوى والهدف.
 
 # --- حوارات عن الأوريجن (Dialogues about Origin) ---
 Origin was supposed to be our salvation. A way to preserve both worlds.=الأوريجن كان يفترض أن يكون خلاصنا. طريقة للحفاظ على كلا العالمين.
-But Moebius corrupted it. Turned it into a tool of stagnation.=لكن مويبيوس أفسده. حوّله إلى أداة ركود.
+But Moebius corrupted it. Turned it into a tool of stagnation.=لكن موبيوس أفسده. حوّله إلى أداة ركود.
 If we can restore Origin to its original purpose, both worlds can be reborn.=إذا استطعنا إعادة الأوريجن لغرضه الأصلي، يمكن لكلا العالمين أن يولدا من جديد.
 The data inside Origin contains everyone who ever lived. That's a heavy responsibility.=البيانات داخل الأوريجن تحتوي على كل شخص عاش. هذه مسؤولية ثقيلة.
 Melia and Nia created Origin together. Keves and Agnus, working as one.=ميليا ونيا أنشأتا الأوريجن معًا. كيفيس وأغنوس، يعملان كواحد.
@@ -9826,13 +9826,13 @@ Guardian Commander=قائد الحراسة
 Stalker=المتعقب
 Lone Exile=المنفي الوحيد
 Incursor=المقتحم
-Lost Vanguard=طليعة مفقودة
+Lost Vanguard=الطليعة المفقودة
 Signifier=حامل الراية
-Soulhacker=مخترق الروح
+Soulhacker=مخترق الأرواح
 Martial Artist=فنان القتال
 Troubadour=المنشد
 Seraph=السيراف
-Machine Assassin=آلة الاغتيال
+Machine Assassin=القاتل الآلي
 Royal Summoner=المستدعي الملكي
 Lifesage=حكيم الحياة
 Noblesse=النبيل
@@ -9895,9 +9895,9 @@ Life Force Energy=طاقة قوة الحياة
 Ether Regulation=تنظيم الأثير
 Combat Rank=رتبة القتال
 Link Level=مستوى الرابط
-Interlink Charge=شحنة الرابط المتبادل
+Interlink Charge=شحنة الإنترلينك
 Ouroboros Stone=حجر أوروبوروس
-Moebius Core=نواة مويبيوس
+Moebius Core=نواة موبيوس
 Z-Factor=عامل Z
 
 # --- مصطلحات نظام اللعب الإضافية (Additional Gameplay System Terms) ---
@@ -10126,7 +10126,7 @@ Position yourself at the enemy's side or back for bonus damage.=ضع نفسك ع
 Cancel Arts by using one Art immediately after another for extra damage.=ألغِ الفنون باستخدام فن فورًا بعد آخر لضرر إضافي.
 Fusion Arts combine a Keves Art with an Agnus Art for powerful effects.=الفنون المدمجة تجمع فن كيفيسي مع فن أغنوسي لتأثيرات قوية.
 Chain Attacks stop time and let your party unleash devastating combos.=هجمات السلسلة توقف الزمن وتدع فريقك يطلق تعاقبات مدمرة.
-Interlink lets two characters combine into a powerful Ouroboros form.=الرابط المتبادل يدع شخصيتين تندمجان في شكل أوروبوروس قوي.
+Interlink lets two characters combine into a powerful Ouroboros form.=الإنترلينك يدع شخصيتين تندمجان في شكل أوروبوروس قوي.
 The Talent Art is a special move unique to each class.=فن الموهبة هو حركة خاصة فريدة لكل فئة.
 Switching targets mid-battle can help you prioritize dangerous enemies.=تبديل الأهداف أثناء المعركة يساعدك على تحديد أولوية الأعداء الخطرين.
 Guard by pressing the button at the right moment to reduce damage.=احرس بالضغط على الزر في اللحظة المناسبة لتقليل الضرر.
@@ -10237,7 +10237,7 @@ Ouroboros Level 1: Basic transformation with enhanced stats.=أوروبوروس 
 Ouroboros Level 2: Unlocks new Arts and stronger abilities.=أوروبوروس المستوى 2: يفتح فنونًا جديدة وقدرات أقوى.
 Ouroboros Level 3: Maximum power. Limited transformation time.=أوروبوروس المستوى 3: القوة القصوى. وقت تحول محدود.
 Heat Gauge: Increases during Ouroboros form. Overheating forces reversion.=مقياس الحرارة: يزداد أثناء شكل أوروبوروس. ارتفاع الحرارة المفرط يفرض العودة.
-Interlink Charge: Build up charge through battle to unlock Ouroboros.=شحنة الرابط المتبادل: اجمع الشحنة عبر القتال لفتح أوروبوروس.
+Interlink Charge: Build up charge through battle to unlock Ouroboros.=شحنة الإنترلينك: اجمع الشحنة عبر القتال لفتح أوروبوروس.
 Soul Tree: Upgrade Ouroboros abilities with Soul Points.=شجرة الروح: طوّر قدرات أوروبوروس بنقاط الروح.
 
 # --- تفاصيل نظام السلسلة (Chain Attack System Details) ---
@@ -10563,14 +10563,14 @@ We were supposed to be enemies. But this power... it's telling us otherwise.=ك�
 If we have this power, maybe we can end the war.=إذا كانت لدينا هذه القوة، ربما نستطيع إنهاء الحرب.
 The Flame Clocks... they stopped?=ساعات اللهب... توقفت؟
 Without the Flame Clocks, we don't need to fight anymore.=بدون ساعات اللهب، لسنا بحاجة للقتال بعد الآن.
-But Moebius won't let us go that easily.=لكن مويبيوس لن يتركنا بهذه السهولة.
-Then we'll fight Moebius. For everyone's freedom.=إذن سنقاتل مويبيوس. من أجل حرية الجميع.
+But Moebius won't let us go that easily.=لكن موبيوس لن يتركنا بهذه السهولة.
+Then we'll fight Moebius. For everyone's freedom.=إذن سنقاتل موبيوس. من أجل حرية الجميع.
 
 # --- مشهد الحقيقة (The Truth Revealed Scene) ---
 Aionios... this world was created by merging two others.=أيونيوس... هذا العالم أُنشئ بدمج عالمين آخرين.
 The two worlds were on a collision course. Origin was built to save them.=العالمان كانا في مسار تصادمي. الأوريجن بُني لإنقاذهما.
 But someone hijacked Origin. They created this endless cycle of war.=لكن أحدًا اختطف الأوريجن. أنشأوا هذه الدورة اللامتناهية من الحرب.
-Moebius feeds on the conflict. They need the war to continue.=مويبيوس يتغذى على الصراع. يحتاجون للحرب أن تستمر.
+Moebius feeds on the conflict. They need the war to continue.=موبيوس يتغذى على الصراع. يحتاجون للحرب أن تستمر.
 Every soldier who dies... their life force fuels the system.=كل جندي يموت... قوة حياته تغذي النظام.
 The Flame Clocks measure how much life energy a colony has harvested.=ساعات اللهب تقيس مقدار طاقة الحياة التي حصدتها المستعمرة.
 Ten terms... that's all anyone gets. Ten terms to live and fight and die.=عشر دورات... هذا كل ما يحصل عليه أي أحد. عشر دورات ليعيش ويقاتل ويموت.
@@ -10578,16 +10578,16 @@ But we're different now. We've broken free from the cycle.=لكننا مختلف
 We carry the hopes of everyone who came before us.=نحمل آمال كل من سبقونا.
 Let's make their sacrifice mean something.=لنجعل تضحيتهم ذات معنى.
 
-# --- مشهد مواجهة مويبيوس (Confronting Moebius Scene) ---
+# --- مشهد مواجهة موبيوس (Confronting Moebius Scene) ---
 So you've come, Ouroboros. How predictable.=إذن أتيتم، أوروبوروس. كم هذا متوقع.
 You think you can change anything? This world exists because of us.=تظنون أنكم تستطيعون تغيير أي شيء؟ هذا العالم موجود بسببنا.
-Without Moebius, there is no Aionios. Without war, there is no life.=بدون مويبيوس، لا يوجد أيونيوس. بدون حرب، لا توجد حياة.
+Without Moebius, there is no Aionios. Without war, there is no life.=بدون موبيوس، لا يوجد أيونيوس. بدون حرب، لا توجد حياة.
 You're wrong! Life isn't about fighting and dying!=أنت مخطئ! الحياة ليست عن القتال والموت!
 People deserve to live on their own terms. To choose their own futures.=الناس يستحقون العيش بشروطهم الخاصة. أن يختاروا مستقبلهم بأنفسهم.
 Foolish children. You don't even understand what you're destroying.=أطفال حمقى. لا تفهمون حتى ما تدمرونه.
 Maybe not. But we know what we're fighting for.=ربما لا. لكننا نعرف لماذا نقاتل.
 For a world where people can live freely. Where they can grow old and be happy.=من أجل عالم يمكن للناس فيه العيش بحرية. حيث يمكنهم أن يكبروا ويكونوا سعداء.
-A world without Flame Clocks. Without terms. Without Moebius.=عالم بدون ساعات لهب. بدون دورات. بدون مويبيوس.
+A world without Flame Clocks. Without terms. Without Moebius.=عالم بدون ساعات لهب. بدون دورات. بدون موبيوس.
 Then come. Show me this "power of freedom" you speak of.=إذن تعالوا. أروني "قوة الحرية" هذه التي تتحدثون عنها.
 
 # --- مشهد الوداع النهائي (Final Farewell Scene) ---
@@ -10619,7 +10619,7 @@ If they can do it, so can we. So can everyone.=إذا استطاعوا فعله�
 # --- الفصل الخامس: معركة الحصار (Chapter 5: The Siege Battle) ---
 They're coming! All forces, prepare for battle!=إنهم قادمون! جميع القوات، استعدوا للمعركة!
 We hold this line no matter what. The colony depends on us.=نحافظ على هذا الخط مهما حدث. المستعمرة تعتمد علينا.
-Moebius sent their strongest. They really want us dead.=مويبيوس أرسلوا أقوى ما لديهم. يريدوننا أمواتًا حقًا.
+Moebius sent their strongest. They really want us dead.=موبيوس أرسلوا أقوى ما لديهم. يريدوننا أمواتًا حقًا.
 But we have something they don't. We have something worth fighting for.=لكن لدينا شيء ليس لديهم. لدينا شيء يستحق القتال من أجله.
 Everyone, link up! It's Ouroboros time!=الجميع، ارتبطوا! حان وقت أوروبوروس!
 We won't let anyone else die today. Not on our watch.=لن ندع أحدًا آخر يموت اليوم. ليس في حراستنا.
@@ -10627,7 +10627,7 @@ We won't let anyone else die today. Not on our watch.=لن ندع أحدًا آ�
 # --- الفصل السادس: كشف أصل العالم (Chapter 6: Origin of the World) ---
 Origin... the machine that was supposed to save both worlds.=الأوريجن... الآلة التي كان من المفترض أن تنقذ كلا العالمين.
 But instead, it became a prison. A cage for billions of souls.=لكن بدلًا من ذلك، أصبحت سجنًا. قفصًا لمليارات الأرواح.
-Z took control of Origin and created Moebius. He wanted this world to last forever.=Z سيطر على الأوريجن وأنشأ مويبيوس. أراد لهذا العالم أن يدوم للأبد.
+Z took control of Origin and created Moebius. He wanted this world to last forever.=Z سيطر على الأوريجن وأنشأ موبيوس. أراد لهذا العالم أن يدوم للأبد.
 An eternal world built on suffering. That's not something we can accept.=عالم أبدي مبني على المعاناة. هذا شيء لا يمكننا قبوله.
 Even if the future is uncertain, it's better than an endless present of pain.=حتى لو كان المستقبل غير مؤكد، فهو أفضل من حاضر لا نهائي من الألم.
 Let's go. Let's reclaim Origin and set everyone free.=لنذهب. لنستعيد الأوريجن ونحرر الجميع.
@@ -13201,7 +13201,7 @@ We're stronger together. That's what Shulk taught us.=نحن أقوى معاً. 
 # ═══════════════════════════════════════════════════════════════════
 
 # --- مهارات شجرة الروح (Soul Tree Skills) ---
-Interlink Level=مستوى الترابط
+Interlink Level=مستوى الإنترلينك
 Soul Tree=شجرة الروح
 Soul Points=نقاط الروح
 Unlock Node=فتح عقدة
@@ -13234,12 +13234,12 @@ Infinity Blade=شفرة اللانهاية
 Eternity Flash=وميض الأبدية
 
 # --- مراتب ربط الأوروبوروس (Ouroboros Link Ranks) ---
-Interlink Rank 1=رتبة الترابط 1
-Interlink Rank 2=رتبة الترابط 2
-Interlink Rank 3=رتبة الترابط 3
-Maximum Interlink=الترابط الأقصى
-Interlink Duration Up=زيادة مدة الترابط
-Interlink Recharge Speed=سرعة إعادة شحن الترابط
+Interlink Rank 1=رتبة الإنترلينك 1
+Interlink Rank 2=رتبة الإنترلينك 2
+Interlink Rank 3=رتبة الإنترلينك 3
+Maximum Interlink=الإنترلينك الأقصى
+Interlink Duration Up=زيادة مدة الإنترلينك
+Interlink Recharge Speed=سرعة إعادة شحن الإنترلينك
 Heat Resistance=مقاومة الحرارة
 Enhanced Ouroboros=أوروبوروس مُعزز
 Ouroboros Awakening=صحوة الأوروبوروس
@@ -13575,7 +13575,7 @@ Manana=مانانا
 Shulk=شولك
 Rex=ريكس
 Fiora=فيورا
-Pyra=بيرا
+Pyra=بايرا
 Mythra=ميثرا
 Melia=ميليا
 Nia=نيا
@@ -13688,7 +13688,7 @@ Remember Colony 9? Those peaceful days... we'll have them again.=تذكرين ا
 
 # --- حوارات ريكس عن مهمته ---
 I'm Rex. And I'm an Aegis Driver.=أنا ريكس. وأنا سائق الإيجيس.
-Pyra, Mythra... I'll always fight by your side.=بيرا، ميثرا... سأقاتل دائماً بجانبكما.
+Pyra, Mythra... I'll always fight by your side.=بايرا، ميثرا... سأقاتل دائماً بجانبكما.
 I used to salvage for a living. Now I'm salvaging the future.=كنت أعمل في الإنقاذ لأعيش. الآن أنقذ المستقبل.
 This new world... it needs people who won't give up. Count me in.=هذا العالم الجديد... يحتاج أناساً لا يستسلمون. اعتبرني معكم.
 I made a promise to reach Elysium. And I kept it. Now there's a new promise to keep.=قطعت وعداً بالوصول إلى الفردوس. ووفيت به. الآن هناك وعد جديد للوفاء به.
@@ -13701,7 +13701,7 @@ I believe in the power of life. Every person has a right to exist.=أؤمن بق
 We'll find a way. We always do.=سنجد طريقة. دائماً نفعل.
 Don't worry about me. I've been through worse.=لا تقلقوا عليّ. مررت بأسوأ من هذا.
 This isn't the end. It's just the beginning of a new chapter.=هذه ليست النهاية. إنها فقط بداية فصل جديد.
-Pyra... Mythra... let's show them what an Aegis can do.=بيرا... ميثرا... لنريهم ما يستطيعه الإيجيس.
+Pyra... Mythra... let's show them what an Aegis can do.=بايرا... ميثرا... لنريهم ما يستطيعه الإيجيس.
 
 # --- حوارات ريكس القتالية ---
 Don't forget me!=لا تنسوني!
@@ -19914,9 +19914,9 @@ Rest at camps to cook meals and level up.=استرح في المعسكرات ل�
 # Section 341: Interlink & Ouroboros Tutorials
 # ============================================================
 
-Interlink=الترابط
-Ouroboros Form=هيئة الأوروبوروس
-Interlink Level=مستوى الترابط
+Interlink=الإنترلينك
+Ouroboros Form=شكل أوروبوروس
+Interlink Level=مستوى الإنترلينك
 Heat Gauge=مقياس الحرارة
 Overheat=فرط الحرارة
 Interlink Arts=فنون الترابط
@@ -21027,7 +21027,7 @@ Off-Seer=مُنشد الوداع
 Consul=القنصل
 Origin=الأوريجن
 Ouroboros=الأوروبوروس
-Interlink=الترابط
+Interlink=الإنترلينك
 Flame Clock=ساعة اللهب
 Chain Attack=الهجوم المتسلسل
 Moebius=موبيوس
