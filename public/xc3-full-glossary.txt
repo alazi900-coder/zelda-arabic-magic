@@ -10332,8 +10332,8 @@ This is probably proof that our Iron Giant God is working well. It helps hide us
 # --- حوارات ريكو (Riku's Dialogues - "mo" suffix) ---
 Riku can see the flow of ether, mo.=ريكو يستطيع رؤية تدفق الأثير، مو.
 There is ether here, mo!=يوجد أثير هنا، مو!
-Noah, you do not need to send them off, mo?=نوا، لا تحتاج لتوديعهم، مو؟
-Riku knows what Noah is thinking, mo.=ريكو يعرف ما يفكر فيه نوا، مو.
+Noah, you do not need to send them off, mo?=نوح، لا تحتاج لتوديعهم، مو؟
+Riku knows what Noah is thinking, mo.=ريكو يعرف ما يفكر فيه نوح، مو.
 It will take too long to investigate in detail, so Riku will pass, mo.=سيستغرق التحقيق بالتفصيل وقتًا طويلًا، لذا ريكو سيمتنع، مو.
 You should try gem crafting, mo.=يجب أن تجرب صناعة الأحجار الكريمة، مو.
 If you have materials, you can make gems, mo.=إذا كانت لديك مواد، يمكنك صنع أحجار كريمة، مو.
@@ -10522,7 +10522,7 @@ Lanz's Mega Meat Platter=صحن لانز الضخم للحوم
 Eunie's Healing Herbal Tea=شاي يوني العشبي الشافي
 Taion's Strategic Ration=حصة تايون الاستراتيجية
 Mio's Melodic Dessert=حلوى ميو اللحنية
-Noah's Traveler's Meal=وجبة نوا المسافر
+Noah's Traveler's Meal=وجبة نوح المسافر
 
 # ═══════════════════════════════════════════════════════════════════════
 # القسم السادس والخمسون: مصطلحات العلاقات والروابط (Relationship Terms - BDAT system.bdat)
@@ -10593,7 +10593,7 @@ Then come. Show me this "power of freedom" you speak of.=إذن تعالوا. أ
 # --- مشهد الوداع النهائي (Final Farewell Scene) ---
 It's time. The two worlds need to separate.=حان الوقت. العالمان يحتاجان للانفصال.
 But that means... we'll be separated too?=لكن هذا يعني... سنُفرَّق نحن أيضًا؟
-Noah... Mio... This isn't goodbye. Not really.=نوا... ميو... هذا ليس وداعًا. ليس حقًا.
+Noah... Mio... This isn't goodbye. Not really.=نوح... ميو... هذا ليس وداعًا. ليس حقًا.
 Even if we're in different worlds, the time we spent together is real.=حتى لو كنا في عوالم مختلفة، الوقت الذي قضيناه معًا حقيقي.
 The memories we made... the bonds we forged... they'll last forever.=الذكريات التي صنعناها... الروابط التي كوّنّاها... ستدوم للأبد.
 I'll find you again. No matter how long it takes.=سأجدك مجددًا. مهما طال الوقت.
@@ -10640,7 +10640,7 @@ I was born to be a soldier. To fight and die for Keves.=وُلدت لأكون ج
 But now I know there's more to life than that.=لكنني الآن أعرف أن هناك أكثر في الحياة من ذلك.
 We fight not because we have to, but because we choose to.=نحن نقاتل ليس لأننا مضطرون، بل لأننا نختار ذلك.
 For every person trapped in this cycle. For every life cut short.=من أجل كل شخص محبوس في هذه الدورة. من أجل كل حياة انتهت مبكرًا.
-For Noah. For Mio. For Lanz and Sena and Eunie and Taion.=من أجل نوا. من أجل ميو. من أجل لانز وسينا ويوني وتايون.
+For Noah. For Mio. For Lanz and Sena and Eunie and Taion.=من أجل نوح. من أجل ميو. من أجل لانز وسينا ويوني وتايون.
 For Riku and Manana. For everyone we've met along the way.=من أجل ريكو ومانانا. من أجل كل من قابلناهم في الطريق.
 Let's end this. Together.=لننهِ هذا. معًا.
 
@@ -10734,7 +10734,7 @@ Then it was worth it. All of it.=إذن كان الأمر يستحق. كل شي�
 See you on the other side. I know we'll meet again.=أراك على الجانب الآخر. أعرف أننا سنلتقي مجددًا.
 
 # --- حوارات أعضاء الفريق الأخيرة (Final Party Member Lines) ---
-Noah... thank you for showing me there's more to life than fighting.=نوا... شكرًا لأنك أريتني أن هناك أكثر في الحياة من القتال.
+Noah... thank you for showing me there's more to life than fighting.=نوح... شكرًا لأنك أريتني أن هناك أكثر في الحياة من القتال.
 Mio... your music gave us strength when we needed it most.=ميو... موسيقاكِ أعطتنا قوة عندما احتجنا إليها أكثر ما يمكن.
 Lanz... you carried us on your back more times than we can count.=لانز... حملتنا على ظهرك مرات أكثر مما نستطيع عدّها.
 Sena... your kindness was the light that guided us through the darkness.=سينا... لطفكِ كان النور الذي أرشدنا عبر الظلام.
@@ -11530,7 +11530,7 @@ Lanz's Challenge=تحدي لانز
 Taion's Analysis=تحليل تايون
 Sena's Strength=قوة سينا
 Riku and Manana's Adventure=مغامرة ريكو ومانانا
-Ashera's Pride=فخر آشيرا
+Ashera's Pride=فخر أشيرا
 Zeon's Duty=واجب زيون
 Fiona's Kindness=لطف فيونا
 Teach's Lesson=درس تيتش
@@ -13464,7 +13464,7 @@ Resurrection=إحياء
 # القسم 103: حوارات الأبطال المتقدمة (Advanced Hero Dialogues)
 # ═══════════════════════════════════════════════════════════════════
 
-# --- حوارات آشيرا (Ashera's Dialogues) ---
+# --- حوارات أشيرا (Ashera's Dialogues) ---
 A real warrior doesn't need words. Actions speak louder.=المحارب الحقيقي لا يحتاج كلمات. الأفعال أبلغ.
 Strength is earned through endless training.=القوة تُكتسب من خلال التدريب اللامتناهي.
 I fight not for glory, but for those I protect.=أقاتل ليس من أجل المجد، بل من أجل من أحميهم.
@@ -15899,17 +15899,17 @@ Knowledge that was suppressed by Moebius.=معرفة كانت مكبوتة من 
 Colony 0's archives are incredible. There's so much we've lost.=أرشيفات المستعمرة 0 مذهلة. هناك الكثير مما فقدناه.
 
 # =============================================
-# القسم 171: مهام المستعمرة غاما (Colony Γ) - آشيرا
+# القسم 171: مهام المستعمرة غاما (Colony Γ) - أشيرا
 # =============================================
 
 # --- مهمة: Battle Scars ---
-Ashera, your colony is in rough shape.=آشيرا، مستعمرتكِ في حالة سيئة.
+Ashera, your colony is in rough shape.=أشيرا، مستعمرتكِ في حالة سيئة.
 We fight hard. That's what we do.=نقاتل بشراسة. هذا ما نفعله.
 Fighting hard and fighting smart aren't the same thing.=القتال بشراسة والقتال بذكاء ليسا نفس الشيء.
 You saying we're not smart?=أتقول أننا لسنا أذكياء؟
 I'm saying your soldiers are injured because they charge in without a plan.=أقول أن جنودكِ مصابون لأنهم يهاجمون بدون خطة.
 ...Fine. Maybe we could use some tactical training.=...حسناً. ربما نحتاج بعض التدريب التكتيكي.
-The casualty rate has dropped by half. Ashera, well done.=معدل الإصابات انخفض للنصف. آشيرا، أحسنتِ.
+The casualty rate has dropped by half. Ashera, well done.=معدل الإصابات انخفض للنصف. أشيرا، أحسنتِ.
 Don't get used to complimenting me. It's weird.=لا تعتاد على مدحي. إنه غريب.
 
 # --- مهمة: The Warrior's Heart ---
@@ -16262,12 +16262,12 @@ They want to learn from me now. Not because I demanded it.=يريدون التع
 Because you earned their respect. That's true leadership.=لأنك كسبت احترامهم. تلك هي القيادة الحقيقية.
 
 # =============================================
-# القسم 186: مهمة بطل - آشيرا (Ashera) - The Weight of Expectations
+# القسم 186: مهمة بطل - أشيرا (Ashera) - The Weight of Expectations
 # =============================================
 
 # --- الفصل الأول: المحاربة ---
 Fight me. Right now.=قاتلني. الآن.
-Ashera, we're not your enemies.=آشيرا، لسنا أعداءكِ.
+Ashera, we're not your enemies.=أشيرا، لسنا أعداءكِ.
 I know that! I just... need to hit something.=أعرف ذلك! أنا فقط... أحتاج لضرب شيء.
 What's wrong?=ما الخطب؟
 My soldiers think I've gone soft since the Flame Clock fell.=جنودي يظنون أنني أصبحت ليّنة منذ سقوط ساعة اللهب.
@@ -16280,13 +16280,13 @@ There's a Unique Monster near Colony Γ. The soldiers are terrified.=هناك و
 Then we kill it. Simple.=إذن نقتله. بسيط.
 Or we could study it first. Understand why it's here.=أو يمكننا دراسته أولاً. فهم لماذا هو هنا.
 Study it? It's a monster!=ندرسه؟ إنه وحش!
-Ashera, not everything needs to be solved with violence.=آشيرا، ليس كل شيء يحتاج للحل بالعنف.
+Ashera, not everything needs to be solved with violence.=أشيرا، ليس كل شيء يحتاج للحل بالعنف.
 ...Fine. But if it attacks, I'm punching it first.=...حسناً. لكن إن هاجم، سأضربه أولاً.
 The creature was protecting its young. We relocated them safely.=المخلوق كان يحمي صغاره. أعدنا توطينهم بأمان.
 I can't believe I'm saying this, but... that was better than fighting.=لا أصدق أنني أقول هذا، لكن... ذلك كان أفضل من القتال.
 
 # --- الخاتمة ---
-Ashera, Colony Γ is thriving.=آشيرا، المستعمرة غاما مزدهرة.
+Ashera, Colony Γ is thriving.=أشيرا، المستعمرة غاما مزدهرة.
 Yeah, well... don't make a big deal out of it.=نعم، حسناً... لا تبالغوا في الأمر.
 Your soldiers respect you more than ever.=جنودكِ يحترمونكِ أكثر من أي وقت مضى.
 Because I stopped punching everything?=لأنني توقفت عن ضرب كل شيء؟
@@ -16592,9 +16592,9 @@ Warrior's Broth=حساء المحارب
 This soup give strength for whole day of fighting!=هذا الحساء يمنح قوة ليوم كامل من القتال!
 Gogol bone marrow, simmered overnight.=نخاع عظام غوغول، يُطهى على نار هادئة طوال الليل.
 Add Mountain Sage and Fire Peppers.=أضيفي ميرمية الجبل وفلفل النار.
-Warning: very hot. Even Ashera cried.=تحذير: حار جداً. حتى آشيرا بكت.
+Warning: very hot. Even Ashera cried.=تحذير: حار جداً. حتى أشيرا بكت.
 I did NOT cry! My eyes were just... sweating.=لم أبكِ! عيناي كانتا فقط... تتعرقان.
-Sure, Ashera. Sure.=بالتأكيد، آشيرا. بالتأكيد.
+Sure, Ashera. Sure.=بالتأكيد، أشيرا. بالتأكيد.
 
 # =============================================
 # القسم 203: حوارات الطبخ مع نوح
@@ -18732,7 +18732,7 @@ Glimmer's Light Armor=درع غليمر الخفيف
 Rex's Salvager Suit=بذلة ريكس المنقذ
 Shulk's Colony 9 Outfit=زي شولك - المستعمرة 9
 Fiora's Mechon Armor=درع فيورا الميكون
-Dunban's Battle Garb=رداء دنبان القتالي
+Dunban's Battle Garb=رداء دانبان القتالي
 Melia's Imperial Dress=فستان ميليا الإمبراطوري
 Nia's Blade Form=هيئة نيا الشفرة
 Poppi's QTπ Form=هيئة بوبي QTπ
