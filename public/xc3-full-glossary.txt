@@ -9796,15 +9796,15 @@ If we can restore Origin to its original purpose, both worlds can be reborn.=إ�
 The data inside Origin contains everyone who ever lived. That's a heavy responsibility.=البيانات داخل الأوريجن تحتوي على كل شخص عاش. هذه مسؤولية ثقيلة.
 Melia and Nia created Origin together. Keves and Agnus, working as one.=ميليا ونيا أنشأتا الأوريجن معًا. كيفيس وأغنوس، يعملان كواحد.
 That's the lesson, isn't it? Unity is our greatest strength.=هذا هو الدرس، أليس كذلك؟ الوحدة هي أعظم قوتنا.
-The path to Origin is guarded by Moebius. They won't give up without a fight.=الطريق إلى الأوريجن يحرسه مويبيوس. لن يستسلموا بدون قتال.
+The path to Origin is guarded by Moebius. They won't give up without a fight.=الطريق إلى الأوريجن يحرسه موبيوس. لن يستسلموا بدون قتال.
 Every step we take toward Origin is a step toward a new future.=كل خطوة نخطوها نحو الأوريجن هي خطوة نحو مستقبل جديد.
 
-# --- حوارات عن مويبيوس (Dialogues about Moebius) ---
-Moebius isn't just an organization. It's an idea. The idea that nothing should ever change.=مويبيوس ليس مجرد منظمة. إنه فكرة. فكرة أن لا شيء يجب أن يتغير أبدًا.
+# --- حوارات عن موبيوس (Dialogues about Moebius) ---
+Moebius isn't just an organization. It's an idea. The idea that nothing should ever change.=موبيوس ليس مجرد منظمة. إنه فكرة. فكرة أن لا شيء يجب أن يتغير أبدًا.
 They feed on human conflict. War, fear, despair—that's their fuel.=يتغذون على الصراع البشري. الحرب والخوف واليأس—هذا وقودهم.
 The Endless Now is their paradise. A world where no one grows or changes.=الآن الأبدي هو جنتهم. عالم لا أحد ينمو أو يتغير فيه.
 But stagnation isn't life. It's just a slow death.=لكن الركود ليس حياة. إنه مجرد موت بطيء.
-We represent everything Moebius fears: growth, change, hope.=نحن نمثل كل ما يخشاه مويبيوس: النمو والتغيير والأمل.
+We represent everything Moebius fears: growth, change, hope.=نحن نمثل كل ما يخشاه موبيوس: النمو والتغيير والأمل.
 That's why they'll do anything to stop us. We're their greatest threat.=لهذا سيفعلون أي شيء لإيقافنا. نحن أكبر تهديد لهم.
 But we won't back down. Not now, not ever.=لكننا لن نتراجع. ليس الآن، ولا أبدًا.
 The cycle of war must end. And we're the ones who'll end it.=دورة الحرب يجب أن تنتهي. ونحن من سينهيها.
@@ -10084,19 +10084,19 @@ Legendary=أسطوري
 # ═══════════════════════════════════════════════════════════════════════
 
 # --- حوارات المعارك الرئيسية (Key Battle Dialogues) ---
-This is it. The final battle against Moebius.=هذا هو. المعركة الأخيرة ضد مويبيوس.
+This is it. The final battle against Moebius.=هذا هو. المعركة الأخيرة ضد موبيوس.
 Everyone, remember why we're fighting. For the future!=جميعًا، تذكروا لماذا نقاتل. من أجل المستقبل!
 Z thinks he can control everything. We'll prove him wrong.=زد يعتقد أنه يستطيع السيطرة على كل شيء. سنثبت خطأه.
 The Endless Now ends here. Today, we choose tomorrow.=الآن الأبدي ينتهي هنا. اليوم، نختار الغد.
 Our Ouroboros power is at its peak. Now or never!=قوة أوروبوروس لدينا في ذروتها. الآن أو لا!
 Keep pushing! We're almost there!=استمروا بالدفع! نحن على وشك الوصول!
 They're throwing everything at us. Hold the line!=يلقون بكل شيء علينا. حافظوا على الخط!
-This is for everyone who suffered under Moebius!=هذا من أجل كل من عانى تحت مويبيوس!
+This is for everyone who suffered under Moebius!=هذا من أجل كل من عانى تحت موبيوس!
 We're not just fighting for ourselves. We're fighting for everyone!=لسنا نقاتل من أجل أنفسنا فقط. نقاتل من أجل الجميع!
 The world is watching. Let's show them what freedom looks like.=العالم يراقب. لنريهم كيف تبدو الحرية.
 
 # --- حوارات انتصار (Victory Dialogues) ---
-We did it! Moebius is finished!=فعلناها! مويبيوس انتهى!
+We did it! Moebius is finished!=فعلناها! موبيوس انتهى!
 The Flame Clocks are dark. We're truly free now.=ساعات اللهب مظلمة. نحن أحرار حقًا الآن.
 It's over. The Endless Now is broken.=انتهى. الآن الأبدي تحطم.
 Look at the sky. It's different. Brighter.=انظروا للسماء. مختلفة. أكثر إشراقًا.
@@ -10222,7 +10222,7 @@ But he believed in you. And so do I.=لكنه آمن بكم. وأنا كذلك.
 
 # --- حوارات غيرنيكا فاندام (Guernica Vandham's Dialogues) ---
 Listen up, kids. The world's bigger than you think.=اسمعوا يا أطفال. العالم أكبر مما تتصورون.
-Keves and Agnus... they're not your enemies. The real enemy is Moebius.=كيفيس وأغنوس... ليسوا أعداءكم. العدو الحقيقي هو مويبيوس.
+Keves and Agnus... they're not your enemies. The real enemy is Moebius.=كيفيس وأغنوس... ليسوا أعداءكم. العدو الحقيقي هو موبيوس.
 These stones have the power to change everything. Use them wisely.=هذه الأحجار لديها القدرة على تغيير كل شيء. استخدموها بحكمة.
 I've fought my whole life for this moment. Make it count.=قاتلت طوال حياتي من أجل هذه اللحظة. اجعلوها تستحق.
 The Ouroboros power... it's your key to breaking the cycle.=قوة أوروبوروس... هي مفتاحكم لكسر الدورة.
@@ -10714,7 +10714,7 @@ Every machine tells a story. You just have to listen.=كل آلة تروي قص�
 
 # --- حوارات القناصل (Consul Dialogues) ---
 You think you're free? You're just playing a different game.=تظنون أنكم أحرار؟ أنتم فقط تلعبون لعبة مختلفة.
-Moebius is eternal. You are fleeting. The math is simple.=مويبيوس أبدي. أنتم زائلون. الحساب بسيط.
+Moebius is eternal. You are fleeting. The math is simple.=موبيوس أبدي. أنتم زائلون. الحساب بسيط.
 We were like you once. Full of hope. Full of dreams. It all fades.=كنا مثلكم ذات يوم. مليئين بالأمل. مليئين بالأحلام. كل شيء يتلاشى.
 Eternity is the only truth. Everything else is an illusion.=الأبدية هي الحقيقة الوحيدة. كل شيء آخر وهم.
 You'll understand someday. When you've lived long enough to see everything you love crumble.=ستفهمون يومًا ما. عندما تعيشون طويلًا بما يكفي لترون كل ما تحبونه ينهار.
@@ -10724,7 +10724,7 @@ You'll understand someday. When you've lived long enough to see everything you l
 # ═══════════════════════════════════════════════════════════════════════
 
 # --- ما بعد هزيمة Z (After Defeating Z) ---
-It's over. Z is gone. Moebius is finished.=انتهى. Z رحل. مويبيوس انتهى.
+It's over. Z is gone. Moebius is finished.=انتهى. Z رحل. موبيوس انتهى.
 The worlds are starting to separate. We don't have much time.=العوالم بدأت بالانفصال. ليس لدينا الكثير من الوقت.
 I don't want to say goodbye. Not yet. Not ever.=لا أريد أن أقول وداعًا. ليس بعد. ليس أبدًا.
 But this is what we fought for, isn't it? For the worlds to return to normal.=لكن هذا ما قاتلنا من أجله، أليس كذلك؟ لتعود العوالم إلى طبيعتها.
@@ -14154,8 +14154,8 @@ Maybe. But it's our only choice.=ربما. لكنه خيارنا الوحيد.
 
 # --- مشهد القنصل ---
 Consul... What are you?=القنصل... ما أنت؟
-We are Moebius. We are eternal.=نحن مويبيوس. نحن أبديون.
-Moebius...?=مويبيوس...؟
+We are Moebius. We are eternal.=نحن موبيوس. نحن أبديون.
+Moebius...?=موبيوس...؟
 You've committed a grave sin, children.=لقد ارتكبتم خطيئة جسيمة، أيها الأطفال.
 Interlink was never meant for the likes of you.=الربط البيني لم يكن مُعدّاً لأمثالكم.
 What do you mean? We didn't choose this!=ماذا تعني؟ لم نختر هذا!
@@ -14188,7 +14188,7 @@ It's a long story. But they're not our enemies.=إنها قصة طويلة. لك
 Not enemies? Have you lost your mind?!=ليسوا أعداء؟ هل فقدت عقلك؟!
 Listen to me! The war... it's all a lie.=اسمعوني! الحرب... كلها كذبة.
 A lie...? What are you saying?=كذبة...؟ ماذا تقول؟
-The Consuls, Moebius... they're using us. All of us.=القناصل، مويبيوس... يستغلوننا. جميعنا.
+The Consuls, Moebius... they're using us. All of us.=القناصل، موبيوس... يستغلوننا. جميعنا.
 Our life force... they're feeding on it.=طاقة حياتنا... يتغذّون عليها.
 
 # --- مشهد تحرير المستعمرة ---
@@ -14246,7 +14246,7 @@ You've heard of it?=هل سمعتِ عنه؟
 It's an Agnian legend. The blade that divided the world.=إنها أسطورة أغنسية. النصل الذي قسم العالم.
 It's not just a legend. It's real. And we need to go there.=ليست مجرد أسطورة. إنه حقيقي. وعلينا الذهاب إلى هناك.
 Why? What's at the Swordmarch?=لماذا؟ ماذا يوجد في مسيرة السيف؟
-Answers. About Ouroboros, about Moebius... about everything.=إجابات. عن أوروبوروس، عن مويبيوس... عن كل شيء.
+Answers. About Ouroboros, about Moebius... about everything.=إجابات. عن أوروبوروس، عن موبيوس... عن كل شيء.
 
 # --- مشهد الأعداد المفقودة (Lost Numbers) ---
 Welcome to the City. We've been waiting for you.=مرحباً في المدينة. كنّا ننتظركم.
@@ -14258,7 +14258,7 @@ Born free... That's possible?=وُلدتم أحراراً... هل هذا ممك�
 It was how things used to be, before the Flame Clocks.=هكذا كانت الأمور، قبل ساعات اللهب.
 A world without Flame Clocks... What was it like?=عالم بدون ساعات اللهب... كيف كان؟
 Beautiful. And terrible. Like any world.=جميل. ومُرعب. كأي عالم.
-We've been fighting Moebius for generations.=كنّا نحارب مويبيوس لأجيال.
+We've been fighting Moebius for generations.=كنّا نحارب موبيوس لأجيال.
 Generations... You live that long?=أجيال... تعيشون لهذه المدة؟
 Without the Flame Clocks, we age naturally. We grow old and die.=بدون ساعات اللهب، نشيخ طبيعياً. نكبر ونموت.
 Growing old... I've never seen anyone grow old.=أن نكبر... لم أرَ أحداً يكبر من قبل.
@@ -14267,14 +14267,14 @@ That's the tragedy of your world.=هذه هي مأساة عالمكم.
 # --- مشهد الملكة نيا ---
 I am Nia. Queen of Agnus.=أنا نيا. ملكة أغنس.
 The Queen...?! But you're here, with the Lost Numbers?=الملكة...؟! لكنك هنا، مع الأعداد المفقودة؟
-The Queen you know is a puppet. A shell of Moebius.=الملكة التي تعرفونها دمية. قوقعة من مويبيوس.
+The Queen you know is a puppet. A shell of Moebius.=الملكة التي تعرفونها دمية. قوقعة من موبيوس.
 Then who are you?=إذن من أنتِ؟
 I am the real Nia. A Blade... from another time.=أنا نيا الحقيقية. سيف... من زمن آخر.
 Another time...?=زمن آخر...؟
 There were two worlds, long ago. They should never have merged.=كان هناك عالمان، منذ زمن بعيد. ما كان يجب أن يندمجا أبداً.
 Two worlds... merging into one?=عالمان... يندمجان في واحد؟
-The merging created this twisted reality. And Moebius was born from it.=الاندماج خلق هذا الواقع المشوّه. ومويبيوس وُلد منه.
-Then to defeat Moebius, we need to fix what was broken.=إذن للقضاء على مويبيوس، علينا إصلاح ما انكسر.
+The merging created this twisted reality. And Moebius was born from it.=الاندماج خلق هذا الواقع المشوّه. وموبيوس وُلد منه.
+Then to defeat Moebius, we need to fix what was broken.=إذن للقضاء على موبيوس، علينا إصلاح ما انكسر.
 Yes. That is your mission, Ouroboros.=نعم. هذه هي مهمتكم، يا أوروبوروس.
 
 # --- مشهد ميليا ---
@@ -14282,7 +14282,7 @@ Melia... Queen of Keves.=ميليا... ملكة كيفس.
 Another queen in hiding?=ملكة أخرى في الخفاء؟
 I've been watching over my people from afar.=كنت أراقب شعبي من بعيد.
 Watching? While they fight and die?=تراقبين؟ بينما يقاتلون ويموتون؟
-I could not act directly. Moebius has eyes everywhere.=لم أستطع التصرّف مباشرة. مويبيوس لديه عيون في كل مكان.
+I could not act directly. Moebius has eyes everywhere.=لم أستطع التصرّف مباشرة. موبيوس لديه عيون في كل مكان.
 But now, with Ouroboros...=لكن الآن، مع أوروبوروس...
 Now there is hope. For the first time in ages.=الآن يوجد أمل. للمرة الأولى منذ عصور.
 
@@ -14290,12 +14290,12 @@ Now there is hope. For the first time in ages.=الآن يوجد أمل. للم�
 # القسم 120: المشاهد السينمائية - الفصل الرابع (Chapter 4: Moebius Revealed)
 # ═══════════════════════════════════════════════════════════════════
 
-# --- مشهد كشف حقيقة مويبيوس ---
-Moebius... They're not gods. They're people.=مويبيوس... ليسوا آلهة. إنهم بشر.
+# --- مشهد كشف حقيقة موبيوس ---
+Moebius... They're not gods. They're people.=موبيوس... ليسوا آلهة. إنهم بشر.
 People? Those monsters?=بشر؟ تلك الوحوش؟
 People who chose eternity over life.=بشر اختاروا الأبدية على الحياة.
 They feed on conflict. On the cycle of war.=يتغذّون على الصراع. على دورة الحرب.
-As long as Keves and Agnus fight, Moebius grows stronger.=طالما كيفس وأغنس يتقاتلان، مويبيوس يزداد قوة.
+As long as Keves and Agnus fight, Moebius grows stronger.=طالما كيفس وأغنس يتقاتلان، موبيوس يزداد قوة.
 So the war... it was designed. From the beginning.=إذن الحرب... كانت مُصمَّمة. منذ البداية.
 Every battle, every death... it all feeds them.=كل معركة، كل موت... كله يُغذّيهم.
 That's monstrous...=هذا وحشي...
@@ -14305,11 +14305,11 @@ But now we do. And that changes everything.=لكننا نعلم الآن. وهذ
 
 # --- مشهد D وJ (القناصل) ---
 Well, well. The little Ouroboros are growing up.=حسناً، حسناً. أوروبوروس الصغار يكبرون.
-D... and J. Two of Moebius's strongest.=دي... وجي. اثنان من أقوى مويبيوس.
+D... and J. Two of Moebius's strongest.=دي... وجي. اثنان من أقوى موبيوس.
 You know, we used to be just like you.=تعلمون، كنّا مثلكم تماماً.
 Like us...?=مثلنا...؟
 Fighters. Dreamers. People with something to lose.=مقاتلين. حالمين. أشخاص لديهم ما يخسرونه.
-And then you chose Moebius.=ثم اخترتم مويبيوس.
+And then you chose Moebius.=ثم اخترتم موبيوس.
 We chose to live forever. What would you choose?=اخترنا أن نعيش للأبد. ماذا ستختارون أنتم؟
 A real life, even if it's short. That's what I choose.=حياة حقيقية، حتى لو كانت قصيرة. هذا ما أختاره.
 How naive. You'll learn... when you watch everyone you love die.=يا لَلسذاجة. ستتعلّمون... حين تُشاهدون كل مَن تحبون يموت.
@@ -14326,7 +14326,7 @@ Watched her die. Again and again and again.=شاهدتُها تموت. مرار�
 Her...? You mean Mio?=هي...؟ تقصد ميو؟
 Every cycle, we find each other. Every cycle, she dies.=كل دورة، نجد بعضنا. كل دورة، تموت.
 And eventually, the pain became too much.=وفي النهاية، أصبح الألم أكبر من أن يُحتمل.
-So you surrendered. You became Moebius.=إذن استسلمتَ. أصبحتَ مويبيوس.
+So you surrendered. You became Moebius.=إذن استسلمتَ. أصبحتَ موبيوس.
 I chose to freeze this moment. To keep her alive, even in this twisted way.=اخترت تجميد هذه اللحظة. لإبقائها حيّة، حتى بهذه الطريقة المشوّهة.
 That's not life, N. That's a prison.=هذه ليست حياة، إن. إنها سجن.
 You'll understand someday. When you hold her as she fades.=ستفهم يوماً ما. حين تحتضنها وهي تتلاشى.
@@ -14382,9 +14382,9 @@ This is it... Origin.=هذا هو... الأوريجن.
 It's massive...=إنه ضخم...
 Origin was built to preserve both worlds when they collided.=الأوريجن بُني للحفاظ على كلا العالمين حين تصادما.
 A machine to save everything...=آلة لإنقاذ كل شيء...
-But Moebius corrupted it. Stopped the worlds from separating again.=لكن مويبيوس أفسده. أوقف العالمين عن الانفصال مجدداً.
+But Moebius corrupted it. Stopped the worlds from separating again.=لكن موبيوس أفسده. أوقف العالمين عن الانفصال مجدداً.
 So they could keep feeding on the cycle.=حتى يتمكّنوا من الاستمرار في التغذّي على الدورة.
-If we can restart Origin, we can undo everything Moebius has done.=إذا استطعنا إعادة تشغيل الأوريجن، يمكننا إلغاء كل ما فعله مويبيوس.
+If we can restart Origin, we can undo everything Moebius has done.=إذا استطعنا إعادة تشغيل الأوريجن، يمكننا إلغاء كل ما فعله موبيوس.
 But that means... the worlds will separate.=لكن ذلك يعني... أن العالمين سينفصلان.
 Yes. Keves and Agnus will become two worlds again.=نعم. كيفس وأغنس سيعودان عالمين مرة أخرى.
 And we... we'll be separated too.=ونحن... سنُفصَل أيضاً.
@@ -14407,7 +14407,7 @@ Maybe. But I'm a free fool.=ربما. لكنني أحمق حُر.
 # --- مشهد M (ميو المظلمة) ---
 You must be M.=لا بد أنكِ إم.
 Mio... or should I say, the current me.=ميو... أو هل أقول، أنا الحالية.
-Why did you join Moebius?=لماذا انضممتِ إلى مويبيوس؟
+Why did you join Moebius?=لماذا انضممتِ إلى موبيوس؟
 N begged me to. He said it was the only way to stay together.=إن توسّل إليّ. قال إنها الطريقة الوحيدة للبقاء معاً.
 And you believed him?=وصدّقتِه؟
 When you've died a thousand times... you'll believe anything.=حين تموتين ألف مرة... ستصدّقين أي شيء.
@@ -14572,7 +14572,7 @@ Your kindness speaks louder than words, Valdi.=لطفك يتحدث أعلى من
 Ouroboros... the power to interlink Keves and Agnus.=أوروبوروس... قوة الربط البيني بين كيفس وأغنس.
 It was created by the Queens themselves.=صنعتها الملكتان بنفسيهما.
 Nia and Melia... They gave us this power?=نيا وميليا... هما مَن منحانا هذه القوة؟
-As a weapon against Moebius. Their last hope.=كسلاح ضد مويبيوس. أملهما الأخير.
+As a weapon against Moebius. Their last hope.=كسلاح ضد موبيوس. أملهما الأخير.
 We carry the hopes of two worlds on our shoulders.=نحمل آمال عالمين على أكتافنا.
 Then we'd better not drop them.=إذن من الأفضل ألا نُسقطها.
 
@@ -14615,7 +14615,7 @@ No... for me, it is. But for you... live well, Noah.=لا... بالنسبة لي
 
 # --- مشهد ميو وإم - المصالحة ---
 M... I don't blame you.=إم... لا ألومكِ.
-How can you say that? I chose Moebius.=كيف تقولين ذلك؟ اخترت مويبيوس.
+How can you say that? I chose Moebius.=كيف تقولين ذلك؟ اخترت موبيوس.
 You chose out of love. I understand that now.=اخترتِ بدافع الحب. أفهم ذلك الآن.
 Love... Is that what it was?=الحب... هل كان ذلك ما كان؟
 It was. A twisted version, but love nonetheless.=كان كذلك. نسخة مشوّهة، لكنه حب مع ذلك.
@@ -14635,7 +14635,7 @@ Real life is messy. It hurts. It ends.=الحياة الحقيقية فوضوي�
 But that's exactly what makes it beautiful.=لكن هذا بالتحديد ما يجعلها جميلة.
 Every moment matters because it won't last forever.=كل لحظة مهمة لأنها لن تدوم إلى الأبد.
 Every bond is precious because it can be broken.=كل رابطة ثمينة لأنه يمكن أن تُقطع.
-That's the truth Moebius could never understand.=هذه هي الحقيقة التي لم يستطع مويبيوس فهمها أبداً.
+That's the truth Moebius could never understand.=هذه هي الحقيقة التي لم يستطع موبيوس فهمها أبداً.
 And that's why we'll win.=ولهذا سننتصر.
 Because we're not afraid to live!=لأننا لسنا خائفين من أن نعيش!
 
@@ -14656,7 +14656,7 @@ Our Interlink is evolving!=الربط البيني يتطوّر!
 I can feel it too! The power is growing!=أستطيع الشعور بذلك أيضاً! القوة تنمو!
 This is the full power of Ouroboros!=هذه هي القوة الكاملة لأوروبوروس!
 Six hearts, beating as one. Six wills, united!=ستة قلوب، تنبض كواحدة. ست إرادات، متحدة!
-Let's show Moebius what we're made of!=لنُري مويبيوس مما نحن مصنوعون!
+Let's show Moebius what we're made of!=لنُري موبيوس مما نحن مصنوعون!
 Together, there's nothing we can't overcome!=معاً، لا يوجد شيء لا نستطيع تجاوزه!
 
 # --- مشهد الوداع مع الأبطال ---
