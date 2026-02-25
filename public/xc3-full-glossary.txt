@@ -120,8 +120,8 @@ Aetia=أيتيا
 # المواقع التفصيلية
 # ═══════════════════════════════════════════════════
 Yzana Plains=سهول يزانا
-Reebe Highlands=هضاب ريبي
-Great Conté Falls=شلالات كونتي العظيمة
+Reebe Highlands=مرتفعات ريبي
+Great Conté Falls=شلالات كونتيه الكبرى
 Moram Bridge=جسر مورام
 Invidian Trail=طريق إنفيديان
 Invidian Tunnels=أنفاق إنفيديان
@@ -597,7 +597,7 @@ Ether Shortage=نقص الأثير
 Buddy Blaster Blunder=خطأ المسدس الرفيق
 Dorrick Complete=دوريك مكتمل
 Widespread Custom=عادة منتشرة
-Colony Iota Goods=بضائع مستعمرة أيوتا
+Colony Iota Goods=بضائع المستعمرة يوتا
 Goods in Storage=بضائع في المخزن
 Ouroboros Research=بحث أوروبوروس
 Niina's Birthday=عيد ميلاد نينا
@@ -1226,7 +1226,7 @@ Secret Area=منطقة سرية
 Skip Travel=الانتقال السريع
 Camp=مخيم
 # ─────────────────────────────────────────────────
-# معالم منطقة إيتيا (Aetia Region Landmarks)
+# معالم منطقة أيتيا (Aetia Region Landmarks)
 # ─────────────────────────────────────────────────
 Colony 9 Camp=مخيم المستعمرة 9
 Hillside Vistas=مرتفعات التلال
@@ -1240,8 +1240,8 @@ Colony 4 Camp=مخيم المستعمرة 4
 Saffronia Tree=شجرة سافرونيا
 Colony Gamma Camp=مخيم المستعمرة غاما
 Ribbi Flats=سهول ريبي
-Aetia Sea=بحر إيتيا
-Aetia Landmark Tower=برج معلم إيتيا
+Aetia Sea=بحر أيتيا
+Aetia Landmark Tower=برج معلم أيتيا
 Mill L'Ciela Landmark=معلم ميل لاسيلا
 Llyn Nyddwr Camp=مخيم لين نيدور
 Gura Flava Camp=مخيم غورا فلافا
@@ -2727,11 +2727,11 @@ Lend me your power!=أعرني قوتك!
 # ═══════════════════════════════════════════════════
 # مستعمرات إضافية (Additional Colonies)
 # ═══════════════════════════════════════════════════
-Colony Gamma=مستعمرة غاما
-Colony Iota=مستعمرة يوتا
+Colony Gamma=المستعمرة غاما
+Colony Iota=المستعمرة يوتا
 Colony 7=المستعمرة 7
-Colony Gamma Camp=مخيم مستعمرة غاما
-Colony Iota Camp=مخيم مستعمرة يوتا
+Colony Gamma Camp=مخيم المستعمرة غاما
+Colony Iota Camp=مخيم المستعمرة يوتا
 # ═══════════════════════════════════════════════════
 # شخصيات غير قابلة للعب إضافية (Additional NPCs)
 # ═══════════════════════════════════════════════════
@@ -8013,11 +8013,11 @@ Burst Lock=قفل الانفجار
 I don't know. I thought a different Consul had come, but I have no memory of what happened after that...=لا أعرف. ظننت أن قنصلًا مختلفًا قد جاء، لكن ليس لديّ ذاكرة لما حدث بعد ذلك...
 The Consul did a lot of crazy things, but the plan that Kouju was promoting hasn't been derailed, has it?=القنصل فعل أشياء مجنونة كثيرة، لكن الخطة التي كان كوجو يروّج لها لم تنحرف عن مسارها، أليس كذلك؟
 That seems to be fine. He said it was essential, considering the future of Lambda.=يبدو أن الأمر على ما يرام. قال إنه ضروري بالنظر إلى مستقبل لامبدا.
-We need autonomous Levnisters to carry out the Invidian Tunnels plan.=نحتاج إلى ليفنيسترات مستقلة لتنفيذ خطة أنفاق إنفيديا.
+We need autonomous Levnisters to carry out the Invidian Tunnels plan.=نحتاج إلى ليفنيسترات مستقلة لتنفيذ خطة أنفاق إنفيديان.
 There are some problems, but we are proceeding with the recovery.=هناك بعض المشاكل، لكننا نمضي قدمًا في عملية الاستعادة.
 You're aiming for the Great Sword, right?=أنتم تستهدفون السيف العظيم، أليس كذلك؟
-Once you leave the colony and cross the Moram Bridge, next you climb the Great Conté Falls. After that... it's still a long way to go.=بمجرد مغادرة المستعمرة وعبور جسر مورام، بعدها تتسلقون شلالات كونتيه العظمى. بعد ذلك... لا يزال الطريق طويلًا.
-There are mysterious ruins at the Great Conté Falls. Please let me investigate.=هناك أطلال غامضة عند شلالات كونتيه العظمى. من فضلكم دعوني أتحقق.
+Once you leave the colony and cross the Moram Bridge, next you climb the Great Conté Falls. After that... it's still a long way to go.=بمجرد مغادرة المستعمرة وعبور جسر مورام، بعدها تتسلقون شلالات كونتيه الكبرى. بعد ذلك... لا يزال الطريق طويلًا.
+There are mysterious ruins at the Great Conté Falls. Please let me investigate.=هناك أطلال غامضة عند شلالات كونتيه الكبرى. من فضلكم دعوني أتحقق.
 I can't authorize an investigation there right now. First, we need to stabilize this colony. We have no support from our home country.=لا أستطيع الإذن بتحقيق هناك الآن. أولًا، نحتاج لاستقرار هذه المستعمرة. ليس لدينا دعم من وطننا.
 It feels strange having a Kevesi Levnister in our colony.=شعور غريب أن يكون لدينا ليفنيستر كيفيسي في مستعمرتنا.
 It's not just Levnisters, we'll be exchanging technology and people too, so it might become normal from now on.=ليسوا فقط الليفنيسترات، سنتبادل التكنولوجيا والأشخاص أيضًا، لذا قد يصبح الأمر طبيعيًا من الآن فصاعدًا.
@@ -8175,7 +8175,7 @@ Isora's Request=طلب إيسورا
 # --- أوصاف المهام (Quest Descriptions) ---
 The Colony 15 soldiers seem to have gone missing from the City. Stop by Michiba Canteen to find out more.=يبدو أن جنود المستعمرة 15 اختفوا من المدينة. توقفوا عند مقهى ميتشيبا لمعرفة المزيد.
 Thanks to the Colony 15 soldiers' sterling work as soldiers of the Lost Numbers, Triden has been given permission to enter the City.=بفضل عمل جنود المستعمرة 15 المتميز كجنود للأرقام المفقودة، مُنح ترايدن إذنًا بدخول المدينة.
-Find a Bright Fig in Morukuna Wildwood, and take it to Triden's drinking buddy, Jougo.=ابحثوا عن تين ساطع في برية موروكونا، وأوصلوه إلى رفيق شرب ترايدن، جوغو.
+Find a Bright Fig in Morukuna Wildwood, and take it to Triden's drinking buddy, Jougo.=ابحثوا عن تين ساطع في غابة موروكونا البرية، وأوصلوه إلى رفيق شرب ترايدن، جوغو.
 Unfortunately, Jougo died as you were searching for a Bright Fig, leaving Triden with one fewer friend.=للأسف، مات جوغو بينما كنتم تبحثون عن تين ساطع، تاركًا ترايدن مع صديق أقل.
 Rest up at the Station Breakroom.=استريحوا في غرفة الاستراحة بالمحطة.
 Head for Captocorn Ridge, where the target was last spotted.=توجهوا إلى تلال كابتوكورن حيث رُصد الهدف آخر مرة.
@@ -8184,7 +8184,7 @@ Head for Captocorn Ridge, where the target was last spotted.=توجهوا إلى
 Michiba Canteen=مقهى ميتشيبا
 Sentridge Harbor=ميناء سنتريدج
 Pioneer's Inlet=مدخل الرواد
-High Morukuna Wildwood Area=منطقة برية موروكونا العليا
+High Morukuna Wildwood Area=منطقة غابة موروكونا البرية العليا
 Monument of Life=نصب الحياة
 Liberi Plaza=ساحة ليبري
 Station Breakroom=غرفة استراحة المحطة
@@ -8339,18 +8339,18 @@ Moram Bridge=جسر مورام
 Basverg Belfry=برج باسفيرغ
 Prison Terrace=شرفة السجن
 The Dragongate=بوابة التنين
-Great Conté Falls=شلالات كونتيه العظمى
+Great Conté Falls=شلالات كونتيه الكبرى
 Reebe Highlands=مرتفعات ريبي
 Yzana Plains=سهول يزانا
-Invidian Tunnels=أنفاق إنفيديا
+Invidian Tunnels=أنفاق إنفيديان
 Li Garte Prison=سجن لي غارت
-Morukuna Wildwood=برية موروكونا
+Morukuna Wildwood=غابة موروكونا البرية
 
 # --- مناطق رئيسية (Major Areas) ---
 Fornis Region=منطقة فورنيس
 Pentelas Region=منطقة بنتيلاس
 Cadensia Region=منطقة كادينسيا
-Aetia Region=منطقة آيتيا
+Aetia Region=منطقة أيتيا
 Keves Castle=قلعة كيفيس
 Agnus Castle=قلعة أغنوس
 Cloudkeep=حصن الغيوم
@@ -8860,7 +8860,7 @@ Increases item drop rate for the next battle.=يزيد معدل إسقاط ال�
 I don't know. I thought a different Consul had come, but I have no memory of what happened after that...=لا أعرف. ظننتُ أن قنصلًا مختلفًا قد جاء، لكن لا ذاكرة لديّ لما حدث بعد ذلك...
 The Consul did a lot of crazy things, but the plan that Kouju was promoting hasn't been derailed, has it?=القنصل فعل أشياء جنونية كثيرة، لكن الخطة التي كان كوجو يروّج لها لم تنحرف عن مسارها، أليس كذلك؟
 That seems to be fine. He said it was essential, considering the future of Lambda.=يبدو أن ذلك على ما يرام. قال إنه أمر ضروري، بالنظر لمستقبل لامبدا.
-We need autonomous Levnisters to carry out the Invidian Tunnels plan.=نحتاج ليفنيسترات مستقلة لتنفيذ خطة أنفاق إنفيديا.
+We need autonomous Levnisters to carry out the Invidian Tunnels plan.=نحتاج ليفنيسترات مستقلة لتنفيذ خطة أنفاق إنفيديان.
 There are some problems, but we are proceeding with the recovery.=هناك بعض المشاكل، لكننا نمضي قدمًا في عملية التعافي.
 You're aiming for the Great Sword, right?=أنت تسعى للسيف العظيم، صحيح؟
 Once you leave the colony and cross the Moram Bridge, next you climb the Great Conté Falls. After that... it's still a long way to go.=بمجرد مغادرة المستعمرة وعبور جسر مورام، تصعد شلالات كونتيه العظيمة. بعد ذلك... لا يزال الطريق طويلًا.
@@ -9439,7 +9439,7 @@ Ether Gate=بوابة الأثير
 Origin Gate=بوابة الأوريجن
 
 # --- الكهوف والأنفاق (Caves & Tunnels) ---
-Invidian Tunnels=أنفاق إنفيديا
+Invidian Tunnels=أنفاق إنفيديان
 Crystal Cave=كهف الكريستال
 Ether Cave=كهف الأثير
 Ancient Cavern=الكهف القديم
@@ -9464,13 +9464,13 @@ Maktha Wildwood=غابة ماكثا البرية
 
 # --- المرتفعات والجبال (Highlands & Mountains) ---
 Reebe Highlands=مرتفعات ريبي
-Great Conté Falls=شلالات كونتيه العظيمة
-Ribbi Flats=سطوح ريبي
+Great Conté Falls=شلالات كونتيه الكبرى
+Ribbi Flats=سهول ريبي
 Mount Raptha=جبل رابثا
 Eagus Wilderness=برية إيغوس
-Upper Aetia=أيشيا العليا
-Lower Aetia=أيشيا السفلى
-Syra Hovering Reefs=الشعاب الطائرة لسيرا
+Upper Aetia=أيتيا العليا
+Lower Aetia=أيتيا السفلى
+Syra Hovering Reefs=الشعاب المرجانية الطائرة سيرا
 Erythia Cliffs=جروف إريثيا
 Titan's Peak=قمة العملاق
 
@@ -10415,7 +10415,7 @@ Liberi Plaza=ساحة ليبيري
 I don't know. I thought a different Consul had come, but I have no memory of what happened after that...=لا أعرف. ظننت أن قنصلًا مختلفًا قد جاء، لكن ليس لديّ ذاكرة لما حدث بعد ذلك...
 The Consul did a lot of crazy things, but the plan that Kouju was promoting hasn't been derailed, has it?=القنصل فعل الكثير من الأشياء المجنونة، لكن الخطة التي كان كوجو يروّج لها لم تنحرف عن مسارها، أليس كذلك؟
 That seems to be fine. He said it was essential, considering the future of Lambda.=يبدو أن ذلك على ما يرام. قال إنها ضرورية، بالنظر إلى مستقبل لامبدا.
-We need autonomous Levnisters to carry out the Invidian Tunnels plan.=نحتاج ليفنيسترات مستقلة لتنفيذ خطة أنفاق إنفيديا.
+We need autonomous Levnisters to carry out the Invidian Tunnels plan.=نحتاج ليفنيسترات مستقلة لتنفيذ خطة أنفاق إنفيديان.
 There are some problems, but we are proceeding with the recovery.=هناك بعض المشاكل، لكننا نمضي في التعافي.
 
 # --- حوارات السيف العظيم (Great Sword Dialogues) ---
@@ -10815,11 +10815,11 @@ Basverg Belfry=برج باسفيرغ
 Prison Terrace=شرفة السجن
 The Dragongate=بوابة التنين
 Moram Bridge=جسر مورام
-Great Conté Falls=شلالات كونتيه العظيمة
+Great Conté Falls=شلالات كونتيه الكبرى
 Yzana Plains=سهول يزانا
 Reebe Highlands=مرتفعات ريبي
 Pedesto Valley Floor=أرضية وادي بيديستو
-Invidian Tunnels=أنفاق إنفيديا
+Invidian Tunnels=أنفاق إنفيديان
 Morukuna Wildwood=غابة موروكونا البرية
 Captocorn Ridge=حافة كابتوكورن
 
@@ -11385,7 +11385,7 @@ Sentridge Harbor=مرفأ سينتريدج
 Pioneer's Inlet=خور الرواد
 Resonance Hill=تل الرنين
 Murmur Rise=مرتفع الهمس
-High Morukuna Wildwood Area=منطقة غابة موروكونا العليا البرية
+High Morukuna Wildwood Area=منطقة غابة موروكونا البرية العليا
 Monument of Life=نصب الحياة
 Liberi Plaza=ساحة ليبيري
 Station Breakroom=غرفة استراحة المحطة
@@ -11397,7 +11397,7 @@ Valley Crossing=عبور الوادي
 Desert Oasis Camp=مخيم واحة الصحراء
 Fornis Garrison=حامية فورنيس
 Pentelas Command Post=نقطة قيادة بينتيلاس
-Aetia Watchtower=برج مراقبة إيتيا
+Aetia Watchtower=برج مراقبة أيتيا
 Cadensia Wharf=رصيف كادينسيا
 Underground Market=السوق السفلي
 Swordmarch Staging Area=منطقة تجمع مسيرة السيوف
@@ -11406,7 +11406,7 @@ Keves Castle Town=بلدة قلعة كيفيس
 Agnus Capital Plaza=ساحة عاصمة أغنوس
 Nopon Trading Post=مركز تجارة النوبون
 Colony Mu Canteen=مطعم المستعمرة مو
-Colony Iota Workshop=ورشة المستعمرة إيوتا
+Colony Iota Workshop=ورشة المستعمرة يوتا
 Colony Gamma Barracks=ثكنات المستعمرة غاما
 Origin Interior=داخل الأوريجن
 Cloudkeep Courtyard=فناء كلاودكيب
@@ -11421,7 +11421,7 @@ Make a Spongy Spud supper at the Colony Mu Canteen=اصنع عشاء البطا�
 Find a Bright Fig in Morukuna Wildwood=جد تينة مشرقة في غابة موروكونا البرية
 See off Leonardo's squad=ودّع فرقة ليوناردو
 Head for Captocorn Ridge=توجه إلى حافة كابتوكورن
-Reach the southern Aetia region=اصل إلى منطقة إيتيا الجنوبية
+Reach the southern Aetia region=اصل إلى منطقة أيتيا الجنوبية
 Collect ether crystals from the cave=اجمع بلورات الأثير من الكهف
 Deliver the supplies to Colony Tau=أوصل الإمدادات إلى المستعمرة تاو
 Investigate the monster sightings near the bridge=تحقق من مشاهدات الوحوش قرب الجسر
@@ -12213,7 +12213,7 @@ Rae-Bel Summit=قمة ري-بل
 Hillside Ferronis Hulk=هيكل فيرونيس سفح التل
 Decayed Ferronis Hulk=هيكل الفيرونيس المتحلل
 Llyn Nyddwr Camp=مخيم لين نيدور
-Colony Iota Entrance=مدخل المستعمرة أيوتا
+Colony Iota Entrance=مدخل المستعمرة يوتا
 Aetia Southern Gate=البوابة الجنوبية لأيتيا
 
 # --- مواقع منطقة فورنيس (Fornis Region Locations) ---
@@ -21168,7 +21168,7 @@ Miyabi: The dance of blades begins!=ميابي: رقصة النصال تبدأ!
 Miyabi: Grace and power, in perfect harmony!=ميابي: الرشاقة والقوة، في تناغم مثالي!
 Miyabi: My movements are my art!=ميابي: حركاتي هي فني!
 Miyabi: Watch closely... you won't see this twice!=ميابي: راقب جيداً... لن ترى هذا مرتين!
-Miyabi: Colony Iota's finest, at your service!=ميابي: أفضل ما في المستعمرة أيوتا، في خدمتكم!
+Miyabi: Colony Iota's finest, at your service!=ميابي: أفضل ما في المستعمرة يوتا، في خدمتكم!
 Miyabi: A flawless performance!=ميابي: أداء لا تشوبه شائبة!
 Miyabi: The dance is done. Take your bow!=ميابي: انتهت الرقصة. انحنِ!
 Miyabi: My body... won't move gracefully anymore...=ميابي: جسدي... لم يعد يتحرك برشاقة...
