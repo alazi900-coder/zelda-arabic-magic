@@ -21044,8 +21044,297 @@ The City=المدينة
 Colony=مستعمرة
 
 # ============================================================
+# القسم 401-420: حوارات معركة الأبطال التفصيلية
+# Sections 401-420: Detailed Hero Battle Dialogues
+# ============================================================
+
+# --- القسم 401: Ashera - حوارات المعركة / Battle Dialogues ---
+# --- Section 401: Ashera - Battle Dialogues ---
+Ashera: Let's get this over with!=أشيرا: لننتهِ من هذا بسرعة!
+Ashera: Don't waste my time!=أشيرا: لا تُضيّعوا وقتي!
+Ashera: I'll cut you down where you stand!=أشيرا: سأقطعك حيث تقف!
+Ashera: You think you can beat me? Pathetic!=أشيرا: تظن أنك تستطيع هزيمتي؟ مثير للشفقة!
+Ashera: This blade will be your end!=أشيرا: هذا النصل سيكون نهايتك!
+Ashera: I've been waiting for a real fight!=أشيرا: كنت أنتظر قتالاً حقيقياً!
+Ashera: Hah! Is that all you've got?=أشيرا: ها! هذا كل ما لديك؟
+Ashera: Another one bites the dust!=أشيرا: واحد آخر يسقط في التراب!
+Ashera: Victory is mine!=أشيرا: النصر لي!
+Ashera: Too easy. Barely broke a sweat.=أشيرا: سهل جداً. بالكاد بذلت جهداً.
+Ashera: That's what happens when you challenge Colony 9!=أشيرا: هذا ما يحدث حين تتحدى المستعمرة 9!
+Ashera: Tch... I won't fall here!=أشيرا: تش... لن أسقط هنا!
+Ashera: Not yet... I refuse to die!=أشيرا: ليس بعد... أرفض أن أموت!
+Ashera: Damn it... They got me...=أشيرا: اللعنة... لقد أصابوني...
+
+# --- القسم 402: Zeon - حوارات المعركة / Battle Dialogues ---
+# --- Section 402: Zeon - Battle Dialogues ---
+Zeon: I shall protect everyone!=زيون: سأحمي الجميع!
+Zeon: My shield will not falter!=زيون: درعي لن يتزعزع!
+Zeon: Stand behind me!=زيون: قفوا خلفي!
+Zeon: I am the wall that guards Colony 9!=زيون: أنا الجدار الذي يحرس المستعمرة 9!
+Zeon: No enemy shall pass!=زيون: لن يمرّ أي عدو!
+Zeon: For the colony! For our future!=زيون: من أجل المستعمرة! من أجل مستقبلنا!
+Zeon: I draw strength from those I protect!=زيون: أستمد قوتي ممن أحميهم!
+Zeon: The battle is won. Everyone safe?=زيون: انتهت المعركة. هل الجميع بخير؟
+Zeon: We prevailed because we fought as one!=زيون: انتصرنا لأننا قاتلنا كواحد!
+Zeon: Another victory for Colony 9!=زيون: نصر آخر للمستعمرة 9!
+Zeon: As long as I stand, none shall fall!=زيون: ما دمت واقفاً، لن يسقط أحد!
+Zeon: I... I can't hold on...!=زيون: أنا... لا أستطيع الصمود...!
+Zeon: Forgive me... I wasn't strong enough...=زيون: سامحوني... لم أكن قوياً كفاية...
+Zeon: My shield... has broken...=زيون: درعي... انكسر...
+
+# --- القسم 403: Teach - حوارات المعركة / Battle Dialogues ---
+# --- Section 403: Teach - Battle Dialogues ---
+Teach: Class is in session!=تيتش: بدأ الدرس!
+Teach: Time for a lesson in pain!=تيتش: حان وقت درس في الألم!
+Teach: I'll teach you the meaning of defeat!=تيتش: سأعلّمك معنى الهزيمة!
+Teach: You picked the wrong teacher to mess with!=تيتش: اخترت المعلم الخطأ لتعبث معه!
+Teach: Pay attention! This will be on the test!=تيتش: انتبه! هذا سيأتي في الامتحان!
+Teach: Let the professor show you how it's done!=تيتش: دع الأستاذ يُريك كيف يُفعل ذلك!
+Teach: Consider that your final exam!=تيتش: اعتبر ذلك امتحانك النهائي!
+Teach: A+ for us, F for them!=تيتش: ممتاز لنا، راسب لهم!
+Teach: That's how Colony Gamma does it!=تيتش: هكذا تفعلها المستعمرة غاما!
+Teach: Class dismissed! Permanently!=تيتش: انتهى الدرس! بشكل دائم!
+Teach: Ngh... The teacher... needs a break...=تيتش: أنغ... المعلم... يحتاج استراحة...
+Teach: I can't... fall here... My students...=تيتش: لا أستطيع... السقوط هنا... طلابي...
+
+# --- القسم 404: Valdi - حوارات المعركة / Battle Dialogues ---
+# --- Section 404: Valdi - Battle Dialogues ---
+Valdi: I'll fix you up... by taking you apart!=فالدي: سأُصلحك... بتفكيكك!
+Valdi: My machines will handle this!=فالدي: آلاتي ستتولى الأمر!
+Valdi: Combat mode engaged!=فالدي: تم تفعيل وضع القتال!
+Valdi: Time to test my latest invention!=فالدي: حان وقت اختبار اختراعي الأخير!
+Valdi: Repairs can wait. Battle first!=فالدي: الإصلاحات يمكن أن تنتظر. المعركة أولاً!
+Valdi: My Ferronis may be gone, but I'm still here!=فالدي: قد يكون فيرونيسي قد ذهب، لكنني ما زلت هنا!
+Valdi: System check complete. Enemy neutralized!=فالدي: فحص النظام مكتمل. تم تحييد العدو!
+Valdi: All clear! Time to get back to repairs!=فالدي: كل شيء واضح! حان وقت العودة للإصلاحات!
+Valdi: Another successful field test!=فالدي: اختبار ميداني ناجح آخر!
+Valdi: S-Systems failing... Need... repairs...=فالدي: الأ-أنظمة تفشل... أحتاج... إصلاحات...
+Valdi: My body... it won't respond...=فالدي: جسدي... لا يستجيب...
+
+# --- القسم 405: Juniper - حوارات المعركة / Battle Dialogues ---
+# --- Section 405: Juniper - Battle Dialogues ---
+Juniper: I've got you in my sights!=جونيبر: أنت في مرمى نظري!
+Juniper: The forest guides my arrows!=جونيبر: الغابة توجّه سهامي!
+Juniper: You won't even see it coming!=جونيبر: لن تراها قادمة حتى!
+Juniper: Every shot counts. I don't miss!=جونيبر: كل طلقة مهمة. أنا لا أُخطئ!
+Juniper: Colony Tau strikes from the shadows!=جونيبر: المستعمرة تاو تضرب من الظلال!
+Juniper: Nature itself is my weapon!=جونيبر: الطبيعة ذاتها هي سلاحي!
+Juniper: The hunt is over. Clean kill!=جونيبر: انتهت المطاردة. قتل نظيف!
+Juniper: All targets eliminated!=جونيبر: تم إزالة جميع الأهداف!
+Juniper: The forest is safe once more!=جونيبر: الغابة آمنة مرة أخرى!
+Juniper: I... missed? No... my body...=جونيبر: أ... أخطأت؟ لا... جسدي...
+Juniper: The forest... calls me back...=جونيبر: الغابة... تناديني للعودة...
+
+# --- القسم 406: Fiona - حوارات المعركة / Battle Dialogues ---
+# --- Section 406: Fiona - Battle Dialogues ---
+Fiona: I'll heal everyone! Just hold on!=فيونا: سأشفي الجميع! فقط اصمدوا!
+Fiona: My prayers will protect us!=فيونا: صلواتي ستحمينا!
+Fiona: Colony Lambda won't give up!=فيونا: المستعمرة لامدا لن تستسلم!
+Fiona: I may not be strong, but I'll never abandon you!=فيونا: قد لا أكون قوية، لكنني لن أتخلى عنكم!
+Fiona: Everyone's safe... Thank goodness!=فيونا: الجميع بأمان... الحمد لله!
+Fiona: We made it through together!=فيونا: نجحنا معاً!
+Fiona: I'm glad I could help!=فيونا: أنا سعيدة أنني استطعت المساعدة!
+Fiona: No... I need to keep healing... everyone...=فيونا: لا... أحتاج أن أستمر في الشفاء... الجميع...
+Fiona: I'm sorry... I wasn't enough...=فيونا: أنا آسفة... لم أكن كافية...
+
+# --- القسم 407: Alexandria - حوارات المعركة / Battle Dialogues ---
+# --- Section 407: Alexandria - Battle Dialogues ---
+Alexandria: Colony 0 will show its strength!=ألكسندريا: المستعمرة 0 ستُظهر قوتها!
+Alexandria: I am the sword that defends the weak!=ألكسندريا: أنا السيف الذي يدافع عن الضعفاء!
+Alexandria: My blade sings for justice!=ألكسندريا: نصلي يُغنّي للعدالة!
+Alexandria: I won't let anyone else fall!=ألكسندريا: لن أدع أحداً آخر يسقط!
+Alexandria: For those who can no longer fight!=ألكسندريا: من أجل أولئك الذين لم يعودوا يستطيعون القتال!
+Alexandria: Justice has been served!=ألكسندريا: تحققت العدالة!
+Alexandria: We fought well. Rest now!=ألكسندريا: قاتلنا جيداً. استريحوا الآن!
+Alexandria: Colony 0 stands victorious!=ألكسندريا: المستعمرة 0 تقف منتصرة!
+Alexandria: No... My colony... needs me...=ألكسندريا: لا... مستعمرتي... تحتاجني...
+Alexandria: I can't... let it end... like this...=ألكسندريا: لا أستطيع... أن أدعها تنتهي... هكذا...
+
+# --- القسم 408: Isurd - حوارات المعركة / Battle Dialogues ---
+# --- Section 408: Isurd - Battle Dialogues ---
+Isurd: I'll analyze their weakness!=إسورد: سأحلل نقطة ضعفهم!
+Isurd: Strategy wins battles, not brute force!=إسورد: الاستراتيجية تربح المعارك، لا القوة الغاشمة!
+Isurd: Colony Lambda's tactician is here!=إسورد: خبير تكتيك المستعمرة لامدا هنا!
+Isurd: The data suggests we will prevail!=إسورد: البيانات تشير إلى أننا سننتصر!
+Isurd: Calculating optimal attack vector!=إسورد: أحسب مسار الهجوم الأمثل!
+Isurd: Analysis complete. As predicted!=إسورد: التحليل مكتمل. كما توقعت!
+Isurd: Victory was statistically inevitable!=إسورد: النصر كان حتمياً إحصائياً!
+Isurd: My calculations... were wrong...?=إسورد: حساباتي... كانت خاطئة...؟
+Isurd: I didn't... account for this...=إسورد: لم أ... أحسب حساب هذا...
+
+# --- القسم 409: Miyabi - حوارات المعركة / Battle Dialogues ---
+# --- Section 409: Miyabi - Battle Dialogues ---
+Miyabi: The dance of blades begins!=ميابي: رقصة النصال تبدأ!
+Miyabi: Grace and power, in perfect harmony!=ميابي: الرشاقة والقوة، في تناغم مثالي!
+Miyabi: My movements are my art!=ميابي: حركاتي هي فني!
+Miyabi: Watch closely... you won't see this twice!=ميابي: راقب جيداً... لن ترى هذا مرتين!
+Miyabi: Colony Iota's finest, at your service!=ميابي: أفضل ما في المستعمرة أيوتا، في خدمتكم!
+Miyabi: A flawless performance!=ميابي: أداء لا تشوبه شائبة!
+Miyabi: The dance is done. Take your bow!=ميابي: انتهت الرقصة. انحنِ!
+Miyabi: My body... won't move gracefully anymore...=ميابي: جسدي... لم يعد يتحرك برشاقة...
+Miyabi: The final dance... already...?=ميابي: الرقصة الأخيرة... بالفعل...؟
+
+# --- القسم 410: Segiri - حوارات المعركة / Battle Dialogues ---
+# --- Section 410: Segiri - Battle Dialogues ---
+Segiri: Target acquired. Engaging.=سيغيري: تم تحديد الهدف. جارٍ الاشتباك.
+Segiri: Combat protocols activated.=سيغيري: تم تفعيل بروتوكولات القتال.
+Segiri: Probability of victory: high.=سيغيري: احتمال النصر: مرتفع.
+Segiri: Analyzing enemy patterns.=سيغيري: تحليل أنماط العدو.
+Segiri: I will protect... my friends.=سيغيري: سأحمي... أصدقائي.
+Segiri: Emotions... they make me stronger.=سيغيري: المشاعر... تجعلني أقوى.
+Segiri: All hostiles eliminated. Mission complete.=سيغيري: تم إزالة جميع المعادين. المهمة مكتملة.
+Segiri: Victory... feels... good.=سيغيري: النصر... يبدو... جيداً.
+Segiri: Systems critical... Shutting down...=سيغيري: الأنظمة حرجة... جارٍ الإغلاق...
+Segiri: I don't want... to stop... feeling...=سيغيري: لا أريد... أن أتوقف... عن الإحساس...
+
+# --- القسم 411: Triton - حوارات المعركة / Battle Dialogues ---
+# --- Section 411: Triton - Battle Dialogues ---
+Triton: AHOY! Battle stations, everyone!=ترايتون: أهوي! مواقع المعركة، الجميع!
+Triton: The sea of battle calls to me!=ترايتون: بحر المعركة يناديني!
+Triton: Colony 15's captain leads the charge!=ترايتون: قائد المستعمرة 15 يقود الهجوم!
+Triton: Full speed ahead! No retreat!=ترايتون: بأقصى سرعة للأمام! لا تراجع!
+Triton: Feel the power of the waves!=ترايتون: اشعر بقوة الأمواج!
+Triton: VICTORY! The seas are ours!=ترايتون: نصر! البحار لنا!
+Triton: A captain always wins!=ترايتون: القائد ينتصر دائماً!
+Triton: Hahaha! What a glorious battle!=ترايتون: هاهاها! يا لها من معركة مجيدة!
+Triton: Abandon ship...? Never...!=ترايتون: هجر السفينة...؟ أبداً...!
+Triton: The captain... goes down with the ship...=ترايتون: القائد... يغرق مع السفينة...
+
+# --- القسم 412: Gray - حوارات المعركة / Battle Dialogues ---
+# --- Section 412: Gray - Battle Dialogues ---
+Gray: ...=غراي: ...
+Gray: Hmph. Fine.=غراي: همف. حسناً.
+Gray: I'll handle it.=غراي: سأتولى الأمر.
+Gray: Don't get in my way.=غراي: لا تقف في طريقي.
+Gray: One shot. One kill.=غراي: طلقة واحدة. قتل واحد.
+Gray: My bullets don't lie.=غراي: رصاصاتي لا تكذب.
+Gray: ...Done.=غراي: ...انتهى.
+Gray: Hmph. Too slow.=غراي: همف. بطيء جداً.
+Gray: That's that.=غراي: هذا كل شيء.
+Gray: Tch... Careless...=غراي: تش... إهمال...
+Gray: ...Not yet...=غراي: ...ليس بعد...
+
+# --- القسم 413: Monica - حوارات المعركة / Battle Dialogues ---
+# --- Section 413: Monica - Battle Dialogues ---
+Monica: The City's finest, reporting for duty!=مونيكا: أفضل ما في المدينة، جاهزة للخدمة!
+Monica: I fight for the future of all people!=مونيكا: أقاتل من أجل مستقبل جميع البشر!
+Monica: This is what the Lost Numbers trained for!=مونيكا: هذا ما تدربت عليه الأرقام المفقودة!
+Monica: I carry the hopes of the City on my shoulders!=مونيكا: أحمل آمال المدينة على كتفيّ!
+Monica: No matter the odds, we push forward!=مونيكا: مهما كانت الاحتمالات، نمضي قدماً!
+Monica: For the City! For humanity!=مونيكا: من أجل المدينة! من أجل البشرية!
+Monica: We've won this day!=مونيكا: فزنا هذا اليوم!
+Monica: The City endures, as always!=مونيكا: المدينة تصمد، كالعادة!
+Monica: I can't fall... not with so much left to do...=مونيكا: لا أستطيع السقوط... ما زال هناك الكثير لأفعله...
+Monica: The City... needs me... still...=مونيكا: المدينة... تحتاجني... لا يزال...
+
+# --- القسم 414: Ghondor - حوارات المعركة / Battle Dialogues ---
+# --- Section 414: Ghondor - Battle Dialogues ---
+Ghondor: Let's GOOO!=غوندور: هيّا بنا!
+Ghondor: You're about to get wrecked!=غوندور: على وشك أن تتحطم!
+Ghondor: Fists of fury, coming right up!=غوندور: قبضات الغضب، قادمة حالاً!
+Ghondor: I'll punch you into next week!=غوندور: سأضربك إلى الأسبوع القادم!
+Ghondor: Don't underestimate me 'cause I'm young!=غوندور: لا تستهن بي لأنني صغيرة!
+Ghondor: Grandma Monica taught me well!=غوندور: الجدة مونيكا علّمتني جيداً!
+Ghondor: BOOM! That's how it's done!=غوندور: بووم! هكذا يُفعل ذلك!
+Ghondor: Hah! Too easy for the great Ghondor!=غوندور: ها! سهل جداً على غوندور العظيمة!
+Ghondor: Ugh... No way... I can't lose...=غوندور: أخ... مستحيل... لا أستطيع أن أخسر...
+Ghondor: Grandma... I'm sorry...=غوندور: جدتي... أنا آسفة...
+
+# --- القسم 415: Cammuravi - حوارات المعركة / Battle Dialogues ---
+# --- Section 415: Cammuravi - Battle Dialogues ---
+Cammuravi: The Flame of Agnus burns eternal!=كامورافي: لهب أغنوس يشتعل للأبد!
+Cammuravi: My flames shall consume you!=كامورافي: لهيبي سيلتهمك!
+Cammuravi: I am the inferno that devours all!=كامورافي: أنا الجحيم الذي يلتهم الكل!
+Cammuravi: Colony Delta bows to no one!=كامورافي: المستعمرة دلتا لا تنحني لأحد!
+Cammuravi: Burn brighter! Fight harder!=كامورافي: اشتعل بقوة أكبر! قاتل بشراسة أكثر!
+Cammuravi: The battlefield is my crucible!=كامورافي: ساحة المعركة هي بوتقتي!
+Cammuravi: Another flame extinguished!=كامورافي: لهب آخر انطفأ!
+Cammuravi: The fire of victory roars!=كامورافي: نار النصر تزأر!
+Cammuravi: My flames... grow cold...=كامورافي: لهيبي... يبرد...
+Cammuravi: Even the mightiest fire... can be quenched...=كامورافي: حتى أقوى نار... يمكن إطفاؤها...
+
+# --- القسم 416: Ethel - حوارات المعركة / Battle Dialogues ---
+# --- Section 416: Ethel - Battle Dialogues ---
+Ethel: Colony 4 charges forward!=إيثل: المستعمرة 4 تندفع للأمام!
+Ethel: My blade is my oath!=إيثل: نصلي هو قسمي!
+Ethel: I fight for those who believe in me!=إيثل: أقاتل من أجل أولئك الذين يؤمنون بي!
+Ethel: Speed is everything in battle!=إيثل: السرعة هي كل شيء في المعركة!
+Ethel: I am the Flash of Colony 4!=إيثل: أنا برق المستعمرة 4!
+Ethel: Swift and decisive. That's my way!=إيثل: سريعة وحاسمة. هذا أسلوبي!
+Ethel: Colony 4 claims victory!=إيثل: المستعمرة 4 تحقق النصر!
+Ethel: Fast enough for you?=إيثل: سريعة بما يكفي لك؟
+Ethel: My speed... wasn't enough...=إيثل: سرعتي... لم تكن كافية...
+Ethel: Colony 4... carry on... without me...=إيثل: المستعمرة 4... واصلوا... بدوني...
+
+# --- القسم 417: Nimue - حوارات المعركة / Battle Dialogues ---
+# --- Section 417: Nimue - Battle Dialogues ---
+Nimue: The ether flows through me!=نيميو: الأثير يتدفق خلالي!
+Nimue: I shall weave the tides of battle!=نيميو: سأنسج مد المعركة!
+Nimue: Colony Mu's healer stands ready!=نيميو: معالجة المستعمرة مو مستعدة!
+Nimue: Let the ether guide us to victory!=نيميو: دع الأثير يقودنا للنصر!
+Nimue: By the grace of ether, we are healed!=نيميو: بفضل الأثير، شُفينا!
+Nimue: The battle is won. Let us tend to the wounded!=نيميو: انتهت المعركة. دعونا نعتني بالجرحى!
+Nimue: Peace returns once more!=نيميو: السلام يعود مرة أخرى!
+Nimue: The ether... fades from me...=نيميو: الأثير... يتلاشى مني...
+Nimue: I can no longer... feel the flow...=نيميو: لم أعد أستطيع... الشعور بالتدفق...
+
+# --- القسم 418: Melia & Nia (DLC) - حوارات المعركة / Battle Dialogues ---
+# --- Section 418: Melia & Nia (DLC) - Battle Dialogues ---
+Melia: As Queen of Keves, I command you to fall!=ميليا: بصفتي ملكة كيفيس، آمرك بالسقوط!
+Melia: My Ether Arts shall strike true!=ميليا: فنوني الأثيرية ستضرب بدقة!
+Melia: I have fought across lifetimes!=ميليا: لقد قاتلت عبر حيوات!
+Melia: The power of the High Entia flows through me!=ميليا: قوة الهاي إنتيا تتدفق خلالي!
+Melia: Victory... for Keves, and for all!=ميليا: النصر... لكيفيس، وللجميع!
+Melia: I must not falter... not again...=ميليا: يجب ألا أتراجع... ليس مرة أخرى...
+Nia: Time to show what a Blade can do!=نيا: حان وقت إظهار ما يستطيع النصل فعله!
+Nia: I've got healing for days!=نيا: لدي شفاء يكفي لأيام!
+Nia: Agnus stands with you!=نيا: أغنوس تقف معكم!
+Nia: Love and courage! That's all we need!=نيا: الحب والشجاعة! هذا كل ما نحتاجه!
+Nia: We won! Group hug, everyone!=نيا: فزنا! عناق جماعي، الجميع!
+Nia: Not here... Rex would never forgive me...=نيا: ليس هنا... ريكس لن يسامحني أبداً...
+
+# --- القسم 419: Matthew & A (DLC Future Redeemed) - حوارات المعركة ---
+# --- Section 419: Matthew & A (DLC Future Redeemed) - Battle Dialogues ---
+Matthew: Let's take 'em down!=ماثيو: لنُسقطهم!
+Matthew: This is what I trained for!=ماثيو: هذا ما تدربت عليه!
+Matthew: I won't lose! Not with everyone counting on me!=ماثيو: لن أخسر! ليس والجميع يعتمد عليّ!
+Matthew: Na'el... I'll find you! But first...!=ماثيو: نائيل... سأجدك! لكن أولاً...!
+Matthew: The future starts here!=ماثيو: المستقبل يبدأ هنا!
+Matthew: For Liberator Na'el!=ماثيو: من أجل المحررة نائيل!
+Matthew: Yeah! We did it!=ماثيو: نعم! فعلناها!
+Matthew: That's what teamwork looks like!=ماثيو: هذا ما يبدو عليه العمل الجماعي!
+Matthew: No... I can't stop now...=ماثيو: لا... لا أستطيع التوقف الآن...
+A: I am the Alpha and the Omega.=أ: أنا الألف والياء.
+A: Your existence is... inconsequential.=أ: وجودك... لا يهم.
+A: I have seen the end. You are not in it.=أ: لقد رأيت النهاية. أنت لست فيها.
+A: This power... transcends mortality.=أ: هذه القوة... تتخطى الفناء.
+A: Hmm. As expected.=أ: حسناً. كما هو متوقع.
+A: How... is this possible...?=أ: كيف... هذا ممكن...؟
+
+# --- القسم 420: حوارات تفاعلية بين الأبطال في المعركة ---
+# --- Section 420: Inter-Hero Battle Interactions ---
+Ashera to Zeon: Stop hiding behind that shield and fight!=أشيرا لزيون: توقف عن الاختباء خلف ذلك الدرع وقاتل!
+Zeon to Ashera: My shield IS my fight!=زيون لأشيرا: درعي هو قتالي!
+Teach to Valdi: You're smarter than you look, kid!=تيتش لفالدي: أنت أذكى مما تبدو، يا فتى!
+Valdi to Teach: That's... a compliment, right?=فالدي لتيتش: هذا... مديح، أليس كذلك؟
+Cammuravi to Ethel: Flash of Colony 4! Show me your speed!=كامورافي لإيثل: برق المستعمرة 4! أريني سرعتك!
+Ethel to Cammuravi: Flame of Agnus! Try to keep up!=إيثل لكامورافي: لهب أغنوس! حاول اللحاق بي!
+Triton to Gray: Say something, would you?!=ترايتون لغراي: قل شيئاً، هل يمكنك ذلك؟!
+Gray to Triton: ...No.=غراي لترايتون: ...لا.
+Monica to Ghondor: Focus, Ghondor!=مونيكا لغوندور: ركّزي، غوندور!
+Ghondor to Monica: I AM focused, Grandma!=غوندور لمونيكا: أنا مركّزة، جدتي!
+Juniper to Fiona: I'll cover you. Stay safe!=جونيبر لفيونا: سأغطيك. ابقِ آمنة!
+Fiona to Juniper: Thank you, Juniper!=فيونا لجونيبر: شكراً لك، جونيبر!
+Isurd to Segiri: Your combat data is impressive.=إسورد لسيغيري: بيانات قتالك مثيرة للإعجاب.
+Segiri to Isurd: Acknowledged. Yours too.=سيغيري لإسورد: مقبول. بياناتك أيضاً.
+Alexandria to Miyabi: Your blade work is beautiful!=ألكسندريا لميابي: عملك بالنصل جميل!
+Miyabi to Alexandria: And yours is powerful!=ميابي لألكسندريا: وعملك قوي!
+Nimue to Teach: Professor, your recklessness worries me!=نيميو لتيتش: أستاذ، تهورك يقلقني!
+Teach to Nimue: Relax! The best lessons are hands-on!=تيتش لنيميو: استرخي! أفضل الدروس عملية!
+
+# ============================================================
 # --- نهاية القاموس الشامل ---
 # End of Comprehensive Glossary
-# Total: 400 sections covering ALL content of Xenoblade Chronicles 3
-# Including: Main Game, DLC Future Redeemed, NG+, Challenge Mode
+# Total: 420 sections covering ALL content of Xenoblade Chronicles 3
+# Including: Main Game, DLC Future Redeemed, NG+, Challenge Mode, Hero Battle Dialogues
 # ============================================================
