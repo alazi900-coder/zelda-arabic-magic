@@ -3974,7 +3974,7 @@ Weapon Slot=خانة السلاح
 # ─────────────────────────────────────────────────
 Sword=سيف
 Dual Swords=سيفان مزدوجان
-Great Sword=سيف عظيم
+Great Sword=السيف العظيم
 Greatsword=السيف العظيم
 Katana=كاتانا
 Blade=نصل
@@ -5661,7 +5661,7 @@ Demand=طلب
 Colony Trade=تجارة المستعمرة
 Colony Shop Level=مستوى متجر المستعمرة
 Ferronis Hulk=هيكل الفيرونيس
-Rest Spot=نقطة راحة
+Rest Spot=نقطة استراحة
 Campsite=مخيم
 Container=حاوية
 Supply Pod=كبسولة إمداد
@@ -5769,7 +5769,7 @@ Player Position=موقع اللاعب
 # --- المعالم ونقاط الاهتمام (Landmarks & Points of Interest) ---
 Landmark=معلم
 Location=موقع
-Rest Spot=نقطة راحة
+Rest Spot=نقطة استراحة
 Campsite=مخيم
 Camp=مخيم
 Ferronis Hulk=هيكل الفيرونيس
