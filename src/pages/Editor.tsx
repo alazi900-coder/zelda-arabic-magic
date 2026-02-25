@@ -49,6 +49,7 @@ import PreBuildDiagnostic from "@/components/editor/PreBuildDiagnostic";
 import CompareEnginesDialog from "@/components/editor/CompareEnginesDialog";
 import SentenceSplitPanel from "@/components/editor/SentenceSplitPanel";
 import ExportEnglishDialog from "@/components/editor/ExportEnglishDialog";
+import GlossaryStatsPanel from "@/components/editor/GlossaryStatsPanel";
 
 const Editor = () => {
   const editor = useEditorState();
@@ -688,6 +689,11 @@ const Editor = () => {
                 )}
               </Button>
             </div>
+          )}
+
+          {/* Glossary Stats Report */}
+          {editor.glossaryTermCount > 0 && (
+            <GlossaryStatsPanel glossaryText={editor.activeGlossary} />
           )}
 
           {/* Cloud & Actions */}
