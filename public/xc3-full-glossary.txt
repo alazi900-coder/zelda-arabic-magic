@@ -3594,7 +3594,7 @@ Affinity Growth=نمو الألفة
 Max Affinity=أقصى ألفة
 Bond=رابطة
 Bond Level=مستوى الرابطة
-Affinity Link=وصلة الألفة
+Affinity Link=رابط الألفة
 Affinity Line=خط الألفة
 Relationship=علاقة
 Trust=ثقة
@@ -5276,8 +5276,8 @@ Fogbound=محبوس بالضباب
 Black Fog=الضباب الأسود
 # --- أعداء DLC Future Redeemed ---
 Alpha=ألفا
-Liberator=المُحرر
-Ancient Automaton=آلي قديم
+Liberator=المحرر
+Ancient Automaton=الآلة القديمة
 Prison Guardian=حارس السجن
 Origin Guardian=حارس الأصل
 Origin Interior Enemy=عدو داخل الأصل
@@ -5908,7 +5908,7 @@ Battle Zone=منطقة قتال
 Bionis Shoulder=كتف البيونيس
 Land of Challenge=أرض التحدي
 Cent-Omnia Region=إقليم سنت أومنيا
-Mechonis Sword=سيف الميكونيس
+Mechonis Sword=سيف ميكونيس
 Origin Interior=داخل الأوريجن
 Prison Depths=أعماق السجن
 Boundary=الحدود
@@ -17361,7 +17361,7 @@ Lower Castle=القلعة السفلى
 Castle Bridge=جسر القلعة
 Keves Memorial=نصب كيفيس التذكاري
 Mechonis Arm=ذراع الميكونيس
-Mechonis Sword=سيف الميكونيس
+Mechonis Sword=سيف ميكونيس
 
 # ============================================================
 # القسم 232: قلعة أغنوس والمناطق المحيطة (Agnus Castle Region)
@@ -17694,7 +17694,7 @@ Cent-Omnia, Eastern=سنت-أومنيا الشرقية
 Cent-Omnia, Western=سنت-أومنيا الغربية
 Cent-Omnia, Central=سنت-أومنيا الوسطى
 Prison Island=جزيرة السجن
-Bionis' Shoulder=كتف البيونيس
+Bionis' Shoulder=كتف بيونيس
 Mechonis Field=حقل الميكونيس
 Fallen Arm=الذراع الساقطة
 Colony 6 Ruins=أطلال المستعمرة 6
