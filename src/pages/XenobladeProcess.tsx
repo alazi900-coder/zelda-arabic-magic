@@ -1,9 +1,9 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Upload, FileText, ArrowRight, Loader2, CheckCircle2, Clock, Pencil, Database, Binary, Sparkles, Download, ChevronDown, ChevronRight, Shield, Tag, Settings2 } from "lucide-react";
+import { Upload, FileText, ArrowRight, Loader2, CheckCircle2, Clock, Pencil, Database, Binary, Sparkles, Download, ChevronDown, ChevronRight, Shield, Tag, Settings2, FolderOpen } from "lucide-react";
 import heroBg from "@/assets/xc3-hero-bg.jpg";
 import { categorizeBdatTable, categorizeByTableName, categorizeByColumnName, categorizeByFilename } from "@/components/editor/types";
 import type { BdatSchemaReport } from "@/lib/bdat-schema-inspector";
@@ -672,20 +672,26 @@ const XenobladeProcess = () => {
                 disabled={isProcessing}
               />
             </label>
-            <label className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-accent/10 border border-accent/30 text-sm font-display font-semibold cursor-pointer hover:bg-accent/20 transition-colors ${isProcessing ? 'opacity-50 pointer-events-none' : ''}`}>
-              <Upload className="w-4 h-4" />
+            <button
+              type="button"
+              className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-accent/10 border border-accent/30 text-sm font-display font-semibold cursor-pointer hover:bg-accent/20 transition-colors ${isProcessing ? 'opacity-50 pointer-events-none' : ''}`}
+              onClick={() => {
+                if (isProcessing) return;
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.multiple = true;
+                input.setAttribute('webkitdirectory', '');
+                input.setAttribute('directory', '');
+                input.addEventListener('change', () => handleFileSelect(input.files));
+                input.click();
+              }}
+              disabled={isProcessing}
+            >
+              <FolderOpen className="w-4 h-4" />
               رفع مجلد كامل
-              <input
-                type="file"
-                {...{ webkitdirectory: "", directory: "" } as any}
-                multiple
-                className="hidden"
-                onChange={e => handleFileSelect(e.target.files)}
-                disabled={isProcessing}
-              />
-            </label>
+            </button>
           </div>
-          <p className="text-xs text-muted-foreground mt-2">💡 استخدم "كل الأنواع" لاختيار عدة ملفات من مدير الملفات، أو "رفع مجلد كامل" لرفع مجلد يحتوي على ملفات .bdat تلقائياً</p>
+          <p className="text-xs text-muted-foreground mt-2">💡 استخدم "كل الأنواع" لاختيار عدة ملفات من مدير الملفات، أو "رفع مجلد كامل" لرفع مجلد بكل ملفاته تلقائياً (يمكنك الضغط عدة مرات لإضافة مجلدات متعددة)</p>
           <input
             type="file"
             accept=".msbt,.json,.bdat"
