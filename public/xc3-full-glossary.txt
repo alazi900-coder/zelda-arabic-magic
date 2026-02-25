@@ -5255,7 +5255,7 @@ Multiple HP Bars=أشرطة صحة متعددة
 Boss Enrage Timer=مؤقت سعار الزعيم
 # --- أعداء القصة البارزون (Notable Story Enemies) ---
 Moebius=موبيوس
-Consul=قنصل
+Consul=القنصل
 M=م
 N=ن
 D=د
@@ -5773,7 +5773,7 @@ Rest Spot=نقطة راحة
 Campsite=مخيم
 Camp=مخيم
 Ferronis Hulk=هيكل الفيرونيس
-Colony=مستعمرة
+Colony=المستعمرة
 Secret Area=منطقة سرية
 Viewpoint=نقطة مشاهدة
 Named Location=موقع مُسمّى
@@ -17911,7 +17911,7 @@ The Consul's Domain=عالم القنصل
 # Section 250: General Terms - Places & Architecture
 # ============================================================
 
-Colony=مستعمرة
+Colony=المستعمرة
 Ferronis=فيرونيس
 Ferronis Hulk=هيكل الفيرونيس
 Flame Clock=ساعة اللهب
@@ -20938,7 +20938,7 @@ Colony 6=المستعمرة 6
 Shulk=شولك
 Reyn=رين
 Fiora=فيورا
-Dunban=دنبان
+Dunban=دانبان
 Sharla=شارلا
 Melia=ميليا
 Riki=ريكي
@@ -20951,7 +20951,7 @@ Rex=ريكس
 Pyra=بايرا
 Mythra=ميثرا
 Nia=نيا
-Brighid=بريجيد
+Brighid=بريغيد
 Pandoria=باندوريا
 Zeke=زيك
 Tora=تورا
@@ -21041,7 +21041,7 @@ Ferronis=فيرونيس
 Kevesi=كيفيسي
 Agnian=أغنوسي
 The City=المدينة
-Colony=مستعمرة
+Colony=المستعمرة
 
 # ============================================================
 # القسم 401-420: حوارات معركة الأبطال التفصيلية
