@@ -1022,7 +1022,7 @@ Dismal Odysseus=أوديسيوس الكئيب
 Rockbound Waldherr=فالدهير الصخري
 Sovereign Dolos=دولوس السيّد
 # ═══════════════════════════════════════════════════
-# منطقة بنتلاس (Pentelas Region)
+# منطقة بنتيلاس (Pentelas Region)
 # ═══════════════════════════════════════════════════
 Roaming Balrog=بالروغ الجوّال
 Savage Muimui=مويموي المتوحّش
@@ -1269,7 +1269,7 @@ Aegis Gate=بوابة إيجيس
 Minoth Summit=قمة مينوث
 Anu Shoals=مياه أنو الضحلة
 # ─────────────────────────────────────────────────
-# معالم منطقة بينتيلاس (Pentelas Region Landmarks)
+# معالم منطقة بنتيلاس (Pentelas Region Landmarks)
 # ─────────────────────────────────────────────────
 Colony 11 Camp=مخيم المستعمرة 11
 Colony Iota Camp=مخيم المستعمرة يوتا
@@ -1277,10 +1277,10 @@ Maktha Wildwood=غابة ماكثا البرية
 Maktha Wildwood Camp=مخيم غابة ماكثا البرية
 Upper Maktha=ماكثا العليا
 Sage's Domicile=مسكن الحكيم
-Great Cotte Falls=شلالات كوتي الكبرى
+Great Conté Falls=شلالات كونتيه الكبرى
 Colony 0 Camp=مخيم المستعمرة 0
 Vinisog Summit=قمة فينيسوج
-Pentelas Landmark Tower=برج معلم بينتيلاس
+Pentelas Landmark Tower=برج معلم بنتيلاس
 Erythia Landmark=معلم إريثيا
 Fyborg Ferronis Hulk=هيكل فيرونيس فايبورغ
 Captocorn Peak=قمة كابتوكورن
@@ -8863,8 +8863,8 @@ That seems to be fine. He said it was essential, considering the future of Lambd
 We need autonomous Levnisters to carry out the Invidian Tunnels plan.=نحتاج ليفنيسترات مستقلة لتنفيذ خطة أنفاق إنفيديان.
 There are some problems, but we are proceeding with the recovery.=هناك بعض المشاكل، لكننا نمضي قدمًا في عملية التعافي.
 You're aiming for the Great Sword, right?=أنت تسعى للسيف العظيم، صحيح؟
-Once you leave the colony and cross the Moram Bridge, next you climb the Great Conté Falls. After that... it's still a long way to go.=بمجرد مغادرة المستعمرة وعبور جسر مورام، تصعد شلالات كونتيه العظيمة. بعد ذلك... لا يزال الطريق طويلًا.
-There are mysterious ruins at the Great Conté Falls. Please let me investigate.=هناك أطلال غامضة عند شلالات كونتيه العظيمة. أرجوكم دعوني أحقق فيها.
+Once you leave the colony and cross the Moram Bridge, next you climb the Great Conté Falls. After that... it's still a long way to go.=بمجرد مغادرة المستعمرة وعبور جسر مورام، تصعد شلالات كونتيه الكبرى. بعد ذلك... لا يزال الطريق طويلًا.
+There are mysterious ruins at the Great Conté Falls. Please let me investigate.=هناك أطلال غامضة عند شلالات كونتيه الكبرى. أرجوكم دعوني أحقق فيها.
 I can't authorize an investigation there right now. First, we need to stabilize this colony. We have no support from our home country.=لا أستطيع تفويض تحقيق هناك الآن. أولًا، نحتاج لتثبيت هذه المستعمرة. ليس لدينا دعم من وطننا الأم.
 It feels strange having a Kevesi Levnister in our colony.=شعور غريب أن يكون لدينا ليفنيستر كيفيسي في مستعمرتنا.
 It's not just Levnisters, we'll be exchanging technology and people too, so it might become normal from now on.=ليس فقط الليفنيسترات، سنتبادل التكنولوجيا والأشخاص أيضًا، فقد يصبح ذلك طبيعيًا من الآن فصاعدًا.
@@ -9456,7 +9456,7 @@ Alfeto Valley=وادي ألفيتو
 Dannagh Desert=صحراء داناغ
 Millick Meadows=مروج ميليك
 Uraya Lowlands=أراضي أورايا المنخفضة
-Pentelas Region=منطقة بينتيلاس
+Pentelas Region=منطقة بنتيلاس
 Cadensia Region=منطقة كادينسيا
 Fornis Region=منطقة فورنيس
 Erythia Sea=بحر إريثيا
@@ -10420,8 +10420,8 @@ There are some problems, but we are proceeding with the recovery.=هناك بع�
 
 # --- حوارات السيف العظيم (Great Sword Dialogues) ---
 You're aiming for the Great Sword, right?=أنت تستهدف السيف العظيم، صحيح؟
-Once you leave the colony and cross the Moram Bridge, next you climb the Great Conté Falls. After that... it's still a long way to go.=بمجرد مغادرة المستعمرة وعبور جسر مورام، بعدها تصعد شلالات كونتيه العظيمة. بعد ذلك... لا يزال الطريق طويلًا.
-There are mysterious ruins at the Great Conté Falls. Please let me investigate.=هناك آثار غامضة عند شلالات كونتيه العظيمة. أرجوكم دعوني أحقق.
+Once you leave the colony and cross the Moram Bridge, next you climb the Great Conté Falls. After that... it's still a long way to go.=بمجرد مغادرة المستعمرة وعبور جسر مورام، بعدها تصعد شلالات كونتيه الكبرى. بعد ذلك... لا يزال الطريق طويلًا.
+There are mysterious ruins at the Great Conté Falls. Please let me investigate.=هناك آثار غامضة عند شلالات كونتيه الكبرى. أرجوكم دعوني أحقق.
 I can't authorize an investigation there right now. First, we need to stabilize this colony. We have no support from our home country.=لا أستطيع الموافقة على تحقيق هناك الآن. أولًا، نحتاج لتثبيت هذه المستعمرة. ليس لدينا دعم من بلدنا الأم.
 
 # --- حوارات تبادل التقنيات (Technology Exchange Dialogues) ---
@@ -11396,7 +11396,7 @@ Clifftop Lookout=مرصد قمة الجرف
 Valley Crossing=عبور الوادي
 Desert Oasis Camp=مخيم واحة الصحراء
 Fornis Garrison=حامية فورنيس
-Pentelas Command Post=نقطة قيادة بينتيلاس
+Pentelas Command Post=نقطة قيادة بنتيلاس
 Aetia Watchtower=برج مراقبة أيتيا
 Cadensia Wharf=رصيف كادينسيا
 Underground Market=السوق السفلي
@@ -12240,14 +12240,14 @@ Cascade Falls Camp=مخيم شلالات الانحدار
 Sage's Domicile=مسكن الحكيم
 Fornis Ether Mine=منجم أثير فورنيس
 
-# --- مواقع منطقة بنتلاس (Pentelas Region Locations) ---
+# --- مواقع منطقة بنتيلاس (Pentelas Region Locations) ---
 Colony Lambda Gate=بوابة المستعمرة لامبدا
 Lambda Command Center=مركز قيادة لامبدا
 Lambda Armory=مستودع أسلحة لامبدا
 Lambda Infirmary=مستوصف لامبدا
-Pentelas Highlands=مرتفعات بنتلاس
-Urayan Tunnels Entrance=مدخل أنفاق أوراي
-Urayan Tunnels Depths=أعماق أنفاق أوراي
+Pentelas Highlands=مرتفعات بنتيلاس
+Urayan Tunnels Entrance=مدخل أنفاق أوريا
+Urayan Tunnels Depths=أعماق أنفاق أوريا
 Erythia Sea Approach=ممر بحر إريثيا
 Erythia Sea Overlook=مطل بحر إريثيا
 Swordmarch Campsite=مخيم مسيرة السيف
@@ -17218,12 +17218,12 @@ Loch Ciel=بحيرة سييل
 Ribbi Flats=سهول ريبي
 Saffronia Tree=شجرة سافرونيا
 Gura Flava Lowlands=أراضي غورا فلافا المنخفضة
-Ferronis Hulk (Colony 9)=هيكل الفيرونيس (المستعمرة 9)
+Ferronis Hulk (Colony 9)=هيكل فيرونيس (المستعمرة 9)
 Battlescar Canyon=وادي ندبة المعركة
 Tableland of Beginnings=هضبة البدايات
 Gura Flava Highroad=طريق غورا فلافا العلوي
 Ulzaback Overlook=مطل أولزاباك
-Hillside Ferronis Hulk=هيكل فيرونيس التلة
+Hillside Ferronis Hulk=هيكل فيرونيس سفح التل
 Colony 4=المستعمرة 4
 Colony 4 Barracks=ثكنات المستعمرة 4
 Aetia Sea=بحر أيتيا
@@ -17296,14 +17296,14 @@ Rae-Bel Campsite=موقع تخييم راي-بيل
 Fornis Campsite=موقع تخييم فورنيس
 
 # ============================================================
-# القسم 230: معالم ومواقع منطقة بينتولاس (Pentelas Region Landmarks & Locations)
+# القسم 230: معالم ومواقع منطقة بنتيلاس (Pentelas Region Landmarks & Locations)
 # Section 230: Pentelas Region Landmarks & Locations
 # ============================================================
 
-Pentelas Region=منطقة بينتولاس
+Pentelas Region=منطقة بنتيلاس
 Colony 30=المستعمرة 30
 Colony Mu=المستعمرة مو
-Great Cotte Falls=شلالات كوتي الكبرى
+Great Conté Falls=شلالات كونتيه الكبرى
 Maktha Wildwood=غابة ماكثا البرية
 Urayan Tunnels=أنفاق أوريا
 Colony 15=المستعمرة 15
@@ -17311,15 +17311,15 @@ Swordmarch=مسيرة السيوف
 Eagus Wilderness Pass=ممر برية إيغوس
 Upper Maktha=ماكثا العليا
 Lower Maktha=ماكثا السفلى
-Pentelas, Northern=بينتولاس الشمالية
-Pentelas, Southern=بينتولاس الجنوبية
+Pentelas, Northern=بنتيلاس الشمالية
+Pentelas, Southern=بنتيلاس الجنوبية
 Maktha Forest Gate=بوابة غابة ماكثا
-Cotte Falls Summit=قمة شلالات كوتي
+Conté Falls Summit=قمة شلالات كونتيه
 Ancient Shrine=المعبد القديم
 Urayan Tunnel Entrance=مدخل أنفاق أوريا
-Pentelas Arch=قوس بينتولاس
+Pentelas Arch=قوس بنتيلاس
 Colony 30 Entrance=مدخل المستعمرة 30
-Pentelas Highroad=طريق بينتولاس العلوي
+Pentelas Highroad=طريق بنتيلاس العلوي
 Maktha Bridge=جسر ماكثا
 Wildwood Clearing=فسحة الغابة البرية
 Waterfall Basin=حوض الشلال
@@ -17333,7 +17333,7 @@ Sunken Hollow=الجوف الغارق
 Colony 30 Canteen=مقصف المستعمرة 30
 Colony Mu Canteen=مقصف المستعمرة مو
 Maktha Campsite=موقع تخييم ماكثا
-Cotte Falls Campsite=موقع تخييم شلالات كوتي
+Conté Falls Campsite=موقع تخييم شلالات كونتيه
 Urayan Campsite=موقع تخييم أوريا
 
 # ============================================================
@@ -17759,7 +17759,7 @@ Unique Monster Lair (DLC)=عرين الوحش الفريد (DLC)
 
 Cent-Omnia Cave=كهف سنت-أومنيا
 Hidden Cavern (DLC)=الكهف المخفي (DLC)
-Underground Passage=الممر السفلي
+Underground Passage=الممر الجوفي
 Machina Underground=تحت أرض الماكينا
 Crystal Mine=منجم الكريستال
 Ether Mine Entrance=مدخل منجم الأثير
@@ -17913,7 +17913,7 @@ The Consul's Domain=عالم القنصل
 
 Colony=المستعمرة
 Ferronis=فيرونيس
-Ferronis Hulk=هيكل الفيرونيس
+Ferronis Hulk=هيكل فيرونيس
 Flame Clock=ساعة اللهب
 Iris=إيريس
 Collectopaedia=موسوعة المقتنيات
@@ -18010,7 +18010,7 @@ Desert Phantom=شبح الصحراء
 Burning Chimera=الكايميرا المشتعلة
 
 # ============================================================
-# القسم 253: الوحوش الفريدة - بينتولاس وكادنسيا
+# القسم 253: الوحوش الفريدة - بنتيلاس وكادنسيا
 # Section 253: Unique Monsters - Pentelas & Cadensia
 # ============================================================
 
@@ -18847,7 +18847,7 @@ River Dragonfly=يعسوب النهر
 Snow Ladybug=دعسوقة الثلج
 Aetia Cicada=زيز أيتيا
 Fornis Scarab=جعران فورنيس
-Pentelas Moth=عثة بينتولاس
+Pentelas Moth=عثة بنتيلاس
 Cadensia Beetle=خنفساء كادنسيا
 Maktha Centipede=حريش ماكثا
 Luminous Worm=دودة مضيئة
@@ -19061,7 +19061,7 @@ Reward: EXP Bonus=المكافأة: مكافأة خبرة
 Reward: Gold Bonus=المكافأة: مكافأة ذهب
 Aetia Collection=مجموعة أيتيا
 Fornis Collection=مجموعة فورنيس
-Pentelas Collection=مجموعة بينتولاس
+Pentelas Collection=مجموعة بنتيلاس
 Cadensia Collection=مجموعة كادنسيا
 Maktha Collection=مجموعة ماكثا
 
