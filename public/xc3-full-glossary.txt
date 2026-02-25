@@ -1096,7 +1096,7 @@ Alpha Tirkin=تيركن الألفا
 # مصطلحات الوحوش العامة
 # ═══════════════════════════════════════════════════
 Monster Level=مستوى الوحش
-Named Monster=وحش مسمّى
+Named Monster=وحش مُسمّى
 Elite Monster=وحش نخبة
 Super Boss=زعيم خارق
 Tombstone=شاهد القبر
@@ -1476,9 +1476,9 @@ Mossy Ore=خام مطحلب
 # ─────────────────────────────────────────────────
 # الأحجار الكريمة والبلورات (Gems & Crystals)
 # ─────────────────────────────────────────────────
-Ruby=ياقوتة حمراء
-Sapphire=ياقوتة زرقاء
-Emerald=زمردة
+Ruby=ياقوت أحمر
+Sapphire=ياقوت أزرق
+Emerald=زمرد
 Topaz=توباز
 Amethyst=جمشت
 Opal=أوبال
@@ -9919,8 +9919,8 @@ Container=حاوية
 Ether Deposit=رواسب الأثير
 Collectible=مقتنيات
 Unique Monster=وحش فريد
-Named Monster=وحش مُسمى
-Elite Monster=وحش نخبوي
+Named Monster=وحش مُسمّى
+Elite Monster=وحش نخبة
 Lucky Monster=وحش محظوظ
 Quest Objective=هدف المهمة
 Quest Reward=مكافأة المهمة
@@ -18372,15 +18372,15 @@ The Architect's final failsafe will not be undone!=آخر صمام أمان ال
 # ============================================================
 
 Normal Enemy=عدو عادي
-Elite Enemy=عدو نخبة
+Elite Enemy=عدو نخبوي
 Unique Monster=وحش فريد
-Boss=رئيس
-Superboss=رئيس خارق
-DLC Boss=رئيس المحتوى الإضافي
+Boss=زعيم
+Superboss=زعيم خارق
+DLC Boss=زعيم المحتوى الإضافي
 Challenge Enemy=عدو التحدي
-Event Boss=رئيس الحدث
-Story Boss=رئيس القصة
-Colony Defense Boss=رئيس دفاع المستعمرة
+Event Boss=زعيم الحدث
+Story Boss=زعيم القصة
+Colony Defense Boss=زعيم دفاع المستعمرة
 Level Range: 1-20=نطاق المستوى: 1-20
 Level Range: 21-40=نطاق المستوى: 21-40
 Level Range: 41-60=نطاق المستوى: 41-60
