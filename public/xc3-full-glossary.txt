@@ -8563,8 +8563,8 @@ New Title Acquired!=تم اكتساب لقب جديد!
 Bonus EXP earned!=تم كسب خبرة إضافية!
 New area discovered!=تم اكتشاف منطقة جديدة!
 New recipe learned!=تم تعلم وصفة جديدة!
-New class unlocked!=تم فتح فئة جديدة!
-Class rank increased!=ارتفعت رتبة الفئة!
+New class unlocked!=تم فتح فصل جديد!
+Class rank increased!=ارتفعت رتبة الفصل!
 Colony affinity increased!=زادت ألفة المستعمرة!
 New hero joined the party!=بطل جديد انضم إلى الفريق!
 Collectopaedia card completed!=اكتملت بطاقة موسوعة المقتنيات!
@@ -9734,7 +9734,7 @@ Achievement: Monster Hunter=إنجاز: صائد الوحوش
 Achievement: Gem Collector=إنجاز: جامع الجواهر
 Achievement: Quest Champion=إنجاز: بطل المهام
 Achievement: Cooking Expert=إنجاز: خبير الطهي
-Achievement: All Classes Mastered=إنجاز: إتقان جميع الفئات
+Achievement: All Classes Mastered=إنجاز: إتقان جميع الفصول
 Achievement: Ouroboros Awakening=إنجاز: صحوة أوروبوروس
 Achievement: Interlink Pioneer=إنجاز: رائد الإنترلينك
 Achievement: Colony Alliance=إنجاز: تحالف المستعمرات
@@ -9902,7 +9902,7 @@ Z-Factor=عامل Z
 
 # --- مصطلحات نظام اللعب الإضافية (Additional Gameplay System Terms) ---
 Bonus EXP=خبرة إضافية
-Class Points=نقاط الفئة
+Class Points=نقاط الفصل
 Soul Points=نقاط الروح
 Skill Points=نقاط المهارة
 Affinity Chart=مخطط الألفة
@@ -11330,7 +11330,7 @@ Art Recharge=إعادة شحن الفن
 Art Cancel=إلغاء الفن
 Art Chain=سلسلة الفنون
 Master Skill=مهارة الإتقان
-Class Skill=مهارة الفئة
+Class Skill=مهارة الفصل
 Innate Skill=مهارة فطرية
 Equippable Skill=مهارة قابلة للتجهيز
 Passive Skill=مهارة سلبية
@@ -13432,8 +13432,8 @@ Total Stats=الإحصائيات الإجمالية
 Level=المستوى
 EXP=الخبرة
 Next Level EXP=خبرة المستوى التالي
-Class Level=مستوى الفئة
-Class EXP=خبرة الفئة
+Class Level=مستوى الفصل
+Class EXP=خبرة الفصل
 Affinity Level=مستوى الألفة
 Trust=الثقة
 Lucky=الحظ
@@ -13526,10 +13526,10 @@ First Chain Attack=أول هجوم متسلسل
 100 Combo Chain=سلسلة 100 كومبو
 Defeat 1000 Enemies=اهزم 1000 عدو
 Defeat All Unique Monsters=اهزم جميع الوحوش الفريدة
-Master All Classes=أتقن جميع الفئات
+Master All Classes=أتقن جميع الفصول
 Reach Level 99=اوصل للمستوى 99
 Perfect Chain Attack=هجوم متسلسل مثالي
-Max Interlink Level=مستوى ترابط أقصى
+Max Interlink Level=مستوى إنترلينك أقصى
 All Gems Crafted=جميع الأحجار مصنوعة
 Full Party Awakening=صحوة الفريق الكاملة
 
@@ -15868,8 +15868,8 @@ Modifications complete. The Levnises will run cleaner and longer now.=التعد
 # --- مهمة: Missing Patrol ---
 A patrol from Colony 11 hasn't returned. It's been three days.=دورية من المستعمرة 11 لم تعد. مرت ثلاثة أيام.
 Three days? That's not like them.=ثلاثة أيام؟ هذا ليس من عادتهم.
-They were investigating reports of Moebius activity in the ruins.=كانوا يحققون في تقارير عن نشاط ميبيوس في الأطلال.
-Moebius? Even after everything we've done?=ميبيوس؟ حتى بعد كل ما فعلناه؟
+They were investigating reports of Moebius activity in the ruins.=كانوا يحققون في تقارير عن نشاط موبيوس في الأطلال.
+Moebius? Even after everything we've done?=موبيوس؟ حتى بعد كل ما فعلناه؟
 Their influence runs deep. Some remnants remain.=تأثيرهم عميق الجذور. بعض البقايا لا تزال.
 We found the patrol. They were trapped, not captured.=وجدنا الدورية. كانوا محاصرين، لم يُأسروا.
 The ruins collapsed around them. But they're safe now.=الأطلال انهارت حولهم. لكنهم بأمان الآن.
@@ -15895,7 +15895,7 @@ Why are they reaching out now?=لماذا يتواصلون الآن؟
 Because the Flame Clocks are falling. The old order is crumbling.=لأن ساعات اللهب تسقط. النظام القديم ينهار.
 They want to help rebuild. They have knowledge we need.=يريدون المساعدة في إعادة البناء. لديهم معرفة نحتاجها.
 Ancient techniques for farming, building, healing.=تقنيات قديمة للزراعة، البناء، الشفاء.
-Knowledge that was suppressed by Moebius.=معرفة كانت مكبوتة من قبل ميبيوس.
+Knowledge that was suppressed by Moebius.=معرفة كانت مكبوتة من قبل موبيوس.
 Colony 0's archives are incredible. There's so much we've lost.=أرشيفات المستعمرة 0 مذهلة. هناك الكثير مما فقدناه.
 
 # =============================================
@@ -15940,7 +15940,7 @@ The first weather forecast was accurate. The crops are saved.=أول توقع ل
 # --- مهمة: The Lost Archives ---
 We've discovered a hidden archive beneath Colony Τ.=اكتشفنا أرشيفاً مخفياً تحت المستعمرة تاو.
 Hidden by whom?=مخفي من قبل من؟
-Researchers from before the war. They hid their findings from Moebius.=باحثون من قبل الحرب. أخفوا اكتشافاتهم عن ميبيوس.
+Researchers from before the war. They hid their findings from Moebius.=باحثون من قبل الحرب. أخفوا اكتشافاتهم عن موبيوس.
 What kind of findings?=أي نوع من الاكتشافات؟
 Details about Origin. About the true nature of our world.=تفاصيل عن أوريجن. عن الطبيعة الحقيقية لعالمنا.
 This changes everything we thought we knew.=هذا يغير كل ما ظننا أننا نعرفه.
@@ -16152,13 +16152,13 @@ Colony Τ can study their behavior patterns.=المستعمرة تاو تستط�
 Understanding is the first step to coexistence.=الفهم هو الخطوة الأولى نحو التعايش.
 
 # --- مهمة: Legacy of Moebius ---
-Moebius is gone, but their influence remains.=ميبيوس رحل، لكن تأثيره باقٍ.
+Moebius is gone, but their influence remains.=موبيوس رحل، لكن تأثيره باقٍ.
 Some soldiers still believe the old propaganda.=بعض الجنود لا يزالون يصدقون الدعاية القديمة.
 That Keves and Agnus are natural enemies.=أن كيفس وأغنوس أعداء طبيعيون.
 We were never enemies. We were puppets.=لم نكن أعداءً أبداً. كنا دمى.
 And now the strings are cut.=والآن الخيوط قُطعت.
 But old beliefs die hard. We need education, not just liberation.=لكن المعتقدات القديمة تموت بصعوبة. نحتاج تعليماً، ليس فقط تحريراً.
-The truth is our strongest weapon against Moebius's legacy.=الحقيقة هي أقوى سلاح لنا ضد إرث ميبيوس.
+The truth is our strongest weapon against Moebius's legacy.=الحقيقة هي أقوى سلاح لنا ضد إرث موبيوس.
 When people understand what was done to them, they choose differently.=عندما يفهم الناس ما فُعل بهم، يختارون بشكل مختلف.
 
 # --- نهاية مهام المستعمرات ---
@@ -16172,8 +16172,8 @@ When people understand what was done to them, they choose differently.=عندم�
 # --- الفصل الأول: الاستدعاء ---
 Commander Ethel, we've received a distress signal from the eastern front.=القائدة إيثل، تلقينا إشارة استغاثة من الجبهة الشرقية.
 How many soldiers are trapped?=كم عدد الجنود المحاصرين؟
-An entire platoon. They were ambushed by a Moebius remnant force.=فصيلة كاملة. نُصب لهم كمين من قوة بقايا ميبيوس.
-Moebius remnants? I thought we dealt with them.=بقايا ميبيوس؟ ظننت أننا تعاملنا معهم.
+An entire platoon. They were ambushed by a Moebius remnant force.=فصيلة كاملة. نُصب لهم كمين من قوة بقايا موبيوس.
+Moebius remnants? I thought we dealt with them.=بقايا موبيوس؟ ظننت أننا تعاملنا معهم.
 Their influence runs deeper than we thought, Ethel.=تأثيرهم أعمق مما ظننا، إيثل.
 Then Colony 4 moves out. Every last one of us.=إذن المستعمرة 4 تتحرك. كل واحد منا.
 Wait. Charging in blindly is what they expect.=انتظري. الهجوم الأعمى هو ما يتوقعونه.
@@ -16192,7 +16192,7 @@ The platoon is safe. But at what cost?=الفصيلة بأمان. لكن بأي 
 Ethel, the soldiers we fought... they were from Colony 4.=إيثل، الجنود الذين قاتلناهم... كانوا من المستعمرة 4.
 What? That's impossible.=ماذا؟ هذا مستحيل.
 Deserters. They left before the Flame Clock fell.=منشقون. غادروا قبل سقوط ساعة اللهب.
-They chose Moebius over freedom?=اختاروا ميبيوس على الحرية؟
+They chose Moebius over freedom?=اختاروا موبيوس على الحرية؟
 They chose certainty over the unknown. Can you blame them?=اختاروا اليقين على المجهول. هل تلومينهم؟
 Yes. No. I don't know.=نعم. لا. لا أعرف.
 Being a leader means facing truths like this.=أن تكوني قائدة يعني مواجهة حقائق كهذه.
@@ -16329,7 +16329,7 @@ You're fixing the world, Valdi. One machine at a time.=أنت تصلح العا�
 Alexandria, you've been quiet lately.=ألكسندريا، كنتِ هادئة مؤخراً.
 I've been thinking. About who I was before.=كنت أفكر. بمن كنت قبلاً.
 Before what?=قبل ماذا؟
-Before I broke free from Moebius's control.=قبل أن أتحرر من سيطرة ميبيوس.
+Before I broke free from Moebius's control.=قبل أن أتحرر من سيطرة موبيوس.
 That wasn't you. You know that.=لم تكوني أنتِ. تعرفين ذلك.
 Do I? The memories feel like mine.=أعرف ذلك؟ الذكريات تبدو كأنها ذكرياتي.
 Then make new ones. Better ones.=إذن اصنعي ذكريات جديدة. أفضل.
@@ -16802,7 +16802,7 @@ Perfect. Just like Cammuravi's flames.=مثالي. تماماً مثل نيرا�
 # =============================================
 
 # --- وجبة ما قبل المعركة الكبرى ---
-Everyone, eat well tonight. Tomorrow we face Moebius.=الجميع، كلوا جيداً الليلة. غداً نواجه ميبيوس.
+Everyone, eat well tonight. Tomorrow we face Moebius.=الجميع، كلوا جيداً الليلة. غداً نواجه موبيوس.
 Manana made everyone's favorite dishes.=مانانا صنعت الأطباق المفضلة لكل شخص.
 Noah gets simple soup. Lanz gets triple portions.=نوح يحصل على حساء بسيط. لانز يحصل على حصص ثلاثية.
 Mio gets rice balls. Eunie gets anything without mushrooms.=ميو تحصل على كرات أرز. يوني تحصل على أي شيء بدون فطر.
@@ -16840,8 +16840,8 @@ Arts become available as you auto-attack. Use them to deal extra damage.=الف�
 Position yourself carefully! Some Arts deal more damage from the side or back.=ضع نفسك بعناية! بعض الفنون تلحق ضرراً أكبر من الجانب أو الخلف.
 Canceling an Art into another Art increases damage and fills the Chain Attack gauge.=إلغاء فن إلى فن آخر يزيد الضرر ويملأ مقياس الهجوم المتسلسل.
 A cancel occurs when you use an Art right as the previous one connects.=يحدث الإلغاء عندما تستخدم فناً فور اتصال الفن السابق.
-Master Arts can be set from a different class than your current one.=الفنون الرئيسية يمكن تعيينها من فئة مختلفة عن فئتك الحالية.
-Combine Arts from different classes to create powerful combos.=ادمج الفنون من فئات مختلفة لإنشاء توليفات قوية.
+Master Arts can be set from a different class than your current one.=فنون الإتقان يمكن تعيينها من فصل مختلف عن فصلك الحالي.
+Combine Arts from different classes to create powerful combos.=ادمج الفنون من فصول مختلفة لإنشاء توليفات قوية.
 
 # --- Roles ---
 Attackers deal the most damage but draw less aggro.=المهاجمون يلحقون أكبر ضرر لكن يجذبون عداوة أقل.
@@ -17034,12 +17034,12 @@ New area discovered!=تم اكتشاف منطقة جديدة!
 Landmark discovered!=تم اكتشاف معلم!
 Secret Area discovered!=تم اكتشاف منطقة سرية!
 Level up!=ارتقاء مستوى!
-Class rank up!=ارتقاء رتبة الفئة!
+Class rank up!=ارتقاء رتبة الفصل!
 New Art learned!=تم تعلم فن جديد!
 New Skill learned!=تم تعلم مهارة جديدة!
 Affinity increased with Colony.=زادت الألفة مع المستعمرة.
 Hero joined the party!=البطل انضم للفريق!
-New class available!=فئة جديدة متاحة!
+New class available!=فصل جديد متاح!
 Ouroboros ability unlocked!=قدرة أوروبوروس فُتحت!
 Soul Tree node activated.=عقدة شجرة الروح فُعّلت.
 Gem crafted successfully.=تم صناعة الحجر الكريم بنجاح.
@@ -17094,7 +17094,7 @@ Watch out! Powerful attack incoming!=احذر! هجوم قوي قادم!
 # --- Menu Messages ---
 Party=الفريق
 Characters=الشخصيات
-Classes=الفئات
+Classes=الفصول
 Arts=الفنون
 Skills=المهارات
 Gems=الأحجار الكريمة
@@ -17129,11 +17129,11 @@ Cook=الطبخ
 Craft Gems=صناعة الأحجار الكريمة
 Discuss=المناقشة
 Level Up=رفع المستوى
-Change Class=تغيير الفئة
+Change Class=تغيير الفصل
 Change Equipment=تغيير التجهيزات
 View Skills=عرض المهارات
 Set Arts=تعيين الفنون
-Set Master Arts=تعيين الفنون الرئيسية
+Set Master Arts=تعيين فنون الإتقان
 Set Skills=تعيين المهارات
 
 # =============================================
@@ -17745,7 +17745,7 @@ A's Stronghold=معقل آي
 Alpha's Arena=ساحة ألفا
 Final Battlefield (DLC)=ساحة المعركة الأخيرة (DLC)
 Convergence Arena=ساحة التلاقي
-Moebius Stronghold (DLC)=معقل ميبيوس (DLC)
+Moebius Stronghold (DLC)=معقل موبيوس (DLC)
 Ancient Battleground=أرض المعركة القديمة
 DLC Boss Arena=ساحة زعيم DLC
 Challenge Arena=ساحة التحدي
@@ -18111,7 +18111,7 @@ Category=الفئة
 Normal=عادي
 Rare=نادر
 Unique=فريد
-Super Boss=رئيس خارق
+Super Boss=زعيم خارق
 Lucky=محظوظ
 
 # ============================================================
@@ -18139,7 +18139,7 @@ Agnus Soldier=جندي أغنوس
 Agnus Officer=ضابط أغنوس
 Levnis=ليفنيس
 Mechon=ميكون
-Moebius=ميبيوس
+Moebius=موبيوس
 Moramora=مورامورا
 Ogre=غول
 Piranhax=بيرانهاكس
@@ -18222,11 +18222,11 @@ You think you can change anything? Foolish children!=تظنون أنكم تست�
 # ============================================================
 
 So, the Ouroboros has appeared at last.=إذاً، ظهر الأوروبوروس أخيراً.
-Interesting... Let me see the power of Interlink!=مثير للاهتمام... دعوني أرى قوة الترابط!
+Interesting... Let me see the power of Interlink!=مثير للاهتمام... دعوني أرى قوة الإنترلينك!
 You've broken free of the Flame Clock? Impossible!=تحررتم من ساعة اللهب؟ مستحيل!
 The Consuls will hear of this transgression!=القناصل سيسمعون بهذا التجاوز!
 You cannot escape the cycle. No one can!=لا يمكنكم الهروب من الدورة. لا أحد يستطيع!
-Your Interlink is nothing compared to our power!=ترابطكم لا شيء مقارنة بقوتنا!
+Your Interlink is nothing compared to our power!=إنترلينككم لا شيء مقارنة بقوتنا!
 Consul N won't be pleased about this...=القنصل إن لن يكون سعيداً بهذا...
 You may have won this battle, but the war is far from over!=قد تكونون فزتم بهذه المعركة، لكن الحرب لم تنتهِ بعد!
 
@@ -19124,7 +19124,7 @@ Flame Clock Core=نواة ساعة اللهب
 True Origin Key=مفتاح الأوريجن الحقيقي
 NG+ Badge=شارة NG+
 Level Reset Token=رمز إعادة المستوى
-Class Unlock Token=رمز فتح الفئة
+Class Unlock Token=رمز فتح الفصل
 Bonus EXP Token=رمز خبرة إضافية
 Bonus Gold Token=رمز ذهب إضافي
 All Achievements Token=رمز جميع الإنجازات
@@ -19658,7 +19658,7 @@ Come back anytime. I'll have new stock soon.=عودوا في أي وقت. سيك
 
 Are you the Ouroboros? You're so cool!=هل أنتم الأوروبوروس؟ أنتم رائعون جداً!
 When I grow up, I want to be a hero like you!=عندما أكبر، أريد أن أكون بطلاً مثلكم!
-What's it like to Interlink? Does it hurt?=كيف يبدو الترابط؟ هل يؤلم؟
+What's it like to Interlink? Does it hurt?=كيف يبدو الإنترلينك؟ هل يؤلم؟
 Teacher said we get to live past ten terms now. Is that true?=المعلم قال إننا سنعيش بعد عشر فترات الآن. هل هذا صحيح؟
 I drew a picture of you fighting a monster! Want to see?=رسمت صورة لكم تقاتلون وحشاً! تريدون أن تروا؟
 Mom and Dad... those are words I just learned. What do they mean?=ماما وبابا... هذه كلمات تعلمتها للتو. ماذا تعنيان؟
@@ -19792,7 +19792,7 @@ Node Unlocked=العقدة مفتوحة
 Insufficient Soul Points=نقاط الروح غير كافية
 Branch: Combat=الفرع: القتال
 Branch: Exploration=الفرع: الاستكشاف
-Branch: Interlink=الفرع: الترابط
+Branch: Interlink=الفرع: الإنترلينك
 Branch: Affinity=الفرع: الألفة
 Branch: Special=الفرع: خاص
 Increases base ATK by %1%.=يزيد الهجوم الأساسي بنسبة %1%.
@@ -19824,7 +19824,7 @@ Affinity increased!=زادت الألفة!
 Affinity maxed out!=بلغت الألفة حدها الأقصى!
 New conversation unlocked.=محادثة جديدة مُفتَحة.
 Heart-to-Heart event available.=حدث قلب إلى قلب متاح.
-Interlink bonus unlocked.=مكافأة الترابط مُفتَحة.
+Interlink bonus unlocked.=مكافأة الإنترلينك مُفتَحة.
 Colony affinity increased with %1.=زادت ألفة المستعمرة مع %1.
 Hero affinity maxed: %1.=بلغت ألفة البطل حدها الأقصى: %1.
 Affinity Growth Rate Up=زيادة معدل نمو الألفة
@@ -19910,7 +19910,7 @@ Secret areas contain rare treasures and powerful enemies.=المناطق الس�
 Rest at camps to cook meals and level up.=استرح في المعسكرات لطبخ الوجبات ورفع المستوى.
 
 # ============================================================
-# القسم 341: دروس الأوروبوروس والترابط
+# القسم 341: دروس الأوروبوروس والإنترلينك
 # Section 341: Interlink & Ouroboros Tutorials
 # ============================================================
 
@@ -19919,16 +19919,16 @@ Ouroboros Form=شكل أوروبوروس
 Interlink Level=مستوى الإنترلينك
 Heat Gauge=مقياس الحرارة
 Overheat=فرط الحرارة
-Interlink Arts=فنون الترابط
-Interlink Skill=مهارة الترابط
+Interlink Arts=فنون الإنترلينك
+Interlink Skill=مهارة الإنترلينك
 Pair: Noah & Mio=الزوج: نوح وميو
 Pair: Lanz & Sena=الزوج: لانز وسينا
 Pair: Eunie & Taion=الزوج: يوني وتايون
-Press the left bumper to Interlink with your partner.=اضغط المصد الأيسر للترابط مع شريكك.
-The Heat Gauge fills during Interlink. If it maxes out, you'll revert.=مقياس الحرارة يمتلئ أثناء الترابط. إذا امتلأ، ستعود لهيئتك الأصلية.
-Use Interlink Arts for devastating attacks.=استخدم فنون الترابط لهجمات مدمرة.
-Higher Interlink levels unlock more powerful Ouroboros forms.=مستويات ترابط أعلى تفتح هيئات أوروبوروس أقوى.
-Both partners share HP during Interlink.=كلا الشريكين يتشاركان نقاط الصحة أثناء الترابط.
+Press the left bumper to Interlink with your partner.=اضغط المصد الأيسر للإنترلينك مع شريكك.
+The Heat Gauge fills during Interlink. If it maxes out, you'll revert.=مقياس الحرارة يمتلئ أثناء الإنترلينك. إذا امتلأ، ستعود لهيئتك الأصلية.
+Use Interlink Arts for devastating attacks.=استخدم فنون الإنترلينك لهجمات مدمرة.
+Higher Interlink levels unlock more powerful Ouroboros forms.=مستويات إنترلينك أعلى تفتح هيئات أوروبوروس أقوى.
+Both partners share HP during Interlink.=كلا الشريكين يتشاركان نقاط الصحة أثناء الإنترلينك.
 Switch the dominant partner to access different Arts and abilities.=بدّل الشريك المسيطر للوصول إلى فنون وقدرات مختلفة.
 
 # ============================================================
@@ -19988,7 +19988,7 @@ Rest at a camp to cook meals and manage your party.=استرح في المعسك
 Meals provide temporary stat boosts for battle.=الوجبات توفر تعزيزات مؤقتة للإحصائيات في المعركة.
 Better ingredients produce more powerful meal effects.=مكونات أفضل تنتج تأثيرات وجبات أقوى.
 Discover new recipes by trying different ingredient combinations.=اكتشف وصفات جديدة بتجريب تركيبات مكونات مختلفة.
-You can also level up, change classes, and craft gems while resting.=يمكنك أيضاً رفع المستوى وتغيير الفئات وصناعة الأحجار أثناء الراحة.
+You can also level up, change classes, and craft gems while resting.=يمكنك أيضاً رفع المستوى وتغيير الفصول وصناعة الأحجار أثناء الراحة.
 Resting triggers conversations between party members.=الراحة تُفعّل محادثات بين أعضاء الفريق.
 
 # ============================================================
@@ -20029,7 +20029,7 @@ About Moebius=عن موبيوس
 About the City=عن المدينة
 About the Flame Clocks=عن ساعات اللهب
 About Origin=عن الأوريجن
-About Interlink=عن الترابط
+About Interlink=عن الإنترلينك
 About the Heroes=عن الأبطال
 About Cooking=عن الطبخ
 About the War=عن الحرب
@@ -20039,20 +20039,20 @@ Regrets=ندم
 What Comes After=ما يأتي بعد ذلك
 
 # ============================================================
-# القسم 347: رسائل تطور الفئات
+# القسم 347: رسائل تطور الفصول
 # Section 347: Class Rank Up Messages
 # ============================================================
 
-Class Rank Up!=ترقية رتبة الفئة!
+Class Rank Up!=ترقية رتبة الفصل!
 %1 reached Rank %2 in %3.=%1 وصل إلى الرتبة %2 في %3.
 New Art Unlocked: %1=فن جديد مُفتَح: %1
 New Skill Unlocked: %1=مهارة جديدة مُفتَحة: %1
-Class Mastered!=تم إتقان الفئة!
-%1 has mastered the %2 class!=%1 أتقن فئة %2!
-Master Art now available for other classes.=فن الإتقان متاح الآن للفئات الأخرى.
-Master Skill now available for other classes.=مهارة الإتقان متاحة الآن للفئات الأخرى.
-You can now inherit this Art to other classes.=يمكنك الآن توريث هذا الفن لفئات أخرى.
-Class CP earned: %1=نقاط فئة مكتسبة: %1
+Class Mastered!=تم إتقان الفصل!
+%1 has mastered the %2 class!=%1 أتقن فصل %2!
+Master Art now available for other classes.=فن الإتقان متاح الآن للفصول الأخرى.
+Master Skill now available for other classes.=مهارة الإتقان متاحة الآن للفصول الأخرى.
+You can now inherit this Art to other classes.=يمكنك الآن توريث هذا الفن لفصول أخرى.
+Class CP earned: %1=نقاط فصل مكتسبة: %1
 Bonus CP earned from affinity: %1=نقاط فئة إضافية من الألفة: %1
 
 # ============================================================
@@ -20246,7 +20246,7 @@ Boss Battle=معركة الزعيم
 Unique Monster Battle=معركة الوحش الفريد
 Colony Liberation Battle=معركة تحرير المستعمرة
 Ouroboros Awakening=يقظة الأوروبوروس
-Interlink Battle=معركة الترابط
+Interlink Battle=معركة الإنترلينك
 Final Boss Phase 1=الزعيم النهائي - المرحلة 1
 Final Boss Phase 2=الزعيم النهائي - المرحلة 2
 Challenge Battle Theme=موضوع معركة التحدي
@@ -20553,18 +20553,18 @@ I'm grateful for every moment we spend together like this.=أنا ممتن لك�
 Let's rest well tonight. We've earned it.=لنسترح جيداً الليلة. نحن نستحق ذلك.
 
 # ============================================================
-# القسم 375: حوارات تبديل الفئة والتطور
+# القسم 375: حوارات تبديل الفصل والتطور
 # Section 375: Class Change & Evolution Dialogues
 # ============================================================
 
-I want to try a new fighting style. Time for a class change!=أريد تجربة أسلوب قتال جديد. حان وقت تغيير الفئة!
-This class suits me well. I feel stronger already.=هذه الفئة تناسبني جيداً. أشعر بالقوة بالفعل.
-Mastering multiple classes makes us more versatile in battle.=إتقان فئات متعددة يجعلنا أكثر مرونة في المعركة.
-I've inherited a new Art from this class. Let me show you!=ورثت فناً جديداً من هذه الفئة. دعوني أريكم!
-The more classes we master, the stronger our team becomes.=كلما أتقنا فئات أكثر، أصبح فريقنا أقوى.
-This Master Skill will be useful even when I switch classes.=مهارة الإتقان هذه ستكون مفيدة حتى عندما أبدّل الفئات.
-I never thought I'd be good at healing. This class changed my perspective.=لم أظن أنني سأكون جيداً في الشفاء. هذه الفئة غيرت منظوري.
-Class mastered! Time to move on to the next challenge.=تم إتقان الفئة! حان وقت الانتقال إلى التحدي التالي.
+I want to try a new fighting style. Time for a class change!=أريد تجربة أسلوب قتال جديد. حان وقت تغيير الفصل!
+This class suits me well. I feel stronger already.=هذا الفصل يناسبني جيداً. أشعر بالقوة بالفعل.
+Mastering multiple classes makes us more versatile in battle.=إتقان فصول متعددة يجعلنا أكثر مرونة في المعركة.
+I've inherited a new Art from this class. Let me show you!=ورثت فناً جديداً من هذا الفصل. دعوني أريكم!
+The more classes we master, the stronger our team becomes.=كلما أتقنا فصولاً أكثر، أصبح فريقنا أقوى.
+This Master Skill will be useful even when I switch classes.=مهارة الإتقان هذه ستكون مفيدة حتى عندما أبدّل الفصول.
+I never thought I'd be good at healing. This class changed my perspective.=لم أظن أنني سأكون جيداً في الشفاء. هذا الفصل غيّر منظوري.
+Class mastered! Time to move on to the next challenge.=تم إتقان الفصل! حان وقت الانتقال إلى التحدي التالي.
 
 # ============================================================
 # القسم 376: حوارات اكتشاف المواقع الجديدة
@@ -20834,7 +20834,7 @@ Love isn't weakness. It's the source of our greatest strength.=الحب ليس �
 Even when worlds end, the connections between hearts endure.=حتى عندما تنتهي العوالم، الروابط بين القلوب تصمد.
 To fight for someone is to tell them: your life matters.=أن تقاتل من أجل شخص هو أن تقول له: حياتك مهمة.
 The people we love become part of us. They live on in our memories.=الناس الذين نحبهم يصبحون جزءاً منا. يعيشون في ذكرياتنا.
-In the Interlink, two become one. That's the power of trust.=في الترابط، يصبح اثنان واحداً. تلك هي قوة الثقة.
+In the Interlink, two become one. That's the power of trust.=في الإنترلينك، يصبح اثنان واحداً. تلك هي قوة الثقة.
 
 # ============================================================
 # القسم 395: حوارات النهاية البديلة والسرية
