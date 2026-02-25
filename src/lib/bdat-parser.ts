@@ -108,14 +108,8 @@ function parseTableHeader(data: Uint8Array, tableOffset: number): BdatTable['_ra
     return { valid: false } as any;
   }
 
-  // Common fields (always at same position)
-  const columnCount = view.getUint16(0x08, true);
-  const rowCount = view.getUint16(0x0C, true);
-  const baseId = view.getUint16(0x10, true);
-
-  // Detect header layout: u32 offsets (48-byte header) vs u16 offsets (40-byte header).
-  // XC3 uses table version 0x3004 which always implies u32 layout.
-  // Fallback: heuristic check for ambiguous versions.
+  // Detect header layout from table version.
+  // XC3 uses table version 0x3004 which always implies u32 layout (48-byte header).
   const tableVersion = view.getUint32(0x04, true);
   const isU32Layout = tableVersion === 0x3004 || (() => {
     // Heuristic fallback for non-0x3004 versions
@@ -124,10 +118,18 @@ function parseTableHeader(data: Uint8Array, tableOffset: number): BdatTable['_ra
     return testRowLength16 === 0 && testColDefsOffset32 > 0 && testColDefsOffset32 < 0x10000;
   })();
 
+  let columnCount: number, rowCount: number, baseId: number;
   let columnDefsOffset: number, hashTableOffset: number, rowDataOffset: number, rowLength: number, stringTableOffset: number, stringTableLength: number;
 
   if (isU32Layout) {
-    // u32 layout (48-byte header)
+    // u32 layout (48-byte header, 0x30) — matches bdat-rs reference implementation:
+    // 0x00: magic (4), 0x04: version (u32), 0x08: columns (u32), 0x0C: rows (u32),
+    // 0x10: base_id (u32), 0x14: unknown (u32), 0x18: col_defs (u32), 0x1C: hash_tbl (u32),
+    // 0x20: row_data (u32), 0x24: row_length (u32), 0x28: str_tbl (u32), 0x2C: str_len (u32)
+    columnCount = view.getUint32(0x08, true);
+    rowCount = view.getUint32(0x0C, true);
+    baseId = view.getUint32(0x10, true);
+    // 0x14 is unknown/padding (u32), skip
     columnDefsOffset = view.getUint32(0x18, true);
     hashTableOffset = view.getUint32(0x1C, true);
     rowDataOffset = view.getUint32(0x20, true);
@@ -135,7 +137,10 @@ function parseTableHeader(data: Uint8Array, tableOffset: number): BdatTable['_ra
     stringTableOffset = view.getUint32(0x28, true);
     stringTableLength = view.getUint32(0x2C, true);
   } else {
-    // u16 layout (40-byte header)
+    // u16 layout (40-byte header) — legacy/non-XC3 format
+    columnCount = view.getUint16(0x08, true);
+    rowCount = view.getUint16(0x0C, true);
+    baseId = view.getUint16(0x10, true);
     columnDefsOffset = view.getUint16(0x18, true);
     hashTableOffset = view.getUint16(0x1A, true);
     rowDataOffset = view.getUint16(0x1C, true);
@@ -182,9 +187,9 @@ function parseColumns(tableData: Uint8Array, raw: BdatTable['_raw'], unhashFn: (
 
     let name: string;
     if (raw.hashedNames) {
-      // nameRef is byte offset into string table (after flag byte).
-      // The hash (u32) is stored at stringTableOffset + 1 + nameRef (matching bdat-rs).
-      const hashOffset = raw.stringTableOffset + 1 + nameRef;
+      // nameRef is the byte offset into the string table (matching bdat-rs get_label).
+      // The hash (u32) is stored at stringTableOffset + nameRef.
+      const hashOffset = raw.stringTableOffset + nameRef;
       if (hashOffset + 4 <= tableData.length) {
         const hash = view.getUint32(hashOffset, true);
         name = unhashFn(hash);
@@ -316,8 +321,9 @@ function getTableName(tableData: Uint8Array, raw: BdatTable['_raw'], tableIndex:
   const view = new DataView(tableData.buffer, tableData.byteOffset);
   
   if (raw.hashedNames && raw.stringTableLength > 0) {
-    // Table name hash is at stringTableOffset + 2 (flag byte + 1 padding byte), matching bdat-rs.
-    const hashOffset = raw.stringTableOffset + 2;
+    // Table name hash: bdat-rs calls get_label(1) → reads u32 at stringTableOffset + 1
+    // (offset 0 is the flag byte, offset 1 starts the table name hash)
+    const hashOffset = raw.stringTableOffset + 1;
     if (hashOffset + 4 <= tableData.length) {
       const hash = view.getUint32(hashOffset, true);
       return { name: unhashFn(hash), hash };
