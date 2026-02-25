@@ -21182,7 +21182,7 @@ Segiri: Probability of victory: high.=سيغيري: احتمال النصر: م�
 Segiri: Analyzing enemy patterns.=سيغيري: تحليل أنماط العدو.
 Segiri: I will protect... my friends.=سيغيري: سأحمي... أصدقائي.
 Segiri: Emotions... they make me stronger.=سيغيري: المشاعر... تجعلني أقوى.
-Segiri: All hostiles eliminated. Mission complete.=سيغيري: تم إزالة جميع المعادين. المهمة مكتملة.
+Segiri: All hostiles eliminated. Mission complete.=سيغيري: تم القضاء على جميع الأعداء. المهمة مكتملة.
 Segiri: Victory... feels... good.=سيغيري: النصر... يبدو... جيداً.
 Segiri: Systems critical... Shutting down...=سيغيري: الأنظمة حرجة... جارٍ الإغلاق...
 Segiri: I don't want... to stop... feeling...=سيغيري: لا أريد... أن أتوقف... عن الإحساس...
@@ -21225,7 +21225,7 @@ Monica: For the City! For humanity!=مونيكا: من أجل المدينة! م
 Monica: We've won this day!=مونيكا: فزنا هذا اليوم!
 Monica: The City endures, as always!=مونيكا: المدينة تصمد، كالعادة!
 Monica: I can't fall... not with so much left to do...=مونيكا: لا أستطيع السقوط... ما زال هناك الكثير لأفعله...
-Monica: The City... needs me... still...=مونيكا: المدينة... تحتاجني... لا يزال...
+Monica: The City... needs me... still...=مونيكا: المدينة... ما زالت تحتاجني...
 
 # --- القسم 414: Ghondor - حوارات المعركة / Battle Dialogues ---
 # --- Section 414: Ghondor - Battle Dialogues ---
@@ -21286,7 +21286,7 @@ Melia: I have fought across lifetimes!=ميليا: لقد قاتلت عبر حي
 Melia: The power of the High Entia flows through me!=ميليا: قوة الهاي إنتيا تتدفق خلالي!
 Melia: Victory... for Keves, and for all!=ميليا: النصر... لكيفيس، وللجميع!
 Melia: I must not falter... not again...=ميليا: يجب ألا أتراجع... ليس مرة أخرى...
-Nia: Time to show what a Blade can do!=نيا: حان وقت إظهار ما يستطيع النصل فعله!
+Nia: Time to show what a Blade can do!=نيا: حان وقت إظهار ما يستطيع البليد فعله!
 Nia: I've got healing for days!=نيا: لدي شفاء يكفي لأيام!
 Nia: Agnus stands with you!=نيا: أغنوس تقف معكم!
 Nia: Love and courage! That's all we need!=نيا: الحب والشجاعة! هذا كل ما نحتاجه!
