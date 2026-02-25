@@ -135,7 +135,7 @@ Dannagh Desert=صحراء داناغ
 Syra Hovering Reefs=الشعاب المرجانية الطائرة سيرا
 Hovering Reef 4=الشعاب المرجانية الطائرة 4
 First Ixian Bridge=جسر إكسيان الأول
-Anu Shoals=ضحايا أنو
+Anu Shoals=مياه أنو الضحلة
 Patulia Bay=خليج باتوليا
 Aegis Sea=بحر إيجيس
 Li Garte Prison Camp=معسكر لي غارت السجني
@@ -207,7 +207,7 @@ Death-seeker=طالب الموت
 Silver-rank=رتبة الفضة
 Bronze-rank=رتبة البرونز
 10th Term=الفترة العاشرة
-Coming-of-Age Ceremony=حفل بلوغ السن القانونية
+Coming-of-Age Ceremony=حفل بلوغ الرشد
 3rd Term=الفترة الثالثة
 Term=فترة
 # ═══════════════════════════════════════════════════
@@ -489,7 +489,7 @@ Captain of the Guard=قائد الحرس
 # مهمات المستعمرة 15
 The Colony 15 Folk=شعب المستعمرة 15
 Curious Picture=لوحة مثيرة للفضول
-Portrait of a Consul=صورة كونسول
+Portrait of a Consul=صورة قنصل
 # مهمات المستعمرة 30
 Colony 30's Sender=مرسل المستعمرة 30
 Unsent Husks=قشور لم تُرسل
@@ -498,7 +498,7 @@ Expeditionary Mission=مهمة استكشافية
 Colony Lambda's Canteen=مقصف مستعمرة لامبدا
 Missing Sender=المرسل المفقود
 Auto-Lev Situation=وضع الليفنيستر الآلي
-Bountiful Ether=إيثير وفير
+Bountiful Ether=أثير وفير
 Colony Lambda Defenses=دفاعات مستعمرة لامبدا
 Moraine and Shijima=مورين وشيجيما
 Situation in Colony Lambda=الوضع في مستعمرة لامبدا
@@ -5266,7 +5266,7 @@ Y=واي
 Z=زد
 Moebius Form=شكل موبيوس
 Annihilator=المُبيد
-Origin=الأصل
+Origin=الأوريجن
 # --- أعداء Fog Beast ---
 Fog Beast=وحش الضباب
 Fog Monster=وحش ضبابي
@@ -10152,13 +10152,13 @@ Steelcleaver=شاطر الفولاذ
 Accurate Grace=نعمة الدقة
 Swelling Scourge=بلاء متصاعد
 Refined Incantation=تعويذة مُصقّلة
-Disperse Bloodlust=تشتيت شهوة الدم
+Disperse Bloodlust=تشتيت عطش الدم
 Steady Striker=الضارب الثابت
 Ultimate Boost=التعزيز الأقصى
 Close Combat=القتال القريب
 Distant Strike=الضربة البعيدة
 Perilous Presence=الحضور الخطير
-Ironclad=مُدرّع بالحديد
+Ironclad=المُدرّع
 Tailwind=الريح الخلفية
 Lifeline=شريان الحياة
 Analyze Weakness=تحليل الضعف
@@ -18070,7 +18070,7 @@ Origin Guardian Alpha=حارس الأوريجن ألفا
 Origin Guardian Omega=حارس الأوريجن أوميغا
 Mechonis Remnant=بقايا الميكونيس
 Bionis Echo=صدى البيونيس
-Moebius Aberration=شذوذ الميبيوس
+Moebius Aberration=شذوذ موبيوس
 Annihilator X=المبيد إكس
 Infinity Sentinel=حارس اللانهاية
 Primordial Beast=الوحش البدائي
@@ -18164,7 +18164,7 @@ Soldiers dispatched from Keves Castle. They fight using Blade weapons.=جنود 
 Elite troops of the Agnus army, skilled in ether-based combat.=قوات نخبة جيش أغنوس، ماهرة في القتال القائم على الأثير.
 A massive creature that has roamed these lands since time immemorial.=مخلوق ضخم يتجول في هذه الأراضي منذ الأزل.
 These machines were created as weapons during an ancient conflict.=صُنعت هذه الآلات كأسلحة خلال صراع قديم.
-A creature corrupted by Moebius influence.=مخلوق أفسده تأثير الميبيوس.
+A creature corrupted by Moebius influence.=مخلوق أفسده تأثير موبيوس.
 Small but fierce when provoked.=صغير لكنه شرس عند استفزازه.
 Pack hunters that coordinate their attacks with surprising intelligence.=صيادون يعملون في مجموعات وينسقون هجماتهم بذكاء مذهل.
 Docile unless threatened, at which point they become extremely dangerous.=وديع ما لم يُهدَّد، وعندها يصبح خطيراً للغاية.
@@ -18253,7 +18253,7 @@ N... is that really you?=إن... هل هذا أنت حقاً؟
 You don't understand what you're fighting against!=لا تفهمون ما تحاربونه!
 I've lived through a thousand lifetimes! What do you know of suffering?=عشت ألف حياة! ماذا تعرفون عن المعاناة؟
 The City... those fools who defy the natural order!=المدينة... أولئك الحمقى الذين يتحدون النظام الطبيعي!
-Moebius exists to preserve this world! Why can't you see that?=الميبيوس موجود للحفاظ على هذا العالم! لماذا لا تستطيعون رؤية ذلك؟
+Moebius exists to preserve this world! Why can't you see that?=موبيوس موجود للحفاظ على هذا العالم! لماذا لا تستطيعون رؤية ذلك؟
 You would risk everything for an uncertain future?=ستخاطرون بكل شيء من أجل مستقبل غير مؤكد؟
 The people chose this eternal present! It wasn't forced upon them!=الناس اختاروا هذا الحاضر الأبدي! لم يُفرض عليهم!
 Fine then. I'll send you to oblivion myself!=حسناً إذاً. سأرسلكم إلى النسيان بنفسي!
@@ -18307,7 +18307,7 @@ Wave %1 of %2=الموجة %1 من %2
 Time remaining: %1=الوقت المتبقي: %1
 Challenge Complete! Time: %1=اكتمل التحدي! الوقت: %1
 New Record!=رقم قياسي جديد!
-Bonus Reward unlocked!=مكافأة إضافية مُفتَحَت!
+Bonus Reward unlocked!=مكافأة إضافية مُفتَحة!
 All waves cleared!=تم تجاوز جميع الموجات!
 
 # ============================================================
@@ -18316,7 +18316,7 @@ All waves cleared!=تم تجاوز جميع الموجات!
 # ============================================================
 
 Alpha Guldo=الغولدو ألفا
-Moebius Phalanx=فالانكس الميبيوس
+Moebius Phalanx=فالانكس موبيوس
 Origin Construct=بناء الأوريجن
 Boundary Watcher=مراقب الحدود
 Rift Stalker=مطارد الشق
@@ -18406,7 +18406,7 @@ Lucky Seven=الحظ السابع
 Veiled Sword=سيف الحجاب
 Sword of the End=سيف النهاية
 Blade of Origin=شفرة الأوريجن
-Monado REX=موناريد ريكس
+Monado REX=مونادو ريكس
 Lucky Seven (Upgraded)=الحظ السابع (مُطوَّر)
 Steel Broadsword=سيف عريض فولاذي
 Iron Saber=صابر حديدي
@@ -18520,11 +18520,11 @@ Chakram=شاكرام
 # Section 275: DLC Weapons
 # ============================================================
 
-Monado III=موناريد III
-Aegis Blade=شفرة الدرع
-True Monado=الموناريد الحقيقي
+Monado III=مونادو III
+Aegis Blade=شفرة الإيجيس
+True Monado=المونادو الحقيقي
 Rex's Broadsword=سيف ريكس العريض
-Shulk's Replica Monado=نسخة موناريد شولك
+Shulk's Replica Monado=نسخة مونادو شولك
 Pneuma's Blade=شفرة بنيوما
 Logos Blade=شفرة اللوغوس
 Ontos Blade=شفرة الأونتوس
@@ -18532,8 +18532,8 @@ Architect's Scepter=صولجان المهندس
 Klaus's Legacy=إرث كلاوس
 Galea's Will=إرادة غاليا
 Alvis Blade=شفرة ألفيس
-Zanza's Monado=موناريد زانزا
-Malos's Monado=موناريد مالوس
+Zanza's Monado=مونادو زانزا
+Malos's Monado=مونادو مالوس
 Infinity Blade=شفرة اللانهاية
 
 # ============================================================
@@ -18737,7 +18737,7 @@ Melia's Imperial Dress=فستان ميليا الإمبراطوري
 Nia's Blade Form=هيئة نيا الشفرة
 Poppi's QTπ Form=هيئة بوبي QTπ
 Consul Uniform=زي القنصل
-Moebius Robes=أردية الميبيوس
+Moebius Robes=أردية موبيوس
 Origin Suit=بذلة الأوريجن
 NG+ Exclusive Costume=زي حصري لـ NG+
 
@@ -18964,7 +18964,7 @@ Ferronis Ignition Key=مفتاح تشغيل الفيرونيس
 City Pass=تصريح المدينة
 Liberation Orders=أوامر التحرير
 Consul's Seal=ختم القنصل
-Moebius Sigil=رمز الميبيوس
+Moebius Sigil=رمز موبيوس
 Ouroboros Stone=حجر الأوروبوروس
 Sword of Origin Fragment=شظية سيف الأوريجن
 Lucky Seven Shard=شظية الحظ السابع
@@ -19092,8 +19092,8 @@ Nopon Premium Selection=تشكيلة النوبون المميزة
 # Section 299: DLC Exclusive Items
 # ============================================================
 
-Monado Keychain=سلسلة مفاتيح الموناريد
-Aegis Core Crystal=كريستال نواة الدرع
+Monado Keychain=سلسلة مفاتيح المونادو
+Aegis Core Crystal=كريستال نواة الإيجيس
 Conduit Fragment=شظية القناة
 Rhadamanthus Key=مفتاح رادامانثوس
 A's Memory Fragment=شظية ذاكرة A
@@ -19117,7 +19117,7 @@ Consul's Mask (N)=قناع القنصل (إن)
 Consul's Mask (M)=قناع القنصل (إم)
 Consul's Mask (X)=قناع القنصل (إكس)
 Consul's Mask (Y)=قناع القنصل (واي)
-Moebius Ring=خاتم الميبيوس
+Moebius Ring=خاتم موبيوس
 Z's Throne Fragment=شظية عرش Z
 Endless Now Shard=شظية الآن اللانهائي
 Flame Clock Core=نواة ساعة اللهب
@@ -19344,8 +19344,8 @@ A festival to celebrate our new alliance? I love the idea!=مهرجان للاح
 The last Flame Clock in the region has been destroyed!=آخر ساعة لهب في المنطقة تم تدميرها!
 All colonies in Aetia are now free!=جميع مستعمرات أيتيا أصبحت حرة الآن!
 Fornis has been completely liberated!=فورنيس تحررت بالكامل!
-Pentelas stands united against Moebius!=بينتولاس تقف متحدة ضد الميبيوس!
-The tide is turning. Moebius can no longer control us!=المد يتحول. الميبيوس لم يعد يستطيع السيطرة علينا!
+Pentelas stands united against Moebius!=بينتولاس تقف متحدة ضد موبيوس!
+The tide is turning. Moebius can no longer control us!=المد يتحول. موبيوس لم يعد يستطيع السيطرة علينا!
 Every colony freed is a step closer to true peace.=كل مستعمرة تتحرر هي خطوة أقرب إلى السلام الحقيقي.
 The Consuls are losing their grip on this world.=القناصل يفقدون قبضتهم على هذا العالم.
 We fight not just for ourselves, but for everyone's future.=نحن لا نقاتل من أجل أنفسنا فقط، بل من أجل مستقبل الجميع.
@@ -19469,8 +19469,8 @@ A Promise Across Time=وعد عبر الزمن
 
 The worlds of Bionis and Alrest... they were never truly separate.=عوالم البيونيس وألريست... لم تكن منفصلة حقاً أبداً.
 The Conduit connected everything. Past, present, and future.=القناة ربطت كل شيء. الماضي والحاضر والمستقبل.
-Shulk, your Monado... it resonates with this place.=شولك، الموناريد الخاص بك... يتردد صداه مع هذا المكان.
-Rex, the power of the Aegis still flows within you.=ريكس، قوة الدرع لا تزال تتدفق بداخلك.
+Shulk, your Monado... it resonates with this place.=شولك، المونادو الخاص بك... يتردد صداه مع هذا المكان.
+Rex, the power of the Aegis still flows within you.=ريكس، قوة الإيجيس لا تزال تتدفق بداخلك.
 Matthew, you carry the hopes of both worlds on your shoulders.=ماثيو، أنت تحمل آمال العالمَين على كتفيك.
 The Architect... Klaus... his final gift was this chance to set things right.=المهندس... كلاوس... هديته الأخيرة كانت هذه الفرصة لإصلاح الأمور.
 We may be from different eras, but our goal is the same.=قد نكون من حِقَب مختلفة، لكن هدفنا واحد.
@@ -19735,7 +19735,7 @@ If the boundary breaks, both worlds will cease to exist.=إذا انكسرت ا�
 Matthew, you have your grandfather's determination.=ماثيو، لديك عزيمة جدك.
 The Nopon archives contain secrets even we don't fully understand.=أرشيفات النوبون تحتوي على أسرار حتى نحن لا نفهمها بالكامل.
 The dimensional rift is unstable. We need to seal it.=الشق البُعدي غير مستقر. نحتاج إلى إغلاقه.
-Both Monado and Aegis... their powers are needed to save everything.=كل من الموناريد والدرع... قوتاهما مطلوبتان لإنقاذ كل شيء.
+Both Monado and Aegis... their powers are needed to save everything.=كل من المونادو والإيجيس... قوتاهما مطلوبتان لإنقاذ كل شيء.
 The Architect's final experiment... Aionios itself.=تجربة المهندس الأخيرة... أيونيوس نفسها.
 Hope is the one thing that transcends time and space.=الأمل هو الشيء الوحيد الذي يتجاوز الزمان والمكان.
 
@@ -19744,7 +19744,7 @@ Hope is the one thing that transcends time and space.=الأمل هو الشيء
 # Section 334: DLC NPC Dialogues (Part 3)
 # ============================================================
 
-The forge here was built by the same hands that created the Monado.=المسبك هنا بُني بنفس الأيدي التي صنعت الموناريد.
+The forge here was built by the same hands that created the Monado.=المسبك هنا بُني بنفس الأيدي التي صنعت المونادو.
 We trade across the dimensional boundary. It keeps both sides alive.=نتاجر عبر الحدود البُعدية. هذا يبقي كلا الجانبين على قيد الحياة.
 The children here dream of a world without boundaries.=الأطفال هنا يحلمون بعالم بلا حدود.
 Every generation, we pass down the stories of Shulk and Rex.=كل جيل، ننقل قصص شولك وريكس.
@@ -19822,9 +19822,9 @@ Party ↔ Colony=الفريق ↔ المستعمرة
 Party ↔ Hero=الفريق ↔ البطل
 Affinity increased!=زادت الألفة!
 Affinity maxed out!=بلغت الألفة حدها الأقصى!
-New conversation unlocked.=محادثة جديدة مُفتَحَت.
+New conversation unlocked.=محادثة جديدة مُفتَحة.
 Heart-to-Heart event available.=حدث قلب إلى قلب متاح.
-Interlink bonus unlocked.=مكافأة الترابط مُفتَحَت.
+Interlink bonus unlocked.=مكافأة الترابط مُفتَحة.
 Colony affinity increased with %1.=زادت ألفة المستعمرة مع %1.
 Hero affinity maxed: %1.=بلغت ألفة البطل حدها الأقصى: %1.
 Affinity Growth Rate Up=زيادة معدل نمو الألفة
@@ -20025,7 +20025,7 @@ About the Future=عن المستقبل
 About Our Journey=عن رحلتنا
 About Freedom=عن الحرية
 About the Off-Seers=عن مُنشدي الوداع
-About Moebius=عن الميبيوس
+About Moebius=عن موبيوس
 About the City=عن المدينة
 About the Flame Clocks=عن ساعات اللهب
 About Origin=عن الأوريجن
@@ -20046,7 +20046,7 @@ What Comes After=ما يأتي بعد ذلك
 Class Rank Up!=ترقية رتبة الفئة!
 %1 reached Rank %2 in %3.=%1 وصل إلى الرتبة %2 في %3.
 New Art Unlocked: %1=فن جديد مُفتَح: %1
-New Skill Unlocked: %1=مهارة جديدة مُفتَحَت: %1
+New Skill Unlocked: %1=مهارة جديدة مُفتَحة: %1
 Class Mastered!=تم إتقان الفئة!
 %1 has mastered the %2 class!=%1 أتقن فئة %2!
 Master Art now available for other classes.=فن الإتقان متاح الآن للفئات الأخرى.
@@ -20164,7 +20164,7 @@ Rex ↔ Matthew Bond=رابطة ريكس ↔ ماثيو
 Fiora ↔ Nia Bond=رابطة فيورا ↔ نيا
 Melia ↔ A Bond=رابطة ميليا ↔ A
 Cross-Era Bond Strengthened!=تعززت رابطة عبر العصور!
-Legacy Skill unlocked through cross-era bond.=مهارة الإرث مُفتَحَت عبر رابطة عبر العصور.
+Legacy Skill unlocked through cross-era bond.=مهارة الإرث مُفتَحة عبر رابطة عبر العصور.
 The heroes of different eras resonate with each other.=أبطال العصور المختلفة يتناغمون مع بعضهم.
 A new technique born from the fusion of two eras.=تقنية جديدة وُلدت من اندماج عصرين.
 
@@ -20173,11 +20173,11 @@ A new technique born from the fusion of two eras.=تقنية جديدة وُلد
 # Section 354: DLC Systems - Exclusive Techniques
 # ============================================================
 
-Monado Enchant=سحر الموناريد
-Aegis Burst=انفجار الدرع
+Monado Enchant=سحر المونادو
+Aegis Burst=انفجار الإيجيس
 Cross Slash=القطع المتقاطع
-Pneuma Drive=دافع بنيوما
-Monado Shield=درع الموناريد
+Pneuma Drive=دفعة نيوما
+Monado Shield=درع المونادو
 Predictive Art=فن التنبؤ
 Conduit Resonance=رنين القناة
 Boundary Break=كسر الحدود
@@ -20218,7 +20218,7 @@ Where We Belong=حيث ننتمي
 Carrying the Weight of Life=حمل ثقل الحياة
 The Weight of Life=ثقل الحياة
 A Step Away=خطوة واحدة
-Moebius Battle=معركة الميبيوس
+Moebius Battle=معركة موبيوس
 Z Battle Theme=موضوع معركة Z
 The God-Slaying Sword=سيف قاتل الآلهة
 Noah and N=نوح و إن
@@ -20229,7 +20229,7 @@ Walking Together=نسير معاً
 See You Tomorrow=أراك غداً
 A World With You=عالم معك
 Our Endless Now=الآن اللانهائي لنا
-Credits Theme=موضوع الأرصدة
+Credits Theme=موضوع قائمة الشرف
 
 # ============================================================
 # القسم 357: مقطوعات القتال
@@ -20242,15 +20242,15 @@ Battle!! (Agnus)=معركة!! (أغنوس)
 Agnus Battle Theme=موضوع معركة أغنوس
 Keves Battle Theme=موضوع معركة كيفيس
 Chain Attack Theme=موضوع الهجوم المتسلسل
-Boss Battle=معركة الرئيس
+Boss Battle=معركة الزعيم
 Unique Monster Battle=معركة الوحش الفريد
 Colony Liberation Battle=معركة تحرير المستعمرة
 Ouroboros Awakening=يقظة الأوروبوروس
 Interlink Battle=معركة الترابط
-Final Boss Phase 1=الرئيس النهائي - المرحلة 1
-Final Boss Phase 2=الرئيس النهائي - المرحلة 2
+Final Boss Phase 1=الزعيم النهائي - المرحلة 1
+Final Boss Phase 2=الزعيم النهائي - المرحلة 2
 Challenge Battle Theme=موضوع معركة التحدي
-Superboss Battle=معركة الرئيس الخارق
+Superboss Battle=معركة الزعيم الخارق
 DLC Battle Theme=موضوع معركة المحتوى الإضافي
 
 # ============================================================
@@ -20303,16 +20303,16 @@ World's End=نهاية العالم
 # Section 360: DLC BGM Tracks
 # ============================================================
 
-Future Redeemed - Main Theme=المستقبل المُستردّ - الموضوع الرئيسي
-Future Redeemed - Battle=المستقبل المُستردّ - المعركة
-Future Redeemed - Boss=المستقبل المُستردّ - الرئيس
-Future Redeemed - Exploration=المستقبل المُستردّ - الاستكشاف
-Future Redeemed - Final Battle=المستقبل المُستردّ - المعركة النهائية
-Monado Awakening=يقظة الموناريد
-Aegis Resonance=رنين الدرع
+Future Redeemed - Main Theme=المستقبل المُستعاد - الموضوع الرئيسي
+Future Redeemed - Battle=المستقبل المُستعاد - المعركة
+Future Redeemed - Boss=المستقبل المُستعاد - الزعيم
+Future Redeemed - Exploration=المستقبل المُستعاد - الاستكشاف
+Future Redeemed - Final Battle=المستقبل المُستعاد - المعركة النهائية
+Monado Awakening=يقظة المونادو
+Aegis Resonance=رنين الإيجيس
 Cross-Era Battle Theme=موضوع معركة عبر العصور
 Boundary Theme=موضوع الحدود
-A Future Redeemed=مستقبل مُستردّ
+A Future Redeemed=مستقبل مُستعاد
 
 # ============================================================
 # القسم 361: أغاني مُنشد الوداع
@@ -20395,7 +20395,7 @@ Concept art for the Aionios landscape.=رسوم مفاهيمية لمشهد أي
 Design sketches for the Flame Clocks.=رسومات تصميم ساعات اللهب.
 Ferronis mech design variations.=تنويعات تصميم آلة الفيرونيس.
 Origin interior concept exploration.=استكشاف مفهوم داخل الأوريجن.
-Moebius character design development.=تطوير تصميم شخصيات الميبيوس.
+Moebius character design development.=تطوير تصميم شخصيات موبيوس.
 Colony architecture style guide.=دليل أسلوب هندسة المستعمرات.
 
 # ============================================================
@@ -20420,14 +20420,14 @@ Some events have multiple outcomes based on your choices.=بعض الأحداث 
 # Section 366: DLC Media - Event Scenes
 # ============================================================
 
-Future Redeemed Opening=افتتاحية المستقبل المُستردّ
+Future Redeemed Opening=افتتاحية المستقبل المُستعاد
 Meeting Rex=لقاء ريكس
 Meeting Shulk=لقاء شولك
 The Architect's Message=رسالة المهندس
 The Conduit Awakens=القناة تستيقظ
 Boundary Collapse=انهيار الحدود
 Final Confrontation=المواجهة النهائية
-Future Redeemed Ending=نهاية المستقبل المُستردّ
+Future Redeemed Ending=نهاية المستقبل المُستعاد
 A Promise Kept=وعد تم الوفاء به
 Two Worlds, One Future=عالمان، مستقبل واحد
 
@@ -20685,7 +20685,7 @@ The dimensional rift spawned something terrible.=الشق البُعدي أنت�
 This entity exists outside of time itself.=هذا الكيان موجود خارج الزمن نفسه.
 We're fighting the manifestation of the world's fear.=نحارب تجسيد خوف العالم.
 It adapts to our attacks. We need to keep changing tactics.=يتكيف مع هجماتنا. نحتاج أن نستمر بتغيير التكتيكات.
-The final Superboss... the ultimate test of our strength.=الرئيس الخارق الأخير... الاختبار النهائي لقوتنا.
+The final Superboss... the ultimate test of our strength.=الزعيم الخارق الأخير... الاختبار النهائي لقوتنا.
 We've conquered every challenge Aionios has to offer!=غلبنا كل تحدٍّ يقدمه أيونيوس!
 
 # ============================================================
@@ -20694,13 +20694,13 @@ We've conquered every challenge Aionios has to offer!=غلبنا كل تحدٍّ
 # ============================================================
 
 Rare Drop acquired!=تم الحصول على سقطة نادرة!
-Superboss Material obtained!=تم الحصول على مادة الرئيس الخارق!
+Superboss Material obtained!=تم الحصول على مادة الزعيم الخارق!
 Achievement unlocked: Legendary Monster Slayer=تم فتح إنجاز: قاتل الوحوش الأسطوري
 New title earned: World's Strongest=لقب جديد مكتسب: الأقوى في العالم
 Unique weapon material obtained. Visit the forge.=تم الحصول على مادة سلاح فريدة. زُر المسبك.
-Superboss entry added to Bestiary.=تمت إضافة مدخل الرئيس الخارق لسجل الوحوش.
-Challenge reward: Supreme Gem unlocked.=مكافأة التحدي: الجوهرة العليا مُفتَحَت.
-All Superbosses defeated! True Warrior title earned.=جميع الرؤساء الخوارق مهزومون! لقب المحارب الحقيقي مكتسب.
+Superboss entry added to Bestiary.=تمت إضافة مدخل الزعيم الخارق لسجل الوحوش.
+Challenge reward: Supreme Gem unlocked.=مكافأة التحدي: الجوهرة العليا مُفتَحة.
+All Superbosses defeated! True Warrior title earned.=جميع الزعماء الخوارق مهزومون! لقب المحارب الحقيقي مكتسب.
 
 # ============================================================
 # القسم 386: حوارات الأحداث الخاصة - المهرجانات
@@ -20766,7 +20766,7 @@ Peace isn't the absence of conflict. It's the presence of understanding.=الس�
 We're not just soldiers anymore. We're builders, farmers, teachers, artists.=لم نعد مجرد جنود. نحن بنّاؤون ومزارعون ومعلمون وفنانون.
 The library is growing. Knowledge is the greatest weapon.=المكتبة تنمو. المعرفة هي أعظم سلاح.
 Music brings us together in ways words can't.=الموسيقى تجمعنا بطرق لا تستطيعها الكلمات.
-Every child born free is a victory against Moebius.=كل طفل يُولد حراً هو نصر ضد الميبيوس.
+Every child born free is a victory against Moebius.=كل طفل يُولد حراً هو نصر ضد موبيوس.
 We chose the uncertain future over the eternal present. And we'd choose it again.=اخترنا المستقبل غير المؤكد على الحاضر الأبدي. وسنختاره مرة أخرى.
 The Flame Clocks are gone, but the fire in our hearts burns brighter.=ساعات اللهب ذهبت، لكن النار في قلوبنا تشتعل بشكل أسطع.
 This is our world now. And we'll make it beautiful.=هذا عالمنا الآن. وسنجعله جميلاً.
@@ -20929,7 +20929,7 @@ Build=البناء/التجهيز
 # Section 399: Cross-Game Terms (XC1 & XC2)
 # ============================================================
 
-Monado=الموناريد
+Monado=المونادو
 Bionis=البيونيس
 Mechonis=الميكونيس
 High Entia=هاي إنتيا
@@ -21030,7 +21030,7 @@ Ouroboros=الأوروبوروس
 Interlink=الترابط
 Flame Clock=ساعة اللهب
 Chain Attack=الهجوم المتسلسل
-Moebius=الميبيوس
+Moebius=موبيوس
 Aionios=أيونيوس
 Master Art=فن الإتقان
 Master Skill=مهارة الإتقان
