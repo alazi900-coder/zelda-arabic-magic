@@ -1255,7 +1255,7 @@ Colony Tau Camp=مخيم المستعمرة تاو
 Colony Lambda Camp=مخيم المستعمرة لامبدا
 Great Desert=الصحراء الكبرى
 Dannagh Desert=صحراء داناغ
-Li Garte Prison Camp=مخيم سجن لي غارتي
+Li Garte Prison Camp=مخيم سجن لي غارت
 Lavi Sandfall=شلال لافي الرملي
 Oasis Camp=مخيم الواحة
 Tableland Camp=مخيم الهضبة
@@ -1425,7 +1425,7 @@ Pair Partner=شريك الثنائي
 Dominant=المهيمن
 Submissive=الخاضع
 Link Attack=هجوم الربط
-Combo Interlink=إنترلينك تتابعي
+Combo Interlink=إنترلينك الكومبو
 Emergency Interlink=إنترلينك طارئ
 Interlink Transformation=تحول الإنترلينك
 De-Interlink=فك الإنترلينك
@@ -1926,13 +1926,13 @@ Tower of Shadows=برج الظلال
 # ─────────────────────────────────────────────────
 Unity=الوحدة
 Unity Link=رابط الوحدة
-Unity Combo=تتابع الوحدة
+Unity Combo=كومبو الوحدة
 Unity Level=مستوى الوحدة
 Unity Gauge=مقياس الوحدة
 Unity Art=فن الوحدة
 Unity Chain=سلسلة الوحدة
 Brave Assault=هجوم شجاع
-Brave Combo=تتابع شجاع
+Brave Combo=كومبو الشجاعة
 Brave Order=أمر شجاع
 # ─────────────────────────────────────────────────
 # نظام Affinity Growth
@@ -1958,7 +1958,7 @@ Lifesage=حكيم الحياة
 Royal Summoner=المستدعي الملكي
 Grand Marshal=المارشال الأعظم
 Xenoblade=زينوبليد
-Combo Attacker=مهاجم تتابعي
+Combo Attacker=مهاجم الكومبو
 # ─────────────────────────────────────────────────
 # فنون ومهارات خاصة بـ Future Redeemed
 # ─────────────────────────────────────────────────
@@ -2586,7 +2586,7 @@ Counter Stance=وضعية المضاد
 Shield Wall=جدار الدروع
 Rallying Cry=صيحة الحشد
 Steady Aim=تصويب ثابت
-Combo Master=سيد التتابع
+Combo Master=سيد الكومبو
 Chain Striker=ضارب السلسلة
 # ═══════════════════════════════════════════════════
 # أحوال الطقس (Weather Types)
@@ -3351,7 +3351,7 @@ Rest Spot=نقطة استراحة
 # تأثيرات الوجبات
 # ─────────────────────────────────────────────────
 EXP Bonus=مكافأة نقاط الخبرة
-AP Bonus=مكافأة نقاط القدرة
+AP Bonus=مكافأة نقاط الفنون
 SP Bonus=مكافأة نقاط المهارة
 Gold Bonus=مكافأة الذهب
 Item Drop Rate Up=زيادة معدل سقوط العناصر
@@ -3716,7 +3716,7 @@ Master Art=فن الإتقان
 Class Art=فن الفصل
 Talent Art=فن الموهبة
 Fusion Art=فن مدمج
-Art Combo=تركيبة فنون
+Art Combo=كومبو الفنون
 Art Swap=تبديل الفن
 Art Rank=رتبة الفن
 Art Enhancement=تحسين الفن
@@ -4240,7 +4240,7 @@ Lucky Charm=تعويذة الحظ
 Rare Drop Booster=مُعزّز الغنائم النادرة
 EXP Booster=مُعزّز نقاط الخبرة
 Gold Booster=مُعزّز الذهب
-AP Booster=مُعزّز نقاط القدرة
+AP Booster=مُعزّز نقاط الفنون
 SP Booster=مُعزّز نقاط المهارة
 CP Booster=مُعزّز نقاط الفصل
 # ─────────────────────────────────────────────────
@@ -5019,7 +5019,7 @@ Quests Completed=مهمات مكتملة
 Side Quests Completed=مهمات فرعية مكتملة
 Hero Quests Completed=مهمات الأبطال المكتملة
 Total Distance Traveled=إجمالي المسافة المقطوعة
-Highest Combo=أعلى سلسلة ضربات
+Highest Combo=أعلى كومبو
 Max Damage Dealt=أعلى ضرر مُلحق
 Fastest Kill=أسرع قتل
 Chain Attack Count=عدد الهجمات المتسلسلة
@@ -7925,8 +7925,8 @@ Multi-hit / Weak=ضربات متعددة / ضعيف
 Guaranteed critical=حرجة مضمونة
 Range attack=هجوم بعيد المدى
 Close range=قريب المدى
-Power Combo starter=بادئ توليفة القوة
-Power Combo ender=خاتم توليفة القوة
+Power Combo starter=بادئ كومبو القوة
+Power Combo ender=خاتم كومبو القوة
 Fusion Art bonus=مكافأة فن الدمج
 Position bonus=مكافأة الموقع
 Cancel bonus=مكافأة الإلغاء
@@ -7967,7 +7967,7 @@ Increase Evasion Rate=زيادة معدل المراوغة
 Physical damage boost=تعزيز الضرر الجسدي
 Ether damage boost=تعزيز الضرر الأثيري
 Auto-attack speed up=تسريع الهجوم التلقائي
-Combo damage multiplier=مضاعف ضرر التوليفة
+Combo damage multiplier=مضاعف ضرر الكومبو
 Chain Attack TP boost=تعزيز نقاط تكتيكية للهجوم المتسلسل
 Interlink cooldown reduction=تقليل فترة انتظار الإنترلينك
 Ouroboros form duration up=زيادة مدة شكل أوروبوروس
@@ -8156,7 +8156,7 @@ Let's use the terrain to our advantage.=لنستخدم التضاريس لصال
 Colony 15 Soldiers Missing=جنود المستعمرة 15 مفقودون
 Friendship=صداقة
 Colony 0's Future=مستقبل المستعمرة 0
-Life in Li Garte Prison=الحياة في سجن لي غارتي
+Life in Li Garte Prison=الحياة في سجن لي غارت
 Prison Problems=مشاكل السجن
 Mystery Ferron=فيرون الغامض
 Sena and No. 9=سينا والرقم 9
@@ -8343,7 +8343,7 @@ Great Conté Falls=شلالات كونتيه العظمى
 Reebe Highlands=مرتفعات ريبي
 Yzana Plains=سهول يزانا
 Invidian Tunnels=أنفاق إنفيديا
-Li Garte Prison=سجن لي غارتي
+Li Garte Prison=سجن لي غارت
 Morukuna Wildwood=برية موروكونا
 
 # --- مناطق رئيسية (Major Areas) ---
@@ -8584,7 +8584,7 @@ Different classes excel in different roles. Experiment to find your style.=ال�
 Fusion Arts combine two Arts for enhanced effects. Time them wisely.=فنون الدمج تجمع فنّين لتأثيرات معززة. وقّتوها بحكمة.
 The Interlink gauge fills during combat. Use it to trigger Ouroboros forms.=مقياس الإنترلينك يمتلئ أثناء القتال. استخدموه لتفعيل أشكال أوروبوروس.
 Accessories provide passive bonuses. Equip them strategically.=الإكسسوارات توفر مكافآت سلبية. جهّزوها بشكل استراتيجي.
-Break → Topple → Launch → Smash: master this combo for devastating damage.=كسر → إسقاط → إطلاق → سحق: أتقنوا هذه التوليفة لضرر مدمر.
+Break → Topple → Launch → Smash: master this combo for devastating damage.=كسر → إسقاط → إطلاق → سحق: أتقنوا هذا الكومبو لضرر مدمر.
 Heart-to-Hearts reveal character relationships. Visit rest spots to trigger them.=أحداث القلب تكشف علاقات الشخصيات. زوروا نقاط الراحة لتفعيلها.
 Nopon Coins come in Silver and Gold varieties. Gold coins are much rarer.=عملات النوبون تأتي بنوعين فضي وذهبي. العملات الذهبية أندر بكثير.
 The Collectopaedia rewards you for gathering sets of collectibles.=موسوعة المقتنيات تكافئكم لجمع مجموعات من المقتنيات.
@@ -8682,7 +8682,7 @@ Lifebearer: Restores HP gradually over time.=حامل الحياة: يستعيد
 Ultimate Counter: Increases counter damage when blocking.=صد مطلق: يزيد ضرر الرد عند الصد.
 Tail Wind: Boosts movement speed and evasion.=ريح الذيل: يعزز سرعة الحركة والمراوغة.
 Doublestrike: Adds chance for auto-attacks to hit twice.=الضربة المزدوجة: يضيف فرصة لضرب الهجوم التلقائي مرتين.
-Empowered Combo: Boosts Fusion Art damage.=توليفة ممكّنة: يعزز ضرر فن الدمج.
+Empowered Combo: Boosts Fusion Art damage.=الكومبو المعزز: يعزز ضرر فن الدمج.
 Refined Incantation: Boosts ether damage dealt.=تعويذة محسّنة: يعزز الضرر الأثيري الملحق.
 Perilous Presence: Boosts aggro generation.=حضور خطر: يعزز توليد الاستفزاز.
 Guardian's Shield: Reduces damage taken while guarding allies.=درع الحارس: يقلل الضرر المتلقى أثناء حراسة الحلفاء.
@@ -9226,7 +9226,7 @@ Colony 15 Soldiers Missing=جنود المستعمرة 15 مفقودون
 Tutor: Mio=المعلمة: ميو
 Isora's Request=طلب إيسورا
 Colony 0's Future=مستقبل المستعمرة 0
-Life in Li Garte Prison=الحياة في سجن لي غارتيه
+Life in Li Garte Prison=الحياة في سجن لي غارت
 Prison Problems=مشاكل السجن
 Mystery Ferron=الفيرون الغامض
 Sena and No. 9=سينا والرقم 9
@@ -11510,7 +11510,7 @@ Patrol Route Marker=علامة مسار الدورية
 Tutor: Mio=معلمة: ميو
 Isora's Request=طلب إيسورا
 Colony 0's Future=مستقبل المستعمرة 0
-Life in Li Garte Prison=الحياة في سجن لي غارتي
+Life in Li Garte Prison=الحياة في سجن لي غارت
 Prison Problems=مشاكل السجن
 Mystery Ferron=فيرون الغامض
 Sena and No. 9=سينا والرقم 9
@@ -12258,9 +12258,9 @@ Castle Inner Ward=الساحة الداخلية للقلعة
 Castle Throne Room=قاعة العرش بالقلعة
 Castle Prison Block=جناح سجن القلعة
 Prison Yard=ساحة السجن
-Li Garte Prison Camp=معسكر سجن لي غارتي
-Li Garte Upper Level=المستوى العلوي لسجن لي غارتي
-Li Garte Lower Level=المستوى السفلي لسجن لي غارتي
+Li Garte Prison Camp=معسكر سجن لي غارت
+Li Garte Upper Level=المستوى العلوي لسجن لي غارت
+Li Garte Lower Level=المستوى السفلي لسجن لي غارت
 
 # --- مواقع منطقة كادينسيا (Cadensia Region Locations) ---
 Cadensia Docks=أرصفة كادينسيا
@@ -12388,7 +12388,7 @@ Warning Sign=لافتة تحذيرية
 Tutor: Mio=المُعلمة: ميو
 Isora's Request=طلب إيسورا
 Colony 0's Future=مستقبل المستعمرة 0
-Life in Li Garte Prison=الحياة في سجن لي غارتي
+Life in Li Garte Prison=الحياة في سجن لي غارت
 Prison Problems=مشاكل السجن
 Mystery Ferron=فيرون الغامض
 Sena and No. 9=سينا والرقم 9
@@ -17064,7 +17064,7 @@ Returning to normal form.=العودة إلى الشكل الطبيعي.
 Brave Order!=أمر شجاع!
 Order complete!=الأمر اكتمل!
 Amazing!=مذهل!
-Incredible combo!=توليفة مذهلة!
+Incredible combo!=كومبو مذهل!
 Critical hit!=ضربة حرجة!
 Weak point struck!=نقطة ضعف أُصيبت!
 Enemy toppled!=العدو سقط!
@@ -17260,7 +17260,7 @@ Fornis Region=منطقة فورنيس
 Dannagh Desert=صحراء داناخ
 Colony Iota=المستعمرة يوتا
 Fornis Hulk=هيكل فورنيس
-Li Garte Prison Camp=معسكر سجن لي غارتيه
+Li Garte Prison Camp=معسكر سجن لي غارت
 Rae-Bel Tableland=هضبة راي-بيل
 Rae-Bel Tablelands=هضاب راي-بيل
 Colony Lambda=المستعمرة لامبدا
@@ -17282,7 +17282,7 @@ Sandstorm Shelter=ملجأ العاصفة الرملية
 Ribbi Plain=سهل ريبي
 Colony 4 Approach=مدخل المستعمرة 4
 Tabletop Oasis=واحة سطح الطاولة
-Li Garte Approach=مدخل لي غارتيه
+Li Garte Approach=مدخل لي غارت
 Fornis Rock Arch=القوس الصخري في فورنيس
 Sandstone Bridge=جسر الحجر الرملي
 Dannagh Ruins=أطلال داناخ
@@ -19877,7 +19877,7 @@ Aggro Management=إدارة الاستفزاز
 Chain Attack=الهجوم المتسلسل
 Burst=الانفجار
 Overkill=القتل المفرط
-Combo Routes=مسارات التوليفة
+Combo Routes=مسارات الكومبو
 Break > Topple > Launch > Smash=كسر > إسقاط > إطلاق > تحطيم
 Daze > Burst=ذهول > انفجار
 Your character automatically attacks nearby enemies.=شخصيتك تهاجم الأعداء القريبين تلقائياً.
@@ -19944,7 +19944,7 @@ Completion Bonus=مكافأة الإكمال
 Overkill Bonus=مكافأة القتل المفرط
 Brave Order=أمر الشجاعة
 Heroic Chain=سلسلة بطولية
-Chain Combo=توليفة السلسلة
+Chain Combo=كومبو السلسلة
 The Chain Gauge fills as you fight. When full, activate a Chain Attack.=مقياس السلسلة يمتلئ أثناء القتال. عندما يمتلئ، فعّل الهجوم المتسلسل.
 Choose party members to attack in sequence for massive damage.=اختر أعضاء الفريق للهجوم بالتسلسل لضرر هائل.
 Each character's Order adds TP. Reach 100% to complete a round.=أمر كل شخصية يضيف TP. اوصل لـ 100% لإكمال جولة.
