@@ -300,12 +300,38 @@ function parseGlossaryToMap(glossary: string): Map<string, string> {
   const map = new Map<string, string>();
   if (!glossary?.trim()) return map;
   for (const line of glossary.split('\n')) {
-    const parts = line.split(/[=→\t]/);
-    if (parts.length >= 2) {
-      map.set(parts[0].trim().toLowerCase(), parts[1].trim());
-    }
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('//')) continue;
+    const eqIdx = trimmed.indexOf('=');
+    if (eqIdx < 1) continue;
+    const eng = trimmed.slice(0, eqIdx).trim().toLowerCase();
+    const arb = trimmed.slice(eqIdx + 1).trim();
+    if (eng && arb) map.set(eng, arb);
   }
   return map;
+}
+
+// --- Filter glossary to only terms relevant to the batch texts ---
+function filterRelevantGlossary(glossary: string, texts: string[]): string {
+  if (!glossary?.trim()) return '';
+  const combinedText = texts.join(' ').toLowerCase();
+  const relevantLines: string[] = [];
+  for (const line of glossary.split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('//')) continue;
+    const eqIdx = trimmed.indexOf('=');
+    if (eqIdx < 1) continue;
+    const eng = trimmed.slice(0, eqIdx).trim();
+    // Check if the English term appears in any of the texts (case-insensitive word boundary)
+    if (eng.length <= 2) {
+      // For very short terms, require exact word match
+      const regex = new RegExp(`\\b${eng.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+      if (regex.test(combinedText)) relevantLines.push(trimmed);
+    } else {
+      if (combinedText.includes(eng.toLowerCase())) relevantLines.push(trimmed);
+    }
+  }
+  return relevantLines.join('\n');
 }
 
 // --- AI translation (Gemini / Lovable gateway) ---
@@ -320,7 +346,14 @@ async function translateWithAI(
 
   let glossarySection = '';
   if (glossary?.trim()) {
-    glossarySection = `\n\nIMPORTANT - Use this glossary for consistent terminology:\n${glossary}\n`;
+    // Filter glossary to only include terms relevant to the current batch
+    const batchTexts = protectedEntries.map(e => e.cleaned);
+    const relevantGlossary = filterRelevantGlossary(glossary, batchTexts);
+    if (relevantGlossary.trim()) {
+      const termCount = relevantGlossary.split('\n').length;
+      console.log(`Glossary: ${termCount} relevant terms sent to AI (filtered from full glossary)`);
+      glossarySection = `\n\nIMPORTANT - Use this glossary for consistent terminology (${termCount} relevant terms):\n${relevantGlossary}\n`;
+    }
   }
 
   let contextSection = '';
