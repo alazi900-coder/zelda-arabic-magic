@@ -2075,7 +2075,7 @@ Monado I=مونادو الأول
 Monado II=مونادو الثاني
 Monado III=مونادو الثالث
 True Monado=مونادو الحقيقي
-Monado Boy=فتى المونادو
+Monado Boy=فتى مونادو
 Monado Purge=تطهير مونادو
 Monado Eater=مونادو الآكل
 Mechon=ميكون
@@ -7140,11 +7140,11 @@ Alpha=ألفا
 The Liberator=المحرر
 Successor=الوريث
 Successor of the Aegis=وريث الإيجيس
-Pneuma's Successor=وريثة بنيوما
+Pneuma's Successor=وريثة نيوما
 The True Architect=المهندس الحقيقي
 Architect of the World=مهندس العالم
 Logos=لوغوس
-Pneuma=بنيوما
+Pneuma=نيوما
 Ontos=أونتوس
 Trinity Processor=المعالج الثلاثي
 Conduit=القناة
@@ -18520,14 +18520,14 @@ Chakram=شاكرام
 # Section 275: DLC Weapons
 # ============================================================
 
-Monado III=مونادو III
+Monado III=مونادو الثالث
 Aegis Blade=شفرة الإيجيس
-True Monado=المونادو الحقيقي
+True Monado=مونادو الحقيقي
 Rex's Broadsword=سيف ريكس العريض
 Shulk's Replica Monado=نسخة مونادو شولك
-Pneuma's Blade=شفرة بنيوما
-Logos Blade=شفرة اللوغوس
-Ontos Blade=شفرة الأونتوس
+Pneuma's Blade=شفرة نيوما
+Logos Blade=شفرة لوغوس
+Ontos Blade=شفرة أونتوس
 Architect's Scepter=صولجان المهندس
 Klaus's Legacy=إرث كلاوس
 Galea's Will=إرادة غاليا
@@ -19092,7 +19092,7 @@ Nopon Premium Selection=تشكيلة النوبون المميزة
 # Section 299: DLC Exclusive Items
 # ============================================================
 
-Monado Keychain=سلسلة مفاتيح المونادو
+Monado Keychain=سلسلة مفاتيح مونادو
 Aegis Core Crystal=كريستال نواة الإيجيس
 Conduit Fragment=شظية القناة
 Rhadamanthus Key=مفتاح رادامانثوس
@@ -20173,11 +20173,11 @@ A new technique born from the fusion of two eras.=تقنية جديدة وُلد
 # Section 354: DLC Systems - Exclusive Techniques
 # ============================================================
 
-Monado Enchant=سحر المونادو
+Monado Enchant=سحر مونادو
 Aegis Burst=انفجار الإيجيس
 Cross Slash=القطع المتقاطع
 Pneuma Drive=دفعة نيوما
-Monado Shield=درع المونادو
+Monado Shield=درع مونادو
 Predictive Art=فن التنبؤ
 Conduit Resonance=رنين القناة
 Boundary Break=كسر الحدود
@@ -20929,7 +20929,7 @@ Build=البناء/التجهيز
 # Section 399: Cross-Game Terms (XC1 & XC2)
 # ============================================================
 
-Monado=المونادو
+Monado=مونادو
 Bionis=البيونيس
 Mechonis=الميكونيس
 High Entia=هاي إنتيا
@@ -20944,9 +20944,9 @@ Melia=ميليا
 Riki=ريكي
 Alrest=ألريست
 Titan=تيتان
-Aegis=الدرع
-Blade=شفرة
-Driver=سائق
+Aegis=الإيجيس
+Blade=النصل
+Driver=السائق
 Rex=ريكس
 Pyra=بايرا
 Mythra=ميثرا
@@ -20956,9 +20956,9 @@ Pandoria=باندوريا
 Zeke=زيك
 Tora=تورا
 Poppi=بوبي
-Pneuma=بنيوما
-Logos=اللوغوس
-Ontos=الأونتوس
+Pneuma=نيوما
+Logos=لوغوس
+Ontos=أونتوس
 Architect=المهندس
 Klaus=كلاوس
 Galea=غاليا
