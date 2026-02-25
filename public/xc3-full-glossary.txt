@@ -21583,8 +21583,141 @@ Perfect chain! Flawless execution!=سلسلة مثالية! تنفيذ بلا ع
 The chain broke... We need to regroup!=انكسرت السلسلة... نحتاج إعادة تجمّع!
 
 # ============================================================
+# القسم 441-452: حوارات تبديل الفئات لكل شخصية رئيسية
+# Sections 441-452: Class Change Battle Dialogues per Main Character
+# ============================================================
+
+# --- القسم 441: Noah - حوارات تبديل الفئة ---
+# --- Section 441: Noah - Class Change Dialogues ---
+Noah (Swordfighter): This is my true calling!=نوح (المبارز): هذه دعوتي الحقيقية!
+Noah (Zephyr): Speed and grace... I'll adapt!=نوح (الزفير): السرعة والرشاقة... سأتكيّف!
+Noah (Medic Gunner): Healing from afar... I can do this!=نوح (المسعف المدفعي): الشفاء من بعيد... أستطيع فعل هذا!
+Noah (Heavy Guard): A shield? Feels different, but I'll manage!=نوح (الحارس الثقيل): درع؟ يبدو مختلفاً، لكنني سأتدبر!
+Noah (Ogre): Raw power... I feel Lanz's strength!=نوح (الغول): قوة خام... أشعر بقوة لانز!
+Noah (Flash Fencer): Ethel's speed flows through this blade!=نوح (المبارز الخاطف): سرعة إيثل تتدفق عبر هذا النصل!
+Noah (War Medic): I'll protect AND heal. Teach's way!=نوح (المسعف الحربي): سأحمي وأشفي. طريقة تيتش!
+Noah (Guardian Commander): Zeon's shield... I'll honor it!=نوح (قائد الحراس): درع زيون... سأكرّمه!
+Noah (Stalker): Juniper's stealth... silent and deadly!=نوح (المتعقب): تخفّي جونيبر... صامت وقاتل!
+Noah (Strategos): Tactics first... Isurd would approve!=نوح (الاستراتيجي): التكتيكات أولاً... إسورد سيوافق!
+Noah (Full Metal Jaguar): Gray's precision... one shot, one kill!=نوح (جاغوار المعدن الكامل): دقة غراي... طلقة واحدة، قتل واحد!
+Noah (Lone Exile): Ashera's fury... I'll channel it!=نوح (المنفي الوحيد): غضب أشيرا... سأوجّهه!
+Noah (Signifer): Fiona's prayers guide my staff!=نوح (حامل الراية): صلوات فيونا توجّه عصاي!
+Noah (Royal Summoner): Melia's Ether Arts... such elegance!=نوح (المستدعي الملكي): فنون ميليا الأثيرية... يا لها من أناقة!
+Noah (Lifesage): Nia's healing mastery... incredible!=نوح (حكيم الحياة): إتقان نيا للشفاء... لا يصدق!
+Noah (Martial Artist): Ghondor's fists... raw and fierce!=نوح (فنان القتال): قبضات غوندور... خام وشرسة!
+Noah (Seraph): Cammuravi's flames burn within me!=نوح (السيراف): لهيب كامورافي يشتعل بداخلي!
+Noah (Machine Assassin): Segiri's protocols... efficient!=نوح (قاتل الآلة): بروتوكولات سيغيري... فعّالة!
+Noah (Soulhacker): Every enemy's Art... is now mine!=نوح (قرصان الأرواح): كل فن عدو... أصبح ملكي الآن!
+
+# --- القسم 442: Mio - حوارات تبديل الفئة ---
+# --- Section 442: Mio - Class Change Dialogues ---
+Mio (Zephyr): My rings dance with the wind!=ميو (الزفير): حلقاتي ترقص مع الريح!
+Mio (Swordfighter): Noah's sword style... I'll try my best!=ميو (المبارزة): أسلوب نوح بالسيف... سأبذل قصارى جهدي!
+Mio (Medic Gunner): Healing shots... precise and caring!=ميو (المسعفة المدفعية): طلقات شفاء... دقيقة وحنونة!
+Mio (Heavy Guard): This shield... it's heavier than I thought!=ميو (الحارسة الثقيلة): هذا الدرع... أثقل مما ظننت!
+Mio (Ogre): Sena's hammer style? Here goes nothing!=ميو (الغولة): أسلوب سينا بالمطرقة؟ لنجرب!
+Mio (Flash Fencer): Speed is my forte anyway!=ميو (المبارزة الخاطفة): السرعة هي تخصصي على أي حال!
+Mio (War Medic): Healing while fighting... I can multitask!=ميو (المسعفة الحربية): الشفاء أثناء القتال... أستطيع تعدد المهام!
+Mio (Stalker): Silent as a shadow... I like this!=ميو (المتعقبة): صامتة كالظل... أحب هذا!
+Mio (Signifer): Fiona's faith... I understand it now!=ميو (حاملة الراية): إيمان فيونا... أفهمه الآن!
+Mio (Troubadour): Miyabi's grace... it suits me!=ميو (المنشدة): رشاقة ميابي... تناسبني!
+Mio (Royal Summoner): Melia's elegance... I'm honored!=ميو (المستدعية الملكية): أناقة ميليا... أنا مُتشرّفة!
+Mio (Lifesage): Nia's warmth in every heal!=ميو (حكيمة الحياة): دفء نيا في كل شفاء!
+Mio (Soulhacker): Their Arts become mine... fascinating!=ميو (قرصانة الأرواح): فنونهم تصبح ملكي... مذهل!
+
+# --- القسم 443: Lanz - حوارات تبديل الفئة ---
+# --- Section 443: Lanz - Class Change Dialogues ---
+Lanz (Heavy Guard): Now THIS is what I'm talking about!=لانز (الحارس الثقيل): هذا ما أتكلم عنه!
+Lanz (Swordfighter): A sword? Bit light for my taste!=لانز (المبارز): سيف؟ خفيف قليلاً لذوقي!
+Lanz (Zephyr): Dodge and weave? That's not really my thing...=لانز (الزفير): مراوغة ونسج؟ هذا ليس أسلوبي حقاً...
+Lanz (Ogre): Sena's hammer! Now we're cooking!=لانز (الغول): مطرقة سينا! الآن نتكلم!
+Lanz (Guardian Commander): Zeon's shield style? I respect that!=لانز (قائد الحراس): أسلوب زيون بالدرع؟ أحترم ذلك!
+Lanz (Lone Exile): Ashera's rage... I GET that!=لانز (المنفي الوحيد): غضب أشيرا... أفهم ذلك!
+Lanz (War Medic): Me? Healing? This'll be interesting...=لانز (المسعف الحربي): أنا؟ أشفي؟ سيكون هذا مثيراً...
+Lanz (Yumsmith): Valdi's machines... button goes brrr!=لانز (حداد اليوم): آلات فالدي... الزر يعمل بررر!
+Lanz (Seraph): Cammuravi's fire! BURN, BABY, BURN!=لانز (السيراف): نار كامورافي! احترق، يا عزيزي، احترق!
+Lanz (Martial Artist): Fists? I've got plenty of those!=لانز (فنان القتال): قبضات؟ لدي الكثير منها!
+Lanz (Lost Vanguard): Monica's style... the City fights different!=لانز (الطليعة المفقودة): أسلوب مونيكا... المدينة تقاتل بشكل مختلف!
+Lanz (Soulhacker): Copy their moves? Cheeky, but effective!=لانز (قرصان الأرواح): نسخ حركاتهم؟ وقح، لكن فعّال!
+
+# --- القسم 444: Sena - حوارات تبديل الفئة ---
+# --- Section 444: Sena - Class Change Dialogues ---
+Sena (Ogre): My hammer, my rules!=سينا (الغولة): مطرقتي، قواعدي!
+Sena (Heavy Guard): A shield? I'll protect everyone!=سينا (الحارسة الثقيلة): درع؟ سأحمي الجميع!
+Sena (Swordfighter): Noah's sword feels... elegant!=سينا (المبارزة): سيف نوح يبدو... أنيقاً!
+Sena (Zephyr): Light on my feet! I like it!=سينا (الزفيرة): خفيفة على قدميّ! أحب ذلك!
+Sena (Flash Fencer): Speed AND power? Yes please!=سينا (المبارزة الخاطفة): سرعة وقوة؟ نعم من فضلك!
+Sena (Guardian Commander): Protecting others... that's what matters!=سينا (قائدة الحراس): حماية الآخرين... هذا ما يهم!
+Sena (Lone Exile): Ashera's fury... I understand that feeling!=سينا (المنفية الوحيدة): غضب أشيرا... أفهم ذلك الشعور!
+Sena (Incursor): Alexandria's justice blade... for the weak!=سينا (المقتحمة): نصل عدالة ألكسندريا... من أجل الضعفاء!
+Sena (Martial Artist): My fists are just as strong as my hammer!=سينا (فنانة القتال): قبضاتي قوية مثل مطرقتي!
+Sena (Seraph): Flames of passion! I'll burn bright!=سينا (السيرافة): لهيب الشغف! سأشتعل بقوة!
+Sena (Soulhacker): Learning from enemies... smart!=سينا (قرصانة الأرواح): التعلم من الأعداء... ذكي!
+
+# --- القسم 445: Taion - حوارات تبديل الفئة ---
+# --- Section 445: Taion - Class Change Dialogues ---
+Taion (Tactician): Strategy is my natural domain!=تايون (التكتيكي): الاستراتيجية هي مجالي الطبيعي!
+Taion (Swordfighter): Close combat? I'll calculate the optimal angles!=تايون (المبارز): قتال قريب؟ سأحسب الزوايا المثلى!
+Taion (Medic Gunner): Healing requires precision. I have that!=تايون (المسعف المدفعي): الشفاء يتطلب دقة. أملك ذلك!
+Taion (Heavy Guard): Brute defense... not my preferred method!=تايون (الحارس الثقيل): دفاع غاشم... ليس أسلوبي المفضل!
+Taion (Strategos): Isurd's analytical approach... I approve!=تايون (الاستراتيجي): نهج إسورد التحليلي... أوافق!
+Taion (War Medic): Healing with combat data... efficient!=تايون (المسعف الحربي): الشفاء مع بيانات القتال... فعّال!
+Taion (Signifer): Support through buffs... mathematically sound!=تايون (حامل الراية): الدعم عبر التعزيزات... سليم رياضياً!
+Taion (Stalker): Observation from stealth... tactically superior!=تايون (المتعقب): المراقبة من التخفي... متفوق تكتيكياً!
+Taion (Full Metal Jaguar): Long-range precision... I can respect that!=تايون (جاغوار المعدن الكامل): دقة بعيدة المدى... أحترم ذلك!
+Taion (Machine Assassin): Segiri's logic systems... fascinating data!=تايون (قاتل الآلة): أنظمة سيغيري المنطقية... بيانات مذهلة!
+Taion (Royal Summoner): Melia's Ether mastery... years of refinement!=تايون (المستدعي الملكي): إتقان ميليا للأثير... سنوات من الصقل!
+Taion (Soulhacker): Acquiring enemy data mid-battle... brilliant!=تايون (قرصان الأرواح): الحصول على بيانات العدو أثناء المعركة... عبقري!
+
+# --- القسم 446: Eunie - حوارات تبديل الفئة ---
+# --- Section 446: Eunie - Class Change Dialogues ---
+Eunie (Medic Gunner): Healing's what I do best!=يوني (المسعفة المدفعية): الشفاء هو أفضل ما أفعله!
+Eunie (Swordfighter): A sword? Watch me make it work!=يوني (المبارزة): سيف؟ شاهدني أجعله يعمل!
+Eunie (Zephyr): Dodging? I'd rather just smack them!=يوني (الزفيرة): مراوغة؟ أفضّل صفعهم مباشرة!
+Eunie (Heavy Guard): Big shield, big attitude!=يوني (الحارسة الثقيلة): درع كبير، شخصية كبيرة!
+Eunie (Ogre): SMASH! Haha, I could get used to this!=يوني (الغولة): تحطيم! هاها، يمكنني التعود على هذا!
+Eunie (War Medic): Teach's style? The professor approves!=يوني (المسعفة الحربية): أسلوب تيتش؟ الأستاذ يوافق!
+Eunie (Signifer): Fiona's buffs plus MY attitude? Unstoppable!=يوني (حاملة الراية): تعزيزات فيونا مع شخصيتي؟ لا يوقفني شيء!
+Eunie (Troubadour): Miyabi's dance? I'll add my own flair!=يوني (المنشدة): رقصة ميابي؟ سأضيف لمستي الخاصة!
+Eunie (Lifesage): Nia's ultimate healing... THIS is power!=يوني (حكيمة الحياة): شفاء نيا المطلق... هذه هي القوة!
+Eunie (Lone Exile): Ashera's aggression? Oh, I've GOT that!=يوني (المنفية الوحيدة): عدوانية أشيرا؟ أوه، أملك ذلك!
+Eunie (Martial Artist): Punching things? Therapeutic!=يوني (فنانة القتال): لكم الأشياء؟ علاجي!
+Eunie (Soulhacker): Stealing Arts? That's cheeky. I love it!=يوني (قرصانة الأرواح): سرقة الفنون؟ وقح. أحب ذلك!
+
+# --- القسم 447: حوارات تبديل الفئة - ردود فعل مضحكة ---
+# --- Section 447: Class Change - Funny Reactions ---
+Lanz (Zephyr): Dodge? DODGE?! I'm too big for this!=لانز (الزفير): مراوغة؟ مراوغة؟! أنا كبير جداً لهذا!
+Lanz (Signifer): Wave a flag? Really? ...Fine.=لانز (حامل الراية): ألوّح بعلم؟ حقاً؟ ...حسناً.
+Taion (Ogre): Mindless smashing... how barbaric. But effective.=تايون (الغول): تحطيم بلا تفكير... كم هو بربري. لكنه فعّال.
+Taion (Martial Artist): Fists over strategy? Preposterous... but interesting.=تايون (فنان القتال): القبضات فوق الاستراتيجية؟ سخيف... لكنه مثير.
+Eunie (Tactician): Me? Thinking before acting? That's rich!=يوني (التكتيكية): أنا؟ أفكر قبل أن أتصرف؟ مضحك!
+Sena (Tactician): Strategy... my brain hurts already!=سينا (التكتيكية): استراتيجية... رأسي يؤلمني بالفعل!
+Mio (Ogre): This hammer is bigger than me!=ميو (الغولة): هذه المطرقة أكبر مني!
+Noah (Martial Artist): Fighting with fists feels... liberating!=نوح (فنان القتال): القتال بالقبضات يبدو... محرراً!
+Lanz (Troubadour): Me? Dancing? Don't you DARE laugh!=لانز (المنشد): أنا؟ أرقص؟ لا تجرؤوا على الضحك!
+Eunie (Stalker): Be quiet? ME?! ...I'll try.=يوني (المتعقبة): أكون هادئة؟ أنا؟! ...سأحاول.
+Taion (Seraph): Flames of passion? I prefer flames of logic.=تايون (السيراف): لهيب الشغف؟ أفضّل لهيب المنطق.
+Sena (Full Metal Jaguar): Guns? But I like hitting things up close!=سينا (جاغوار المعدن الكامل): بنادق؟ لكنني أحب ضرب الأشياء عن قرب!
+
+# --- القسم 448: حوارات إتقان الفئة الجديدة ---
+# --- Section 448: Class Mastery Dialogues ---
+Noah: I've mastered this class! The knowledge stays with me!=نوح: أتقنت هذه الفئة! المعرفة تبقى معي!
+Mio: Class mastered! Every experience makes me stronger!=ميو: أُتقنت الفئة! كل تجربة تجعلني أقوى!
+Lanz: Mastered! Ha! I'm a natural at everything!=لانز: أُتقنت! ها! أنا موهوب طبيعياً في كل شيء!
+Sena: I mastered it! I really did it!=سينا: أتقنتها! لقد فعلتها حقاً!
+Taion: Class mastery achieved. The data has been fully analyzed.=تايون: تم إتقان الفئة. تم تحليل البيانات بالكامل.
+Eunie: Mastered! Obviously. Was there ever any doubt?=يوني: أُتقنت! بالطبع. هل كان هناك أي شك؟
+Master Art unlocked!=تم فتح فن الإتقان!
+Master Skill unlocked!=تم فتح مهارة الإتقان!
+Class rank increased!=ارتفعت رتبة الفئة!
+Class rank 10 achieved! Full mastery!=تم تحقيق الرتبة 10! إتقان كامل!
+New Arts available!=فنون جديدة متاحة!
+New Skills available!=مهارات جديدة متاحة!
+Inherited Skill slot unlocked!=تم فتح خانة مهارة موروثة!
+
+# ============================================================
 # --- نهاية القاموس الشامل ---
 # End of Comprehensive Glossary
-# Total: 440 sections covering ALL content of Xenoblade Chronicles 3
-# Including: Main Game, DLC Future Redeemed, NG+, Challenge Mode, All Battle Dialogues
+# Total: 448 sections covering ALL content of Xenoblade Chronicles 3
+# Including: Main Game, DLC Future Redeemed, NG+, Challenge Mode, All Battle & Class Dialogues
 # ============================================================
