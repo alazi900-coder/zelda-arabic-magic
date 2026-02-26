@@ -51,6 +51,7 @@ import SentenceSplitPanel from "@/components/editor/SentenceSplitPanel";
 import ExportEnglishDialog from "@/components/editor/ExportEnglishDialog";
 import GlossaryStatsPanel from "@/components/editor/GlossaryStatsPanel";
 import TranslationStatsPanel from "@/components/editor/TranslationStatsPanel";
+import ImportConflictDialog from "@/components/editor/ImportConflictDialog";
 
 const Editor = () => {
   const editor = useEditorState();
@@ -1098,6 +1099,12 @@ const Editor = () => {
           onOpenChange={setShowExportEnglishDialog}
           totalCount={untranslatedCount}
           onExport={(chunkSize, format) => format === "json" ? editor.handleExportEnglishOnlyJson(chunkSize) : editor.handleExportEnglishOnly(chunkSize)}
+        />
+        <ImportConflictDialog
+          open={editor.importConflicts.length > 0}
+          conflicts={editor.importConflicts}
+          onConfirm={editor.handleConflictConfirm}
+          onCancel={editor.handleConflictCancel}
         />
       </div>
     </TooltipProvider>
