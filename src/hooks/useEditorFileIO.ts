@@ -449,19 +449,10 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       }
     }
 
-    if (isFilterActive && filteredEntries.length < (state?.entries.length || 0)) {
-      const allowedKeys = new Set(filteredEntries.map(e => `${e.msbtFile}:${e.index}`));
-      for (const [key, value] of Object.entries(imported)) {
-        if (key.startsWith('__fp__:')) continue;
-        if (allowedKeys.has(key)) {
-          cleanedImported[key] = normalizeArabicPresentationForms(value);
-        }
-      }
-    } else {
-      for (const [key, value] of Object.entries(imported)) {
-        if (key.startsWith('__fp__:')) continue;
-        cleanedImported[key] = normalizeArabicPresentationForms(value);
-      }
+    // Always import ALL keys regardless of active filter
+    for (const [key, value] of Object.entries(imported)) {
+      if (key.startsWith('__fp__:')) continue;
+      cleanedImported[key] = normalizeArabicPresentationForms(value);
     }
 
     // ── Convert legacy "table[row].column" keys to bdat-bin format ──
