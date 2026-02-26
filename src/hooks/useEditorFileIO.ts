@@ -455,10 +455,51 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       }
     }
 
-    // ── Diagnostic: count how many imported keys match loaded entries ──
+    // ── Convert legacy "table[row].column" keys to bdat-bin format ──
+    const legacyKeyRegex = /^(\w+)\[(\d+)\]\.(\w+)$/;
     const entryKeySet = new Set(
       (state?.entries || []).map(e => `${e.msbtFile}:${e.index}`)
     );
+
+    // Build lookup: "tableName:rowIndex:colName" → actual entry key
+    const legacyLookup = new Map<string, string>();
+    for (const ek of entryKeySet) {
+      // ek format: "bdat-bin:filename:table:row:col:0"
+      const parts = ek.split(':');
+      if (parts.length >= 6 && parts[0] === 'bdat-bin') {
+        const tableName = parts[2];
+        const rowIndex = parts[3];
+        const colName = parts[4];
+        legacyLookup.set(`${tableName}:${rowIndex}:${colName}`, ek);
+      }
+    }
+
+    // Remap legacy keys in cleanedImported
+    let legacyConverted = 0;
+    const remappedImport: Record<string, string> = {};
+    for (const [key, value] of Object.entries(cleanedImported)) {
+      const legacyMatch = key.match(legacyKeyRegex);
+      if (legacyMatch) {
+        const [, tableName, rowIndex, colName] = legacyMatch;
+        const lookupKey = `${tableName}:${rowIndex}:${colName}`;
+        const newKey = legacyLookup.get(lookupKey);
+        if (newKey && !remappedImport[newKey]) {
+          remappedImport[newKey] = value;
+          legacyConverted++;
+          continue;
+        }
+      }
+      // Keep as-is (either already bdat-bin or no match found)
+      if (!remappedImport[key]) {
+        remappedImport[key] = value;
+      }
+    }
+    if (legacyConverted > 0) {
+      console.log(`🔑 Import: converted ${legacyConverted} legacy keys (table[row].col → bdat-bin)`);
+      cleanedImported = remappedImport;
+    }
+
+    // ── Diagnostic: count how many imported keys match loaded entries ──
     let directMatchCount = Object.keys(cleanedImported).filter(k => entryKeySet.has(k)).length;
     let fpRemappedTotal = 0;
 
