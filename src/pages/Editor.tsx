@@ -812,7 +812,7 @@ const Editor = () => {
                     {editor.scanningSentences ? <Loader2 className="w-4 h-4 animate-spin" /> : <AlertTriangle className="w-4 h-4" />} فصل الجمل المندمجة ✂️
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleScanNewlines} disabled={editor.translatedCount === 0}>
-                    🧹 إزالة أسطر جديدة \n
+                    🧹 تنظيف رموز غير مرغوبة
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => setShowClearConfirm(editor.isFilterActive ? 'filtered' : 'all')} disabled={editor.translatedCount === 0} className="text-destructive focus:text-destructive">
@@ -911,7 +911,7 @@ const Editor = () => {
                     {editor.scanningSentences ? <Loader2 className="w-4 h-4 animate-spin" /> : <AlertTriangle className="w-4 h-4" />} فصل الجمل المندمجة ✂️
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleScanNewlines} disabled={editor.translatedCount === 0}>
-                    🧹 إزالة أسطر جديدة \n
+                    🧹 تنظيف رموز غير مرغوبة
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => setShowClearConfirm(editor.isFilterActive ? 'filtered' : 'all')} disabled={editor.translatedCount === 0} className="text-destructive focus:text-destructive">

@@ -33,7 +33,7 @@ const NewlineCleanPanel: React.FC<NewlineCleanPanelProps> = ({
       <CardContent className="p-4">
         <div className="flex items-center justify-between mb-3">
           <h3 className="font-display font-bold text-sm">
-            🧹 إزالة أسطر جديدة \n — {results.length} نتيجة
+            🧹 تنظيف رموز غير مرغوبة — {results.length} نتيجة
             {accepted > 0 && <span className="text-secondary mr-2"> ✅ {accepted}</span>}
             {rejected > 0 && <span className="text-destructive mr-2"> ❌ {rejected}</span>}
           </h3>
@@ -77,7 +77,7 @@ const NewlineCleanPanel: React.FC<NewlineCleanPanelProps> = ({
 
                 <div className="flex items-center gap-2 justify-end">
                   <span className="text-[10px] text-muted-foreground mr-auto">
-                    {item.count} موضع \n
+                    {item.count} رمز
                   </span>
                   <Button
                     variant="outline"
