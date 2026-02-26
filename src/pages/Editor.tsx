@@ -49,6 +49,7 @@ import PreBuildDiagnostic from "@/components/editor/PreBuildDiagnostic";
 import CompareEnginesDialog from "@/components/editor/CompareEnginesDialog";
 import SentenceSplitPanel from "@/components/editor/SentenceSplitPanel";
 import NewlineCleanPanel from "@/components/editor/NewlineCleanPanel";
+import DiacriticsCleanPanel from "@/components/editor/DiacriticsCleanPanel";
 import ExportEnglishDialog from "@/components/editor/ExportEnglishDialog";
 import GlossaryStatsPanel from "@/components/editor/GlossaryStatsPanel";
 import TranslationStatsPanel from "@/components/editor/TranslationStatsPanel";
@@ -547,6 +548,17 @@ const Editor = () => {
             />
           )}
 
+          {/* Diacritics Clean Results */}
+          {editor.diacriticsCleanResults && editor.diacriticsCleanResults.length > 0 && (
+            <DiacriticsCleanPanel
+              results={editor.diacriticsCleanResults}
+              onAccept={editor.handleApplyDiacriticsClean}
+              onReject={editor.handleRejectDiacriticsClean}
+              onAcceptAll={editor.handleApplyAllDiacriticsCleans}
+              onClose={() => editor.setDiacriticsCleanResults(null)}
+            />
+          )}
+
           {!editor.user && (
             <Card className="mb-4 border-primary/30 bg-primary/5">
               <CardContent className="flex items-center gap-3 p-4"><LogIn className="w-4 h-4" /> سجّل دخولك للمزامنة</CardContent>
@@ -798,7 +810,7 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleApplyArabicProcessing} disabled={editor.applyingArabic}><Sparkles className="w-4 h-4" /> تطبيق المعالجة العربية ✨</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleFixAllReversed}><RotateCcw className="w-4 h-4" /> تصحيح الكل (معكوس)</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleFixAllStuckCharacters} disabled={editor.needsImproveCount.stuck === 0}><AlertTriangle className="w-4 h-4" /> إصلاح الأحرف الملتصقة 🔤</DropdownMenuItem>
-                  <DropdownMenuItem onClick={editor.handleRemoveAllDiacritics}><Type className="w-4 h-4" /> إزالة التشكيلات ✏️</DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleScanDiacritics}><Type className="w-4 h-4" /> إزالة التشكيلات ✏️</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleFixMixedLanguage} disabled={editor.fixingMixed || editor.needsImproveCount.mixed === 0}>
                     {editor.fixingMixed ? <Loader2 className="w-4 h-4 animate-spin" /> : <Filter className="w-4 h-4" />} إصلاح النصوص المختلطة 🌐
                   </DropdownMenuItem>
@@ -893,7 +905,7 @@ const Editor = () => {
                 <DropdownMenuContent align="start" className="bg-card border-border z-50 min-w-[240px]">
                   <DropdownMenuItem onClick={editor.handleFixAllReversed}><RotateCcw className="w-4 h-4" /> تصحيح الكل (عربي معكوس)</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleFixAllStuckCharacters} disabled={editor.needsImproveCount.stuck === 0}><AlertTriangle className="w-4 h-4" /> إصلاح الأحرف الملتصقة 🔤</DropdownMenuItem>
-                  <DropdownMenuItem onClick={editor.handleRemoveAllDiacritics}><Type className="w-4 h-4" /> إزالة التشكيلات ✏️</DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleScanDiacritics}><Type className="w-4 h-4" /> إزالة التشكيلات ✏️</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleFixMixedLanguage} disabled={editor.fixingMixed || editor.needsImproveCount.mixed === 0}>
                     {editor.fixingMixed ? <Loader2 className="w-4 h-4 animate-spin" /> : <Filter className="w-4 h-4" />} إصلاح النصوص المختلطة 🌐
                   </DropdownMenuItem>

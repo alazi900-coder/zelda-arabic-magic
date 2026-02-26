@@ -50,6 +50,7 @@ export function useEditorState() {
   const [scanningSentences, setScanningSentences] = useState(false);
   const [sentenceSplitResults, setSentenceSplitResults] = useState<import("@/lib/arabic-sentence-splitter").SentenceSplitResult[] | null>(null);
   const [newlineCleanResults, setNewlineCleanResults] = useState<import("@/components/editor/NewlineCleanPanel").NewlineCleanResult[] | null>(null);
+  const [diacriticsCleanResults, setDiacriticsCleanResults] = useState<import("@/components/editor/DiacriticsCleanPanel").DiacriticsCleanResult[] | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [showFindReplace, setShowFindReplace] = useState(false);
   const [userGeminiKey, _setUserGeminiKey] = useState(() => {
@@ -1286,26 +1287,56 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 5000);
   }, [state]);
 
-  // === Remove all Arabic diacritics (tashkeel) from translations ===
-  const handleRemoveAllDiacritics = useCallback(() => {
+  // === Diacritics Clean (scan + review) ===
+  const diacriticsRegex = /[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06E4\u06E7\u06E8\u06EA-\u06ED]/g;
+
+  const handleScanDiacritics = useCallback(() => {
     if (!state) return;
-    const diacriticsRegex = /[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06E4\u06E7\u06E8\u06EA-\u06ED]/g;
-    const newTranslations = { ...state.translations };
-    let count = 0;
-    for (const [key, val] of Object.entries(newTranslations)) {
-      if (val && diacriticsRegex.test(val)) {
-        newTranslations[key] = val.replace(diacriticsRegex, '');
-        count++;
+    const results: import("@/components/editor/DiacriticsCleanPanel").DiacriticsCleanResult[] = [];
+    for (const [key, value] of Object.entries(state.translations)) {
+      if (!value?.trim()) continue;
+      const matches = value.match(diacriticsRegex);
+      if (matches && matches.length > 0) {
+        const after = value.replace(diacriticsRegex, '');
+        if (after !== value) {
+          results.push({ key, before: value, after, count: matches.length, status: 'pending' });
+        }
       }
     }
-    if (count > 0) {
-      setState(prev => prev ? { ...prev, translations: newTranslations } : null);
-      setLastSaved(`✅ تم إزالة التشكيلات من ${count} ترجمة`);
-    } else {
-      setLastSaved("ℹ️ لا توجد تشكيلات لإزالتها");
+    setDiacriticsCleanResults(results);
+    if (results.length === 0) {
+      setLastSaved("✅ لا توجد تشكيلات لإزالتها");
+      setTimeout(() => setLastSaved(""), 4000);
     }
-    setTimeout(() => setLastSaved(""), 4000);
   }, [state]);
+
+  const handleApplyDiacriticsClean = useCallback((key: string) => {
+    if (!state || !diacriticsCleanResults) return;
+    const item = diacriticsCleanResults.find(r => r.key === key);
+    if (!item) return;
+    setState(prev => prev ? { ...prev, translations: { ...prev.translations, [key]: item.after } } : null);
+    setDiacriticsCleanResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'accepted' as const } : r) : null);
+  }, [state, diacriticsCleanResults]);
+
+  const handleRejectDiacriticsClean = useCallback((key: string) => {
+    setDiacriticsCleanResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'rejected' as const } : r) : null);
+  }, []);
+
+  const handleApplyAllDiacriticsCleans = useCallback(() => {
+    if (!state || !diacriticsCleanResults) return;
+    const pending = diacriticsCleanResults.filter(r => r.status === 'pending');
+    const newTranslations = { ...state.translations };
+    for (const item of pending) {
+      newTranslations[item.key] = item.after;
+    }
+    setState(prev => prev ? { ...prev, translations: newTranslations } : null);
+    setDiacriticsCleanResults(prev => prev ? prev.map(r => r.status === 'pending' ? { ...r, status: 'accepted' as const } : r) : null);
+    setLastSaved(`✅ تم إزالة التشكيلات من ${pending.length} ترجمة`);
+    setTimeout(() => setLastSaved(""), 4000);
+  }, [state, diacriticsCleanResults]);
+
+  // Keep old function name for backward compat (single-entry button in EntryCard)
+  const handleRemoveAllDiacritics = handleScanDiacritics;
 
   // === Newline & Symbol Clean (remove \n, \., \:, \-, \\, and standalone n . \ : -) ===
   const handleScanNewlines = useCallback(() => {
@@ -1313,7 +1344,7 @@ export function useEditorState() {
     const results: import("@/components/editor/NewlineCleanPanel").NewlineCleanResult[] = [];
     // Pattern: backslash+char combos OR standalone stray symbols (n . \ : -)
     // Standalone n only when surrounded by spaces or at start/end
-    const cleanupPattern = /\\[n.:\-\\r]|(?<=\s|^)[n.:\\\-](?=\s|$)/g;
+    const cleanupPattern = /\\[n.:\-\\r]|(?<=\s|^)[n.:\\\-](?=\s|$)|(?<=\s|^)[a-zA-Z](?=\s|$)/g;
     for (const [key, value] of Object.entries(state.translations)) {
       if (!value?.trim()) continue;
       if (cleanupPattern.test(value)) {
@@ -1413,7 +1444,7 @@ export function useEditorState() {
     applyingArabic, improvingTranslations, improveResults,
     fixingMixed, filtersOpen, buildStats, buildPreview, showBuildConfirm, bdatFileStats,
     checkingConsistency, consistencyResults,
-    scanningSentences, sentenceSplitResults, newlineCleanResults,
+    scanningSentences, sentenceSplitResults, newlineCleanResults, diacriticsCleanResults,
     categoryProgress, qualityStats, needsImproveCount, translatedCount, tagsCount, fuzzyCount, byteOverflowCount,
     bdatTableNames, bdatColumnNames, bdatTableCounts, bdatColumnCounts,
     ...glossary,
@@ -1426,7 +1457,7 @@ export function useEditorState() {
     setCurrentPage, setShowRetranslateConfirm,
     setArabicNumerals, setMirrorPunctuation, setUserGeminiKey, setTranslationProvider, setMyMemoryEmail,
     setReviewResults, setShortSuggestions, setImproveResults, setBuildStats, setShowBuildConfirm,
-    setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults,
+    setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults, setDiacriticsCleanResults,
 
     // Handlers
     toggleProtection, toggleTechnicalBypass,
@@ -1445,6 +1476,7 @@ export function useEditorState() {
     handleApplyArabicProcessing, handlePreBuild, handleBuild, handleBulkReplace, loadDemoBdatData, handleCheckIntegrity, handleRestoreOriginals, handleRemoveAllDiacritics,
     handleScanMergedSentences, handleApplySentenceSplit, handleRejectSentenceSplit, handleApplyAllSentenceSplits,
     handleScanNewlines, handleApplyNewlineClean, handleRejectNewlineClean, handleApplyAllNewlineCleans,
+    handleScanDiacritics, handleApplyDiacriticsClean, handleRejectDiacriticsClean, handleApplyAllDiacriticsCleans,
     handleClearTranslations, handleUndoClear, clearUndoBackup, isFilterActive,
     integrityResult, showIntegrityDialog, setShowIntegrityDialog, checkingIntegrity,
 
