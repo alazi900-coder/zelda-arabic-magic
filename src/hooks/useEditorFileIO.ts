@@ -651,12 +651,10 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       return;
     }
 
-    if (!isDemo && matchedCount < Object.keys(cleanedImported).length * 0.1 && matchedCount > 0) {
-      const confirmed = window.confirm(
-        `⚠️ تحذير: فقط ${matchedCount} من ${Object.keys(cleanedImported).length} ترجمة تطابقت مع المدخلات المحملة.\n\n` +
-        `هل تريد الاستمرار في الاستيراد؟`
-      );
-      if (!confirmed) return;
+    // No longer block import for low match rate — all keys are saved regardless
+    // and will appear when corresponding BDAT files are loaded later
+    if (!isDemo && matchedCount > 0 && unmatchedCount > 0) {
+      console.log(`ℹ️ Import: ${matchedCount} matched, ${unmatchedCount} unmatched (saved for later)`);
     }
 
     const appliedCount = Object.keys(cleanedImported).length;
@@ -668,8 +666,8 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     let msg: string;
     if (isDemo) {
       msg = `✅ تم استيراد ${appliedCount} ترجمة — ستظهر عند رفع ملفات BDAT من صفحة المعالجة`;
-    } else if (matchedCount > 0 && matchedCount < appliedCount) {
-      msg = `✅ تم استيراد ${matchedCount} ترجمة مطابقة${statsInfo} (${unmatchedCount} مفتاح غير مطابق محفوظ أيضاً)`;
+    } else if (matchedCount > 0 && unmatchedCount > 0) {
+      msg = `✅ تم استيراد ${appliedCount} ترجمة${statsInfo} — ${matchedCount} تظهر الآن، ${unmatchedCount} محفوظة لملفات BDAT أخرى`;
     } else if (isFilterActive) {
       msg = `✅ تم استيراد ${appliedCount} من ${totalInFile} ترجمة${statsInfo} (${filterLabel})`;
     } else {
