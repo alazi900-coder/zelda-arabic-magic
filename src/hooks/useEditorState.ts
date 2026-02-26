@@ -955,10 +955,20 @@ export function useEditorState() {
     : filterFile !== "all" ? filterFile
     : "";
 
-  // === Clear translations ===
+  // === Clear translations (with undo) ===
   const isFilterActive = filterLabel !== "";
+  const [clearUndoBackup, setClearUndoBackup] = useState<Record<string, string> | null>(null);
+  const clearUndoTimerRef = useRef<ReturnType<typeof setTimeout>>();
+
   const handleClearTranslations = useCallback((scope: 'all' | 'filtered') => {
     if (!state) return;
+    // Save backup for undo
+    const backup = { ...state.translations };
+    setClearUndoBackup(backup);
+    // Clear previous undo timer
+    if (clearUndoTimerRef.current) clearTimeout(clearUndoTimerRef.current);
+    clearUndoTimerRef.current = setTimeout(() => setClearUndoBackup(null), 15000);
+
     if (scope === 'all') {
       setState(prev => prev ? { ...prev, translations: {} } : null);
       setLastSaved(`🗑️ تم مسح جميع الترجمات (${Object.keys(state.translations).length})`);
@@ -977,6 +987,15 @@ export function useEditorState() {
     }
     setTimeout(() => setLastSaved(""), 4000);
   }, [state, filteredEntries, filterLabel]);
+
+  const handleUndoClear = useCallback(() => {
+    if (!clearUndoBackup) return;
+    setState(prev => prev ? { ...prev, translations: clearUndoBackup } : null);
+    setClearUndoBackup(null);
+    if (clearUndoTimerRef.current) clearTimeout(clearUndoTimerRef.current);
+    setLastSaved("↩️ تم التراجع عن المسح واستعادة الترجمات ✅");
+    setTimeout(() => setLastSaved(""), 4000);
+  }, [clearUndoBackup]);
 
   const fileIO = useEditorFileIO({ state, setState, setLastSaved, filteredEntries, filterLabel });
   const { normalizeArabicPresentationForms } = fileIO;
@@ -1373,7 +1392,7 @@ export function useEditorState() {
     handleCloudSave, handleCloudLoad,
     handleApplyArabicProcessing, handlePreBuild, handleBuild, handleBulkReplace, loadDemoBdatData, handleCheckIntegrity, handleRestoreOriginals, handleRemoveAllDiacritics,
     handleScanMergedSentences, handleApplySentenceSplit, handleRejectSentenceSplit, handleApplyAllSentenceSplits,
-    handleClearTranslations, isFilterActive,
+    handleClearTranslations, handleUndoClear, clearUndoBackup, isFilterActive,
     integrityResult, showIntegrityDialog, setShowIntegrityDialog, checkingIntegrity,
 
     // Quality helpers
