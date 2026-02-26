@@ -681,6 +681,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     if (repaired.wasTruncated) {
       msg += ` ⚠️ الملف كان مقطوعاً — تم تخطي ${repaired.skippedCount} سطر غير مكتمل`;
     }
+    alert(msg);
     setLastSaved(msg);
 
     // FIX: Apply BiDi fix only to entries that have Arabic in the ORIGINAL text
