@@ -8,7 +8,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
+// native scroll used for better mobile touch support
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckCircle2, XCircle, ArrowRight } from "lucide-react";
 
@@ -98,7 +98,7 @@ const ImportConflictDialog = ({
         </div>
 
         {/* Conflict list */}
-        <ScrollArea className="flex-1 min-h-0 max-h-[55vh]">
+        <div className="flex-1 min-h-0 max-h-[55vh] overflow-y-auto overflow-x-hidden -webkit-overflow-scrolling-touch">
           <div className="space-y-2 p-1">
             {conflicts.map((c) => {
               const isAccepted = accepted.has(c.key);
@@ -120,14 +120,14 @@ const ImportConflictDialog = ({
                     />
                     <div className="flex-1 min-w-0 space-y-1.5">
                       <p className="text-[10px] text-muted-foreground font-mono truncate">{c.label}</p>
-                      <div className="grid grid-cols-2 gap-2">
-                        <div className="bg-destructive/10 rounded p-2 border border-destructive/20">
+                      <div className="flex gap-2">
+                        <div className="flex-1 min-w-0 bg-destructive/10 rounded p-2 border border-destructive/20">
                           <p className="text-[10px] text-destructive font-bold mb-0.5">🔴 الحالية</p>
-                          <p className="text-xs leading-relaxed break-words" dir="auto">{c.oldValue}</p>
+                          <p className="text-xs leading-relaxed break-words overflow-hidden" dir="auto">{c.oldValue}</p>
                         </div>
-                        <div className="bg-green-500/10 rounded p-2 border border-green-500/20">
+                        <div className="flex-1 min-w-0 bg-green-500/10 rounded p-2 border border-green-500/20">
                           <p className="text-[10px] text-green-600 font-bold mb-0.5">🟢 المستوردة</p>
-                          <p className="text-xs leading-relaxed break-words" dir="auto">{c.newValue}</p>
+                          <p className="text-xs leading-relaxed break-words overflow-hidden" dir="auto">{c.newValue}</p>
                         </div>
                       </div>
                     </div>
@@ -136,7 +136,7 @@ const ImportConflictDialog = ({
               );
             })}
           </div>
-        </ScrollArea>
+        </div>
 
         <DialogFooter className="flex-row gap-2 justify-end pt-2 border-t border-border">
           <Button variant="outline" onClick={onCancel}>
