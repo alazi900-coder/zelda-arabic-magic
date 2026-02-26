@@ -59,6 +59,16 @@ const ImportConflictDialog = ({
     }
   };
 
+  const invertSelection = () => {
+    setAccepted(prev => {
+      const next = new Set<string>();
+      for (const c of conflicts) {
+        if (!prev.has(c.key)) next.add(c.key);
+      }
+      return next;
+    });
+  };
+
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onCancel(); }}>
       <DialogContent className="max-w-3xl max-h-[85vh] flex flex-col" dir="rtl">
@@ -82,6 +92,9 @@ const ImportConflictDialog = ({
           <label htmlFor="select-all" className="text-sm font-bold cursor-pointer">
             {allAccepted ? "إلغاء تحديد الكل" : "تحديد الكل"} ({accepted.size}/{conflicts.length})
           </label>
+          <Button variant="ghost" size="sm" onClick={invertSelection} className="text-xs mr-auto">
+            🔄 عكس التحديد
+          </Button>
         </div>
 
         {/* Conflict list */}
