@@ -18,7 +18,7 @@ import {
   ArrowRight, Download, FileText, Loader2, Filter, Sparkles, Save, Tag,
   Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle,
   Eye, EyeOff, RotateCcw, CheckCircle2, ShieldCheck, ChevronLeft, ChevronRight,
-  BarChart3, Menu, MoreVertical, Replace, Columns, Key, Type,
+  BarChart3, Menu, MoreVertical, Replace, Columns, Key, Type, Trash2,
 } from "lucide-react";
 import heroBg from "@/assets/xc3-hero-bg.jpg";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -62,6 +62,7 @@ const Editor = () => {
   const [showDiagnostic, setShowDiagnostic] = React.useState(false);
   const [showExportEnglishDialog, setShowExportEnglishDialog] = React.useState(false);
   const [compareEntry, setCompareEntry] = React.useState<import("@/components/editor/types").ExtractedEntry | null>(null);
+  const [showClearConfirm, setShowClearConfirm] = React.useState<'all' | 'filtered' | null>(null);
   const gameType = "xenoblade";
   const processPath = "/process";
 
@@ -787,6 +788,10 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleScanMergedSentences} disabled={editor.scanningSentences || editor.translatedCount === 0}>
                     {editor.scanningSentences ? <Loader2 className="w-4 h-4 animate-spin" /> : <AlertTriangle className="w-4 h-4" />} فصل الجمل المندمجة ✂️
                   </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => setShowClearConfirm(editor.isFilterActive ? 'filtered' : 'all')} disabled={editor.translatedCount === 0} className="text-destructive focus:text-destructive">
+                    <Trash2 className="w-4 h-4" /> {editor.isFilterActive ? `مسح ترجمة القسم المحدد 🗑️` : `مسح جميع الترجمات 🗑️`}
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -878,6 +883,10 @@ const Editor = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleScanMergedSentences} disabled={editor.scanningSentences || editor.translatedCount === 0}>
                     {editor.scanningSentences ? <Loader2 className="w-4 h-4 animate-spin" /> : <AlertTriangle className="w-4 h-4" />} فصل الجمل المندمجة ✂️
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => setShowClearConfirm(editor.isFilterActive ? 'filtered' : 'all')} disabled={editor.translatedCount === 0} className="text-destructive focus:text-destructive">
+                    <Trash2 className="w-4 h-4" /> {editor.isFilterActive ? `مسح ترجمة القسم المحدد 🗑️` : `مسح جميع الترجمات 🗑️`}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -1106,6 +1115,36 @@ const Editor = () => {
           onConfirm={editor.handleConflictConfirm}
           onCancel={editor.handleConflictCancel}
         />
+
+        {/* Clear Translations Confirmation */}
+        <AlertDialog open={!!showClearConfirm} onOpenChange={(v) => { if (!v) setShowClearConfirm(null); }}>
+          <AlertDialogContent dir="rtl">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="flex items-center gap-2 font-display">
+                <Trash2 className="w-5 h-5 text-destructive" />
+                ⚠️ تأكيد مسح الترجمات
+              </AlertDialogTitle>
+              <AlertDialogDescription className="text-right">
+                {showClearConfirm === 'all'
+                  ? `سيتم حذف جميع الترجمات (${editor.translatedCount} ترجمة) نهائياً. هل أنت متأكد؟`
+                  : `سيتم حذف ترجمات القسم المحدد فقط. هل أنت متأكد؟`
+                }
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter className="flex-row gap-2 justify-end">
+              <AlertDialogCancel>إلغاء</AlertDialogCancel>
+              <AlertDialogAction
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                onClick={() => {
+                  if (showClearConfirm) editor.handleClearTranslations(showClearConfirm);
+                  setShowClearConfirm(null);
+                }}
+              >
+                🗑️ نعم، امسح الترجمات
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </TooltipProvider>
   );
