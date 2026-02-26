@@ -48,6 +48,7 @@ import IntegrityCheckDialog from "@/components/editor/IntegrityCheckDialog";
 import PreBuildDiagnostic from "@/components/editor/PreBuildDiagnostic";
 import CompareEnginesDialog from "@/components/editor/CompareEnginesDialog";
 import SentenceSplitPanel from "@/components/editor/SentenceSplitPanel";
+import NewlineCleanPanel from "@/components/editor/NewlineCleanPanel";
 import ExportEnglishDialog from "@/components/editor/ExportEnglishDialog";
 import GlossaryStatsPanel from "@/components/editor/GlossaryStatsPanel";
 import TranslationStatsPanel from "@/components/editor/TranslationStatsPanel";
@@ -535,6 +536,17 @@ const Editor = () => {
             />
           )}
 
+          {/* Newline Clean Results */}
+          {editor.newlineCleanResults && editor.newlineCleanResults.length > 0 && (
+            <NewlineCleanPanel
+              results={editor.newlineCleanResults}
+              onAccept={editor.handleApplyNewlineClean}
+              onReject={editor.handleRejectNewlineClean}
+              onAcceptAll={editor.handleApplyAllNewlineCleans}
+              onClose={() => editor.setNewlineCleanResults(null)}
+            />
+          )}
+
           {!editor.user && (
             <Card className="mb-4 border-primary/30 bg-primary/5">
               <CardContent className="flex items-center gap-3 p-4"><LogIn className="w-4 h-4" /> سجّل دخولك للمزامنة</CardContent>
@@ -799,6 +811,9 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleScanMergedSentences} disabled={editor.scanningSentences || editor.translatedCount === 0}>
                     {editor.scanningSentences ? <Loader2 className="w-4 h-4 animate-spin" /> : <AlertTriangle className="w-4 h-4" />} فصل الجمل المندمجة ✂️
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleScanNewlines} disabled={editor.translatedCount === 0}>
+                    🧹 إزالة أسطر جديدة \n
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => setShowClearConfirm(editor.isFilterActive ? 'filtered' : 'all')} disabled={editor.translatedCount === 0} className="text-destructive focus:text-destructive">
                     <Trash2 className="w-4 h-4" /> {editor.isFilterActive ? `مسح ترجمة القسم المحدد 🗑️` : `مسح جميع الترجمات 🗑️`}
@@ -894,6 +909,9 @@ const Editor = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleScanMergedSentences} disabled={editor.scanningSentences || editor.translatedCount === 0}>
                     {editor.scanningSentences ? <Loader2 className="w-4 h-4 animate-spin" /> : <AlertTriangle className="w-4 h-4" />} فصل الجمل المندمجة ✂️
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleScanNewlines} disabled={editor.translatedCount === 0}>
+                    🧹 إزالة أسطر جديدة \n
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => setShowClearConfirm(editor.isFilterActive ? 'filtered' : 'all')} disabled={editor.translatedCount === 0} className="text-destructive focus:text-destructive">

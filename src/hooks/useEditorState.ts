@@ -49,6 +49,7 @@ export function useEditorState() {
   const [consistencyResults, setConsistencyResults] = useState<{ groups: any[]; aiSuggestions: { best: string; reason: string }[] } | null>(null);
   const [scanningSentences, setScanningSentences] = useState(false);
   const [sentenceSplitResults, setSentenceSplitResults] = useState<import("@/lib/arabic-sentence-splitter").SentenceSplitResult[] | null>(null);
+  const [newlineCleanResults, setNewlineCleanResults] = useState<import("@/components/editor/NewlineCleanPanel").NewlineCleanResult[] | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [showFindReplace, setShowFindReplace] = useState(false);
   const [userGeminiKey, _setUserGeminiKey] = useState(() => {
@@ -1306,6 +1307,53 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 4000);
   }, [state]);
 
+  // === Newline Clean (\n removal) ===
+  const handleScanNewlines = useCallback(() => {
+    if (!state) return;
+    const results: import("@/components/editor/NewlineCleanPanel").NewlineCleanResult[] = [];
+    for (const [key, value] of Object.entries(state.translations)) {
+      if (!value?.trim()) continue;
+      // Look for literal \n (backslash + n) in the text
+      if (value.includes('\\n')) {
+        const after = value.replace(/\\n/g, ' ').replace(/ {2,}/g, ' ').trim();
+        const count = (value.match(/\\n/g) || []).length;
+        if (after !== value) {
+          results.push({ key, before: value, after, count, status: 'pending' });
+        }
+      }
+    }
+    setNewlineCleanResults(results);
+    if (results.length === 0) {
+      setLastSaved("✅ لم يتم اكتشاف أي \\n في الترجمات");
+      setTimeout(() => setLastSaved(""), 4000);
+    }
+  }, [state]);
+
+  const handleApplyNewlineClean = useCallback((key: string) => {
+    if (!state || !newlineCleanResults) return;
+    const item = newlineCleanResults.find(r => r.key === key);
+    if (!item) return;
+    setState(prev => prev ? { ...prev, translations: { ...prev.translations, [key]: item.after } } : null);
+    setNewlineCleanResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'accepted' as const } : r) : null);
+  }, [state, newlineCleanResults]);
+
+  const handleRejectNewlineClean = useCallback((key: string) => {
+    setNewlineCleanResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'rejected' as const } : r) : null);
+  }, []);
+
+  const handleApplyAllNewlineCleans = useCallback(() => {
+    if (!state || !newlineCleanResults) return;
+    const pending = newlineCleanResults.filter(r => r.status === 'pending');
+    const newTranslations = { ...state.translations };
+    for (const item of pending) {
+      newTranslations[item.key] = item.after;
+    }
+    setState(prev => prev ? { ...prev, translations: newTranslations } : null);
+    setNewlineCleanResults(prev => prev ? prev.map(r => r.status === 'pending' ? { ...r, status: 'accepted' as const } : r) : null);
+    setLastSaved(`✅ تم إزالة \\n من ${pending.length} ترجمة`);
+    setTimeout(() => setLastSaved(""), 4000);
+  }, [state, newlineCleanResults]);
+
   // === Sentence Splitter ===
   const handleScanMergedSentences = useCallback(() => {
     if (!state) return;
@@ -1361,7 +1409,7 @@ export function useEditorState() {
     applyingArabic, improvingTranslations, improveResults,
     fixingMixed, filtersOpen, buildStats, buildPreview, showBuildConfirm, bdatFileStats,
     checkingConsistency, consistencyResults,
-    scanningSentences, sentenceSplitResults,
+    scanningSentences, sentenceSplitResults, newlineCleanResults,
     categoryProgress, qualityStats, needsImproveCount, translatedCount, tagsCount, fuzzyCount, byteOverflowCount,
     bdatTableNames, bdatColumnNames, bdatTableCounts, bdatColumnCounts,
     ...glossary,
@@ -1374,7 +1422,7 @@ export function useEditorState() {
     setCurrentPage, setShowRetranslateConfirm,
     setArabicNumerals, setMirrorPunctuation, setUserGeminiKey, setTranslationProvider, setMyMemoryEmail,
     setReviewResults, setShortSuggestions, setImproveResults, setBuildStats, setShowBuildConfirm,
-    setConsistencyResults, setSentenceSplitResults,
+    setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults,
 
     // Handlers
     toggleProtection, toggleTechnicalBypass,
@@ -1392,6 +1440,7 @@ export function useEditorState() {
     handleCloudSave, handleCloudLoad,
     handleApplyArabicProcessing, handlePreBuild, handleBuild, handleBulkReplace, loadDemoBdatData, handleCheckIntegrity, handleRestoreOriginals, handleRemoveAllDiacritics,
     handleScanMergedSentences, handleApplySentenceSplit, handleRejectSentenceSplit, handleApplyAllSentenceSplits,
+    handleScanNewlines, handleApplyNewlineClean, handleRejectNewlineClean, handleApplyAllNewlineCleans,
     handleClearTranslations, handleUndoClear, clearUndoBackup, isFilterActive,
     integrityResult, showIntegrityDialog, setShowIntegrityDialog, checkingIntegrity,
 
