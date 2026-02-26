@@ -426,6 +426,17 @@ const Editor = () => {
           {editor.lastSaved && (
             <Card className="mb-4 border-secondary/30 bg-secondary/5"><CardContent className="p-4 text-center font-display">{editor.lastSaved}</CardContent></Card>
           )}
+          {/* Undo Clear Banner */}
+          {editor.clearUndoBackup && (
+            <Card className="mb-4 border-destructive/30 bg-destructive/5">
+              <CardContent className="p-3 flex items-center justify-between gap-3">
+                <span className="text-sm font-display">⚠️ تم مسح الترجمات — يمكنك التراجع خلال 15 ثانية</span>
+                <Button size="sm" variant="outline" onClick={editor.handleUndoClear} className="font-display border-destructive/30 text-destructive hover:text-destructive shrink-0">
+                  <RotateCcw className="w-4 h-4" /> تراجع ↩️
+                </Button>
+              </CardContent>
+            </Card>
+          )}
           {editor.translateProgress && (
             <Card className="mb-4 border-secondary/30 bg-secondary/5"><CardContent className="p-4 text-center font-display">{editor.translateProgress}</CardContent></Card>
           )}
