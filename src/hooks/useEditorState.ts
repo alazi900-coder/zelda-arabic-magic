@@ -954,6 +954,30 @@ export function useEditorState() {
   const filterLabel = filterCategory.length > 0 ? filterCategory.join('+')
     : filterFile !== "all" ? filterFile
     : "";
+
+  // === Clear translations ===
+  const isFilterActive = filterLabel !== "";
+  const handleClearTranslations = useCallback((scope: 'all' | 'filtered') => {
+    if (!state) return;
+    if (scope === 'all') {
+      setState(prev => prev ? { ...prev, translations: {} } : null);
+      setLastSaved(`🗑️ تم مسح جميع الترجمات (${Object.keys(state.translations).length})`);
+    } else {
+      const keysToRemove = new Set(filteredEntries.map(e => `${e.msbtFile}:${e.index}`));
+      const newTranslations = { ...state.translations };
+      let removed = 0;
+      for (const key of keysToRemove) {
+        if (newTranslations[key]?.trim()) {
+          delete newTranslations[key];
+          removed++;
+        }
+      }
+      setState(prev => prev ? { ...prev, translations: newTranslations } : null);
+      setLastSaved(`🗑️ تم مسح ${removed} ترجمة (${filterLabel || 'القسم المحدد'})`);
+    }
+    setTimeout(() => setLastSaved(""), 4000);
+  }, [state, filteredEntries, filterLabel]);
+
   const fileIO = useEditorFileIO({ state, setState, setLastSaved, filteredEntries, filterLabel });
   const { normalizeArabicPresentationForms } = fileIO;
 
@@ -1349,6 +1373,7 @@ export function useEditorState() {
     handleCloudSave, handleCloudLoad,
     handleApplyArabicProcessing, handlePreBuild, handleBuild, handleBulkReplace, loadDemoBdatData, handleCheckIntegrity, handleRestoreOriginals, handleRemoveAllDiacritics,
     handleScanMergedSentences, handleApplySentenceSplit, handleRejectSentenceSplit, handleApplyAllSentenceSplits,
+    handleClearTranslations, isFilterActive,
     integrityResult, showIntegrityDialog, setShowIntegrityDialog, checkingIntegrity,
 
     // Quality helpers
