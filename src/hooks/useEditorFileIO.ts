@@ -1,4 +1,5 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
+import type { ImportConflict } from "@/components/editor/ImportConflictDialog";
 import { removeArabicPresentationForms } from "@/lib/arabic-processing";
 import type { EditorState } from "@/components/editor/types";
 import { ExtractedEntry, hasArabicChars, unReverseBidi } from "@/components/editor/types";
@@ -143,6 +144,14 @@ function parseCSVLine(line: string): string[] {
 export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries, filterLabel }: UseEditorFileIOProps) {
 
   const isFilterActive = filterLabel !== "";
+
+  // Conflict dialog state
+  const [importConflicts, setImportConflicts] = useState<ImportConflict[]>([]);
+  const [pendingImport, setPendingImport] = useState<{
+    cleanedImported: Record<string, string>;
+    msg: string;
+    repaired: { wasTruncated?: boolean; skippedCount?: number };
+  } | null>(null);
 
   const handleExportTranslations = () => {
     if (!state) return;
@@ -659,8 +668,6 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       if (!confirmed) return;
     }
 
-    setState(prev => { if (!prev) return null; return { ...prev, translations: { ...prev.translations, ...cleanedImported } }; });
-
     const appliedCount = Object.keys(cleanedImported).length;
     const statsDetails: string[] = [];
     if (directMatchCount > 0) statsDetails.push(`${directMatchCount} مباشرة`);
@@ -681,12 +688,40 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     if (repaired.wasTruncated) {
       msg += ` ⚠️ الملف كان مقطوعاً — تم تخطي ${repaired.skippedCount} سطر غير مكتمل`;
     }
+
+    // ── Detect conflicts: existing translations that differ from imported ones ──
+    const conflicts: ImportConflict[] = [];
+    if (state) {
+      for (const [key, newValue] of Object.entries(cleanedImported)) {
+        const oldValue = state.translations[key];
+        if (oldValue && oldValue.trim() && oldValue.trim() !== newValue.trim()) {
+          // Find a readable label
+          const entry = state.entries.find(e => `${e.msbtFile}:${e.index}` === key);
+          const label = entry ? entry.original.slice(0, 60) : key.split(':').slice(-3).join(':');
+          conflicts.push({ key, label, oldValue, newValue });
+        }
+      }
+    }
+
+    if (conflicts.length > 0) {
+      // Store pending import and show conflict dialog
+      setPendingImport({ cleanedImported, msg, repaired });
+      setImportConflicts(conflicts);
+      return; // Wait for user decision in the dialog
+    }
+
+    // No conflicts — apply directly
+    applyImport(cleanedImported, msg, repaired);
+  }, [state, setState, setLastSaved, isFilterActive, filteredEntries, filterLabel]);
+
+  /** Apply imported translations (after conflict resolution or directly) */
+  const applyImport = useCallback((cleanedImported: Record<string, string>, msg: string, repaired: { wasTruncated?: boolean; skippedCount?: number }) => {
+    setState(prev => { if (!prev) return null; return { ...prev, translations: { ...prev.translations, ...cleanedImported } }; });
+
     alert(msg);
     setLastSaved(msg);
 
-    // FIX: Apply BiDi fix only to entries that have Arabic in the ORIGINAL text
-    // and do NOT yet have a translation from the imported JSON.
-    // We must NOT touch keys that were just imported (cleanedImported) — only truly empty ones.
+    // Apply BiDi fix to entries that have Arabic in the ORIGINAL and no imported translation
     setState(prevState => {
       if (!prevState) return null;
       const newTranslations = { ...prevState.translations };
@@ -695,7 +730,6 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       const importedKeys = new Set(Object.keys(cleanedImported));
       for (const entry of prevState.entries) {
         const key = `${entry.msbtFile}:${entry.index}`;
-        // Skip any key that was just imported — never overwrite freshly imported translations
         if (importedKeys.has(key)) continue;
         if (hasArabicChars(entry.original)) {
           if (newProtected.has(key)) continue;
@@ -714,7 +748,45 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       if (count > 0) setLastSaved(prev => prev + ` + تصحيح ${count} نص معكوس`);
       return { ...prevState, translations: newTranslations, protectedEntries: newProtected };
     });
-  }, [state, setState, setLastSaved, isFilterActive, filteredEntries, filterLabel]);
+  }, [setState, setLastSaved]);
+
+  /** Handle conflict dialog confirmation */
+  const handleConflictConfirm = useCallback((acceptedKeys: Set<string>) => {
+    if (!pendingImport) return;
+    const { cleanedImported, msg, repaired } = pendingImport;
+    // Remove rejected conflicts from the import
+    const filtered = { ...cleanedImported };
+    for (const conflict of importConflicts) {
+      if (!acceptedKeys.has(conflict.key)) {
+        delete filtered[conflict.key];
+      }
+    }
+    const rejectedCount = importConflicts.length - acceptedKeys.size;
+    const finalMsg = rejectedCount > 0
+      ? msg + ` (${acceptedKeys.size} استبدال، ${rejectedCount} إبقاء الحالية)`
+      : msg;
+    setImportConflicts([]);
+    setPendingImport(null);
+    applyImport(filtered, finalMsg, repaired);
+  }, [pendingImport, importConflicts, applyImport]);
+
+  /** Handle conflict dialog cancellation */
+  const handleConflictCancel = useCallback(() => {
+    if (!pendingImport) return;
+    const { cleanedImported, msg, repaired } = pendingImport;
+    // Remove ALL conflicting keys — keep only new translations
+    const filtered = { ...cleanedImported };
+    for (const conflict of importConflicts) {
+      delete filtered[conflict.key];
+    }
+    setImportConflicts([]);
+    setPendingImport(null);
+    if (Object.keys(filtered).length > 0) {
+      applyImport(filtered, msg + ` (${importConflicts.length} ترجمة حالية لم تُستبدل)`, repaired);
+    } else {
+      alert('تم إلغاء الاستيراد — لم يتم تغيير أي ترجمة.');
+    }
+  }, [pendingImport, importConflicts, applyImport]);
 
   /** Handle drop/paste of JSON file or text */
   const handleDropImport = useCallback(async (dataTransfer: DataTransfer) => {
@@ -1283,5 +1355,9 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     normalizeArabicPresentationForms,
     isFilterActive,
     filterLabel,
+    // Conflict dialog
+    importConflicts,
+    handleConflictConfirm,
+    handleConflictCancel,
   };
 }
