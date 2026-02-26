@@ -1307,24 +1307,28 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 4000);
   }, [state]);
 
-  // === Newline Clean (\n removal) ===
+  // === Newline & Symbol Clean (remove \n, \., \:, \-, \\, and standalone n . \ : -) ===
   const handleScanNewlines = useCallback(() => {
     if (!state) return;
     const results: import("@/components/editor/NewlineCleanPanel").NewlineCleanResult[] = [];
+    // Pattern: backslash+char combos OR standalone stray symbols (n . \ : -)
+    // Standalone n only when surrounded by spaces or at start/end
+    const cleanupPattern = /\\[n.:\-\\r]|(?<=\s|^)[n.:\\\-](?=\s|$)/g;
     for (const [key, value] of Object.entries(state.translations)) {
       if (!value?.trim()) continue;
-      // Look for literal \n (backslash + n) in the text
-      if (value.includes('\\n')) {
-        const after = value.replace(/\\n/g, ' ').replace(/ {2,}/g, ' ').trim();
-        const count = (value.match(/\\n/g) || []).length;
+      if (cleanupPattern.test(value)) {
+        cleanupPattern.lastIndex = 0; // reset regex
+        const count = (value.match(cleanupPattern) || []).length;
+        const after = value.replace(cleanupPattern, ' ').replace(/ {2,}/g, ' ').trim();
         if (after !== value) {
           results.push({ key, before: value, after, count, status: 'pending' });
         }
+        cleanupPattern.lastIndex = 0;
       }
     }
     setNewlineCleanResults(results);
     if (results.length === 0) {
-      setLastSaved("✅ لم يتم اكتشاف أي \\n في الترجمات");
+      setLastSaved("✅ لم يتم اكتشاف أي رموز غير مرغوبة في الترجمات");
       setTimeout(() => setLastSaved(""), 4000);
     }
   }, [state]);
@@ -1350,7 +1354,7 @@ export function useEditorState() {
     }
     setState(prev => prev ? { ...prev, translations: newTranslations } : null);
     setNewlineCleanResults(prev => prev ? prev.map(r => r.status === 'pending' ? { ...r, status: 'accepted' as const } : r) : null);
-    setLastSaved(`✅ تم إزالة \\n من ${pending.length} ترجمة`);
+    setLastSaved(`✅ تم تنظيف ${pending.length} ترجمة من الرموز غير المرغوبة`);
     setTimeout(() => setLastSaved(""), 4000);
   }, [state, newlineCleanResults]);
 
