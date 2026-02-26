@@ -662,16 +662,20 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     setState(prev => { if (!prev) return null; return { ...prev, translations: { ...prev.translations, ...cleanedImported } }; });
 
     const appliedCount = Object.keys(cleanedImported).length;
-    const fpInfo = fpRemappedTotal > 0 ? ` (${directMatchCount} مباشرة + ${fpRemappedTotal} عبر البصمة 🔄)` : '';
+    const statsDetails: string[] = [];
+    if (directMatchCount > 0) statsDetails.push(`${directMatchCount} مباشرة`);
+    if (legacyConverted > 0) statsDetails.push(`${legacyConverted} محوّلة من صيغة قديمة 🔑`);
+    if (fpRemappedTotal > 0) statsDetails.push(`${fpRemappedTotal} عبر البصمة 🔄`);
+    const statsInfo = statsDetails.length > 0 ? ` (${statsDetails.join(' + ')})` : '';
     let msg: string;
     if (isDemo) {
       msg = `✅ تم استيراد ${appliedCount} ترجمة — ستظهر عند رفع ملفات BDAT من صفحة المعالجة`;
     } else if (matchedCount > 0 && matchedCount < appliedCount) {
-      msg = `✅ تم استيراد ${matchedCount} ترجمة مطابقة${fpInfo} (${unmatchedCount} مفتاح غير مطابق محفوظ أيضاً)`;
+      msg = `✅ تم استيراد ${matchedCount} ترجمة مطابقة${statsInfo} (${unmatchedCount} مفتاح غير مطابق محفوظ أيضاً)`;
     } else if (isFilterActive) {
-      msg = `✅ تم استيراد ${appliedCount} من ${totalInFile} ترجمة${fpInfo} (${filterLabel})`;
+      msg = `✅ تم استيراد ${appliedCount} من ${totalInFile} ترجمة${statsInfo} (${filterLabel})`;
     } else {
-      msg = `✅ تم استيراد ${appliedCount} ترجمة — ${matchedCount} مطابقة في المحرر${fpInfo}`;
+      msg = `✅ تم استيراد ${appliedCount} ترجمة — ${matchedCount} مطابقة في المحرر${statsInfo}`;
     }
     if (sourceName) msg += ` — ${sourceName}`;
     if (repaired.wasTruncated) {
