@@ -5,6 +5,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Loader2, Check, Sparkles } from "lucide-react";
 import type { ExtractedEntry } from "./types";
+import { protectTags, restoreTags } from "@/lib/xc3-tag-protection";
 
 interface CompareResult {
   gemini?: string;
@@ -45,13 +46,16 @@ const CompareEnginesDialog: React.FC<CompareEnginesDialogProps> = ({
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
+    // Protect tags client-side before sending to any engine
+    const { cleanText, tags } = protectTags(entry.original);
+
     const fetchProvider = async (provider: string) => {
       try {
         const response = await fetch(`${supabaseUrl}/functions/v1/translate-entries`, {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            entries: [{ key, original: entry.original }],
+            entries: [{ key, original: cleanText }],
             glossary,
             provider,
             userApiKey: provider === 'gemini' ? (userGeminiKey || undefined) : undefined,
@@ -60,7 +64,9 @@ const CompareEnginesDialog: React.FC<CompareEnginesDialogProps> = ({
         });
         if (!response.ok) return null;
         const data = await response.json();
-        return data.translations?.[key] || null;
+        const rawTranslation = data.translations?.[key] || null;
+        // Restore original tags into the translated text
+        return rawTranslation ? restoreTags(rawTranslation, tags) : null;
       } catch {
         return null;
       }
