@@ -215,21 +215,17 @@ export function useEditorTranslation({
         const batch = needsAI.slice(b * AI_BATCH_SIZE, (b + 1) * AI_BATCH_SIZE);
         setTranslateProgress(`🔄 ترجمة الدفعة ${b + 1}/${totalBatches} (${batch.length} نص)...`);
 
-        // Protect tags before sending to AI
-        const protectedMap = new Map<string, ReturnType<typeof protectTags>>();
-        const entries = batch.map(e => {
-          const key = `${e.msbtFile}:${e.index}`;
-          const p = protectTags(e.original);
-          protectedMap.set(key, p);
-          return { key, original: p.tags.length > 0 ? p.cleanText : e.original };
-        });
-        // Build context: nearby entries + recently translated entries from this session for consistency
+        // Send original text directly — server handles tag protection
+        const entries = batch.map(e => ({
+          key: `${e.msbtFile}:${e.index}`,
+          original: e.original,
+        }));
+        // Build context: nearby entries only (limited to 8 to prevent context leakage)
         const contextEntries: { key: string; original: string; translation?: string }[] = [];
         const contextKeys = new Set<string>();
-        // Nearby entries (positional context)
         for (const e of batch) {
           const idx = state.entries.indexOf(e);
-          for (const offset of [-2, -1, 1, 2]) {
+          for (const offset of [-1, 1]) {
             const neighbor = state.entries[idx + offset];
             if (neighbor) {
               const nKey = `${neighbor.msbtFile}:${neighbor.index}`;
@@ -240,16 +236,6 @@ export function useEditorTranslation({
             }
           }
         }
-        // Add recently translated entries from this session (for term consistency across batches)
-        const recentKeys = Object.keys(allTranslations).slice(-20);
-        for (const rKey of recentKeys) {
-          if (contextKeys.has(rKey)) continue;
-          const entry = state.entries.find(e => `${e.msbtFile}:${e.index}` === rKey);
-          if (entry && allTranslations[rKey]?.trim()) {
-            contextKeys.add(rKey);
-            contextEntries.push({ key: rKey, original: entry.original, translation: allTranslations[rKey] });
-          }
-        }
 
         const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
         const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -257,7 +243,7 @@ export function useEditorTranslation({
           method: 'POST',
           headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
           signal: abortControllerRef.current.signal,
-           body: JSON.stringify({ entries, glossary: activeGlossary, context: contextEntries.length > 0 ? contextEntries.slice(0, 25) : undefined, userApiKey: userGeminiKey || undefined, provider: translationProvider, myMemoryEmail: myMemoryEmail || undefined }),
+           body: JSON.stringify({ entries, glossary: activeGlossary, context: contextEntries.length > 0 ? contextEntries.slice(0, 8) : undefined, userApiKey: userGeminiKey || undefined, provider: translationProvider, myMemoryEmail: myMemoryEmail || undefined }),
         });
         if (!response.ok) throw new Error(`خطأ ${response.status}`);
         const data = await response.json();
@@ -280,7 +266,7 @@ export function useEditorTranslation({
           textsTranslated: prev.textsTranslated + batchTranslated,
         }));
         if (data.translations) {
-          const fixedTranslations = autoFixTags(data.translations, protectedMap);
+          const fixedTranslations = autoFixTags(data.translations);
           allTranslations = { ...allTranslations, ...fixedTranslations };
           setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...fixedTranslations } } : null);
         }
@@ -571,28 +557,12 @@ export function useEditorTranslation({
         const batch = needsAI.slice(b * AI_BATCH_SIZE, (b + 1) * AI_BATCH_SIZE);
         setTranslateProgress(`🔄 ترجمة صفحة: الدفعة ${b + 1}/${totalBatches} (${batch.length} نص)...`);
 
-        const protectedMap = new Map<string, ReturnType<typeof protectTags>>();
-        const entries = batch.map(e => {
-          const key = `${e.msbtFile}:${e.index}`;
-          const p = protectTags(e.original);
-          protectedMap.set(key, p);
-          return { key, original: p.tags.length > 0 ? p.cleanText : e.original };
-        });
-        const contextEntries: { key: string; original: string; translation?: string }[] = [];
-        const contextKeys = new Set<string>();
-        for (const e of batch) {
-          const idx = state.entries.indexOf(e);
-          for (const offset of [-2, -1, 1, 2]) {
-            const neighbor = state.entries[idx + offset];
-            if (neighbor) {
-              const nKey = `${neighbor.msbtFile}:${neighbor.index}`;
-              if (!contextKeys.has(nKey) && state.translations[nKey]?.trim()) {
-                contextKeys.add(nKey);
-                contextEntries.push({ key: nKey, original: neighbor.original, translation: state.translations[nKey] });
-              }
-            }
-          }
-        }
+        // Send original text directly — server handles tag protection (no double protection)
+        const entries = batch.map(e => ({
+          key: `${e.msbtFile}:${e.index}`,
+          original: e.original,
+        }));
+        // No context sent for page translation — prevents context leakage from outside the filter
 
         const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
         const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -600,7 +570,7 @@ export function useEditorTranslation({
           method: 'POST',
           headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
           signal: abortControllerRef.current.signal,
-          body: JSON.stringify({ entries, glossary: activeGlossary, context: contextEntries.length > 0 ? contextEntries.slice(0, 25) : undefined, userApiKey: userGeminiKey || undefined, provider: translationProvider, myMemoryEmail: myMemoryEmail || undefined }),
+          body: JSON.stringify({ entries, glossary: activeGlossary, userApiKey: userGeminiKey || undefined, provider: translationProvider, myMemoryEmail: myMemoryEmail || undefined }),
         });
         if (!response.ok) throw new Error(`خطأ ${response.status}`);
         const data = await response.json();
@@ -609,7 +579,7 @@ export function useEditorTranslation({
         const batchTranslated = data.translations ? Object.keys(data.translations).length : 0;
         setGlossarySessionStats(prev => ({ ...prev, batchesCompleted: b + 1, textsTranslated: prev.textsTranslated + batchTranslated }));
         if (data.translations) {
-          const fixedTranslations = autoFixTags(data.translations, protectedMap);
+          const fixedTranslations = autoFixTags(data.translations);
           allTranslations = { ...allTranslations, ...fixedTranslations };
           setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...fixedTranslations } } : null);
         }

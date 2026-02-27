@@ -610,6 +610,17 @@ ${textsBlock}`;
       if (!translated) continue;
       const item = needsAI[i];
 
+      // Safety check: reject suspiciously short translations (likely mismatched)
+      const originalLen = item.pe.cleaned.length;
+      if (translated.length < 3 && originalLen > 20) {
+        console.warn(`Skipping suspiciously short translation "${translated}" for ${item.entry.key} (original: ${originalLen} chars)`);
+        continue;
+      }
+      if (originalLen > 30 && translated.length < originalLen * 0.15) {
+        console.warn(`Translation ratio too low for ${item.entry.key}: ${translated.length}/${originalLen} chars`);
+        continue;
+      }
+
       // Normalize malformed TAG variants before any processing
       translated = translated
         .replace(/TAG\s+(\d+)/gi, 'TAG_$1')   // "TAG 0" → "TAG_0"
