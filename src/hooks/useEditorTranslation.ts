@@ -491,63 +491,74 @@ export function useEditorTranslation({
 
     const untranslated = candidates;
 
-    // Translation Memory
-    const tmMap = new Map<string, string>();
-    for (const [key, val] of Object.entries(state.translations)) {
-      if (val.trim()) {
-        const entry = state.entries.find(e => `${e.msbtFile}:${e.index}` === key);
-        if (entry) {
-          const norm = entry.original.trim().toLowerCase();
-          if (!tmMap.has(norm)) tmMap.set(norm, val);
+    let needsAI: typeof untranslated;
+    let tmCount = 0;
+    let glossaryCount = 0;
+
+    if (memoryOnly) {
+      // Memory-only mode: use TM + Glossary, skip AI entirely
+      const tmMap = new Map<string, string>();
+      for (const [key, val] of Object.entries(state.translations)) {
+        if (val.trim()) {
+          const entry = state.entries.find(e => `${e.msbtFile}:${e.index}` === key);
+          if (entry) {
+            const norm = entry.original.trim().toLowerCase();
+            if (!tmMap.has(norm)) tmMap.set(norm, val);
+          }
         }
       }
-    }
-    const tmReused: Record<string, string> = {};
-    const afterTM: typeof untranslated = [];
-    for (const e of untranslated) {
-      const norm = e.original.trim().toLowerCase();
-      const cached = tmMap.get(norm);
-      if (cached) { tmReused[`${e.msbtFile}:${e.index}`] = cached; }
-      else { afterTM.push(e); }
-    }
+      const tmReused: Record<string, string> = {};
+      const afterTM: typeof untranslated = [];
+      for (const e of untranslated) {
+        const norm = e.original.trim().toLowerCase();
+        const cached = tmMap.get(norm);
+        if (cached) { tmReused[`${e.msbtFile}:${e.index}`] = cached; }
+        else { afterTM.push(e); }
+      }
 
-    // Glossary direct translation (free, no AI)
-    const glossaryMap = parseGlossaryMap(activeGlossary);
-    const glossaryReused: Record<string, string> = {};
-    const needsAI: typeof untranslated = [];
-    for (const e of afterTM) {
-      const norm = e.original.trim().toLowerCase();
-      const glossaryHit = glossaryMap.get(norm);
-      if (glossaryHit) { glossaryReused[`${e.msbtFile}:${e.index}`] = glossaryHit; }
-      else { needsAI.push(e); }
-    }
+      const glossaryMap = parseGlossaryMap(activeGlossary);
+      const glossaryReused: Record<string, string> = {};
+      const remaining: typeof untranslated = [];
+      for (const e of afterTM) {
+        const norm = e.original.trim().toLowerCase();
+        const glossaryHit = glossaryMap.get(norm);
+        if (glossaryHit) { glossaryReused[`${e.msbtFile}:${e.index}`] = glossaryHit; }
+        else { remaining.push(e); }
+      }
 
-    const freeTranslations = { ...tmReused, ...glossaryReused };
-    if (Object.keys(freeTranslations).length > 0) {
-      setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...freeTranslations } } : null);
-    }
-    const tmCount = Object.keys(tmReused).length;
-    const glossaryCount = Object.keys(glossaryReused).length;
-    setTmStats({ reused: tmCount + glossaryCount, sent: needsAI.length });
-    if (needsAI.length === 0 || memoryOnly) {
+      const freeTranslations = { ...tmReused, ...glossaryReused };
+      if (Object.keys(freeTranslations).length > 0) {
+        setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...freeTranslations } } : null);
+      }
+      tmCount = Object.keys(tmReused).length;
+      glossaryCount = Object.keys(glossaryReused).length;
+      const totalFree = tmCount + glossaryCount;
+      setTmStats({ reused: totalFree, sent: 0 });
       const parts: string[] = [];
       if (tmCount > 0) parts.push(`${tmCount} من الذاكرة`);
       if (glossaryCount > 0) parts.push(`${glossaryCount} من القاموس 📖`);
-      const totalFree = tmCount + glossaryCount;
-      if (memoryOnly && needsAI.length > 0) {
-        setTranslateProgress(`✅ تم ترجمة ${totalFree} نص مجاناً (${parts.join(' + ')}) — تم تخطي ${needsAI.length} نص (بدون ذكاء اصطناعي)`);
+      if (remaining.length > 0) {
+        setTranslateProgress(`✅ تم ترجمة ${totalFree} نص مجاناً (${parts.join(' + ')}) — تم تخطي ${remaining.length} نص (بدون ذكاء اصطناعي)`);
       } else {
         setTranslateProgress(`✅ تم ترجمة ${totalFree} نص مجاناً (${parts.join(' + ')}) — لا حاجة للذكاء الاصطناعي!`);
       }
       setTimeout(() => setTranslateProgress(""), 5000);
       return;
+    } else {
+      // AI mode: send everything directly to AI, skip TM/Glossary
+      needsAI = untranslated;
+      setTmStats({ reused: 0, sent: needsAI.length });
+      if (needsAI.length === 0) {
+        setTranslateProgress(`✅ لا توجد نصوص تحتاج ترجمة`);
+        setTimeout(() => setTranslateProgress(""), 5000);
+        return;
+      }
     }
 
     setTranslating(true);
     const totalBatches = Math.ceil(needsAI.length / AI_BATCH_SIZE);
     let allTranslations: Record<string, string> = {};
-    const freeCount = Object.keys(freeTranslations).length;
-    setGlossarySessionStats(prev => ({ ...prev, batchesCompleted: 0, totalBatches, textsTranslated: 0, freeTranslations: freeCount }));
+    setGlossarySessionStats(prev => ({ ...prev, batchesCompleted: 0, totalBatches, textsTranslated: 0, freeTranslations: 0 }));
     abortControllerRef.current = new AbortController();
 
     try {
