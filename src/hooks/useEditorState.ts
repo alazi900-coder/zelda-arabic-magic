@@ -720,7 +720,7 @@ export function useEditorState() {
     state, setState, setLastSaved, setTranslateProgress, setPreviousTranslations, updateTranslation,
     filterCategory, activeGlossary, parseGlossaryMap, paginatedEntries, userGeminiKey, translationProvider, myMemoryEmail, addMyMemoryChars, addAiRequest,
   });
-  const { translating, translatingSingle, tmStats, glossarySessionStats, handleTranslateSingle, handleAutoTranslate, handleStopTranslate, handleRetranslatePage, handleFixDamagedTags } = translation;
+  const { translating, translatingSingle, tmStats, glossarySessionStats, handleTranslateSingle, handleAutoTranslate, handleTranslatePage, handleStopTranslate, handleRetranslatePage, handleFixDamagedTags } = translation;
 
   // === Local (offline) fix for damaged tags — no AI needed ===
   const handleLocalFixDamagedTag = useCallback((entry: ExtractedEntry) => {
@@ -1532,7 +1532,7 @@ export function useEditorState() {
     toggleProtection, toggleTechnicalBypass,
     handleProtectAllArabic, handleFixReversed, handleFixAllReversed,
     updateTranslation, handleUndoTranslation,
-    handleTranslateSingle, handleAutoTranslate, handleStopTranslate,
+    handleTranslateSingle, handleAutoTranslate, handleTranslatePage, handleStopTranslate,
     handleRetranslatePage, handleFixDamagedTags, handleLocalFixDamagedTag, handleLocalFixAllDamagedTags, handleRedistributeTags, handleReviewTranslations,
     handleSuggestShorterTranslations, handleApplyShorterTranslation, handleApplyAllShorterTranslations,
     handleFixAllStuckCharacters, handleFixMixedLanguage,
