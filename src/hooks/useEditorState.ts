@@ -1528,7 +1528,7 @@ export function useEditorState() {
       // Protect technical tags from being mirrored: [Tag:Value], {var}, <html>, PUA sequences
       const protected_: { placeholder: string; original: string }[] = [];
       let counter = 0;
-      let safe = t.replace(/(\[\w+:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?|\{[\w]+\}|<[\w\/][^>]*>|[\uE000-\uE0FF]+|\([A-Z][^)]{1,100}\))/g, (match) => {
+      let safe = t.replace(/(\[\w+:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?|\{[\w]+\}|<[\w\/][^>]*>|[\uE000-\uE0FF]+|[\uFFF9-\uFFFB]+|\([A-Z][^)]{1,100}\))/g, (match) => {
         const ph = `\x01PROT${counter++}\x01`;
         protected_.push({ placeholder: ph, original: match });
         return ph;
