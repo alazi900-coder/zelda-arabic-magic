@@ -1401,6 +1401,113 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     }
   }, []);
 
+  /** ─── Linguistic cleanup for bundled translations ─── */
+  const normalizeArabicText = (text: string): string => {
+    let t = text;
+    // Normalize alef variants → ا
+    t = t.replace(/[إأآٱ]/g, 'ا');
+    // Remove tatweel
+    t = t.replace(/ـ/g, '');
+    // Fix duplicate alefs
+    t = t.replace(/ا{2,}/g, 'ا');
+    // Remove extra spaces
+    t = t.replace(/\s{2,}/g, ' ').trim();
+    // Remove stray escape sequences
+    t = t.replace(/\\n/g, ' ').replace(/\\r/g, '').replace(/\s{2,}/g, ' ').trim();
+    return t;
+  };
+
+  const [cleaningBundled, setCleaningBundled] = useState(false);
+  const handleCleanBundledTranslations = useCallback(async () => {
+    setCleaningBundled(true);
+    try {
+      const resp = await fetch('/bundled-translations.json');
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const bundled: Record<string, string> = await resp.json();
+
+      let cleaned = 0;
+      const result: Record<string, string> = {};
+      for (const [key, value] of Object.entries(bundled)) {
+        const normalized = normalizeArabicText(value);
+        if (normalized !== value) cleaned++;
+        result[key] = normalized;
+      }
+
+      if (cleaned === 0) {
+        alert('✅ الترجمات نظيفة بالفعل — لا تغييرات مطلوبة');
+        return;
+      }
+
+      const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'bundled-translations-cleaned.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      alert(`✅ تم تنظيف ${cleaned} ترجمة من أصل ${Object.keys(bundled).length}\n\n• توحيد الألف والهمزات\n• إزالة المسافات الزائدة\n• إزالة الألف المكررة\n• تنظيف رموز الهروب`);
+    } catch (err) {
+      alert(`❌ فشل التنظيف: ${err instanceof Error ? err.message : err}`);
+    } finally {
+      setCleaningBundled(false);
+    }
+  }, []);
+
+  /** ─── Quality check for bundled translations ─── */
+  const [bundledQualityReport, setBundledQualityReport] = useState<{
+    total: number;
+    shortTexts: string[];
+    mixedLanguage: string[];
+    byteLimitExceeded: string[];
+    emptyValues: string[];
+  } | null>(null);
+  const [checkingBundledQuality, setCheckingBundledQuality] = useState(false);
+
+  const handleCheckBundledQuality = useCallback(async () => {
+    setCheckingBundledQuality(true);
+    try {
+      const resp = await fetch('/bundled-translations.json');
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const bundled: Record<string, string> = await resp.json();
+      const encoder = new TextEncoder();
+
+      const shortTexts: string[] = [];
+      const mixedLanguage: string[] = [];
+      const byteLimitExceeded: string[] = [];
+      const emptyValues: string[] = [];
+
+      for (const [key, value] of Object.entries(bundled)) {
+        if (!value || !value.trim()) { emptyValues.push(key); continue; }
+        if (value.trim().length < 3) shortTexts.push(key);
+        const hasAr = /[\u0600-\u06FF]/.test(value);
+        const hasLatin = /[a-zA-Z]{2,}/.test(value);
+        if (hasAr && hasLatin) mixedLanguage.push(key);
+        if (encoder.encode(value).length > 255) byteLimitExceeded.push(key);
+      }
+
+      const report = { total: Object.keys(bundled).length, shortTexts, mixedLanguage, byteLimitExceeded, emptyValues };
+      setBundledQualityReport(report);
+
+      const issues = shortTexts.length + mixedLanguage.length + byteLimitExceeded.length + emptyValues.length;
+      if (issues === 0) {
+        alert(`✅ فحص ${report.total} ترجمة — لم يتم العثور على مشاكل!`);
+      } else {
+        alert(
+          `📊 نتائج فحص الجودة (${report.total} ترجمة):\n\n` +
+          `• نصوص فارغة: ${emptyValues.length}\n` +
+          `• نصوص قصيرة جداً (< 3 حروف): ${shortTexts.length}\n` +
+          `• لغة مختلطة (عربي + إنجليزي): ${mixedLanguage.length}\n` +
+          `• تجاوز حد البايت (> 255): ${byteLimitExceeded.length}\n\n` +
+          `إجمالي المشاكل: ${issues}`
+        );
+      }
+    } catch (err) {
+      alert(`❌ فشل الفحص: ${err instanceof Error ? err.message : err}`);
+    } finally {
+      setCheckingBundledQuality(false);
+    }
+  }, []);
+
   return {
     handleExportTranslations,
     handleExportEnglishOnly,
@@ -1432,5 +1539,11 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     savingBundled,
     handleDownloadBundled,
     bundledCount,
+    // Bundled quality & cleanup
+    handleCleanBundledTranslations,
+    cleaningBundled,
+    handleCheckBundledQuality,
+    checkingBundledQuality,
+    bundledQualityReport,
   };
 }
