@@ -1408,7 +1408,8 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     t = t.replace(/[إأآٱ]/g, 'ا');
     // Remove tatweel
     t = t.replace(/ـ/g, '');
-    // Fix duplicate alefs
+    // Fix duplicate alefs: "اال" → "الا" (swap alef before ال), then remove remaining duplicates
+    t = t.replace(/ا(ال)/g, '$1ا');
     t = t.replace(/ا{2,}/g, 'ا');
     // Remove extra spaces
     t = t.replace(/\s{2,}/g, ' ').trim();
