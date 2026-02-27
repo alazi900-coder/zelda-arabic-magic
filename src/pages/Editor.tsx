@@ -803,6 +803,11 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleImportTMX}><Upload className="w-4 h-4" /> استيراد TMX 📥</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={editor.handleImportLegacyJson}><Upload className="w-4 h-4" /> استيراد JSON قديم 🔄</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuLabel className="text-xs">📦 ترجمات مدمجة</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={editor.handleLoadBundledTranslations} disabled={editor.loadingBundled}>
+                    {editor.loadingBundled ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />} تحميل الترجمات المدمجة 📦
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
 
@@ -888,6 +893,11 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleImportTMX}><Upload className="w-4 h-4" /> استيراد TMX 📥</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={editor.handleImportLegacyJson}><Upload className="w-4 h-4" /> استيراد JSON قديم 🔄</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuLabel className="text-xs">📦 ترجمات مدمجة</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={editor.handleLoadBundledTranslations} disabled={editor.loadingBundled}>
+                    {editor.loadingBundled ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />} تحميل الترجمات المدمجة 📦
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
 
