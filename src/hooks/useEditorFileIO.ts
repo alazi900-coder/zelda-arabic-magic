@@ -1489,16 +1489,42 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       setBundledQualityReport(report);
 
       const issues = shortTexts.length + mixedLanguage.length + byteLimitExceeded.length + emptyValues.length;
+
+      // Build text report
+      const formatSection = (title: string, keys: string[]) => {
+        if (keys.length === 0) return '';
+        return `\n━━ ${title} (${keys.length}) ━━\n` + keys.map((k, i) => `  ${i + 1}. ${k} → ${bundled[k]?.substring(0, 80) || '(فارغ)'}`).join('\n') + '\n';
+      };
+
+      const textReport =
+        `📊 تقرير فحص جودة الترجمات المدمجة\n` +
+        `التاريخ: ${new Date().toLocaleString('ar-SA')}\n` +
+        `إجمالي الترجمات: ${report.total}\n` +
+        `إجمالي المشاكل: ${issues}\n` +
+        formatSection('نصوص فارغة', emptyValues) +
+        formatSection('نصوص قصيرة جداً (< 3 حروف)', shortTexts) +
+        formatSection('لغة مختلطة (عربي + إنجليزي)', mixedLanguage) +
+        formatSection('تجاوز حد البايت (> 255)', byteLimitExceeded);
+
       if (issues === 0) {
         alert(`✅ فحص ${report.total} ترجمة — لم يتم العثور على مشاكل!`);
       } else {
+        // Auto-download the report
+        const blob = new Blob([textReport], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'bundled-quality-report.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+
         alert(
           `📊 نتائج فحص الجودة (${report.total} ترجمة):\n\n` +
           `• نصوص فارغة: ${emptyValues.length}\n` +
-          `• نصوص قصيرة جداً (< 3 حروف): ${shortTexts.length}\n` +
-          `• لغة مختلطة (عربي + إنجليزي): ${mixedLanguage.length}\n` +
-          `• تجاوز حد البايت (> 255): ${byteLimitExceeded.length}\n\n` +
-          `إجمالي المشاكل: ${issues}`
+          `• نصوص قصيرة جداً: ${shortTexts.length}\n` +
+          `• لغة مختلطة: ${mixedLanguage.length}\n` +
+          `• تجاوز حد البايت: ${byteLimitExceeded.length}\n\n` +
+          `📄 تم تحميل التقرير التفصيلي تلقائياً`
         );
       }
     } catch (err) {
