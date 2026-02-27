@@ -1667,6 +1667,88 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     }
   }, [bundledConflicts]);
 
+  /** ─── Merge editor translations into bundled ─── */
+  const [mergeToBundledItems, setMergeToBundledItems] = useState<
+    import("@/components/editor/MergeToBundledPanel").MergeToBundledItem[] | null
+  >(null);
+  const [mergingToBundled, setMergingToBundled] = useState(false);
+
+  const handleMergeToBundled = useCallback(async () => {
+    if (!state) return;
+    setMergingToBundled(true);
+    try {
+      const resp = await fetch('/bundled-translations.json');
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const bundled: Record<string, string> = await resp.json();
+
+      const diffs: import("@/components/editor/MergeToBundledPanel").MergeToBundledItem[] = [];
+      for (const entry of (state.entries || [])) {
+        const key = `${entry.msbtFile}:${entry.index}`;
+        const editorVal = state.translations[key]?.trim();
+        if (!editorVal) continue;
+        const bundledVal = (bundled[key] || '').trim();
+        if (editorVal !== bundledVal) {
+          diffs.push({ key, bundledValue: bundledVal, editorValue: editorVal, status: 'pending' });
+        }
+      }
+
+      if (diffs.length === 0) {
+        setLastSaved("✅ لا توجد تعديلات مختلفة عن الترجمات المدمجة");
+        setTimeout(() => setLastSaved(""), 4000);
+      } else {
+        setMergeToBundledItems(diffs);
+      }
+    } catch (err) {
+      alert(`❌ فشل المقارنة: ${err instanceof Error ? err.message : err}`);
+    } finally {
+      setMergingToBundled(false);
+    }
+  }, [state, setLastSaved]);
+
+  const handleMergeToBundledAccept = useCallback((key: string) => {
+    setMergeToBundledItems(prev => prev ? prev.map(i => i.key === key ? { ...i, status: 'accepted' as const } : i) : null);
+  }, []);
+
+  const handleMergeToBundledReject = useCallback((key: string) => {
+    setMergeToBundledItems(prev => prev ? prev.map(i => i.key === key ? { ...i, status: 'rejected' as const } : i) : null);
+  }, []);
+
+  const handleMergeToBundledAcceptAll = useCallback(() => {
+    setMergeToBundledItems(prev => prev ? prev.map(i => i.status === 'pending' ? { ...i, status: 'accepted' as const } : i) : null);
+  }, []);
+
+  const handleMergeToBundledRejectAll = useCallback(() => {
+    setMergeToBundledItems(prev => prev ? prev.map(i => i.status === 'pending' ? { ...i, status: 'rejected' as const } : i) : null);
+  }, []);
+
+  const handleMergeToBundledDownload = useCallback(async () => {
+    if (!mergeToBundledItems) return;
+    try {
+      const resp = await fetch('/bundled-translations.json');
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const bundled: Record<string, string> = await resp.json();
+
+      const accepted = mergeToBundledItems.filter(i => i.status === 'accepted');
+      for (const item of accepted) {
+        bundled[item.key] = item.editorValue;
+      }
+
+      const blob = new Blob([JSON.stringify(bundled, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'bundled-translations-merged.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      setBundledCount(Object.keys(bundled).length);
+      setMergeToBundledItems(null);
+      setLastSaved(`✅ تم دمج ${accepted.length} تعديل في الترجمات المدمجة`);
+      setTimeout(() => setLastSaved(""), 4000);
+    } catch (err) {
+      alert(`❌ فشل التحميل: ${err instanceof Error ? err.message : err}`);
+    }
+  }, [mergeToBundledItems, setLastSaved]);
+
   /** ─── AI Proofreading for bundled translations ─── */
   const [proofreadingBundled, setProofreadingBundled] = useState(false);
   const handleProofreadBundled = useCallback(async () => {
@@ -1809,5 +1891,15 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     // AI proofreading
     handleProofreadBundled,
     proofreadingBundled,
+    // Merge to bundled
+    mergeToBundledItems,
+    mergingToBundled,
+    handleMergeToBundled,
+    handleMergeToBundledAccept,
+    handleMergeToBundledReject,
+    handleMergeToBundledAcceptAll,
+    handleMergeToBundledRejectAll,
+    handleMergeToBundledDownload,
+    setMergeToBundledItems,
   };
 }
