@@ -43,7 +43,7 @@ export function fixTagBrackets(original: string, translation: string): string {
     const brokenPatterns = [
       new RegExp(`\\]\\s*${escapedInner}\\s*\\]`),   // ]inner]
       new RegExp(`\\[\\s*${escapedInner}\\s*\\[`),   // [inner[
-      new RegExp(`(?<![\\[\\w])${escapedInner}(?![\\]\\w])`), // bare inner
+      new RegExp(`(?<!\\[)${escapedInner}(?!\\])`),   // bare inner (works with Arabic neighbors)
     ];
 
     let fixed = false;

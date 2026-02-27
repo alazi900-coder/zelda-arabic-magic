@@ -104,9 +104,14 @@ export function useEditorTranslation({
       const rev = new RegExp(`\\]\\s*${esc}\\s*\\[`);
       if (rev.test(res)) { res = res.replace(rev, `[${inner}]`); continue; }
       // ]inner] or [inner[
+      let fixed = false;
       for (const bp of [new RegExp(`\\]\\s*${esc}\\s*\\]`), new RegExp(`\\[\\s*${esc}\\s*\\[`)]) {
-        if (bp.test(res)) { res = res.replace(bp, `[${inner}]`); break; }
+        if (bp.test(res)) { res = res.replace(bp, `[${inner}]`); fixed = true; break; }
       }
+      if (fixed) continue;
+      // bare inner without brackets (common after BiDi mangling)
+      const bare = new RegExp(`(?<!\\[)${esc}(?!\\])`);
+      if (bare.test(res)) { res = res.replace(bare, `[${inner}]`); }
     }
     // Remove orphan [ ] not part of valid tags
     const validPos = new Set<number>();
