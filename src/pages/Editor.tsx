@@ -262,9 +262,21 @@ const Editor = () => {
                 <Button size={isMobile ? "default" : "lg"} variant="default" onClick={editor.handleAutoTranslate} disabled={editor.translating} className="font-display font-bold px-4 md:px-6">
                   <Sparkles className="w-4 h-4" /> ترجمة تلقائية 🤖
                 </Button>
-                <Button size={isMobile ? "default" : "lg"} variant="secondary" onClick={() => editor.handleTranslatePage()} disabled={editor.translating} className="font-display font-bold px-4 md:px-6">
-                  <FileText className="w-4 h-4" /> ترجمة الصفحة 📄
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button size={isMobile ? "default" : "lg"} variant="secondary" disabled={editor.translating} className="font-display font-bold px-4 md:px-6">
+                      <FileText className="w-4 h-4" /> ترجمة الصفحة 📄
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="center">
+                    <DropdownMenuItem onClick={() => editor.handleTranslatePage(false, false)}>
+                      <Sparkles className="w-4 h-4" /> ترجمة بالذكاء الاصطناعي 🤖
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => editor.handleTranslatePage(false, true)}>
+                      <BookOpen className="w-4 h-4" /> ترجمة بالذاكرة فقط 📖
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </>
             )}
             <Button size={isMobile ? "default" : "lg"} variant="outline" onClick={() => editor.setShowRetranslateConfirm(true)} disabled={editor.translating} className="font-display font-bold px-4 md:px-6 border-accent/30 text-accent hover:text-accent">

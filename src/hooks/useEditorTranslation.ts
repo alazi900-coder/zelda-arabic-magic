@@ -442,7 +442,7 @@ export function useEditorTranslation({
     } finally { setTranslating(false); }
   };
 
-  const handleTranslatePage = async (forceRetranslate = false) => {
+  const handleTranslatePage = async (forceRetranslate = false, memoryOnly = false) => {
     if (!state) return;
     const arabicRegex = /[\u0600-\u06FF]/;
     let skipEmpty = 0, skipArabic = 0, skipTechnical = 0, skipTranslated = 0;
@@ -461,7 +461,7 @@ export function useEditorTranslation({
         `✅ الصفحة مترجمة بالكامل (${skipTranslated} نص مترجم).\n\nهل تريد إعادة ترجمتها؟`
       );
       if (confirmed) {
-        return handleTranslatePage(true);
+        return handleTranslatePage(true, memoryOnly);
       }
       return;
     }
@@ -529,11 +529,16 @@ export function useEditorTranslation({
     const tmCount = Object.keys(tmReused).length;
     const glossaryCount = Object.keys(glossaryReused).length;
     setTmStats({ reused: tmCount + glossaryCount, sent: needsAI.length });
-    if (needsAI.length === 0) {
+    if (needsAI.length === 0 || memoryOnly) {
       const parts: string[] = [];
       if (tmCount > 0) parts.push(`${tmCount} من الذاكرة`);
       if (glossaryCount > 0) parts.push(`${glossaryCount} من القاموس 📖`);
-      setTranslateProgress(`✅ تم ترجمة ${tmCount + glossaryCount} نص مجاناً (${parts.join(' + ')}) — لا حاجة للذكاء الاصطناعي!`);
+      const totalFree = tmCount + glossaryCount;
+      if (memoryOnly && needsAI.length > 0) {
+        setTranslateProgress(`✅ تم ترجمة ${totalFree} نص مجاناً (${parts.join(' + ')}) — تم تخطي ${needsAI.length} نص (بدون ذكاء اصطناعي)`);
+      } else {
+        setTranslateProgress(`✅ تم ترجمة ${totalFree} نص مجاناً (${parts.join(' + ')}) — لا حاجة للذكاء الاصطناعي!`);
+      }
       setTimeout(() => setTranslateProgress(""), 5000);
       return;
     }
