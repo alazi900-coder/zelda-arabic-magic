@@ -127,11 +127,23 @@ function lockTermsInText(text: string, glossaryMap: Map<string, string>): TermLo
   return { lockedText, locks };
 }
 
+function normalizeTermBrackets(text: string): string {
+  return text
+    .replace(/[《〈«]/g, '⟪')
+    .replace(/[》〉»]/g, '⟫');
+}
+
 function unlockTerms(translatedText: string, locks: TermLockResult['locks']): string {
-  let result = translatedText;
+  // Normalize AI-corrupted bracket variants before matching
+  let result = normalizeTermBrackets(translatedText);
   for (const lock of locks) {
     result = result.replace(lock.placeholder, lock.arabic);
   }
+  // Fallback: catch any remaining bracket variants the AI may have introduced
+  result = result.replace(/[⟪《〈«]T(\d+)[⟫》〉»]/g, (_match, num) => {
+    const lock = locks.find(l => l.placeholder === `⟪T${num}⟫`);
+    return lock ? lock.arabic : _match;
+  });
   return result;
 }
 
@@ -596,8 +608,15 @@ ${textsBlock}`;
     for (let i = 0; i < Math.min(needsAI.length, translations.length); i++) {
       let translated = translations[i]?.trim();
       if (!translated) continue;
-      // Unlock term placeholders → Arabic
       const item = needsAI[i];
+
+      // Normalize malformed TAG variants before any processing
+      translated = translated
+        .replace(/TAG\s+(\d+)/gi, 'TAG_$1')   // "TAG 0" → "TAG_0"
+        .replace(/(?<!\w)TAG(\d+)(?!\w)/gi, 'TAG_$1')  // "TAG0" → "TAG_0"
+        .replace(/tag_(\d+)/g, 'TAG_$1');      // "tag_0" → "TAG_0"
+
+      // Unlock term placeholders → Arabic
       if (item.termLocks.locks.length > 0) {
         translated = unlockTerms(translated, item.termLocks.locks);
       }
