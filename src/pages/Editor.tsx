@@ -828,6 +828,14 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleCheckBundledQuality} disabled={editor.checkingBundledQuality}>
                     {editor.checkingBundledQuality ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />} فحص الجودة 🔍
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleDetectBundledConflicts} disabled={editor.conflictDetectionRunning || !editor.state.entries.length}>
+                    {editor.conflictDetectionRunning ? <Loader2 className="w-4 h-4 animate-spin" /> : <AlertTriangle className="w-4 h-4" />} كشف التضاربات ⚡
+                  </DropdownMenuItem>
+                  {editor.bundledConflicts && editor.bundledConflicts.length > 0 && (
+                    <DropdownMenuItem onClick={editor.handleUnifyBundledConflicts} disabled={editor.unifyingConflicts}>
+                      {editor.unifyingConflicts ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />} توحيد الترجمات ({editor.bundledConflicts.length})
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={editor.handleDownloadBundled}>
                     <FileDown className="w-4 h-4" /> تحميل ملف المدمجة 💾
@@ -942,6 +950,14 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleCheckBundledQuality} disabled={editor.checkingBundledQuality}>
                     {editor.checkingBundledQuality ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />} فحص الجودة 🔍
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleDetectBundledConflicts} disabled={editor.conflictDetectionRunning || !editor.state.entries.length}>
+                    {editor.conflictDetectionRunning ? <Loader2 className="w-4 h-4 animate-spin" /> : <AlertTriangle className="w-4 h-4" />} كشف التضاربات ⚡
+                  </DropdownMenuItem>
+                  {editor.bundledConflicts && editor.bundledConflicts.length > 0 && (
+                    <DropdownMenuItem onClick={editor.handleUnifyBundledConflicts} disabled={editor.unifyingConflicts}>
+                      {editor.unifyingConflicts ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />} توحيد الترجمات ({editor.bundledConflicts.length})
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={editor.handleDownloadBundled}>
                     <FileDown className="w-4 h-4" /> تحميل ملف المدمجة 💾
