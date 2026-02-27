@@ -1452,17 +1452,16 @@ export function useEditorState() {
   // === Duplicate Alef Clean ===
   const handleScanDuplicateAlef = useCallback(() => {
     if (!state) return;
-    const alefRegex = /ا{2,}/g;
     const results: import("@/components/editor/DuplicateAlefCleanPanel").DuplicateAlefResult[] = [];
     for (const [key, value] of Object.entries(state.translations)) {
       if (!value?.trim()) continue;
-      const matches = value.match(alefRegex);
-      if (matches && matches.length > 0) {
-        const after = value.replace(alefRegex, 'ا');
-        if (after !== value) {
-          results.push({ key, before: value, after, count: matches.length, status: 'pending' });
-        }
-      }
+      // Pattern: "اال" (alef-alef-lam) → "الا" (alef-lam-alef) — swap, don't delete
+      const fixedAlefLam = value.replace(/ا(ال)/g, '$1ا');
+      // Then fix any remaining raw duplicate alefs (not before lam)
+      const after = fixedAlefLam.replace(/ا{2,}/g, 'ا');
+      if (after === value) continue;
+      const count = (value.match(/ا{2,}/g) || []).length + (value.match(/ا(?=ال)/g) || []).length;
+      results.push({ key, before: value, after, count, status: 'pending' });
     }
     setDuplicateAlefResults(results);
     if (results.length === 0) {
