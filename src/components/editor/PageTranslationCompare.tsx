@@ -4,7 +4,6 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { CheckCircle2, X } from "lucide-react";
 
 interface PageTranslationCompareProps {
@@ -50,7 +49,7 @@ const PageTranslationCompare: React.FC<PageTranslationCompareProps> = ({
           </DialogDescription>
         </DialogHeader>
 
-        <ScrollArea className="flex-1 min-h-0 border rounded-md">
+        <div className="flex-1 min-h-0 border rounded-md overflow-y-auto" style={{ maxHeight: '60vh', WebkitOverflowScrolling: 'touch' }}>
           <div className="p-2">
             {/* Header row */}
             <div className="grid grid-cols-[40px_1fr_1fr_1fr] gap-2 px-2 py-2 text-xs font-display font-bold text-muted-foreground border-b sticky top-0 bg-background z-10">
@@ -97,7 +96,7 @@ const PageTranslationCompare: React.FC<PageTranslationCompareProps> = ({
               );
             })}
           </div>
-        </ScrollArea>
+        </div>
 
         <DialogFooter className="flex-row-reverse gap-2 pt-2">
           <Button variant="outline" onClick={onDiscard} className="font-display gap-1">
