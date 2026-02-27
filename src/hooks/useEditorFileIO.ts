@@ -1324,6 +1324,22 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     input.click();
   };
 
+  /** Load bundled translations from the app's public folder */
+  const [loadingBundled, setLoadingBundled] = useState(false);
+  const handleLoadBundledTranslations = useCallback(async () => {
+    setLoadingBundled(true);
+    try {
+      const resp = await fetch('/bundled-translations.json');
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const rawText = await resp.text();
+      await processJsonImport(rawText, 'الترجمات المدمجة 📦');
+    } catch (err) {
+      alert(`❌ فشل تحميل الترجمات المدمجة: ${err instanceof Error ? err.message : err}`);
+    } finally {
+      setLoadingBundled(false);
+    }
+  }, [processJsonImport]);
+
   return {
     handleExportTranslations,
     handleExportEnglishOnly,
@@ -1348,5 +1364,8 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     importConflicts,
     handleConflictConfirm,
     handleConflictCancel,
+    // Bundled translations
+    handleLoadBundledTranslations,
+    loadingBundled,
   };
 }
