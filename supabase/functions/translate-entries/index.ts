@@ -5,15 +5,60 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// --- Tag Protection: replace [content] with TAG_N placeholders ---
+// --- Tag Protection: replace technical tags + abbreviations with TAG_N placeholders ---
+const PROTECTED_ABBREVIATIONS = [
+  'EXP', 'PST', 'CP', 'SP', 'HP', 'AP', 'TP', 'WP', 'DP',
+  'ATK', 'DEF', 'AGI', 'DEX', 'LUK', 'CRI', 'BLK',
+  'DPS', 'DOT', 'AOE', 'HoT', 'MPH',
+  'Lv', 'LV', 'MAX', 'DLC', 'NPC', 'QTE', 'UI', 'HUD',
+  'KO', 'NG', 'NG\\+',
+  'm', 's', 'x', 'g', 'kg', 'km', 'cm', 'mm',
+];
+const ABBREV_PATTERN = new RegExp(`\\b(${PROTECTED_ABBREVIATIONS.join('|')})\\b`, 'g');
+
 function protectTags(text: string): { cleaned: string; tags: Map<string, string> } {
   const tags = new Map<string, string>();
   let counter = 0;
-  const cleaned = text.replace(/\[[^\]]*\]|[\uFFF9-\uFFFC\uE000-\uE0FF]+/g, (match) => {
-    const placeholder = `TAG_${counter++}`;
-    tags.set(placeholder, match);
-    return placeholder;
-  });
+  const patterns: RegExp[] = [
+    /[\uE000-\uE0FF]+/g,
+    /\[\w+:[^\]]*\](?:\s*\([^)]{1,100}\))?/g,
+    /\{[\w]+\}/g,
+    /[\uFFF9-\uFFFC]/g,
+    /<[\w\/][^>]*>/g,
+    /\([A-Z][^)]{1,100}\)/g,
+    ABBREV_PATTERN,
+  ];
+
+  // Collect all matches
+  const matches: { start: number; end: number; original: string }[] = [];
+  for (const pattern of patterns) {
+    const regex = new RegExp(pattern.source, pattern.flags);
+    let match: RegExpExecArray | null;
+    while ((match = regex.exec(text)) !== null) {
+      const start = match.index;
+      const end = start + match[0].length;
+      const overlaps = matches.some(m => start < m.end && end > m.start);
+      if (!overlaps) {
+        matches.push({ start, end, original: match[0] });
+      }
+    }
+  }
+  matches.sort((a, b) => a.start - b.start);
+
+  if (matches.length === 0) return { cleaned: text, tags };
+
+  let cleaned = '';
+  let lastEnd = 0;
+  for (const m of matches) {
+    cleaned += text.slice(lastEnd, m.start);
+    const placeholder = `TAG_${counter}`;
+    tags.set(placeholder, m.original);
+    cleaned += placeholder;
+    counter++;
+    lastEnd = m.end;
+  }
+  cleaned += text.slice(lastEnd);
+
   return { cleaned, tags };
 }
 
