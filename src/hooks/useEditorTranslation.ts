@@ -66,7 +66,7 @@ export function useEditorTranslation({
     setShowPageCompare(false);
   };
 
-  /** Auto-fix: restore protected tags then restore any remaining missing tags */
+  /** Auto-fix: restore protected tags, fix broken brackets, then restore any remaining missing tags */
   const autoFixTags = (translations: Record<string, string>, protectedMap?: Map<string, ReturnType<typeof protectTags>>): Record<string, string> => {
     if (!state) return translations;
     const fixed: Record<string, string> = {};
@@ -81,10 +81,47 @@ export function useEditorTranslation({
       const entry = state.entries.find(e => `${e.msbtFile}:${e.index}` === key);
       if (entry && hasTechnicalTags(entry.original)) {
         result = restoreTagsLocally(entry.original, result);
+        // Fix broken brackets around [Tag:Value] tags
+        result = autoFixTagBrackets(entry.original, result);
       }
       fixed[key] = result;
     }
     return fixed;
+  };
+
+  /** Fix broken/reversed/orphan brackets around [Tag:Value] technical tags */
+  const autoFixTagBrackets = (original: string, translation: string): string => {
+    const allTagsRegex = /\[\w+:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?/g;
+    const origTags = [...original.matchAll(allTagsRegex)].map(m => m[0]);
+    if (origTags.length === 0) return translation;
+    let res = translation;
+    for (const tag of origTags) {
+      if (res.includes(tag)) continue;
+      const ci = tag.indexOf(']');
+      const inner = tag.slice(1, ci);
+      const esc = inner.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      // reversed ]inner[
+      const rev = new RegExp(`\\]\\s*${esc}\\s*\\[`);
+      if (rev.test(res)) { res = res.replace(rev, `[${inner}]`); continue; }
+      // ]inner] or [inner[
+      for (const bp of [new RegExp(`\\]\\s*${esc}\\s*\\]`), new RegExp(`\\[\\s*${esc}\\s*\\[`)]) {
+        if (bp.test(res)) { res = res.replace(bp, `[${inner}]`); break; }
+      }
+    }
+    // Remove orphan [ ] not part of valid tags
+    const validPos = new Set<number>();
+    const vp = /\[\w+:[^\]]*?\s*\]/g;
+    let vm;
+    while ((vm = vp.exec(res)) !== null) { for (let i = vm.index; i < vm.index + vm[0].length; i++) validPos.add(i); }
+    const op = /(\{[\w]+\}|<[\w\/][^>]*>)/g;
+    while ((vm = op.exec(res)) !== null) { for (let i = vm.index; i < vm.index + vm[0].length; i++) validPos.add(i); }
+    let cleaned = '';
+    for (let i = 0; i < res.length; i++) {
+      const ch = res[i];
+      if ((ch === '[' || ch === ']') && !validPos.has(i)) continue;
+      cleaned += ch;
+    }
+    return cleaned;
   };
 
   const handleTranslateSingle = async (entry: ExtractedEntry) => {
