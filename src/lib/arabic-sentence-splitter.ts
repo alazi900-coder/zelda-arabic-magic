@@ -2,6 +2,7 @@
  * Arabic Sentence Splitter — detects and fixes merged Arabic words
  * Uses linguistic rules (no AI) based on Arabic non-connecting letters.
  */
+import { isKnownArabicWord } from './arabic-common-words';
 
 // Non-connecting Arabic letters: these NEVER connect to the letter after them
 // If one of these is followed immediately by another Arabic letter, there's likely a missing space
@@ -168,7 +169,10 @@ export function splitMergedSentences(text: string): { result: string; splitCount
     // Skip if not Arabic
     if (![...token].some(ch => isArabicLetter(ch))) return token;
     
-    // Skip short words (6 Arabic chars or less are usually single words)
+    // Skip known Arabic words (whitelist)
+    if (isKnownArabicWord(token)) return token;
+    
+    // Skip short words (7 Arabic chars or less are usually single words)
     const arabicChars = [...token].filter(ch => isArabicLetter(ch));
     if (arabicChars.length <= 7) return token;
     
