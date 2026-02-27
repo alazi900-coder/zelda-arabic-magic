@@ -1340,6 +1340,57 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     }
   }, [processJsonImport]);
 
+  /** Save current translations back to bundled format & download */
+  const [savingBundled, setSavingBundled] = useState(false);
+  const handleSaveBundledTranslations = useCallback(async () => {
+    setSavingBundled(true);
+    try {
+      let bundled: Record<string, any> = {};
+      try {
+        const resp = await fetch('/bundled-translations.json');
+        if (resp.ok) bundled = JSON.parse(await resp.text());
+      } catch { /* start fresh */ }
+
+      for (const entry of state.entries) {
+        const key = `${entry.msbtFile}:${entry.index}`;
+        const translation = state.translations[key];
+        if (translation) {
+          bundled[key] = translation;
+        }
+      }
+
+      const blob = new Blob([JSON.stringify(bundled, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `bundled-translations-updated.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      alert(`✅ تم حفظ ${Object.keys(bundled).length} ترجمة في الملف المحدث`);
+    } catch (err) {
+      alert(`❌ فشل حفظ الترجمات: ${err instanceof Error ? err.message : err}`);
+    } finally {
+      setSavingBundled(false);
+    }
+  }, [state.entries, state.translations]);
+
+  /** Download the current bundled translations file as-is */
+  const handleDownloadBundled = useCallback(async () => {
+    try {
+      const resp = await fetch('/bundled-translations.json');
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const blob = await resp.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'bundled-translations.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      alert(`❌ فشل التحميل: ${err instanceof Error ? err.message : err}`);
+    }
+  }, []);
+
   return {
     handleExportTranslations,
     handleExportEnglishOnly,
@@ -1367,5 +1418,8 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     // Bundled translations
     handleLoadBundledTranslations,
     loadingBundled,
+    handleSaveBundledTranslations,
+    savingBundled,
+    handleDownloadBundled,
   };
 }

@@ -18,7 +18,7 @@ import {
   ArrowRight, Download, FileText, Loader2, Filter, Sparkles, Save, Tag,
   Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle,
   Eye, EyeOff, RotateCcw, CheckCircle2, ShieldCheck, ChevronLeft, ChevronRight,
-  BarChart3, Menu, MoreVertical, Replace, Columns, Key, Type, Trash2,
+  BarChart3, Menu, MoreVertical, Replace, Columns, Key, Type, Trash2, Package,
 } from "lucide-react";
 import heroBg from "@/assets/xc3-hero-bg.jpg";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -803,10 +803,27 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleImportTMX}><Upload className="w-4 h-4" /> استيراد TMX 📥</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={editor.handleImportLegacyJson}><Upload className="w-4 h-4" /> استيراد JSON قديم 🔄</DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuLabel className="text-xs">📦 ترجمات مدمجة</DropdownMenuLabel>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* Bundled Translations — مستقل */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="font-body text-xs border-accent/50 gap-1.5">
+                    {editor.loadingBundled ? <Loader2 className="w-3 h-3 animate-spin" /> : <Package className="w-3 h-3" />} ترجمات مدمجة 📦
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="bg-card border-border z-[100] min-w-[200px]">
+                  <DropdownMenuLabel className="text-xs">📦 الترجمات المدمجة</DropdownMenuLabel>
                   <DropdownMenuItem onClick={editor.handleLoadBundledTranslations} disabled={editor.loadingBundled}>
-                    {editor.loadingBundled ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />} تحميل الترجمات المدمجة 📦
+                    <Download className="w-4 h-4" /> تحميل الترجمات المدمجة
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleSaveBundledTranslations} disabled={editor.savingBundled || editor.translatedCount === 0}>
+                    {editor.savingBundled ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />} حفظ التعديلات على المدمجة
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={editor.handleDownloadBundled}>
+                    <FileDown className="w-4 h-4" /> تحميل ملف المدمجة 💾
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -893,10 +910,27 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleImportTMX}><Upload className="w-4 h-4" /> استيراد TMX 📥</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={editor.handleImportLegacyJson}><Upload className="w-4 h-4" /> استيراد JSON قديم 🔄</DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuLabel className="text-xs">📦 ترجمات مدمجة</DropdownMenuLabel>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* Bundled Translations — مستقل */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="font-body border-accent/50 gap-1.5">
+                    {editor.loadingBundled ? <Loader2 className="w-4 h-4 animate-spin" /> : <Package className="w-4 h-4" />} ترجمات مدمجة 📦
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="bg-card border-border z-50 min-w-[220px]">
+                  <DropdownMenuLabel className="text-xs">📦 الترجمات المدمجة</DropdownMenuLabel>
                   <DropdownMenuItem onClick={editor.handleLoadBundledTranslations} disabled={editor.loadingBundled}>
-                    {editor.loadingBundled ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />} تحميل الترجمات المدمجة 📦
+                    <Download className="w-4 h-4" /> تحميل الترجمات المدمجة
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleSaveBundledTranslations} disabled={editor.savingBundled || editor.translatedCount === 0}>
+                    {editor.savingBundled ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />} حفظ التعديلات على المدمجة
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={editor.handleDownloadBundled}>
+                    <FileDown className="w-4 h-4" /> تحميل ملف المدمجة 💾
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
