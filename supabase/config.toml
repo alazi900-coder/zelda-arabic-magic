@@ -1,1 +1,4 @@
 project_id = "vyqsempkqpkooeurlmgh"
+
+[functions.proofread-bundled]
+verify_jwt = false
