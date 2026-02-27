@@ -1524,9 +1524,25 @@ export function useEditorState() {
   // === Mirror Chars Clean (brackets & arrows) ===
   const handleScanMirrorChars = useCallback(() => {
     if (!state) return;
-    const swapChars = (t: string) => t
-      .replace(/\(/g, '\x00OPEN\x00').replace(/\)/g, '(').replace(/\x00OPEN\x00/g, ')')
-      .replace(/</g, '\x00LT\x00').replace(/>/g, '<').replace(/\x00LT\x00/g, '>');
+    const swapChars = (t: string) => {
+      // Protect technical tags from being mirrored: [Tag:Value], {var}, <html>, PUA sequences
+      const protected_: { placeholder: string; original: string }[] = [];
+      let counter = 0;
+      let safe = t.replace(/(\[\w+:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?|\{[\w]+\}|<[\w\/][^>]*>|[\uE000-\uE0FF]+|\([A-Z][^)]{1,100}\))/g, (match) => {
+        const ph = `\x01PROT${counter++}\x01`;
+        protected_.push({ placeholder: ph, original: match });
+        return ph;
+      });
+      // Swap brackets and arrows in non-protected text
+      safe = safe
+        .replace(/\(/g, '\x00OPEN\x00').replace(/\)/g, '(').replace(/\x00OPEN\x00/g, ')')
+        .replace(/</g, '\x00LT\x00').replace(/>/g, '<').replace(/\x00LT\x00/g, '>');
+      // Restore protected tags
+      for (const p of protected_) {
+        safe = safe.replace(p.placeholder, p.original);
+      }
+      return safe;
+    };
     const results: import("@/components/editor/MirrorCharsCleanPanel").MirrorCharsResult[] = [];
     for (const [key, value] of Object.entries(state.translations)) {
       if (!value?.trim()) continue;
