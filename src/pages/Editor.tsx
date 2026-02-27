@@ -50,6 +50,7 @@ import CompareEnginesDialog from "@/components/editor/CompareEnginesDialog";
 import SentenceSplitPanel from "@/components/editor/SentenceSplitPanel";
 import NewlineCleanPanel from "@/components/editor/NewlineCleanPanel";
 import DiacriticsCleanPanel from "@/components/editor/DiacriticsCleanPanel";
+import DuplicateAlefCleanPanel from "@/components/editor/DuplicateAlefCleanPanel";
 import ExportEnglishDialog from "@/components/editor/ExportEnglishDialog";
 import GlossaryStatsPanel from "@/components/editor/GlossaryStatsPanel";
 import TranslationStatsPanel from "@/components/editor/TranslationStatsPanel";
@@ -559,6 +560,17 @@ const Editor = () => {
             />
           )}
 
+          {/* Duplicate Alef Clean Results */}
+          {editor.duplicateAlefResults && editor.duplicateAlefResults.length > 0 && (
+            <DuplicateAlefCleanPanel
+              results={editor.duplicateAlefResults}
+              onAccept={editor.handleApplyDuplicateAlefClean}
+              onReject={editor.handleRejectDuplicateAlefClean}
+              onAcceptAll={editor.handleApplyAllDuplicateAlefCleans}
+              onClose={() => editor.setDuplicateAlefResults(null)}
+            />
+          )}
+
           {!editor.user && (
             <Card className="mb-4 border-primary/30 bg-primary/5">
               <CardContent className="flex items-center gap-3 p-4"><LogIn className="w-4 h-4" /> سجّل دخولك للمزامنة</CardContent>
@@ -574,6 +586,15 @@ const Editor = () => {
                 onChange={(val) => editor.setSearch(val)}
                 className="flex-1 min-w-[120px] px-3 py-2 rounded bg-background border border-border font-body text-sm"
               />
+              <Button
+                variant={editor.isSearchPinned ? "default" : "outline"}
+                size="sm"
+                onClick={editor.handleTogglePin}
+                className="font-body text-xs shrink-0"
+                title={editor.isSearchPinned ? "إلغاء التثبيت" : "تثبيت نتائج البحث"}
+              >
+                📌
+              </Button>
               {isMobile ? (
                 <Button variant={editor.filtersOpen ? "secondary" : "outline"} size="sm" onClick={() => editor.setFiltersOpen(!editor.filtersOpen)} className="font-body text-xs shrink-0">
                   <Filter className="w-3 h-3" /> فلاتر
@@ -811,6 +832,7 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleFixAllReversed}><RotateCcw className="w-4 h-4" /> تصحيح الكل (معكوس)</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleFixAllStuckCharacters} disabled={editor.needsImproveCount.stuck === 0}><AlertTriangle className="w-4 h-4" /> إصلاح الأحرف الملتصقة 🔤</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleScanDiacritics}><Type className="w-4 h-4" /> إزالة التشكيلات ✏️</DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleScanDuplicateAlef} disabled={editor.translatedCount === 0}>🔤 إزالة الألف المكرر</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleFixMixedLanguage} disabled={editor.fixingMixed || editor.needsImproveCount.mixed === 0}>
                     {editor.fixingMixed ? <Loader2 className="w-4 h-4 animate-spin" /> : <Filter className="w-4 h-4" />} إصلاح النصوص المختلطة 🌐
                   </DropdownMenuItem>
@@ -906,6 +928,7 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleFixAllReversed}><RotateCcw className="w-4 h-4" /> تصحيح الكل (عربي معكوس)</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleFixAllStuckCharacters} disabled={editor.needsImproveCount.stuck === 0}><AlertTriangle className="w-4 h-4" /> إصلاح الأحرف الملتصقة 🔤</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleScanDiacritics}><Type className="w-4 h-4" /> إزالة التشكيلات ✏️</DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleScanDuplicateAlef} disabled={editor.translatedCount === 0}>🔤 إزالة الألف المكرر</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleFixMixedLanguage} disabled={editor.fixingMixed || editor.needsImproveCount.mixed === 0}>
                     {editor.fixingMixed ? <Loader2 className="w-4 h-4 animate-spin" /> : <Filter className="w-4 h-4" />} إصلاح النصوص المختلطة 🌐
                   </DropdownMenuItem>
