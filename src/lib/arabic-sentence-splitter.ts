@@ -62,7 +62,18 @@ export interface SplitResult {
 }
 
 /**
- * Detect merge points in a single Arabic word
+ * Detect merge points in a single Arabic word.
+ * CONSERVATIVE approach: only split on highly reliable patterns to avoid
+ * breaking valid Arabic words that contain non-connecting letters internally.
+ * 
+ * Reliable patterns:
+ * 1. Word-enders (ة, ى) followed by Arabic letter — these truly end words
+ *    BUT require the remaining part to be at least 3 Arabic chars
+ * 2. Medial "ال" — definite article appearing mid-word
+ * 
+ * We do NOT split on general non-connecting letters (د، ر، ز، و، ا...)
+ * because they appear inside valid single words constantly
+ * (e.g. المرتفع، المستودع، الأوغاد، مستعمرة)
  */
 export function detectMergedInWord(word: string): MergePoint[] {
   const points: MergePoint[] = [];
@@ -83,32 +94,20 @@ export function detectMergedInWord(word: string): MergePoint[] {
     const nextCh = chars[nextIdx];
     if (!isArabicLetter(nextCh)) continue;
     
-    // Rule 1a: Word-enders (ة، ى) — these ALWAYS end a word, so any Arabic letter after = merge
+    // Rule 1: Word-enders (ة، ى) — these truly end words
+    // Only split if the part AFTER has at least 3 Arabic letters
     if (WORD_ENDERS.has(ch)) {
-      points.push({
-        position: nextIdx,
-        charBefore: ch,
-        charAfter: nextCh,
-        rule: 'non-connecting',
-      });
+      const remaining = chars.slice(nextIdx);
+      const remainingArabic = remaining.filter(c => isArabicLetter(c));
+      if (remainingArabic.length >= 3) {
+        points.push({
+          position: nextIdx,
+          charBefore: ch,
+          charAfter: nextCh,
+          rule: 'non-connecting',
+        });
+      }
       continue;
-    }
-    
-    // Rule 1b: Non-connecting letter followed by Arabic letter
-    if (NON_CONNECTING.has(ch) && isArabicLetter(nextCh)) {
-      // Exception: don't split "ال" (definite article)
-      if (ch === '\u0627' && nextCh === '\u0644') continue; // ال
-      // Exception: don't split common prefixes like وا, أو
-      if (ch === '\u0627' && i === 0) continue; // alef at start of word is normal
-      // Exception: و at start is likely conjunction prefix
-      if (ch === '\u0648' && i === 0) continue;
-      
-      points.push({
-        position: nextIdx,
-        charBefore: ch,
-        charAfter: nextCh,
-        rule: 'non-connecting',
-      });
     }
   }
   
@@ -171,7 +170,7 @@ export function splitMergedSentences(text: string): { result: string; splitCount
     
     // Skip short words (6 Arabic chars or less are usually single words)
     const arabicChars = [...token].filter(ch => isArabicLetter(ch));
-    if (arabicChars.length <= 6) return token;
+    if (arabicChars.length <= 7) return token;
     
     const points = detectMergedInWord(token);
     if (points.length === 0) return token;
