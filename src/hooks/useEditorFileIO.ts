@@ -1534,6 +1534,138 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     }
   }, []);
 
+  /** ─── Conflict detection: same English → different Arabic ─── */
+  const [conflictDetectionRunning, setConflictDetectionRunning] = useState(false);
+  const [bundledConflicts, setBundledConflicts] = useState<
+    { english: string; variants: { key: string; arabic: string }[] }[] | null
+  >(null);
+
+  const handleDetectBundledConflicts = useCallback(async () => {
+    if (!state.entries.length) {
+      alert('⚠️ يجب رفع ملف BDAT أولاً لمعرفة النصوص الإنجليزية الأصلية');
+      return;
+    }
+    setConflictDetectionRunning(true);
+    try {
+      const resp = await fetch('/bundled-translations.json');
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const bundled: Record<string, string> = await resp.json();
+
+      // Build english→key map from loaded entries
+      const englishMap = new Map<string, { key: string; arabic: string }[]>();
+      for (const entry of state.entries) {
+        const key = `${entry.msbtFile}:${entry.index}`;
+        const arabic = bundled[key];
+        if (!arabic?.trim()) continue;
+        const eng = entry.original.trim();
+        if (!eng) continue;
+        const arr = englishMap.get(eng) || [];
+        arr.push({ key, arabic: arabic.trim() });
+        englishMap.set(eng, arr);
+      }
+
+      // Find conflicts: same English with ≥2 different Arabic translations
+      const conflicts: { english: string; variants: { key: string; arabic: string }[] }[] = [];
+      for (const [eng, entries] of englishMap) {
+        const uniqueArabic = new Set(entries.map(e => e.arabic));
+        if (uniqueArabic.size > 1) {
+          conflicts.push({ english: eng, variants: entries });
+        }
+      }
+
+      setBundledConflicts(conflicts);
+
+      if (conflicts.length === 0) {
+        alert(`✅ لا توجد ترجمات متضاربة — كل نص إنجليزي له ترجمة واحدة موحدة`);
+      } else {
+        // Generate and download report
+        let report = `📊 تقرير الترجمات المتضاربة\nالتاريخ: ${new Date().toLocaleString('ar-SA')}\nعدد التضاربات: ${conflicts.length}\n\n`;
+        for (const c of conflicts) {
+          report += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+          report += `🔤 الإنجليزي: ${c.english.substring(0, 100)}\n`;
+          const grouped = new Map<string, string[]>();
+          for (const v of c.variants) {
+            const arr = grouped.get(v.arabic) || [];
+            arr.push(v.key);
+            grouped.set(v.arabic, arr);
+          }
+          let i = 1;
+          for (const [arabic, keys] of grouped) {
+            report += `  الترجمة ${i++}: "${arabic.substring(0, 80)}" (${keys.length} مدخل)\n`;
+            for (const k of keys.slice(0, 5)) report += `    → ${k}\n`;
+            if (keys.length > 5) report += `    ... و${keys.length - 5} مدخلات أخرى\n`;
+          }
+          report += `\n`;
+        }
+
+        const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'bundled-conflicts-report.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+
+        alert(
+          `⚠️ تم العثور على ${conflicts.length} تضارب في الترجمات!\n\n` +
+          `📄 تم تحميل التقرير التفصيلي\n\n` +
+          `يمكنك الضغط على "توحيد الترجمات" لاختيار الترجمة الأكثر شيوعاً تلقائياً`
+        );
+      }
+    } catch (err) {
+      alert(`❌ فشل الفحص: ${err instanceof Error ? err.message : err}`);
+    } finally {
+      setConflictDetectionRunning(false);
+    }
+  }, [state.entries]);
+
+  /** Unify conflicts: pick the most common Arabic translation for each English text */
+  const [unifyingConflicts, setUnifyingConflicts] = useState(false);
+  const handleUnifyBundledConflicts = useCallback(async () => {
+    if (!bundledConflicts?.length) return;
+    setUnifyingConflicts(true);
+    try {
+      const resp = await fetch('/bundled-translations.json');
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const bundled: Record<string, string> = await resp.json();
+
+      let unified = 0;
+      for (const conflict of bundledConflicts) {
+        // Count occurrences of each Arabic variant
+        const freq = new Map<string, number>();
+        for (const v of conflict.variants) {
+          freq.set(v.arabic, (freq.get(v.arabic) || 0) + 1);
+        }
+        // Pick the most common one
+        let best = '', bestCount = 0;
+        for (const [arabic, count] of freq) {
+          if (count > bestCount) { best = arabic; bestCount = count; }
+        }
+        // Apply to all keys
+        for (const v of conflict.variants) {
+          if (bundled[v.key] && bundled[v.key] !== best) {
+            bundled[v.key] = best;
+            unified++;
+          }
+        }
+      }
+
+      const blob = new Blob([JSON.stringify(bundled, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'bundled-translations-unified.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      setBundledConflicts(null);
+      alert(`✅ تم توحيد ${unified} ترجمة متضاربة وتحميل الملف المحدث`);
+    } catch (err) {
+      alert(`❌ فشل التوحيد: ${err instanceof Error ? err.message : err}`);
+    } finally {
+      setUnifyingConflicts(false);
+    }
+  }, [bundledConflicts]);
+
   return {
     handleExportTranslations,
     handleExportEnglishOnly,
@@ -1571,5 +1703,11 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     handleCheckBundledQuality,
     checkingBundledQuality,
     bundledQualityReport,
+    // Bundled conflict detection
+    handleDetectBundledConflicts,
+    conflictDetectionRunning,
+    bundledConflicts,
+    handleUnifyBundledConflicts,
+    unifyingConflicts,
   };
 }
