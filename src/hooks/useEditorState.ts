@@ -53,6 +53,7 @@ export function useEditorState() {
   const [diacriticsCleanResults, setDiacriticsCleanResults] = useState<import("@/components/editor/DiacriticsCleanPanel").DiacriticsCleanResult[] | null>(null);
   const [duplicateAlefResults, setDuplicateAlefResults] = useState<import("@/components/editor/DuplicateAlefCleanPanel").DuplicateAlefResult[] | null>(null);
   const [mirrorCharsResults, setMirrorCharsResults] = useState<import("@/components/editor/MirrorCharsCleanPanel").MirrorCharsResult[] | null>(null);
+  const [tagBracketFixResults, setTagBracketFixResults] = useState<import("@/components/editor/TagBracketFixPanel").TagBracketFixResult[] | null>(null);
   const [pinnedKeys, setPinnedKeys] = useState<Set<string> | null>(null);
   const [isSearchPinned, setIsSearchPinned] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -1583,6 +1584,89 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 4000);
   }, [state, mirrorCharsResults]);
 
+  // === Tag Bracket Fix ===
+  const handleScanTagBrackets = useCallback(() => {
+    if (!state) return;
+    const tagRegex = /\[\w+:[^\]]*?\s*\]/;
+    const results: import("@/components/editor/TagBracketFixPanel").TagBracketFixResult[] = [];
+    
+    // Inline the fix logic to avoid dynamic require
+    const fixBrackets = (original: string, translation: string): string => {
+      const allTagsRegex = /\[\w+:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?/g;
+      const origTags = [...original.matchAll(allTagsRegex)].map(m => m[0]);
+      if (origTags.length === 0) return translation;
+      let res = translation;
+      for (const tag of origTags) {
+        if (res.includes(tag)) continue;
+        const ci = tag.indexOf(']');
+        const inner = tag.slice(1, ci);
+        const esc = inner.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        // reversed ]inner[
+        const rev = new RegExp(`\\]\\s*${esc}\\s*\\[`);
+        if (rev.test(res)) { res = res.replace(rev, `[${inner}]`); continue; }
+        // ]inner] or [inner[
+        const bp = [new RegExp(`\\]\\s*${esc}\\s*\\]`), new RegExp(`\\[\\s*${esc}\\s*\\[`)];
+        let fixed = false;
+        for (const p of bp) { if (p.test(res)) { res = res.replace(p, `[${inner}]`); fixed = true; break; } }
+        if (fixed) continue;
+      }
+      // Remove orphan brackets
+      const validPos = new Set<number>();
+      const vp = /\[\w+:[^\]]*?\s*\]/g;
+      let vm;
+      while ((vm = vp.exec(res)) !== null) { for (let i = vm.index; i < vm.index + vm[0].length; i++) validPos.add(i); }
+      const op = /(\{[\w]+\}|<[\w\/][^>]*>)/g;
+      while ((vm = op.exec(res)) !== null) { for (let i = vm.index; i < vm.index + vm[0].length; i++) validPos.add(i); }
+      let cleaned = '';
+      for (let i = 0; i < res.length; i++) {
+        const ch = res[i];
+        if ((ch === '[' || ch === ']') && !validPos.has(i)) continue;
+        cleaned += ch;
+      }
+      return cleaned;
+    };
+    for (const entry of state.entries) {
+      const key = `${entry.msbtFile}:${entry.index}`;
+      const translation = state.translations[key];
+      if (!translation?.trim()) continue;
+      if (!tagRegex.test(entry.original)) continue;
+      const after = fixBrackets(entry.original, translation);
+      if (after === translation) continue;
+      const count = (translation.match(/[\[\]]/g) || []).length - (after.match(/[\[\]]/g) || []).length;
+      results.push({ key, before: translation, after, count: Math.abs(count) || 1, status: 'pending' });
+    }
+    setTagBracketFixResults(results);
+    if (results.length === 0) {
+      setLastSaved("✅ جميع أقواس الرموز التقنية صحيحة");
+      setTimeout(() => setLastSaved(""), 4000);
+    }
+  }, [state]);
+
+  const handleApplyTagBracketFix = useCallback((key: string) => {
+    if (!state || !tagBracketFixResults) return;
+    const item = tagBracketFixResults.find(r => r.key === key);
+    if (!item) return;
+    setState(prev => prev ? { ...prev, translations: { ...prev.translations, [key]: item.after } } : null);
+    setTagBracketFixResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'accepted' as const } : r) : null);
+  }, [state, tagBracketFixResults]);
+
+  const handleRejectTagBracketFix = useCallback((key: string) => {
+    setTagBracketFixResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'rejected' as const } : r) : null);
+  }, []);
+
+  const handleApplyAllTagBracketFixes = useCallback(() => {
+    if (!state || !tagBracketFixResults) return;
+    const pending = tagBracketFixResults.filter(r => r.status === 'pending');
+    const newTranslations = { ...state.translations };
+    for (const item of pending) {
+      newTranslations[item.key] = item.after;
+    }
+    setState(prev => prev ? { ...prev, translations: newTranslations } : null);
+    setTagBracketFixResults(prev => prev ? prev.map(r => r.status === 'pending' ? { ...r, status: 'accepted' as const } : r) : null);
+    setLastSaved(`✅ تم إصلاح أقواس ${pending.length} رمز تقني`);
+    setTimeout(() => setLastSaved(""), 4000);
+  }, [state, tagBracketFixResults]);
+
   return {
     // State
     state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, showFindReplace, userGeminiKey, translationProvider, myMemoryEmail, myMemoryCharsUsed, aiRequestsToday, aiRequestsMonth,
@@ -1600,7 +1684,7 @@ export function useEditorState() {
     applyingArabic, improvingTranslations, improveResults,
     fixingMixed, filtersOpen, buildStats, buildPreview, showBuildConfirm, bdatFileStats,
     checkingConsistency, consistencyResults,
-    scanningSentences, sentenceSplitResults, newlineCleanResults, diacriticsCleanResults, duplicateAlefResults, mirrorCharsResults,
+    scanningSentences, sentenceSplitResults, newlineCleanResults, diacriticsCleanResults, duplicateAlefResults, mirrorCharsResults, tagBracketFixResults,
     isSearchPinned, pinnedKeys,
     categoryProgress, qualityStats, needsImproveCount, translatedCount, tagsCount, fuzzyCount, byteOverflowCount,
     bdatTableNames, bdatColumnNames, bdatTableCounts, bdatColumnCounts,
@@ -1614,7 +1698,7 @@ export function useEditorState() {
     setCurrentPage, setShowRetranslateConfirm,
     setArabicNumerals, setMirrorPunctuation, setUserGeminiKey, setTranslationProvider, setMyMemoryEmail,
     setReviewResults, setShortSuggestions, setImproveResults, setBuildStats, setShowBuildConfirm,
-    setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults, setDiacriticsCleanResults, setDuplicateAlefResults, setMirrorCharsResults,
+    setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults, setDiacriticsCleanResults, setDuplicateAlefResults, setMirrorCharsResults, setTagBracketFixResults,
 
     // Handlers
     toggleProtection, toggleTechnicalBypass,
@@ -1637,6 +1721,7 @@ export function useEditorState() {
     handleScanDiacritics, handleApplyDiacriticsClean, handleRejectDiacriticsClean, handleApplyAllDiacriticsCleans,
     handleScanDuplicateAlef, handleApplyDuplicateAlefClean, handleRejectDuplicateAlefClean, handleApplyAllDuplicateAlefCleans,
     handleScanMirrorChars, handleApplyMirrorCharsClean, handleRejectMirrorCharsClean, handleApplyAllMirrorCharsCleans,
+    handleScanTagBrackets, handleApplyTagBracketFix, handleRejectTagBracketFix, handleApplyAllTagBracketFixes,
     handleTogglePin,
     handleClearTranslations, handleUndoClear, clearUndoBackup, isFilterActive,
     integrityResult, showIntegrityDialog, setShowIntegrityDialog, checkingIntegrity,
