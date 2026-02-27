@@ -18,7 +18,7 @@ import {
   ArrowRight, Download, FileText, Loader2, Filter, Sparkles, Save, Tag,
   Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle,
   Eye, EyeOff, RotateCcw, CheckCircle2, ShieldCheck, ChevronLeft, ChevronRight,
-  BarChart3, Menu, MoreVertical, Replace, Columns, Key, Type, Trash2, Package,
+  BarChart3, Menu, MoreVertical, Replace, Columns, Key, Type, Trash2, Package, Wand2,
 } from "lucide-react";
 import heroBg from "@/assets/xc3-hero-bg.jpg";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -837,6 +837,10 @@ const Editor = () => {
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={editor.handleProofreadBundled} disabled={editor.proofreadingBundled}>
+                    {editor.proofreadingBundled ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />} تصحيح إملائي بالذكاء 🤖
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={editor.handleDownloadBundled}>
                     <FileDown className="w-4 h-4" /> تحميل ملف المدمجة 💾
                   </DropdownMenuItem>
@@ -958,6 +962,10 @@ const Editor = () => {
                       {editor.unifyingConflicts ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />} توحيد الترجمات ({editor.bundledConflicts.length})
                     </DropdownMenuItem>
                   )}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={editor.handleProofreadBundled} disabled={editor.proofreadingBundled}>
+                    {editor.proofreadingBundled ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />} تصحيح إملائي بالذكاء 🤖
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={editor.handleDownloadBundled}>
                     <FileDown className="w-4 h-4" /> تحميل ملف المدمجة 💾

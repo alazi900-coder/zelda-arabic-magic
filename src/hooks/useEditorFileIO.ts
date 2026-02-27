@@ -1666,6 +1666,102 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     }
   }, [bundledConflicts]);
 
+  /** ─── AI Proofreading for bundled translations ─── */
+  const [proofreadingBundled, setProofreadingBundled] = useState(false);
+  const handleProofreadBundled = useCallback(async () => {
+    setProofreadingBundled(true);
+    try {
+      const resp = await fetch('/bundled-translations.json');
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const bundled: Record<string, string> = await resp.json();
+
+      // Filter short Arabic translations (≤ 80 chars) that actually have Arabic content
+      const candidates = Object.entries(bundled)
+        .filter(([_, v]) => {
+          if (!v?.trim() || v.trim().length > 80) return false;
+          return /[\u0600-\u06FF]/.test(v);
+        })
+        .map(([key, arabic]) => ({ key, arabic }));
+
+      if (candidates.length === 0) {
+        alert('✅ لا توجد ترجمات قصيرة تحتاج تدقيق');
+        return;
+      }
+
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+      const fnResp = await fetch(`${supabaseUrl}/functions/v1/proofread-bundled`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${supabaseKey}`,
+        },
+        body: JSON.stringify({ entries: candidates }),
+      });
+
+      if (!fnResp.ok) {
+        const errData = await fnResp.json().catch(() => ({}));
+        throw new Error(errData.error || `HTTP ${fnResp.status}`);
+      }
+
+      const { results, total } = await fnResp.json();
+
+      if (!results || results.length === 0) {
+        alert(`✅ تم فحص ${total} ترجمة — لم يتم العثور على أخطاء إملائية`);
+        return;
+      }
+
+      // Generate report
+      let report = `📝 تقرير التصحيح الإملائي بالذكاء الاصطناعي\n`;
+      report += `التاريخ: ${new Date().toLocaleString('ar-SA')}\n`;
+      report += `الترجمات المفحوصة: ${total}\n`;
+      report += `التصحيحات: ${results.length}\n\n`;
+
+      for (const r of results) {
+        report += `━━━━━━━━━━━━━━━━━━━━\n`;
+        report += `🔑 ${r.key}\n`;
+        report += `  قبل: "${r.original}"\n`;
+        report += `  بعد: "${r.corrected}"\n`;
+      }
+
+      // Download report
+      const reportBlob = new Blob([report], { type: 'text/plain;charset=utf-8' });
+      const reportUrl = URL.createObjectURL(reportBlob);
+      const reportA = document.createElement('a');
+      reportA.href = reportUrl;
+      reportA.download = 'bundled-proofread-report.txt';
+      reportA.click();
+      URL.revokeObjectURL(reportUrl);
+
+      // Apply corrections and download corrected file
+      const corrected = { ...bundled };
+      for (const r of results) {
+        corrected[r.key] = r.corrected;
+      }
+
+      const corrBlob = new Blob([JSON.stringify(corrected, null, 2)], { type: 'application/json' });
+      const corrUrl = URL.createObjectURL(corrBlob);
+      const corrA = document.createElement('a');
+      corrA.href = corrUrl;
+      corrA.download = 'bundled-translations-proofread.json';
+      corrA.click();
+      URL.revokeObjectURL(corrUrl);
+
+      setBundledCount(Object.keys(corrected).length);
+      alert(
+        `📝 تم التصحيح الإملائي:\n\n` +
+        `• الترجمات المفحوصة: ${total}\n` +
+        `• التصحيحات: ${results.length}\n\n` +
+        `📄 تم تحميل التقرير والملف المصحح`
+      );
+    } catch (err) {
+      alert(`❌ فشل التصحيح: ${err instanceof Error ? err.message : err}`);
+    } finally {
+      setProofreadingBundled(false);
+    }
+  }, []);
+
   return {
     handleExportTranslations,
     handleExportEnglishOnly,
@@ -1709,5 +1805,8 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     bundledConflicts,
     handleUnifyBundledConflicts,
     unifyingConflicts,
+    // AI proofreading
+    handleProofreadBundled,
+    proofreadingBundled,
   };
 }
