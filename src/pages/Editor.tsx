@@ -260,7 +260,7 @@ const Editor = () => {
                 <Button size={isMobile ? "default" : "lg"} variant="default" onClick={editor.handleAutoTranslate} disabled={editor.translating} className="font-display font-bold px-4 md:px-6">
                   <Sparkles className="w-4 h-4" /> ترجمة تلقائية 🤖
                 </Button>
-                <Button size={isMobile ? "default" : "lg"} variant="secondary" onClick={editor.handleTranslatePage} disabled={editor.translating} className="font-display font-bold px-4 md:px-6">
+                <Button size={isMobile ? "default" : "lg"} variant="secondary" onClick={() => editor.handleTranslatePage()} disabled={editor.translating} className="font-display font-bold px-4 md:px-6">
                   <FileText className="w-4 h-4" /> ترجمة الصفحة 📄
                 </Button>
               </>

@@ -442,28 +442,54 @@ export function useEditorTranslation({
     } finally { setTranslating(false); }
   };
 
-  const handleTranslatePage = async () => {
+  const handleTranslatePage = async (forceRetranslate = false) => {
     if (!state) return;
     const arabicRegex = /[\u0600-\u06FF]/;
     let skipEmpty = 0, skipArabic = 0, skipTechnical = 0, skipTranslated = 0;
-    const untranslated = paginatedEntries.filter(e => {
+    const candidates = paginatedEntries.filter(e => {
       const key = `${e.msbtFile}:${e.index}`;
       if (!e.original.trim()) { skipEmpty++; return false; }
       if (arabicRegex.test(e.original)) { skipArabic++; return false; }
       if (isTechnicalText(e.original) && !state.technicalBypass?.has(key)) { skipTechnical++; return false; }
-      if (state.translations[key]?.trim()) { skipTranslated++; return false; }
+      if (!forceRetranslate && state.translations[key]?.trim()) { skipTranslated++; return false; }
       return true;
     });
 
-    if (untranslated.length === 0) {
+    // If no untranslated entries and there are translated ones, ask user to re-translate
+    if (candidates.length === 0 && skipTranslated > 0 && !forceRetranslate) {
+      const confirmed = window.confirm(
+        `✅ الصفحة مترجمة بالكامل (${skipTranslated} نص مترجم).\n\nهل تريد إعادة ترجمتها؟`
+      );
+      if (confirmed) {
+        return handleTranslatePage(true);
+      }
+      return;
+    }
+
+    if (candidates.length === 0) {
       const reasons: string[] = [];
       if (skipArabic > 0) reasons.push(`${skipArabic} نص عربي أصلاً`);
       if (skipTechnical > 0) reasons.push(`${skipTechnical} نص تقني`);
-      if (skipTranslated > 0) reasons.push(`${skipTranslated} مترجم بالفعل`);
       setTranslateProgress(`✅ لا توجد نصوص تحتاج ترجمة في هذه الصفحة${reasons.length > 0 ? ` (${reasons.join('، ')})` : ''}`);
       setTimeout(() => setTranslateProgress(""), 5000);
       return;
     }
+
+    // Save previous translations for undo when re-translating
+    if (forceRetranslate) {
+      const prevTrans: Record<string, string> = {};
+      for (const e of candidates) {
+        const key = `${e.msbtFile}:${e.index}`;
+        if (state.translations[key]?.trim()) {
+          prevTrans[key] = state.translations[key];
+        }
+      }
+      if (Object.keys(prevTrans).length > 0) {
+        setPreviousTranslations(old => ({ ...old, ...prevTrans }));
+      }
+    }
+
+    const untranslated = candidates;
 
     // Translation Memory
     const tmMap = new Map<string, string>();
