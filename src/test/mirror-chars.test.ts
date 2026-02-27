@@ -4,7 +4,7 @@ import { describe, it, expect } from 'vitest';
 function swapChars(t: string): string {
   const protected_: { placeholder: string; original: string }[] = [];
   let counter = 0;
-  let safe = t.replace(/(\[\w+:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?|\{[\w]+\}|<[\w\/][^>]*>|[\uE000-\uE0FF]+|\([A-Z][^)]{1,100}\))/g, (match) => {
+  let safe = t.replace(/(\[\w+:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?|\{[\w]+\}|<[\w\/][^>]*>|[\uE000-\uE0FF]+|[\uFFF9-\uFFFB]+|\([A-Z][^)]{1,100}\))/g, (match) => {
     const ph = `\x01PROT${counter++}\x01`;
     protected_.push({ placeholder: ph, original: match });
     return ph;
@@ -91,5 +91,12 @@ describe('Mirror Characters', () => {
     const input = '\uE010 (اسم) [ML:number ] نهاية';
     const result = swapChars(input);
     expect(result).toBe('\uE010 )اسم( [ML:number ] نهاية');
+  });
+
+  it('should protect Unicode control chars \\uFFF9-\\uFFFB from swapping', () => {
+    const input = '\uFFF9annotation\uFFFA alt\uFFFB (عادي)';
+    const result = swapChars(input);
+    // Control chars untouched, normal parens swapped
+    expect(result).toBe('\uFFF9annotation\uFFFA alt\uFFFB )عادي(');
   });
 });
