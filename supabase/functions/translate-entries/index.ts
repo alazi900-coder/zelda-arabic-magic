@@ -65,10 +65,10 @@ function protectTags(text: string): { cleaned: string; tags: Map<string, string>
 /** Normalize malformed TAG_N variants that AI engines may produce */
 function normalizeTagPlaceholders(text: string): string {
   return text
-    .replace(/TAG\s+(\d+)/gi, 'TAG_$1')
-    .replace(/(?<!\w)TAG(\d+)(?!\w)/gi, 'TAG_$1')
-    .replace(/tag_(\d+)/g, 'TAG_$1')
-    .replace(/[《〈«⟪\[(<]\s*T(?:AG)?[_\s]?(\d+)\s*[》〉»⟫\])>]/gi, 'TAG_$1');
+    .replace(/TAG\s+_?(\d+)/gi, 'TAG_$1')           // "TAG 0", "TAG _0" → "TAG_0"
+    .replace(/(?<!\w)TAG(\d+)(?!\w)/gi, 'TAG_$1')    // "TAG0" → "TAG_0"
+    .replace(/tag_(\d+)/g, 'TAG_$1')                  // "tag_0" → "TAG_0"
+    .replace(/[《〈«⟪\[(<]\s*T(?:AG)?[_\s]?(\d+)\s*[》〉»⟫\])>]/gi, 'TAG_$1');  // «T0» etc → TAG_0
 }
 
 function restoreTags(text: string, tags: Map<string, string>): string {
