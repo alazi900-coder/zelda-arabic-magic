@@ -5,6 +5,7 @@ import { processArabicText, hasArabicChars as hasArabicCharsProcessing, hasArabi
 import { scanAllTranslations as scanMergedTranslations } from "@/lib/arabic-sentence-splitter";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { fixTagBracketsStrict } from "@/lib/tag-bracket-fix";
 
 import { useEditorGlossary } from "@/hooks/useEditorGlossary";
 import { useEditorFileIO } from "@/hooks/useEditorFileIO";
@@ -1590,50 +1591,14 @@ export function useEditorState() {
     const tagRegex = /\[\w+:[^\]]*?\s*\]/;
     const results: import("@/components/editor/TagBracketFixPanel").TagBracketFixResult[] = [];
     
-    // Inline the fix logic to avoid dynamic require
-    const fixBrackets = (original: string, translation: string): string => {
-      const allTagsRegex = /\[\w+:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?/g;
-      const origTags = [...original.matchAll(allTagsRegex)].map(m => m[0]);
-      if (origTags.length === 0) return translation;
-      let res = translation;
-      for (const tag of origTags) {
-        if (res.includes(tag)) continue;
-        const ci = tag.indexOf(']');
-        const inner = tag.slice(1, ci);
-        const esc = inner.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        // reversed ]inner[
-        const rev = new RegExp(`\\]\\s*${esc}\\s*\\[`);
-        if (rev.test(res)) { res = res.replace(rev, `[${inner}]`); continue; }
-        // ]inner] or [inner[
-        const bp = [new RegExp(`\\]\\s*${esc}\\s*\\]`), new RegExp(`\\[\\s*${esc}\\s*\\[`)];
-        let fixed = false;
-        for (const p of bp) { if (p.test(res)) { res = res.replace(p, `[${inner}]`); fixed = true; break; } }
-        if (fixed) continue;
-      }
-      // Remove orphan brackets
-      const validPos = new Set<number>();
-      const vp = /\[\w+:[^\]]*?\s*\]/g;
-      let vm;
-      while ((vm = vp.exec(res)) !== null) { for (let i = vm.index; i < vm.index + vm[0].length; i++) validPos.add(i); }
-      const op = /(\{[\w]+\}|<[\w\/][^>]*>)/g;
-      while ((vm = op.exec(res)) !== null) { for (let i = vm.index; i < vm.index + vm[0].length; i++) validPos.add(i); }
-      let cleaned = '';
-      for (let i = 0; i < res.length; i++) {
-        const ch = res[i];
-        if ((ch === '[' || ch === ']') && !validPos.has(i)) continue;
-        cleaned += ch;
-      }
-      return cleaned;
-    };
     for (const entry of state.entries) {
       const key = `${entry.msbtFile}:${entry.index}`;
       const translation = state.translations[key];
       if (!translation?.trim()) continue;
       if (!tagRegex.test(entry.original)) continue;
-      const after = fixBrackets(entry.original, translation);
+      const { text: after, stats } = fixTagBracketsStrict(entry.original, translation);
       if (after === translation) continue;
-      const count = (translation.match(/[\[\]]/g) || []).length - (after.match(/[\[\]]/g) || []).length;
-      results.push({ key, before: translation, after, count: Math.abs(count) || 1, status: 'pending' });
+      results.push({ key, before: translation, after, count: stats.total || 1, status: 'pending' });
     }
     setTagBracketFixResults(results);
     if (results.length === 0) {

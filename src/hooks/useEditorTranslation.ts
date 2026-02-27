@@ -6,6 +6,7 @@ import {
 } from "@/components/editor/types";
 import { restoreTagsLocally } from "@/lib/xc3-tag-restoration";
 import { protectTags, restoreTags } from "@/lib/xc3-tag-protection";
+import { fixTagBracketsStrict } from "@/lib/tag-bracket-fix";
 
 interface UseEditorTranslationProps {
   state: EditorState | null;
@@ -91,42 +92,7 @@ export function useEditorTranslation({
 
   /** Fix broken/reversed/orphan brackets around [Tag:Value] technical tags */
   const autoFixTagBrackets = (original: string, translation: string): string => {
-    const allTagsRegex = /\[\w+:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?/g;
-    const origTags = [...original.matchAll(allTagsRegex)].map(m => m[0]);
-    if (origTags.length === 0) return translation;
-    let res = translation;
-    for (const tag of origTags) {
-      if (res.includes(tag)) continue;
-      const ci = tag.indexOf(']');
-      const inner = tag.slice(1, ci);
-      const esc = inner.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      // reversed ]inner[
-      const rev = new RegExp(`\\]\\s*${esc}\\s*\\[`);
-      if (rev.test(res)) { res = res.replace(rev, `[${inner}]`); continue; }
-      // ]inner] or [inner[
-      let fixed = false;
-      for (const bp of [new RegExp(`\\]\\s*${esc}\\s*\\]`), new RegExp(`\\[\\s*${esc}\\s*\\[`)]) {
-        if (bp.test(res)) { res = res.replace(bp, `[${inner}]`); fixed = true; break; }
-      }
-      if (fixed) continue;
-      // bare inner without brackets (common after BiDi mangling)
-      const bare = new RegExp(`(?<!\\[)${esc}(?!\\])`);
-      if (bare.test(res)) { res = res.replace(bare, `[${inner}]`); }
-    }
-    // Remove orphan [ ] not part of valid tags
-    const validPos = new Set<number>();
-    const vp = /\[\w+:[^\]]*?\s*\]/g;
-    let vm;
-    while ((vm = vp.exec(res)) !== null) { for (let i = vm.index; i < vm.index + vm[0].length; i++) validPos.add(i); }
-    const op = /(\{[\w]+\}|<[\w\/][^>]*>)/g;
-    while ((vm = op.exec(res)) !== null) { for (let i = vm.index; i < vm.index + vm[0].length; i++) validPos.add(i); }
-    let cleaned = '';
-    for (let i = 0; i < res.length; i++) {
-      const ch = res[i];
-      if ((ch === '[' || ch === ']') && !validPos.has(i)) continue;
-      cleaned += ch;
-    }
-    return cleaned;
+    return fixTagBracketsStrict(original, translation).text;
   };
 
   const handleTranslateSingle = async (entry: ExtractedEntry) => {
@@ -173,6 +139,7 @@ export function useEditorTranslation({
         }
         if (hasTechnicalTags(entry.original)) {
           translated = restoreTagsLocally(entry.original, translated);
+          translated = autoFixTagBrackets(entry.original, translated);
         }
         updateTranslation(key, translated);
       }
@@ -664,6 +631,7 @@ export function useEditorTranslation({
           }
           if (hasTechnicalTags(entry.original)) {
             translated = restoreTagsLocally(entry.original, translated);
+            translated = autoFixTagBrackets(entry.original, translated);
           }
           allTranslations[key] = translated;
         }
