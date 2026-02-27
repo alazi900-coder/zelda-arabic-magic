@@ -1,132 +1,71 @@
 
 
-# اصلاح مشكلة ظهور ترجمات من خارج الدفعة/الفلتر
+# خطة: ترجمة الصفحة واحدة تلو الأخرى مع عرض مقارنة
 
-## المشكلة الجذرية
-
-عند ترجمة الصفحة بـ Lovable AI، تظهر ترجمات لجمل غير موجودة في الدفعة اصلاً. السبب الرئيسي:
-
-### 1. تسريب السياق (Context Leakage)
-الكود يرسل للذكاء الاصطناعي:
-- 30 نص للترجمة (الدفعة)
-- حتى 25 نص "سياق" كمرجع (من جيران الادخالات في المصفوفة الكاملة)
-
-الموديل يرى 55 نصاً في البرومبت ويخلط بينها — يترجم نصوص السياق بدلاً من نصوص الدفعة، فتظهر ترجمات لجمل من ملفات اخرى او اماكن اخرى تماماً.
-
-### 2. حجم الدفعة كبير (30 نص)
-مع 30 نصاً مرقماً `[0]...[29]`، الموديل يتخطى بعض الارقام او يعيد عدداً مختلفاً، فتنزاح الترجمات عن مواقعها الصحيحة.
-
-### 3. حماية مزدوجة للوسوم (لا تزال موجودة)
-`handleTranslatePage` و `handleAutoTranslate` يستدعيان `protectTags` على العميل، ثم الخادم يستدعيها مرة اخرى.
+## المشكلة
+عند ترجمة الصفحة كاملة، يتم إرسال 10 نصوص دفعة واحدة للذكاء الاصطناعي مما يسبب خلط بعض الكلمات الإنجليزية في الترجمة. بينما ترجمة كل نص على حدة تعطي نتائج أدق.
 
 ## الحل
+تغيير "ترجمة الصفحة" لتعمل بأسلوب "نص واحد في كل مرة" مع عرض شاشة مقارنة قبل تطبيق النتائج.
 
-### 1. تقليل حجم الدفعة وتحديد السياق
-**الملف: `src/components/editor/types.tsx`**
-- تقليل `AI_BATCH_SIZE` من 30 الى 10
+## التغييرات المطلوبة
 
-### 2. ازالة السياق من ترجمة الصفحة او تحديده بشدة
-**الملف: `src/hooks/useEditorTranslation.ts`**
+### 1. تعديل `handleTranslatePage` في `src/hooks/useEditorTranslation.ts`
+- بدلا من إرسال دفعات (batches) من 10 نصوص، سيتم إرسال نص واحد فقط في كل طلب
+- تخزين الترجمات الجديدة في متغير مؤقت (`pendingPageTranslations`) بدون تطبيقها فورا
+- حفظ الترجمات القديمة للمقارنة
+- إرسال سياق (النصوص المجاورة المترجمة) مع كل نص لتحسين الدقة كما يحدث في الترجمة المفردة
+- عرض تقدم واضح: "ترجمة 3/25..."
 
-في `handleTranslatePage` (سطر 581-595):
-- ازالة ارسال `context` بالكامل عند ترجمة الصفحة (لان السياق هو سبب التسريب)
-- او تحديد السياق بـ 5 نصوص فقط بدلاً من 25
+### 2. إضافة حالة المقارنة (state) في `useEditorTranslation`
+- `pendingPageTranslations`: الترجمات الجديدة المعلقة (لم تُطبق بعد)
+- `oldPageTranslations`: الترجمات القديمة قبل التغيير
+- `showPageCompare`: لإظهار/إخفاء نافذة المقارنة
+- `applyPendingTranslations()`: دالة لتطبيق الترجمات عند الموافقة
+- `discardPendingTranslations()`: دالة لإلغاء الترجمات
 
-في `handleAutoTranslate` (سطر 226-252):
-- تقليل السياق من 25 الى 8 نصوص
-- ازالة "recently translated entries" (سطر 244-252) لانها تضيف نصوصاً من خارج المنطقة الحالية
+### 3. إنشاء مكون `PageTranslationCompare` في `src/components/editor/PageTranslationCompare.tsx`
+- نافذة مقارنة تعرض جدولا بثلاثة أعمدة:
+  - النص الأصلي (الإنجليزي)
+  - الترجمة السابقة (إن وجدت)
+  - الترجمة الجديدة
+- تلوين الاختلافات بين القديم والجديد
+- عداد إجمالي: "25 نص مترجم"
+- زر "موافقة - تطبيق الكل" وزر "إلغاء - تجاهل"
+- إمكانية رفض ترجمات فردية (checkbox لكل سطر)
 
-### 3. ازالة الحماية المزدوجة
-**الملف: `src/hooks/useEditorTranslation.ts`**
+### 4. تعديل `src/pages/Editor.tsx`
+- ربط مكون المقارنة الجديد بحالة `showPageCompare`
+- تمرير دوال الموافقة والإلغاء
 
-في `handleTranslatePage` (سطر 574-579):
-- ارسال `e.original` مباشرة بدلاً من `p.cleanText`
-- حذف `protectedMap` وترك الخادم يتولى الحماية
-
-في `handleAutoTranslate` (سطر 218-224):
-- نفس الاصلاح
-
-تحديث `autoFixTags` (سطر 612):
-- عدم تمرير `protectedMap` لانها لم تعد موجودة
-- الاعتماد فقط على `restoreTagsLocally` الموجود في السطر 53-57
-
-### 4. فحص نسبة الطول في الخادم
-**الملف: `supabase/functions/translate-entries/index.ts`**
-
-في `parseAndUnlock` (بعد سطر 610):
-- اذا كانت الترجمة اقل من 3 احرف والاصلي اكثر من 20 حرف — تخطي
-- اذا كانت نسبة طول الترجمة اقل من 15% من الاصلي (والاصلي اكثر من 30 حرف) — تخطي
+### 5. تعديل `src/hooks/useEditorState.ts`
+- تصدير الحالات والدوال الجديدة للمحرر
 
 ## التفاصيل التقنية
 
-### ازالة السياق من handleTranslatePage
-
 ```text
-// سطر 581-603: حذف بناء contextEntries بالكامل
-// وارسال context: undefined في body
-
-body: JSON.stringify({
-  entries,
-  glossary: activeGlossary,
-  // لا context — هذا يمنع تسريب جمل من خارج الفلتر
-  userApiKey: userGeminiKey || undefined,
-  provider: translationProvider,
-})
+سير العمل الجديد:
+                                          
+  [ضغط "ترجمة الصفحة"]                    
+         |                                 
+         v                                 
+  [ترجمة نص 1/25 ...]  --> طلب API منفرد   
+  [ترجمة نص 2/25 ...]  --> طلب API منفرد   
+  [ترجمة نص 3/25 ...]  --> طلب API منفرد   
+         ...                               
+  [ترجمة نص 25/25]                         
+         |                                 
+         v                                 
+  [عرض شاشة المقارنة]                      
+    - القديم vs الجديد                      
+    - اختيار/إلغاء لكل سطر                 
+         |                                 
+    [موافقة]  أو  [إلغاء]                  
+         |            |                    
+    تطبيق       تجاهل الكل                
 ```
 
-### ازالة الحماية المزدوجة
-
-```text
-// handleTranslatePage سطر 574-580:
-قبل:
-  const protectedMap = new Map();
-  const entries = batch.map(e => {
-    const p = protectTags(e.original);
-    protectedMap.set(key, p);
-    return { key, original: p.cleanText };
-  });
-
-بعد:
-  const entries = batch.map(e => ({
-    key: `${e.msbtFile}:${e.index}`,
-    original: e.original,
-  }));
-
-// نفس التغيير في handleAutoTranslate سطر 218-224
-```
-
-### تقليل السياق في handleAutoTranslate
-
-```text
-// سطر 226-252: تقليل السياق
-// - ابقاء الجيران فقط (offsets -1, 1)
-// - حذف "recently translated entries" (سطر 244-252)
-// - تحديد context.slice(0, 8) بدلاً من slice(0, 25)
-```
-
-### فحص نسبة الطول في الخادم
-
-```text
-// في parseAndUnlock بعد سطر 610:
-const originalLen = item.pe.cleaned.length;
-if (translated.length < 3 && originalLen > 20) {
-  console.warn(`Skipping short translation: "${translated}" for ${item.entry.key}`);
-  continue;
-}
-if (originalLen > 30 && translated.length < originalLen * 0.15) {
-  console.warn(`Translation ratio too low for ${item.entry.key}`);
-  continue;
-}
-```
-
-## الملفات المتأثرة
-1. `src/components/editor/types.tsx` — تقليل AI_BATCH_SIZE من 30 الى 10
-2. `src/hooks/useEditorTranslation.ts` — ازالة الحماية المزدوجة + ازالة/تقليل السياق
-3. `supabase/functions/translate-entries/index.ts` — فحص نسبة الطول
-
-## النتيجة المتوقعة
-- لن تظهر ترجمات من خارج الدفعة/الفلتر
-- كل ترجمة تتطابق مع نصها الاصلي
-- دفعات اصغر (10 نصوص) تعطي دقة اعلى
-- الوسوم تُحمى مرة واحدة فقط على الخادم
+- كل طلب يرسل نصا واحدا مع سياق (4 نصوص مجاورة مترجمة) تماما مثل `handleTranslateSingle`
+- الترجمات تُخزن مؤقتا ولا تُطبق حتى يوافق المستخدم
+- يمكن إيقاف الترجمة في أي وقت والمقارنة بما تم ترجمته حتى الآن
 
