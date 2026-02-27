@@ -625,7 +625,9 @@ ${textsBlock}`;
       translated = translated
         .replace(/TAG\s+(\d+)/gi, 'TAG_$1')   // "TAG 0" → "TAG_0"
         .replace(/(?<!\w)TAG(\d+)(?!\w)/gi, 'TAG_$1')  // "TAG0" → "TAG_0"
-        .replace(/tag_(\d+)/g, 'TAG_$1');      // "tag_0" → "TAG_0"
+        .replace(/tag_(\d+)/g, 'TAG_$1')      // "tag_0" → "TAG_0"
+        // Fix AI corrupting TAG_N into bracketed variants like 《T0》, «T0», ⟪TAG_0⟫, (T0), etc.
+        .replace(/[《〈«⟪\[(<]\s*T(?:AG)?[_\s]?(\d+)\s*[》〉»⟫\])>]/gi, 'TAG_$1');
 
       // Unlock term placeholders → Arabic
       if (item.termLocks.locks.length > 0) {
