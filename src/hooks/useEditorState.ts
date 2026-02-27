@@ -51,6 +51,9 @@ export function useEditorState() {
   const [sentenceSplitResults, setSentenceSplitResults] = useState<import("@/lib/arabic-sentence-splitter").SentenceSplitResult[] | null>(null);
   const [newlineCleanResults, setNewlineCleanResults] = useState<import("@/components/editor/NewlineCleanPanel").NewlineCleanResult[] | null>(null);
   const [diacriticsCleanResults, setDiacriticsCleanResults] = useState<import("@/components/editor/DiacriticsCleanPanel").DiacriticsCleanResult[] | null>(null);
+  const [duplicateAlefResults, setDuplicateAlefResults] = useState<import("@/components/editor/DuplicateAlefCleanPanel").DuplicateAlefResult[] | null>(null);
+  const [pinnedKeys, setPinnedKeys] = useState<Set<string> | null>(null);
+  const [isSearchPinned, setIsSearchPinned] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [showFindReplace, setShowFindReplace] = useState(false);
   const [userGeminiKey, _setUserGeminiKey] = useState(() => {
@@ -644,6 +647,10 @@ export function useEditorState() {
   // === Filtered entries ===
   const filteredEntries = useMemo(() => {
     if (!state) return [];
+    // If search is pinned, show only pinned keys (bypass all filters)
+    if (pinnedKeys) {
+      return state.entries.filter(e => pinnedKeys.has(`${e.msbtFile}:${e.index}`));
+    }
     return state.entries.filter(e => {
       const key = `${e.msbtFile}:${e.index}`;
       const translation = state.translations[key] || '';
@@ -681,7 +688,7 @@ export function useEditorState() {
       const matchColumn = filterColumn === "all" || (labelMatch && labelMatch[3] === filterColumn);
       return matchSearch && matchFile && matchCategory && matchStatus && matchTechnical && matchTable && matchColumn;
     });
-  }, [state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, qualityStats.problemKeys, needsImprovement, isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage]);
+  }, [state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, qualityStats.problemKeys, needsImprovement, isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage, pinnedKeys]);
 
   useEffect(() => { setCurrentPage(0); }, [search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn]);
 
@@ -1428,6 +1435,67 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 4000);
   }, [state, sentenceSplitResults]);
 
+  // === Pin Search ===
+  const handleTogglePin = useCallback(() => {
+    if (pinnedKeys) {
+      // Unpin
+      setPinnedKeys(null);
+      setIsSearchPinned(false);
+    } else {
+      // Pin current filtered entries
+      const keys = new Set(filteredEntries.map(e => `${e.msbtFile}:${e.index}`));
+      setPinnedKeys(keys);
+      setIsSearchPinned(true);
+    }
+  }, [pinnedKeys, filteredEntries]);
+
+  // === Duplicate Alef Clean ===
+  const handleScanDuplicateAlef = useCallback(() => {
+    if (!state) return;
+    const alefRegex = /ا{2,}/g;
+    const results: import("@/components/editor/DuplicateAlefCleanPanel").DuplicateAlefResult[] = [];
+    for (const [key, value] of Object.entries(state.translations)) {
+      if (!value?.trim()) continue;
+      const matches = value.match(alefRegex);
+      if (matches && matches.length > 0) {
+        const after = value.replace(alefRegex, 'ا');
+        if (after !== value) {
+          results.push({ key, before: value, after, count: matches.length, status: 'pending' });
+        }
+      }
+    }
+    setDuplicateAlefResults(results);
+    if (results.length === 0) {
+      setLastSaved("✅ لا توجد ألفات مكررة في الترجمات");
+      setTimeout(() => setLastSaved(""), 4000);
+    }
+  }, [state]);
+
+  const handleApplyDuplicateAlefClean = useCallback((key: string) => {
+    if (!state || !duplicateAlefResults) return;
+    const item = duplicateAlefResults.find(r => r.key === key);
+    if (!item) return;
+    setState(prev => prev ? { ...prev, translations: { ...prev.translations, [key]: item.after } } : null);
+    setDuplicateAlefResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'accepted' as const } : r) : null);
+  }, [state, duplicateAlefResults]);
+
+  const handleRejectDuplicateAlefClean = useCallback((key: string) => {
+    setDuplicateAlefResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'rejected' as const } : r) : null);
+  }, []);
+
+  const handleApplyAllDuplicateAlefCleans = useCallback(() => {
+    if (!state || !duplicateAlefResults) return;
+    const pending = duplicateAlefResults.filter(r => r.status === 'pending');
+    const newTranslations = { ...state.translations };
+    for (const item of pending) {
+      newTranslations[item.key] = item.after;
+    }
+    setState(prev => prev ? { ...prev, translations: newTranslations } : null);
+    setDuplicateAlefResults(prev => prev ? prev.map(r => r.status === 'pending' ? { ...r, status: 'accepted' as const } : r) : null);
+    setLastSaved(`✅ تم إصلاح ${pending.length} ألف مكرر`);
+    setTimeout(() => setLastSaved(""), 4000);
+  }, [state, duplicateAlefResults]);
+
   return {
     // State
     state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, showFindReplace, userGeminiKey, translationProvider, myMemoryEmail, myMemoryCharsUsed, aiRequestsToday, aiRequestsMonth,
@@ -1444,7 +1512,8 @@ export function useEditorState() {
     applyingArabic, improvingTranslations, improveResults,
     fixingMixed, filtersOpen, buildStats, buildPreview, showBuildConfirm, bdatFileStats,
     checkingConsistency, consistencyResults,
-    scanningSentences, sentenceSplitResults, newlineCleanResults, diacriticsCleanResults,
+    scanningSentences, sentenceSplitResults, newlineCleanResults, diacriticsCleanResults, duplicateAlefResults,
+    isSearchPinned, pinnedKeys,
     categoryProgress, qualityStats, needsImproveCount, translatedCount, tagsCount, fuzzyCount, byteOverflowCount,
     bdatTableNames, bdatColumnNames, bdatTableCounts, bdatColumnCounts,
     ...glossary,
@@ -1457,7 +1526,7 @@ export function useEditorState() {
     setCurrentPage, setShowRetranslateConfirm,
     setArabicNumerals, setMirrorPunctuation, setUserGeminiKey, setTranslationProvider, setMyMemoryEmail,
     setReviewResults, setShortSuggestions, setImproveResults, setBuildStats, setShowBuildConfirm,
-    setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults, setDiacriticsCleanResults,
+    setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults, setDiacriticsCleanResults, setDuplicateAlefResults,
 
     // Handlers
     toggleProtection, toggleTechnicalBypass,
@@ -1477,6 +1546,8 @@ export function useEditorState() {
     handleScanMergedSentences, handleApplySentenceSplit, handleRejectSentenceSplit, handleApplyAllSentenceSplits,
     handleScanNewlines, handleApplyNewlineClean, handleRejectNewlineClean, handleApplyAllNewlineCleans,
     handleScanDiacritics, handleApplyDiacriticsClean, handleRejectDiacriticsClean, handleApplyAllDiacriticsCleans,
+    handleScanDuplicateAlef, handleApplyDuplicateAlefClean, handleRejectDuplicateAlefClean, handleApplyAllDuplicateAlefCleans,
+    handleTogglePin,
     handleClearTranslations, handleUndoClear, clearUndoBackup, isFilterActive,
     integrityResult, showIntegrityDialog, setShowIntegrityDialog, checkingIntegrity,
 
