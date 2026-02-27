@@ -1375,6 +1375,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       a.download = `bundled-translations-updated.json`;
       a.click();
       URL.revokeObjectURL(url);
+      setBundledCount(Object.keys(bundled).length);
       alert(`✅ تم حفظ ${Object.keys(bundled).length} ترجمة في الملف المحدث`);
     } catch (err) {
       alert(`❌ فشل حفظ الترجمات: ${err instanceof Error ? err.message : err}`);
