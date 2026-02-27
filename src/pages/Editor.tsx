@@ -57,6 +57,7 @@ import ExportEnglishDialog from "@/components/editor/ExportEnglishDialog";
 import GlossaryStatsPanel from "@/components/editor/GlossaryStatsPanel";
 import TranslationStatsPanel from "@/components/editor/TranslationStatsPanel";
 import ImportConflictDialog from "@/components/editor/ImportConflictDialog";
+import TagRepairPanel from "@/components/editor/TagRepairPanel";
 
 const Editor = () => {
   const editor = useEditorState();
@@ -68,6 +69,7 @@ const Editor = () => {
   const [showExportEnglishDialog, setShowExportEnglishDialog] = React.useState(false);
   const [compareEntry, setCompareEntry] = React.useState<import("@/components/editor/types").ExtractedEntry | null>(null);
   const [showClearConfirm, setShowClearConfirm] = React.useState<'all' | 'filtered' | null>(null);
+  const [showTagRepair, setShowTagRepair] = React.useState(false);
   const gameType = "xenoblade";
   const processPath = "/process";
 
@@ -426,7 +428,7 @@ const Editor = () => {
             onFilterDamagedTags={() => editor.setFilterStatus(editor.filterStatus === "damaged-tags" ? "all" : "damaged-tags")}
             isDamagedTagsActive={editor.filterStatus === "damaged-tags"}
             onFixDamagedTags={() => editor.handleFixDamagedTags(editor.qualityStats.damagedTagKeys)}
-            onLocalFixDamagedTags={() => editor.handleLocalFixAllDamagedTags(editor.qualityStats.damagedTagKeys)}
+            onLocalFixDamagedTags={() => setShowTagRepair(true)}
             isFixing={editor.translating}
             onRedistributeTags={editor.handleRedistributeTags}
             tagsCount={editor.tagsCount}
@@ -598,6 +600,17 @@ const Editor = () => {
               onReject={editor.handleRejectMirrorCharsClean}
               onAcceptAll={editor.handleApplyAllMirrorCharsCleans}
               onClose={() => editor.setMirrorCharsResults(null)}
+            />
+          )}
+
+          {/* Tag Repair Panel */}
+          {showTagRepair && editor.state && (
+            <TagRepairPanel
+              entries={editor.state.entries}
+              translations={editor.state.translations}
+              damagedTagKeys={editor.qualityStats.damagedTagKeys}
+              onApplySelected={(keys) => editor.handleLocalFixSelectedTags(keys)}
+              onClose={() => setShowTagRepair(false)}
             />
           )}
 
