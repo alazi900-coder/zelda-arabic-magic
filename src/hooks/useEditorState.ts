@@ -721,7 +721,7 @@ export function useEditorState() {
     state, setState, setLastSaved, setTranslateProgress, setPreviousTranslations, updateTranslation,
     filterCategory, activeGlossary, parseGlossaryMap, paginatedEntries, userGeminiKey, translationProvider, myMemoryEmail, addMyMemoryChars, addAiRequest,
   });
-  const { translating, translatingSingle, tmStats, glossarySessionStats, handleTranslateSingle, handleAutoTranslate, handleTranslatePage, handleStopTranslate, handleRetranslatePage, handleFixDamagedTags } = translation;
+  const { translating, translatingSingle, tmStats, glossarySessionStats, handleTranslateSingle, handleAutoTranslate, handleTranslatePage, handleStopTranslate, handleRetranslatePage, handleFixDamagedTags, pendingPageTranslations, oldPageTranslations, pageTranslationOriginals, showPageCompare, applyPendingTranslations, discardPendingTranslations } = translation;
 
   // === Local (offline) fix for damaged tags — no AI needed ===
   const handleLocalFixDamagedTag = useCallback((entry: ExtractedEntry) => {
@@ -1589,6 +1589,7 @@ export function useEditorState() {
     pendingRecovery, handleRecoverSession, handleStartFresh,
     hasStoredOriginals, originalsDetectedAsPreviousBuild,
     building, buildProgress, dismissBuildProgress, translating, translateProgress,
+    pendingPageTranslations, oldPageTranslations, pageTranslationOriginals, showPageCompare,
     lastSaved, cloudSyncing, cloudStatus,
     reviewing, reviewResults, tmStats, glossarySessionStats,
     suggestingShort, shortSuggestions,
@@ -1621,6 +1622,7 @@ export function useEditorState() {
     updateTranslation, handleUndoTranslation,
     handleTranslateSingle, handleAutoTranslate, handleTranslatePage, handleStopTranslate,
     handleRetranslatePage, handleFixDamagedTags, handleLocalFixDamagedTag, handleLocalFixAllDamagedTags, handleLocalFixSelectedTags, handleRedistributeTags, handleReviewTranslations,
+    applyPendingTranslations, discardPendingTranslations,
     handleSuggestShorterTranslations, handleApplyShorterTranslation, handleApplyAllShorterTranslations,
     handleFixAllStuckCharacters, handleFixMixedLanguage,
     ...fileIO,

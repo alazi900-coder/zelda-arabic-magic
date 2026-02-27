@@ -58,6 +58,7 @@ import GlossaryStatsPanel from "@/components/editor/GlossaryStatsPanel";
 import TranslationStatsPanel from "@/components/editor/TranslationStatsPanel";
 import ImportConflictDialog from "@/components/editor/ImportConflictDialog";
 import TagRepairPanel from "@/components/editor/TagRepairPanel";
+import PageTranslationCompare from "@/components/editor/PageTranslationCompare";
 
 const Editor = () => {
   const editor = useEditorState();
@@ -1399,6 +1400,18 @@ const Editor = () => {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+
+        {/* Page Translation Compare Dialog */}
+        {editor.showPageCompare && editor.pendingPageTranslations && (
+          <PageTranslationCompare
+            open={editor.showPageCompare}
+            originals={editor.pageTranslationOriginals}
+            oldTranslations={editor.oldPageTranslations}
+            newTranslations={editor.pendingPageTranslations}
+            onApply={(selectedKeys) => editor.applyPendingTranslations(selectedKeys)}
+            onDiscard={editor.discardPendingTranslations}
+          />
+        )}
       </div>
     </TooltipProvider>
   );

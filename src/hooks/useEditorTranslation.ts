@@ -38,6 +38,34 @@ export function useEditorTranslation({
   }>({ directMatches: 0, lockedTerms: 0, contextTerms: 0, batchesCompleted: 0, totalBatches: 0, textsTranslated: 0, freeTranslations: 0 });
   const abortControllerRef = useRef<AbortController | null>(null);
 
+  // Page translation compare state
+  const [pendingPageTranslations, setPendingPageTranslations] = useState<Record<string, string> | null>(null);
+  const [oldPageTranslations, setOldPageTranslations] = useState<Record<string, string>>({});
+  const [pageTranslationOriginals, setPageTranslationOriginals] = useState<Record<string, string>>({});
+  const [showPageCompare, setShowPageCompare] = useState(false);
+
+  const applyPendingTranslations = (selectedKeys?: Set<string>) => {
+    if (!state || !pendingPageTranslations) return;
+    const toApply: Record<string, string> = {};
+    for (const [key, val] of Object.entries(pendingPageTranslations)) {
+      if (!selectedKeys || selectedKeys.has(key)) {
+        toApply[key] = val;
+      }
+    }
+    setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...toApply } } : null);
+    setPendingPageTranslations(null);
+    setOldPageTranslations({});
+    setPageTranslationOriginals({});
+    setShowPageCompare(false);
+  };
+
+  const discardPendingTranslations = () => {
+    setPendingPageTranslations(null);
+    setOldPageTranslations({});
+    setPageTranslationOriginals({});
+    setShowPageCompare(false);
+  };
+
   /** Auto-fix: restore protected tags then restore any remaining missing tags */
   const autoFixTags = (translations: Record<string, string>, protectedMap?: Map<string, ReturnType<typeof protectTags>>): Record<string, string> => {
     if (!state) return translations;
@@ -461,25 +489,14 @@ export function useEditorTranslation({
       return;
     }
 
-    // Save previous translations for undo when re-translating
-    if (forceRetranslate) {
-      const prevTrans: Record<string, string> = {};
-      for (const e of candidates) {
-        const key = `${e.msbtFile}:${e.index}`;
-        if (state.translations[key]?.trim()) {
-          prevTrans[key] = state.translations[key];
-        }
-      }
-      if (Object.keys(prevTrans).length > 0) {
-        setPreviousTranslations(old => ({ ...old, ...prevTrans }));
-      }
+    // Save previous translations for comparison
+    const oldTrans: Record<string, string> = {};
+    const originalsMap: Record<string, string> = {};
+    for (const e of candidates) {
+      const key = `${e.msbtFile}:${e.index}`;
+      oldTrans[key] = state.translations[key] || '';
+      originalsMap[key] = e.original;
     }
-
-    const untranslated = candidates;
-
-    let needsAI: typeof untranslated;
-    let tmCount = 0;
-    let glossaryCount = 0;
 
     if (memoryOnly) {
       // Memory-only mode: use TM + Glossary, skip AI entirely
@@ -494,8 +511,8 @@ export function useEditorTranslation({
         }
       }
       const tmReused: Record<string, string> = {};
-      const afterTM: typeof untranslated = [];
-      for (const e of untranslated) {
+      const afterTM: typeof candidates = [];
+      for (const e of candidates) {
         const norm = e.original.trim().toLowerCase();
         const cached = tmMap.get(norm);
         if (cached) { tmReused[`${e.msbtFile}:${e.index}`] = cached; }
@@ -504,7 +521,7 @@ export function useEditorTranslation({
 
       const glossaryMap = parseGlossaryMap(activeGlossary);
       const glossaryReused: Record<string, string> = {};
-      const remaining: typeof untranslated = [];
+      const remaining: typeof candidates = [];
       for (const e of afterTM) {
         const norm = e.original.trim().toLowerCase();
         const glossaryHit = glossaryMap.get(norm);
@@ -513,13 +530,17 @@ export function useEditorTranslation({
       }
 
       const freeTranslations = { ...tmReused, ...glossaryReused };
-      if (Object.keys(freeTranslations).length > 0) {
-        setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...freeTranslations } } : null);
+      const totalFree = Object.keys(freeTranslations).length;
+      if (totalFree > 0) {
+        // Show compare dialog for memory-only too
+        setOldPageTranslations(oldTrans);
+        setPageTranslationOriginals(originalsMap);
+        setPendingPageTranslations(freeTranslations);
+        setShowPageCompare(true);
       }
-      tmCount = Object.keys(tmReused).length;
-      glossaryCount = Object.keys(glossaryReused).length;
-      const totalFree = tmCount + glossaryCount;
-      setTmStats({ reused: totalFree, sent: 0 });
+      const tmCount = Object.keys(tmReused).length;
+      const glossaryCount = Object.keys(glossaryReused).length;
+      setTmStats({ reused: tmCount + glossaryCount, sent: 0 });
       const parts: string[] = [];
       if (tmCount > 0) parts.push(`${tmCount} من الذاكرة`);
       if (glossaryCount > 0) parts.push(`${glossaryCount} من القاموس 📖`);
@@ -530,39 +551,50 @@ export function useEditorTranslation({
       }
       setTimeout(() => setTranslateProgress(""), 5000);
       return;
-    } else {
-      // AI mode: send everything directly to AI, skip TM/Glossary
-      needsAI = untranslated;
-      setTmStats({ reused: 0, sent: needsAI.length });
-      if (needsAI.length === 0) {
-        setTranslateProgress(`✅ لا توجد نصوص تحتاج ترجمة`);
-        setTimeout(() => setTranslateProgress(""), 5000);
-        return;
-      }
+    }
+
+    // AI mode: translate one-by-one for maximum accuracy
+    const needsAI = candidates;
+    setTmStats({ reused: 0, sent: needsAI.length });
+    if (needsAI.length === 0) {
+      setTranslateProgress(`✅ لا توجد نصوص تحتاج ترجمة`);
+      setTimeout(() => setTranslateProgress(""), 5000);
+      return;
     }
 
     setTranslating(true);
-    const totalBatches = Math.ceil(needsAI.length / AI_BATCH_SIZE);
-    let allTranslations: Record<string, string> = {};
-    setGlossarySessionStats(prev => ({ ...prev, batchesCompleted: 0, totalBatches, textsTranslated: 0, freeTranslations: 0 }));
+    const allTranslations: Record<string, string> = {};
     abortControllerRef.current = new AbortController();
 
     try {
-      for (let b = 0; b < totalBatches; b++) {
+      for (let i = 0; i < needsAI.length; i++) {
         if (abortControllerRef.current.signal.aborted) {
           setTranslateProgress("⏹️ تم إيقاف الترجمة");
           setTimeout(() => setTranslateProgress(""), 3000);
           break;
         }
-        const batch = needsAI.slice(b * AI_BATCH_SIZE, (b + 1) * AI_BATCH_SIZE);
-        setTranslateProgress(`🔄 ترجمة صفحة: الدفعة ${b + 1}/${totalBatches} (${batch.length} نص)...`);
+        const entry = needsAI[i];
+        const key = `${entry.msbtFile}:${entry.index}`;
+        setTranslateProgress(`🔄 ترجمة ${i + 1}/${needsAI.length}...`);
 
-        // Send original text directly — server handles tag protection (no double protection)
-        const entries = batch.map(e => ({
-          key: `${e.msbtFile}:${e.index}`,
-          original: e.original,
-        }));
-        // No context sent for page translation — prevents context leakage from outside the filter
+        // Build context from neighboring entries (like handleTranslateSingle)
+        const idx = state.entries.indexOf(entry);
+        const contextEntries: { key: string; original: string; translation?: string }[] = [];
+        for (const offset of [-2, -1, 1, 2]) {
+          const neighbor = state.entries[idx + offset];
+          if (neighbor) {
+            const nKey = `${neighbor.msbtFile}:${neighbor.index}`;
+            // Use already-translated entries from this session or existing translations
+            const trans = allTranslations[nKey] || state.translations[nKey];
+            if (trans?.trim()) {
+              contextEntries.push({ key: nKey, original: neighbor.original, translation: trans });
+            }
+          }
+        }
+
+        // Protect tags before sending
+        const protected_ = protectTags(entry.original);
+        const textToSend = protected_.tags.length > 0 ? protected_.cleanText : entry.original;
 
         const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
         const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -570,33 +602,66 @@ export function useEditorTranslation({
           method: 'POST',
           headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
           signal: abortControllerRef.current.signal,
-          body: JSON.stringify({ entries, glossary: activeGlossary, userApiKey: userGeminiKey || undefined, provider: translationProvider, myMemoryEmail: myMemoryEmail || undefined }),
+          body: JSON.stringify({
+            entries: [{ key, original: textToSend }],
+            glossary: activeGlossary,
+            context: contextEntries.length > 0 ? contextEntries : undefined,
+            userApiKey: userGeminiKey || undefined,
+            provider: translationProvider,
+            myMemoryEmail: myMemoryEmail || undefined,
+          }),
         });
         if (!response.ok) throw new Error(`خطأ ${response.status}`);
         const data = await response.json();
         addAiRequest(1);
         if (data.charsUsed) addMyMemoryChars(data.charsUsed);
-        const batchTranslated = data.translations ? Object.keys(data.translations).length : 0;
-        setGlossarySessionStats(prev => ({ ...prev, batchesCompleted: b + 1, textsTranslated: prev.textsTranslated + batchTranslated }));
-        if (data.translations) {
-          const fixedTranslations = autoFixTags(data.translations);
-          allTranslations = { ...allTranslations, ...fixedTranslations };
-          setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...fixedTranslations } } : null);
+        if (data.translations && data.translations[key]) {
+          let translated = data.translations[key];
+          if (protected_.tags.length > 0) {
+            translated = restoreTags(translated, protected_.tags);
+          }
+          if (hasTechnicalTags(entry.original)) {
+            translated = restoreTagsLocally(entry.original, translated);
+          }
+          allTranslations[key] = translated;
         }
       }
-      if (!abortControllerRef.current?.signal.aborted) {
-        const total = Object.keys(allTranslations).length;
-        setTranslateProgress(`✅ تم ترجمة ${total} نص في الصفحة الحالية${tmCount > 0 ? ` + ${tmCount} من الذاكرة` : ''}${glossaryCount > 0 ? ` + ${glossaryCount} من القاموس` : ''}`);
-        setTimeout(() => setTranslateProgress(""), 8000);
+
+      // Show compare dialog instead of applying immediately
+      if (Object.keys(allTranslations).length > 0) {
+        setOldPageTranslations(oldTrans);
+        setPageTranslationOriginals(originalsMap);
+        setPendingPageTranslations(allTranslations);
+        setShowPageCompare(true);
+        setTranslateProgress(`✅ تم ترجمة ${Object.keys(allTranslations).length} نص — راجع النتائج`);
+        setTimeout(() => setTranslateProgress(""), 5000);
+      } else if (!abortControllerRef.current?.signal.aborted) {
+        setTranslateProgress(`⚠️ لم يتم ترجمة أي نص`);
+        setTimeout(() => setTranslateProgress(""), 5000);
       }
     } catch (err) {
       if ((err as Error).name === 'AbortError') {
-        setTranslateProgress("⏹️ تم إيقاف الترجمة يدوياً");
+        // Show what we have so far
+        if (Object.keys(allTranslations).length > 0) {
+          setOldPageTranslations(oldTrans);
+          setPageTranslationOriginals(originalsMap);
+          setPendingPageTranslations(allTranslations);
+          setShowPageCompare(true);
+          setTranslateProgress(`⏹️ تم إيقاف الترجمة — ${Object.keys(allTranslations).length} نص جاهز للمراجعة`);
+        } else {
+          setTranslateProgress("⏹️ تم إيقاف الترجمة يدوياً");
+        }
         setTimeout(() => setTranslateProgress(""), 4000);
       } else {
-        const savedCount = Object.keys(allTranslations).length;
+        // Show what we have so far even on error
+        if (Object.keys(allTranslations).length > 0) {
+          setOldPageTranslations(oldTrans);
+          setPageTranslationOriginals(originalsMap);
+          setPendingPageTranslations(allTranslations);
+          setShowPageCompare(true);
+        }
         const errMsg = err instanceof Error ? err.message : 'خطأ في الترجمة';
-        setTranslateProgress(`❌ ${errMsg}${savedCount > 0 ? ` (تم حفظ ${savedCount} نص قبل الخطأ)` : ''}`);
+        setTranslateProgress(`❌ ${errMsg}${Object.keys(allTranslations).length > 0 ? ` (${Object.keys(allTranslations).length} نص جاهز للمراجعة)` : ''}`);
         setTimeout(() => setTranslateProgress(""), 5000);
       }
     } finally {
@@ -610,6 +675,12 @@ export function useEditorTranslation({
     translatingSingle,
     tmStats,
     glossarySessionStats,
+    pendingPageTranslations,
+    oldPageTranslations,
+    pageTranslationOriginals,
+    showPageCompare,
+    applyPendingTranslations,
+    discardPendingTranslations,
     handleTranslateSingle,
     handleAutoTranslate,
     handleTranslatePage,
