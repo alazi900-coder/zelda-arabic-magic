@@ -52,6 +52,7 @@ import NewlineCleanPanel from "@/components/editor/NewlineCleanPanel";
 import DiacriticsCleanPanel from "@/components/editor/DiacriticsCleanPanel";
 import DuplicateAlefCleanPanel from "@/components/editor/DuplicateAlefCleanPanel";
 import MirrorCharsCleanPanel from "@/components/editor/MirrorCharsCleanPanel";
+import MergeToBundledPanel from "@/components/editor/MergeToBundledPanel";
 import ExportEnglishDialog from "@/components/editor/ExportEnglishDialog";
 import GlossaryStatsPanel from "@/components/editor/GlossaryStatsPanel";
 import TranslationStatsPanel from "@/components/editor/TranslationStatsPanel";
@@ -588,6 +589,19 @@ const Editor = () => {
             />
           )}
 
+          {/* Merge to Bundled Panel */}
+          {editor.mergeToBundledItems && editor.mergeToBundledItems.length > 0 && (
+            <MergeToBundledPanel
+              items={editor.mergeToBundledItems}
+              onAccept={editor.handleMergeToBundledAccept}
+              onReject={editor.handleMergeToBundledReject}
+              onAcceptAll={editor.handleMergeToBundledAcceptAll}
+              onRejectAll={editor.handleMergeToBundledRejectAll}
+              onClose={() => editor.setMergeToBundledItems(null)}
+              onDownload={editor.handleMergeToBundledDownload}
+            />
+          )}
+
           {!editor.user && (
             <Card className="mb-4 border-primary/30 bg-primary/5">
               <CardContent className="flex items-center gap-3 p-4"><LogIn className="w-4 h-4" /> سجّل دخولك للمزامنة</CardContent>
@@ -833,6 +847,9 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleSaveBundledTranslations} disabled={editor.savingBundled || editor.translatedCount === 0}>
                     {editor.savingBundled ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />} حفظ التعديلات على المدمجة
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleMergeToBundled} disabled={editor.mergingToBundled || editor.translatedCount === 0}>
+                    {editor.mergingToBundled ? <Loader2 className="w-4 h-4 animate-spin" /> : <Replace className="w-4 h-4" />} دمج التعديلات في المدمجة 🔀
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={editor.handleCleanBundledTranslations} disabled={editor.cleaningBundled}>
                     {editor.cleaningBundled ? <Loader2 className="w-4 h-4 animate-spin" /> : <Type className="w-4 h-4" />} تنظيف لغوي تلقائي 🧹
@@ -959,6 +976,9 @@ const Editor = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleSaveBundledTranslations} disabled={editor.savingBundled || editor.translatedCount === 0}>
                     {editor.savingBundled ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />} حفظ التعديلات على المدمجة
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleMergeToBundled} disabled={editor.mergingToBundled || editor.translatedCount === 0}>
+                    {editor.mergingToBundled ? <Loader2 className="w-4 h-4 animate-spin" /> : <Replace className="w-4 h-4" />} دمج التعديلات في المدمجة 🔀
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={editor.handleCleanBundledTranslations} disabled={editor.cleaningBundled}>
