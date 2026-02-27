@@ -4,6 +4,7 @@ import { removeArabicPresentationForms } from "@/lib/arabic-processing";
 import type { EditorState } from "@/components/editor/types";
 import { ExtractedEntry, hasArabicChars, unReverseBidi } from "@/components/editor/types";
 import { murmur3_32 } from "@/lib/bdat-hash-dictionary";
+import { fetchBundledTranslations, uploadBundledTranslations } from "@/lib/bundled-cloud";
 
 /** Parse a single JSON object chunk, repairing common issues */
 function repairSingleChunk(raw: string): Record<string, string> | null {
@@ -1332,8 +1333,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
   /** Bundled translations count */
   const [bundledCount, setBundledCount] = useState(0);
   useEffect(() => {
-    fetch('/bundled-translations.json')
-      .then(r => r.ok ? r.json() : {})
+    fetchBundledTranslations()
       .then(data => setBundledCount(Object.keys(data).length))
       .catch(() => {});
   }, []);
@@ -1343,9 +1343,8 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
   const handleLoadBundledTranslations = useCallback(async () => {
     setLoadingBundled(true);
     try {
-      const resp = await fetch('/bundled-translations.json');
-      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      const rawText = await resp.text();
+      const bundled = await fetchBundledTranslations();
+      const rawText = JSON.stringify(bundled);
       await processJsonImport(rawText, 'الترجمات المدمجة 📦');
     } catch (err) {
       alert(`❌ فشل تحميل الترجمات المدمجة: ${err instanceof Error ? err.message : err}`);
@@ -1361,8 +1360,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     try {
       let bundled: Record<string, any> = {};
       try {
-        const resp = await fetch('/bundled-translations.json');
-        if (resp.ok) bundled = JSON.parse(await resp.text());
+        bundled = await fetchBundledTranslations();
       } catch { /* start fresh */ }
 
       for (const entry of (state?.entries || [])) {
@@ -1373,6 +1371,13 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
         }
       }
 
+      // Upload to cloud
+      const uploadResult = await uploadBundledTranslations(bundled);
+      if (!uploadResult.success) {
+        console.warn('Cloud upload failed:', uploadResult.error);
+      }
+
+      // Also download locally
       const blob = new Blob([JSON.stringify(bundled, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -1381,7 +1386,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       a.click();
       URL.revokeObjectURL(url);
       setBundledCount(Object.keys(bundled).length);
-      alert(`✅ تم حفظ ${Object.keys(bundled).length} ترجمة في الملف المحدث`);
+      alert(`✅ تم حفظ ${Object.keys(bundled).length} ترجمة${uploadResult.success ? ' ورفعها للسحابة ☁️' : ' (محلياً فقط)'}`);
       // Auto-merge to bundled if enabled
       if (autoMergeToBundledRef.current) {
         setTimeout(() => handleMergeToBundledRef.current?.(), 500);
@@ -1396,9 +1401,8 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
   /** Download the current bundled translations file as-is */
   const handleDownloadBundled = useCallback(async () => {
     try {
-      const resp = await fetch('/bundled-translations.json');
-      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      const blob = await resp.blob();
+      const bundled = await fetchBundledTranslations();
+      const blob = new Blob([JSON.stringify(bundled, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -1431,9 +1435,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
   const handleCleanBundledTranslations = useCallback(async () => {
     setCleaningBundled(true);
     try {
-      const resp = await fetch('/bundled-translations.json');
-      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      const bundled: Record<string, string> = await resp.json();
+      const bundled: Record<string, string> = await fetchBundledTranslations();
 
       let cleaned = 0;
       const result: Record<string, string> = {};
@@ -1448,6 +1450,9 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
         return;
       }
 
+      // Upload cleaned version to cloud
+      const uploadResult = await uploadBundledTranslations(result);
+
       const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -1455,7 +1460,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       a.download = 'bundled-translations-cleaned.json';
       a.click();
       URL.revokeObjectURL(url);
-      alert(`✅ تم تنظيف ${cleaned} ترجمة من أصل ${Object.keys(bundled).length}\n\n• توحيد الألف والهمزات\n• إزالة المسافات الزائدة\n• إزالة الألف المكررة\n• تنظيف رموز الهروب`);
+      alert(`✅ تم تنظيف ${cleaned} ترجمة من أصل ${Object.keys(bundled).length}${uploadResult.success ? ' ☁️ تم الرفع للسحابة' : ''}\n\n• توحيد الألف والهمزات\n• إزالة المسافات الزائدة\n• إزالة الألف المكررة\n• تنظيف رموز الهروب`);
     } catch (err) {
       alert(`❌ فشل التنظيف: ${err instanceof Error ? err.message : err}`);
     } finally {
@@ -1476,9 +1481,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
   const handleCheckBundledQuality = useCallback(async () => {
     setCheckingBundledQuality(true);
     try {
-      const resp = await fetch('/bundled-translations.json');
-      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      const bundled: Record<string, string> = await resp.json();
+      const bundled: Record<string, string> = await fetchBundledTranslations();
       const encoder = new TextEncoder();
 
       const shortTexts: string[] = [];
@@ -1557,9 +1560,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     }
     setConflictDetectionRunning(true);
     try {
-      const resp = await fetch('/bundled-translations.json');
-      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      const bundled: Record<string, string> = await resp.json();
+      const bundled: Record<string, string> = await fetchBundledTranslations();
 
       // Build english→key map from loaded entries
       const englishMap = new Map<string, { key: string; arabic: string }[]>();
@@ -1635,9 +1636,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     if (!bundledConflicts?.length) return;
     setUnifyingConflicts(true);
     try {
-      const resp = await fetch('/bundled-translations.json');
-      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      const bundled: Record<string, string> = await resp.json();
+      const bundled: Record<string, string> = await fetchBundledTranslations();
 
       let unified = 0;
       for (const conflict of bundledConflicts) {
@@ -1660,6 +1659,9 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
         }
       }
 
+      // Upload unified to cloud
+      const uploadResult = await uploadBundledTranslations(bundled);
+
       const blob = new Blob([JSON.stringify(bundled, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -1668,7 +1670,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       a.click();
       URL.revokeObjectURL(url);
       setBundledConflicts(null);
-      alert(`✅ تم توحيد ${unified} ترجمة متضاربة وتحميل الملف المحدث`);
+      alert(`✅ تم توحيد ${unified} ترجمة متضاربة${uploadResult.success ? ' ☁️ تم الرفع للسحابة' : ''}`);
     } catch (err) {
       alert(`❌ فشل التوحيد: ${err instanceof Error ? err.message : err}`);
     } finally {
@@ -1691,9 +1693,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     if (!state) return;
     setMergingToBundled(true);
     try {
-      const resp = await fetch('/bundled-translations.json');
-      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      const bundled: Record<string, string> = await resp.json();
+      const bundled: Record<string, string> = await fetchBundledTranslations();
 
       const diffs: import("@/components/editor/MergeToBundledPanel").MergeToBundledItem[] = [];
       for (const entry of (state.entries || [])) {
@@ -1739,14 +1739,15 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
   const handleMergeToBundledDownload = useCallback(async () => {
     if (!mergeToBundledItems) return;
     try {
-      const resp = await fetch('/bundled-translations.json');
-      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      const bundled: Record<string, string> = await resp.json();
+      const bundled: Record<string, string> = await fetchBundledTranslations();
 
       const accepted = mergeToBundledItems.filter(i => i.status === 'accepted');
       for (const item of accepted) {
         bundled[item.key] = item.editorValue;
       }
+
+      // Upload merged to cloud
+      const uploadResult = await uploadBundledTranslations(bundled);
 
       const blob = new Blob([JSON.stringify(bundled, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
@@ -1757,7 +1758,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       URL.revokeObjectURL(url);
       setBundledCount(Object.keys(bundled).length);
       setMergeToBundledItems(null);
-      setLastSaved(`✅ تم دمج ${accepted.length} تعديل في الترجمات المدمجة`);
+      setLastSaved(`✅ تم دمج ${accepted.length} تعديل${uploadResult.success ? ' ☁️ ورفعها للسحابة' : ''}`);
       setTimeout(() => setLastSaved(""), 4000);
     } catch (err) {
       alert(`❌ فشل التحميل: ${err instanceof Error ? err.message : err}`);
@@ -1769,9 +1770,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
   const handleProofreadBundled = useCallback(async () => {
     setProofreadingBundled(true);
     try {
-      const resp = await fetch('/bundled-translations.json');
-      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      const bundled: Record<string, string> = await resp.json();
+      const bundled: Record<string, string> = await fetchBundledTranslations();
 
       // Filter short Arabic translations (≤ 80 chars) that actually have Arabic content
       const candidates = Object.entries(bundled)
@@ -1838,6 +1837,9 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
         corrected[r.key] = r.corrected;
       }
 
+      // Upload proofread version to cloud
+      const uploadResult = await uploadBundledTranslations(corrected);
+
       const corrBlob = new Blob([JSON.stringify(corrected, null, 2)], { type: 'application/json' });
       const corrUrl = URL.createObjectURL(corrBlob);
       const corrA = document.createElement('a');
@@ -1851,7 +1853,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
         `📝 تم التصحيح الإملائي:\n\n` +
         `• الترجمات المفحوصة: ${total}\n` +
         `• التصحيحات: ${results.length}\n\n` +
-        `📄 تم تحميل التقرير والملف المصحح`
+        `📄 تم تحميل التقرير والملف المصحح${uploadResult.success ? ' ☁️ ورفعها للسحابة' : ''}`
       );
     } catch (err) {
       alert(`❌ فشل التصحيح: ${err instanceof Error ? err.message : err}`);
