@@ -59,4 +59,37 @@ describe('Mirror Characters', () => {
     const result = swapChars(input);
     expect(result).toBe('\uE001\uE002 نص )عادي(');
   });
+
+  // === Additional real-world game text cases ===
+
+  it('should protect [ML:number digit=8 ](Crowd noise) compound tag', () => {
+    const input = 'صوت [ML:number digit=8 ](Crowd noise of children) عالي';
+    const result = swapChars(input);
+    expect(result).toBe('صوت [ML:number digit=8 ](Crowd noise of children) عالي');
+  });
+
+  it('should protect multiple [Tag:Value] tags in one string', () => {
+    const input = 'اضغط [ML:Feeling ] ثم (تأكيد) ثم [ML:undisp ]';
+    const result = swapChars(input);
+    // Normal (تأكيد) swapped, both [ML:...] untouched
+    expect(result).toBe('اضغط [ML:Feeling ] ثم )تأكيد( ثم [ML:undisp ]');
+  });
+
+  it('should swap nested normal parens but protect tags', () => {
+    const input = '(أ (ب)) [ML:test ]';
+    const result = swapChars(input);
+    expect(result).toBe(')أ )ب(( [ML:test ]');
+  });
+
+  it('should handle text with only technical tags and no normal brackets', () => {
+    const input = '[ML:Feeling ] مرحبا {name} عالم';
+    const result = swapChars(input);
+    expect(result).toBe('[ML:Feeling ] مرحبا {name} عالم'); // no change
+  });
+
+  it('should handle mixed PUA + normal parens + tags', () => {
+    const input = '\uE010 (اسم) [ML:number ] نهاية';
+    const result = swapChars(input);
+    expect(result).toBe('\uE010 )اسم( [ML:number ] نهاية');
+  });
 });
