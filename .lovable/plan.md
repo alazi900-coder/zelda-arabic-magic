@@ -1,88 +1,132 @@
 
 
-# اصلاح مشاكل الترجمة في مقارنة المحركات
+# اصلاح مشكلة ظهور ترجمات من خارج الدفعة/الفلتر
 
-## المشاكل المكتشفة
+## المشكلة الجذرية
 
-### 1. حماية مزدوجة للوسوم (Double Protection)
-في `CompareEnginesDialog.tsx`، يتم حماية الوسوم على العميل (سطر 50) ثم ارسال النص المنظف للخادم، لكن الخادم يطبق `protectTags` مرة أخرى (سطر 715-718)، مما ينتج عناصر نائبة متداخلة مثل `TAG_TAG_0_0`.
+عند ترجمة الصفحة بـ Lovable AI، تظهر ترجمات لجمل غير موجودة في الدفعة اصلاً. السبب الرئيسي:
 
-### 2. تشويه أقواس قفل المصطلحات
-الذكاء الاصطناعي يحوّل `⟪T0⟫` (U+27EA/U+27EB) إلى `《T0》` (U+300A/U+300B) وهي حروف مشابهة بصرياً لكن مختلفة، فلا يتم استبدالها مرة أخرى بواسطة `unlockTerms`.
+### 1. تسريب السياق (Context Leakage)
+الكود يرسل للذكاء الاصطناعي:
+- 30 نص للترجمة (الدفعة)
+- حتى 25 نص "سياق" كمرجع (من جيران الادخالات في المصفوفة الكاملة)
 
-### 3. MyMemory يُظهر TAG_0 حرفياً
-MyMemory لا يفهم العناصر النائبة ويعيدها كنص عادي أو يشوّهها.
+الموديل يرى 55 نصاً في البرومبت ويخلط بينها — يترجم نصوص السياق بدلاً من نصوص الدفعة، فتظهر ترجمات لجمل من ملفات اخرى او اماكن اخرى تماماً.
+
+### 2. حجم الدفعة كبير (30 نص)
+مع 30 نصاً مرقماً `[0]...[29]`، الموديل يتخطى بعض الارقام او يعيد عدداً مختلفاً، فتنزاح الترجمات عن مواقعها الصحيحة.
+
+### 3. حماية مزدوجة للوسوم (لا تزال موجودة)
+`handleTranslatePage` و `handleAutoTranslate` يستدعيان `protectTags` على العميل، ثم الخادم يستدعيها مرة اخرى.
 
 ## الحل
 
-### 1. ازالة الحماية المزدوجة من CompareEnginesDialog
-**الملف: `src/components/editor/CompareEnginesDialog.tsx`**
-- ارسال `entry.original` مباشرة بدلاً من `cleanText`
-- ترك الخادم يتولى الحماية والاستعادة بالكامل
-- حذف استيراد `protectTags/restoreTags` من هذا الملف لأنه غير ضروري
+### 1. تقليل حجم الدفعة وتحديد السياق
+**الملف: `src/components/editor/types.tsx`**
+- تقليل `AI_BATCH_SIZE` من 30 الى 10
 
-### 2. تطبيع أقواس قفل المصطلحات
-**الملف: `supabase/functions/translate-entries/index.ts`**
-- اضافة دالة `normalizeTermBrackets` في `unlockTerms` تستبدل المتغيرات المشابهة:
-  - `《` و `〈` و `«` → `⟪`
-  - `》` و `〉` و `»` → `⟫`
-- تطبيقها على نص الترجمة قبل محاولة فك القفل
-- اضافة تحقق اضافي: اذا لم يُعثر على `⟪T0⟫` بعد التطبيع، البحث بنمط regex عام مثل `/[⟪《〈«]T(\d+)[⟫》〉»]/g`
+### 2. ازالة السياق من ترجمة الصفحة او تحديده بشدة
+**الملف: `src/hooks/useEditorTranslation.ts`**
 
-### 3. تحسين post-validation للوسوم TAG_N
+في `handleTranslatePage` (سطر 581-595):
+- ازالة ارسال `context` بالكامل عند ترجمة الصفحة (لان السياق هو سبب التسريب)
+- او تحديد السياق بـ 5 نصوص فقط بدلاً من 25
+
+في `handleAutoTranslate` (سطر 226-252):
+- تقليل السياق من 25 الى 8 نصوص
+- ازالة "recently translated entries" (سطر 244-252) لانها تضيف نصوصاً من خارج المنطقة الحالية
+
+### 3. ازالة الحماية المزدوجة
+**الملف: `src/hooks/useEditorTranslation.ts`**
+
+في `handleTranslatePage` (سطر 574-579):
+- ارسال `e.original` مباشرة بدلاً من `p.cleanText`
+- حذف `protectedMap` وترك الخادم يتولى الحماية
+
+في `handleAutoTranslate` (سطر 218-224):
+- نفس الاصلاح
+
+تحديث `autoFixTags` (سطر 612):
+- عدم تمرير `protectedMap` لانها لم تعد موجودة
+- الاعتماد فقط على `restoreTagsLocally` الموجود في السطر 53-57
+
+### 4. فحص نسبة الطول في الخادم
 **الملف: `supabase/functions/translate-entries/index.ts`**
-- في `parseAndUnlock`: تنظيف متغيرات TAG المشوّهة (مثل `TAG _0` أو `tag_0` أو `TAG0`) واعادتها للشكل الصحيح `TAG_0` قبل استعادة الوسوم
+
+في `parseAndUnlock` (بعد سطر 610):
+- اذا كانت الترجمة اقل من 3 احرف والاصلي اكثر من 20 حرف — تخطي
+- اذا كانت نسبة طول الترجمة اقل من 15% من الاصلي (والاصلي اكثر من 30 حرف) — تخطي
 
 ## التفاصيل التقنية
+
+### ازالة السياق من handleTranslatePage
+
+```text
+// سطر 581-603: حذف بناء contextEntries بالكامل
+// وارسال context: undefined في body
+
+body: JSON.stringify({
+  entries,
+  glossary: activeGlossary,
+  // لا context — هذا يمنع تسريب جمل من خارج الفلتر
+  userApiKey: userGeminiKey || undefined,
+  provider: translationProvider,
+})
+```
 
 ### ازالة الحماية المزدوجة
 
 ```text
-CompareEnginesDialog - fetchProvider():
-  قبل: protectTags(entry.original) → ارسال cleanText → الخادم يحمي مرة أخرى
-  بعد: ارسال entry.original مباشرة → الخادم يحمي ويستعيد
-```
-
-### تطبيع الأقواس
-
-```text
-function normalizeTermBrackets(text: string): string {
-  return text
-    .replace(/[《〈«]/g, '⟪')
-    .replace(/[》〉»]/g, '⟫');
-}
-
-// في unlockTerms:
-function unlockTerms(text, locks) {
-  let result = normalizeTermBrackets(text);
-  for (const lock of locks) {
-    result = result.replace(lock.placeholder, lock.arabic);
-  }
-  // Fallback: regex للأقواس غير المعروفة
-  result = result.replace(/[⟪《〈«]T(\d+)[⟫》〉»]/g, (match, num) => {
-    const lock = locks.find(l => l.placeholder === `⟪T${num}⟫`);
-    return lock ? lock.arabic : match;
+// handleTranslatePage سطر 574-580:
+قبل:
+  const protectedMap = new Map();
+  const entries = batch.map(e => {
+    const p = protectTags(e.original);
+    protectedMap.set(key, p);
+    return { key, original: p.cleanText };
   });
-  return result;
-}
+
+بعد:
+  const entries = batch.map(e => ({
+    key: `${e.msbtFile}:${e.index}`,
+    original: e.original,
+  }));
+
+// نفس التغيير في handleAutoTranslate سطر 218-224
 ```
 
-### تنظيف TAG المشوّه
+### تقليل السياق في handleAutoTranslate
 
 ```text
-// في parseAndUnlock، قبل استعادة الوسوم:
-translated = translated
-  .replace(/TAG\s+(\d+)/gi, 'TAG_$1')   // "TAG 0" → "TAG_0"
-  .replace(/TAG(\d+)/gi, 'TAG_$1')       // "TAG0" → "TAG_0"
-  .replace(/tag_(\d+)/g, 'TAG_$1');      // "tag_0" → "TAG_0"
+// سطر 226-252: تقليل السياق
+// - ابقاء الجيران فقط (offsets -1, 1)
+// - حذف "recently translated entries" (سطر 244-252)
+// - تحديد context.slice(0, 8) بدلاً من slice(0, 25)
+```
+
+### فحص نسبة الطول في الخادم
+
+```text
+// في parseAndUnlock بعد سطر 610:
+const originalLen = item.pe.cleaned.length;
+if (translated.length < 3 && originalLen > 20) {
+  console.warn(`Skipping short translation: "${translated}" for ${item.entry.key}`);
+  continue;
+}
+if (originalLen > 30 && translated.length < originalLen * 0.15) {
+  console.warn(`Translation ratio too low for ${item.entry.key}`);
+  continue;
+}
 ```
 
 ## الملفات المتأثرة
-1. `src/components/editor/CompareEnginesDialog.tsx` - ازالة الحماية المزدوجة
-2. `supabase/functions/translate-entries/index.ts` - تطبيع الأقواس + تنظيف TAG
+1. `src/components/editor/types.tsx` — تقليل AI_BATCH_SIZE من 30 الى 10
+2. `src/hooks/useEditorTranslation.ts` — ازالة الحماية المزدوجة + ازالة/تقليل السياق
+3. `supabase/functions/translate-entries/index.ts` — فحص نسبة الطول
 
 ## النتيجة المتوقعة
-- Gemini: `لقد أنعم عليك حكمة رئيس الحكماء بـ كتلة واحدة من شحن الإطلاق!` (مع استعادة الوسوم الأصلية)
-- MyMemory: استعادة الوسوم بشكل صحيح بدلاً من عرض `TAG_0`
-- Google: نفس التحسين
+- لن تظهر ترجمات من خارج الدفعة/الفلتر
+- كل ترجمة تتطابق مع نصها الاصلي
+- دفعات اصغر (10 نصوص) تعطي دقة اعلى
+- الوسوم تُحمى مرة واحدة فقط على الخادم
 
