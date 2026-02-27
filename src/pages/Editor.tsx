@@ -935,6 +935,7 @@ const Editor = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="bg-card border-border z-[100] min-w-[200px]">
                   <DropdownMenuItem onClick={editor.handleApplyArabicProcessing} disabled={editor.applyingArabic}><Sparkles className="w-4 h-4" /> تطبيق المعالجة العربية ✨</DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleUndoArabicProcessing} disabled={editor.applyingArabic}><RotateCcw className="w-4 h-4" /> التراجع عن المعالجة العربية ↩️</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleFixAllReversed}><RotateCcw className="w-4 h-4" /> تصحيح الكل (معكوس)</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleFixAllStuckCharacters} disabled={editor.needsImproveCount.stuck === 0}><AlertTriangle className="w-4 h-4" /> إصلاح الأحرف الملتصقة 🔤</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleScanDiacritics}><Type className="w-4 h-4" /> إزالة التشكيلات ✏️</DropdownMenuItem>
@@ -1161,6 +1162,10 @@ const Editor = () => {
            <div className="flex gap-3 mb-6">
             <Button size="lg" variant="secondary" onClick={editor.handleApplyArabicProcessing} disabled={editor.applyingArabic} className="flex-1 font-display font-bold">
               {editor.applyingArabic ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Sparkles className="w-4 h-4 mr-2" />} تطبيق المعالجة العربية ✨
+            </Button>
+            <Button size="sm" variant="outline" onClick={editor.handleUndoArabicProcessing} disabled={editor.applyingArabic} className="font-body gap-1 shrink-0" title="التراجع عن المعالجة العربية">
+              <RotateCcw className="w-4 h-4" />
+              <span className="hidden sm:inline">تراجع</span>
             </Button>
             <Button size="sm" variant="outline" onClick={() => setShowDiagnostic(true)} disabled={editor.building} className="font-body gap-1 shrink-0" title="تشخيص ما قبل البناء">
               <BarChart3 className="w-4 h-4" />

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import type { IntegrityCheckResult } from "@/components/editor/IntegrityCheckDialog";
 import { idbGet } from "@/lib/idb-storage";
-import { processArabicText, hasArabicChars as hasArabicCharsProcessing, hasArabicPresentationForms } from "@/lib/arabic-processing";
+import { processArabicText, hasArabicChars as hasArabicCharsProcessing, hasArabicPresentationForms, removeArabicPresentationForms, reverseBidi } from "@/lib/arabic-processing";
 import { EditorState, hasTechnicalTags, restoreTagsLocally } from "@/components/editor/types";
 import { BuildPreview } from "@/components/editor/BuildConfirmDialog";
 import type { MutableRefObject } from "react";
@@ -68,6 +68,27 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
     setState(prev => prev ? { ...prev, translations: newTranslations } : null);
     setApplyingArabic(false);
     setLastSaved(`✅ تم تطبيق المعالجة العربية على ${processedCount} نص` + (skippedCount > 0 ? ` (تم تخطي ${skippedCount} نص معالج مسبقاً)` : ''));
+    setTimeout(() => setLastSaved(""), 5000);
+  };
+
+  const handleUndoArabicProcessing = () => {
+    const currentState = stateRef.current;
+    if (!currentState) return;
+    setApplyingArabic(true);
+    const newTranslations = { ...currentState.translations };
+    let revertedCount = 0;
+    for (const [key, value] of Object.entries(newTranslations)) {
+      if (!value?.trim()) continue;
+      if (!hasArabicPresentationForms(value)) continue;
+      // Reverse BiDi (self-inverse) then map presentation forms back to standard
+      const unReversed = reverseBidi(value);
+      newTranslations[key] = removeArabicPresentationForms(unReversed);
+      newTranslations[key] = removeArabicPresentationForms(unReversed);
+      revertedCount++;
+    }
+    setState(prev => prev ? { ...prev, translations: newTranslations } : null);
+    setApplyingArabic(false);
+    setLastSaved(`↩️ تم التراجع عن المعالجة العربية لـ ${revertedCount} نص`);
     setTimeout(() => setLastSaved(""), 5000);
   };
 
@@ -742,6 +763,7 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
     setShowIntegrityDialog,
     checkingIntegrity,
     handleApplyArabicProcessing,
+    handleUndoArabicProcessing,
     handlePreBuild,
     handleBuild,
     handleCheckIntegrity,
