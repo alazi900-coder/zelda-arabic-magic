@@ -21,7 +21,7 @@ function protectTags(text: string): { cleaned: string; tags: Map<string, string>
   let counter = 0;
   const patterns: RegExp[] = [
     /[\uE000-\uE0FF]+/g,
-    /\[\w+:[^\]]*\](?:\s*\([^)]{1,100}\))?/g,
+    /\[\w+:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?/g,
     /\{[\w]+\}/g,
     /[\uFFF9-\uFFFC]/g,
     /<[\w\/][^>]*>/g,
@@ -578,7 +578,7 @@ async function translateWithAI(
 
 CRITICAL RULES:
 1. Placeholders like ⟪T0⟫, ⟪T1⟫, etc. are LOCKED TERMS — copy them EXACTLY as-is into your translation. Do NOT translate, modify, or remove them.
-2. Keep TAG_0, TAG_1, etc. and special characters like \uFFFC intact in their exact positions.
+2. NEVER remove, modify, merge, or reorder TAG_0, TAG_1, TAG_2 etc. placeholders. They MUST appear in your output EXACTLY as they appear in the input. If the input has TAG_0 and TAG_1, your output MUST also have TAG_0 and TAG_1. Missing even one TAG placeholder will corrupt the game data.
 3. Keep the translation length close to the original to fit in-game text boxes.
 4. If a glossary term appears, you MUST use its EXACT Arabic translation — no alternatives, no synonyms, no paraphrasing. This is NON-NEGOTIABLE.
 5. CONSISTENCY IS MANDATORY: If a word or phrase was translated a certain way in the "Previously Translated Texts" section, you MUST translate it the same way. Never use different Arabic words for the same English term.
@@ -600,6 +600,15 @@ ${textsBlock}`;
       const item = needsAI[i];
       if (item.termLocks.locks.length > 0) {
         translated = unlockTerms(translated, item.termLocks.locks);
+      }
+      // Post-validation: re-insert any missing TAG_N placeholders
+      const expectedTags = [...item.pe.tags.keys()];
+      for (const tag of expectedTags) {
+        if (!translated.includes(tag)) {
+          console.warn(`Post-validation: re-inserting missing ${tag} for key ${item.entry.key}`);
+          // Append missing tag at the end (safest fallback)
+          translated = translated.trimEnd() + ' ' + tag;
+        }
       }
       // Post-process: replace any remaining English glossary terms
       if (glossaryMap.size > 0) {

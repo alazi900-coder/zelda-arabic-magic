@@ -764,6 +764,31 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 4000);
   }, [state, setState, setPreviousTranslations, setLastSaved]);
 
+  // Apply tag repairs only for selected keys
+  const handleLocalFixSelectedTags = useCallback((selectedKeys: string[]) => {
+    if (!state || selectedKeys.length === 0) return;
+    const updates: Record<string, string> = {};
+    const prevTrans: Record<string, string> = {};
+    for (const entry of state.entries) {
+      const key = `${entry.msbtFile}:${entry.index}`;
+      if (!selectedKeys.includes(key)) continue;
+      const translation = state.translations[key] || '';
+      if (!translation.trim()) continue;
+      const fixed = restoreTagsLocally(entry.original, translation);
+      if (fixed !== translation) {
+        prevTrans[key] = translation;
+        updates[key] = fixed;
+      }
+    }
+    const fixedCount = Object.keys(updates).length;
+    if (fixedCount === 0) return;
+    setPreviousTranslations(old => ({ ...old, ...prevTrans }));
+    setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...updates } } : null);
+    toast({ title: "✅ تم الإصلاح", description: `تم استعادة الرموز في ${fixedCount} نص` });
+    setLastSaved(`✅ تم إصلاح ${fixedCount} نص`);
+    setTimeout(() => setLastSaved(""), 4000);
+  }, [state, setState, setPreviousTranslations, setLastSaved]);
+
   // === Accept/Reject fuzzy match handlers ===
   const handleAcceptFuzzy = useCallback((key: string) => {
     if (!state?.fuzzyScores?.[key]) return;
@@ -1579,7 +1604,7 @@ export function useEditorState() {
     handleProtectAllArabic, handleFixReversed, handleFixAllReversed,
     updateTranslation, handleUndoTranslation,
     handleTranslateSingle, handleAutoTranslate, handleTranslatePage, handleStopTranslate,
-    handleRetranslatePage, handleFixDamagedTags, handleLocalFixDamagedTag, handleLocalFixAllDamagedTags, handleRedistributeTags, handleReviewTranslations,
+    handleRetranslatePage, handleFixDamagedTags, handleLocalFixDamagedTag, handleLocalFixAllDamagedTags, handleLocalFixSelectedTags, handleRedistributeTags, handleReviewTranslations,
     handleSuggestShorterTranslations, handleApplyShorterTranslation, handleApplyAllShorterTranslations,
     handleFixAllStuckCharacters, handleFixMixedLanguage,
     ...fileIO,
