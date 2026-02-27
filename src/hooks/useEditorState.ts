@@ -52,6 +52,7 @@ export function useEditorState() {
   const [newlineCleanResults, setNewlineCleanResults] = useState<import("@/components/editor/NewlineCleanPanel").NewlineCleanResult[] | null>(null);
   const [diacriticsCleanResults, setDiacriticsCleanResults] = useState<import("@/components/editor/DiacriticsCleanPanel").DiacriticsCleanResult[] | null>(null);
   const [duplicateAlefResults, setDuplicateAlefResults] = useState<import("@/components/editor/DuplicateAlefCleanPanel").DuplicateAlefResult[] | null>(null);
+  const [mirrorCharsResults, setMirrorCharsResults] = useState<import("@/components/editor/MirrorCharsCleanPanel").MirrorCharsResult[] | null>(null);
   const [pinnedKeys, setPinnedKeys] = useState<Set<string> | null>(null);
   const [isSearchPinned, setIsSearchPinned] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -1495,6 +1496,52 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 4000);
   }, [state, duplicateAlefResults]);
 
+  // === Mirror Chars Clean (brackets & arrows) ===
+  const handleScanMirrorChars = useCallback(() => {
+    if (!state) return;
+    const swapChars = (t: string) => t
+      .replace(/\(/g, '\x00OPEN\x00').replace(/\)/g, '(').replace(/\x00OPEN\x00/g, ')')
+      .replace(/</g, '\x00LT\x00').replace(/>/g, '<').replace(/\x00LT\x00/g, '>');
+    const results: import("@/components/editor/MirrorCharsCleanPanel").MirrorCharsResult[] = [];
+    for (const [key, value] of Object.entries(state.translations)) {
+      if (!value?.trim()) continue;
+      const after = swapChars(value);
+      if (after === value) continue;
+      const count = (value.match(/[()<>]/g) || []).length;
+      results.push({ key, before: value, after, count, status: 'pending' });
+    }
+    setMirrorCharsResults(results);
+    if (results.length === 0) {
+      setLastSaved("✅ لا توجد أقواس أو أسهم معكوسة");
+      setTimeout(() => setLastSaved(""), 4000);
+    }
+  }, [state]);
+
+  const handleApplyMirrorCharsClean = useCallback((key: string) => {
+    if (!state || !mirrorCharsResults) return;
+    const item = mirrorCharsResults.find(r => r.key === key);
+    if (!item) return;
+    setState(prev => prev ? { ...prev, translations: { ...prev.translations, [key]: item.after } } : null);
+    setMirrorCharsResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'accepted' as const } : r) : null);
+  }, [state, mirrorCharsResults]);
+
+  const handleRejectMirrorCharsClean = useCallback((key: string) => {
+    setMirrorCharsResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'rejected' as const } : r) : null);
+  }, []);
+
+  const handleApplyAllMirrorCharsCleans = useCallback(() => {
+    if (!state || !mirrorCharsResults) return;
+    const pending = mirrorCharsResults.filter(r => r.status === 'pending');
+    const newTranslations = { ...state.translations };
+    for (const item of pending) {
+      newTranslations[item.key] = item.after;
+    }
+    setState(prev => prev ? { ...prev, translations: newTranslations } : null);
+    setMirrorCharsResults(prev => prev ? prev.map(r => r.status === 'pending' ? { ...r, status: 'accepted' as const } : r) : null);
+    setLastSaved(`✅ تم عكس ${pending.length} رمز`);
+    setTimeout(() => setLastSaved(""), 4000);
+  }, [state, mirrorCharsResults]);
+
   return {
     // State
     state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, showFindReplace, userGeminiKey, translationProvider, myMemoryEmail, myMemoryCharsUsed, aiRequestsToday, aiRequestsMonth,
@@ -1511,7 +1558,7 @@ export function useEditorState() {
     applyingArabic, improvingTranslations, improveResults,
     fixingMixed, filtersOpen, buildStats, buildPreview, showBuildConfirm, bdatFileStats,
     checkingConsistency, consistencyResults,
-    scanningSentences, sentenceSplitResults, newlineCleanResults, diacriticsCleanResults, duplicateAlefResults,
+    scanningSentences, sentenceSplitResults, newlineCleanResults, diacriticsCleanResults, duplicateAlefResults, mirrorCharsResults,
     isSearchPinned, pinnedKeys,
     categoryProgress, qualityStats, needsImproveCount, translatedCount, tagsCount, fuzzyCount, byteOverflowCount,
     bdatTableNames, bdatColumnNames, bdatTableCounts, bdatColumnCounts,
@@ -1525,7 +1572,7 @@ export function useEditorState() {
     setCurrentPage, setShowRetranslateConfirm,
     setArabicNumerals, setMirrorPunctuation, setUserGeminiKey, setTranslationProvider, setMyMemoryEmail,
     setReviewResults, setShortSuggestions, setImproveResults, setBuildStats, setShowBuildConfirm,
-    setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults, setDiacriticsCleanResults, setDuplicateAlefResults,
+    setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults, setDiacriticsCleanResults, setDuplicateAlefResults, setMirrorCharsResults,
 
     // Handlers
     toggleProtection, toggleTechnicalBypass,
@@ -1546,6 +1593,7 @@ export function useEditorState() {
     handleScanNewlines, handleApplyNewlineClean, handleRejectNewlineClean, handleApplyAllNewlineCleans,
     handleScanDiacritics, handleApplyDiacriticsClean, handleRejectDiacriticsClean, handleApplyAllDiacriticsCleans,
     handleScanDuplicateAlef, handleApplyDuplicateAlefClean, handleRejectDuplicateAlefClean, handleApplyAllDuplicateAlefCleans,
+    handleScanMirrorChars, handleApplyMirrorCharsClean, handleRejectMirrorCharsClean, handleApplyAllMirrorCharsCleans,
     handleTogglePin,
     handleClearTranslations, handleUndoClear, clearUndoBackup, isFilterActive,
     integrityResult, showIntegrityDialog, setShowIntegrityDialog, checkingIntegrity,
