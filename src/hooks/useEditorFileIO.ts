@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { ImportConflict } from "@/components/editor/ImportConflictDialog";
 import { removeArabicPresentationForms } from "@/lib/arabic-processing";
 import type { EditorState } from "@/components/editor/types";
@@ -199,6 +199,11 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       : `✅ تم تصدير ${countMsg} ترجمة`
     );
     setTimeout(() => setLastSaved(""), 3000);
+
+    // Auto-merge to bundled if enabled
+    if (autoMergeToBundledRef.current) {
+      setTimeout(() => handleMergeToBundledRef.current?.(), 500);
+    }
   };
 
   /** Build the list of untranslated entries grouped by file */
@@ -1377,6 +1382,10 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       URL.revokeObjectURL(url);
       setBundledCount(Object.keys(bundled).length);
       alert(`✅ تم حفظ ${Object.keys(bundled).length} ترجمة في الملف المحدث`);
+      // Auto-merge to bundled if enabled
+      if (autoMergeToBundledRef.current) {
+        setTimeout(() => handleMergeToBundledRef.current?.(), 500);
+      }
     } catch (err) {
       alert(`❌ فشل حفظ الترجمات: ${err instanceof Error ? err.message : err}`);
     } finally {
@@ -1672,6 +1681,11 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     import("@/components/editor/MergeToBundledPanel").MergeToBundledItem[] | null
   >(null);
   const [mergingToBundled, setMergingToBundled] = useState(false);
+  const [autoMergeToBundled, setAutoMergeToBundled] = useState(false);
+  const autoMergeToBundledRef = useRef(false);
+  autoMergeToBundledRef.current = autoMergeToBundled;
+
+  const handleMergeToBundledRef = useRef<(() => void) | null>(null);
 
   const handleMergeToBundled = useCallback(async () => {
     if (!state) return;
@@ -1704,6 +1718,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       setMergingToBundled(false);
     }
   }, [state, setLastSaved]);
+  handleMergeToBundledRef.current = handleMergeToBundled;
 
   const handleMergeToBundledAccept = useCallback((key: string) => {
     setMergeToBundledItems(prev => prev ? prev.map(i => i.key === key ? { ...i, status: 'accepted' as const } : i) : null);
@@ -1901,5 +1916,8 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     handleMergeToBundledRejectAll,
     handleMergeToBundledDownload,
     setMergeToBundledItems,
+    // Auto-merge toggle
+    autoMergeToBundled,
+    setAutoMergeToBundled,
   };
 }

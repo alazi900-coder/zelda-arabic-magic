@@ -850,6 +850,12 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleMergeToBundled} disabled={editor.mergingToBundled || editor.translatedCount === 0}>
                     {editor.mergingToBundled ? <Loader2 className="w-4 h-4 animate-spin" /> : <Replace className="w-4 h-4" />} دمج التعديلات في المدمجة 🔀
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={(e) => { e.preventDefault(); editor.setAutoMergeToBundled(!editor.autoMergeToBundled); }}>
+                    <span className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] ${editor.autoMergeToBundled ? 'bg-primary text-primary-foreground border-primary' : 'border-muted-foreground'}`}>
+                      {editor.autoMergeToBundled ? '✓' : ''}
+                    </span>
+                    دمج تلقائي بعد الحفظ
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={editor.handleCleanBundledTranslations} disabled={editor.cleaningBundled}>
                     {editor.cleaningBundled ? <Loader2 className="w-4 h-4 animate-spin" /> : <Type className="w-4 h-4" />} تنظيف لغوي تلقائي 🧹
@@ -979,6 +985,12 @@ const Editor = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleMergeToBundled} disabled={editor.mergingToBundled || editor.translatedCount === 0}>
                     {editor.mergingToBundled ? <Loader2 className="w-4 h-4 animate-spin" /> : <Replace className="w-4 h-4" />} دمج التعديلات في المدمجة 🔀
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={(e) => { e.preventDefault(); editor.setAutoMergeToBundled(!editor.autoMergeToBundled); }}>
+                    <span className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] ${editor.autoMergeToBundled ? 'bg-primary text-primary-foreground border-primary' : 'border-muted-foreground'}`}>
+                      {editor.autoMergeToBundled ? '✓' : ''}
+                    </span>
+                    دمج تلقائي بعد الحفظ
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={editor.handleCleanBundledTranslations} disabled={editor.cleaningBundled}>
