@@ -2,15 +2,16 @@ import { describe, it, expect } from 'vitest';
 import { detectMergedInWord, splitMergedSentences, scanAllTranslations } from '@/lib/arabic-sentence-splitter';
 
 describe('arabic-sentence-splitter', () => {
-  it('detects non-connecting letter merge', () => {
-    // "مثلكلمة" — ل is connecting but let's test with ة
+  it('detects ta marbuta merge when remainder is long enough', () => {
+    // "كلمةجديدة" — ة followed by جديدة (4 Arabic chars) → should split
     const points = detectMergedInWord('كلمةجديدة');
     expect(points.length).toBeGreaterThan(0);
-    expect(points[0].rule).toBe('non-connecting');
+    expect(points[0].charBefore).toBe('\u0629');
   });
 
   it('splits merged words correctly', () => {
-    const { result, splitCount } = splitMergedSentences('كلمةجديدة');
+    // Need 8+ Arabic chars total for threshold
+    const { result, splitCount } = splitMergedSentences('مدرسةكبيرة');
     expect(splitCount).toBeGreaterThan(0);
     expect(result).toContain(' ');
   });
@@ -22,7 +23,7 @@ describe('arabic-sentence-splitter', () => {
   });
 
   it('does not split short words', () => {
-    const { result, splitCount } = splitMergedSentences('من');
+    const { splitCount } = splitMergedSentences('من');
     expect(splitCount).toBe(0);
   });
 
@@ -36,7 +37,8 @@ describe('arabic-sentence-splitter', () => {
     const entries = [
       { msbtFile: 'test.bdat', index: 0, original: 'Hello' },
     ];
-    const translations = { 'test.bdat:0': 'مرحباكيف الحال' };
+    // Use a long enough merged text with medial ال
+    const translations = { 'test.bdat:0': 'كتابالمدرسة' };
     const results = scanAllTranslations(translations, entries);
     expect(results.length).toBeGreaterThan(0);
     expect(results[0].splits).toBeGreaterThan(0);
@@ -47,28 +49,31 @@ describe('arabic-sentence-splitter', () => {
     expect(splitCount).toBe(0);
   });
 
-  it('detects ta marbuta followed by another word', () => {
-    // "مدرسةكبيرة" = مدرسة + كبيرة
+  it('does NOT split valid single words with non-connecting letters', () => {
+    // These are all valid single Arabic words — must NOT be split
+    const validWords = ['المرتفع', 'المستودع', 'الأوغاد', 'مستعمرة'];
+    for (const word of validWords) {
+      const { splitCount } = splitMergedSentences(word);
+      expect(splitCount).toBe(0);
+    }
+  });
+
+  it('detects ta marbuta followed by long enough word', () => {
+    // "مدرسةكبيرة" = مدرسة + كبيرة (4 Arabic chars after ة)
     const points = detectMergedInWord('مدرسةكبيرة');
     expect(points.length).toBeGreaterThan(0);
-    // ة should be detected as a merge point somewhere
     expect(points.some(p => p.charBefore === '\u0629')).toBe(true);
   });
 
-  it('detects alef maksura as word-ender', () => {
-    // "علىالطاولة" = على + الطاولة
+  it('does NOT split ta marbuta with short remainder', () => {
+    // "مستعمرة" — ة is at end, no merge
+    const points = detectMergedInWord('مستعمرة');
+    expect(points.length).toBe(0);
+  });
+
+  it('detects alef maksura with long enough remainder', () => {
+    // "علىالطاولة" = على + الطاولة — medial ال should catch this
     const { splitCount } = splitMergedSentences('علىالطاولة');
     expect(splitCount).toBeGreaterThan(0);
-  });
-
-  it('detects hamza alone as non-connecting', () => {
-    const points = detectMergedInWord('شيءجديد');
-    expect(points.length).toBeGreaterThan(0);
-  });
-
-  it('handles short words with ta marbuta correctly', () => {
-    // "كلمةجد" has 6 Arabic chars - should NOT split (threshold is 6)
-    const { splitCount } = splitMergedSentences('كلمةجد');
-    expect(splitCount).toBe(0);
   });
 });
