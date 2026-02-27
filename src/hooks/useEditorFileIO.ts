@@ -1360,9 +1360,9 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
         if (resp.ok) bundled = JSON.parse(await resp.text());
       } catch { /* start fresh */ }
 
-      for (const entry of state.entries) {
+      for (const entry of (state?.entries || [])) {
         const key = `${entry.msbtFile}:${entry.index}`;
-        const translation = state.translations[key];
+        const translation = state?.translations[key];
         if (translation) {
           bundled[key] = translation;
         }
@@ -1382,7 +1382,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     } finally {
       setSavingBundled(false);
     }
-  }, [state.entries, state.translations]);
+  }, [state?.entries, state?.translations]);
 
   /** Download the current bundled translations file as-is */
   const handleDownloadBundled = useCallback(async () => {
@@ -1541,7 +1541,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
   >(null);
 
   const handleDetectBundledConflicts = useCallback(async () => {
-    if (!state.entries.length) {
+    if (!state?.entries?.length) {
       alert('⚠️ يجب رفع ملف BDAT أولاً لمعرفة النصوص الإنجليزية الأصلية');
       return;
     }
@@ -1553,7 +1553,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
 
       // Build english→key map from loaded entries
       const englishMap = new Map<string, { key: string; arabic: string }[]>();
-      for (const entry of state.entries) {
+      for (const entry of (state?.entries || [])) {
         const key = `${entry.msbtFile}:${entry.index}`;
         const arabic = bundled[key];
         if (!arabic?.trim()) continue;
@@ -1617,7 +1617,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     } finally {
       setConflictDetectionRunning(false);
     }
-  }, [state.entries]);
+  }, [state?.entries]);
 
   /** Unify conflicts: pick the most common Arabic translation for each English text */
   const [unifyingConflicts, setUnifyingConflicts] = useState(false);
