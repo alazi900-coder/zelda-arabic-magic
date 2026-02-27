@@ -263,6 +263,12 @@ async function translateWithMyMemory(
       let translation = pickBestTranslation(data);
       
       if (translation?.trim()) {
+        // Normalize malformed TAG variants
+        translation = translation
+          .replace(/TAG\s+(\d+)/gi, 'TAG_$1')
+          .replace(/(?<!\w)TAG(\d+)(?!\w)/gi, 'TAG_$1')
+          .replace(/tag_(\d+)/g, 'TAG_$1')
+          .replace(/[《〈«⟪\[(<]\s*T(?:AG)?[_\s]?(\d+)\s*[》〉»⟫\])>]/gi, 'TAG_$1');
         // Unlock terms first (replace placeholders with Arabic)
         if (termLocks.locks.length > 0) {
           translation = unlockTerms(translation, termLocks.locks);
@@ -345,6 +351,12 @@ async function translateWithGoogle(
         translation = translation.trim();
 
         if (translation) {
+          // Normalize malformed TAG variants
+          translation = translation
+            .replace(/TAG\s+(\d+)/gi, 'TAG_$1')
+            .replace(/(?<!\w)TAG(\d+)(?!\w)/gi, 'TAG_$1')
+            .replace(/tag_(\d+)/g, 'TAG_$1')
+            .replace(/[《〈«⟪\[(<]\s*T(?:AG)?[_\s]?(\d+)\s*[》〉»⟫\])>]/gi, 'TAG_$1');
           if (termLocks.locks.length > 0) {
             translation = unlockTerms(translation, termLocks.locks);
           }
@@ -421,6 +433,12 @@ async function translateWithGoogle(
           const t = toTranslate[j];
           let translation = translations[j]?.trim();
           if (translation) {
+            // Normalize malformed TAG variants
+            translation = translation
+              .replace(/TAG\s+(\d+)/gi, 'TAG_$1')
+              .replace(/(?<!\w)TAG(\d+)(?!\w)/gi, 'TAG_$1')
+              .replace(/tag_(\d+)/g, 'TAG_$1')
+              .replace(/[《〈«⟪\[(<]\s*T(?:AG)?[_\s]?(\d+)\s*[》〉»⟫\])>]/gi, 'TAG_$1');
             if (t.termLocks.locks.length > 0) {
               translation = unlockTerms(translation, t.termLocks.locks);
             }
