@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { ImportConflict } from "@/components/editor/ImportConflictDialog";
 import { removeArabicPresentationForms } from "@/lib/arabic-processing";
 import type { EditorState } from "@/components/editor/types";
@@ -1324,6 +1324,15 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     input.click();
   };
 
+  /** Bundled translations count */
+  const [bundledCount, setBundledCount] = useState(0);
+  useEffect(() => {
+    fetch('/bundled-translations.json')
+      .then(r => r.ok ? r.json() : {})
+      .then(data => setBundledCount(Object.keys(data).length))
+      .catch(() => {});
+  }, []);
+
   /** Load bundled translations from the app's public folder */
   const [loadingBundled, setLoadingBundled] = useState(false);
   const handleLoadBundledTranslations = useCallback(async () => {
@@ -1421,5 +1430,6 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     handleSaveBundledTranslations,
     savingBundled,
     handleDownloadBundled,
+    bundledCount,
   };
 }
