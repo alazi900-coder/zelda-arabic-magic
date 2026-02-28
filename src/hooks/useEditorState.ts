@@ -5,7 +5,7 @@ import { processArabicText, hasArabicChars as hasArabicCharsProcessing, hasArabi
 import { scanAllTranslations as scanMergedTranslations } from "@/lib/arabic-sentence-splitter";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { fixTagBracketsStrict } from "@/lib/tag-bracket-fix";
+import { fixTagBracketsStrict, hasTechnicalBracketTag } from "@/lib/tag-bracket-fix";
 
 import { useEditorGlossary } from "@/hooks/useEditorGlossary";
 import { useEditorFileIO } from "@/hooks/useEditorFileIO";
@@ -1588,9 +1588,6 @@ export function useEditorState() {
   // === Tag Bracket Fix ===
   const handleScanTagBrackets = useCallback(() => {
     if (!state) return;
-    const tagColonRegex = /\[\w+:[^\]]*?\s*\]/;
-    const tagBracketNumRegex = /\[[A-Z]{2,10}\]\d+/;
-    const malformedTechnicalLikeRegex = /\[[A-Z]{2,10}\](?:\s*\d+)?/;
     const results: import("@/components/editor/TagBracketFixPanel").TagBracketFixResult[] = [];
     let suspiciousUnfixableCount = 0;
     
@@ -1598,13 +1595,16 @@ export function useEditorState() {
       const key = `${entry.msbtFile}:${entry.index}`;
       const translation = state.translations[key];
       if (!translation?.trim()) continue;
-      if (!tagColonRegex.test(entry.original) && !tagBracketNumRegex.test(entry.original)) continue;
+      if (!hasTechnicalBracketTag(entry.original)) continue;
 
       const colonTags = entry.original.match(/\[\w+:[^\]]*?\s*\]/g) ?? [];
       const bracketNumTags = entry.original.match(/\[[A-Z]{2,10}\]\d+/g) ?? [];
-      const allOriginalTags = [...colonTags, ...bracketNumTags];
+      const numBracketTags = entry.original.match(/\d+\[[A-Z]{2,10}\]/g) ?? [];
+      const equalsTags = entry.original.match(/\[\w+=\w[^\]]*\]/g) ?? [];
+      const braceTags = entry.original.match(/\{\w+:\w[^}]*\}/g) ?? [];
+      const allOriginalTags = [...colonTags, ...bracketNumTags, ...numBracketTags, ...equalsTags, ...braceTags];
       const hasMissingOriginalTag = allOriginalTags.some((tag) => !translation.includes(tag));
-      const hasMalformedTechnicalLike = malformedTechnicalLikeRegex.test(translation);
+      const hasMalformedTechnicalLike = /\[[A-Z]{2,10}\](?:\s*\d+)?/.test(translation);
 
       const { text: after, stats } = fixTagBracketsStrict(entry.original, translation);
       if (after === translation) {

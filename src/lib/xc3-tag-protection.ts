@@ -34,11 +34,15 @@ const ABBREV_PATTERN = new RegExp(
 // Patterns to match technical tags in order of priority
 const TAG_PATTERNS: RegExp[] = [
   /[\uE000-\uE0FF]+/g,                     // PUA icons (consecutive = atomic block)
-  /\[\w+:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?/g, // [Tag:Value] with optional internal spaces + optional descriptive parentheses (e.g. [ML:number digit=8 ](Crowd noise))
+  /\[\w+:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?/g, // [Tag:Value] with optional descriptive parentheses
+  /\d+\[[A-Z]{2,10}\]/g,                   // N[TAG] patterns (e.g. 1[ML])
+  /\[[A-Z]{2,10}\]\d+/g,                   // [TAG]N patterns (e.g. [ML]1)
+  /\[\w+=\w[^\]]*\]/g,                     // [TAG=Value] patterns (e.g. [Color=Red])
+  /\{\w+:\w[^}]*\}/g,                      // {TAG:Value} patterns (e.g. {player:name})
   /\{[\w]+\}/g,                             // {variable} placeholders
   /[\uFFF9-\uFFFC]/g,                       // Unicode special markers
   /<[\w\/][^>]*>/g,                         // HTML-like tags
-  /\([A-Z][^)]{1,100}\)/g,                  // Standalone descriptive parentheses (e.g. (Crowd noise of children))
+  /\([A-Z][^)]{1,100}\)/g,                  // Standalone descriptive parentheses
   ABBREV_PATTERN,                           // Game abbreviations (EXP, CP, SP, etc.)
 ];
 

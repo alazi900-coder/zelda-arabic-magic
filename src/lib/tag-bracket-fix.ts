@@ -21,16 +21,27 @@ export interface TagBracketFixResult {
 /** Regex to match valid [Tag:Value] patterns, optionally followed by (description) */
 const TAG_COLON_REGEX = /\[\w+:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?/g;
 
-/** Regex to match [TAG]N patterns (no colon, tag followed by closing bracket then a number) */
+/** Regex to match [TAG]N patterns (tag then number) e.g. [ML]1 */
 const TAG_BRACKET_NUM_REGEX = /\[[A-Z]{2,10}\]\d+/g;
 
+/** Regex to match N[TAG] patterns (number then tag) e.g. 1[ML] */
+const NUM_TAG_BRACKET_REGEX = /\d+\[[A-Z]{2,10}\]/g;
+
+/** Regex to match [TAG=Value] patterns e.g. [Color=Red] */
+const TAG_EQUALS_REGEX = /\[\w+=\w[^\]]*\]/g;
+
+/** Regex to match {TAG:Value} patterns e.g. {player:name} */
+const BRACE_TAG_REGEX = /\{\w+:\w[^}]*\}/g;
+
 /**
- * Check if original text contains technical tags in any supported format:
- * - [Tag:Value] style (with colon)
- * - [TAG]N style (tag then number)
+ * Check if original text contains technical tags in any supported format.
  */
 export function hasTechnicalBracketTag(original: string): boolean {
-  return /\[\w+:[^\]]*?\s*\]/.test(original) || /\[[A-Z]{2,10}\]\d+/.test(original);
+  return /\[\w+:[^\]]*?\s*\]/.test(original) 
+    || /\[[A-Z]{2,10}\]\d+/.test(original)
+    || /\d+\[[A-Z]{2,10}\]/.test(original)
+    || /\[\w+=\w[^\]]*\]/.test(original)
+    || /\{\w+:\w[^}]*\}/.test(original);
 }
 
 /**
@@ -115,57 +126,111 @@ export function fixTagBracketsStrict(original: string, translation: string): Tag
   const bracketNumTags = [...original.matchAll(new RegExp(TAG_BRACKET_NUM_REGEX.source, TAG_BRACKET_NUM_REGEX.flags))].map(m => m[0]);
   for (const tag of bracketNumTags) {
     if (result.includes(tag)) continue;
-
-    // Extract parts: e.g. tag="[ML]1" → tagName="ML", num="1"
     const match = tag.match(/^\[([A-Z]{2,10})\](\d+)$/);
     if (!match) continue;
     const [, tagName, num] = match;
     const escName = escapeRegex(tagName);
     const escNum = escapeRegex(num);
 
-    // Pattern: ]TAG[N (reversed brackets)
-    const revP = new RegExp(`\\]${escName}\\[${escNum}`);
-    if (revP.test(result)) {
-      result = result.replace(revP, tag);
-      stats.reversed++;
-      stats.total++;
-      continue;
-    }
-
-    // Pattern: [TAG[N or ]TAG]N (mismatched)
+    const patterns: [RegExp, 'reversed' | 'mismatched' | 'bare'][] = [
+      [new RegExp(`\\]${escName}\\[${escNum}`), 'reversed'],
+      [new RegExp(`\\[${escName}\\[${escNum}`), 'mismatched'],
+      [new RegExp(`\\]${escName}\\]${escNum}`), 'mismatched'],
+      [new RegExp(`\\[${escName}\\]\\s+${escNum}`), 'mismatched'],
+      [new RegExp(`(?<!\\[)${escName}(?!\\])\\s*${escNum}`), 'bare'],
+    ];
     let fixed2 = false;
-    for (const bp of [
-      new RegExp(`\\[${escName}\\[${escNum}`),
-      new RegExp(`\\]${escName}\\]${escNum}`),
-    ]) {
-      if (bp.test(result)) {
-        result = result.replace(bp, tag);
-        stats.mismatched++;
+    for (const [pat, type] of patterns) {
+      if (pat.test(result)) {
+        result = result.replace(pat, tag);
+        stats[type]++;
         stats.total++;
         fixed2 = true;
         break;
       }
     }
     if (fixed2) continue;
+  }
 
-    // Pattern: TAG]N or [TAG]  N (tag present but number detached or brackets wrong)
-    // Pattern: bare TAGN without brackets
-    const bareP = new RegExp(`(?<!\\[)${escName}(?!\\])\\s*${escNum}`);
-    if (bareP.test(result)) {
-      result = result.replace(bareP, tag);
-      stats.bare++;
-      stats.total++;
-      continue;
-    }
+  // 3. Handle N[TAG] style tags (e.g. 1[ML], 0[SE])
+  const numBracketTags = [...original.matchAll(new RegExp(NUM_TAG_BRACKET_REGEX.source, NUM_TAG_BRACKET_REGEX.flags))].map(m => m[0]);
+  for (const tag of numBracketTags) {
+    if (result.includes(tag)) continue;
+    const match = tag.match(/^(\d+)\[([A-Z]{2,10})\]$/);
+    if (!match) continue;
+    const [, num, tagName] = match;
+    const escName = escapeRegex(tagName);
+    const escNum = escapeRegex(num);
 
-    // Pattern: [TAG] N (space between ] and number)
-    const spaceP = new RegExp(`\\[${escName}\\]\\s+${escNum}`);
-    if (spaceP.test(result)) {
-      result = result.replace(spaceP, tag);
-      stats.mismatched++;
-      stats.total++;
-      continue;
+    const patterns: [RegExp, 'reversed' | 'mismatched' | 'bare'][] = [
+      [new RegExp(`${escNum}\\]${escName}\\[`), 'reversed'],
+      [new RegExp(`${escNum}\\[${escName}\\[`), 'mismatched'],
+      [new RegExp(`${escNum}\\]${escName}\\]`), 'mismatched'],
+      [new RegExp(`${escNum}\\s*(?<!\\[)${escName}(?!\\])`), 'bare'],
+    ];
+    let fixed3 = false;
+    for (const [pat, type] of patterns) {
+      if (pat.test(result)) {
+        result = result.replace(pat, tag);
+        stats[type]++;
+        stats.total++;
+        fixed3 = true;
+        break;
+      }
     }
+    if (fixed3) continue;
+  }
+
+  // 4. Handle [TAG=Value] style tags (e.g. [Color=Red])
+  const equalsTags = [...original.matchAll(new RegExp(TAG_EQUALS_REGEX.source, TAG_EQUALS_REGEX.flags))].map(m => m[0]);
+  for (const tag of equalsTags) {
+    if (result.includes(tag)) continue;
+    const inner = tag.slice(1, -1); // remove [ ]
+    const esc = escapeRegex(inner);
+
+    const patterns: [RegExp, 'reversed' | 'mismatched' | 'bare'][] = [
+      [new RegExp(`\\]\\s*${esc}\\s*\\[`), 'reversed'],
+      [new RegExp(`\\]\\s*${esc}\\s*\\]`), 'mismatched'],
+      [new RegExp(`\\[\\s*${esc}\\s*\\[`), 'mismatched'],
+      [new RegExp(`(?<!\\[)${esc}(?!\\])`), 'bare'],
+    ];
+    let fixed4 = false;
+    for (const [pat, type] of patterns) {
+      if (pat.test(result)) {
+        result = result.replace(pat, `[${inner}]`);
+        stats[type]++;
+        stats.total++;
+        fixed4 = true;
+        break;
+      }
+    }
+    if (fixed4) continue;
+  }
+
+  // 5. Handle {TAG:Value} style tags (e.g. {player:name})
+  const braceTags = [...original.matchAll(new RegExp(BRACE_TAG_REGEX.source, BRACE_TAG_REGEX.flags))].map(m => m[0]);
+  for (const tag of braceTags) {
+    if (result.includes(tag)) continue;
+    const inner = tag.slice(1, -1); // remove { }
+    const esc = escapeRegex(inner);
+
+    const patterns: [RegExp, 'reversed' | 'mismatched' | 'bare'][] = [
+      [new RegExp(`\\}\\s*${esc}\\s*\\{`), 'reversed'],
+      [new RegExp(`\\}\\s*${esc}\\s*\\}`), 'mismatched'],
+      [new RegExp(`\\{\\s*${esc}\\s*\\{`), 'mismatched'],
+      [new RegExp(`(?<!\\{)${esc}(?!\\})`), 'bare'],
+    ];
+    let fixed5 = false;
+    for (const [pat, type] of patterns) {
+      if (pat.test(result)) {
+        result = result.replace(pat, `{${inner}}`);
+        stats[type]++;
+        stats.total++;
+        fixed5 = true;
+        break;
+      }
+    }
+    if (fixed5) continue;
   }
 
   return { text: result, stats };

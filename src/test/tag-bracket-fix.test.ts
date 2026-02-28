@@ -94,6 +94,38 @@ describe('fixTagBracketsStrict', () => {
     expect(text).toContain('[ML:Name]');
   });
 
+  it('fixes N[TAG] format (number before tag)', () => {
+    const original = 'Show 1[ML] on map';
+    const translation = 'عرض 1]ML[ على الخريطة';
+    const { text, stats } = fixTagBracketsStrict(original, translation);
+    expect(text).toContain('1[ML]');
+    expect(stats.reversed).toBe(1);
+  });
+
+  it('fixes bare N TAG format', () => {
+    const original = 'Show 1[ML] on map';
+    const translation = 'عرض 1ML على الخريطة';
+    const { text, stats } = fixTagBracketsStrict(original, translation);
+    expect(text).toContain('1[ML]');
+    expect(stats.bare).toBe(1);
+  });
+
+  it('fixes [TAG=Value] reversed brackets', () => {
+    const original = 'Use [Color=Red] here';
+    const translation = 'استخدم ]Color=Red[ هنا';
+    const { text, stats } = fixTagBracketsStrict(original, translation);
+    expect(text).toContain('[Color=Red]');
+    expect(stats.reversed).toBe(1);
+  });
+
+  it('fixes {TAG:Value} reversed braces', () => {
+    const original = 'Hello {player:name} world';
+    const translation = 'مرحبا }player:name{ بالعالم';
+    const { text, stats } = fixTagBracketsStrict(original, translation);
+    expect(text).toContain('{player:name}');
+    expect(stats.reversed).toBe(1);
+  });
+
   it('same input produces same output (idempotent)', () => {
     const original = 'Hello [ML:Name] world';
     const translation = 'مرحبا ]ML:Name[ بالعالم';
