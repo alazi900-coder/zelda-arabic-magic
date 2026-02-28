@@ -79,6 +79,7 @@ const QuickReviewMode: React.FC<QuickReviewModeProps> = ({
             placeholder="أدخل الترجمة..."
             className="w-full px-3 py-2 rounded bg-background border border-border font-body text-sm"
             autoFocus
+            multiline
           />
           {entry.maxBytes > 0 && (
             <p className={`text-xs mt-1 ${byteUsed > entry.maxBytes ? 'text-destructive' : 'text-muted-foreground'}`}>
