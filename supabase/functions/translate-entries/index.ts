@@ -20,13 +20,17 @@ function protectTags(text: string): { cleaned: string; tags: Map<string, string>
   const tags = new Map<string, string>();
   let counter = 0;
   const patterns: RegExp[] = [
-    /[\uE000-\uE0FF]+/g,
-    /\[\w+:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?/g,
-    /\{[\w]+\}/g,
-    /[\uFFF9-\uFFFC]/g,
-    /<[\w\/][^>]*>/g,
-    /\([A-Z][^)]{1,100}\)/g,
-    ABBREV_PATTERN,
+    /[\uE000-\uE0FF]+/g,                     // PUA icons (consecutive = atomic block)
+    /\[\w+:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?/g, // [Tag:Value] with optional descriptive parentheses
+    /\d+\[[A-Z]{2,10}\]/g,                   // N[TAG] patterns (e.g. 1[ML])
+    /\[[A-Z]{2,10}\]\d+/g,                   // [TAG]N patterns (e.g. [ML]1)
+    /\[\w+=\w[^\]]*\]/g,                     // [TAG=Value] patterns (e.g. [Color=Red])
+    /\{\w+:\w[^}]*\}/g,                      // {TAG:Value} patterns (e.g. {player:name})
+    /\{[\w]+\}/g,                             // {variable} placeholders
+    /[\uFFF9-\uFFFC]/g,                       // Unicode special markers
+    /<[\w\/][^>]*>/g,                         // HTML-like tags
+    /\([A-Z][^)]{1,100}\)/g,                  // Standalone descriptive parentheses
+    ABBREV_PATTERN,                           // Game abbreviations
   ];
 
   // Collect all matches

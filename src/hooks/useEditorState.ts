@@ -1604,17 +1604,28 @@ export function useEditorState() {
       const braceTags = entry.original.match(/\{\w+:\w[^}]*\}/g) ?? [];
       const allOriginalTags = [...colonTags, ...bracketNumTags, ...numBracketTags, ...equalsTags, ...braceTags];
       const hasMissingOriginalTag = allOriginalTags.some((tag) => !translation.includes(tag));
-      const hasMalformedTechnicalLike = /\[[A-Z]{2,10}\](?:\s*\d+)?/.test(translation);
+
+      // Detect AI-invented tags: tags in translation that don't exist in original
+      const transColonTags = translation.match(/\[\w+:[^\]]*?\s*\]/g) ?? [];
+      const origTagSet = new Set(allOriginalTags);
+      const hasForeignTag = transColonTags.some(t => !origTagSet.has(t));
 
       const { text: after, stats } = fixTagBracketsStrict(entry.original, translation);
-      if (after === translation) {
-        if (hasMissingOriginalTag && hasMalformedTechnicalLike) {
+      
+      // Also try restoreTagsLocally to fix missing/foreign tags
+      let finalAfter = after;
+      if (hasMissingOriginalTag || hasForeignTag) {
+        finalAfter = restoreTagsLocally(entry.original, after);
+      }
+      
+      if (finalAfter === translation) {
+        if (hasMissingOriginalTag || hasForeignTag) {
           suspiciousUnfixableCount++;
         }
         continue;
       }
 
-      results.push({ key, before: translation, after, count: stats.total || 1, status: 'pending' });
+      results.push({ key, before: translation, after: finalAfter, count: (stats.total || 0) + (finalAfter !== after ? 1 : 0), status: 'pending' });
     }
 
     setTagBracketFixResults(results);
