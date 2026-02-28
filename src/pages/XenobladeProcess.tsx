@@ -58,21 +58,38 @@ const XenobladeProcess = () => {
 
   const addLog = (msg: string) => setLogs(prev => [...prev, `[${new Date().toLocaleTimeString("ar-SA")}] ${msg}`]);
 
-  const handleFileSelect = useCallback((files: FileList | null) => {
-    if (!files) return;
+  const [fileLoadProgress, setFileLoadProgress] = useState<{ current: number; total: number } | null>(null);
+
+  const handleFileSelect = useCallback(async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    const total = files.length;
+    setFileLoadProgress({ current: 0, total });
+
     const newMsbt: File[] = [];
     const newBdat: File[] = [];
     const newBdatBin: File[] = [];
-    for (let i = 0; i < files.length; i++) {
-      const f = files[i];
-      const name = f.name.toLowerCase();
-      if (name.endsWith('.msbt')) newMsbt.push(f);
-      else if (name.endsWith('.json')) newBdat.push(f);
-      else if (name.endsWith('.bdat')) newBdatBin.push(f);
+
+    const BATCH = 200;
+    for (let start = 0; start < total; start += BATCH) {
+      const end = Math.min(start + BATCH, total);
+      for (let i = start; i < end; i++) {
+        const f = files[i];
+        const name = f.name.toLowerCase();
+        if (name.endsWith('.msbt')) newMsbt.push(f);
+        else if (name.endsWith('.json')) newBdat.push(f);
+        else if (name.endsWith('.bdat')) newBdatBin.push(f);
+      }
+      setFileLoadProgress({ current: end, total });
+      // Yield to UI thread
+      await new Promise(r => setTimeout(r, 0));
     }
+
     if (newMsbt.length > 0) setMsbtFiles(prev => [...prev, ...newMsbt]);
     if (newBdat.length > 0) setBdatFiles(prev => [...prev, ...newBdat]);
     if (newBdatBin.length > 0) setBdatBinaryFiles(prev => [...prev, ...newBdatBin]);
+
+    setFileLoadProgress(null);
+    addLog(`📂 تم تحميل ${total} ملف (MSBT: ${newMsbt.length} | JSON: ${newBdat.length} | BDAT: ${newBdatBin.length})`);
   }, []);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
@@ -687,6 +704,17 @@ const XenobladeProcess = () => {
               />
             </label>
           </div>
+          {fileLoadProgress && (
+            <div className="mt-3 flex items-center gap-3 px-2">
+              <Loader2 className="w-4 h-4 animate-spin text-primary shrink-0" />
+              <div className="flex-1">
+                <div className="h-2 rounded-full bg-muted overflow-hidden">
+                  <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${Math.round((fileLoadProgress.current / fileLoadProgress.total) * 100)}%` }} />
+                </div>
+              </div>
+              <span className="text-xs font-mono text-muted-foreground shrink-0">{fileLoadProgress.current}/{fileLoadProgress.total}</span>
+            </div>
+          )}
           <p className="text-xs text-muted-foreground mt-2">💡 استخدم "كل الأنواع" لاختيار عدة ملفات من مدير الملفات، أو "رفع مجلد كامل" لرفع مجلد بكل ملفاته تلقائياً (يمكنك الضغط عدة مرات لإضافة مجلدات متعددة)</p>
           <input
             type="file"
