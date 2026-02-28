@@ -154,7 +154,7 @@ const CompareEnginesDialog: React.FC<CompareEnginesDialogProps> = ({
                         )}
                       </div>
                       {result ? (
-                        <p className="text-sm font-body" dir="rtl">{result}</p>
+                        <p className="text-sm font-body whitespace-pre-wrap break-words" dir="auto" style={{ unicodeBidi: 'plaintext' }}>{result}</p>
                       ) : (
                         <p className="text-xs text-muted-foreground italic">فشل في الترجمة أو لا توجد نتيجة</p>
                       )}
