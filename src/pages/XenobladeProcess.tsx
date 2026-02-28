@@ -672,24 +672,20 @@ const XenobladeProcess = () => {
                 disabled={isProcessing}
               />
             </label>
-            <button
-              type="button"
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-accent/10 border border-accent/30 text-sm font-display font-semibold cursor-pointer hover:bg-accent/20 transition-colors ${isProcessing ? 'opacity-50 pointer-events-none' : ''}`}
-              onClick={() => {
-                if (isProcessing) return;
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.multiple = true;
-                input.setAttribute('webkitdirectory', '');
-                input.setAttribute('directory', '');
-                input.addEventListener('change', () => handleFileSelect(input.files));
-                input.click();
-              }}
-              disabled={isProcessing}
-            >
+            <label className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-accent/10 border border-accent/30 text-sm font-display font-semibold cursor-pointer hover:bg-accent/20 transition-colors ${isProcessing ? 'opacity-50 pointer-events-none' : ''}`}>
               <FolderOpen className="w-4 h-4" />
               رفع مجلد كامل
-            </button>
+              <input
+                type="file"
+                multiple
+                className="hidden"
+                // @ts-ignore - webkitdirectory is non-standard but widely supported
+                webkitdirectory=""
+                directory=""
+                onChange={e => { handleFileSelect(e.target.files); e.target.value = ''; }}
+                disabled={isProcessing}
+              />
+            </label>
           </div>
           <p className="text-xs text-muted-foreground mt-2">💡 استخدم "كل الأنواع" لاختيار عدة ملفات من مدير الملفات، أو "رفع مجلد كامل" لرفع مجلد بكل ملفاته تلقائياً (يمكنك الضغط عدة مرات لإضافة مجلدات متعددة)</p>
           <input
