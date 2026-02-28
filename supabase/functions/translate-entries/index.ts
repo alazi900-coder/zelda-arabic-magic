@@ -21,16 +21,16 @@ function protectTags(text: string): { cleaned: string; tags: Map<string, string>
   let counter = 0;
   const patterns: RegExp[] = [
     /[\uE000-\uE0FF]+/g,                     // PUA icons (consecutive = atomic block)
-    /\[\w+:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?/g, // [Tag:Value] with optional descriptive parentheses
-    /\d+\[[A-Z]{2,10}\]/g,                   // N[TAG] patterns (e.g. 1[ML])
-    /\[[A-Z]{2,10}\]\d+/g,                   // [TAG]N patterns (e.g. [ML]1)
-    /\[\w+=\w[^\]]*\]/g,                     // [TAG=Value] patterns (e.g. [Color=Red])
-    /\{\w+:\w[^}]*\}/g,                      // {TAG:Value} patterns (e.g. {player:name})
-    /\{[\w]+\}/g,                             // {variable} placeholders
+    /\[\s*\w+\s*:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?/g, // [Tag:Value] with optional descriptive parentheses
+    /\d+\s*\[[A-Z]{2,10}\]/g,              // N[TAG] patterns (e.g. 1[ML], 1 [ML])
+    /\[[A-Z]{2,10}\]\s*\d+/g,              // [TAG]N patterns (e.g. [ML]1, [ML] 1)
+    /\[\s*\w+\s*=\s*\w[^\]]*\]/g,       // [TAG=Value] patterns (e.g. [Color=Red])
+    /\{\s*\w+\s*:\s*\w[^}]*\}/g,         // {TAG:Value} patterns (e.g. {player:name})
+    /\{[\w]+\}/g,                            // {variable} placeholders
     /[\uFFF9-\uFFFC]/g,                       // Unicode special markers
     /<[\w\/][^>]*>/g,                         // HTML-like tags
     /\([A-Z][^)]{1,100}\)/g,                  // Standalone descriptive parentheses
-    ABBREV_PATTERN,                           // Game abbreviations
+    ABBREV_PATTERN,                             // Game abbreviations
   ];
 
   // Collect all matches
@@ -83,7 +83,15 @@ function restoreTags(text: string, tags: Map<string, string>): string {
   return result;
 }
 
-// --- Term Locking System ---
+/**
+ * If text becomes only placeholders/punctuation after protection, don't send to AI.
+ * Example: "[ML:EnhanceParam paramtype=1 ]%." should be returned as-is.
+ */
+function isTagOnlyOrSymbolic(cleanedText: string): boolean {
+  const withoutTags = cleanedText.replace(/TAG_\d+/g, ' ').trim();
+  if (!withoutTags) return true;
+  return !/[A-Za-z\u00C0-\u024F]/.test(withoutTags);
+}
 // Replaces glossary terms in source text with locked placeholders before AI translation,
 // then swaps them back to the approved Arabic translations afterward.
 
@@ -239,6 +247,12 @@ async function translateWithMyMemory(
     
     if (!textToTranslate) continue;
 
+    // Tag-only/symbolic entries must pass through unchanged
+    if (isTagOnlyOrSymbolic(textToTranslate)) {
+      result[entry.key] = restoreTags(textToTranslate, pe.tags);
+      continue;
+    }
+
     // Check glossary for exact match first
     if (glossaryMap) {
       const norm = textToTranslate.toLowerCase();
@@ -319,6 +333,12 @@ async function translateWithGoogle(
       const text = pe.cleaned.trim();
       if (!text) continue;
 
+      // Tag-only/symbolic entries must pass through unchanged
+      if (isTagOnlyOrSymbolic(text)) {
+        result[entry.key] = restoreTags(text, pe.tags);
+        continue;
+      }
+
       if (glossaryMap) {
         const norm = text.toLowerCase();
         const hit = glossaryMap.get(norm);
@@ -389,6 +409,13 @@ async function translateWithGoogle(
         const pe = batchProtected[i];
         const text = pe.cleaned.trim();
         if (!text) continue;
+
+        // Tag-only/symbolic entries must pass through unchanged
+        if (isTagOnlyOrSymbolic(text)) {
+          result[batchEntries[i].key] = restoreTags(text, pe.tags);
+          continue;
+        }
+
         if (glossaryMap) {
           const norm = text.toLowerCase();
           const hit = glossaryMap.get(norm);
@@ -536,6 +563,12 @@ async function translateWithAI(
     const entry = entries[i];
     const pe = protectedEntries[i];
     const norm = pe.cleaned.trim().toLowerCase();
+
+    // Tag-only/symbolic entries must pass through unchanged
+    if (isTagOnlyOrSymbolic(pe.cleaned)) {
+      directResult[entry.key] = restoreTags(pe.cleaned, pe.tags);
+      continue;
+    }
 
     // Priority 1: Glossary exact match
     const glossaryHit = glossaryMap.get(norm);
