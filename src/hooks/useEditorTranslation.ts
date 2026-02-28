@@ -56,7 +56,8 @@ export function useEditorTranslation({
         toApply[key] = val;
       }
     }
-    setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...toApply } } : null);
+    const safeToApply = autoFixTags(toApply);
+    setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...safeToApply } } : null);
     setPendingPageTranslations(null);
     setOldPageTranslations({});
     setPageTranslationOriginals({});
@@ -223,7 +224,8 @@ export function useEditorTranslation({
 
     const freeTranslations = { ...tmReused, ...glossaryReused };
     if (Object.keys(freeTranslations).length > 0) {
-      setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...freeTranslations } } : null);
+      const safeFreeTranslations = autoFixTags(freeTranslations);
+      setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...safeFreeTranslations } } : null);
     }
     const tmCount = Object.keys(tmReused).length;
     const glossaryCount = Object.keys(glossaryReused).length;
@@ -547,7 +549,8 @@ export function useEditorTranslation({
         // Show compare dialog for memory-only too
         setOldPageTranslations(oldTrans);
         setPageTranslationOriginals(originalsMap);
-        setPendingPageTranslations(freeTranslations);
+        const safeFreeTranslations = autoFixTags(freeTranslations);
+        setPendingPageTranslations(safeFreeTranslations);
         setShowPageCompare(true);
       }
       const tmCount = Object.keys(tmReused).length;
@@ -760,7 +763,8 @@ export function useEditorTranslation({
             if (glossaryHit) { freeTranslations[key] = glossaryHit; }
           }
           if (Object.keys(freeTranslations).length > 0) {
-            setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...freeTranslations } } : null);
+            const safeFreeTranslations = autoFixTags(freeTranslations);
+            setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...safeFreeTranslations } } : null);
             totalTranslated += Object.keys(freeTranslations).length;
           }
         } else {
