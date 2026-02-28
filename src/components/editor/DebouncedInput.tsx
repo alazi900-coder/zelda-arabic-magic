@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef, memo } from "react";
 import { INPUT_DEBOUNCE } from "./types";
 
-const DebouncedInput = memo(({ value, onChange, placeholder, className, autoFocus }: {
+const DebouncedInput = memo(({ value, onChange, placeholder, className, autoFocus, multiline }: {
   value: string;
   onChange: (val: string) => void;
   placeholder?: string;
   className?: string;
   autoFocus?: boolean;
+  multiline?: boolean;
 }) => {
   const [localValue, setLocalValue] = useState(value);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
@@ -23,7 +24,7 @@ const DebouncedInput = memo(({ value, onChange, placeholder, className, autoFocu
     committedRef.current = value;
   }, [value]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const newVal = e.target.value;
     setLocalValue(newVal);
     localRef.current = newVal;
@@ -57,6 +58,21 @@ const DebouncedInput = memo(({ value, onChange, placeholder, className, autoFocu
       committedRef.current = localRef.current;
     }
   };
+
+  if (multiline) {
+    return (
+      <textarea
+        value={localValue}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        placeholder={placeholder}
+        className={className}
+        autoFocus={autoFocus}
+        rows={Math.max(2, (localValue.match(/\n/g) || []).length + 1)}
+        style={{ resize: 'vertical', minHeight: '2.5rem' }}
+      />
+    );
+  }
 
   return (
     <input

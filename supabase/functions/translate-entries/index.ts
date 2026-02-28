@@ -19,6 +19,24 @@ const ABBREV_PATTERN = new RegExp(`\\b(${PROTECTED_ABBREVIATIONS.join('|')})\\b`
 function protectTags(text: string): { cleaned: string; tags: Map<string, string> } {
   const tags = new Map<string, string>();
   let counter = 0;
+
+  // First: shield literal newlines as NEWLINE_N placeholders
+  const nlParts = text.split('\n');
+  let shielded = text;
+  if (nlParts.length > 1) {
+    const nlFragments: string[] = [];
+    for (let i = 0; i < nlParts.length; i++) {
+      nlFragments.push(nlParts[i]);
+      if (i < nlParts.length - 1) {
+        const placeholder = `NEWLINE_${counter}`;
+        tags.set(placeholder, '\n');
+        nlFragments.push(` ${placeholder} `);
+        counter++;
+      }
+    }
+    shielded = nlFragments.join('');
+  }
+
   const patterns: RegExp[] = [
     /[\uE000-\uE0FF]+/g,                     // PUA icons (consecutive = atomic block)
     /\[\s*\w+\s*:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?/g, // [Tag:Value] with optional descriptive parentheses
@@ -38,7 +56,7 @@ function protectTags(text: string): { cleaned: string; tags: Map<string, string>
   for (const pattern of patterns) {
     const regex = new RegExp(pattern.source, pattern.flags);
     let match: RegExpExecArray | null;
-    while ((match = regex.exec(text)) !== null) {
+    while ((match = regex.exec(shielded)) !== null) {
       const start = match.index;
       const end = start + match[0].length;
       const overlaps = matches.some(m => start < m.end && end > m.start);
@@ -49,19 +67,19 @@ function protectTags(text: string): { cleaned: string; tags: Map<string, string>
   }
   matches.sort((a, b) => a.start - b.start);
 
-  if (matches.length === 0) return { cleaned: text, tags };
+  if (matches.length === 0) return { cleaned: shielded, tags };
 
   let cleaned = '';
   let lastEnd = 0;
   for (const m of matches) {
-    cleaned += text.slice(lastEnd, m.start);
+    cleaned += shielded.slice(lastEnd, m.start);
     const placeholder = `TAG_${counter}`;
     tags.set(placeholder, m.original);
     cleaned += placeholder;
     counter++;
     lastEnd = m.end;
   }
-  cleaned += text.slice(lastEnd);
+  cleaned += shielded.slice(lastEnd);
 
   return { cleaned, tags };
 }
@@ -73,13 +91,25 @@ function normalizeTagPlaceholders(text: string): string {
     .replace(/(?<!\w)TAG(\d+)(?!\w)/gi, 'TAG_$1')      // TAG0 -> TAG_0
     .replace(/tag_(\d+)/g, 'TAG_$1')                    // tag_0 -> TAG_0
     .replace(/[\[{(<]\s*TAG\s*[_\s-:]?(\d+)\s*[\]})>]/gi, 'TAG_$1') // [TAG_0] -> TAG_0
-    .replace(/[《〈«⟪\[(<]\s*T(?:AG)?[_\s-:]?(\d+)\s*[》〉»⟫\])>]/gi, 'TAG_$1');  // «T0» etc -> TAG_0
+    .replace(/[《〈«⟪\[(<]\s*T(?:AG)?[_\s-:]?(\d+)\s*[》〉»⟫\])>]/gi, 'TAG_$1')  // «T0» etc -> TAG_0
+    .replace(/NEWLINE\s*[-:_]?\s*_?(\d+)/gi, 'NEWLINE_$1')  // Normalize NEWLINE variants
+    .replace(/newline_(\d+)/g, 'NEWLINE_$1');                // lowercase -> uppercase
 }
 
 function restoreTags(text: string, tags: Map<string, string>): string {
   let result = text;
+  // Restore NEWLINE_N placeholders first (they may have spaces around them from protection)
   for (const [placeholder, original] of tags) {
-    result = result.replace(placeholder, original);
+    if (placeholder.startsWith('NEWLINE_')) {
+      // Remove optional surrounding spaces that were added during protection
+      result = result.replace(new RegExp(`\\s*${placeholder}\\s*`, 'g'), original);
+    }
+  }
+  // Then restore TAG_N placeholders
+  for (const [placeholder, original] of tags) {
+    if (!placeholder.startsWith('NEWLINE_')) {
+      result = result.replace(placeholder, original);
+    }
   }
   return result;
 }
@@ -481,7 +511,9 @@ async function translateWithGoogle(
 
       if (toTranslate.length === 0) continue;
 
-      const joinedText = toTranslate.map(t => t.text).join('\n');
+      // Use a unique separator that won't appear in entries (since \n inside entries is already shielded as NEWLINE_N)
+      const BATCH_SEP = '\n';
+      const joinedText = toTranslate.map(t => t.text).join(BATCH_SEP);
 
       try {
         const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ar&dt=t&q=${encodeURIComponent(joinedText)}`;
@@ -502,7 +534,7 @@ async function translateWithGoogle(
           }
         }
 
-        const translations = fullTranslation.split('\n');
+        const translations = fullTranslation.split(BATCH_SEP);
 
         for (let j = 0; j < Math.min(toTranslate.length, translations.length); j++) {
           const t = toTranslate[j];

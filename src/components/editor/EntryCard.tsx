@@ -210,6 +210,7 @@ const EntryCard: React.FC<EntryCardProps> = ({
               onChange={(val) => updateTranslation(key, val)}
               placeholder="أدخل الترجمة..."
               className="flex-1 w-full px-3 py-2 rounded bg-background border border-border font-body text-sm"
+              multiline
             />
             <div className="flex items-center gap-1 shrink-0">
               <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => handleTranslateSingle(entry)} disabled={translatingSingle === key} title="ترجمة هذا النص">
