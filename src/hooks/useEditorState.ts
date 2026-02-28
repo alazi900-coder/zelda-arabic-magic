@@ -1589,21 +1589,39 @@ export function useEditorState() {
   const handleScanTagBrackets = useCallback(() => {
     if (!state) return;
     const tagRegex = /\[\w+:[^\]]*?\s*\]/;
+    const malformedTechnicalLikeRegex = /\[[A-Z]{2,10}\](?:\s*\d+)?/;
     const results: import("@/components/editor/TagBracketFixPanel").TagBracketFixResult[] = [];
+    let suspiciousUnfixableCount = 0;
     
     for (const entry of state.entries) {
       const key = `${entry.msbtFile}:${entry.index}`;
       const translation = state.translations[key];
       if (!translation?.trim()) continue;
       if (!tagRegex.test(entry.original)) continue;
+
+      const originalTags = entry.original.match(/\[\w+:[^\]]*?\s*\]/g) ?? [];
+      const hasMissingOriginalTag = originalTags.some((tag) => !translation.includes(tag));
+      const hasMalformedTechnicalLike = malformedTechnicalLikeRegex.test(translation);
+
       const { text: after, stats } = fixTagBracketsStrict(entry.original, translation);
-      if (after === translation) continue;
+      if (after === translation) {
+        if (hasMissingOriginalTag && hasMalformedTechnicalLike) {
+          suspiciousUnfixableCount++;
+        }
+        continue;
+      }
+
       results.push({ key, before: translation, after, count: stats.total || 1, status: 'pending' });
     }
+
     setTagBracketFixResults(results);
     if (results.length === 0) {
-      setLastSaved("✅ جميع أقواس الرموز التقنية صحيحة");
-      setTimeout(() => setLastSaved(""), 4000);
+      if (suspiciousUnfixableCount > 0) {
+        setLastSaved(`⚠️ تم رصد ${suspiciousUnfixableCount} سطر فيه رموز تقنية غير صحيحة (مثل [ML]1) وتحتاج إصلاح الوسوم`);
+      } else {
+        setLastSaved("✅ جميع أقواس الرموز التقنية صحيحة");
+      }
+      setTimeout(() => setLastSaved(""), 5000);
     }
   }, [state]);
 
