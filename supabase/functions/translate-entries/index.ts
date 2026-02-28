@@ -84,6 +84,11 @@ function restoreTags(text: string, tags: Map<string, string>): string {
   return result;
 }
 
+function restoreAndEnforce(original: string, translated: string, tags: Map<string, string>): string {
+  const restored = restoreTags(translated, tags);
+  return enforceTagIntegrity(original, restored);
+}
+
 /** Unified regex matching all supported technical tag formats */
 const TECH_TAG_REGEX = /[\uFFF9-\uFFFC]|[\uE000-\uE0FF]+|\d+\s*\[[A-Z]{2,10}\]|\[[A-Z]{2,10}\]\s*\d+|\[\s*\w+\s*:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?|\[\s*\w+\s*=\s*\w[^\]]*\]|\{\s*\w+\s*:\s*\w[^}]*\}|\{[\w]+\}/g;
 
@@ -289,7 +294,7 @@ async function translateWithMyMemory(
 
     // Tag-only/symbolic entries must pass through unchanged
     if (isTagOnlyOrSymbolic(textToTranslate)) {
-      result[entry.key] = restoreTags(textToTranslate, pe.tags);
+      result[entry.key] = restoreAndEnforce(entry.original, textToTranslate, pe.tags);
       continue;
     }
 
@@ -298,7 +303,7 @@ async function translateWithMyMemory(
       const norm = textToTranslate.toLowerCase();
       const hit = glossaryMap.get(norm);
       if (hit) {
-        result[entry.key] = restoreTags(hit, pe.tags);
+        result[entry.key] = restoreAndEnforce(entry.original, hit, pe.tags);
         stats.directMatches++;
         continue;
       }
@@ -339,7 +344,7 @@ async function translateWithMyMemory(
         if (glossaryMap) {
           translation = applyGlossaryPost(translation, glossaryMap);
         }
-        result[entry.key] = restoreTags(translation, pe.tags);
+        result[entry.key] = restoreAndEnforce(entry.original, translation, pe.tags);
         charsUsed += textToTranslate.length;
       }
     } catch (err) {
@@ -375,7 +380,7 @@ async function translateWithGoogle(
 
       // Tag-only/symbolic entries must pass through unchanged
       if (isTagOnlyOrSymbolic(text)) {
-        result[entry.key] = restoreTags(text, pe.tags);
+        result[entry.key] = restoreAndEnforce(entry.original, text, pe.tags);
         continue;
       }
 
@@ -383,7 +388,7 @@ async function translateWithGoogle(
         const norm = text.toLowerCase();
         const hit = glossaryMap.get(norm);
         if (hit) {
-          result[entry.key] = restoreTags(hit, pe.tags);
+          result[entry.key] = restoreAndEnforce(entry.original, hit, pe.tags);
           stats.directMatches++;
           continue;
         }
@@ -426,7 +431,7 @@ async function translateWithGoogle(
           if (glossaryMap) {
             translation = applyGlossaryPost(translation, glossaryMap);
           }
-          result[entry.key] = restoreTags(translation, pe.tags);
+          result[entry.key] = restoreAndEnforce(entry.original, translation, pe.tags);
           charsUsed += text.length;
         }
       } catch (err) {
@@ -452,7 +457,7 @@ async function translateWithGoogle(
 
         // Tag-only/symbolic entries must pass through unchanged
         if (isTagOnlyOrSymbolic(text)) {
-          result[batchEntries[i].key] = restoreTags(text, pe.tags);
+          result[batchEntries[i].key] = restoreAndEnforce(batchEntries[i].original, text, pe.tags);
           continue;
         }
 
@@ -460,7 +465,7 @@ async function translateWithGoogle(
           const norm = text.toLowerCase();
           const hit = glossaryMap.get(norm);
           if (hit) {
-            result[batchEntries[i].key] = restoreTags(hit, pe.tags);
+            result[batchEntries[i].key] = restoreAndEnforce(batchEntries[i].original, hit, pe.tags);
             stats.directMatches++;
             continue;
           }
@@ -510,7 +515,7 @@ async function translateWithGoogle(
             if (glossaryMap) {
               translation = applyGlossaryPost(translation, glossaryMap);
             }
-            result[batchEntries[t.idx].key] = restoreTags(translation, batchProtected[t.idx].tags);
+            result[batchEntries[t.idx].key] = restoreAndEnforce(batchEntries[t.idx].original, translation, batchProtected[t.idx].tags);
             charsUsed += t.text.length;
           }
         }
@@ -606,14 +611,14 @@ async function translateWithAI(
 
     // Tag-only/symbolic entries must pass through unchanged
     if (isTagOnlyOrSymbolic(pe.cleaned)) {
-      directResult[entry.key] = restoreTags(pe.cleaned, pe.tags);
+      directResult[entry.key] = restoreAndEnforce(entry.original, pe.cleaned, pe.tags);
       continue;
     }
 
     // Priority 1: Glossary exact match
     const glossaryHit = glossaryMap.get(norm);
     if (glossaryHit) {
-      directResult[entry.key] = restoreTags(glossaryHit, pe.tags);
+      directResult[entry.key] = restoreAndEnforce(entry.original, glossaryHit, pe.tags);
       stats.directMatches++;
       continue;
     }
@@ -621,7 +626,7 @@ async function translateWithAI(
     // Priority 2: Translation memory exact match (previously translated identical text)
     const tmHit = tmMap.get(norm);
     if (tmHit) {
-      directResult[entry.key] = restoreTags(tmHit, pe.tags);
+      directResult[entry.key] = restoreAndEnforce(entry.original, tmHit, pe.tags);
       stats.directMatches++;
       continue;
     }
