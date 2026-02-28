@@ -181,7 +181,17 @@ export function reshapeArabic(text: string): string {
 }
 
 export function reverseBidi(text: string): string {
-  return text.split('\n').map(line => {
+  // Protect technical tags as atomic placeholders before BiDi processing
+  const tagPattern = /\[\s*\w+\s*:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?|\[\s*\w+\s*=\s*[^\]]*\]|\{\s*\w+\s*:[^}]*\}|\{[\w]+\}|\d+\s*\[[A-Z]{2,10}\]|\[[A-Z]{2,10}\]\s*\d+/g;
+  const tagSlots: string[] = [];
+  const shielded = text.replace(tagPattern, (match) => {
+    const idx = tagSlots.length;
+    tagSlots.push(match);
+    // Use a single PUA char sequence that reverseBidi treats as atomic
+    return `\uE0F0\uE0F1${String.fromCharCode(0xE0A0 + idx)}\uE0F1\uE0F0`;
+  });
+
+  const reversed = shielded.split('\n').map(line => {
     const segments: { text: string; isLTR: boolean }[] = [];
     let current = '';
     let currentIsLTR: boolean | null = null;
@@ -232,6 +242,13 @@ export function reverseBidi(text: string): string {
       return chunks.reverse().join('');
     }).join('');
   }).join('\n');
+
+  // Restore protected tags from placeholders
+  if (tagSlots.length === 0) return reversed;
+  return reversed.replace(/\uE0F0\uE0F1([\uE0A0-\uE0FF])\uE0F1\uE0F0/g, (_m, ch) => {
+    const idx = ch.charCodeAt(0) - 0xE0A0;
+    return tagSlots[idx] || _m;
+  });
 }
 
 const NUMERAL_MAP: Record<string, string> = {

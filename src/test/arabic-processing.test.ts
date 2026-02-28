@@ -236,4 +236,35 @@ describe('Arabic Processing', () => {
       expect(result).toBe('؟\uE000،');
     });
   });
+
+  describe('reverseBidi tag protection', () => {
+    it('should preserve [ML:EnhanceParam paramtype=1 ] as atomic block', () => {
+      const input = 'يزيد الهجوم بنسبة [ML:EnhanceParam paramtype=1 ]%.';
+      const reshaped = reshapeArabic(input);
+      const result = reverseBidi(reshaped);
+      expect(result).toContain('[ML:EnhanceParam paramtype=1 ]');
+    });
+
+    it('should preserve [ML:icon icon=btn_a ] tag', () => {
+      const input = 'اضغط [ML:icon icon=btn_a ] لسحب سلحك';
+      const reshaped = reshapeArabic(input);
+      const result = reverseBidi(reshaped);
+      expect(result).toContain('[ML:icon icon=btn_a ]');
+    });
+
+    it('should preserve multiple tags in same line', () => {
+      const input = 'اضغط [ML:icon icon=btn_a ] للهجوم و [ML:icon icon=btn_b ] للدفاع';
+      const reshaped = reshapeArabic(input);
+      const result = reverseBidi(reshaped);
+      expect(result).toContain('[ML:icon icon=btn_a ]');
+      expect(result).toContain('[ML:icon icon=btn_b ]');
+    });
+
+    it('should preserve N[ML] short tags', () => {
+      const input = 'اضغط 1[ML] للتأكيد';
+      const reshaped = reshapeArabic(input);
+      const result = reverseBidi(reshaped);
+      expect(result).toContain('1[ML]');
+    });
+  });
 });
