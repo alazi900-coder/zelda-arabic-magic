@@ -138,4 +138,87 @@ describe("XC3 Tag Protection", () => {
     expect(tags[0].original).toBe("[ML:undisp ]");
     expect(tags[1].original).toBe("[ML:Feeling ]");
   });
+
+  // === NEW: N[TAG] and [TAG]N protection tests ===
+  
+  it("should protect N[TAG] patterns like 1[ML]", () => {
+    const text = "Press 1[ML] to confirm";
+    const { cleanText, tags } = protectTags(text);
+    expect(cleanText).toBe("Press TAG_0 to confirm");
+    expect(tags).toHaveLength(1);
+    expect(tags[0].original).toBe("1[ML]");
+    const restored = restoreTags("اضغط TAG_0 للتأكيد", tags);
+    expect(restored).toBe("اضغط 1[ML] للتأكيد");
+  });
+
+  it("should protect [TAG]N patterns like [ML]1", () => {
+    const text = "Hold [ML]2 and press [ML]1";
+    const { cleanText, tags } = protectTags(text);
+    expect(tags).toHaveLength(2);
+    expect(tags[0].original).toBe("[ML]2");
+    expect(tags[1].original).toBe("[ML]1");
+    const restored = restoreTags("امسك TAG_0 واضغط TAG_1", tags);
+    expect(restored).toBe("امسك [ML]2 واضغط [ML]1");
+  });
+
+  it("should protect [TAG=Value] patterns", () => {
+    const text = "[Color=Red]Warning![Color=White]";
+    const { cleanText, tags } = protectTags(text);
+    expect(tags).toHaveLength(2);
+    expect(tags[0].original).toBe("[Color=Red]");
+    expect(tags[1].original).toBe("[Color=White]");
+  });
+
+  it("should protect {TAG:Value} patterns", () => {
+    const text = "Hello {player:name}, score: {score:value}";
+    const { cleanText, tags } = protectTags(text);
+    expect(tags).toHaveLength(2);
+    expect(tags[0].original).toBe("{player:name}");
+    expect(tags[1].original).toBe("{score:value}");
+  });
+
+  it("should preserve 1[ML] and 2[ML] through full protect/restore cycle", () => {
+    const text = "Press 1[ML] and hold 2[ML] to attack";
+    const { cleanText, tags } = protectTags(text);
+    expect(cleanText).not.toContain("1[ML]");
+    expect(cleanText).not.toContain("2[ML]");
+    // Simulate AI translation
+    const aiOutput = "اضغط TAG_0 وامسك TAG_1 للهجوم";
+    const restored = restoreTags(aiOutput, tags);
+    expect(restored).toBe("اضغط 1[ML] وامسك 2[ML] للهجوم");
+  });
+
+  // === NEW: restoreTagsLocally with multi-char tags ===
+
+  it("should restore missing 1[ML] via restoreTagsLocally", () => {
+    const original = "Press 1[ML] to confirm";
+    const translation = "اضغط للتأكيد";
+    const fixed = restoreTagsLocally(original, translation);
+    expect(fixed).toContain("1[ML]");
+  });
+
+  it("should restore missing N[TAG] and [TAG]N tags", () => {
+    const original = "Press 1[ML] and hold 2[ML] to attack";
+    const translation = "اضغط وامسك للهجوم";
+    const fixed = restoreTagsLocally(original, translation);
+    expect(fixed).toContain("1[ML]");
+    expect(fixed).toContain("2[ML]");
+  });
+
+  it("should strip AI-invented tags that don't exist in original", () => {
+    const original = "Press 1[ML] to confirm";
+    const translation = "اضغط [ML:icon icon=btn_a ] للتأكيد";
+    const fixed = restoreTagsLocally(original, translation);
+    expect(fixed).toContain("1[ML]");
+    expect(fixed).not.toContain("[ML:icon");
+  });
+
+  it("should strip [ML:icon ...] and restore 1[ML] correctly", () => {
+    const original = "Press 1[ML] button. Hold 2[ML] to charge.";
+    const translation = "اضغط [ML:icon icon=btn_a ] زر. امسك [ML:icon icon=btn_b ] للشحن.";
+    const fixed = restoreTagsLocally(original, translation);
+    expect(fixed).toContain("1[ML]");
+    expect(fixed).toContain("2[ML]");
+    expect(fixed).not.toContain("[ML:icon");
+  });
 });
