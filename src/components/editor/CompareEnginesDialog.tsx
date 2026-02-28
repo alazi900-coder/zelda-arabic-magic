@@ -5,6 +5,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Loader2, Check, Sparkles } from "lucide-react";
 import type { ExtractedEntry } from "./types";
+import { hasTechnicalTags, restoreTagsLocally } from "./types";
 
 interface CompareResult {
   gemini?: string;
@@ -60,7 +61,11 @@ const CompareEnginesDialog: React.FC<CompareEnginesDialogProps> = ({
         });
         if (!response.ok) return null;
         const data = await response.json();
-        return data.translations?.[key] || null;
+        const raw = data.translations?.[key] || null;
+        if (!raw) return null;
+        return hasTechnicalTags(entry.original)
+          ? restoreTagsLocally(entry.original, raw)
+          : raw;
       } catch {
         return null;
       }

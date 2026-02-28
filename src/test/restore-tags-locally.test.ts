@@ -100,6 +100,14 @@ describe("restoreTagsLocally", () => {
     expect(group1Idx).toBeLessThan(group2Idx);
   });
 
+  it("restores N[TAG] and strips AI-invented [TAG:...] variants", () => {
+    const original = "Press 1[ML]%.";
+    const damagedTranslation = "[ML:EnhanceParam paramtype=1 ]%.";
+    const result = restoreTagsLocally(original, damagedTranslation);
+    expect(result).toContain("1[ML]");
+    expect(result).not.toContain("[ML:EnhanceParam");
+  });
+
   // === Legacy FFF9-FFFC backward compat ===
 
   it("still works with legacy FFF9-FFFC markers", () => {
