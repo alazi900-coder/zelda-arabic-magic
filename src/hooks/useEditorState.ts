@@ -55,6 +55,7 @@ export function useEditorState() {
   const [duplicateAlefResults, setDuplicateAlefResults] = useState<import("@/components/editor/DuplicateAlefCleanPanel").DuplicateAlefResult[] | null>(null);
   const [mirrorCharsResults, setMirrorCharsResults] = useState<import("@/components/editor/MirrorCharsCleanPanel").MirrorCharsResult[] | null>(null);
   const [tagBracketFixResults, setTagBracketFixResults] = useState<import("@/components/editor/TagBracketFixPanel").TagBracketFixResult[] | null>(null);
+  const [newlineSplitResults, setNewlineSplitResults] = useState<import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] | null>(null);
   const [pinnedKeys, setPinnedKeys] = useState<Set<string> | null>(null);
   const [isSearchPinned, setIsSearchPinned] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -1485,6 +1486,77 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 4000);
   }, [state, sentenceSplitResults]);
 
+  // === Newline Split (recover lost \n from translations) ===
+  const handleScanNewlineSplit = useCallback(() => {
+    if (!state) return;
+    const results: import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] = [];
+    for (const entry of state.entries) {
+      const key = `${entry.msbtFile}:${entry.index}`;
+      const translation = state.translations[key];
+      if (!translation?.trim()) continue;
+      const originalLines = entry.original.split('\n').length;
+      if (originalLines <= 1) continue; // only multi-line originals
+      const translationLines = translation.split('\n').length;
+      if (translationLines >= originalLines) continue; // already has enough lines
+      // Try to split at word boundaries
+      const targetLineCount = originalLines;
+      const words = translation.split(/\s+/).filter(w => w.length > 0);
+      if (words.length < targetLineCount) continue; // not enough words to split
+      const wordsPerLine = Math.ceil(words.length / targetLineCount);
+      const lines: string[] = [];
+      for (let i = 0; i < targetLineCount; i++) {
+        const start = i * wordsPerLine;
+        const end = i === targetLineCount - 1 ? words.length : start + wordsPerLine;
+        lines.push(words.slice(start, end).join(' '));
+      }
+      const after = lines.join('\n');
+      if (after === translation) continue;
+      results.push({
+        key,
+        originalLines,
+        translationLines,
+        before: translation,
+        after,
+        original: entry.original,
+        status: 'pending',
+      });
+    }
+    setNewlineSplitResults(results);
+    if (results.length === 0) {
+      setLastSaved("✅ لم يتم اكتشاف نصوص مضغوطة تحتاج تقسيم");
+      setTimeout(() => setLastSaved(""), 4000);
+    }
+  }, [state]);
+
+  const handleApplyNewlineSplit = useCallback((key: string) => {
+    if (!state || !newlineSplitResults) return;
+    const item = newlineSplitResults.find(r => r.key === key);
+    if (!item) return;
+    setPreviousTranslations(old => ({ ...old, [key]: state.translations[key] || '' }));
+    setState(prev => prev ? { ...prev, translations: { ...prev.translations, [key]: item.after } } : null);
+    setNewlineSplitResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'accepted' as const } : r) : null);
+  }, [state, newlineSplitResults]);
+
+  const handleRejectNewlineSplit = useCallback((key: string) => {
+    setNewlineSplitResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'rejected' as const } : r) : null);
+  }, []);
+
+  const handleApplyAllNewlineSplits = useCallback(() => {
+    if (!state || !newlineSplitResults) return;
+    const pending = newlineSplitResults.filter(r => r.status === 'pending');
+    const newTranslations = { ...state.translations };
+    const prevTrans: Record<string, string> = {};
+    for (const item of pending) {
+      prevTrans[item.key] = newTranslations[item.key] || '';
+      newTranslations[item.key] = item.after;
+    }
+    setPreviousTranslations(old => ({ ...old, ...prevTrans }));
+    setState(prev => prev ? { ...prev, translations: newTranslations } : null);
+    setNewlineSplitResults(prev => prev ? prev.map(r => r.status === 'pending' ? { ...r, status: 'accepted' as const } : r) : null);
+    setLastSaved(`✅ تم تقسيم ${pending.length} نص مضغوط`);
+    setTimeout(() => setLastSaved(""), 4000);
+  }, [state, newlineSplitResults]);
+
   // === Pin Search ===
   const handleTogglePin = useCallback(() => {
     if (pinnedKeys) {
@@ -1703,7 +1775,7 @@ export function useEditorState() {
     applyingArabic, improvingTranslations, improveResults,
     fixingMixed, filtersOpen, buildStats, buildPreview, showBuildConfirm, bdatFileStats,
     checkingConsistency, consistencyResults,
-    scanningSentences, sentenceSplitResults, newlineCleanResults, diacriticsCleanResults, duplicateAlefResults, mirrorCharsResults, tagBracketFixResults,
+    scanningSentences, sentenceSplitResults, newlineCleanResults, diacriticsCleanResults, duplicateAlefResults, mirrorCharsResults, tagBracketFixResults, newlineSplitResults,
     isSearchPinned, pinnedKeys,
     categoryProgress, qualityStats, needsImproveCount, translatedCount, tagsCount, fuzzyCount, byteOverflowCount,
     bdatTableNames, bdatColumnNames, bdatTableCounts, bdatColumnCounts,
@@ -1717,7 +1789,7 @@ export function useEditorState() {
     setCurrentPage, setShowRetranslateConfirm,
     setArabicNumerals, setMirrorPunctuation, setUserGeminiKey, setTranslationProvider, setMyMemoryEmail,
     setReviewResults, setShortSuggestions, setImproveResults, setBuildStats, setShowBuildConfirm,
-    setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults, setDiacriticsCleanResults, setDuplicateAlefResults, setMirrorCharsResults, setTagBracketFixResults,
+    setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults, setDiacriticsCleanResults, setDuplicateAlefResults, setMirrorCharsResults, setTagBracketFixResults, setNewlineSplitResults,
 
     // Handlers
     toggleProtection, toggleTechnicalBypass,
@@ -1741,6 +1813,7 @@ export function useEditorState() {
     handleScanDuplicateAlef, handleApplyDuplicateAlefClean, handleRejectDuplicateAlefClean, handleApplyAllDuplicateAlefCleans,
     handleScanMirrorChars, handleApplyMirrorCharsClean, handleRejectMirrorCharsClean, handleApplyAllMirrorCharsCleans,
     handleScanTagBrackets, handleApplyTagBracketFix, handleRejectTagBracketFix, handleApplyAllTagBracketFixes,
+    handleScanNewlineSplit, handleApplyNewlineSplit, handleRejectNewlineSplit, handleApplyAllNewlineSplits,
     handleTogglePin,
     handleClearTranslations, handleUndoClear, clearUndoBackup, isFilterActive,
     integrityResult, showIntegrityDialog, setShowIntegrityDialog, checkingIntegrity,

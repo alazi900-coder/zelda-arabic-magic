@@ -59,6 +59,7 @@ import TranslationStatsPanel from "@/components/editor/TranslationStatsPanel";
 import ImportConflictDialog from "@/components/editor/ImportConflictDialog";
 import TagRepairPanel from "@/components/editor/TagRepairPanel";
 import TagBracketFixPanel from "@/components/editor/TagBracketFixPanel";
+import NewlineSplitPanel from "@/components/editor/NewlineSplitPanel";
 import PageTranslationCompare from "@/components/editor/PageTranslationCompare";
 
 const Editor = () => {
@@ -624,6 +625,18 @@ const Editor = () => {
               onClose={() => editor.setTagBracketFixResults(null)}
             />
           )}
+
+          {/* Newline Split Results */}
+          {editor.newlineSplitResults && editor.newlineSplitResults.length > 0 && (
+            <NewlineSplitPanel
+              results={editor.newlineSplitResults}
+              onAccept={editor.handleApplyNewlineSplit}
+              onReject={editor.handleRejectNewlineSplit}
+              onAcceptAll={editor.handleApplyAllNewlineSplits}
+              onClose={() => editor.setNewlineSplitResults(null)}
+            />
+          )}
+
           {/* Tag Repair Panel */}
           {showTagRepair && editor.state && (
             <TagRepairPanel
@@ -978,6 +991,9 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleScanNewlines} disabled={editor.translatedCount === 0}>
                     🧹 تنظيف رموز غير مرغوبة
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleScanNewlineSplit} disabled={editor.translatedCount === 0}>
+                    📐 تقسيم النصوص المضغوطة
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => setShowClearConfirm(editor.isFilterActive ? 'filtered' : 'all')} disabled={editor.translatedCount === 0} className="text-destructive focus:text-destructive">
                     <Trash2 className="w-4 h-4" /> {editor.isFilterActive ? `مسح ترجمة القسم المحدد 🗑️` : `مسح جميع الترجمات 🗑️`}
@@ -1129,6 +1145,9 @@ const Editor = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleScanNewlines} disabled={editor.translatedCount === 0}>
                     🧹 تنظيف رموز غير مرغوبة
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleScanNewlineSplit} disabled={editor.translatedCount === 0}>
+                    📐 تقسيم النصوص المضغوطة
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => setShowClearConfirm(editor.isFilterActive ? 'filtered' : 'all')} disabled={editor.translatedCount === 0} className="text-destructive focus:text-destructive">
