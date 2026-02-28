@@ -1572,6 +1572,19 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 4000);
   }, [state, newlineSplitResults]);
 
+  /** Split a single entry's translation at word boundaries (per-entry inline button) */
+  const handleSplitSingleEntry = useCallback((key: string) => {
+    if (!state) return;
+    const translation = state.translations[key];
+    if (!translation?.trim() || translation.includes('\n') || translation.length <= LINE_CHAR_LIMIT) return;
+    const after = splitAtWordBoundary(translation, LINE_CHAR_LIMIT);
+    if (after === translation) return;
+    setPreviousTranslations(old => ({ ...old, [key]: translation }));
+    setState(prev => prev ? { ...prev, translations: { ...prev.translations, [key]: after } } : null);
+    setLastSaved("✅ تم تقسيم النص");
+    setTimeout(() => setLastSaved(""), 3000);
+  }, [state, splitAtWordBoundary]);
+
   // === Pin Search ===
   const handleTogglePin = useCallback(() => {
     if (pinnedKeys) {
@@ -1828,7 +1841,7 @@ export function useEditorState() {
     handleScanDuplicateAlef, handleApplyDuplicateAlefClean, handleRejectDuplicateAlefClean, handleApplyAllDuplicateAlefCleans,
     handleScanMirrorChars, handleApplyMirrorCharsClean, handleRejectMirrorCharsClean, handleApplyAllMirrorCharsCleans,
     handleScanTagBrackets, handleApplyTagBracketFix, handleRejectTagBracketFix, handleApplyAllTagBracketFixes,
-    handleScanNewlineSplit, handleApplyNewlineSplit, handleRejectNewlineSplit, handleApplyAllNewlineSplits,
+    handleScanNewlineSplit, handleApplyNewlineSplit, handleRejectNewlineSplit, handleApplyAllNewlineSplits, handleSplitSingleEntry,
     handleTogglePin,
     handleClearTranslations, handleUndoClear, clearUndoBackup, isFilterActive,
     integrityResult, showIntegrityDialog, setShowIntegrityDialog, checkingIntegrity,

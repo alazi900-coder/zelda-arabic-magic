@@ -1309,6 +1309,7 @@ const Editor = () => {
                     onAcceptFuzzy={editor.handleAcceptFuzzy}
                     onRejectFuzzy={editor.handleRejectFuzzy}
                     onCompare={(entry) => setCompareEntry(entry)}
+                    onSplitNewline={editor.handleSplitSingleEntry}
                     tmSuggestions={findSimilar(key, entry.original)}
                   />
                 );
