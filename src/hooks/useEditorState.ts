@@ -1514,7 +1514,8 @@ export function useEditorState() {
   const handleScanNewlineSplit = useCallback(() => {
     if (!state) return;
     const results: import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] = [];
-    for (const entry of state.entries) {
+    const entriesToScan = isFilterActive ? filteredEntries : state.entries;
+    for (const entry of entriesToScan) {
       const key = `${entry.msbtFile}:${entry.index}`;
       const translation = state.translations[key];
       if (!translation?.trim()) continue;
@@ -1540,7 +1541,7 @@ export function useEditorState() {
       setLastSaved("✅ لم يتم اكتشاف نصوص طويلة تحتاج تقسيم");
       setTimeout(() => setLastSaved(""), 4000);
     }
-  }, [state, splitAtWordBoundary]);
+  }, [state, splitAtWordBoundary, isFilterActive, filteredEntries]);
 
   const handleApplyNewlineSplit = useCallback((key: string) => {
     if (!state || !newlineSplitResults) return;
