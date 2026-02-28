@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag, BookOpen, Wrench, Copy, Eye, Check, X, Table2, Columns3, History, GitCompareArrows, Type } from "lucide-react";
+import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag, BookOpen, Wrench, Copy, Eye, Check, X, Table2, Columns3, History, GitCompareArrows, Type, SplitSquareHorizontal } from "lucide-react";
 import type { TMSuggestion } from "@/hooks/useTranslationMemory";
 import DebouncedInput from "./DebouncedInput";
 import { ExtractedEntry, displayOriginal, hasArabicChars, isTechnicalText, hasTechnicalTags, previewTagRestore } from "./types";
@@ -61,6 +61,7 @@ interface EntryCardProps {
   onAcceptFuzzy?: (key: string) => void;
   onRejectFuzzy?: (key: string) => void;
   onCompare?: (entry: ExtractedEntry) => void;
+  onSplitNewline?: (key: string) => void;
   tmSuggestions?: TMSuggestion[];
 }
 
@@ -93,7 +94,7 @@ const EntryCard: React.FC<EntryCardProps> = ({
   isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage,
   updateTranslation, handleTranslateSingle, handleImproveSingleTranslation,
   handleUndoTranslation, handleFixReversed, handleLocalFixDamagedTag,
-  onAcceptFuzzy, onRejectFuzzy, onCompare, tmSuggestions,
+  onAcceptFuzzy, onRejectFuzzy, onCompare, onSplitNewline, tmSuggestions,
 }) => {
   const key = `${entry.msbtFile}:${entry.index}`;
   const isTech = isTechnicalText(entry.original);
@@ -230,6 +231,11 @@ const EntryCard: React.FC<EntryCardProps> = ({
                   updateTranslation(key, cleaned);
                 }} title="إزالة التشكيلات">
                   <Type className="w-4 h-4 text-muted-foreground" />
+                </Button>
+              )}
+              {onSplitNewline && translation?.trim() && !translation.includes('\n') && translation.length > 42 && (
+                <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => onSplitNewline(key)} title="تقسيم النص إلى أسطر">
+                  <SplitSquareHorizontal className="w-4 h-4 text-primary" />
                 </Button>
               )}
               {isDamagedTag && handleLocalFixDamagedTag && (
