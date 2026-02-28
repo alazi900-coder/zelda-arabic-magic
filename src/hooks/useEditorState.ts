@@ -703,13 +703,35 @@ export function useEditorState() {
 
 
   // === Translation handlers ===
+  const lastTagFixToastRef = useRef(0);
   const updateTranslation = (key: string, value: string) => {
     if (!state) return;
     const prev = state.translations[key] || '';
     if (prev !== value) {
       setPreviousTranslations(old => ({ ...old, [key]: prev }));
     }
-    setState(prev => prev ? { ...prev, translations: { ...prev.translations, [key]: value } } : null);
+
+    // Auto-validate: check for missing/foreign technical tags
+    let finalValue = value;
+    const entry = state.entries.find(e => `${e.msbtFile}:${e.index}` === key);
+    if (entry && hasTechnicalTags(entry.original) && value.trim()) {
+      const fixed = restoreTagsLocally(entry.original, value);
+      if (fixed !== value) {
+        finalValue = fixed;
+        // Throttle toast to max once per 5 seconds
+        const now = Date.now();
+        if (now - lastTagFixToastRef.current > 5000) {
+          lastTagFixToastRef.current = now;
+          toast({
+            title: "🔧 إصلاح تلقائي للرموز التقنية",
+            description: "تم اكتشاف رموز مفقودة أو محرفة وتم إصلاحها تلقائياً",
+            duration: 3000,
+          });
+        }
+      }
+    }
+
+    setState(prev => prev ? { ...prev, translations: { ...prev.translations, [key]: finalValue } } : null);
   };
 
   const handleUndoTranslation = (key: string) => {
