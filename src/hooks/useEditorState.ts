@@ -1486,7 +1486,31 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 4000);
   }, [state, sentenceSplitResults]);
 
-  // === Newline Split (recover lost \n from translations) ===
+  // === Newline Split (auto-split long translations at character limit) ===
+  const LINE_CHAR_LIMIT = 42; // approximate characters per line in game dialog box
+
+  const splitAtWordBoundary = useCallback((text: string, charLimit: number): string => {
+    // Don't split text that already has \n
+    if (text.includes('\n')) return text;
+    if (text.length <= charLimit) return text;
+
+    const words = text.split(/\s+/).filter(w => w.length > 0);
+    const lines: string[] = [];
+    let currentLine = '';
+
+    for (const word of words) {
+      const candidate = currentLine ? `${currentLine} ${word}` : word;
+      if (candidate.length > charLimit && currentLine) {
+        lines.push(currentLine);
+        currentLine = word;
+      } else {
+        currentLine = candidate;
+      }
+    }
+    if (currentLine) lines.push(currentLine);
+    return lines.join('\n');
+  }, []);
+
   const handleScanNewlineSplit = useCallback(() => {
     if (!state) return;
     const results: import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] = [];
@@ -1494,27 +1518,17 @@ export function useEditorState() {
       const key = `${entry.msbtFile}:${entry.index}`;
       const translation = state.translations[key];
       if (!translation?.trim()) continue;
-      const originalLines = entry.original.split('\n').length;
-      if (originalLines <= 1) continue; // only multi-line originals
-      const translationLines = translation.split('\n').length;
-      if (translationLines >= originalLines) continue; // already has enough lines
-      // Try to split at word boundaries
-      const targetLineCount = originalLines;
-      const words = translation.split(/\s+/).filter(w => w.length > 0);
-      if (words.length < targetLineCount) continue; // not enough words to split
-      const wordsPerLine = Math.ceil(words.length / targetLineCount);
-      const lines: string[] = [];
-      for (let i = 0; i < targetLineCount; i++) {
-        const start = i * wordsPerLine;
-        const end = i === targetLineCount - 1 ? words.length : start + wordsPerLine;
-        lines.push(words.slice(start, end).join(' '));
-      }
-      const after = lines.join('\n');
+      // Skip if already has line breaks
+      if (translation.includes('\n')) continue;
+      // Skip short translations
+      if (translation.length <= LINE_CHAR_LIMIT) continue;
+      const after = splitAtWordBoundary(translation, LINE_CHAR_LIMIT);
       if (after === translation) continue;
+      const afterLines = after.split('\n').length;
       results.push({
         key,
-        originalLines,
-        translationLines,
+        originalLines: afterLines,
+        translationLines: 1,
         before: translation,
         after,
         original: entry.original,
@@ -1523,10 +1537,10 @@ export function useEditorState() {
     }
     setNewlineSplitResults(results);
     if (results.length === 0) {
-      setLastSaved("✅ لم يتم اكتشاف نصوص مضغوطة تحتاج تقسيم");
+      setLastSaved("✅ لم يتم اكتشاف نصوص طويلة تحتاج تقسيم");
       setTimeout(() => setLastSaved(""), 4000);
     }
-  }, [state]);
+  }, [state, splitAtWordBoundary]);
 
   const handleApplyNewlineSplit = useCallback((key: string) => {
     if (!state || !newlineSplitResults) return;

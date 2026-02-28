@@ -64,7 +64,7 @@ const NewlineSplitPanel: React.FC<NewlineSplitPanelProps> = ({
                     {item.key.split(':').slice(1, 3).join(':')}
                   </p>
                   <span className="text-[10px] text-muted-foreground">
-                    الأصل: {item.originalLines} أسطر → الترجمة: {item.translationLines} سطر
+                    {item.before.length} حرف → {item.originalLines} أسطر
                   </span>
                 </div>
 
