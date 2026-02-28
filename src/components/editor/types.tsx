@@ -345,11 +345,11 @@ export function categorizeByColumnName(columnName: string): string | null {
 // Check if text contains technical tag markers (PUA, control chars, [Tag:...], N[TAG], [TAG]N, [TAG=Value], {TAG:Value})
 export function hasTechnicalTags(text: string): boolean {
   return /[\uFFF9\uFFFA\uFFFB\uFFFC\uE000-\uE0FF]/.test(text)
-    || /\[\w+:[^\]]*\]/.test(text)
-    || /\d+\[[A-Z]{2,10}\]/.test(text)
-    || /\[[A-Z]{2,10}\]\d+/.test(text)
-    || /\[\w+=\w[^\]]*\]/.test(text)
-    || /\{\w+:\w[^}]*\}/.test(text);
+    || /\[\s*\w+\s*:[^\]]*\]/.test(text)
+    || /\d+\s*\[[A-Z]{2,10}\]/.test(text)
+    || /\[[A-Z]{2,10}\]\s*\d+/.test(text)
+    || /\[\s*\w+\s*=\s*\w[^\]]*\]/.test(text)
+    || /\{\s*\w+\s*:\s*\w[^}]*\}/.test(text);
 }
 
 // Re-export from dedicated module for backward compatibility
@@ -474,8 +474,8 @@ export function isTechnicalText(text: string): boolean {
   if (text.length < 10 && /[{}()\[\]<>|&%$#@!]/.test(text)) return true;
   if (/^[a-z]+([A-Z][a-z]*)+$|^[a-z]+(_[a-z]+)+$/.test(text.trim())) return true;
   // Text that is ONLY [ML:...] tags with no real translatable content
-  const strippedML = text.replace(/\[\w+:[^\]]*\]/g, '').trim();
-  if (strippedML.length === 0 && /\[\w+:[^\]]*\]/.test(text)) return true;
+  const strippedML = text.replace(/\[\s*\w+\s*:[^\]]*\]/g, '').trim();
+  if (strippedML.length === 0 && /\[\s*\w+\s*:[^\]]*\]/.test(text)) return true;
   return false;
 }
 
