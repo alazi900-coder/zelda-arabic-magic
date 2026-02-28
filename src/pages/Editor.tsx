@@ -280,6 +280,14 @@ const Editor = () => {
                     <DropdownMenuItem onClick={() => editor.handleTranslatePage(false, true)}>
                       <BookOpen className="w-4 h-4" /> ترجمة بالذاكرة فقط 📖
                     </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuLabel className="text-xs text-muted-foreground">جميع الصفحات</DropdownMenuLabel>
+                    <DropdownMenuItem onClick={() => editor.handleTranslateAllPages(false)}>
+                      <Sparkles className="w-4 h-4" /> ترجمة جميع الصفحات بالذكاء 🤖📄
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => editor.handleTranslateAllPages(true)}>
+                      <BookOpen className="w-4 h-4" /> ترجمة جميع الصفحات بالذاكرة 📖📄
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </>
