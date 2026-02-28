@@ -69,10 +69,11 @@ function protectTags(text: string): { cleaned: string; tags: Map<string, string>
 /** Normalize malformed TAG_N variants that AI engines may produce */
 function normalizeTagPlaceholders(text: string): string {
   return text
-    .replace(/TAG\s+_?(\d+)/gi, 'TAG_$1')           // "TAG 0", "TAG _0" → "TAG_0"
-    .replace(/(?<!\w)TAG(\d+)(?!\w)/gi, 'TAG_$1')    // "TAG0" → "TAG_0"
-    .replace(/tag_(\d+)/g, 'TAG_$1')                  // "tag_0" → "TAG_0"
-    .replace(/[《〈«⟪\[(<]\s*T(?:AG)?[_\s]?(\d+)\s*[》〉»⟫\])>]/gi, 'TAG_$1');  // «T0» etc → TAG_0
+    .replace(/TAG\s*[-:_]?\s*_?(\d+)/gi, 'TAG_$1')    // TAG-0, TAG:0, TAG 0, TAG _0
+    .replace(/(?<!\w)TAG(\d+)(?!\w)/gi, 'TAG_$1')      // TAG0 -> TAG_0
+    .replace(/tag_(\d+)/g, 'TAG_$1')                    // tag_0 -> TAG_0
+    .replace(/[\[{(<]\s*TAG\s*[_\s-:]?(\d+)\s*[\]})>]/gi, 'TAG_$1') // [TAG_0] -> TAG_0
+    .replace(/[《〈«⟪\[(<]\s*T(?:AG)?[_\s-:]?(\d+)\s*[》〉»⟫\])>]/gi, 'TAG_$1');  // «T0» etc -> TAG_0
 }
 
 function restoreTags(text: string, tags: Map<string, string>): string {
@@ -81,6 +82,45 @@ function restoreTags(text: string, tags: Map<string, string>): string {
     result = result.replace(placeholder, original);
   }
   return result;
+}
+
+/** Unified regex matching all supported technical tag formats */
+const TECH_TAG_REGEX = /[\uFFF9-\uFFFC]|[\uE000-\uE0FF]+|\d+\s*\[[A-Z]{2,10}\]|\[[A-Z]{2,10}\]\s*\d+|\[\s*\w+\s*:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?|\[\s*\w+\s*=\s*\w[^\]]*\]|\{\s*\w+\s*:\s*\w[^}]*\}|\{[\w]+\}/g;
+
+function extractTechTags(text: string): string[] {
+  return [...text.matchAll(new RegExp(TECH_TAG_REGEX.source, TECH_TAG_REGEX.flags))].map(m => m[0]);
+}
+
+/** Remove invented tags and enforce original tag multiset */
+function enforceTagIntegrity(original: string, translation: string): string {
+  const origTags = extractTechTags(original);
+  if (origTags.length === 0) return translation;
+
+  let result = translation;
+  const origTagSet = new Set(origTags);
+  const transTags = extractTechTags(result);
+
+  // Strip foreign tags invented by AI
+  for (const t of transTags) {
+    if (!origTagSet.has(t)) {
+      result = result.replace(t, '');
+    }
+  }
+
+  // Ensure all original tags exist with correct multiplicity
+  const currentTags = extractTechTags(result);
+  const currentCount = new Map<string, number>();
+  for (const t of currentTags) currentCount.set(t, (currentCount.get(t) || 0) + 1);
+  for (const t of origTags) {
+    const n = currentCount.get(t) || 0;
+    if (n <= 0) {
+      result = `${result.trimEnd()} ${t}`.trim();
+    } else {
+      currentCount.set(t, n - 1);
+    }
+  }
+
+  return result.replace(/\s{2,}/g, ' ').trim();
 }
 
 /**
@@ -689,7 +729,8 @@ ${textsBlock}`;
       if (glossaryMap.size > 0) {
         translated = applyGlossaryPost(translated, glossaryMap);
       }
-      result[item.entry.key] = restoreTags(translated, item.pe.tags);
+      const restored = restoreTags(translated, item.pe.tags);
+      result[item.entry.key] = enforceTagIntegrity(item.entry.original, restored);
     }
     return result;
   };
