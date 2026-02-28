@@ -233,9 +233,13 @@ export function categorizeByTableName(tbl: string): string | null {
   // === القائمة الرئيسية (title screen & core menus) — must be checked FIRST ===
   if (/^msg_mnu_(common_ms|title|save|load|option|config)/i.test(tbl)) return "bdat-title-menu";
 
+  // === النصائح والشروحات — must be checked BEFORE generic menu catch-all ===
+  if (/^(tip_|hlp_|tut_|mnu_tutorial)/i.test(tbl)) return "bdat-tips";
+  if (/^msg_mnu_tutorial/i.test(tbl)) return "bdat-tips";
+
   // === القوائم والواجهة ===
   if (/^mnu_/i.test(tbl) || /^menu$/i.test(tbl)) return "bdat-menu";
-  if (/mnu_option|mnu_msg|mnu_name|mnu_shop|mnu_camp|mnu_tutorial|mnu_map|mnu_status|mnu_battle|mnu_quest|mnu_hero|mnu_system|mnu_achievement|mnu_class|mnu_collect|mnu_item|mnu_gem|mnu_filter|mnu_sort|mnu_font|mnu_res|mnu_layer|mnu_text|mnu_weapon/i.test(tbl)) return "bdat-menu";
+  if (/mnu_option|mnu_msg|mnu_name|mnu_shop|mnu_camp|mnu_map|mnu_status|mnu_battle|mnu_quest|mnu_hero|mnu_system|mnu_achievement|mnu_class|mnu_collect|mnu_item|mnu_gem|mnu_filter|mnu_sort|mnu_font|mnu_res|mnu_layer|mnu_text|mnu_weapon/i.test(tbl)) return "bdat-menu";
 
   // === نظام القتال ===
   if (/^btl_/i.test(tbl) || /^(rsc_|wpn_)/i.test(tbl)) return "bdat-battle";
@@ -292,8 +296,7 @@ export function categorizeByTableName(tbl: string): string | null {
   // === الفصائل ===
   if (/^(job_|rol_|cls_)/i.test(tbl)) return "bdat-class";
 
-  // === النصائح ===
-  if (/^(tip_|hlp_|tut_)/i.test(tbl)) return "bdat-tips";
+  // === النصائح (remaining patterns — tut_/hlp_/tip_/mnu_tutorial already caught above) ===
   if (/^sys_(tips|loading)/i.test(tbl)) return "bdat-tips";
 
   // === FLD_ عام (catch-all for remaining FLD_ tables) ===
@@ -331,6 +334,9 @@ export function categorizeByColumnName(columnName: string): string | null {
   // الأدوات والقتال - Items & Battle column patterns
   if (/^(itm|gem|weapon|armor|accessory|pouch|material|recipe|price|equiptype)/i.test(columnName)) return "bdat-item";
   if (/skill|weapon|armor|gem(?!ini)/i.test(col) && col.length > 3) return "bdat-item";
+
+  // النصائح والشروحات - Tips/Tutorial column patterns
+  if (/tutorial|tips?_|howto|hint|help_text|loading_?tip/i.test(col)) return "bdat-tips";
 
   // الإعدادات - Settings column patterns
   if (/^(voice|audio|config|option(?!text)|setting|display|brightness|camera|sound|formation|notice|message$)/i.test(columnName)) return "bdat-settings";
