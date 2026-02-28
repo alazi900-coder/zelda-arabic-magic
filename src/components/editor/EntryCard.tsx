@@ -5,6 +5,35 @@ import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag, BookOpen, Wrench, Cop
 import type { TMSuggestion } from "@/hooks/useTranslationMemory";
 import DebouncedInput from "./DebouncedInput";
 import { ExtractedEntry, displayOriginal, hasArabicChars, isTechnicalText, hasTechnicalTags, previewTagRestore } from "./types";
+
+/** Renders text with technical tags highlighted visually */
+function HighlightedOriginal({ text }: { text: string }) {
+  const tagPattern = /(\[\s*\w+\s*:[^\]]*?\](?:\s*\([^)]{1,100}\))?|\[\s*\w+\s*=\s*[^\]]*\]|\{\s*\w+\s*:\s*[^}]*\}|\{[\w]+\}|\d+\s*\[[A-Z]{2,10}\]|\[[A-Z]{2,10}\]\s*\d+|[\uE000-\uE0FF]+|[\uFFF9-\uFFFC])/g;
+  const parts = text.split(tagPattern);
+
+  if (parts.length <= 1) {
+    return <span>{displayOriginal(text)}</span>;
+  }
+
+  return (
+    <span>
+      {parts.map((part, i) =>
+        tagPattern.test(part) ? (
+          <span
+            key={i}
+            className="inline-flex items-center px-1 py-0.5 mx-0.5 rounded text-[11px] font-mono bg-accent/15 text-accent border border-accent/25 leading-tight"
+            dir="ltr"
+            title="وسم تقني — لا تحذفه"
+          >
+            {displayOriginal(part)}
+          </span>
+        ) : (
+          <span key={i}>{displayOriginal(part)}</span>
+        )
+      )}
+    </span>
+  );
+}
 import { toast } from "@/hooks/use-toast";
 
 interface EntryCardProps {
@@ -113,7 +142,7 @@ const EntryCard: React.FC<EntryCardProps> = ({
             }
             return <p className="text-xs text-muted-foreground mb-1 truncate">{entry.msbtFile} • {entry.label}</p>;
           })()}
-          <p className="font-body text-sm mb-2 break-words">{displayOriginal(entry.original)}</p>
+          <p className="font-body text-sm mb-2 break-words"><HighlightedOriginal text={entry.original} /></p>
           {hasTechnicalTags(entry.original) && (
             <p className="text-[10px] text-muted-foreground mb-2 leading-relaxed">
               💡 الرموز الملونة (⚙ تحكم • 🎨 تنسيق • 📌 متغير) أكواد خاصة بمحرك اللعبة — <span className="font-semibold text-accent">لا تحذفها من الترجمة</span>
