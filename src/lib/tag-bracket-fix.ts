@@ -19,13 +19,18 @@ export interface TagBracketFixResult {
 }
 
 /** Regex to match valid [Tag:Value] patterns, optionally followed by (description) */
-const TAG_REGEX = /\[\w+:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?/g;
+const TAG_COLON_REGEX = /\[\w+:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?/g;
+
+/** Regex to match [TAG]N patterns (no colon, tag followed by closing bracket then a number) */
+const TAG_BRACKET_NUM_REGEX = /\[[A-Z]{2,10}\]\d+/g;
 
 /**
- * Check if original text contains [Tag:Value] style technical tags.
+ * Check if original text contains technical tags in any supported format:
+ * - [Tag:Value] style (with colon)
+ * - [TAG]N style (tag then number)
  */
 export function hasTechnicalBracketTag(original: string): boolean {
-  return /\[\w+:[^\]]*?\s*\]/.test(original);
+  return /\[\w+:[^\]]*?\s*\]/.test(original) || /\[[A-Z]{2,10}\]\d+/.test(original);
 }
 
 /**
@@ -45,19 +50,13 @@ function escapeRegex(s: string): string {
 export function fixTagBracketsStrict(original: string, translation: string): TagBracketFixResult {
   const stats: TagBracketFixStats = { reversed: 0, mismatched: 0, bare: 0, total: 0 };
 
-  // 1. Collect all valid [Tag:Value] from original
-  const origTags = [...original.matchAll(new RegExp(TAG_REGEX.source, TAG_REGEX.flags))].map(m => m[0]);
-  if (origTags.length === 0) {
-    return { text: translation, stats };
-  }
-
   let result = translation;
 
-  for (const tag of origTags) {
-    // If the tag already exists correctly, skip
+  // 1. Handle [Tag:Value] style tags
+  const colonTags = [...original.matchAll(new RegExp(TAG_COLON_REGEX.source, TAG_COLON_REGEX.flags))].map(m => m[0]);
+  for (const tag of colonTags) {
     if (result.includes(tag)) continue;
 
-    // Extract inner content: e.g. "ML:EnhanceParam paramtype=1 "
     const closeBracketIdx = tag.indexOf(']');
     const inner = tag.slice(1, closeBracketIdx);
     const esc = escapeRegex(inner);
@@ -87,8 +86,7 @@ export function fixTagBracketsStrict(original: string, translation: string): Tag
     }
     if (fixed) continue;
 
-    // Pattern 3: bare inner without brackets (common after BiDi mangling)
-    // Use negative lookbehind/lookahead to ensure no bracket is adjacent
+    // Pattern 3: bare inner without brackets
     const barePattern = new RegExp(`(?<!\\[)${esc}(?!\\])`);
     if (barePattern.test(result)) {
       result = result.replace(barePattern, `[${inner}]`);
@@ -113,9 +111,62 @@ export function fixTagBracketsStrict(original: string, translation: string): Tag
     }
   }
 
-  // NO orphan bracket cleanup — this is the key safety change.
-  // We only fix brackets we can confidently identify as belonging to a known tag.
-  // Removing "orphan" brackets was causing destructive deletion of valid content.
+  // 2. Handle [TAG]N style tags (e.g. [ML]1, [SE]0)
+  const bracketNumTags = [...original.matchAll(new RegExp(TAG_BRACKET_NUM_REGEX.source, TAG_BRACKET_NUM_REGEX.flags))].map(m => m[0]);
+  for (const tag of bracketNumTags) {
+    if (result.includes(tag)) continue;
+
+    // Extract parts: e.g. tag="[ML]1" → tagName="ML", num="1"
+    const match = tag.match(/^\[([A-Z]{2,10})\](\d+)$/);
+    if (!match) continue;
+    const [, tagName, num] = match;
+    const escName = escapeRegex(tagName);
+    const escNum = escapeRegex(num);
+
+    // Pattern: ]TAG[N (reversed brackets)
+    const revP = new RegExp(`\\]${escName}\\[${escNum}`);
+    if (revP.test(result)) {
+      result = result.replace(revP, tag);
+      stats.reversed++;
+      stats.total++;
+      continue;
+    }
+
+    // Pattern: [TAG[N or ]TAG]N (mismatched)
+    let fixed2 = false;
+    for (const bp of [
+      new RegExp(`\\[${escName}\\[${escNum}`),
+      new RegExp(`\\]${escName}\\]${escNum}`),
+    ]) {
+      if (bp.test(result)) {
+        result = result.replace(bp, tag);
+        stats.mismatched++;
+        stats.total++;
+        fixed2 = true;
+        break;
+      }
+    }
+    if (fixed2) continue;
+
+    // Pattern: TAG]N or [TAG]  N (tag present but number detached or brackets wrong)
+    // Pattern: bare TAGN without brackets
+    const bareP = new RegExp(`(?<!\\[)${escName}(?!\\])\\s*${escNum}`);
+    if (bareP.test(result)) {
+      result = result.replace(bareP, tag);
+      stats.bare++;
+      stats.total++;
+      continue;
+    }
+
+    // Pattern: [TAG] N (space between ] and number)
+    const spaceP = new RegExp(`\\[${escName}\\]\\s+${escNum}`);
+    if (spaceP.test(result)) {
+      result = result.replace(spaceP, tag);
+      stats.mismatched++;
+      stats.total++;
+      continue;
+    }
+  }
 
   return { text: result, stats };
 }

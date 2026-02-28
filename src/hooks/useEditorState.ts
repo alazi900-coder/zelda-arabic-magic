@@ -1588,7 +1588,8 @@ export function useEditorState() {
   // === Tag Bracket Fix ===
   const handleScanTagBrackets = useCallback(() => {
     if (!state) return;
-    const tagRegex = /\[\w+:[^\]]*?\s*\]/;
+    const tagColonRegex = /\[\w+:[^\]]*?\s*\]/;
+    const tagBracketNumRegex = /\[[A-Z]{2,10}\]\d+/;
     const malformedTechnicalLikeRegex = /\[[A-Z]{2,10}\](?:\s*\d+)?/;
     const results: import("@/components/editor/TagBracketFixPanel").TagBracketFixResult[] = [];
     let suspiciousUnfixableCount = 0;
@@ -1597,10 +1598,12 @@ export function useEditorState() {
       const key = `${entry.msbtFile}:${entry.index}`;
       const translation = state.translations[key];
       if (!translation?.trim()) continue;
-      if (!tagRegex.test(entry.original)) continue;
+      if (!tagColonRegex.test(entry.original) && !tagBracketNumRegex.test(entry.original)) continue;
 
-      const originalTags = entry.original.match(/\[\w+:[^\]]*?\s*\]/g) ?? [];
-      const hasMissingOriginalTag = originalTags.some((tag) => !translation.includes(tag));
+      const colonTags = entry.original.match(/\[\w+:[^\]]*?\s*\]/g) ?? [];
+      const bracketNumTags = entry.original.match(/\[[A-Z]{2,10}\]\d+/g) ?? [];
+      const allOriginalTags = [...colonTags, ...bracketNumTags];
+      const hasMissingOriginalTag = allOriginalTags.some((tag) => !translation.includes(tag));
       const hasMalformedTechnicalLike = malformedTechnicalLikeRegex.test(translation);
 
       const { text: after, stats } = fixTagBracketsStrict(entry.original, translation);
