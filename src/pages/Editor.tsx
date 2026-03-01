@@ -74,6 +74,8 @@ const Editor = () => {
   const [showClearConfirm, setShowClearConfirm] = React.useState<'all' | 'filtered' | null>(null);
   const [showTagRepair, setShowTagRepair] = React.useState(false);
   const [showArabicProcessConfirm, setShowArabicProcessConfirm] = React.useState(false);
+  const [showFontTest, setShowFontTest] = React.useState(false);
+  const [fontTestWord, setFontTestWord] = React.useState("");
   const gameType = "xenoblade";
   const processPath = "/process";
 
