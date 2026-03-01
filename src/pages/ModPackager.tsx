@@ -88,29 +88,83 @@ export default function ModPackager() {
     setFontFile({ name, data, size: data.byteLength, info });
   }, []);
 
-  // Try to detect WIFNT from raw or zstd-compressed data
-  const tryExtractFont = useCallback((data: ArrayBuffer, name: string): boolean => {
-    // Check raw first
+  // Try to detect WIFNT from raw, zstd-compressed, or embedded within file
+  const tryExtractFont = useCallback((data: ArrayBuffer, name: string): { found: boolean; debug: string } => {
+    const bytes = new Uint8Array(data);
+    const debugLines: string[] = [];
+    const magic4 = bytes.length >= 4 ? String.fromCharCode(bytes[0], bytes[1], bytes[2], bytes[3]) : "??";
+    debugLines.push(`حجم الملف: ${data.byteLength} بايت، أول 4 بايت: ${magic4} (${bytes.slice(0, 4).join(",")})`);
+
+    // 1. Check raw WIFNT
     const info = analyzeWifnt(data);
     if (info.valid) {
       processFont(data, name);
-      return true;
+      return { found: true, debug: "خط WIFNT مباشر" };
     }
-    // Check zstd magic: 0x28 0xB5 0x2F 0xFD
-    const bytes = new Uint8Array(data);
+
+    // 2. Try zstd decompression
     if (zstdReady && bytes.length >= 4 && bytes[0] === 0x28 && bytes[1] === 0xB5 && bytes[2] === 0x2F && bytes[3] === 0xFD) {
+      debugLines.push("تم كشف ضغط zstd، جارٍ فك الضغط...");
       try {
         const decompressed = zstdDecompress(bytes);
         const decompBuf = decompressed.buffer.slice(decompressed.byteOffset, decompressed.byteOffset + decompressed.byteLength) as ArrayBuffer;
+        debugLines.push(`حجم بعد فك الضغط: ${decompBuf.byteLength} بايت`);
+        const decompBytes = new Uint8Array(decompBuf);
+        const decompMagic = decompBytes.length >= 4 ? String.fromCharCode(decompBytes[0], decompBytes[1], decompBytes[2], decompBytes[3]) : "??";
+        debugLines.push(`أول 4 بايت بعد الفك: ${decompMagic} (${decompBytes.slice(0, 4).join(",")})`);
+        
         const decompInfo = analyzeWifnt(decompBuf);
         if (decompInfo.valid) {
           processFont(decompBuf, name);
-          return true;
+          return { found: true, debug: "خط WIFNT بعد فك ضغط zstd" };
         }
-      } catch { /* not a valid zstd font */ }
+        
+        // Search for LAFT/TFAL magic inside decompressed data
+        const foundOffset = searchForMagic(decompBytes);
+        if (foundOffset >= 0) {
+          debugLines.push(`وُجدت بصمة LAFT عند الموقع ${foundOffset}`);
+          const subBuf = decompBuf.slice(foundOffset);
+          const subInfo = analyzeWifnt(subBuf);
+          if (subInfo.valid) {
+            processFont(subBuf, name);
+            return { found: true, debug: `خط WIFNT عند الموقع ${foundOffset} بعد فك الضغط` };
+          }
+        }
+      } catch (err) {
+        debugLines.push(`فشل فك ضغط zstd: ${err}`);
+      }
+    } else if (!zstdReady) {
+      debugLines.push("⚠️ محرك zstd لم يجهز بعد");
+    } else {
+      debugLines.push("ليس ملف zstd");
     }
-    return false;
+
+    // 3. Search for LAFT/TFAL magic in raw data
+    const foundOffset = searchForMagic(bytes);
+    if (foundOffset >= 0) {
+      debugLines.push(`وُجدت بصمة LAFT في البيانات الخام عند الموقع ${foundOffset}`);
+      const subBuf = data.slice(foundOffset);
+      const subInfo = analyzeWifnt(subBuf);
+      if (subInfo.valid) {
+        processFont(subBuf, name);
+        return { found: true, debug: `خط WIFNT مضمّن عند الموقع ${foundOffset}` };
+      }
+    }
+
+    return { found: false, debug: debugLines.join("\n") };
   }, [processFont, zstdReady]);
+
+  // Search for LAFT or TFAL magic bytes in a buffer
+  const searchForMagic = (bytes: Uint8Array): number => {
+    // LAFT = 0x4C 0x41 0x46 0x54, TFAL = 0x54 0x46 0x41 0x4C
+    for (let i = 0; i < bytes.length - 4; i++) {
+      if ((bytes[i] === 0x4C && bytes[i+1] === 0x41 && bytes[i+2] === 0x46 && bytes[i+3] === 0x54) ||
+          (bytes[i] === 0x54 && bytes[i+1] === 0x46 && bytes[i+2] === 0x41 && bytes[i+3] === 0x4C)) {
+        return i;
+      }
+    }
+    return -1;
+  };
 
   const handleLoadBundledFont = useCallback(async () => {
     setLoadingBundledFont(true);
@@ -136,9 +190,11 @@ export default function ModPackager() {
     const reader = new FileReader();
     reader.onload = () => {
       const data = reader.result as ArrayBuffer;
-      if (!tryExtractFont(data, file.name)) {
-        setStatus(`❌ الملف "${file.name}" ليس ملف خط WIFNT صالحاً (حتى بعد فك الضغط)`);
-        setTimeout(() => setStatus(""), 5000);
+      const result = tryExtractFont(data, file.name);
+      if (!result.found) {
+        console.warn("فشل كشف الخط:", result.debug);
+        setStatus(`❌ الملف "${file.name}" ليس ملف خط WIFNT صالحاً\n${result.debug}`);
+        setTimeout(() => setStatus(""), 8000);
       } else {
         setStatus(`✅ تم تحميل الخط من "${file.name}"`);
         setTimeout(() => setStatus(""), 4000);
@@ -162,10 +218,13 @@ export default function ModPackager() {
         scanned++;
         if (found) return; // already found
         const data = reader.result as ArrayBuffer;
-        if (tryExtractFont(data, file.name)) {
+        const result = tryExtractFont(data, file.name);
+        if (result.found) {
           found++;
           setStatus(`✅ تم العثور على خط في "${file.name}" (فُحص ${scanned}/${total})`);
           setTimeout(() => setStatus(""), 6000);
+        } else {
+          console.log(`[${file.name}]`, result.debug);
         }
         if (scanned === total && !found) {
           setStatus(`❌ لم يتم العثور على أي ملف خط من بين ${total} ملف`);
