@@ -38,6 +38,13 @@ export default function ModPackager() {
   const [glyphTextInput, setGlyphTextInput] = useState("");
   const [zstdReady, setZstdReady] = useState(false);
 
+  // DAT Explorer state
+  const [exploredFiles, setExploredFiles] = useState<{ name: string; size: number; magic: string; isZstd: boolean; decompressedSize?: number; decompressedMagic?: string; rawBytes: Uint8Array; decompressedBytes?: Uint8Array }[]>([]);
+  const [exploringFolder, setExploringFolder] = useState(false);
+  const [exploreStatus, setExploreStatus] = useState("");
+  const [selectedExploreFile, setSelectedExploreFile] = useState<number | null>(null);
+  const [hexViewOffset, setHexViewOffset] = useState(0);
+
   // Initialize zstd-wasm once
   useEffect(() => {
     initZstd().then(() => setZstdReady(true)).catch(() => {});
@@ -244,6 +251,104 @@ export default function ModPackager() {
     });
     input.click();
   }, [handleScanDatForFonts]);
+
+  // DAT Explorer: analyze files in a folder
+  const getMagicString = useCallback((bytes: Uint8Array): string => {
+    if (bytes.length < 4) return "??";
+    const printable = Array.from(bytes.slice(0, 4)).every(b => b >= 0x20 && b < 0x7F);
+    if (printable) return String.fromCharCode(bytes[0], bytes[1], bytes[2], bytes[3]);
+    return `0x${Array.from(bytes.slice(0, 4)).map(b => b.toString(16).padStart(2, '0')).join(' ')}`;
+  }, []);
+
+  const handleExploreDatFolder = useCallback(async () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.setAttribute("webkitdirectory", "");
+    input.setAttribute("directory", "");
+    input.addEventListener("change", async () => {
+      const files = input.files;
+      if (!files || files.length === 0) return;
+      setExploringFolder(true);
+      setExploredFiles([]);
+      setSelectedExploreFile(null);
+      setHexViewOffset(0);
+      const allFiles = Array.from(files);
+      setExploreStatus(`🔍 جارٍ تحليل ${allFiles.length} ملف...`);
+      const results: typeof exploredFiles = [];
+      for (let i = 0; i < allFiles.length; i++) {
+        const file = allFiles[i];
+        setExploreStatus(`🔍 تحليل ${i + 1}/${allFiles.length}: ${file.name}...`);
+        try {
+          const data = await file.arrayBuffer();
+          const bytes = new Uint8Array(data);
+          const magic = getMagicString(bytes);
+          const isZstd = bytes.length >= 4 && bytes[0] === 0x28 && bytes[1] === 0xB5 && bytes[2] === 0x2F && bytes[3] === 0xFD;
+          let decompressedSize: number | undefined;
+          let decompressedMagic: string | undefined;
+          let decompressedBytes: Uint8Array | undefined;
+          if (isZstd && zstdReady) {
+            try {
+              const decompressed = zstdDecompress(bytes);
+              decompressedSize = decompressed.length;
+              decompressedMagic = getMagicString(decompressed);
+              decompressedBytes = decompressed;
+            } catch {}
+          }
+          results.push({
+            name: file.webkitRelativePath || file.name,
+            size: file.size,
+            magic,
+            isZstd,
+            decompressedSize,
+            decompressedMagic,
+            rawBytes: bytes,
+            decompressedBytes,
+          });
+        } catch {}
+      }
+      setExploredFiles(results);
+      setExploreStatus(`✅ تم تحليل ${results.length} ملف`);
+      setExploringFolder(false);
+      setTimeout(() => setExploreStatus(""), 5000);
+    });
+    input.click();
+  }, [zstdReady, getMagicString]);
+
+  const handleDownloadExploredFile = useCallback((index: number, useDecompressed: boolean) => {
+    const file = exploredFiles[index];
+    if (!file) return;
+    const data = useDecompressed && file.decompressedBytes ? file.decompressedBytes : file.rawBytes;
+    const blob = new Blob([data.buffer as ArrayBuffer]);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    const baseName = file.name.split('/').pop() || file.name;
+    a.download = useDecompressed ? `decompressed_${baseName}` : baseName;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [exploredFiles]);
+
+  const renderHexView = useCallback((bytes: Uint8Array, offset: number) => {
+    const lines: string[] = [];
+    const start = offset;
+    const end = Math.min(start + 256, bytes.length);
+    for (let i = start; i < end; i += 16) {
+      const addr = i.toString(16).padStart(8, '0');
+      const hexParts: string[] = [];
+      let ascii = '';
+      for (let j = 0; j < 16; j++) {
+        if (i + j < end) {
+          hexParts.push(bytes[i + j].toString(16).padStart(2, '0'));
+          ascii += bytes[i + j] >= 0x20 && bytes[i + j] < 0x7F ? String.fromCharCode(bytes[i + j]) : '.';
+        } else {
+          hexParts.push('  ');
+          ascii += ' ';
+        }
+      }
+      lines.push(`${addr}  ${hexParts.slice(0, 8).join(' ')}  ${hexParts.slice(8).join(' ')}  |${ascii}|`);
+    }
+    return lines.join('\n');
+  }, []);
 
 
 
@@ -1212,6 +1317,169 @@ export default function ModPackager() {
             </p>
           )}
         </div>
+
+        {/* DAT Explorer Section */}
+        <Card className="p-6 space-y-4 border-accent/30">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center">
+              <Search className="w-5 h-5 text-accent-foreground" />
+            </div>
+            <div>
+              <h2 className="font-display font-bold text-lg">🔬 مستكشف ملفات DAT</h2>
+              <p className="text-xs text-muted-foreground">فك ضغط ملفات .dat واستعراض محتوياتها ومعرفة نوعها</p>
+            </div>
+          </div>
+
+          <Button
+            variant="outline"
+            className="w-full gap-2"
+            onClick={handleExploreDatFolder}
+            disabled={exploringFolder}
+          >
+            {exploringFolder ? <Loader2 className="w-4 h-4 animate-spin" /> : <FolderArchive className="w-4 h-4" />}
+            {exploringFolder ? "جارٍ التحليل..." : "📁 اختر مجلد dat لاستكشافه"}
+          </Button>
+
+          {exploreStatus && (
+            <p className="text-sm text-muted-foreground">{exploreStatus}</p>
+          )}
+
+          {exploredFiles.length > 0 && (
+            <div className="space-y-3">
+              <p className="text-sm font-semibold">{exploredFiles.length} ملف — اضغط على أي ملف لعرض تفاصيله</p>
+
+              {/* File type summary */}
+              <div className="flex flex-wrap gap-2 text-xs">
+                {(() => {
+                  const zstdCount = exploredFiles.filter(f => f.isZstd).length;
+                  const magics = new Map<string, number>();
+                  exploredFiles.forEach(f => {
+                    const key = f.isZstd && f.decompressedMagic ? `zstd→${f.decompressedMagic}` : f.magic;
+                    magics.set(key, (magics.get(key) || 0) + 1);
+                  });
+                  return (
+                    <>
+                      {zstdCount > 0 && <span className="bg-primary/10 text-primary px-2 py-1 rounded">Zstd مضغوط: {zstdCount}</span>}
+                      {Array.from(magics.entries()).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([magic, count]) => (
+                        <span key={magic} className="bg-muted px-2 py-1 rounded">{magic}: {count}</span>
+                      ))}
+                    </>
+                  );
+                })()}
+              </div>
+
+              {/* File list */}
+              <div className="max-h-64 overflow-y-auto space-y-1 border rounded-lg p-2 bg-muted/20">
+                {exploredFiles.map((file, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    className={`w-full text-left p-2 rounded text-xs font-mono flex items-center justify-between gap-2 transition-colors ${
+                      selectedExploreFile === i ? 'bg-primary/15 border border-primary/30' : 'hover:bg-muted/50'
+                    }`}
+                    onClick={() => { setSelectedExploreFile(i === selectedExploreFile ? null : i); setHexViewOffset(0); }}
+                  >
+                    <span className="truncate max-w-[200px]">{file.name.split('/').pop()}</span>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className="text-muted-foreground">{formatSize(file.size)}</span>
+                      {file.isZstd && <span className="text-primary">zstd</span>}
+                      <span className="text-accent-foreground">{file.magic}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+              {/* Selected file details */}
+              {selectedExploreFile !== null && exploredFiles[selectedExploreFile] && (() => {
+                const file = exploredFiles[selectedExploreFile];
+                const activeBytes = file.decompressedBytes || file.rawBytes;
+                return (
+                  <div className="space-y-3 p-4 border rounded-lg bg-muted/10">
+                    <div className="flex items-center justify-between flex-wrap gap-2">
+                      <h4 className="font-bold text-sm truncate max-w-[300px]">{file.name}</h4>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm" className="h-7 text-xs gap-1" onClick={() => handleDownloadExploredFile(selectedExploreFile, false)}>
+                          <Download className="w-3 h-3" /> خام
+                        </Button>
+                        {file.decompressedBytes && (
+                          <Button variant="outline" size="sm" className="h-7 text-xs gap-1" onClick={() => handleDownloadExploredFile(selectedExploreFile, true)}>
+                            <Download className="w-3 h-3" /> مفكوك
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3 text-xs">
+                      <div className="bg-muted/30 rounded p-2">
+                        <span className="text-muted-foreground">الحجم الأصلي:</span>
+                        <span className="font-bold mr-1">{formatSize(file.size)}</span>
+                      </div>
+                      <div className="bg-muted/30 rounded p-2">
+                        <span className="text-muted-foreground">نوع الملف:</span>
+                        <span className="font-bold mr-1">{file.magic}</span>
+                      </div>
+                      {file.isZstd && (
+                        <>
+                          <div className="bg-primary/10 rounded p-2">
+                            <span className="text-muted-foreground">الحجم بعد الفك:</span>
+                            <span className="font-bold text-primary mr-1">{file.decompressedSize ? formatSize(file.decompressedSize) : 'فشل'}</span>
+                          </div>
+                          <div className="bg-primary/10 rounded p-2">
+                            <span className="text-muted-foreground">نوع المحتوى:</span>
+                            <span className="font-bold text-primary mr-1">{file.decompressedMagic || '??'}</span>
+                          </div>
+                        </>
+                      )}
+                    </div>
+
+                    {/* Hex viewer */}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-semibold">
+                          عرض HEX {file.isZstd && file.decompressedBytes ? '(بعد فك الضغط)' : '(خام)'}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          الموقع: {hexViewOffset} / {activeBytes.length}
+                        </span>
+                      </div>
+                      <pre className="bg-background border rounded p-3 text-[10px] leading-relaxed overflow-x-auto font-mono whitespace-pre" dir="ltr">
+                        {renderHexView(activeBytes, hexViewOffset)}
+                      </pre>
+                      <div className="flex items-center gap-2 justify-center">
+                        <Button
+                          variant="ghost" size="sm" className="h-7 text-xs"
+                          disabled={hexViewOffset === 0}
+                          onClick={() => setHexViewOffset(Math.max(0, hexViewOffset - 256))}
+                        >
+                          ← السابق
+                        </Button>
+                        <Button
+                          variant="ghost" size="sm" className="h-7 text-xs"
+                          onClick={() => setHexViewOffset(0)}
+                        >
+                          البداية
+                        </Button>
+                        <Button
+                          variant="ghost" size="sm" className="h-7 text-xs"
+                          disabled={hexViewOffset + 256 >= activeBytes.length}
+                          onClick={() => setHexViewOffset(hexViewOffset + 256)}
+                        >
+                          التالي →
+                        </Button>
+                        <Button
+                          variant="ghost" size="sm" className="h-7 text-xs"
+                          onClick={() => setHexViewOffset(Math.max(0, activeBytes.length - 256))}
+                        >
+                          النهاية
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+          )}
+        </Card>
       </main>
 
     </div>
