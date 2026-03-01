@@ -994,6 +994,9 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleScanNewlineSplit} disabled={editor.translatedCount === 0}>
                     📐 تقسيم النصوص المضغوطة
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleFlattenAllNewlines} disabled={editor.translatedCount === 0}>
+                    📏 دمج الأسطر المتعددة (سطر واحد)
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => setShowClearConfirm(editor.isFilterActive ? 'filtered' : 'all')} disabled={editor.translatedCount === 0} className="text-destructive focus:text-destructive">
                     <Trash2 className="w-4 h-4" /> {editor.isFilterActive ? `مسح ترجمة القسم المحدد 🗑️` : `مسح جميع الترجمات 🗑️`}
@@ -1148,6 +1151,9 @@ const Editor = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleScanNewlineSplit} disabled={editor.translatedCount === 0}>
                     📐 تقسيم النصوص المضغوطة
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleFlattenAllNewlines} disabled={editor.translatedCount === 0}>
+                    📏 دمج الأسطر المتعددة (سطر واحد)
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => setShowClearConfirm(editor.isFilterActive ? 'filtered' : 'all')} disabled={editor.translatedCount === 0} className="text-destructive focus:text-destructive">
