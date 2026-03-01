@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from "react";
+import { init as initZstd, decompress as zstdDecompress } from "@bokuweb/zstd-wasm";
 
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,12 @@ export default function ModPackager() {
   const [selectedGlyph, setSelectedGlyph] = useState<number | null>(null);
   const [showDrawingEditor, setShowDrawingEditor] = useState(false);
   const [glyphTextInput, setGlyphTextInput] = useState("");
+  const [zstdReady, setZstdReady] = useState(false);
+
+  // Initialize zstd-wasm once
+  useEffect(() => {
+    initZstd().then(() => setZstdReady(true)).catch(() => {});
+  }, []);
 
   const atlasCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -81,6 +88,30 @@ export default function ModPackager() {
     setFontFile({ name, data, size: data.byteLength, info });
   }, []);
 
+  // Try to detect WIFNT from raw or zstd-compressed data
+  const tryExtractFont = useCallback((data: ArrayBuffer, name: string): boolean => {
+    // Check raw first
+    const info = analyzeWifnt(data);
+    if (info.valid) {
+      processFont(data, name);
+      return true;
+    }
+    // Check zstd magic: 0x28 0xB5 0x2F 0xFD
+    const bytes = new Uint8Array(data);
+    if (zstdReady && bytes.length >= 4 && bytes[0] === 0x28 && bytes[1] === 0xB5 && bytes[2] === 0x2F && bytes[3] === 0xFD) {
+      try {
+        const decompressed = zstdDecompress(bytes);
+        const decompBuf = decompressed.buffer.slice(decompressed.byteOffset, decompressed.byteOffset + decompressed.byteLength) as ArrayBuffer;
+        const decompInfo = analyzeWifnt(decompBuf);
+        if (decompInfo.valid) {
+          processFont(decompBuf, name);
+          return true;
+        }
+      } catch { /* not a valid zstd font */ }
+    }
+    return false;
+  }, [processFont, zstdReady]);
+
   const handleLoadBundledFont = useCallback(async () => {
     setLoadingBundledFont(true);
     setStatus("جارٍ تحميل خط اللعبة المدمج...");
@@ -105,17 +136,16 @@ export default function ModPackager() {
     const reader = new FileReader();
     reader.onload = () => {
       const data = reader.result as ArrayBuffer;
-      // Auto-detect: check if .dat file is actually a WIFNT font
-      const info = analyzeWifnt(data);
-      if (info.valid) {
-        processFont(data, file.name);
-      } else {
-        setStatus(`❌ الملف "${file.name}" ليس ملف خط WIFNT صالحاً`);
+      if (!tryExtractFont(data, file.name)) {
+        setStatus(`❌ الملف "${file.name}" ليس ملف خط WIFNT صالحاً (حتى بعد فك الضغط)`);
         setTimeout(() => setStatus(""), 5000);
+      } else {
+        setStatus(`✅ تم تحميل الخط من "${file.name}"`);
+        setTimeout(() => setStatus(""), 4000);
       }
     };
     reader.readAsArrayBuffer(file);
-  }, [processFont]);
+  }, [tryExtractFont]);
 
   // Scan multiple .dat files to find font files
   const handleScanDatForFonts = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,11 +160,10 @@ export default function ModPackager() {
       const reader = new FileReader();
       reader.onload = () => {
         scanned++;
+        if (found) return; // already found
         const data = reader.result as ArrayBuffer;
-        const info = analyzeWifnt(data);
-        if (info.valid && !found) {
+        if (tryExtractFont(data, file.name)) {
           found++;
-          processFont(data, file.name);
           setStatus(`✅ تم العثور على خط في "${file.name}" (فُحص ${scanned}/${total})`);
           setTimeout(() => setStatus(""), 6000);
         }
@@ -145,7 +174,9 @@ export default function ModPackager() {
       };
       reader.readAsArrayBuffer(file);
     }
-  }, [processFont]);
+  }, [tryExtractFont]);
+
+
 
   const handleBdatUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
