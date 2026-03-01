@@ -1511,12 +1511,17 @@ export function useEditorState() {
     return lines.join('\n');
   }, []);
 
+  // Bubble dialogue files — newlines cause text to disappear in-game
+  const BUBBLE_FILE_RE = /(?:^|[:/])(?:tlk_|fev_|cq_)/i;
+
   const handleScanNewlineSplit = useCallback(() => {
     if (!state) return;
     const results: import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] = [];
     const entriesToScan = isFilterActive ? filteredEntries : state.entries;
     for (const entry of entriesToScan) {
       const key = `${entry.msbtFile}:${entry.index}`;
+      // Skip bubble dialogue files (tlk/fev/cq) — newlines hide text in-game
+      if (BUBBLE_FILE_RE.test(key)) continue;
       const translation = state.translations[key];
       if (!translation?.trim()) continue;
       // Skip if already has line breaks

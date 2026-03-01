@@ -236,12 +236,25 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
 
         // Auto Arabic processing before build
         let autoProcessedCountBin = 0;
+        // Strip newlines from bubble dialogue files (tlk, fev, cq) — game engine hides text with \n in bubbles
+        const BUBBLE_FILE_PATTERNS = /(?:^|[:/])(?:tlk_|fev_|cq_)/i;
+        let strippedNewlineCount = 0;
         for (const [key, value] of Object.entries(nonEmptyTranslations)) {
           if (!value?.trim()) continue;
-          if (hasArabicPresentationForms(value)) continue;
-          if (!hasArabicCharsProcessing(value)) continue;
-          nonEmptyTranslations[key] = processArabicText(value, { arabicNumerals, mirrorPunct: mirrorPunctuation });
+          // Strip \n from bubble dialogue files
+          if (value.includes('\n') && BUBBLE_FILE_PATTERNS.test(key)) {
+            nonEmptyTranslations[key] = value.replace(/\n/g, ' ');
+            strippedNewlineCount++;
+          }
+          const current = nonEmptyTranslations[key];
+          if (hasArabicPresentationForms(current)) continue;
+          if (!hasArabicCharsProcessing(current)) continue;
+          nonEmptyTranslations[key] = processArabicText(current, { arabicNumerals, mirrorPunct: mirrorPunctuation });
           autoProcessedCountBin++;
+        }
+        if (strippedNewlineCount > 0) {
+          setBuildProgress(`🫧 إزالة فواصل أسطر من ${strippedNewlineCount} نص فقاعي (tlk/fev/cq)...`);
+          await new Promise(r => setTimeout(r, 200));
         }
         if (autoProcessedCountBin > 0) {
           setBuildProgress(`✅ تمت معالجة ${autoProcessedCountBin} نص عربي تلقائياً...`);
