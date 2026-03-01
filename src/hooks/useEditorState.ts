@@ -1600,6 +1600,25 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 3000);
   }, [state, splitAtWordBoundary]);
 
+  /** Fill all translations with a single word for font testing */
+  const handleFontTest = useCallback((testWord: string) => {
+    if (!state || !testWord.trim()) return;
+    const entriesToFill = isFilterActive ? filteredEntries : state.entries;
+    const newTranslations = { ...state.translations };
+    const prevTrans: Record<string, string> = {};
+    let count = 0;
+    for (const entry of entriesToFill) {
+      const key = `${entry.msbtFile}:${entry.index}`;
+      prevTrans[key] = newTranslations[key] || '';
+      newTranslations[key] = testWord.trim();
+      count++;
+    }
+    setPreviousTranslations(old => ({ ...old, ...prevTrans }));
+    setState(prev => prev ? { ...prev, translations: newTranslations } : null);
+    setLastSaved(`🔤 تم ملء ${count} ترجمة بـ "${testWord.trim()}" لاختبار الخط`);
+    setTimeout(() => setLastSaved(""), 4000);
+  }, [state, isFilterActive, filteredEntries]);
+
   /** Flatten all multi-line translations to single line (preserving word order) */
   const handleFlattenAllNewlines = useCallback(() => {
     if (!state) return;
@@ -1882,7 +1901,7 @@ export function useEditorState() {
     handleScanDuplicateAlef, handleApplyDuplicateAlefClean, handleRejectDuplicateAlefClean, handleApplyAllDuplicateAlefCleans,
     handleScanMirrorChars, handleApplyMirrorCharsClean, handleRejectMirrorCharsClean, handleApplyAllMirrorCharsCleans,
     handleScanTagBrackets, handleApplyTagBracketFix, handleRejectTagBracketFix, handleApplyAllTagBracketFixes,
-    handleScanNewlineSplit, handleApplyNewlineSplit, handleRejectNewlineSplit, handleApplyAllNewlineSplits, handleSplitSingleEntry, handleFlattenAllNewlines,
+    handleScanNewlineSplit, handleApplyNewlineSplit, handleRejectNewlineSplit, handleApplyAllNewlineSplits, handleSplitSingleEntry, handleFlattenAllNewlines, handleFontTest,
     handleTogglePin,
     handleClearTranslations, handleUndoClear, clearUndoBackup, isFilterActive,
     integrityResult, showIntegrityDialog, setShowIntegrityDialog, checkingIntegrity,
