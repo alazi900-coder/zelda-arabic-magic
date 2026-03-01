@@ -225,7 +225,7 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
         const totalKeys = Object.keys(currentState.translations).length;
         const nonEmptyCount = Object.keys(nonEmptyTranslations).length;
         setBuildProgress(`📊 وجدت ${nonEmptyCount} ترجمة من أصل ${totalKeys} مفتاح...`);
-        await new Promise(r => setTimeout(r, 600));
+        await new Promise(r => setTimeout(r, 200));
         console.log('[BUILD] ✅ State has', totalKeys, 'total keys,', nonEmptyCount, 'non-empty');
         
         if (nonEmptyCount === 0) {
@@ -245,29 +245,49 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
         }
         if (autoProcessedCountBin > 0) {
           setBuildProgress(`✅ تمت معالجة ${autoProcessedCountBin} نص عربي تلقائياً...`);
-          await new Promise(r => setTimeout(r, 800));
+          await new Promise(r => setTimeout(r, 200));
         }
 
-      // Pre-scan: find which files actually have translations to skip untranslated ones
-      const filesWithTranslations = new Set<string>();
-      for (const key of Object.keys(nonEmptyTranslations)) {
+      // Pre-scan: build per-file index of translations for O(1) lookup
+      const perFileTranslations = new Map<string, Map<string, string>>();
+      const perFileLegacy = new Map<string, Map<string, string>>();
+      for (const [key, trans] of Object.entries(nonEmptyTranslations)) {
         if (key.startsWith('bdat-bin:')) {
-          const secondColon = key.indexOf(':', 9); // after "bdat-bin:"
-          if (secondColon !== -1) filesWithTranslations.add(key.slice(9, secondColon));
+          const secondColon = key.indexOf(':', 9);
+          if (secondColon === -1) continue;
+          const fName = key.slice(9, secondColon);
+          const rest = key.slice(secondColon + 1);
+          const lastColon = rest.lastIndexOf(':');
+          if (lastColon === -1) continue;
+          const mapKey = rest.slice(0, lastColon);
+          if (mapKey.split(':').length < 3) continue;
+          if (!perFileTranslations.has(fName)) perFileTranslations.set(fName, new Map());
+          perFileTranslations.get(fName)!.set(mapKey, trans);
         } else if (key.startsWith('bdat:')) {
           const secondColon = key.indexOf(':', 5);
-          if (secondColon !== -1) filesWithTranslations.add(key.slice(5, secondColon));
+          if (secondColon === -1) continue;
+          const fName = key.slice(5, secondColon);
+          if (!perFileLegacy.has(fName)) perFileLegacy.set(fName, new Map());
+          perFileLegacy.get(fName)!.set(key, trans);
         }
       }
 
-      const skippedFiles = bdatBinaryFileNames!.filter(f => !filesWithTranslations.has(f));
+      const filesWithTranslations = new Set([...perFileTranslations.keys(), ...perFileLegacy.keys()]);
       const filesToBuild = bdatBinaryFileNames!.filter(f => filesWithTranslations.has(f));
-      if (skippedFiles.length > 0) {
-        setBuildProgress(`⏭️ تخطي ${skippedFiles.length} ملف بدون ترجمات، بناء ${filesToBuild.length} ملف فقط...`);
-        await new Promise(r => setTimeout(r, 800));
+      const skippedCount = bdatBinaryFileNames!.length - filesToBuild.length;
+      if (skippedCount > 0) {
+        setBuildProgress(`⏭️ تخطي ${skippedCount} ملف بدون ترجمات، بناء ${filesToBuild.length} ملف فقط...`);
+        await new Promise(r => setTimeout(r, 300));
       }
 
-      for (const fileName of filesToBuild) {
+      // Process files in batches to keep UI responsive
+      const BUILD_BATCH = 5;
+      for (let batchStart = 0; batchStart < filesToBuild.length; batchStart += BUILD_BATCH) {
+        const batchEnd = Math.min(batchStart + BUILD_BATCH, filesToBuild.length);
+        setBuildProgress(`⚙️ بناء ${batchStart + 1}-${batchEnd} من ${filesToBuild.length} ملف...`);
+
+        for (let fi = batchStart; fi < batchEnd; fi++) {
+          const fileName = filesToBuild[fi];
           const buf = bdatBinaryFiles![fileName];
           if (!buf) continue;
           try {
@@ -275,105 +295,51 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
             const bdatFile = parseBdatFile(data, unhashLabel);
 
             const translationMap = new Map<string, string>();
-            const prefix = `bdat-bin:${fileName}:`;
 
-            let totalExtracted = 0;
-
-            for (const [key, trans] of Object.entries(nonEmptyTranslations)) {
-              if (!key.startsWith(prefix)) continue;
-              // key = "bdat-bin:fileName:tableName:rowIndex:colName:0"
-              const rest = key.slice(prefix.length); // "tableName:rowIndex:colName:0"
-
-              // FIX: Use lastIndexOf to safely strip ONLY the trailing ":index" suffix
-              // This prevents cutting column names that might end with digits
-              const lastColon = rest.lastIndexOf(':');
-              if (lastColon === -1) continue;
-              const withoutIndex = rest.slice(0, lastColon); // "tableName:rowIndex:colName"
-
-              // Validate it has at least tableName:rowIndex:colName (3 parts minimum)
-              const parts = withoutIndex.split(':');
-              if (parts.length < 3) continue;
-
-              let processed: string;
-              if (hasPF(trans)) {
-                processed = trans;
-              } else {
-                processed = processArabicText(trans, { arabicNumerals, mirrorPunct: mirrorPunctuation });
+            // Use pre-indexed translations — no scanning needed
+            const fileTransMap = perFileTranslations.get(fileName);
+            if (fileTransMap) {
+              for (const [mapKey, trans] of fileTransMap) {
+                const processed = hasPF(trans) ? trans : processArabicText(trans, { arabicNumerals, mirrorPunct: mirrorPunctuation });
+                translationMap.set(mapKey, processed);
               }
-
-              // mapKey for bdat-writer is "tableName:rowIndex:colName"
-              translationMap.set(withoutIndex, processed);
             }
 
-            setBuildProgress(`📂 ${fileName}: وجدت ${translationMap.size} ترجمة مطابقة...`);
-            console.log(`[BUILD-BDAT] ${fileName}: prefix="${prefix}", found ${translationMap.size} matching translations out of ${Object.keys(nonEmptyTranslations).length} total`);
+            // Legacy fallback
             if (translationMap.size === 0) {
-              const sampleKeys = Object.keys(nonEmptyTranslations).filter(k => k.includes(fileName)).slice(0, 5);
-              const sampleAllKeys = Object.keys(nonEmptyTranslations).slice(0, 5);
-              const firstKey = sampleAllKeys[0] || '(فارغ)';
-              setBuildProgress(`⚠️ ${fileName}: لم تتطابق أي ترجمة! أول مفتاح: ${firstKey.substring(0, 60)}`);
-              await new Promise(r => setTimeout(r, 2000));
-              console.warn(`[BUILD-BDAT] ❌ NO MATCH for ${fileName}!`, { sampleKeys, sampleAllKeys, prefix });
-            }
-
-            // Also support legacy key format: "bdat:fileName:index" (old sessions)
-            if (translationMap.size === 0) {
-              const legacyPrefix = `bdat:${fileName}:`;
-              const legacyKeys = Object.keys(nonEmptyTranslations).filter(k => k.startsWith(legacyPrefix));
-              if (legacyKeys.length > 0) {
-                console.log(`[BUILD-BDAT] ${fileName}: falling back to legacy sequential keys (${legacyKeys.length} found)`);
+              const legacyMap = perFileLegacy.get(fileName);
+              if (legacyMap && legacyMap.size > 0) {
                 const { extractBdatStrings } = await import("@/lib/bdat-parser");
                 const extractedStrings = extractBdatStrings(bdatFile, fileName);
-                totalExtracted = extractedStrings.length;
                 for (let i = 0; i < extractedStrings.length; i++) {
                   const s = extractedStrings[i];
                   const stateKey = `bdat:${fileName}:${i}`;
-                  const trans = nonEmptyTranslations[stateKey];
+                  const trans = legacyMap.get(stateKey);
                   if (!trans) continue;
-                  let processed: string;
-                  if (hasPF(trans)) { processed = trans; }
-                  else { processed = processArabicText(trans, { arabicNumerals, mirrorPunct: mirrorPunctuation }); }
+                  const processed = hasPF(trans) ? trans : processArabicText(trans, { arabicNumerals, mirrorPunct: mirrorPunctuation });
                   translationMap.set(`${s.tableName}:${s.rowIndex}:${s.columnName}`, processed);
                   localModifiedCount++;
                 }
               }
             }
 
-            // Count total strings for stats (parse if not already done)
-            if (totalExtracted === 0) {
-              const { extractBdatStrings } = await import("@/lib/bdat-parser");
-              totalExtracted = extractBdatStrings(bdatFile, fileName).length;
-            }
-
-            // Record per-file stats
+            // Record per-file stats (use translationMap size instead of expensive re-parse)
             newBdatFileStats.push({
               fileName,
-              total: totalExtracted,
+              total: translationMap.size, // approximate — avoids costly extractBdatStrings
               translated: translationMap.size,
             });
 
-            console.log(`[BUILD-BDAT] ${fileName}: ${totalExtracted} strings total, ${translationMap.size} translations applied`);
             if (translationMap.size > 0) {
-              console.log(`[BUILD-BDAT] ${fileName}: sample map keys:`, [...translationMap.keys()].slice(0, 3));
-            }
-
-            if (translationMap.size > 0) {
-              const { result: patched, overflowErrors, patchedCount, skippedCount, tableStats } = patchBdatFile(bdatFile, translationMap);
+              const { result: patched, overflowErrors, patchedCount, skippedCount: patchSkipped, tableStats } = patchBdatFile(bdatFile, translationMap);
               localBdatResults.push({ name: fileName, data: patched });
               for (const e of overflowErrors) {
                 allOverflowErrors.push({ fileName, ...e });
               }
-              // Log table-level diagnostics
-              for (const ts of tableStats) {
-                if (ts.stringsPatched > 0 || ts.stringsSkipped > 0) {
-                  const growth = ts.newStringTableSize - ts.originalStringTableSize;
-                  console.log(`[BUILD-BDAT] ${fileName}/${ts.tableName}: ${ts.stringsPatched} patched, string table ${growth >= 0 ? '+' : ''}${growth} bytes${ts.hasU16Columns ? ' ⚠️ u16' : ''}`);
-                }
-              }
               const u16Tables = tableStats.filter(ts => ts.hasU16Columns && ts.stringsSkipped > 0);
-              const u16Warn = u16Tables.length > 0 ? ` ⚠️ ${u16Tables.length} جدول u16 overflow` : '';
-              setBuildProgress(`✅ ${fileName}: تم حقن ${patchedCount} نص${skippedCount > 0 ? ` ⚠️ تخطي ${skippedCount} (تجاوز الحجم)` : ''}${u16Warn}`);
-              await new Promise(r => setTimeout(r, 400));
+              if (u16Tables.length > 0) {
+                console.warn(`[BUILD-BDAT] ${fileName}: ${u16Tables.length} u16 overflow tables`);
+              }
               localModifiedCount += patchedCount;
             } else {
               localBdatResults.push({ name: fileName, data });
@@ -384,6 +350,9 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
             localBdatResults.push({ name: fileName, data: new Uint8Array(buf) });
           }
         }
+        // Yield to UI between batches
+        await new Promise(r => setTimeout(r, 0));
+      }
 
         // Update stats state so UI can display per-file breakdown
         setBdatFileStats(newBdatFileStats);
