@@ -994,8 +994,8 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleScanNewlineSplit} disabled={editor.translatedCount === 0}>
                     📐 تقسيم النصوص المضغوطة
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={editor.handleFlattenAllNewlines} disabled={editor.translatedCount === 0}>
-                    📏 دمج الأسطر المتعددة (سطر واحد)
+                  <DropdownMenuItem onClick={editor.handleFlattenAllNewlines} disabled={editor.translatedCount === 0 || editor.multiLineCount === 0}>
+                    📏 دمج الأسطر المتعددة (سطر واحد) {editor.multiLineCount > 0 && <span className="text-muted-foreground text-[10px]">({editor.multiLineCount})</span>}
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => setShowClearConfirm(editor.isFilterActive ? 'filtered' : 'all')} disabled={editor.translatedCount === 0} className="text-destructive focus:text-destructive">
@@ -1152,8 +1152,8 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleScanNewlineSplit} disabled={editor.translatedCount === 0}>
                     📐 تقسيم النصوص المضغوطة
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={editor.handleFlattenAllNewlines} disabled={editor.translatedCount === 0}>
-                    📏 دمج الأسطر المتعددة (سطر واحد)
+                  <DropdownMenuItem onClick={editor.handleFlattenAllNewlines} disabled={editor.translatedCount === 0 || editor.multiLineCount === 0}>
+                    📏 دمج الأسطر المتعددة (سطر واحد) {editor.multiLineCount > 0 && <span className="text-muted-foreground text-[10px]">({editor.multiLineCount})</span>}
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => setShowClearConfirm(editor.isFilterActive ? 'filtered' : 'all')} disabled={editor.translatedCount === 0} className="text-destructive focus:text-destructive">

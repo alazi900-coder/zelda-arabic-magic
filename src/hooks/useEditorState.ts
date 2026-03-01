@@ -568,6 +568,16 @@ export function useEditorState() {
     return Array.from(set).sort();
   }, [state?.entries]);
 
+  // === Count multi-line translations ===
+  const multiLineCount = useMemo(() => {
+    if (!state) return 0;
+    let count = 0;
+    for (const v of Object.values(state.translations)) {
+      if (v && v.includes('\n')) count++;
+    }
+    return count;
+  }, [state?.translations]);
+
 
   // === Count entries with technical tags ===
   const tagsCount = useMemo(() => {
@@ -1836,7 +1846,7 @@ export function useEditorState() {
     checkingConsistency, consistencyResults,
     scanningSentences, sentenceSplitResults, newlineCleanResults, diacriticsCleanResults, duplicateAlefResults, mirrorCharsResults, tagBracketFixResults, newlineSplitResults,
     isSearchPinned, pinnedKeys,
-    categoryProgress, qualityStats, needsImproveCount, translatedCount, tagsCount, fuzzyCount, byteOverflowCount,
+    categoryProgress, qualityStats, needsImproveCount, translatedCount, tagsCount, fuzzyCount, byteOverflowCount, multiLineCount,
     bdatTableNames, bdatColumnNames, bdatTableCounts, bdatColumnCounts,
     ...glossary,
     msbtFiles, filteredEntries, paginatedEntries, totalPages,
