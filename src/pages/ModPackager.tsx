@@ -203,37 +203,47 @@ export default function ModPackager() {
     reader.readAsArrayBuffer(file);
   }, [tryExtractFont]);
 
-  // Scan multiple .dat files to find font files
-  const handleScanDatForFonts = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
+  // Scan multiple .dat files to find font files (sequential to avoid memory overload)
+  const handleScanDatForFonts = useCallback(async (files: FileList) => {
     if (!files || files.length === 0) return;
-    setStatus(`🔍 جارٍ فحص ${files.length} ملف بحثاً عن خطوط...`);
-    let found = 0;
-    let scanned = 0;
-    const total = files.length;
-    for (let i = 0; i < total; i++) {
-      const file = files[i];
-      const reader = new FileReader();
-      reader.onload = () => {
-        scanned++;
-        if (found) return; // already found
-        const data = reader.result as ArrayBuffer;
+    const datFiles = Array.from(files).filter(f => f.name.endsWith('.dat') || f.name.endsWith('.bdat') || f.name.endsWith('.wifnt'));
+    if (datFiles.length === 0) {
+      setStatus(`❌ لم يتم العثور على ملفات dat في المجلد (${files.length} ملف إجمالي)`);
+      setTimeout(() => setStatus(""), 5000);
+      return;
+    }
+    setStatus(`🔍 جارٍ فحص ${datFiles.length} ملف بحثاً عن خطوط...`);
+    
+    for (let i = 0; i < datFiles.length; i++) {
+      const file = datFiles[i];
+      setStatus(`🔍 فحص ${i + 1}/${datFiles.length}: ${file.name}...`);
+      try {
+        const data = await file.arrayBuffer();
         const result = tryExtractFont(data, file.name);
         if (result.found) {
-          found++;
-          setStatus(`✅ تم العثور على خط في "${file.name}" (فُحص ${scanned}/${total})`);
+          setStatus(`✅ تم العثور على خط في "${file.name}" (فُحص ${i + 1}/${datFiles.length})`);
           setTimeout(() => setStatus(""), 6000);
-        } else {
-          console.log(`[${file.name}]`, result.debug);
+          return;
         }
-        if (scanned === total && !found) {
-          setStatus(`❌ لم يتم العثور على أي ملف خط من بين ${total} ملف`);
-          setTimeout(() => setStatus(""), 5000);
-        }
-      };
-      reader.readAsArrayBuffer(file);
+      } catch (err) {
+        console.warn(`خطأ في قراءة ${file.name}:`, err);
+      }
     }
+    setStatus(`❌ لم يتم العثور على أي ملف خط من بين ${datFiles.length} ملف`);
+    setTimeout(() => setStatus(""), 5000);
   }, [tryExtractFont]);
+
+  // Folder scan handler using webkitdirectory
+  const handleScanFolder = useCallback(() => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.setAttribute("webkitdirectory", "");
+    input.setAttribute("directory", "");
+    input.addEventListener("change", () => {
+      if (input.files) handleScanDatForFonts(input.files);
+    });
+    input.click();
+  }, [handleScanDatForFonts]);
 
 
 
@@ -877,11 +887,14 @@ export default function ModPackager() {
                   <span className="text-sm text-muted-foreground">أو ارفع ملف .wifnt أو .dat يدوياً</span>
                   <input type="file" accept=".wifnt,.dat" onChange={handleFontUpload} className="hidden" />
                 </label>
-                <label className="flex flex-col items-center gap-3 p-4 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-accent/50 transition-colors">
+                <button
+                  type="button"
+                  onClick={handleScanFolder}
+                  className="flex flex-col items-center gap-3 p-4 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-accent/50 transition-colors w-full"
+                >
                   <Search className="w-5 h-5 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">🔍 فحص عدة ملفات .dat للبحث عن الخط</span>
-                  <input type="file" accept=".dat" multiple onChange={handleScanDatForFonts} className="hidden" />
-                </label>
+                  <span className="text-sm text-muted-foreground">📁 فحص مجلد كامل للبحث عن الخط</span>
+                </button>
               </div>
             )}
             <div className="text-xs text-muted-foreground bg-muted/30 rounded p-3 space-y-1">
