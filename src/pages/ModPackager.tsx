@@ -103,8 +103,48 @@ export default function ModPackager() {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = () => processFont(reader.result as ArrayBuffer, file.name);
+    reader.onload = () => {
+      const data = reader.result as ArrayBuffer;
+      // Auto-detect: check if .dat file is actually a WIFNT font
+      const info = analyzeWifnt(data);
+      if (info.valid) {
+        processFont(data, file.name);
+      } else {
+        setStatus(`❌ الملف "${file.name}" ليس ملف خط WIFNT صالحاً`);
+        setTimeout(() => setStatus(""), 5000);
+      }
+    };
     reader.readAsArrayBuffer(file);
+  }, [processFont]);
+
+  // Scan multiple .dat files to find font files
+  const handleScanDatForFonts = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    setStatus(`🔍 جارٍ فحص ${files.length} ملف بحثاً عن خطوط...`);
+    let found = 0;
+    let scanned = 0;
+    const total = files.length;
+    for (let i = 0; i < total; i++) {
+      const file = files[i];
+      const reader = new FileReader();
+      reader.onload = () => {
+        scanned++;
+        const data = reader.result as ArrayBuffer;
+        const info = analyzeWifnt(data);
+        if (info.valid && !found) {
+          found++;
+          processFont(data, file.name);
+          setStatus(`✅ تم العثور على خط في "${file.name}" (فُحص ${scanned}/${total})`);
+          setTimeout(() => setStatus(""), 6000);
+        }
+        if (scanned === total && !found) {
+          setStatus(`❌ لم يتم العثور على أي ملف خط من بين ${total} ملف`);
+          setTimeout(() => setStatus(""), 5000);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
   }, [processFont]);
 
   const handleBdatUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -744,8 +784,13 @@ export default function ModPackager() {
 
                 <label className="flex flex-col items-center gap-3 p-4 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
                   <Upload className="w-5 h-5 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">أو ارفع ملف .wifnt يدوياً</span>
-                  <input type="file" accept=".wifnt" onChange={handleFontUpload} className="hidden" />
+                  <span className="text-sm text-muted-foreground">أو ارفع ملف .wifnt أو .dat يدوياً</span>
+                  <input type="file" accept=".wifnt,.dat" onChange={handleFontUpload} className="hidden" />
+                </label>
+                <label className="flex flex-col items-center gap-3 p-4 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-accent/50 transition-colors">
+                  <Search className="w-5 h-5 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground">🔍 فحص عدة ملفات .dat للبحث عن الخط</span>
+                  <input type="file" accept=".dat" multiple onChange={handleScanDatForFonts} className="hidden" />
                 </label>
               </div>
             )}
