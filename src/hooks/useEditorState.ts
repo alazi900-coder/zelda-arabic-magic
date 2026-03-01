@@ -1590,6 +1590,32 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 3000);
   }, [state, splitAtWordBoundary]);
 
+  /** Flatten all multi-line translations to single line (preserving word order) */
+  const handleFlattenAllNewlines = useCallback(() => {
+    if (!state) return;
+    const entriesToFlatten = isFilterActive ? filteredEntries : state.entries;
+    const keysToFlatten = new Set(entriesToFlatten.map(e => `${e.msbtFile}:${e.index}`));
+    const newTranslations = { ...state.translations };
+    const prevTrans: Record<string, string> = {};
+    let count = 0;
+    for (const key of keysToFlatten) {
+      const trans = newTranslations[key];
+      if (!trans || !trans.includes('\n')) continue;
+      prevTrans[key] = trans;
+      newTranslations[key] = trans.replace(/\n/g, ' ').replace(/\s{2,}/g, ' ').trim();
+      count++;
+    }
+    if (count === 0) {
+      setLastSaved("✅ لا توجد ترجمات متعددة الأسطر");
+      setTimeout(() => setLastSaved(""), 3000);
+      return;
+    }
+    setPreviousTranslations(old => ({ ...old, ...prevTrans }));
+    setState(prev => prev ? { ...prev, translations: newTranslations } : null);
+    setLastSaved(`✅ تم دمج ${count} ترجمة إلى سطر واحد`);
+    setTimeout(() => setLastSaved(""), 4000);
+  }, [state, isFilterActive, filteredEntries]);
+
   // === Pin Search ===
   const handleTogglePin = useCallback(() => {
     if (pinnedKeys) {
@@ -1846,7 +1872,7 @@ export function useEditorState() {
     handleScanDuplicateAlef, handleApplyDuplicateAlefClean, handleRejectDuplicateAlefClean, handleApplyAllDuplicateAlefCleans,
     handleScanMirrorChars, handleApplyMirrorCharsClean, handleRejectMirrorCharsClean, handleApplyAllMirrorCharsCleans,
     handleScanTagBrackets, handleApplyTagBracketFix, handleRejectTagBracketFix, handleApplyAllTagBracketFixes,
-    handleScanNewlineSplit, handleApplyNewlineSplit, handleRejectNewlineSplit, handleApplyAllNewlineSplits, handleSplitSingleEntry,
+    handleScanNewlineSplit, handleApplyNewlineSplit, handleRejectNewlineSplit, handleApplyAllNewlineSplits, handleSplitSingleEntry, handleFlattenAllNewlines,
     handleTogglePin,
     handleClearTranslations, handleUndoClear, clearUndoBackup, isFilterActive,
     integrityResult, showIntegrityDialog, setShowIntegrityDialog, checkingIntegrity,
