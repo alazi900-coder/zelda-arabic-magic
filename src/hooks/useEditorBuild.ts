@@ -248,15 +248,32 @@ export function useEditorBuild({ state, setState, setLastSaved, arabicNumerals, 
           await new Promise(r => setTimeout(r, 800));
         }
 
-        for (const fileName of bdatBinaryFileNames!) {
+      // Pre-scan: find which files actually have translations to skip untranslated ones
+      const filesWithTranslations = new Set<string>();
+      for (const key of Object.keys(nonEmptyTranslations)) {
+        if (key.startsWith('bdat-bin:')) {
+          const secondColon = key.indexOf(':', 9); // after "bdat-bin:"
+          if (secondColon !== -1) filesWithTranslations.add(key.slice(9, secondColon));
+        } else if (key.startsWith('bdat:')) {
+          const secondColon = key.indexOf(':', 5);
+          if (secondColon !== -1) filesWithTranslations.add(key.slice(5, secondColon));
+        }
+      }
+
+      const skippedFiles = bdatBinaryFileNames!.filter(f => !filesWithTranslations.has(f));
+      const filesToBuild = bdatBinaryFileNames!.filter(f => filesWithTranslations.has(f));
+      if (skippedFiles.length > 0) {
+        setBuildProgress(`⏭️ تخطي ${skippedFiles.length} ملف بدون ترجمات، بناء ${filesToBuild.length} ملف فقط...`);
+        await new Promise(r => setTimeout(r, 800));
+      }
+
+      for (const fileName of filesToBuild) {
           const buf = bdatBinaryFiles![fileName];
           if (!buf) continue;
           try {
             const data = new Uint8Array(buf);
             const bdatFile = parseBdatFile(data, unhashLabel);
 
-            // NEW KEY FORMAT: "bdat-bin:fileName:tableName:rowIndex:colName:0"
-            // Extract translations directly from key structure — no order dependency!
             const translationMap = new Map<string, string>();
             const prefix = `bdat-bin:${fileName}:`;
 
