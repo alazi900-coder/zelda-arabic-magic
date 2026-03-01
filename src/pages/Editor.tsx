@@ -13,6 +13,8 @@ import {
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import {
   ArrowRight, Download, FileText, Loader2, Filter, Sparkles, Save, Tag,
@@ -999,6 +1001,9 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleFlattenAllNewlines} disabled={editor.translatedCount === 0 || editor.multiLineCount === 0}>
                     📏 دمج الأسطر المتعددة (سطر واحد) {editor.multiLineCount > 0 && <span className="text-muted-foreground text-[10px]">({editor.multiLineCount})</span>}
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => { setFontTestWord(""); setShowFontTest(true); }} disabled={editor.translatedCount === 0 && (editor.state?.entries.length || 0) === 0}>
+                    🔤 تجربة الخط (ملء الكل)
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => setShowClearConfirm(editor.isFilterActive ? 'filtered' : 'all')} disabled={editor.translatedCount === 0} className="text-destructive focus:text-destructive">
                     <Trash2 className="w-4 h-4" /> {editor.isFilterActive ? `مسح ترجمة القسم المحدد 🗑️` : `مسح جميع الترجمات 🗑️`}
@@ -1156,6 +1161,9 @@ const Editor = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleFlattenAllNewlines} disabled={editor.translatedCount === 0 || editor.multiLineCount === 0}>
                     📏 دمج الأسطر المتعددة (سطر واحد) {editor.multiLineCount > 0 && <span className="text-muted-foreground text-[10px]">({editor.multiLineCount})</span>}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => { setFontTestWord(""); setShowFontTest(true); }} disabled={editor.translatedCount === 0 && (editor.state?.entries.length || 0) === 0}>
+                    🔤 تجربة الخط (ملء الكل)
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => setShowClearConfirm(editor.isFilterActive ? 'filtered' : 'all')} disabled={editor.translatedCount === 0} className="text-destructive focus:text-destructive">
@@ -1449,6 +1457,35 @@ const Editor = () => {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+
+        {/* Font Test Dialog */}
+        <Dialog open={showFontTest} onOpenChange={setShowFontTest}>
+          <DialogContent className="max-w-sm">
+            <DialogHeader>
+              <DialogTitle className="font-display">🔤 تجربة الخط</DialogTitle>
+              <DialogDescription>اكتب كلمة أو عبارة لملء جميع الترجمات بها لاختبار الخط</DialogDescription>
+            </DialogHeader>
+            <Input
+              value={fontTestWord}
+              onChange={e => setFontTestWord(e.target.value)}
+              placeholder="مثال: اختبار"
+              className="text-right font-display"
+              dir="rtl"
+              onKeyDown={e => {
+                if (e.key === 'Enter' && fontTestWord.trim()) {
+                  editor.handleFontTest(fontTestWord);
+                  setShowFontTest(false);
+                }
+              }}
+            />
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowFontTest(false)}>إلغاء</Button>
+              <Button onClick={() => { editor.handleFontTest(fontTestWord); setShowFontTest(false); }} disabled={!fontTestWord.trim()}>
+                ✨ ملء الكل
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
         {/* Page Translation Compare Dialog */}
         {editor.showPageCompare && editor.pendingPageTranslations && (
