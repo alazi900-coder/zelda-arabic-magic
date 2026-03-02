@@ -675,7 +675,17 @@ async function translateWithAI(
 
   // --- Step 3: Build prompt with KEYED texts (prevents positional misalignment) ---
   // Use short unique keys like K0, K1, ... so the AI must return a JSON object with the same keys
-  const textsBlock = needsAI.map((item, i) => `"K${i}": "${item.termLocks.lockedText.replace(/"/g, '\\"')}"`).join(',\n');
+  // Proper JSON escaping to prevent broken prompts
+  function escapeForJsonString(s: string): string {
+    return s
+      .replace(/\\/g, '\\\\')
+      .replace(/"/g, '\\"')
+      .replace(/\n/g, '\\n')
+      .replace(/\r/g, '\\r')
+      .replace(/\t/g, '\\t')
+      .replace(/[\x00-\x1F\x7F]/g, '');
+  }
+  const textsBlock = needsAI.map((item, i) => `"K${i}": "${escapeForJsonString(item.termLocks.lockedText)}"`).join(',\n');
 
   let glossarySection = '';
   if (glossary?.trim()) {
@@ -745,27 +755,42 @@ ${textsBlock}
   function extractJsonObject(raw: string): Record<string, string> {
     let cleaned = raw.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
     
-    // Try parsing as object first
-    const objMatch = cleaned.match(/\{[\s\S]*\}/);
-    if (objMatch) {
-      let jsonStr = objMatch[0];
+    // Find the outermost JSON object by matching balanced braces
+    let depth = 0, start = -1, end = -1;
+    for (let i = 0; i < cleaned.length; i++) {
+      if (cleaned[i] === '{') {
+        if (depth === 0) start = i;
+        depth++;
+      } else if (cleaned[i] === '}') {
+        depth--;
+        if (depth === 0 && start !== -1) { end = i; break; }
+      }
+    }
+    
+    if (start !== -1 && end !== -1) {
+      let jsonStr = cleaned.substring(start, end + 1);
       try {
         return JSON.parse(jsonStr);
       } catch {
-        // Fix common issues
+        // Fix common issues: trailing commas, control characters
         jsonStr = jsonStr.replace(/,\s*}/g, '}').replace(/[\x00-\x1F\x7F]/g, ' ');
-        try { return JSON.parse(jsonStr); } catch {}
+        try { return JSON.parse(jsonStr); } catch (e2) {
+          console.error('JSON parse failed after cleanup:', (e2 as Error).message, 'Raw length:', jsonStr.length);
+        }
       }
     }
     
     // Fallback: try as array (old format) and convert to keyed object
-    const arrMatch = cleaned.match(/\[[\s\S]*\]/);
+    const arrMatch = cleaned.match(/\[[\s\S]*?\]/);
     if (arrMatch) {
       const sanitized = arrMatch[0].replace(/[\x00-\x1F\x7F]/g, ' ');
-      const arr: string[] = JSON.parse(sanitized);
-      const obj: Record<string, string> = {};
-      arr.forEach((val, i) => { obj[`K${i}`] = val; });
-      return obj;
+      try {
+        const arr: string[] = JSON.parse(sanitized);
+        const obj: Record<string, string> = {};
+        arr.forEach((val, i) => { obj[`K${i}`] = val; });
+        console.warn(`AI returned array instead of object, converted ${arr.length} entries`);
+        return obj;
+      } catch {}
     }
     
     throw new Error('فشل في تحليل استجابة الذكاء الاصطناعي — لم يتم العثور على JSON صالح');
