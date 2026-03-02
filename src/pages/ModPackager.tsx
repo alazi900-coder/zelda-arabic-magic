@@ -70,6 +70,8 @@ export default function ModPackager() {
   const glyphMapCanvasRef = useRef<HTMLCanvasElement>(null);
   const glyphUploadRef = useRef<HTMLInputElement>(null);
   const selectedGlyphCanvasRef = useRef<HTMLCanvasElement>(null);
+  const xbc1FolderInputRef = useRef<HTMLInputElement>(null);
+  const exploreFolderInputRef = useRef<HTMLInputElement>(null);
 
   // Decode and cache the atlas canvas when font changes
   useEffect(() => {
@@ -275,21 +277,23 @@ export default function ModPackager() {
     return `0x${Array.from(bytes.slice(0, 4)).map(b => b.toString(16).padStart(2, '0')).join(' ')}`;
   }, []);
 
-  const handleExploreDatFolder = useCallback(async () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.setAttribute("webkitdirectory", "");
-    input.setAttribute("directory", "");
-    input.addEventListener("change", async () => {
-      const files = input.files;
-      if (!files || files.length === 0) return;
-      setExploringFolder(true);
-      setExploredFiles([]);
-      setSelectedExploreFile(null);
-      setHexViewOffset(0);
-      const allFiles = Array.from(files);
-      setExploreStatus(`🔍 جارٍ تحليل ${allFiles.length} ملف...`);
-      const results: typeof exploredFiles = [];
+  const handleExploreFolderSelection = useCallback(async (files: FileList) => {
+    if (!files || files.length === 0) {
+      setExploreStatus("⚠️ لم يتم اختيار ملفات");
+      setTimeout(() => setExploreStatus(""), 4000);
+      return;
+    }
+
+    setExploringFolder(true);
+    setExploredFiles([]);
+    setSelectedExploreFile(null);
+    setHexViewOffset(0);
+
+    const allFiles = Array.from(files);
+    setExploreStatus(`🔍 جارٍ تحليل ${allFiles.length} ملف...`);
+    const results: typeof exploredFiles = [];
+
+    try {
       for (let i = 0; i < allFiles.length; i++) {
         const file = allFiles[i];
         setExploreStatus(`🔍 تحليل ${i + 1}/${allFiles.length}: ${file.name}...`);
@@ -301,14 +305,18 @@ export default function ModPackager() {
           let decompressedSize: number | undefined;
           let decompressedMagic: string | undefined;
           let decompressedBytes: Uint8Array | undefined;
+
           if (isZstd && zstdReady) {
             try {
               const decompressed = zstdDecompress(bytes);
               decompressedSize = decompressed.length;
               decompressedMagic = getMagicString(decompressed);
               decompressedBytes = decompressed;
-            } catch {}
+            } catch {
+              // تجاهل الملف الذي فشل فك ضغطه مع الاستمرار في الباقي
+            }
           }
+
           results.push({
             name: file.webkitRelativePath || file.name,
             size: file.size,
@@ -319,15 +327,25 @@ export default function ModPackager() {
             rawBytes: bytes,
             decompressedBytes,
           });
-        } catch {}
+        } catch {
+          // تجاهل ملف تالف/غير قابل للقراءة مع الاستمرار
+        }
       }
+
       setExploredFiles(results);
       setExploreStatus(`✅ تم تحليل ${results.length} ملف`);
-      setExploringFolder(false);
       setTimeout(() => setExploreStatus(""), 5000);
-    });
-    input.click();
+    } catch {
+      setExploreStatus("❌ حدث خطأ أثناء تحليل الملفات");
+      setTimeout(() => setExploreStatus(""), 6000);
+    } finally {
+      setExploringFolder(false);
+    }
   }, [zstdReady, getMagicString]);
+
+  const handleExploreDatFolder = useCallback(() => {
+    exploreFolderInputRef.current?.click();
+  }, []);
 
   const handleDownloadExploredFile = useCallback((index: number, useDecompressed: boolean) => {
     const file = exploredFiles[index];
@@ -467,24 +485,26 @@ export default function ModPackager() {
   }, [zstdReady]);
 
   // Handle XBC1 folder extraction
-  const handleXbc1ExtractFolder = useCallback(async () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.setAttribute("webkitdirectory", "");
-    input.setAttribute("directory", "");
-    input.addEventListener("change", async () => {
-      const files = input.files;
-      if (!files || files.length === 0) return;
-      const datFiles = Array.from(files);
-      setXbc1Extracting(true);
-      setXbc1Files([]);
-      setXbc1Progress({ current: 0, total: datFiles.length });
-      setXbc1Status(`🔍 جارٍ فك ${datFiles.length} ملف...`);
+  const handleXbc1FolderSelection = useCallback(async (files: FileList) => {
+    if (!files || files.length === 0) {
+      setXbc1Status("⚠️ لم يتم اختيار ملفات");
+      setTimeout(() => setXbc1Status(""), 4000);
+      return;
+    }
 
-      const results: Xbc1File[] = [];
+    const datFiles = Array.from(files);
+    setXbc1Extracting(true);
+    setXbc1Files([]);
+    setXbc1Progress({ current: 0, total: datFiles.length });
+    setXbc1Status(`🔍 جارٍ فك ${datFiles.length} ملف...`);
+
+    const results: Xbc1File[] = [];
+
+    try {
       for (let i = 0; i < datFiles.length; i++) {
         setXbc1Progress({ current: i + 1, total: datFiles.length });
         setXbc1Status(`🔍 فك ${i + 1}/${datFiles.length}: ${datFiles[i].name}...`);
+
         try {
           const data = await datFiles[i].arrayBuffer();
           const parsed = await parseXbc1(data);
@@ -500,16 +520,26 @@ export default function ModPackager() {
               decompressedData: parsed.decompressedData,
             });
           }
-        } catch {}
+        } catch {
+          // تجاهل الملف الفاشل مع الاستمرار
+        }
       }
+
       setXbc1Files(results);
       const skipped = datFiles.length - results.length;
       setXbc1Status(`✅ تم فك ${results.length} ملف xbc1${skipped > 0 ? ` (${skipped} ملف ليس xbc1)` : ''}`);
-      setXbc1Extracting(false);
       setTimeout(() => setXbc1Status(""), 8000);
-    });
-    input.click();
+    } catch {
+      setXbc1Status("❌ حدث خطأ أثناء فك الملفات");
+      setTimeout(() => setXbc1Status(""), 6000);
+    } finally {
+      setXbc1Extracting(false);
+    }
   }, [parseXbc1, getMagicString]);
+
+  const handleXbc1ExtractFolder = useCallback(() => {
+    xbc1FolderInputRef.current?.click();
+  }, []);
 
   // Handle single XBC1 file extraction
   const handleXbc1ExtractFile = useCallback(async () => {
@@ -1553,7 +1583,7 @@ export default function ModPackager() {
         </div>
 
         {/* XBC1 Extractor Section */}
-        <Card className="p-6 space-y-4 border-primary/30">
+        <Card id="dat-extractor" className="p-6 space-y-4 border-primary/30 scroll-mt-24">
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
               <FolderArchive className="w-5 h-5 text-primary" />
@@ -1563,6 +1593,18 @@ export default function ModPackager() {
               <p className="text-xs text-muted-foreground">فك ضغط ملفات اللعبة المغلفة بصيغة xbc1 (zlib / zstd)</p>
             </div>
           </div>
+
+          <input
+            ref={xbc1FolderInputRef}
+            type="file"
+            className="hidden"
+            multiple
+            onChange={(e) => {
+              if (e.target.files) void handleXbc1FolderSelection(e.target.files);
+              e.currentTarget.value = "";
+            }}
+            {...({ webkitdirectory: "", directory: "" } as Record<string, string>)}
+          />
 
           <div className="grid grid-cols-2 gap-3">
             <Button
@@ -1681,6 +1723,18 @@ export default function ModPackager() {
               <p className="text-xs text-muted-foreground">فك ضغط ملفات .dat واستعراض محتوياتها ومعرفة نوعها</p>
             </div>
           </div>
+
+          <input
+            ref={exploreFolderInputRef}
+            type="file"
+            className="hidden"
+            multiple
+            onChange={(e) => {
+              if (e.target.files) void handleExploreFolderSelection(e.target.files);
+              e.currentTarget.value = "";
+            }}
+            {...({ webkitdirectory: "", directory: "" } as Record<string, string>)}
+          />
 
           <Button
             variant="outline"
