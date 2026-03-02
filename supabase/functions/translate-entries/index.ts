@@ -91,9 +91,16 @@ function normalizeTagPlaceholders(text: string): string {
     .replace(/(?<!\w)TAG(\d+)(?!\w)/gi, 'TAG_$1')      // TAG0 -> TAG_0
     .replace(/tag_(\d+)/g, 'TAG_$1')                    // tag_0 -> TAG_0
     .replace(/[\[{(<]\s*TAG\s*[_\s-:]?(\d+)\s*[\]})>]/gi, 'TAG_$1') // [TAG_0] -> TAG_0
-    .replace(/[《〈«⟪\[(<]\s*T(?:AG)?[_\s-:]?(\d+)\s*[》〉»⟫\])>]/gi, 'TAG_$1')  // «T0» etc -> TAG_0
     .replace(/NEWLINE\s*[-:_]?\s*_?(\d+)/gi, 'NEWLINE_$1')  // Normalize NEWLINE variants
     .replace(/newline_(\d+)/g, 'NEWLINE_$1');                // lowercase -> uppercase
+}
+
+/** Normalize locked term placeholders (⟪T0⟫) without converting them to TAG_N */
+function normalizeLockedTermPlaceholders(text: string): string {
+  return text
+    .replace(/[《〈«]/g, '⟪')
+    .replace(/[》〉»]/g, '⟫')
+    .replace(/[⟪]\s*T\s*[-:_]?\s*(\d+)\s*[⟫]/gi, '⟪T$1⟫');
 }
 
 function restoreTags(text: string, tags: Map<string, string>): string {
@@ -108,10 +115,19 @@ function restoreTags(text: string, tags: Map<string, string>): string {
   // Then restore TAG_N placeholders
   for (const [placeholder, original] of tags) {
     if (!placeholder.startsWith('NEWLINE_')) {
-      result = result.replace(placeholder, original);
+      const escaped = placeholder.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      result = result.replace(new RegExp(escaped, 'g'), original);
     }
   }
   return result;
+}
+
+function stripUnexpectedPlaceholders(text: string, allowedPlaceholders: Set<string>): string {
+  return text
+    .replace(/\b(?:TAG|NEWLINE)_\d+\b/g, (match) => (allowedPlaceholders.has(match) ? match : ''))
+    .replace(/[⟪《〈«]\s*T\s*[-:_]?\s*\d+\s*[⟫》〉»]/gi, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
 }
 
 function restoreAndEnforce(original: string, translated: string, tags: Map<string, string>): string {
@@ -223,24 +239,24 @@ function lockTermsInText(text: string, glossaryMap: Map<string, string>): TermLo
   return { lockedText, locks };
 }
 
-function normalizeTermBrackets(text: string): string {
-  return text
-    .replace(/[《〈«]/g, '⟪')
-    .replace(/[》〉»]/g, '⟫');
-}
-
 function unlockTerms(translatedText: string, locks: TermLockResult['locks']): string {
-  // Normalize AI-corrupted bracket variants before matching
-  let result = normalizeTermBrackets(translatedText);
+  // Normalize AI-corrupted term placeholders before matching
+  let result = normalizeLockedTermPlaceholders(translatedText);
+
+  const lockMap = new Map<string, string>();
   for (const lock of locks) {
-    result = result.replace(lock.placeholder, lock.arabic);
+    lockMap.set(lock.placeholder, lock.arabic);
+    const escaped = lock.placeholder.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    result = result.replace(new RegExp(escaped, 'g'), lock.arabic);
   }
-  // Fallback: catch any remaining bracket variants the AI may have introduced
-  result = result.replace(/[⟪《〈«]T(\d+)[⟫》〉»]/g, (_match, num) => {
-    const lock = locks.find(l => l.placeholder === `⟪T${num}⟫`);
-    return lock ? lock.arabic : _match;
+
+  // Fallback: catch bracket/spacing variants and drop unknown placeholders
+  result = result.replace(/[⟪《〈«]\s*T\s*[-:_]?\s*(\d+)\s*[⟫》〉»]/gi, (_match, num) => {
+    const key = `⟪T${num}⟫`;
+    return lockMap.get(key) ?? '';
   });
-  return result;
+
+  return result.replace(/\s{2,}/g, ' ').trim();
 }
 
 // --- Apply glossary replacements to translated text (post-processing) ---
@@ -366,10 +382,9 @@ async function translateWithMyMemory(
       
       if (translation?.trim()) {
         translation = normalizeTagPlaceholders(translation);
-        // Unlock terms first (replace placeholders with Arabic)
-        if (termLocks.locks.length > 0) {
-          translation = unlockTerms(translation, termLocks.locks);
-        }
+        translation = normalizeLockedTermPlaceholders(translation);
+        translation = unlockTerms(translation, termLocks.locks);
+        translation = stripUnexpectedPlaceholders(translation, new Set(pe.tags.keys()));
         // Then apply glossary post-processing for any remaining English terms
         if (glossaryMap) {
           translation = applyGlossaryPost(translation, glossaryMap);
@@ -455,9 +470,9 @@ async function translateWithGoogle(
 
         if (translation) {
           translation = normalizeTagPlaceholders(translation);
-          if (termLocks.locks.length > 0) {
-            translation = unlockTerms(translation, termLocks.locks);
-          }
+          translation = normalizeLockedTermPlaceholders(translation);
+          translation = unlockTerms(translation, termLocks.locks);
+          translation = stripUnexpectedPlaceholders(translation, new Set(pe.tags.keys()));
           if (glossaryMap) {
             translation = applyGlossaryPost(translation, glossaryMap);
           }
@@ -541,9 +556,9 @@ async function translateWithGoogle(
           let translation = translations[j]?.trim();
           if (translation) {
             translation = normalizeTagPlaceholders(translation);
-            if (t.termLocks.locks.length > 0) {
-              translation = unlockTerms(translation, t.termLocks.locks);
-            }
+            translation = normalizeLockedTermPlaceholders(translation);
+            translation = unlockTerms(translation, t.termLocks.locks);
+            translation = stripUnexpectedPlaceholders(translation, new Set(batchProtected[t.idx].tags.keys()));
             if (glossaryMap) {
               translation = applyGlossaryPost(translation, glossaryMap);
             }
@@ -826,13 +841,16 @@ ${textsBlock}
       }
 
       translated = normalizeTagPlaceholders(translated);
+      translated = normalizeLockedTermPlaceholders(translated);
 
-      // Unlock term placeholders → Arabic
-      if (item.termLocks.locks.length > 0) {
-        translated = unlockTerms(translated, item.termLocks.locks);
-      }
-      // Post-validation: re-insert any missing TAG_N placeholders
+      // Unlock term placeholders → Arabic (and strip unknown lock placeholders)
+      translated = unlockTerms(translated, item.termLocks.locks);
+
+      // Remove any leaked TAG_/NEWLINE_ placeholders that are not expected for this entry
       const expectedTags = [...item.pe.tags.keys()];
+      translated = stripUnexpectedPlaceholders(translated, new Set(expectedTags));
+
+      // Post-validation: re-insert any missing expected placeholders only
       for (const tag of expectedTags) {
         if (!translated.includes(tag)) {
           console.warn(`Post-validation: re-inserting missing ${tag} for key ${item.entry.key}`);
