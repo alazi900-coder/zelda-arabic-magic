@@ -475,12 +475,7 @@ export default function ModPackager() {
     input.addEventListener("change", async () => {
       const files = input.files;
       if (!files || files.length === 0) return;
-      const datFiles = Array.from(files).filter(f => f.name.endsWith('.dat') || f.name.endsWith('.wismt') || f.name.endsWith('.wilay') || f.name.endsWith('.mot'));
-      if (datFiles.length === 0) {
-        setXbc1Status(`❌ لم يتم العثور على ملفات dat في المجلد (${files.length} ملف)`);
-        setTimeout(() => setXbc1Status(""), 5000);
-        return;
-      }
+      const datFiles = Array.from(files);
       setXbc1Extracting(true);
       setXbc1Files([]);
       setXbc1Progress({ current: 0, total: datFiles.length });
