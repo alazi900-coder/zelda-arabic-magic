@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Shield, FileText, Download, Sparkles } from "lucide-react";
+import { Shield, FileText, Download, Sparkles, FolderOpen } from "lucide-react";
 import GameInfoSection from "@/components/GameInfoSection";
 import heroBg from "@/assets/xc3-hero-bg.jpg";
 import { APP_VERSION } from "@/lib/version";
@@ -50,6 +50,12 @@ const Xenoblade = forwardRef<HTMLDivElement>((_, ref) => {
             <Link to="/mod-packager">
               <Button size="lg" variant="outline" className="font-display font-bold text-lg px-10 py-6 border-primary/40 hover:bg-primary/10">
                 بناء حزمة المود 📦
+              </Button>
+            </Link>
+            <Link to="/mod-packager#dat-extractor">
+              <Button size="lg" variant="ghost" className="font-display font-bold text-lg px-10 py-6 hover:bg-primary/10">
+                <FolderOpen className="w-5 h-5 ml-2" />
+                فك ملفات DAT 🔬
               </Button>
             </Link>
           </div>
