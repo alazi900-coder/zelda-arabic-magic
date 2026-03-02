@@ -247,7 +247,13 @@ export function categorizeByTableName(tbl: string): string | null {
   if (/^mnu_/i.test(tbl) || /^menu$/i.test(tbl)) return "bdat-menu";
   if (/mnu_option|mnu_msg|mnu_name|mnu_shop|mnu_camp|mnu_map|mnu_status|mnu_battle|mnu_quest|mnu_hero|mnu_system|mnu_achievement|mnu_class|mnu_collect|mnu_item|mnu_gem|mnu_filter|mnu_sort|mnu_font|mnu_res|mnu_layer|mnu_text|mnu_weapon/i.test(tbl)) return "bdat-menu";
 
-  // === نظام القتال ===
+  // === المهارات والفنون (must check before generic btl_) ===
+  if (/^btl_(skill|art|arts|spc|talent|master)/i.test(tbl)) return "bdat-skill";
+
+  // === التأثيرات والبوفات (must check before generic btl_) ===
+  if (/^btl_(buff|debuff|enhance|aura|status|condition|effect)/i.test(tbl)) return "bdat-buff";
+
+  // === نظام القتال (هجمات وإحصائيات) ===
   if (/^btl_/i.test(tbl) || /^(rsc_|wpn_)/i.test(tbl)) return "bdat-battle";
 
   // === الشخصيات ===
