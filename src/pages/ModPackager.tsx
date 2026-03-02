@@ -365,67 +365,105 @@ export default function ModPackager() {
     return lines.join('\n');
   }, []);
 
-  // XBC1 parser: parse and decompress xbc1-wrapped files
+  // XBC1 parser: parse and decompress xbc1-wrapped files, also supports plain zstd
   const parseXbc1 = useCallback(async (data: ArrayBuffer): Promise<{ archiveName: string; compressionType: number; decompressedSize: number; compressedSize: number; decompressedData: Uint8Array } | null> => {
     const bytes = new Uint8Array(data);
-    if (bytes.length < 48) return null;
-    // Check magic "xbc1"
-    if (bytes[0] !== 0x78 || bytes[1] !== 0x62 || bytes[2] !== 0x63 || bytes[3] !== 0x31) return null;
-    const view = new DataView(data);
-    const compressionType = view.getUint32(4, true);
-    const decompressedSize = view.getUint32(8, true);
-    const compressedSize = view.getUint32(12, true);
-    // const hash = view.getUint32(16, true);
-    // Name: 28 bytes starting at offset 20, null-terminated
-    let archiveName = "";
-    for (let i = 20; i < 48; i++) {
-      if (bytes[i] === 0) break;
-      archiveName += String.fromCharCode(bytes[i]);
-    }
-    const compressedStream = bytes.slice(48, 48 + compressedSize);
+    if (bytes.length < 4) return null;
 
-    let decompressedData: Uint8Array;
-    if (compressionType === 0) {
-      // Uncompressed
-      decompressedData = compressedStream;
-    } else if (compressionType === 1) {
-      // Zlib - use browser's DecompressionStream
-      try {
-        const ds = new DecompressionStream('deflate');
-        const writer = ds.writable.getWriter();
-        const reader = ds.readable.getReader();
-        writer.write(compressedStream);
-        writer.close();
-        const chunks: Uint8Array[] = [];
-        let totalLen = 0;
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          chunks.push(value);
-          totalLen += value.length;
+    // Check magic "xbc1"
+    const isXbc1 = bytes[0] === 0x78 && bytes[1] === 0x62 && bytes[2] === 0x63 && bytes[3] === 0x31;
+    // Check zstd magic
+    const isZstd = bytes[0] === 0x28 && bytes[1] === 0xB5 && bytes[2] === 0x2F && bytes[3] === 0xFD;
+
+    if (isXbc1 && bytes.length >= 48) {
+      const view = new DataView(data);
+      const compressionType = view.getUint32(4, true);
+      const decompressedSize = view.getUint32(8, true);
+      const compressedSize = view.getUint32(12, true);
+      let archiveName = "";
+      for (let i = 20; i < 48; i++) {
+        if (bytes[i] === 0) break;
+        archiveName += String.fromCharCode(bytes[i]);
+      }
+      const compressedStream = bytes.slice(48, 48 + compressedSize);
+
+      let decompressedData: Uint8Array;
+      if (compressionType === 0) {
+        decompressedData = compressedStream;
+      } else if (compressionType === 1) {
+        try {
+          const ds = new DecompressionStream('deflate');
+          const writer = ds.writable.getWriter();
+          const reader = ds.readable.getReader();
+          writer.write(compressedStream);
+          writer.close();
+          const chunks: Uint8Array[] = [];
+          let totalLen = 0;
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            chunks.push(value);
+            totalLen += value.length;
+          }
+          decompressedData = new Uint8Array(totalLen);
+          let offset = 0;
+          for (const chunk of chunks) {
+            decompressedData.set(chunk, offset);
+            offset += chunk.length;
+          }
+        } catch {
+          return null;
         }
-        decompressedData = new Uint8Array(totalLen);
+      } else if (compressionType === 3) {
+        if (!zstdReady) return null;
+        try {
+          decompressedData = zstdDecompress(compressedStream);
+        } catch {
+          return null;
+        }
+      } else {
+        return null;
+      }
+      return { archiveName, compressionType, decompressedSize, compressedSize, decompressedData };
+    }
+
+    if (isZstd && zstdReady) {
+      try {
+        const decompressedData = zstdDecompress(bytes);
+        return { archiveName: "", compressionType: 3, decompressedSize: decompressedData.length, compressedSize: bytes.length, decompressedData };
+      } catch {
+        return null;
+      }
+    }
+
+    // Try zlib (deflate) raw
+    try {
+      const ds = new DecompressionStream('deflate');
+      const writer = ds.writable.getWriter();
+      const reader = ds.readable.getReader();
+      writer.write(bytes);
+      writer.close();
+      const chunks: Uint8Array[] = [];
+      let totalLen = 0;
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        chunks.push(value);
+        totalLen += value.length;
+      }
+      if (totalLen > bytes.length) {
+        const decompressedData = new Uint8Array(totalLen);
         let offset = 0;
         for (const chunk of chunks) {
           decompressedData.set(chunk, offset);
           offset += chunk.length;
         }
-      } catch {
-        return null;
+        return { archiveName: "", compressionType: 1, decompressedSize: totalLen, compressedSize: bytes.length, decompressedData };
       }
-    } else if (compressionType === 3) {
-      // Zstd
-      if (!zstdReady) return null;
-      try {
-        decompressedData = zstdDecompress(compressedStream);
-      } catch {
-        return null;
-      }
-    } else {
-      return null;
-    }
+    } catch {}
 
-    return { archiveName, compressionType, decompressedSize, compressedSize, decompressedData };
+    // Raw file - return as-is so user can inspect it
+    return { archiveName: "", compressionType: -1, decompressedSize: bytes.length, compressedSize: bytes.length, decompressedData: bytes };
   }, [zstdReady]);
 
   // Handle XBC1 folder extraction
