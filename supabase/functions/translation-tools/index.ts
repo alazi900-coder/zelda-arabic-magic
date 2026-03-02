@@ -112,6 +112,35 @@ Rules:
 - Return ONLY the JSON array${glossaryContext}`;
       userPrompt = `Improve these translations:\n${entries.map((e: any) => `[${e.key}] EN: ${e.original}\nAR: ${e.translation}`).join('\n\n')}`;
 
+    } else if (style === 'mismatch-detect') {
+      // Detect misplaced translations using AI
+      if (!entries || !Array.isArray(entries)) {
+        return new Response(JSON.stringify({ error: 'Missing entries array' }), {
+          status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      systemPrompt = `You are a professional video game translation QA expert.
+You are given pairs of English original text and their Arabic translations.
+Your job is to detect MISMATCHED translations — where an Arabic translation clearly does NOT correspond to its paired English original.
+
+Signs of a mismatch:
+1. The translation talks about a completely different topic than the original
+2. Names/numbers/variables in the translation don't match the original
+3. The translation appears to belong to a different entry entirely
+4. The meaning is completely unrelated (not just a bad translation, but WRONG content)
+
+Do NOT flag:
+- Bad quality translations (those are still matched correctly)
+- Literal translations (still correct target)
+- Missing content (partial translations are OK)
+
+Return a JSON array of objects for ONLY the mismatched entries:
+{ "key": "entry_key", "reason": "brief Arabic explanation of why this is mismatched", "confidence": "high" or "medium" }
+
+If all translations match their originals, return an empty array [].
+Return ONLY the JSON array.`;
+      userPrompt = `Check these translation pairs for mismatches:\n${entries.map((e: any) => `[${e.key}] EN: ${e.original}\nAR: ${e.translation}`).join('\n\n')}`;
+
     } else {
       // Style translation
       if (!text?.trim()) {
