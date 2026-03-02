@@ -45,6 +45,21 @@ export default function ModPackager() {
   const [selectedExploreFile, setSelectedExploreFile] = useState<number | null>(null);
   const [hexViewOffset, setHexViewOffset] = useState(0);
 
+  // XBC1 Extractor state
+  interface Xbc1File {
+    originalName: string;
+    archiveName: string;
+    compressionType: number;
+    compressedSize: number;
+    decompressedSize: number;
+    contentMagic: string;
+    decompressedData: Uint8Array;
+  }
+  const [xbc1Files, setXbc1Files] = useState<Xbc1File[]>([]);
+  const [xbc1Extracting, setXbc1Extracting] = useState(false);
+  const [xbc1Status, setXbc1Status] = useState("");
+  const [xbc1Progress, setXbc1Progress] = useState({ current: 0, total: 0 });
+
   // Initialize zstd-wasm once
   useEffect(() => {
     initZstd().then(() => setZstdReady(true)).catch(() => {});
@@ -350,6 +365,192 @@ export default function ModPackager() {
     return lines.join('\n');
   }, []);
 
+  // XBC1 parser: parse and decompress xbc1-wrapped files
+  const parseXbc1 = useCallback(async (data: ArrayBuffer): Promise<{ archiveName: string; compressionType: number; decompressedSize: number; compressedSize: number; decompressedData: Uint8Array } | null> => {
+    const bytes = new Uint8Array(data);
+    if (bytes.length < 48) return null;
+    // Check magic "xbc1"
+    if (bytes[0] !== 0x78 || bytes[1] !== 0x62 || bytes[2] !== 0x63 || bytes[3] !== 0x31) return null;
+    const view = new DataView(data);
+    const compressionType = view.getUint32(4, true);
+    const decompressedSize = view.getUint32(8, true);
+    const compressedSize = view.getUint32(12, true);
+    // const hash = view.getUint32(16, true);
+    // Name: 28 bytes starting at offset 20, null-terminated
+    let archiveName = "";
+    for (let i = 20; i < 48; i++) {
+      if (bytes[i] === 0) break;
+      archiveName += String.fromCharCode(bytes[i]);
+    }
+    const compressedStream = bytes.slice(48, 48 + compressedSize);
+
+    let decompressedData: Uint8Array;
+    if (compressionType === 0) {
+      // Uncompressed
+      decompressedData = compressedStream;
+    } else if (compressionType === 1) {
+      // Zlib - use browser's DecompressionStream
+      try {
+        const ds = new DecompressionStream('deflate');
+        const writer = ds.writable.getWriter();
+        const reader = ds.readable.getReader();
+        writer.write(compressedStream);
+        writer.close();
+        const chunks: Uint8Array[] = [];
+        let totalLen = 0;
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          chunks.push(value);
+          totalLen += value.length;
+        }
+        decompressedData = new Uint8Array(totalLen);
+        let offset = 0;
+        for (const chunk of chunks) {
+          decompressedData.set(chunk, offset);
+          offset += chunk.length;
+        }
+      } catch {
+        return null;
+      }
+    } else if (compressionType === 3) {
+      // Zstd
+      if (!zstdReady) return null;
+      try {
+        decompressedData = zstdDecompress(compressedStream);
+      } catch {
+        return null;
+      }
+    } else {
+      return null;
+    }
+
+    return { archiveName, compressionType, decompressedSize, compressedSize, decompressedData };
+  }, [zstdReady]);
+
+  // Handle XBC1 folder extraction
+  const handleXbc1ExtractFolder = useCallback(async () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.setAttribute("webkitdirectory", "");
+    input.setAttribute("directory", "");
+    input.addEventListener("change", async () => {
+      const files = input.files;
+      if (!files || files.length === 0) return;
+      const datFiles = Array.from(files).filter(f => f.name.endsWith('.dat') || f.name.endsWith('.wismt') || f.name.endsWith('.wilay') || f.name.endsWith('.mot'));
+      if (datFiles.length === 0) {
+        setXbc1Status(`❌ لم يتم العثور على ملفات dat في المجلد (${files.length} ملف)`);
+        setTimeout(() => setXbc1Status(""), 5000);
+        return;
+      }
+      setXbc1Extracting(true);
+      setXbc1Files([]);
+      setXbc1Progress({ current: 0, total: datFiles.length });
+      setXbc1Status(`🔍 جارٍ فك ${datFiles.length} ملف...`);
+
+      const results: Xbc1File[] = [];
+      for (let i = 0; i < datFiles.length; i++) {
+        setXbc1Progress({ current: i + 1, total: datFiles.length });
+        setXbc1Status(`🔍 فك ${i + 1}/${datFiles.length}: ${datFiles[i].name}...`);
+        try {
+          const data = await datFiles[i].arrayBuffer();
+          const parsed = await parseXbc1(data);
+          if (parsed) {
+            const contentMagic = getMagicString(parsed.decompressedData);
+            results.push({
+              originalName: datFiles[i].webkitRelativePath || datFiles[i].name,
+              archiveName: parsed.archiveName || datFiles[i].name,
+              compressionType: parsed.compressionType,
+              compressedSize: parsed.compressedSize,
+              decompressedSize: parsed.decompressedSize,
+              contentMagic,
+              decompressedData: parsed.decompressedData,
+            });
+          }
+        } catch {}
+      }
+      setXbc1Files(results);
+      const skipped = datFiles.length - results.length;
+      setXbc1Status(`✅ تم فك ${results.length} ملف xbc1${skipped > 0 ? ` (${skipped} ملف ليس xbc1)` : ''}`);
+      setXbc1Extracting(false);
+      setTimeout(() => setXbc1Status(""), 8000);
+    });
+    input.click();
+  }, [parseXbc1, getMagicString]);
+
+  // Handle single XBC1 file extraction
+  const handleXbc1ExtractFile = useCallback(async () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".dat,.wismt,.wilay,.mot";
+    input.multiple = true;
+    input.addEventListener("change", async () => {
+      const files = input.files;
+      if (!files || files.length === 0) return;
+      setXbc1Extracting(true);
+      setXbc1Progress({ current: 0, total: files.length });
+
+      const results: Xbc1File[] = [...xbc1Files];
+      for (let i = 0; i < files.length; i++) {
+        setXbc1Progress({ current: i + 1, total: files.length });
+        setXbc1Status(`🔍 فك ${i + 1}/${files.length}: ${files[i].name}...`);
+        try {
+          const data = await files[i].arrayBuffer();
+          const parsed = await parseXbc1(data);
+          if (parsed) {
+            const contentMagic = getMagicString(parsed.decompressedData);
+            results.push({
+              originalName: files[i].name,
+              archiveName: parsed.archiveName || files[i].name,
+              compressionType: parsed.compressionType,
+              compressedSize: parsed.compressedSize,
+              decompressedSize: parsed.decompressedSize,
+              contentMagic,
+              decompressedData: parsed.decompressedData,
+            });
+          } else {
+            setXbc1Status(`⚠️ "${files[i].name}" ليس ملف xbc1`);
+          }
+        } catch {}
+      }
+      setXbc1Files(results);
+      setXbc1Extracting(false);
+      setXbc1Status(`✅ تم فك ${results.length} ملف`);
+      setTimeout(() => setXbc1Status(""), 5000);
+    });
+    input.click();
+  }, [parseXbc1, getMagicString, xbc1Files]);
+
+  const handleDownloadXbc1File = useCallback((index: number) => {
+    const file = xbc1Files[index];
+    if (!file) return;
+    const blob = new Blob([file.decompressedData.buffer as ArrayBuffer]);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = file.archiveName || `decompressed_${file.originalName}`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [xbc1Files]);
+
+  const handleDownloadAllXbc1 = useCallback(async () => {
+    if (xbc1Files.length === 0) return;
+    setXbc1Status("📦 جارٍ بناء ملف ZIP...");
+    const zipParts = xbc1Files.map(f => ({
+      path: f.archiveName || f.originalName,
+      data: f.decompressedData,
+    }));
+    const zipData = buildZip(zipParts);
+    const blob = new Blob([zipData.buffer as ArrayBuffer], { type: "application/zip" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "xbc1_extracted.zip";
+    a.click();
+    URL.revokeObjectURL(url);
+    setXbc1Status(`✅ تم تحميل ${xbc1Files.length} ملف كـ ZIP`);
+    setTimeout(() => setXbc1Status(""), 5000);
+  }, [xbc1Files]);
 
 
   const handleBdatUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1317,6 +1518,124 @@ export default function ModPackager() {
             </p>
           )}
         </div>
+
+        {/* XBC1 Extractor Section */}
+        <Card className="p-6 space-y-4 border-primary/30">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <FolderArchive className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <h2 className="font-display font-bold text-lg">📦 فك ملفات DAT (xbc1)</h2>
+              <p className="text-xs text-muted-foreground">فك ضغط ملفات اللعبة المغلفة بصيغة xbc1 (zlib / zstd)</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <Button
+              variant="outline"
+              className="gap-2"
+              onClick={handleXbc1ExtractFolder}
+              disabled={xbc1Extracting}
+            >
+              {xbc1Extracting ? <Loader2 className="w-4 h-4 animate-spin" /> : <FolderArchive className="w-4 h-4" />}
+              📁 فك مجلد كامل
+            </Button>
+            <Button
+              variant="outline"
+              className="gap-2"
+              onClick={handleXbc1ExtractFile}
+              disabled={xbc1Extracting}
+            >
+              {xbc1Extracting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+              📄 فك ملفات محددة
+            </Button>
+          </div>
+
+          {xbc1Extracting && xbc1Progress.total > 0 && (
+            <div className="space-y-1">
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>جارٍ المعالجة...</span>
+                <span>{xbc1Progress.current} / {xbc1Progress.total}</span>
+              </div>
+              <div className="w-full bg-muted rounded-full h-2">
+                <div
+                  className="bg-primary h-2 rounded-full transition-all"
+                  style={{ width: `${(xbc1Progress.current / xbc1Progress.total) * 100}%` }}
+                />
+              </div>
+            </div>
+          )}
+
+          {xbc1Status && (
+            <p className={`text-sm font-medium ${xbc1Status.startsWith("✅") ? "text-primary" : xbc1Status.startsWith("❌") || xbc1Status.startsWith("⚠️") ? "text-destructive" : "text-muted-foreground"}`}>
+              {xbc1Status}
+            </p>
+          )}
+
+          {xbc1Files.length > 0 && (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold">{xbc1Files.length} ملف مستخرج</p>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" className="h-7 text-xs gap-1" onClick={handleDownloadAllXbc1}>
+                    <Download className="w-3 h-3" /> تحميل الكل ZIP
+                  </Button>
+                  <Button variant="ghost" size="sm" className="h-7 text-xs text-destructive" onClick={() => setXbc1Files([])}>
+                    مسح
+                  </Button>
+                </div>
+              </div>
+
+              {/* Content type summary */}
+              <div className="flex flex-wrap gap-2 text-xs">
+                {(() => {
+                  const types = new Map<string, number>();
+                  xbc1Files.forEach(f => types.set(f.contentMagic, (types.get(f.contentMagic) || 0) + 1));
+                  const compTypes = new Map<string, number>();
+                  xbc1Files.forEach(f => {
+                    const label = f.compressionType === 0 ? 'غير مضغوط' : f.compressionType === 1 ? 'zlib' : f.compressionType === 3 ? 'zstd' : `نوع ${f.compressionType}`;
+                    compTypes.set(label, (compTypes.get(label) || 0) + 1);
+                  });
+                  return (
+                    <>
+                      {Array.from(compTypes.entries()).map(([t, c]) => (
+                        <span key={t} className="bg-primary/10 text-primary px-2 py-1 rounded">{t}: {c}</span>
+                      ))}
+                      {Array.from(types.entries()).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([magic, count]) => (
+                        <span key={magic} className="bg-muted px-2 py-1 rounded">{magic}: {count}</span>
+                      ))}
+                    </>
+                  );
+                })()}
+              </div>
+
+              {/* File list */}
+              <div className="max-h-80 overflow-y-auto space-y-1 border rounded-lg p-2 bg-muted/20">
+                {xbc1Files.map((file, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center justify-between p-2 rounded text-xs font-mono hover:bg-muted/50 gap-2"
+                  >
+                    <div className="flex flex-col min-w-0 flex-1">
+                      <span className="truncate text-foreground font-semibold">{file.archiveName || file.originalName.split('/').pop()}</span>
+                      {file.archiveName && file.archiveName !== file.originalName.split('/').pop() && (
+                        <span className="truncate text-muted-foreground text-[10px]">{file.originalName.split('/').pop()}</span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className="text-muted-foreground">{formatSize(file.compressedSize)} → {formatSize(file.decompressedSize)}</span>
+                      <span className="bg-muted px-1.5 py-0.5 rounded text-accent-foreground">{file.contentMagic}</span>
+                      <Button variant="ghost" size="sm" className="h-6 px-1.5" onClick={() => handleDownloadXbc1File(i)}>
+                        <Download className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </Card>
 
         {/* DAT Explorer Section */}
         <Card className="p-6 space-y-4 border-accent/30">
