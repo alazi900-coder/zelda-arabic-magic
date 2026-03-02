@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag, BookOpen, Wrench, Copy, Eye, Check, X, Table2, Columns3, History, GitCompareArrows, Type, SplitSquareHorizontal } from "lucide-react";
+import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag, BookOpen, Wrench, Copy, Eye, Check, X, Table2, Columns3, History, GitCompareArrows, Type, SplitSquareHorizontal, Languages } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import type { TMSuggestion } from "@/hooks/useTranslationMemory";
 import DebouncedInput from "./DebouncedInput";
 import { ExtractedEntry, displayOriginal, hasArabicChars, isTechnicalText, hasTechnicalTags, previewTagRestore } from "./types";
@@ -98,6 +99,8 @@ const EntryCard: React.FC<EntryCardProps> = ({
 }) => {
   const key = `${entry.msbtFile}:${entry.index}`;
   const isTech = isTechnicalText(entry.original);
+  const [backTranslation, setBackTranslation] = useState<string | null>(null);
+  const [backTranslating, setBackTranslating] = useState(false);
   const [showTagPreview, setShowTagPreview] = useState(false);
 
   const tagPreview = useMemo(() => {
@@ -119,6 +122,23 @@ const EntryCard: React.FC<EntryCardProps> = ({
     () => findGlossaryMatches(entry.original, glossary),
     [entry.original, glossary]
   );
+
+  const handleBackTranslate = async () => {
+    if (!translation?.trim() || backTranslating) return;
+    setBackTranslating(true);
+    setBackTranslation(null);
+    try {
+      const { data, error } = await supabase.functions.invoke('translation-tools', {
+        body: { text: translation, style: 'back-translate' },
+      });
+      if (error) throw error;
+      setBackTranslation(data?.result || 'لم يتم الحصول على نتيجة');
+    } catch (e) {
+      toast({ title: "خطأ", description: "فشل في الترجمة العكسية", variant: "destructive" });
+    } finally {
+      setBackTranslating(false);
+    }
+  };
 
   return (
     <Card className={`p-3 md:p-4 border-border/50 hover:border-border transition-colors ${hasProblem ? 'border-destructive/30 bg-destructive/5' : ''}`}>
@@ -222,6 +242,11 @@ const EntryCard: React.FC<EntryCardProps> = ({
                   <GitCompareArrows className="w-4 h-4 text-accent" />
                 </Button>
               )}
+              {translation?.trim() && (
+                <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={handleBackTranslate} disabled={backTranslating} title="ترجمة عكسية — تحقق من دقة الترجمة">
+                  {backTranslating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Languages className="w-4 h-4 text-accent" />}
+                </Button>
+              )}
               <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => handleImproveSingleTranslation(entry)} disabled={improvingTranslations || !translation?.trim()} title="تحسين هذه الترجمة">
                 {improvingTranslations ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4 text-secondary" />}
               </Button>
@@ -287,6 +312,20 @@ const EntryCard: React.FC<EntryCardProps> = ({
                   <X className="w-3 h-3 ml-1" /> إغلاق
                 </Button>
               </div>
+            </div>
+          )}
+          {/* Back-translation result */}
+          {backTranslation && (
+            <div className="mt-2 p-2 rounded border border-accent/20 bg-accent/5 text-xs space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-1 text-accent font-semibold">
+                  <Languages className="w-3.5 h-3.5" /> ترجمة عكسية
+                </span>
+                <Button variant="ghost" size="sm" className="h-5 px-1.5 text-[10px]" onClick={() => setBackTranslation(null)}>
+                  <X className="w-3 h-3" />
+                </Button>
+              </div>
+              <p dir="ltr" className="text-foreground break-words">{backTranslation}</p>
             </div>
           )}
           {/* Translation Memory Suggestions */}
