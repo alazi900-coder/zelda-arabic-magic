@@ -285,6 +285,9 @@ export function categorizeByTableName(tbl: string): string | null {
   if (/^(evt_|tlk_|fld_talk|fld_event)/i.test(tbl)) return "bdat-story";
   // msg_ sub-categories (check specific prefixes before generic msg_)
   if (/^msg_mnu_/i.test(tbl)) return "bdat-menu";
+  // msg_btl_ sub-categories: skill/buff BEFORE generic battle catch-all
+  if (/^msg_btl_.*(skill|art|arts|talent|master|spc)/i.test(tbl)) return "bdat-skill";
+  if (/^msg_btl_.*(buff|debuff|status|enhance|aura|condition|effect)/i.test(tbl)) return "bdat-buff";
   if (/^msg_btl_/i.test(tbl)) return "bdat-battle";
   if (/^msg_fld_/i.test(tbl)) return "bdat-character";
   if (/^msg_qst_hero/i.test(tbl)) return "bdat-hero-quest";
@@ -319,7 +322,6 @@ export function categorizeByTableName(tbl: string): string | null {
 
   // === التأثيرات والبوفات ===
   if (/^(buff_|debuff_|status_|aura_|enhance_|condition_)/i.test(tbl)) return "bdat-buff";
-  if (/^msg_btl_.*(buff|debuff|status|enhance|aura|condition)/i.test(tbl)) return "bdat-buff";
 
   // === الجواهر ===
   if (/^(gem_|acc_|orb_)/i.test(tbl)) return "bdat-gem";
