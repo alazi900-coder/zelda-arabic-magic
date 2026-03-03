@@ -133,6 +133,30 @@ export const BDAT_CATEGORIES: FileCategory[] = [
 // Keywords that identify title screen / main menu text
 const TITLE_MENU_KEYWORDS = /^(new game|continue|load game|save game|options|settings|quit|exit|title screen|press any button|difficulty|controls|brightness|language|audio|vibration|game over|retry|return to title)$/i;
 
+// Buff/Debuff/Status effect patterns for content-based detection
+const BUFF_CONTENT_RE = /^(attack up|defense up|accuracy up|evasion up|crit rate up|crit damage up|regen|armor veil|power charge|awakening|atk spd up|recharge up|fast blade switch|counter heal|damage armor|invincible|aggro up|decoy|block rate up|max hp up|attack down|defense down|physical def down|ether def down|accuracy down|evasion down|dmg taken up|aggro down|resistance down|maximum hp down|bleed|blaze|toxin|frost|bind|sleep|arts seal|heal bind|target lock|unblockable|pierce|debuff resistance down|debuff resistance|moebius shackles|shackle arts|shackle healing|shackle blocking)$/i;
+
+// Skill/Art patterns for content-based detection
+const SKILL_CONTENT_RE = /^(physical arts?|ether arts?|talent art|auto[- ]?attack|cancel attack|chain attack|interlink|heat gauge|overheat|ouroboros order|master arts?|master skills?|soul hack|fusion arts?|role action|class aptitude|combo route|tactical points|completion bonus|overkill)$/i;
+
+// Longer effect descriptions (e.g. "Damage to Toppled enemies ↑")
+const BUFF_EFFECT_DESC_RE = /\b(up|down|↑|↓)\s*$/i;
+const BUFF_EFFECT_KEYWORDS_RE = /\b(damage to|aggro generated|arts recharge|revive|cancel damage|auto-attack speed|block damage|healing arts|damage dealt|damage taken|chance to|accuracy|movement speed|status effect duration|field effect duration|area of effect|reaction success|break resistance|topple duration|launch duration|daze duration|bleed damage|blaze damage|toxin damage|defender aggro|healer aggro|attacker aggro|first attack|chain attack tp|chain attack multiplier|interlink level|heat build|ouroboros|fusion arts|stance duration)\b/i;
+
+export function isBuffContent(text: string): boolean {
+  if (!text) return false;
+  const t = text.trim();
+  if (BUFF_CONTENT_RE.test(t)) return true;
+  // Short-to-medium effect descriptions ending with ↑/↓/up/down
+  if (t.split(/\s+/).length <= 8 && BUFF_EFFECT_DESC_RE.test(t) && BUFF_EFFECT_KEYWORDS_RE.test(t)) return true;
+  return false;
+}
+
+export function isSkillContent(text: string): boolean {
+  if (!text) return false;
+  return SKILL_CONTENT_RE.test(text.trim());
+}
+
 export function isMainMenuText(englishText: string): boolean {
   if (!englishText) return false;
   const trimmed = englishText.trim();
@@ -162,14 +186,20 @@ export function categorizeBdatTable(label: string, sourceFilename?: string, engl
   const colCat = categorizeByColumnName(col);
   if (colCat) return colCat;
 
-  // Step 3: Fallback to source BDAT filename
+  // Step 3: Content-based detection for combat subcategories
+  // This runs BEFORE filename fallback so hex-hash entries in battle.bdat
+  // can be classified as skill/buff based on their English text
+  if (englishText) {
+    if (isBuffContent(englishText)) return "bdat-buff";
+    if (isSkillContent(englishText)) return "bdat-skill";
+    if (isMainMenuText(englishText)) return "bdat-title-menu";
+  }
+
+  // Step 4: Fallback to source BDAT filename
   if (sourceFilename) {
     const fileCat = categorizeByFilename(sourceFilename);
     if (fileCat) return fileCat;
   }
-
-  // Step 4: Content-based detection — check English text for title-menu keywords
-  if (englishText && isMainMenuText(englishText)) return "bdat-title-menu";
 
   return "other";
 }

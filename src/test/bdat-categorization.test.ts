@@ -5,8 +5,8 @@ describe("categorizeBdatTable - table name prefixes", () => {
   it("classifies MNU_ tables as menu", () => {
     expect(categorizeBdatTable("MNU_ShopList[0].Msg_Name")).toBe("bdat-menu");
   });
-  it("classifies BTL_ tables as battle", () => {
-    expect(categorizeBdatTable("BTL_Arts[5].Name")).toBe("bdat-battle");
+  it("classifies BTL_Arts as skill (arts are skills)", () => {
+    expect(categorizeBdatTable("BTL_Arts[5].Name")).toBe("bdat-skill");
   });
   it("classifies QST_ tables as quest", () => {
     expect(categorizeBdatTable("QST_List[10].Title")).toBe("bdat-quest");
@@ -98,8 +98,8 @@ describe("categorizeBdatTable - Stage 4: content-based detection", () => {
   it("does NOT classify long text with 'continue' as title-menu", () => {
     expect(categorizeBdatTable("Unknown[0].SomeCol", undefined, "Please continue walking down the path to find the treasure")).toBe("other");
   });
-  it("does NOT override table-name classification", () => {
-    expect(categorizeBdatTable("BTL_Arts[0].Name", undefined, "New Game")).toBe("bdat-battle");
+  it("table-name classification takes priority over content", () => {
+    expect(categorizeBdatTable("BTL_Arts[0].Name", undefined, "New Game")).toBe("bdat-skill");
   });
 });
 
