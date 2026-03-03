@@ -891,7 +891,7 @@ export function useEditorTranslation({
     }
   };
 
-  /** Translate using glossary only — no AI, no TM */
+  /** Translate using glossary only — no AI, no TM. Supports both exact and partial matching. */
   const handleTranslateFromGlossaryOnly = () => {
     if (!state) return;
     const glossaryMap = parseGlossaryMap(activeGlossary);
@@ -902,6 +902,11 @@ export function useEditorTranslation({
     const arabicRegex = /[\u0600-\u06FF]/;
     const glossaryTranslations: Record<string, string> = {};
     let skipEmpty = 0, skipArabic = 0, skipTechnical = 0, skipTranslated = 0, skipNoMatch = 0;
+    let exactMatches = 0, partialMatches = 0;
+
+    // Sort glossary entries by key length (longest first) for greedy partial matching
+    const sortedGlossaryEntries = Array.from(glossaryMap.entries())
+      .sort((a, b) => b[0].length - a[0].length);
 
     const targetEntries = filterCategory.length > 0
       ? state.entries.filter(e => filterCategory.includes(categorizeEntry(e)))
@@ -913,10 +918,33 @@ export function useEditorTranslation({
       if (arabicRegex.test(e.original)) { skipArabic++; continue; }
       if (isTechnicalText(e.original) && !state.technicalBypass?.has(key)) { skipTechnical++; continue; }
       if (state.translations[key]?.trim()) { skipTranslated++; continue; }
+
       const norm = e.original.trim().toLowerCase();
-      const glossaryHit = glossaryMap.get(norm);
-      if (glossaryHit) {
-        glossaryTranslations[key] = glossaryHit;
+
+      // Try exact match first
+      const exactHit = glossaryMap.get(norm);
+      if (exactHit) {
+        glossaryTranslations[key] = exactHit;
+        exactMatches++;
+        continue;
+      }
+
+      // Try partial matching: replace glossary terms found within the text
+      let result = e.original;
+      let matched = false;
+      for (const [glossaryKey, glossaryValue] of sortedGlossaryEntries) {
+        // Case-insensitive search in the original text
+        const idx = result.toLowerCase().indexOf(glossaryKey);
+        if (idx !== -1) {
+          // Replace the matched portion with the Arabic translation
+          result = result.slice(0, idx) + glossaryValue + result.slice(idx + glossaryKey.length);
+          matched = true;
+        }
+      }
+
+      if (matched) {
+        glossaryTranslations[key] = result;
+        partialMatches++;
       } else {
         skipNoMatch++;
       }
@@ -936,7 +964,10 @@ export function useEditorTranslation({
 
     const safeTranslations = autoFixTags(glossaryTranslations);
     setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...safeTranslations } } : null);
-    setTranslateProgress(`✅ تم ترجمة ${count} نص من القاموس فقط 📖 (بدون ذكاء اصطناعي)${skipNoMatch > 0 ? ` — ${skipNoMatch} بدون تطابق` : ''}`);
+    const parts: string[] = [];
+    if (exactMatches > 0) parts.push(`${exactMatches} تطابق كامل`);
+    if (partialMatches > 0) parts.push(`${partialMatches} تطابق جزئي`);
+    setTranslateProgress(`✅ تم ترجمة ${count} نص من القاموس 📖 (${parts.join(' + ')})${skipNoMatch > 0 ? ` — ${skipNoMatch} بدون تطابق` : ''}`);
     setTimeout(() => setTranslateProgress(""), 6000);
   };
 
