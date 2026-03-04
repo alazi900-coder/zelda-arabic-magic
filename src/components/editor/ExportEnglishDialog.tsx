@@ -41,8 +41,26 @@ const ExportEnglishDialog: React.FC<ExportEnglishDialogProps> = ({
     }
   }, [open, totalPages, totalCount]);
 
-  const effectiveCount = scope === "untranslated" ? totalCount : totalEntries;
-  const fileCount = useMemo(() => Math.ceil(effectiveCount / chunkSize), [effectiveCount, chunkSize]);
+  const PAGE_SIZE = 50;
+  
+  // Calculate effective count considering page range
+  const effectiveCount = useMemo(() => {
+    const baseCount = scope === "untranslated" ? totalCount : totalEntries;
+    if (!usePageRange) return baseCount;
+    
+    // Estimate entries in the selected page range
+    const validStart = Math.max(1, startPage);
+    const validEnd = Math.min(endPage, totalPages);
+    const selectedPages = Math.max(0, validEnd - validStart + 1);
+    const rangeEntries = Math.min(selectedPages * PAGE_SIZE, totalEntries);
+    
+    if (scope === "all") return rangeEntries;
+    // For untranslated, estimate proportionally
+    const ratio = totalEntries > 0 ? totalCount / totalEntries : 0;
+    return Math.round(rangeEntries * ratio);
+  }, [scope, totalCount, totalEntries, usePageRange, startPage, endPage, totalPages]);
+  
+  const fileCount = useMemo(() => Math.ceil(Math.max(effectiveCount, 1) / chunkSize), [effectiveCount, chunkSize]);
 
   const handleExport = () => {
     onExport(
