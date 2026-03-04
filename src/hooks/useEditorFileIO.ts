@@ -1877,13 +1877,13 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     }
   }, []);
 
-  /** Quick export: export current page's English texts as JSON */
+  /** Quick export: export current page's entries (respects active filter) as JSON */
   const handleExportCurrentPageEnglish = (currentPage: number) => {
     if (!state) return;
     const PAGE_SIZE = 50;
     const fromIdx = currentPage * PAGE_SIZE;
-    const toIdx = Math.min((currentPage + 1) * PAGE_SIZE, state.entries.length);
-    const pageEntries = state.entries.slice(fromIdx, toIdx);
+    const toIdx = Math.min((currentPage + 1) * PAGE_SIZE, filteredEntries.length);
+    const pageEntries = filteredEntries.slice(fromIdx, toIdx);
     if (pageEntries.length === 0) return;
     const obj: Record<string, string> = {};
     for (const entry of pageEntries) {

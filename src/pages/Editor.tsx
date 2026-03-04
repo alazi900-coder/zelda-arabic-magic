@@ -1554,8 +1554,8 @@ const Editor = () => {
           open={showExportEnglishDialog}
           onOpenChange={setShowExportEnglishDialog}
           totalCount={untranslatedCount}
-          totalEntries={editor.absoluteTotalEntries}
-          totalPages={editor.absoluteTotalPages}
+          totalEntries={editor.filteredEntries.length}
+          totalPages={editor.totalPages}
           onExport={(chunkSize, format, scope, startPage, endPage) =>
             format === "json"
               ? editor.handleExportEnglishOnlyJson(chunkSize, scope, startPage, endPage)
