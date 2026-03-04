@@ -210,11 +210,10 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
   /** Build the list of entries grouped by file, optionally filtered by scope */
   const getEntriesGrouped = (scope: 'untranslated' | 'all' = 'untranslated', startPage?: number, endPage?: number) => {
     if (!state) return { groupedByFile: {} as Record<string, { index: number; original: string; label: string }[]>, totalCount: 0 };
-    // Always use state.entries (absolute list) for page-range slicing — NOT filteredEntries
-    // This ensures page numbers match the full dataset regardless of active filters
-    let entriesToExport = state.entries;
+    // Use filteredEntries to respect active filters (category, file, status, etc.)
+    let entriesToExport = filteredEntries;
     
-    // Apply page range filter if specified (absolute indices)
+    // Apply page range filter if specified
     if (startPage !== undefined && endPage !== undefined) {
       const PAGE_SIZE = 50;
       const fromIdx = startPage * PAGE_SIZE;
@@ -1878,13 +1877,13 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     }
   }, []);
 
-  /** Quick export: export current page's English texts as JSON */
+  /** Quick export: export current page's entries (respects active filter) as JSON */
   const handleExportCurrentPageEnglish = (currentPage: number) => {
     if (!state) return;
     const PAGE_SIZE = 50;
     const fromIdx = currentPage * PAGE_SIZE;
-    const toIdx = Math.min((currentPage + 1) * PAGE_SIZE, state.entries.length);
-    const pageEntries = state.entries.slice(fromIdx, toIdx);
+    const toIdx = Math.min((currentPage + 1) * PAGE_SIZE, filteredEntries.length);
+    const pageEntries = filteredEntries.slice(fromIdx, toIdx);
     if (pageEntries.length === 0) return;
     const obj: Record<string, string> = {};
     for (const entry of pageEntries) {
