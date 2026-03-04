@@ -264,6 +264,14 @@ const EntryCard: React.FC<EntryCardProps> = ({
                   <SplitSquareHorizontal className="w-4 h-4 text-primary" />
                 </Button>
               )}
+              {translation?.trim() && hasOrphanLines(translation) && (
+                <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => {
+                  const balanced = balanceLines(translation);
+                  if (balanced !== translation) updateTranslation(key, balanced);
+                }} title="⚖️ إعادة توازن الأسطر">
+                  <Scale className="w-4 h-4 text-accent" />
+                </Button>
+              )}
               {isDamagedTag && handleLocalFixDamagedTag && (
                 <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => setShowTagPreview(prev => !prev)} title="👁 معاينة الإصلاح قبل التطبيق">
                   <Eye className="w-4 h-4 text-accent" />
