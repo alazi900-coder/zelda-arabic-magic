@@ -28,7 +28,7 @@ const ExportEnglishDialog: React.FC<ExportEnglishDialogProps> = ({
 }) => {
   const [chunkSize, setChunkSize] = useState(1000);
   const [format, setFormat] = useState<ExportFormat>("json");
-  const [scope, setScope] = useState<ExportScope>("untranslated");
+  const [scope, setScope] = useState<ExportScope>(totalCount === 0 ? "all" : "untranslated");
   const [usePageRange, setUsePageRange] = useState(false);
   const [startPage, setStartPage] = useState(1);
   const [endPage, setEndPage] = useState(totalPages);
