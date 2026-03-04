@@ -268,7 +268,9 @@ const EntryCard: React.FC<EntryCardProps> = ({
               {translation?.trim() && hasOrphanLines(translation) && (
                 <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => {
                   const balanced = balanceLines(translation);
-                  if (balanced !== translation) updateTranslation(key, balanced);
+                  if (balanced !== translation) {
+                    setBalancePreview(balanced);
+                  }
                 }} title="⚖️ إعادة توازن الأسطر">
                   <Scale className="w-4 h-4 text-accent" />
                 </Button>
