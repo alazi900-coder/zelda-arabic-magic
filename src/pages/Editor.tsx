@@ -67,6 +67,7 @@ import NewlineSplitPanel from "@/components/editor/NewlineSplitPanel";
 import PageTranslationCompare from "@/components/editor/PageTranslationCompare";
 import QualityChecksPanel from "@/components/editor/QualityChecksPanel";
 import CleanupToolsPanel from "@/components/editor/CleanupToolsPanel";
+import LineBalancePanel from "@/components/editor/LineBalancePanel";
 import TranslationToolsPanel from "@/components/editor/TranslationToolsPanel";
 import MismatchDetectorPanel from "@/components/editor/MismatchDetectorPanel";
 import GlossaryMergePreviewDialog from "@/components/editor/GlossaryMergePreviewDialog";
@@ -641,6 +642,15 @@ const Editor = () => {
 
           {/* Cleanup Tools */}
           <CleanupToolsPanel
+            state={editor.state}
+            onApplyFix={(key, fix) => editor.updateTranslation(key, fix)}
+            onApplyAll={(fixes) => {
+              for (const f of fixes) editor.updateTranslation(f.key, f.value);
+            }}
+          />
+
+          {/* Line Balance Tool */}
+          <LineBalancePanel
             state={editor.state}
             onApplyFix={(key, fix) => editor.updateTranslation(key, fix)}
             onApplyAll={(fixes) => {
