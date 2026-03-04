@@ -40,9 +40,10 @@ const ExportEnglishDialog: React.FC<ExportEnglishDialogProps> = ({
     if (open) {
       setStartPage(1);
       setEndPage(totalPages);
-      setScope(totalCount === 0 ? "all" : "untranslated");
+      setScope("all");
+      setUsePageRange(true);
     }
-  }, [open, totalPages, totalCount]);
+  }, [open, totalPages]);
 
   // Calculate effective count using real data when available
   const effectiveCount = useMemo(() => {

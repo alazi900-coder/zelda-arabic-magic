@@ -403,7 +403,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       a.download = `english-only${suffix}_${totalParts}files_${date}.zip`;
       a.click();
       URL.revokeObjectURL(url);
-      setLastSaved(`✅ تم تصدير ${totalCount} نص JSON في ${totalParts} ملفات ZIP`);
+      setLastSaved(`✅ تم تصدير ${totalCount} نص JSON في ${totalParts} ملفات ZIP${pageRangeLabel}`);
     }
     setTimeout(() => setLastSaved(""), 4000);
   };
