@@ -696,7 +696,7 @@ export function useEditorTranslation({
     // Collect ALL translatable candidates across all pages (including already-translated if forced)
     let totalCandidates = 0;
     let totalSkippedTranslated = 0;
-    for (let p = 0; p < allPages; p++) {
+    for (let p = fromPage; p <= toPage; p++) {
       const pageEntries = filteredEntries.slice(p * PAGE_SIZE, (p + 1) * PAGE_SIZE);
       for (const e of pageEntries) {
         const key = `${e.msbtFile}:${e.index}`;
