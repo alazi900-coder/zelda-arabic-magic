@@ -103,6 +103,7 @@ const EntryCard: React.FC<EntryCardProps> = ({
   const [backTranslation, setBackTranslation] = useState<string | null>(null);
   const [backTranslating, setBackTranslating] = useState(false);
   const [showTagPreview, setShowTagPreview] = useState(false);
+  const [balancePreview, setBalancePreview] = useState<string | null>(null);
 
   const tagPreview = useMemo(() => {
     if (!isDamagedTag || !translation?.trim()) return null;
