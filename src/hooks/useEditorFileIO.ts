@@ -365,6 +365,9 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
 
     const suffix = isFilterActive ? `_${filterLabel}` : '';
     const date = new Date().toISOString().slice(0, 10);
+    const pageRangeLabel = startPage !== undefined && endPage !== undefined
+      ? ` • الصفحات ${startPage + 1}-${endPage + 1}`
+      : '';
 
     const buildJsonChunk = (entries: typeof flatEntries) => {
       const obj: Record<string, string> = {};
