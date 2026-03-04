@@ -133,6 +133,12 @@ function stripUnexpectedPlaceholders(text: string, allowedPlaceholders: Set<stri
 function restoreAndEnforce(original: string, translated: string, tags: Map<string, string>): string {
   const restored = restoreTags(translated, tags);
   const enforced = enforceTagIntegrity(original, restored);
+  // Check if original had real newlines (NEWLINE_N tags exist)
+  const hasOriginalNewlines = [...tags.keys()].some(k => k.startsWith('NEWLINE_'));
+  if (hasOriginalNewlines) {
+    // Original had newlines - don't re-balance, they're structural
+    return enforced;
+  }
   return balanceLines(enforced);
 }
 
@@ -142,17 +148,18 @@ const TARGET_MAX = 42;
 const HARD_MAX = 48;
 
 function balanceLines(text: string): string {
-  // Don't touch text that already has newlines (already formatted)
-  if (text.includes('\n')) return text;
+  // Strip AI-inserted newlines and re-balance (AI should not control line breaking)
+  // But preserve newlines that came from original (NEWLINE_N placeholders are already restored at this point)
+  const stripped = text.replace(/\n/g, ' ').replace(/\s{2,}/g, ' ').trim();
   // Don't touch short text
-  if (text.length <= TARGET_MAX) return text;
+  if (stripped.length <= TARGET_MAX) return stripped;
   // Don't touch texts with technical tags that could break
-  if (/[\uE000-\uE0FF]|[\uFFF9-\uFFFC]|\[.*?:.*?\]/.test(text)) return text;
+  if (/[\uE000-\uE0FF]|[\uFFF9-\uFFFC]|\[.*?:.*?\]/.test(stripped)) return stripped;
 
-  const words = text.split(/\s+/).filter(w => w.length > 0);
+  const words = stripped.split(/\s+/).filter(w => w.length > 0);
   if (words.length < 2) return text;
 
-  const totalLen = words.reduce((s, w) => s + w.length, 0) + (words.length - 1); // words + spaces
+  const totalLen = words.reduce((s, w) => s + w.length, 0) + (words.length - 1);
   const numLines = Math.max(2, Math.ceil(totalLen / TARGET_MAX));
 
   // Try line counts from numLines to numLines+1, pick the best
@@ -385,9 +392,10 @@ function lockTermsInText(text: string, glossaryMap: Map<string, string>): TermLo
 
   for (const [eng, arab] of candidateTerms) {
     const escaped = eng.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    // Match with optional possessive suffix ('s, 's)
     const pattern = eng.length <= 3
-      ? new RegExp(`\\b${escaped}\\b`, 'gi')
-      : new RegExp(`(?<![\\w-])${escaped}(?![\\w-])`, 'gi');
+      ? new RegExp(`\\b${escaped}(?:'s|'s)?\\b`, 'gi')
+      : new RegExp(`(?<![\\w-])${escaped}(?:'s|'s)?(?![\\w-])`, 'gi');
 
     const regex = new RegExp(pattern.source, pattern.flags);
     let match: RegExpExecArray | null;
@@ -436,8 +444,14 @@ function applyGlossaryPost(text: string, glossaryMap: Map<string, string>): stri
     if (eng.length < 2) continue;
     if (!textLower.includes(eng)) continue; // Fast pre-filter
     const escaped = eng.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const regex = new RegExp(`\\b${escaped}\\b`, 'gi');
-    result = result.replace(regex, ara);
+    // Match term with optional possessive suffix ('s, 's) and flexible word boundaries
+    const regex = new RegExp(`(?:^|[\\s.,;:!?()\\[\\]{}])${escaped}(?:'s|'s)?(?=$|[\\s.,;:!?()\\[\\]{}])`, 'gi');
+    result = result.replace(regex, (match) => {
+      // Preserve leading whitespace/punctuation
+      const leadMatch = match.match(/^[\s.,;:!?()\[\]{}]*/);
+      const lead = leadMatch ? leadMatch[0] : '';
+      return lead + ara;
+    });
   }
   return result;
 }
@@ -823,12 +837,13 @@ CRITICAL RULES:
 1. Placeholders like ⟪T0⟫, ⟪T1⟫, etc. are LOCKED TERMS — copy them EXACTLY as-is into your translation. Do NOT translate, modify, or remove them.
 2. NEVER remove, modify, merge, or reorder TAG_0, TAG_1, TAG_2 etc. placeholders. They MUST appear in your output EXACTLY as they appear in the input.
 3. Keep the translation length close to the original to fit in-game text boxes.
-4. If a glossary term appears, you MUST use its EXACT Arabic translation — no alternatives, no synonyms, no paraphrasing. This is NON-NEGOTIABLE.
+4. If a glossary term appears, you MUST use its EXACT Arabic translation — no alternatives, no synonyms, no paraphrasing. This is NON-NEGOTIABLE. Match possessive forms too (e.g., "Hero's" should use the glossary entry for "Hero").
 5. CONSISTENCY IS MANDATORY: If a word or phrase was translated a certain way in the "Previously Translated Texts" section, you MUST translate it the same way.
 6. Use terminology consistent with the Arabic gaming community for Xenoblade Chronicles 3.
 7. Preserve proper nouns (Noah, Mio, Eunie, Taion, Lanz, Sena, Aionios) as-is or use their established Arabic equivalents from the glossary.
 8. Return ONLY a JSON object where each key matches the input key (K0, K1, etc.) and the value is the Arabic translation. Example: {"K0": "ترجمة", "K1": "ترجمة"}
-9. You MUST return EXACTLY ${needsAI.length} entries. Do NOT skip, merge, or add extra entries. Each key MUST have its own separate translation.${categorySection}${glossarySection}${contextSection}
+9. You MUST return EXACTLY ${needsAI.length} entries. Do NOT skip, merge, or add extra entries. Each key MUST have its own separate translation.
+10. Do NOT insert newline characters (\\n) in your translations. Return each translation as a single continuous string. Line breaking is handled separately.${categorySection}${glossarySection}${contextSection}
 
 Input texts (as JSON object — translate each value and return with the SAME keys):
 {
@@ -941,7 +956,10 @@ ${textsBlock}
         translated = applyGlossaryPost(translated, glossaryMap);
       }
       const restored = restoreTags(translated, item.pe.tags);
-      result[item.entry.key] = balanceLines(enforceTagIntegrity(item.entry.original, restored));
+      const enforced = enforceTagIntegrity(item.entry.original, restored);
+      // Only balance lines if original didn't have structural newlines
+      const hasOriginalNewlines = [...item.pe.tags.keys()].some(k => k.startsWith('NEWLINE_'));
+      result[item.entry.key] = hasOriginalNewlines ? enforced : balanceLines(enforced);
     }
     return result;
   };
