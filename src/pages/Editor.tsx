@@ -1166,6 +1166,14 @@ const Editor = () => {
             </div>
           ) : (
             <div className="mb-6 flex gap-2 flex-wrap">
+              {/* Standalone Export English Button */}
+              <Button variant="outline" onClick={() => setShowExportEnglishDialog(true)} className="font-body border-primary/30 text-primary gap-1.5">
+                <Package className="w-4 h-4" /> تصدير الإنجليزية 📦
+              </Button>
+              {/* Quick Export Current Page */}
+              <Button variant="outline" onClick={() => editor.handleExportCurrentPageEnglish(editor.currentPage)} className="font-body gap-1.5">
+                <FileDown className="w-4 h-4" /> تصدير الصفحة الحالية 📄
+              </Button>
               {/* ── Export/Import ── */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
