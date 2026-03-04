@@ -714,7 +714,7 @@ export function useEditorTranslation({
         `✅ جميع الصفحات مترجمة بالكامل (${totalSkippedTranslated} نص مترجم).\n\nهل تريد إعادة ترجمتها؟`
       );
       if (confirmed) {
-        return handleTranslateAllPages(memoryOnly, true);
+        return handleTranslateAllPages(memoryOnly, true, startPage, endPage);
       }
       return;
     }
