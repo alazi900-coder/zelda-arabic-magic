@@ -136,79 +136,172 @@ function restoreAndEnforce(original: string, translated: string, tags: Map<strin
   return balanceLines(enforced);
 }
 
-/** Split long lines into balanced chunks (~MAX_LINE_WIDTH chars each) */
-const MAX_LINE_WIDTH = 42;
+/** Split long lines into balanced chunks using DP optimization */
+const TARGET_MIN = 38;
+const TARGET_MAX = 42;
+const HARD_MAX = 48;
 
 function balanceLines(text: string): string {
   // Don't touch text that already has newlines (already formatted)
   if (text.includes('\n')) return text;
   // Don't touch short text
-  if (text.length <= MAX_LINE_WIDTH) return text;
+  if (text.length <= TARGET_MAX) return text;
   // Don't touch texts with technical tags that could break
   if (/[\uE000-\uE0FF]|[\uFFF9-\uFFFC]|\[.*?:.*?\]/.test(text)) return text;
 
-  const words = text.split(/\s+/);
+  const words = text.split(/\s+/).filter(w => w.length > 0);
   if (words.length < 2) return text;
 
-  const totalLen = text.length;
-  const numLines = Math.ceil(totalLen / MAX_LINE_WIDTH);
+  const totalLen = words.reduce((s, w) => s + w.length, 0) + (words.length - 1); // words + spaces
+  const numLines = Math.max(2, Math.ceil(totalLen / TARGET_MAX));
 
-  // Try all possible split points and pick the most balanced distribution
-  // For 2 lines: find the best single split point
-  // For 3+ lines: use dynamic approach
-  
-  if (numLines === 2) {
-    // Find split that minimizes difference between two halves
-    let bestSplit = 1;
-    let bestDiff = Infinity;
-    let cumLen = 0;
-    for (let i = 0; i < words.length - 1; i++) {
-      cumLen += (i > 0 ? 1 : 0) + words[i].length;
-      const remaining = totalLen - cumLen - 1; // -1 for the space replaced by newline
-      const diff = Math.abs(cumLen - remaining);
-      if (diff < bestDiff) {
-        bestDiff = diff;
-        bestSplit = i + 1;
-      }
-    }
-    const line1 = words.slice(0, bestSplit).join(' ');
-    const line2 = words.slice(bestSplit).join(' ');
-    return line1 + '\n' + line2;
-  }
+  // Try line counts from numLines to numLines+1, pick the best
+  let bestResult: string[] | null = null;
+  let bestCost = Infinity;
 
-  // For 3+ lines: distribute words so each line is close to totalLen/numLines
-  const targetLen = Math.ceil(totalLen / numLines);
-  const lines: string[] = [];
-  let currentLine = '';
-  let linesLeft = numLines;
-
-  for (let i = 0; i < words.length; i++) {
-    const word = words[i];
-    const wordsLeft = words.length - i;
-    
-    if (currentLine === '') {
-      currentLine = word;
-    } else {
-      const newLen = currentLine.length + 1 + word.length;
-      // Don't break if we'd leave too few words for remaining lines
-      // or if current line hasn't reached a reasonable length
-      const shouldBreak = linesLeft > 1 
-        && newLen > targetLen 
-        && wordsLeft > (linesLeft - 1)  // ensure remaining lines get at least 1 word each
-        && currentLine.length >= targetLen * 0.5; // don't break if line is too short
-      
-      if (shouldBreak) {
-        lines.push(currentLine);
-        currentLine = word;
-        linesLeft--;
-      } else {
-        currentLine = currentLine + ' ' + word;
+  for (let nLines = numLines; nLines <= Math.min(numLines + 1, words.length); nLines++) {
+    const result = dpSplit(words, nLines);
+    if (result) {
+      const cost = scoreSplit(result);
+      if (cost < bestCost) {
+        bestCost = cost;
+        bestResult = result;
       }
     }
   }
-  if (currentLine) lines.push(currentLine);
 
-  return lines.join('\n');
+  if (!bestResult) return text;
+
+  // Post-pass: fix orphan lines (single-word middle lines)
+  bestResult = fixOrphans(bestResult);
+
+  return bestResult.join('\n');
+}
+
+/** DP to find optimal word distribution across exactly nLines lines */
+function dpSplit(words: string[], nLines: number): string[] | null {
+  const n = words.length;
+  if (n < nLines) return null;
+
+  // Precompute line lengths: lineLen[i][j] = length of words[i..j-1] joined
+  const lineLen = (from: number, to: number): number => {
+    let len = 0;
+    for (let k = from; k < to; k++) {
+      len += words[k].length + (k > from ? 1 : 0);
+    }
+    return len;
+  };
+
+  const totalLen = lineLen(0, n);
+  const ideal = totalLen / nLines;
+
+  // dp[i][k] = min cost to split words[0..i-1] into k lines
+  // choice[i][k] = the start index of line k
+  const INF = 1e18;
+  const dp: number[][] = Array.from({ length: n + 1 }, () => new Array(nLines + 1).fill(INF));
+  const choice: number[][] = Array.from({ length: n + 1 }, () => new Array(nLines + 1).fill(0));
+
+  dp[0][0] = 0;
+
+  for (let k = 1; k <= nLines; k++) {
+    for (let i = k; i <= n; i++) {
+      // Line k contains words[j..i-1] for some j
+      for (let j = k - 1; j < i; j++) {
+        const ll = lineLen(j, i);
+        if (ll > HARD_MAX && i - j > 1) continue; // skip if too long (unless single word)
+
+        const deviation = ll - ideal;
+        let cost = deviation * deviation; // squared deviation from ideal
+
+        // Orphan penalty: single-word middle line
+        const wordCount = i - j;
+        const isMiddleLine = k > 1 && k < nLines;
+        if (wordCount === 1 && isMiddleLine) {
+          cost += 50000; // massive penalty
+        }
+
+        // Short line penalty (less than half ideal)
+        if (ll < ideal * 0.4 && wordCount < 3) {
+          cost += 5000;
+        }
+
+        const total = dp[j][k - 1] + cost;
+        if (total < dp[i][k]) {
+          dp[i][k] = total;
+          choice[i][k] = j;
+        }
+      }
+    }
+  }
+
+  if (dp[n][nLines] >= INF) return null;
+
+  // Reconstruct
+  const lines: string[] = new Array(nLines);
+  let pos = n;
+  for (let k = nLines; k >= 1; k--) {
+    const start = choice[pos][k];
+    lines[k - 1] = words.slice(start, pos).join(' ');
+    pos = start;
+  }
+
+  return lines;
+}
+
+/** Score a split: lower is better */
+function scoreSplit(lines: string[]): number {
+  if (lines.length <= 1) return 0;
+  const lengths = lines.map(l => l.length);
+  const avg = lengths.reduce((a, b) => a + b, 0) / lengths.length;
+
+  let cost = 0;
+  for (let i = 0; i < lines.length; i++) {
+    const dev = lengths[i] - avg;
+    cost += dev * dev;
+
+    // Orphan penalty for middle lines with single word
+    if (i > 0 && i < lines.length - 1) {
+      const wc = lines[i].split(/\s+/).length;
+      if (wc === 1) cost += 50000;
+      if (wc === 2 && lengths[i] < 8) cost += 5000;
+    }
+  }
+  return cost;
+}
+
+/** Fix orphan lines by merging single-word middle lines with neighbors */
+function fixOrphans(lines: string[]): string[] {
+  if (lines.length <= 2) return lines;
+
+  const result = [...lines];
+  let changed = true;
+  let iterations = 0;
+
+  while (changed && iterations < 5) {
+    changed = false;
+    iterations++;
+
+    for (let i = 1; i < result.length - 1; i++) {
+      const wc = result[i].split(/\s+/).length;
+      if (wc <= 1) {
+        // Merge with shorter neighbor
+        const prevLen = result[i - 1].length;
+        const nextLen = i + 1 < result.length ? result[i + 1].length : Infinity;
+
+        if (prevLen <= nextLen) {
+          result[i - 1] = result[i - 1] + ' ' + result[i];
+          result.splice(i, 1);
+        } else {
+          result[i + 1] = result[i] + ' ' + result[i + 1];
+          result.splice(i, 1);
+        }
+        changed = true;
+        break; // restart loop after modification
+      }
+    }
+  }
+
+  return result;
 }
 
 /** Unified regex matching all supported technical tag formats */
