@@ -341,7 +341,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       a.download = `english-only${suffix}_${totalParts}files_${date}.zip`;
       a.click();
       URL.revokeObjectURL(url);
-      setLastSaved(`✅ تم تصدير ${totalCount} نص في ${totalParts} ملفات ZIP (${chunkSize} لكل ملف)`);
+      setLastSaved(`✅ تم تصدير ${totalCount} نص في ${totalParts} ملفات ZIP (${chunkSize} لكل ملف)${pageRangeLabel}`);
     }
     setTimeout(() => setLastSaved(""), 4000);
   };
