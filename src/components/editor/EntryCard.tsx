@@ -1,11 +1,12 @@
 import React, { useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag, BookOpen, Wrench, Copy, Eye, Check, X, Table2, Columns3, History, GitCompareArrows, Type, SplitSquareHorizontal, Languages } from "lucide-react";
+import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag, BookOpen, Wrench, Copy, Eye, Check, X, Table2, Columns3, History, GitCompareArrows, Type, SplitSquareHorizontal, Languages, Scale } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import type { TMSuggestion } from "@/hooks/useTranslationMemory";
 import DebouncedInput from "./DebouncedInput";
 import { ExtractedEntry, displayOriginal, hasArabicChars, isTechnicalText, hasTechnicalTags, previewTagRestore } from "./types";
+import { balanceLines, hasOrphanLines } from "@/lib/balance-lines";
 
 /** Renders text with technical tags highlighted visually */
 function HighlightedOriginal({ text }: { text: string }) {
@@ -261,6 +262,14 @@ const EntryCard: React.FC<EntryCardProps> = ({
               {onSplitNewline && translation?.trim() && !translation.includes('\n') && translation.length > 42 && (
                 <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => onSplitNewline(key)} title="تقسيم النص إلى أسطر">
                   <SplitSquareHorizontal className="w-4 h-4 text-primary" />
+                </Button>
+              )}
+              {translation?.trim() && hasOrphanLines(translation) && (
+                <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => {
+                  const balanced = balanceLines(translation);
+                  if (balanced !== translation) updateTranslation(key, balanced);
+                }} title="⚖️ إعادة توازن الأسطر">
+                  <Scale className="w-4 h-4 text-accent" />
                 </Button>
               )}
               {isDamagedTag && handleLocalFixDamagedTag && (
