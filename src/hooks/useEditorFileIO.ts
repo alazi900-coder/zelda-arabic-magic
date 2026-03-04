@@ -387,7 +387,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       a.download = `english-only${suffix}_${date}.json`;
       a.click();
       URL.revokeObjectURL(url);
-      setLastSaved(`✅ تم تصدير ${totalCount} نص إنجليزي JSON (${sortedFiles.length} ملف)`);
+      setLastSaved(`✅ تم تصدير ${totalCount} نص إنجليزي JSON (${sortedFiles.length} ملف)${pageRangeLabel}`);
     } else {
       const totalParts = Math.ceil(totalCount / chunkSize);
       const JSZip = (await import("jszip")).default;
