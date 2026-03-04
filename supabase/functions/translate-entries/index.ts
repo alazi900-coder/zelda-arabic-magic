@@ -133,12 +133,14 @@ function stripUnexpectedPlaceholders(text: string, allowedPlaceholders: Set<stri
 function restoreAndEnforce(original: string, translated: string, tags: Map<string, string>): string {
   const restored = restoreTags(translated, tags);
   const enforced = enforceTagIntegrity(original, restored);
+
   // Check if original had real newlines (NEWLINE_N tags exist)
   const hasOriginalNewlines = [...tags.keys()].some(k => k.startsWith('NEWLINE_'));
   if (hasOriginalNewlines) {
-    // Original had newlines - don't re-balance, they're structural
-    return enforced;
+    // Preserve structural newlines but still remove orphan lines
+    return fixOrphansPreservingNewlines(enforced);
   }
+
   return balanceLines(enforced);
 }
 
@@ -449,6 +451,15 @@ function fixOrphans(lines: string[]): string[] {
   }
 
   return result;
+}
+
+/** Preserve existing newlines but merge orphan lines across boundaries */
+function fixOrphansPreservingNewlines(text: string): string {
+  const rawLines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  if (rawLines.length <= 1) return text.replace(/\s{2,}/g, ' ').trim();
+
+  const fixed = fixOrphans(rawLines);
+  return fixed.join('\n').replace(/[ \t]+\n/g, '\n').replace(/\n[ \t]+/g, '\n').trim();
 }
 
 /** Unified regex matching all supported technical tag formats */
@@ -1102,11 +1113,7 @@ ${textsBlock}
       if (glossaryMap.size > 0) {
         translated = applyGlossaryPost(translated, glossaryMap);
       }
-      const restored = restoreTags(translated, item.pe.tags);
-      const enforced = enforceTagIntegrity(item.entry.original, restored);
-      // Only balance lines if original didn't have structural newlines
-      const hasOriginalNewlines = [...item.pe.tags.keys()].some(k => k.startsWith('NEWLINE_'));
-      result[item.entry.key] = hasOriginalNewlines ? enforced : balanceLines(enforced);
+      result[item.entry.key] = restoreAndEnforce(item.entry.original, translated, item.pe.tags);
     }
     return result;
   };
