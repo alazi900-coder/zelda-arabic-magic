@@ -326,6 +326,30 @@ const EntryCard: React.FC<EntryCardProps> = ({
               </div>
             </div>
           )}
+          {/* Balance lines preview */}
+          {balancePreview && (
+            <div className="mt-2 p-2 rounded border border-accent/30 bg-accent/5 text-xs space-y-1.5">
+              <p className="font-semibold text-accent">⚖️ معاينة توازن الأسطر:</p>
+              <div className="space-y-1">
+                <div className="flex gap-2 items-start">
+                  <span className="text-destructive shrink-0">قبل:</span>
+                  <pre dir="rtl" className="break-words whitespace-pre-wrap text-foreground font-body">{translation}</pre>
+                </div>
+                <div className="flex gap-2 items-start">
+                  <span className="text-primary shrink-0">بعد:</span>
+                  <pre dir="rtl" className="break-words whitespace-pre-wrap text-foreground font-body">{balancePreview}</pre>
+                </div>
+              </div>
+              <div className="flex gap-1.5">
+                <Button size="sm" variant="default" className="h-6 text-[10px] px-2" onClick={() => { updateTranslation(key, balancePreview); setBalancePreview(null); }}>
+                  <Check className="w-3 h-3 ml-1" /> تطبيق
+                </Button>
+                <Button size="sm" variant="ghost" className="h-6 text-[10px] px-2" onClick={() => setBalancePreview(null)}>
+                  <X className="w-3 h-3 ml-1" /> إغلاق
+                </Button>
+              </div>
+            </div>
+          )
           {/* Back-translation result */}
           {backTranslation && (
             <div className="mt-2 p-2 rounded border border-accent/20 bg-accent/5 text-xs space-y-1">
