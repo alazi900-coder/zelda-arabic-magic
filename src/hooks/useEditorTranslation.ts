@@ -767,7 +767,7 @@ export function useEditorTranslation({
 
         // Navigate to this page visually
         setCurrentPage(() => p);
-        setTranslateProgress(`📄 صفحة ${p + 1}/${allPages} — ترجمة ${candidates.length} نص...`);
+        setTranslateProgress(`📄 صفحة ${p + 1}/${toPage + 1} — ترجمة ${candidates.length} نص...`);
 
         if (memoryOnly) {
           // Memory-only: TM + Glossary
