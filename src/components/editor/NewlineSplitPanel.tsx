@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, RefreshCw, X, XCircle } from "lucide-react";
@@ -34,6 +34,18 @@ const NewlineSplitPanel: React.FC<NewlineSplitPanelProps> = ({
   const pending = results.filter(r => r.status === 'pending');
   const accepted = results.filter(r => r.status === 'accepted').length;
   const rejected = results.filter(r => r.status === 'rejected').length;
+
+  // Auto-rescan when charLimit changes (debounced)
+  const rescanTimer = useRef<ReturnType<typeof setTimeout>>();
+  const prevLimit = useRef(charLimit);
+  useEffect(() => {
+    if (prevLimit.current !== charLimit) {
+      prevLimit.current = charLimit;
+      clearTimeout(rescanTimer.current);
+      rescanTimer.current = setTimeout(() => onRescan(), 400);
+    }
+    return () => clearTimeout(rescanTimer.current);
+  }, [charLimit, onRescan]);
 
   if (results.length === 0) return null;
 
