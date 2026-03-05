@@ -209,13 +209,14 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
 
   /** Build the list of untranslated entries grouped by file */
   const getUntranslatedGrouped = () => {
-    if (!state) return { groupedByFile: {} as Record<string, { index: number; original: string; label: string }[]>, totalCount: 0 };
+    if (!state) return { groupedByFile: {} as Record<string, { index: number; original: string; label: string }[]>, totalCount: 0, skippedTechnical: 0 };
     const entriesToExport = isFilterActive ? filteredEntries : state.entries;
     const groupedByFile: Record<string, { index: number; original: string; label: string }[]> = {};
+    let skippedTechnical = 0;
     for (const entry of entriesToExport) {
       const key = `${entry.msbtFile}:${entry.index}`;
       // Skip technical/code entries from export
-      if (isTechnicalText(entry.original)) continue;
+      if (isTechnicalText(entry.original)) { skippedTechnical++; continue; }
       const translation = state.translations[key]?.trim();
       if (!translation || translation === entry.original || translation === entry.original.trim()) {
         if (!groupedByFile[entry.msbtFile]) groupedByFile[entry.msbtFile] = [];
@@ -223,7 +224,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
       }
     }
     const totalCount = Object.values(groupedByFile).reduce((sum, arr) => sum + arr.length, 0);
-    return { groupedByFile, totalCount };
+    return { groupedByFile, totalCount, skippedTechnical };
   };
 
   /** Build text content for a flat list of entries */
