@@ -283,6 +283,11 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     return getUntranslatedGrouped().totalCount;
   };
 
+  const getSkippedTechnicalCount = (): number => {
+    if (!state) return 0;
+    return getUntranslatedGrouped().skippedTechnical;
+  };
+
   const handleExportEnglishOnly = async (chunkSize?: number) => {
     if (!state) return;
     const { groupedByFile, totalCount, skippedTechnical } = getUntranslatedGrouped();
