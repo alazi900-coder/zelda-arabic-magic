@@ -1603,9 +1603,17 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 4000);
   }, [state, newlineSplitResults]);
 
-  // === NPC Dialogue Split (37 chars for msg_nq files) ===
+  // === NPC Dialogue Split (configurable chars for msg_nq files) ===
   const NPC_FILE_RE = /msg_nq/i;
-  const NPC_CHAR_LIMIT = 37;
+
+  const [npcSplitCharLimit, setNpcSplitCharLimit] = useState(() => {
+    const saved = localStorage.getItem('npcSplitCharLimit');
+    return saved ? Number(saved) : 37;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('npcSplitCharLimit', String(npcSplitCharLimit));
+  }, [npcSplitCharLimit]);
 
   const handleScanNpcSplit = useCallback(() => {
     if (!state) return;
@@ -1613,45 +1621,62 @@ export function useEditorState() {
     const entriesToScan = isFilterActive ? filteredEntries : state.entries;
     for (const entry of entriesToScan) {
       const key = `${entry.msbtFile}:${entry.index}`;
-      // Only target NPC dialogue files (msg_nq)
       if (!NPC_FILE_RE.test(key)) continue;
       const translation = state.translations[key];
       if (!translation?.trim()) continue;
-      // Flatten existing newlines first, then re-split at 37
       const flat = translation.replace(/\n/g, ' ').replace(/\s{2,}/g, ' ').trim();
-      if (visualLength(flat) <= NPC_CHAR_LIMIT) {
-        // If already has newlines but fits in 37, flatten it
+      if (visualLength(flat) <= npcSplitCharLimit) {
         if (translation !== flat && translation.includes('\n')) {
           results.push({
-            key,
-            originalLines: 1,
-            translationLines: translation.split('\n').length,
-            before: translation,
-            after: flat,
-            original: entry.original,
-            status: 'pending',
+            key, originalLines: 1, translationLines: translation.split('\n').length,
+            before: translation, after: flat, original: entry.original, status: 'pending',
           });
         }
         continue;
       }
-      const after = balanceLines(translation, NPC_CHAR_LIMIT);
+      const after = balanceLines(translation, npcSplitCharLimit);
       if (after === translation) continue;
       results.push({
-        key,
-        originalLines: after.split('\n').length,
-        translationLines: translation.split('\n').length,
-        before: translation,
-        after,
-        original: entry.original,
-        status: 'pending',
+        key, originalLines: after.split('\n').length, translationLines: translation.split('\n').length,
+        before: translation, after, original: entry.original, status: 'pending',
       });
     }
-    setNewlineSplitResults(results);
+    setNpcSplitResults(results);
     if (results.length === 0) {
-      setLastSaved("✅ لا توجد نصوص NPC تحتاج إعادة تقسيم عند 37 حرف");
+      setLastSaved(`✅ لا توجد نصوص NPC تحتاج إعادة تقسيم عند ${npcSplitCharLimit} حرف`);
       setTimeout(() => setLastSaved(""), 4000);
     }
-  }, [state, isFilterActive, filteredEntries]);
+  }, [state, isFilterActive, filteredEntries, npcSplitCharLimit]);
+
+  const handleApplyNpcSplit = useCallback((key: string) => {
+    if (!state || !npcSplitResults) return;
+    const item = npcSplitResults.find(r => r.key === key);
+    if (!item) return;
+    setPreviousTranslations(old => ({ ...old, [key]: state.translations[key] || '' }));
+    setState(prev => prev ? { ...prev, translations: { ...prev.translations, [key]: item.after } } : null);
+    setNpcSplitResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'accepted' as const } : r) : null);
+  }, [state, npcSplitResults]);
+
+  const handleRejectNpcSplit = useCallback((key: string) => {
+    setNpcSplitResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'rejected' as const } : r) : null);
+  }, []);
+
+  const handleApplyAllNpcSplits = useCallback(() => {
+    if (!state || !npcSplitResults) return;
+    const pending = npcSplitResults.filter(r => r.status === 'pending');
+    const newTranslations = { ...state.translations };
+    const prevTrans: Record<string, string> = {};
+    for (const item of pending) {
+      prevTrans[item.key] = newTranslations[item.key] || '';
+      newTranslations[item.key] = item.after;
+    }
+    setPreviousTranslations(old => ({ ...old, ...prevTrans }));
+    setState(prev => prev ? { ...prev, translations: newTranslations } : null);
+    setNpcSplitResults(prev => prev ? prev.map(r => r.status === 'pending' ? { ...r, status: 'accepted' as const } : r) : null);
+    setLastSaved(`✅ تم تقسيم ${pending.length} نص NPC`);
+    setTimeout(() => setLastSaved(""), 4000);
+  }, [state, npcSplitResults]);
+
 
   /** Split a single entry's translation at word boundaries (per-entry inline button) */
   const handleSplitSingleEntry = useCallback((key: string) => {
