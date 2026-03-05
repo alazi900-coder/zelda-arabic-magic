@@ -29,7 +29,7 @@ interface NewlineSplitPanelProps {
 
 const NewlineSplitPanel: React.FC<NewlineSplitPanelProps> = ({
   results, onAccept, onReject, onAcceptAll, onClose,
-  charLimit, onCharLimitChange, onRescan,
+  charLimit, onCharLimitChange, onRescan, title,
 }) => {
   const pending = results.filter(r => r.status === 'pending');
   const accepted = results.filter(r => r.status === 'accepted').length;
