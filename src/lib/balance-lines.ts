@@ -109,7 +109,8 @@ function fixOrphans(lines: string[]): string[] {
 function dpSplitShielded(
   words: string[],
   nLines: number,
-  wordDisplayLen: (w: string) => number
+  wordDisplayLen: (w: string) => number,
+  hardMax: number = HARD_MAX
 ): string[] | null {
   const n = words.length;
   if (n < nLines) return null;
