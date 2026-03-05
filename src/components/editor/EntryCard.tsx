@@ -1,12 +1,13 @@
 import React, { useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag, BookOpen, Wrench, Copy, Eye, Check, X, Table2, Columns3, History, GitCompareArrows, Type, SplitSquareHorizontal, Languages, Scale } from "lucide-react";
+import { AlertTriangle, RotateCcw, Sparkles, Loader2, Tag, BookOpen, Wrench, Copy, Eye, Check, X, Table2, Columns3, History, GitCompareArrows, Type, SplitSquareHorizontal, Languages, Scale, Gamepad2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import type { TMSuggestion } from "@/hooks/useTranslationMemory";
 import DebouncedInput from "./DebouncedInput";
 import { ExtractedEntry, displayOriginal, hasArabicChars, isTechnicalText, hasTechnicalTags, previewTagRestore } from "./types";
 import { balanceLines, hasOrphanLines, visualLength } from "@/lib/balance-lines";
+import { processArabicText, hasArabicChars as hasArabicContent } from "@/lib/arabic-processing";
 
 /** Renders text with technical tags highlighted visually */
 function HighlightedOriginal({ text }: { text: string }) {
@@ -104,6 +105,7 @@ const EntryCard: React.FC<EntryCardProps> = ({
   const [backTranslating, setBackTranslating] = useState(false);
   const [showTagPreview, setShowTagPreview] = useState(false);
   const [balancePreview, setBalancePreview] = useState<string | null>(null);
+  const [showGamePreview, setShowGamePreview] = useState(false);
 
   const tagPreview = useMemo(() => {
     if (!isDamagedTag || !translation?.trim()) return null;
@@ -294,6 +296,11 @@ const EntryCard: React.FC<EntryCardProps> = ({
                   <Scale className={`w-4 h-4 ${hasOrphanLines(translation) ? 'text-destructive' : 'text-accent'}`} />
                 </Button>
               )}
+              {translation?.trim() && hasArabicContent(translation) && (
+                <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => setShowGamePreview(prev => !prev)} title="🎮 معاينة كما ستظهر في اللعبة">
+                  <Gamepad2 className={`w-4 h-4 ${showGamePreview ? 'text-primary' : 'text-muted-foreground'}`} />
+                </Button>
+              )}
               {isDamagedTag && handleLocalFixDamagedTag && (
                 <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => setShowTagPreview(prev => !prev)} title="👁 معاينة الإصلاح قبل التطبيق">
                   <Eye className="w-4 h-4 text-accent" />
@@ -321,6 +328,29 @@ const EntryCard: React.FC<EntryCardProps> = ({
               )}
             </div>
           </div>
+          {/* Game preview */}
+          {showGamePreview && translation?.trim() && (
+            <div className="mt-2 p-3 rounded-lg border border-primary/30 bg-primary/5 text-xs space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-1.5 text-primary font-semibold font-display">
+                  <Gamepad2 className="w-3.5 h-3.5" /> معاينة كما في اللعبة
+                </span>
+                <Button variant="ghost" size="sm" className="h-5 px-1.5 text-[10px]" onClick={() => setShowGamePreview(false)}>
+                  <X className="w-3 h-3" />
+                </Button>
+              </div>
+              <div className="bg-black/90 rounded-md p-3 border border-primary/10">
+                {translation.split('\n').map((line, i) => (
+                  <p key={i} dir="ltr" className="text-white font-body text-sm leading-relaxed tracking-wide" style={{ unicodeBidi: 'bidi-override', fontFeatureSettings: '"liga" 0' }}>
+                    {processArabicText(line)}
+                  </p>
+                ))}
+              </div>
+              <p className="text-[10px] text-muted-foreground">
+                ⓘ هذه محاكاة تقريبية — النتيجة الفعلية تعتمد على خط اللعبة
+              </p>
+            </div>
+          )}
           {/* Tag restore preview */}
           {showTagPreview && tagPreview?.hasDiff && (
             <div className="mt-2 p-2 rounded border border-accent/30 bg-accent/5 text-xs space-y-1.5">
