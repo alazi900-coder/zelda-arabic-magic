@@ -792,7 +792,21 @@ const Editor = () => {
             />
           )}
 
-          {/* Sentence Order Results */}
+          {/* NPC Split Results */}
+          {editor.npcSplitResults && editor.npcSplitResults.length > 0 && (
+            <NewlineSplitPanel
+              results={editor.npcSplitResults}
+              onAccept={editor.handleApplyNpcSplit}
+              onReject={editor.handleRejectNpcSplit}
+              onAcceptAll={editor.handleApplyAllNpcSplits}
+              onClose={() => editor.setNpcSplitResults(null)}
+              charLimit={editor.npcSplitCharLimit}
+              onCharLimitChange={editor.setNpcSplitCharLimit}
+              onRescan={editor.handleScanNpcSplit}
+              title="💬 تقسيم محادثات NPC"
+            />
+          )}
+
           {editor.sentenceOrderResults && editor.sentenceOrderResults.length > 0 && (
             <SentenceOrderPanel
               results={editor.sentenceOrderResults}
@@ -1129,7 +1143,18 @@ const Editor = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              {/* Tools */}
+              {/* NPC Split — standalone button */}
+              <Button
+                variant="outline"
+                size="sm"
+                className="font-body text-xs border-cyan-500/30 text-cyan-400 hover:text-cyan-300 gap-1.5"
+                onClick={editor.handleScanNpcSplit}
+                disabled={editor.translatedCount === 0}
+              >
+                💬 تقسيم NPC
+              </Button>
+
+
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="sm" className="font-body text-xs"><MoreVertical className="w-3 h-3" /> أدوات</Button>
@@ -1161,9 +1186,6 @@ const Editor = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleScanNewlineSplit} disabled={editor.translatedCount === 0}>
                     📐 تقسيم النصوص المضغوطة
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={editor.handleScanNpcSplit} disabled={editor.translatedCount === 0}>
-                    💬 تقسيم محادثات NPC (37 حرف)
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleFlattenAllNewlines} disabled={editor.translatedCount === 0 || editor.multiLineCount === 0}>
                     📏 دمج الأسطر المتعددة (سطر واحد) {editor.multiLineCount > 0 && <span className="text-muted-foreground text-[10px]">({editor.multiLineCount})</span>}
@@ -1285,6 +1307,16 @@ const Editor = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
 
+              {/* NPC Split — standalone button */}
+              <Button
+                variant="outline"
+                className="font-body border-cyan-500/30 text-cyan-400 hover:text-cyan-300 gap-1.5"
+                onClick={editor.handleScanNpcSplit}
+                disabled={editor.translatedCount === 0}
+              >
+                💬 تقسيم NPC
+              </Button>
+
               {/* ── Cloud Save/Load ── */}
               <Button variant="outline" onClick={editor.handleCloudSave} disabled={!editor.user || editor.cloudSyncing} className="font-body border-secondary/30 text-secondary hover:text-secondary">
                 {editor.cloudSyncing ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />} حفظ ☁️
@@ -1327,9 +1359,6 @@ const Editor = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleScanNewlineSplit} disabled={editor.translatedCount === 0}>
                     📐 تقسيم النصوص المضغوطة
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={editor.handleScanNpcSplit} disabled={editor.translatedCount === 0}>
-                    💬 تقسيم محادثات NPC (37 حرف)
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleFlattenAllNewlines} disabled={editor.translatedCount === 0 || editor.multiLineCount === 0}>
                     📏 دمج الأسطر المتعددة (سطر واحد) {editor.multiLineCount > 0 && <span className="text-muted-foreground text-[10px]">({editor.multiLineCount})</span>}
