@@ -134,7 +134,7 @@ function dpSplitShielded(
     for (let i = k; i <= n; i++) {
       for (let j = k - 1; j < i; j++) {
         const ll = lineLen(j, i);
-        if (ll > HARD_MAX && i - j > 1) continue;
+        if (ll > hardMax && i - j > 1) continue;
 
         const deviation = ll - ideal;
         let cost = deviation * deviation;
