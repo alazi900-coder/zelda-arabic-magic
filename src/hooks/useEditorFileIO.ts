@@ -686,12 +686,14 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
         return null;
       };
 
-      const importedFiles = new Set<string>();
+      const importedFiles = new Map<string, number>(); // fileName → count of unmatched keys
       const loadedFiles = new Set<string>();
 
+      // Only count UNMATCHED keys (not all imported keys)
       for (const key of Object.keys(cleanedImported)) {
+        if (entryKeySet.has(key)) continue; // skip matched keys
         const fileName = extractBdatFileName(key);
-        if (fileName) importedFiles.add(fileName);
+        if (fileName) importedFiles.set(fileName, (importedFiles.get(fileName) || 0) + 1);
       }
 
       for (const entry of state?.entries || []) {
@@ -699,11 +701,22 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
         if (fileName) loadedFiles.add(fileName);
       }
 
-      // Show "missing files" only when we can confidently parse BDAT file names
+      // Debug: log both sets for comparison
+      console.log(`📂 تشخيص الاستيراد:`, {
+        unmatchedFilesInJson: [...importedFiles.entries()].map(([f, c]) => `${f} (${c})`),
+        loadedFilesInEditor: [...loadedFiles],
+        unmatchedCount,
+        matchedCount,
+      });
+
+      // Show "missing files" only for files that are truly NOT in the editor
       if (importedFiles.size > 0) {
-        missingFileNames = [...importedFiles].filter(f => !loadedFiles.has(f));
+        missingFileNames = [...importedFiles.keys()].filter(f => !loadedFiles.has(f));
         if (missingFileNames.length > 0) {
           console.log(`📂 ملفات BDAT في JSON غير محملة في المحرر (${missingFileNames.length}):`, missingFileNames);
+        } else if (unmatchedCount > 0) {
+          // Files exist but keys don't match — it's an indexing/version mismatch, NOT missing files
+          console.log(`🔑 الملفات موجودة لكن ${unmatchedCount} مفتاح لم تتطابق (اختلاف فهرسة/نسخة)`);
         }
       }
     }
