@@ -1564,7 +1564,7 @@ export function useEditorState() {
       setLastSaved("✅ لم يتم اكتشاف نصوص طويلة تحتاج تقسيم");
       setTimeout(() => setLastSaved(""), 4000);
     }
-  }, [state, isFilterActive, filteredEntries]);
+  }, [state, isFilterActive, filteredEntries, newlineSplitCharLimit]);
 
   const handleApplyNewlineSplit = useCallback((key: string) => {
     if (!state || !newlineSplitResults) return;
