@@ -529,10 +529,9 @@ const XenobladeProcess = () => {
       }
 
       // Check if extracted texts contain presentation forms (re-extraction from built file)
-      const { hasArabicPresentationForms } = await import("@/lib/arabic-processing");
-      const hasPresentationFormsInOriginals = allEntries.some((e: any) => hasArabicPresentationForms(e.original));
+      // (hasArabicPresentationForms already imported above; reuse isReUploadedBuild)
       
-      if (hasPresentationFormsInOriginals) {
+      if (isReUploadedBuild) {
         addLog("⚠️ تم اكتشاف نصوص عربية مُشكَّلة (Presentation Forms) — يبدو أن الملف مبني سابقاً");
         
         // Try to restore original English texts from saved originals
