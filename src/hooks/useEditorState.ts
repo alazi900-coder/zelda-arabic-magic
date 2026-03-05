@@ -1545,7 +1545,7 @@ export function useEditorState() {
       if (translation.includes('\n')) continue;
       // Skip short translations
       if (translation.length <= LINE_CHAR_LIMIT) continue;
-      const after = splitAtWordBoundary(translation, LINE_CHAR_LIMIT);
+      const after = balanceLines(translation);
       if (after === translation) continue;
       const afterLines = after.split('\n').length;
       results.push({
@@ -1563,7 +1563,7 @@ export function useEditorState() {
       setLastSaved("✅ لم يتم اكتشاف نصوص طويلة تحتاج تقسيم");
       setTimeout(() => setLastSaved(""), 4000);
     }
-  }, [state, splitAtWordBoundary, isFilterActive, filteredEntries]);
+  }, [state, isFilterActive, filteredEntries]);
 
   const handleApplyNewlineSplit = useCallback((key: string) => {
     if (!state || !newlineSplitResults) return;
