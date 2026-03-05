@@ -228,13 +228,30 @@ const EntryCard: React.FC<EntryCardProps> = ({
             </Button>
           )}
           <div className={`flex ${isMobile ? 'flex-col' : 'items-center'} gap-2`}>
-            <DebouncedInput
-              value={translation}
-              onChange={(val) => updateTranslation(key, val)}
-              placeholder="أدخل الترجمة..."
-              className="flex-1 w-full px-3 py-2 rounded bg-background border border-border font-body text-sm"
-              multiline
-            />
+            <div className="flex-1 w-full min-w-0">
+              <DebouncedInput
+                value={translation}
+                onChange={(val) => updateTranslation(key, val)}
+                placeholder="أدخل الترجمة..."
+                className="flex-1 w-full px-3 py-2 rounded bg-background border border-border font-body text-sm"
+                multiline
+              />
+              {translation?.trim() && (
+                <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1 px-1" dir="ltr">
+                  {translation.split('\n').map((line, i, arr) => {
+                    const vLen = visualLength(line);
+                    return (
+                      <span
+                        key={i}
+                        className={`text-[10px] font-mono ${vLen > 42 ? 'text-destructive' : vLen > 37 ? 'text-amber-500' : 'text-muted-foreground/60'}`}
+                      >
+                        {arr.length > 1 ? `L${i + 1}:` : ''}{vLen}
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
             <div className="flex items-center gap-1 shrink-0">
               <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => handleTranslateSingle(entry)} disabled={translatingSingle === key} title="ترجمة هذا النص">
                 {translatingSingle === key ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4 text-primary" />}
