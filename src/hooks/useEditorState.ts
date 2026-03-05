@@ -1505,7 +1505,7 @@ export function useEditorState() {
   }, [state, sentenceSplitResults]);
 
   // === Newline Split (auto-split long translations at character limit) ===
-  const LINE_CHAR_LIMIT = 42; // approximate characters per line in game dialog box
+  const [newlineSplitCharLimit, setNewlineSplitCharLimit] = useState(42);
 
   const splitAtWordBoundary = useCallback((text: string, charLimit: number): string => {
     // Don't split text that already has \n
