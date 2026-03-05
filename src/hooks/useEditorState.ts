@@ -1599,8 +1599,8 @@ export function useEditorState() {
   const handleSplitSingleEntry = useCallback((key: string) => {
     if (!state) return;
     const translation = state.translations[key];
-    if (!translation?.trim() || translation.includes('\n') || translation.length <= LINE_CHAR_LIMIT) return;
-    const after = splitAtWordBoundary(translation, LINE_CHAR_LIMIT);
+    if (!translation?.trim() || translation.includes('\n') || translation.length <= newlineSplitCharLimit) return;
+    const after = splitAtWordBoundary(translation, newlineSplitCharLimit);
     if (after === translation) return;
     setPreviousTranslations(old => ({ ...old, [key]: translation }));
     setState(prev => prev ? { ...prev, translations: { ...prev.translations, [key]: after } } : null);
