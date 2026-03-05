@@ -2018,7 +2018,7 @@ export function useEditorState() {
     setCurrentPage, setShowRetranslateConfirm,
     setArabicNumerals, setMirrorPunctuation, setUserGeminiKey, setTranslationProvider, setMyMemoryEmail,
     setReviewResults, setShortSuggestions, setImproveResults, setBuildStats, setShowBuildConfirm,
-    setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults, setDiacriticsCleanResults, setDuplicateAlefResults, setMirrorCharsResults, setTagBracketFixResults, setNewlineSplitResults, setSentenceOrderResults,
+    setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults, setDiacriticsCleanResults, setDuplicateAlefResults, setMirrorCharsResults, setTagBracketFixResults, setNewlineSplitResults, setNpcSplitResults, setSentenceOrderResults,
 
     // Handlers
     toggleProtection, toggleTechnicalBypass,
