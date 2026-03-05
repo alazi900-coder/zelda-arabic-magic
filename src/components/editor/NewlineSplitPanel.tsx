@@ -35,6 +35,18 @@ const NewlineSplitPanel: React.FC<NewlineSplitPanelProps> = ({
   const accepted = results.filter(r => r.status === 'accepted').length;
   const rejected = results.filter(r => r.status === 'rejected').length;
 
+  // Auto-rescan when charLimit changes (debounced)
+  const rescanTimer = useRef<ReturnType<typeof setTimeout>>();
+  const prevLimit = useRef(charLimit);
+  useEffect(() => {
+    if (prevLimit.current !== charLimit) {
+      prevLimit.current = charLimit;
+      clearTimeout(rescanTimer.current);
+      rescanTimer.current = setTimeout(() => onRescan(), 400);
+    }
+    return () => clearTimeout(rescanTimer.current);
+  }, [charLimit, onRescan]);
+
   if (results.length === 0) return null;
 
   return (
