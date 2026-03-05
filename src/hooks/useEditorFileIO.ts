@@ -679,19 +679,32 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     // and will appear when corresponding BDAT files are loaded later
     let missingFileNames: string[] = [];
     if (!isDemo && unmatchedCount > 0) {
+      const extractBdatFileName = (key: string): string | null => {
+        const parts = key.split(':');
+        if (parts.length < 2) return null;
+        if (parts[0] === 'bdat-bin') return parts[1] || null;
+        return null;
+      };
+
       const importedFiles = new Set<string>();
       const loadedFiles = new Set<string>();
+
       for (const key of Object.keys(cleanedImported)) {
-        const parts = key.split(':');
-        if (parts.length >= 2) importedFiles.add(parts.slice(0, 2).join(':'));
+        const fileName = extractBdatFileName(key);
+        if (fileName) importedFiles.add(fileName);
       }
-      for (const ek of entryKeySet) {
-        const parts = ek.split(':');
-        if (parts.length >= 2) loadedFiles.add(parts.slice(0, 2).join(':'));
+
+      for (const entry of state?.entries || []) {
+        const fileName = extractBdatFileName(entry.msbtFile);
+        if (fileName) loadedFiles.add(fileName);
       }
-      missingFileNames = [...importedFiles].filter(f => !loadedFiles.has(f)).map(f => f.replace('bdat-bin:', ''));
-      if (missingFileNames.length > 0) {
-        console.log(`📂 ملفات في JSON غير محملة في المحرر (${missingFileNames.length}):`, missingFileNames);
+
+      // Show "missing files" only when we can confidently parse BDAT file names
+      if (importedFiles.size > 0) {
+        missingFileNames = [...importedFiles].filter(f => !loadedFiles.has(f));
+        if (missingFileNames.length > 0) {
+          console.log(`📂 ملفات BDAT في JSON غير محملة في المحرر (${missingFileNames.length}):`, missingFileNames);
+        }
       }
     }
 
@@ -705,7 +718,10 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     if (isDemo) {
       msg = `✅ تم استيراد ${appliedCount} ترجمة — ستظهر عند رفع ملفات BDAT من صفحة المعالجة`;
     } else if (matchedCount > 0 && unmatchedCount > 0) {
-      msg = `✅ تم استيراد ${appliedCount} ترجمة${statsInfo} — ${matchedCount} تظهر الآن، ${unmatchedCount} محفوظة لملفات BDAT أخرى`;
+      const unmatchedReason = missingFileNames.length > 0
+        ? `، ${unmatchedCount} محفوظة لملفات BDAT أخرى`
+        : `، ${unmatchedCount} محفوظة كمفاتيح غير مطابقة (اختلاف نسخة/فهرسة)`;
+      msg = `✅ تم استيراد ${appliedCount} ترجمة${statsInfo} — ${matchedCount} تظهر الآن${unmatchedReason}`;
       if (missingFileNames.length > 0) {
         const preview = missingFileNames.slice(0, 5).join('\n• ');
         const extra = missingFileNames.length > 5 ? `\n... و${missingFileNames.length - 5} ملف آخر` : '';
