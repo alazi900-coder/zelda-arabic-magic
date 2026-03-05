@@ -327,6 +327,29 @@ const EntryCard: React.FC<EntryCardProps> = ({
               )}
             </div>
           </div>
+          {/* Game preview */}
+          {showGamePreview && translation?.trim() && (
+            <div className="mt-2 p-3 rounded-lg border border-primary/30 bg-primary/5 text-xs space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-1.5 text-primary font-semibold font-display">
+                  <Gamepad2 className="w-3.5 h-3.5" /> معاينة كما في اللعبة
+                </span>
+                <Button variant="ghost" size="sm" className="h-5 px-1.5 text-[10px]" onClick={() => setShowGamePreview(false)}>
+                  <X className="w-3 h-3" />
+                </Button>
+              </div>
+              <div className="bg-black/90 rounded-md p-3 border border-primary/10">
+                {translation.split('\n').map((line, i) => (
+                  <p key={i} dir="ltr" className="text-white font-body text-sm leading-relaxed tracking-wide" style={{ unicodeBidi: 'bidi-override', fontFeatureSettings: '"liga" 0' }}>
+                    {processArabicText(line)}
+                  </p>
+                ))}
+              </div>
+              <p className="text-[10px] text-muted-foreground">
+                ⓘ هذه محاكاة تقريبية — النتيجة الفعلية تعتمد على خط اللعبة
+              </p>
+            </div>
+          )}
           {/* Tag restore preview */}
           {showTagPreview && tagPreview?.hasDiff && (
             <div className="mt-2 p-2 rounded border border-accent/30 bg-accent/5 text-xs space-y-1.5">
