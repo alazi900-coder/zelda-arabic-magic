@@ -214,6 +214,8 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     const groupedByFile: Record<string, { index: number; original: string; label: string }[]> = {};
     for (const entry of entriesToExport) {
       const key = `${entry.msbtFile}:${entry.index}`;
+      // Skip technical/code entries from export
+      if (isTechnicalText(entry.original)) continue;
       const translation = state.translations[key]?.trim();
       if (!translation || translation === entry.original || translation === entry.original.trim()) {
         if (!groupedByFile[entry.msbtFile]) groupedByFile[entry.msbtFile] = [];
