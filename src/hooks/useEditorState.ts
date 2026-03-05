@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { fixTagBracketsStrict, hasTechnicalBracketTag } from "@/lib/tag-bracket-fix";
 import { detectReversedSentences } from "@/components/editor/SentenceOrderPanel";
-import { balanceLines } from "@/lib/balance-lines";
+import { balanceLines, visualLength } from "@/lib/balance-lines";
 
 import { useEditorGlossary } from "@/hooks/useEditorGlossary";
 import { useEditorFileIO } from "@/hooks/useEditorFileIO";
@@ -1545,7 +1545,7 @@ export function useEditorState() {
       // Skip if already has line breaks
       if (translation.includes('\n')) continue;
       // Skip short translations
-      if (translation.length <= LINE_CHAR_LIMIT) continue;
+      if (visualLength(translation) <= LINE_CHAR_LIMIT) continue;
       const after = balanceLines(translation);
       if (after === translation) continue;
       const afterLines = after.split('\n').length;
