@@ -1545,7 +1545,7 @@ export function useEditorState() {
       // Skip if already has line breaks
       if (translation.includes('\n')) continue;
       // Skip short translations
-      if (visualLength(translation) <= LINE_CHAR_LIMIT) continue;
+      if (visualLength(translation) <= newlineSplitCharLimit) continue;
       const after = balanceLines(translation);
       if (after === translation) continue;
       const afterLines = after.split('\n').length;
