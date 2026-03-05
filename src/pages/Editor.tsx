@@ -280,6 +280,18 @@ const Editor = () => {
 
           {/* Stats Cards */}
           <div className="flex flex-wrap items-center gap-3 md:gap-4 mb-6">
+            {/* BDAT file count */}
+            <Card className="flex-1 min-w-[100px]">
+              <CardContent className="flex items-center gap-2 md:gap-3 p-3 md:p-4">
+                <Package className="w-4 h-4 md:w-5 md:h-5 text-accent" />
+                <div>
+                  <p className="text-base md:text-lg font-display font-bold">
+                    {new Set((editor.state?.entries || []).map(e => { const p = e.msbtFile.split(':'); return p[0] === 'bdat-bin' ? p[1] : e.msbtFile; })).size}
+                  </p>
+                  <p className="text-[10px] md:text-xs text-muted-foreground">ملفات BDAT</p>
+                </div>
+              </CardContent>
+            </Card>
             <Card className="flex-1 min-w-[100px]">
               <CardContent className="flex items-center gap-2 md:gap-3 p-3 md:p-4">
                 <FileText className="w-4 h-4 md:w-5 md:h-5 text-primary" />
