@@ -1617,8 +1617,17 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 4000);
   }, [state, newlineSplitResults]);
 
-  // === NPC Dialogue Split (configurable chars for msg_nq files) ===
-  const NPC_FILE_RE = /msg_nq/i;
+  // === NPC Dialogue Split (configurable chars for NPC dialogue files) ===
+  const NPC_FILE_RE = /msg_(ask|cq|fev|nq|sq|tlk|tq)/i;
+
+  // === NPC Mode: sync Arabic line count to English \n count ===
+  const [npcMode, _setNpcMode] = useState(() => {
+    try { return localStorage.getItem('npcMode') === 'true'; } catch { return false; }
+  });
+  const setNpcMode = useCallback((v: boolean) => {
+    _setNpcMode(v);
+    try { localStorage.setItem('npcMode', String(v)); } catch {}
+  }, []);
 
   const [npcSplitCharLimit, setNpcSplitCharLimit] = useState(() => {
     const saved = localStorage.getItem('npcSplitCharLimit');
