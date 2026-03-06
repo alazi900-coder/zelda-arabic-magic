@@ -130,13 +130,15 @@ function stripUnexpectedPlaceholders(text: string, allowedPlaceholders: Set<stri
     .trim();
 }
 
+let _rebalanceNewlines = false;
+
 function restoreAndEnforce(original: string, translated: string, tags: Map<string, string>): string {
   const restored = restoreTags(translated, tags);
   const enforced = enforceTagIntegrity(original, restored);
 
   // Check if original had real newlines (NEWLINE_N tags exist)
   const hasOriginalNewlines = [...tags.keys()].some(k => k.startsWith('NEWLINE_'));
-  if (hasOriginalNewlines) {
+  if (hasOriginalNewlines && !_rebalanceNewlines) {
     // Preserve structural newlines but still remove orphan lines
     return fixOrphansPreservingNewlines(enforced);
   }
