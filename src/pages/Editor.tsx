@@ -1380,7 +1380,7 @@ const Editor = () => {
                 onClick={editor.handleScanNpcSplit}
                 disabled={editor.translatedCount === 0}
               >
-                💬 تقسيم NPC
+                💬 تقسيم NPC {editor.npcAffectedCount > 0 && <span className="bg-cyan-500/20 text-cyan-300 rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none">{editor.npcAffectedCount}</span>}
               </Button>
 
               {/* ── Cloud Save/Load ── */}
