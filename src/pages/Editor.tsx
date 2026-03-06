@@ -820,6 +820,21 @@ const Editor = () => {
             />
           )}
 
+          {/* Line Sync Results */}
+          {editor.lineSyncResults && editor.lineSyncResults.length > 0 && (
+            <NewlineSplitPanel
+              results={editor.lineSyncResults}
+              onAccept={editor.handleApplyLineSync}
+              onReject={editor.handleRejectLineSync}
+              onAcceptAll={editor.handleApplyAllLineSyncs}
+              onClose={() => editor.setLineSyncResults(null)}
+              charLimit={editor.npcSplitCharLimit}
+              onCharLimitChange={editor.setNpcSplitCharLimit}
+              onRescan={editor.handleScanLineSync}
+              title="🔄 مزامنة الأسطر (كل الملفات)"
+            />
+          )}
+
           {editor.sentenceOrderResults && editor.sentenceOrderResults.length > 0 && (
             <SentenceOrderPanel
               results={editor.sentenceOrderResults}
@@ -1194,7 +1209,15 @@ const Editor = () => {
               >
                 💬 تقسيم NPC {editor.npcAffectedCount > 0 && <span className="bg-cyan-500/20 text-cyan-300 rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none">{editor.npcAffectedCount}</span>}
               </Button>
-
+              <Button
+                variant="outline"
+                size="sm"
+                className="font-body text-xs border-amber-500/30 text-amber-400 hover:text-amber-300 gap-1.5"
+                onClick={editor.handleScanLineSync}
+                disabled={editor.translatedCount === 0}
+              >
+                🔄 مزامنة الأسطر {editor.lineSyncAffectedCount > 0 && <span className="bg-amber-500/20 text-amber-300 rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none">{editor.lineSyncAffectedCount}</span>}
+              </Button>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -1381,6 +1404,14 @@ const Editor = () => {
                 disabled={editor.translatedCount === 0}
               >
                 💬 تقسيم NPC {editor.npcAffectedCount > 0 && <span className="bg-cyan-500/20 text-cyan-300 rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none">{editor.npcAffectedCount}</span>}
+              </Button>
+              <Button
+                variant="outline"
+                className="font-body border-amber-500/30 text-amber-400 hover:text-amber-300 gap-1.5"
+                onClick={editor.handleScanLineSync}
+                disabled={editor.translatedCount === 0}
+              >
+                🔄 مزامنة الأسطر {editor.lineSyncAffectedCount > 0 && <span className="bg-amber-500/20 text-amber-300 rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none">{editor.lineSyncAffectedCount}</span>}
               </Button>
 
               {/* ── Cloud Save/Load ── */}

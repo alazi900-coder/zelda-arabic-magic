@@ -59,6 +59,7 @@ export function useEditorState() {
   const [tagBracketFixResults, setTagBracketFixResults] = useState<import("@/components/editor/TagBracketFixPanel").TagBracketFixResult[] | null>(null);
   const [newlineSplitResults, setNewlineSplitResults] = useState<import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] | null>(null);
   const [npcSplitResults, setNpcSplitResults] = useState<import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] | null>(null);
+  const [lineSyncResults, setLineSyncResults] = useState<import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] | null>(null);
   const [sentenceOrderResults, setSentenceOrderResults] = useState<import("@/components/editor/SentenceOrderPanel").SentenceOrderResult[] | null>(null);
   const [pinnedKeys, setPinnedKeys] = useState<Set<string> | null>(null);
   const [isSearchPinned, setIsSearchPinned] = useState(false);
@@ -1370,6 +1371,84 @@ export function useEditorState() {
 
 
 
+  // === Universal Line Sync (all files — match Arabic line count to English \n count) ===
+  const lineSyncAffectedCount = useMemo(() => {
+    if (!state) return 0;
+    const entriesToScan = isFilterActive ? filteredEntries : state.entries;
+    let count = 0;
+    for (const entry of entriesToScan) {
+      const key = `${entry.msbtFile}:${entry.index}`;
+      const translation = state.translations[key];
+      if (!translation?.trim()) continue;
+      const englishLineCount = entry.original.split('\n').length;
+      const arabicLineCount = translation.split('\n').length;
+      if (englishLineCount !== arabicLineCount) count++;
+    }
+    return count;
+  }, [state, isFilterActive, filteredEntries]);
+
+  const handleScanLineSync = useCallback(() => {
+    if (!state) return;
+    const results: import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] = [];
+    const entriesToScan = isFilterActive ? filteredEntries : state.entries;
+    for (const entry of entriesToScan) {
+      const key = `${entry.msbtFile}:${entry.index}`;
+      const translation = state.translations[key];
+      if (!translation?.trim()) continue;
+
+      const englishLineCount = entry.original.split('\n').length;
+      const arabicLineCount = translation.split('\n').length;
+      if (englishLineCount === arabicLineCount) continue;
+
+      const flat = translation.replace(/\n/g, ' ').replace(/\s{2,}/g, ' ').trim();
+      let after: string;
+      if (englishLineCount <= 1) {
+        after = flat;
+      } else {
+        after = balanceLines(flat, npcSplitCharLimit, englishLineCount);
+      }
+      if (after === translation) continue;
+      results.push({
+        key, originalLines: englishLineCount, translationLines: arabicLineCount,
+        before: translation, after, original: entry.original, status: 'pending',
+      });
+    }
+    setLineSyncResults(results);
+    if (results.length === 0) {
+      setLastSaved(`✅ جميع الترجمات متطابقة الأسطر مع النص الإنجليزي`);
+      setTimeout(() => setLastSaved(""), 4000);
+    }
+  }, [state, isFilterActive, filteredEntries, npcSplitCharLimit]);
+
+  const handleApplyLineSync = useCallback((key: string) => {
+    if (!state || !lineSyncResults) return;
+    const item = lineSyncResults.find(r => r.key === key);
+    if (!item) return;
+    setPreviousTranslations(old => ({ ...old, [key]: state.translations[key] || '' }));
+    setState(prev => prev ? { ...prev, translations: { ...prev.translations, [key]: item.after } } : null);
+    setLineSyncResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'accepted' as const } : r) : null);
+  }, [state, lineSyncResults]);
+
+  const handleRejectLineSync = useCallback((key: string) => {
+    setLineSyncResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'rejected' as const } : r) : null);
+  }, []);
+
+  const handleApplyAllLineSyncs = useCallback(() => {
+    if (!state || !lineSyncResults) return;
+    const pending = lineSyncResults.filter(r => r.status === 'pending');
+    const newTranslations = { ...state.translations };
+    const prevTrans: Record<string, string> = {};
+    for (const item of pending) {
+      prevTrans[item.key] = newTranslations[item.key] || '';
+      newTranslations[item.key] = item.after;
+    }
+    setPreviousTranslations(old => ({ ...old, ...prevTrans }));
+    setState(prev => prev ? { ...prev, translations: newTranslations } : null);
+    setLineSyncResults(prev => prev ? prev.map(r => r.status === 'pending' ? { ...r, status: 'accepted' as const } : r) : null);
+    setLastSaved(`✅ تم مزامنة أسطر ${pending.length} ترجمة`);
+    setTimeout(() => setLastSaved(""), 4000);
+  }, [state, lineSyncResults]);
+
 
   // === Restore original English texts from IndexedDB ===
   const handleRestoreOriginals = useCallback(async () => {
@@ -2071,9 +2150,9 @@ export function useEditorState() {
     applyingArabic, improvingTranslations, improveResults,
     fixingMixed, filtersOpen, buildStats, buildPreview, showBuildConfirm, bdatFileStats,
     checkingConsistency, consistencyResults,
-    scanningSentences, sentenceSplitResults, newlineCleanResults, diacriticsCleanResults, duplicateAlefResults, mirrorCharsResults, tagBracketFixResults, newlineSplitResults, npcSplitResults, sentenceOrderResults,
+    scanningSentences, sentenceSplitResults, newlineCleanResults, diacriticsCleanResults, duplicateAlefResults, mirrorCharsResults, tagBracketFixResults, newlineSplitResults, npcSplitResults, lineSyncResults, sentenceOrderResults,
     isSearchPinned, pinnedKeys,
-    categoryProgress, qualityStats, needsImproveCount, translatedCount, tagsCount, fuzzyCount, byteOverflowCount, multiLineCount, newlinesCount, npcAffectedCount,
+    categoryProgress, qualityStats, needsImproveCount, translatedCount, tagsCount, fuzzyCount, byteOverflowCount, multiLineCount, newlinesCount, npcAffectedCount, lineSyncAffectedCount,
     bdatTableNames, bdatColumnNames, bdatTableCounts, bdatColumnCounts,
     ...glossary,
     msbtFiles, filteredEntries, paginatedEntries, totalPages,
@@ -2085,7 +2164,7 @@ export function useEditorState() {
     setCurrentPage, setShowRetranslateConfirm,
     setArabicNumerals, setMirrorPunctuation, setUserGeminiKey, setTranslationProvider, setMyMemoryEmail, setRebalanceNewlines,
     setReviewResults, setShortSuggestions, setImproveResults, setBuildStats, setShowBuildConfirm,
-    setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults, setDiacriticsCleanResults, setDuplicateAlefResults, setMirrorCharsResults, setTagBracketFixResults, setNewlineSplitResults, setNpcSplitResults, setSentenceOrderResults,
+    setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults, setDiacriticsCleanResults, setDuplicateAlefResults, setMirrorCharsResults, setTagBracketFixResults, setNewlineSplitResults, setNpcSplitResults, setLineSyncResults, setSentenceOrderResults,
 
     // Handlers
     toggleProtection, toggleTechnicalBypass,
@@ -2111,6 +2190,7 @@ export function useEditorState() {
     handleScanTagBrackets, handleApplyTagBracketFix, handleRejectTagBracketFix, handleApplyAllTagBracketFixes,
     handleScanNewlineSplit, handleApplyNewlineSplit, handleRejectNewlineSplit, handleApplyAllNewlineSplits, handleSplitSingleEntry, handleFlattenAllNewlines, handleFontTest, newlineSplitCharLimit, setNewlineSplitCharLimit,
     handleScanNpcSplit, handleApplyNpcSplit, handleRejectNpcSplit, handleApplyAllNpcSplits, npcSplitCharLimit, setNpcSplitCharLimit, npcMode, setNpcMode, npcMaxLines, setNpcMaxLines,
+    handleScanLineSync, handleApplyLineSync, handleRejectLineSync, handleApplyAllLineSyncs,
     handleScanSentenceOrder, handleApplySentenceOrder, handleRejectSentenceOrder, handleApplyAllSentenceOrders,
     handleTogglePin,
     handleClearTranslations, handleUndoClear, clearUndoBackup, isFilterActive,

@@ -41,18 +41,17 @@ export function useEditorTranslation({
   filterCategory, activeGlossary, parseGlossaryMap, paginatedEntries, filteredEntries, totalPages, setCurrentPage, userGeminiKey, translationProvider, myMemoryEmail, addMyMemoryChars, addAiRequest, rebalanceNewlines, npcMaxLines, npcMode, npcSplitCharLimit,
 }: UseEditorTranslationProps) {
 
-  /** Auto-split NPC translation to respect line limits */
-  const autoSplitNpc = (key: string, translated: string, originalEntry?: ExtractedEntry): string => {
-    if (!NPC_FILE_RE.test(key)) return translated;
-    if (npcMode && originalEntry) {
-      const englishLineCount = originalEntry.original.split('\n').length;
-      const flat = translated.replace(/\n/g, ' ').replace(/\s{2,}/g, ' ').trim();
-      if (englishLineCount <= 1) return flat;
-      return balanceLines(flat, npcSplitCharLimit, Math.min(englishLineCount, npcMaxLines));
-    }
-    // Classic: just enforce maxLines
+  /** Auto-sync Arabic line count to match English \n count (universal — all files) */
+  const autoSyncLines = (key: string, translated: string, originalEntry?: ExtractedEntry): string => {
+    if (!originalEntry) return translated;
+    const englishLineCount = originalEntry.original.split('\n').length;
     const flat = translated.replace(/\n/g, ' ').replace(/\s{2,}/g, ' ').trim();
-    return balanceLines(flat, npcSplitCharLimit, npcMaxLines);
+    if (englishLineCount <= 1) return flat;
+    // For NPC files, respect npcMaxLines cap
+    const isNpc = NPC_FILE_RE.test(key);
+    const maxLines = isNpc ? Math.min(englishLineCount, npcMaxLines) : englishLineCount;
+    const charLimit = isNpc ? npcSplitCharLimit : npcSplitCharLimit;
+    return balanceLines(flat, charLimit, maxLines);
   };
   const [translating, setTranslating] = useState(false);
   const [translatingSingle, setTranslatingSingle] = useState<string | null>(null);
@@ -110,8 +109,8 @@ export function useEditorTranslation({
         // Fix broken brackets around [Tag:Value] tags
         result = autoFixTagBrackets(entry.original, result);
       }
-      // Auto-split NPC translations to respect line limits
-      result = autoSplitNpc(key, result, entry);
+      // Auto-sync line count to match English source
+      result = autoSyncLines(key, result, entry);
       fixed[key] = result;
     }
     return fixed;
@@ -168,8 +167,8 @@ export function useEditorTranslation({
           translated = restoreTagsLocally(entry.original, translated);
           translated = autoFixTagBrackets(entry.original, translated);
         }
-        // Auto-split NPC translations
-        translated = autoSplitNpc(key, translated, entry);
+        // Auto-sync line count to match English source
+        translated = autoSyncLines(key, translated, entry);
         updateTranslation(key, translated);
       }
     } catch (err) {
