@@ -930,7 +930,7 @@ async function translateWithAI(
 
     // Tag-only/symbolic entries must pass through unchanged
     if (isTagOnlyOrSymbolic(pe.cleaned)) {
-      directResult[entry.key] = restoreAndEnforce(entry.original, pe.cleaned, pe.tags);
+      directResult[entry.key] = restoreAndEnforce(entry.original, pe.cleaned, pe.tags, entry.key);
       continue;
     }
 
