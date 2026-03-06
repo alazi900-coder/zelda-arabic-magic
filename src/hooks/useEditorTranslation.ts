@@ -27,6 +27,7 @@ interface UseEditorTranslationProps {
   myMemoryEmail: string;
   addMyMemoryChars: (chars: number) => void;
   addAiRequest: (count?: number) => void;
+  rebalanceNewlines: boolean;
 }
 
 export function useEditorTranslation({
