@@ -708,7 +708,8 @@ export function useEditorState() {
         (filterStatus === "has-tags" && hasTechnicalTags(e.original)) ||
         (filterStatus === "damaged-tags" && qualityStats.damagedTagKeys.has(key)) ||
         (filterStatus === "fuzzy" && !!(state.fuzzyScores?.[key])) ||
-        (filterStatus === "byte-overflow" && e.maxBytes > 0 && isTranslated && new TextEncoder().encode(translation).length > e.maxBytes);
+        (filterStatus === "byte-overflow" && e.maxBytes > 0 && isTranslated && new TextEncoder().encode(translation).length > e.maxBytes) ||
+        (filterStatus === "has-newlines" && e.original.includes('\n'));
       const matchTechnical = 
         filterTechnical === "all" ||
         (filterTechnical === "only" && isTechnical) ||
