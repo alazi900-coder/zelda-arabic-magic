@@ -1688,7 +1688,7 @@ export function useEditorState() {
         }
         continue;
       }
-      const after = balanceLines(translation, npcSplitCharLimit);
+      const after = balanceLines(translation, npcSplitCharLimit, npcMaxLines);
       if (after === translation) continue;
       results.push({
         key, originalLines: after.split('\n').length, translationLines: translation.split('\n').length,
