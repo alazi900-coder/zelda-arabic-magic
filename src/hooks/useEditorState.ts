@@ -589,6 +589,12 @@ export function useEditorState() {
     return count;
   }, [state?.translations]);
 
+  // === Count entries where English original has \n ===
+  const newlinesCount = useMemo(() => {
+    if (!state) return 0;
+    return state.entries.filter(e => e.original.includes('\n')).length;
+  }, [state?.entries]);
+
 
   // === Count entries with technical tags ===
   const tagsCount = useMemo(() => {
