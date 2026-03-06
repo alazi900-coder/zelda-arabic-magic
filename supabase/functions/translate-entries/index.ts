@@ -1066,6 +1066,41 @@ ${textsBlock}
         return obj;
       } catch {}
     }
+
+    // Fallback: regex extraction of individual K{n} keys
+    const regexResult: Record<string, string> = {};
+    const keyRegex = /"K(\d+)"\s*:\s*"/g;
+    let keyMatch;
+    while ((keyMatch = keyRegex.exec(cleaned)) !== null) {
+      const keyNum = keyMatch[1];
+      const valueStart = keyMatch.index + keyMatch[0].length;
+      // Find the end of the value string, handling escaped quotes
+      let i = valueStart;
+      let value = '';
+      while (i < cleaned.length) {
+        if (cleaned[i] === '\\' && i + 1 < cleaned.length) {
+          value += cleaned[i] + cleaned[i + 1];
+          i += 2;
+        } else if (cleaned[i] === '"') {
+          break;
+        } else {
+          value += cleaned[i];
+          i++;
+        }
+      }
+      if (value.trim()) {
+        // Unescape the value
+        try {
+          regexResult[`K${keyNum}`] = JSON.parse(`"${value}"`);
+        } catch {
+          regexResult[`K${keyNum}`] = value.replace(/\\n/g, '\n').replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+        }
+      }
+    }
+    if (Object.keys(regexResult).length > 0) {
+      console.warn(`Extracted ${Object.keys(regexResult).length} keys via regex fallback`);
+      return regexResult;
+    }
     
     throw new Error('فشل في تحليل استجابة الذكاء الاصطناعي — لم يتم العثور على JSON صالح');
   }
