@@ -1169,7 +1169,7 @@ ${textsBlock}
       if (glossaryMap.size > 0) {
         translated = applyGlossaryPost(translated, glossaryMap);
       }
-      result[item.entry.key] = restoreAndEnforce(item.entry.original, translated, item.pe.tags);
+      result[item.entry.key] = restoreAndEnforce(item.entry.original, translated, item.pe.tags, item.entry.key);
     }
     return result;
   };
