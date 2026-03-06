@@ -1638,6 +1638,7 @@ export function useEditorState() {
     try { localStorage.setItem('npcMaxLines', String(clamped)); } catch {}
   }, []);
 
+  const [npcSplitCharLimit, setNpcSplitCharLimit] = useState(() => {
     const saved = localStorage.getItem('npcSplitCharLimit');
     return saved ? Number(saved) : 37;
   });
