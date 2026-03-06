@@ -1629,15 +1629,6 @@ export function useEditorState() {
     try { localStorage.setItem('npcMode', String(v)); } catch {}
   }, []);
 
-  const [npcMaxLines, _setNpcMaxLines] = useState(() => {
-    try { const v = localStorage.getItem('npcMaxLines'); return v ? Number(v) : 2; } catch { return 2; }
-  });
-  const setNpcMaxLines = useCallback((v: number) => {
-    const clamped = Math.max(1, Math.min(3, v));
-    _setNpcMaxLines(clamped);
-    try { localStorage.setItem('npcMaxLines', String(clamped)); } catch {}
-  }, []);
-
   const [npcSplitCharLimit, setNpcSplitCharLimit] = useState(() => {
     const saved = localStorage.getItem('npcSplitCharLimit');
     return saved ? Number(saved) : 37;
