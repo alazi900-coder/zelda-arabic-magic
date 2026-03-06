@@ -751,7 +751,7 @@ async function translateWithMyMemory(
         if (glossaryMap) {
           translation = applyGlossaryPost(translation, glossaryMap);
         }
-        result[entry.key] = restoreAndEnforce(entry.original, translation, pe.tags);
+        result[entry.key] = restoreAndEnforce(entry.original, translation, pe.tags, entry.key);
         charsUsed += textToTranslate.length;
       }
     } catch (err) {
