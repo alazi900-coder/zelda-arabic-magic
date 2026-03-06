@@ -130,13 +130,15 @@ function stripUnexpectedPlaceholders(text: string, allowedPlaceholders: Set<stri
     .trim();
 }
 
+let _rebalanceNewlines = false;
+
 function restoreAndEnforce(original: string, translated: string, tags: Map<string, string>): string {
   const restored = restoreTags(translated, tags);
   const enforced = enforceTagIntegrity(original, restored);
 
   // Check if original had real newlines (NEWLINE_N tags exist)
   const hasOriginalNewlines = [...tags.keys()].some(k => k.startsWith('NEWLINE_'));
-  if (hasOriginalNewlines) {
+  if (hasOriginalNewlines && !_rebalanceNewlines) {
     // Preserve structural newlines but still remove orphan lines
     return fixOrphansPreservingNewlines(enforced);
   }
@@ -1267,14 +1269,18 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { entries, glossary, context, userApiKey, provider, myMemoryEmail } = await req.json() as {
+    const { entries, glossary, context, userApiKey, provider, myMemoryEmail, rebalanceNewlines } = await req.json() as {
       entries: { key: string; original: string }[];
       glossary?: string;
       context?: { key: string; original: string; translation?: string }[];
       userApiKey?: string;
       provider?: string;
       myMemoryEmail?: string;
+      rebalanceNewlines?: boolean;
     };
+
+    // Set the global rebalance flag for this request
+    _rebalanceNewlines = !!rebalanceNewlines;
 
     if (!entries || entries.length === 0) {
       return new Response(JSON.stringify({ error: 'لا توجد نصوص للترجمة' }), {
