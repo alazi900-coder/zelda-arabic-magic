@@ -785,7 +785,7 @@ async function translateWithGoogle(
 
       // Tag-only/symbolic entries must pass through unchanged
       if (isTagOnlyOrSymbolic(text)) {
-        result[entry.key] = restoreAndEnforce(entry.original, text, pe.tags);
+        result[entry.key] = restoreAndEnforce(entry.original, text, pe.tags, entry.key);
         continue;
       }
 
