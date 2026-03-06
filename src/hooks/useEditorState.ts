@@ -62,6 +62,13 @@ export function useEditorState() {
   const [sentenceOrderResults, setSentenceOrderResults] = useState<import("@/components/editor/SentenceOrderPanel").SentenceOrderResult[] | null>(null);
   const [pinnedKeys, setPinnedKeys] = useState<Set<string> | null>(null);
   const [isSearchPinned, setIsSearchPinned] = useState(false);
+  const [rebalanceNewlines, _setRebalanceNewlines] = useState(() => {
+    try { return localStorage.getItem('rebalanceNewlines') === 'true'; } catch { return false; }
+  });
+  const setRebalanceNewlines = useCallback((v: boolean) => {
+    _setRebalanceNewlines(v);
+    try { localStorage.setItem('rebalanceNewlines', String(v)); } catch {}
+  }, []);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [showFindReplace, setShowFindReplace] = useState(false);
   const [userGeminiKey, _setUserGeminiKey] = useState(() => {
