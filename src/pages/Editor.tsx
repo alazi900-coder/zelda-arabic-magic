@@ -820,7 +820,21 @@ const Editor = () => {
             />
           )}
 
-          {editor.sentenceOrderResults && editor.sentenceOrderResults.length > 0 && (
+          {/* Line Sync Results */}
+          {editor.lineSyncResults && editor.lineSyncResults.length > 0 && (
+            <NewlineSplitPanel
+              results={editor.lineSyncResults}
+              onAccept={editor.handleApplyLineSync}
+              onReject={editor.handleRejectLineSync}
+              onAcceptAll={editor.handleApplyAllLineSyncs}
+              onClose={() => editor.setLineSyncResults(null)}
+              charLimit={editor.npcSplitCharLimit}
+              onCharLimitChange={editor.setNpcSplitCharLimit}
+              onRescan={editor.handleScanLineSync}
+              title="🔄 مزامنة الأسطر (كل الملفات)"
+            />
+          )}
+
             <SentenceOrderPanel
               results={editor.sentenceOrderResults}
               onAccept={editor.handleApplySentenceOrder}
