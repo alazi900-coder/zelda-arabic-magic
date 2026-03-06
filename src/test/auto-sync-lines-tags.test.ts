@@ -106,8 +106,8 @@ describe("autoSyncLines tag protection", () => {
 
 describe("autoSyncLines edge cases", () => {
   it("splits to 3 lines with multiple tags and variables", () => {
-    const input = "اضغط [ML:icon icon=btn_a ] للتأكيد ثم أدخل {name} واحصل على {count} نقطة خبرة إضافية من المعركة الأخيرة";
-    const result = syncLines(input, 3);
+    const input = "اضغط [ML:icon icon=btn_a ] للتأكيد ثم أدخل {name} واحصل على {count} نقطة خبرة إضافية من المعركة الأخيرة التي خضتها في الميدان الشرقي ضد الأعداء الأقوياء";
+    const result = syncLines(input, 3, 30);
     expect(result).toContain("[ML:icon icon=btn_a ]");
     expect(result).toContain("{name}");
     expect(result).toContain("{count}");
