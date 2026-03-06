@@ -109,8 +109,8 @@ export function useEditorTranslation({
         // Fix broken brackets around [Tag:Value] tags
         result = autoFixTagBrackets(entry.original, result);
       }
-      // Auto-split NPC translations to respect line limits
-      result = autoSplitNpc(key, result, entry);
+      // Auto-sync line count to match English source
+      result = autoSyncLines(key, result, entry);
       fixed[key] = result;
     }
     return fixed;
