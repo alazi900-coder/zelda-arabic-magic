@@ -75,7 +75,7 @@ describe("autoSyncLines tag protection", () => {
   });
 
   it("handles PUA icon characters as atomic blocks", () => {
-    const input = "\uE001\uE002 اختر السلاح المناسب للمعركة القادمة";
+    const input = "\uE001\uE002 اختر السلاح المناسب للمعركة القادمة واستعد جيداً للمواجهة الكبرى";
     const result = syncLines(input, 2);
     // PUA icons should stay together
     expect(result).toContain("\uE001\uE002");
