@@ -134,7 +134,7 @@ let _rebalanceNewlines = false;
 
 /** Check if an entry key belongs to an NPC dialogue file */
 function isNpcDialogue(key: string): boolean {
-  return /\bmsg_nq\b/i.test(key);
+  return /\bmsg_(ask|cq|fev|nq|sq|tlk|tq)\b/i.test(key);
 }
 
 function restoreAndEnforce(original: string, translated: string, tags: Map<string, string>, entryKey?: string): string {
