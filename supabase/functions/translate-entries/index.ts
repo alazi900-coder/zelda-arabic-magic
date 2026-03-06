@@ -1269,14 +1269,18 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { entries, glossary, context, userApiKey, provider, myMemoryEmail } = await req.json() as {
+    const { entries, glossary, context, userApiKey, provider, myMemoryEmail, rebalanceNewlines } = await req.json() as {
       entries: { key: string; original: string }[];
       glossary?: string;
       context?: { key: string; original: string; translation?: string }[];
       userApiKey?: string;
       provider?: string;
       myMemoryEmail?: string;
+      rebalanceNewlines?: boolean;
     };
+
+    // Set the global rebalance flag for this request
+    _rebalanceNewlines = !!rebalanceNewlines;
 
     if (!entries || entries.length === 0) {
       return new Response(JSON.stringify({ error: 'لا توجد نصوص للترجمة' }), {
