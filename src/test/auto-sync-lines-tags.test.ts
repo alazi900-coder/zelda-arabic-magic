@@ -37,7 +37,7 @@ describe("autoSyncLines tag protection", () => {
   });
 
   it("preserves paired [System:Ruby] tags as atomic block", () => {
-    const input = "[System:Ruby rt=we ]جيش كيفيسي[/System:Ruby] يهاجم المدينة بقوة كبيرة";
+    const input = "[System:Ruby rt=we ]جيش كيفيسي[/System:Ruby] يهاجم المدينة بقوة كبيرة جداً ويجب الاستعداد لها";
     const result = syncLines(input, 2);
     // The paired tag must not be split across lines
     expect(result).toContain("[System:Ruby rt=we ]");
