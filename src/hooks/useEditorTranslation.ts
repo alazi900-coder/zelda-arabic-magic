@@ -28,11 +28,12 @@ interface UseEditorTranslationProps {
   addMyMemoryChars: (chars: number) => void;
   addAiRequest: (count?: number) => void;
   rebalanceNewlines: boolean;
+  npcMaxLines: number;
 }
 
 export function useEditorTranslation({
   state, setState, setLastSaved, setTranslateProgress, setPreviousTranslations, updateTranslation,
-  filterCategory, activeGlossary, parseGlossaryMap, paginatedEntries, filteredEntries, totalPages, setCurrentPage, userGeminiKey, translationProvider, myMemoryEmail, addMyMemoryChars, addAiRequest, rebalanceNewlines,
+  filterCategory, activeGlossary, parseGlossaryMap, paginatedEntries, filteredEntries, totalPages, setCurrentPage, userGeminiKey, translationProvider, myMemoryEmail, addMyMemoryChars, addAiRequest, rebalanceNewlines, npcMaxLines,
 }: UseEditorTranslationProps) {
   const [translating, setTranslating] = useState(false);
   const [translatingSingle, setTranslatingSingle] = useState<string | null>(null);
