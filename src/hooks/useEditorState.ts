@@ -1647,6 +1647,29 @@ export function useEditorState() {
       if (!NPC_FILE_RE.test(key)) continue;
       const translation = state.translations[key];
       if (!translation?.trim()) continue;
+
+      // NPC Mode: sync Arabic line count to English \n count
+      if (npcMode) {
+        const englishLineCount = entry.original.split('\n').length;
+        const flat = translation.replace(/\n/g, ' ').replace(/\s{2,}/g, ' ').trim();
+
+        let after: string;
+        if (englishLineCount <= 1) {
+          // English is one line → flatten Arabic
+          after = flat;
+        } else {
+          // English has N lines → force Arabic to N lines
+          after = balanceLines(flat, npcSplitCharLimit, englishLineCount);
+        }
+        if (after === translation) continue;
+        results.push({
+          key, originalLines: englishLineCount, translationLines: translation.split('\n').length,
+          before: translation, after, original: entry.original, status: 'pending',
+        });
+        continue;
+      }
+
+      // Classic mode: split based on char limit
       const flat = translation.replace(/\n/g, ' ').replace(/\s{2,}/g, ' ').trim();
       if (visualLength(flat) <= npcSplitCharLimit) {
         if (translation !== flat && translation.includes('\n')) {
@@ -1666,10 +1689,12 @@ export function useEditorState() {
     }
     setNpcSplitResults(results);
     if (results.length === 0) {
-      setLastSaved(`✅ لا توجد نصوص NPC تحتاج إعادة تقسيم عند ${npcSplitCharLimit} حرف`);
+      setLastSaved(npcMode
+        ? `✅ لا توجد نصوص NPC تحتاج مزامنة أسطر`
+        : `✅ لا توجد نصوص NPC تحتاج إعادة تقسيم عند ${npcSplitCharLimit} حرف`);
       setTimeout(() => setLastSaved(""), 4000);
     }
-  }, [state, isFilterActive, filteredEntries, npcSplitCharLimit]);
+  }, [state, isFilterActive, filteredEntries, npcSplitCharLimit, npcMode]);
 
   const handleApplyNpcSplit = useCallback((key: string) => {
     if (!state || !npcSplitResults) return;
