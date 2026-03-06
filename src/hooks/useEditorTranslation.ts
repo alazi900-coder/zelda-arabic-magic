@@ -131,7 +131,7 @@ export function useEditorTranslation({
       const response = await fetch(`${supabaseUrl}/functions/v1/translate-entries`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ entries: [{ key, original: textToSend }], glossary: activeGlossary, context: contextEntries.length > 0 ? contextEntries : undefined, userApiKey: userGeminiKey || undefined, provider: translationProvider, myMemoryEmail: myMemoryEmail || undefined, rebalanceNewlines: rebalanceNewlines || undefined }),
+        body: JSON.stringify({ entries: [{ key, original: textToSend }], glossary: activeGlossary, context: contextEntries.length > 0 ? contextEntries : undefined, userApiKey: userGeminiKey || undefined, provider: translationProvider, myMemoryEmail: myMemoryEmail || undefined, rebalanceNewlines: rebalanceNewlines || undefined, npcMaxLines }),
       });
       if (!response.ok) throw new Error(`خطأ ${response.status}`);
       const data = await response.json();
