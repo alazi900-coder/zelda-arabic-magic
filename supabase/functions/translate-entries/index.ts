@@ -1302,6 +1302,7 @@ Deno.serve(async (req) => {
 
     // Set the global rebalance flag for this request
     _rebalanceNewlines = !!rebalanceNewlines;
+    _npcMaxLines = npcMaxLines && npcMaxLines >= 1 && npcMaxLines <= 3 ? npcMaxLines : undefined;
 
     if (!entries || entries.length === 0) {
       return new Response(JSON.stringify({ error: 'لا توجد نصوص للترجمة' }), {
