@@ -213,6 +213,11 @@ const EntryCard: React.FC<EntryCardProps> = ({
           )}
           {translation?.trim() && (
             <div className="flex flex-wrap gap-1 mb-2">
+              {entry.original.includes('\n') && (
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">
+                  ↵ {entry.original.split('\n').length} أسطر
+                </span>
+              )}
               {isTranslationTooShort(entry, translation) && (
                 <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 border border-amber-500/20">📏 قصيرة جداً</span>
               )}
