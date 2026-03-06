@@ -131,6 +131,7 @@ function stripUnexpectedPlaceholders(text: string, allowedPlaceholders: Set<stri
 }
 
 let _rebalanceNewlines = false;
+let _npcMaxLines: number | undefined = undefined;
 
 /** Check if an entry key belongs to an NPC dialogue file */
 function isNpcDialogue(key: string): boolean {
