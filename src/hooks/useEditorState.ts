@@ -2347,7 +2347,7 @@ export function useEditorState() {
     applyingArabic, improvingTranslations, improveResults,
     fixingMixed, filtersOpen, buildStats, buildPreview, showBuildConfirm, bdatFileStats,
     checkingConsistency, consistencyResults,
-    scanningSentences, sentenceSplitResults, newlineCleanResults, diacriticsCleanResults, duplicateAlefResults, mirrorCharsResults, tagBracketFixResults, newlineSplitResults, npcSplitResults, lineSyncResults, unifiedSplitResults, sentenceOrderResults,
+    scanningSentences, sentenceSplitResults, newlineCleanResults, diacriticsCleanResults, duplicateAlefResults, missingAlefResults, mirrorCharsResults, tagBracketFixResults, newlineSplitResults, npcSplitResults, lineSyncResults, unifiedSplitResults, sentenceOrderResults,
     isSearchPinned, pinnedKeys,
     categoryProgress, qualityStats, needsImproveCount, translatedCount, tagsCount, fuzzyCount, byteOverflowCount, multiLineCount, newlinesCount, npcAffectedCount, lineSyncAffectedCount,
     bdatTableNames, bdatColumnNames, bdatTableCounts, bdatColumnCounts,
