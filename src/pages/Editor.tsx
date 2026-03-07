@@ -22,7 +22,7 @@ import {
   Upload, FileDown, Cloud, CloudUpload, LogIn, BookOpen, AlertTriangle,
   Eye, EyeOff, RotateCcw, CheckCircle2, ShieldCheck, ChevronLeft, ChevronRight,
   BarChart3, Menu, MoreVertical, Replace, Columns, Key, Type, Trash2, Package, Wand2,
-  Lock, Unlock,
+  Lock, Unlock, Rows3,
 } from "lucide-react";
 import heroBg from "@/assets/xc3-hero-bg.jpg";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -1200,6 +1200,7 @@ const Editor = () => {
                 🎭 وضع NPC {editor.npcMode ? "✅" : ""}
               </Button>
               <div className="flex items-center gap-1 border border-cyan-500/20 rounded-md px-2 py-1">
+                <Rows3 className="w-3 h-3 text-cyan-400" />
                 <span className="text-[10px] text-muted-foreground whitespace-nowrap">أسطر:</span>
                 {[1, 2, 3].map(n => (
                   <Button
@@ -1386,6 +1387,7 @@ const Editor = () => {
                 🎭 وضع NPC {editor.npcMode ? "✅" : ""}
               </Button>
               <div className="flex items-center gap-1 border border-cyan-500/20 rounded-md px-3 py-1.5">
+                <Rows3 className="w-3.5 h-3.5 text-cyan-400" />
                 <span className="text-xs text-muted-foreground whitespace-nowrap">حد الأسطر:</span>
                 {[1, 2, 3].map(n => (
                   <Button
