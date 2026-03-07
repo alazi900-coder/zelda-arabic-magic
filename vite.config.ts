@@ -27,9 +27,9 @@ export default defineConfig(({ mode }) => ({
         clientsClaim: true,
       },
       manifest: {
-        name: "أداة تعريب زيلدا",
-        short_name: "تعريب زيلدا",
-        description: "أداة لتعريب ملفات لعبة زيلدا تلقائياً",
+        name: "أداة تعريب Xenoblade Chronicles 3",
+        short_name: "تعريب XC3",
+        description: "أداة لتعريب ملفات لعبة Xenoblade Chronicles 3 تلقائياً",
         theme_color: "#0f2617",
         background_color: "#0f2617",
         display: "standalone",
