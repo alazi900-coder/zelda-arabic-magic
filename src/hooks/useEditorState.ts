@@ -1871,7 +1871,7 @@ export function useEditorState() {
               processedKeys.add(key);
             }
           } else {
-            const after = balanceLines(translation, npcSplitCharLimit, npcMaxLines);
+            const after = splitEvenlyByLines(translation, npcMaxLines);
             if (after !== translation) {
               results.push({
                 key, originalLines: after.split('\n').length, translationLines: arabicLineCount,
