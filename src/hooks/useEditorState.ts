@@ -2361,7 +2361,7 @@ export function useEditorState() {
     setCurrentPage, setShowRetranslateConfirm,
     setArabicNumerals, setMirrorPunctuation, setUserGeminiKey, setTranslationProvider, setMyMemoryEmail, setRebalanceNewlines,
     setReviewResults, setShortSuggestions, setImproveResults, setBuildStats, setShowBuildConfirm,
-    setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults, setDiacriticsCleanResults, setDuplicateAlefResults, setMirrorCharsResults, setTagBracketFixResults, setNewlineSplitResults, setNpcSplitResults, setLineSyncResults, setUnifiedSplitResults, setSentenceOrderResults,
+    setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults, setDiacriticsCleanResults, setDuplicateAlefResults, setMissingAlefResults, setMirrorCharsResults, setTagBracketFixResults, setNewlineSplitResults, setNpcSplitResults, setLineSyncResults, setUnifiedSplitResults, setSentenceOrderResults,
 
     // Handlers
     toggleProtection, toggleTechnicalBypass,
