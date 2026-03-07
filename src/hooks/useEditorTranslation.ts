@@ -7,7 +7,7 @@ import {
 import { restoreTagsLocally } from "@/lib/xc3-tag-restoration";
 import { protectTags, restoreTags } from "@/lib/xc3-tag-protection";
 import { fixTagBracketsStrict } from "@/lib/tag-bracket-fix";
-import { balanceLines } from "@/lib/balance-lines";
+import { splitEvenlyByLines } from "@/lib/balance-lines";
 
 const NPC_FILE_RE = /msg_(ask|cq|fev|nq|sq|tlk|tq)/i;
 
@@ -58,7 +58,7 @@ export function useEditorTranslation({
     } else {
       const isNpc = NPC_FILE_RE.test(key);
       const maxLines = isNpc ? Math.min(englishLineCount, npcMaxLines) : englishLineCount;
-      balanced = balanceLines(flat, npcSplitCharLimit, maxLines);
+      balanced = splitEvenlyByLines(flat, maxLines);
     }
 
     // Restore tags

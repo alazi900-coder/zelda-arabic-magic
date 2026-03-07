@@ -1669,9 +1669,11 @@ export function useEditorState() {
       if (!translation?.trim()) continue;
       // Skip if already has line breaks
       if (translation.includes('\n')) continue;
-      // Skip short translations
-      if (visualLength(translation) <= newlineSplitCharLimit) continue;
-      const after = balanceLines(translation, newlineSplitCharLimit);
+      // Skip short translations — use English line count if available
+      const englishLineCount = entry.original.split('\n').length;
+      if (englishLineCount <= 1 && visualLength(translation) <= newlineSplitCharLimit) continue;
+      const targetLines = englishLineCount > 1 ? englishLineCount : Math.max(2, Math.ceil(visualLength(translation) / newlineSplitCharLimit));
+      const after = splitEvenlyByLines(translation, targetLines);
       if (after === translation) continue;
       const afterLines = after.split('\n').length;
       results.push({
@@ -1759,7 +1761,7 @@ export function useEditorState() {
           after = flat;
         } else {
           // English has N lines → force Arabic to N lines
-          after = balanceLines(flat, npcSplitCharLimit, Math.min(englishLineCount, npcMaxLines));
+          after = splitEvenlyByLines(flat, Math.min(englishLineCount, npcMaxLines));
         }
         if (after === translation) continue;
         results.push({
@@ -1780,7 +1782,7 @@ export function useEditorState() {
         }
         continue;
       }
-      const after = balanceLines(translation, npcSplitCharLimit, npcMaxLines);
+      const after = splitEvenlyByLines(translation, npcMaxLines);
       if (after === translation) continue;
       results.push({
         key, originalLines: after.split('\n').length, translationLines: translation.split('\n').length,
@@ -1850,7 +1852,7 @@ export function useEditorState() {
           if (englishLineCount <= 1) {
             after = flat;
           } else {
-            after = balanceLines(flat, npcSplitCharLimit, Math.min(englishLineCount, npcMaxLines));
+            after = splitEvenlyByLines(flat, Math.min(englishLineCount, npcMaxLines));
           }
           if (after !== translation) {
             results.push({
@@ -1869,7 +1871,7 @@ export function useEditorState() {
               processedKeys.add(key);
             }
           } else {
-            const after = balanceLines(translation, npcSplitCharLimit, npcMaxLines);
+            const after = splitEvenlyByLines(translation, npcMaxLines);
             if (after !== translation) {
               results.push({
                 key, originalLines: after.split('\n').length, translationLines: arabicLineCount,
@@ -1888,7 +1890,7 @@ export function useEditorState() {
         if (englishLineCount <= 1) {
           after = flat;
         } else {
-          after = balanceLines(flat, newlineSplitCharLimit, englishLineCount);
+          after = splitEvenlyByLines(flat, englishLineCount);
         }
         if (after !== translation) {
           results.push({
@@ -1901,7 +1903,8 @@ export function useEditorState() {
 
       // 3) Newline split: long single-line texts (skip bubble files)
       if (!processedKeys.has(key) && !isBubbleFile && !translation.includes('\n') && visualLength(translation) > newlineSplitCharLimit) {
-        const after = balanceLines(translation, newlineSplitCharLimit);
+        const targetLines = Math.max(2, Math.ceil(visualLength(translation) / newlineSplitCharLimit));
+        const after = splitEvenlyByLines(translation, targetLines);
         if (after !== translation) {
           results.push({
             key, originalLines: after.split('\n').length, translationLines: 1,
