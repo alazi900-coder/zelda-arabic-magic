@@ -793,9 +793,7 @@ export function useEditorTranslation({
             if (data.charsUsed) addMyMemoryChars(data.charsUsed);
             if (data.translations && data.translations[key]) {
               let translated = data.translations[key];
-              if (protected_.tags.length > 0) {
-                translated = restoreTags(translated, protected_.tags);
-              }
+              // Server handles tag protection — just do local repair
               if (hasTechnicalTags(entry.original)) {
                 translated = restoreTagsLocally(entry.original, translated);
                 translated = autoFixTagBrackets(entry.original, translated);
