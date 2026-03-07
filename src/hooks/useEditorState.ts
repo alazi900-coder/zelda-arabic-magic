@@ -1406,7 +1406,8 @@ export function useEditorState() {
       if (englishLineCount <= 1) {
         after = flat;
       } else {
-        after = balanceLines(flat, npcSplitCharLimit, englishLineCount);
+        // تقسيم متساوٍ بالكلمات حسب عدد أسطر النص الإنجليزي فقط (بدون حد أحرف)
+        after = splitEvenlyByLines(flat, englishLineCount);
       }
       if (after === translation) continue;
       results.push({
