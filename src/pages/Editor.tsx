@@ -1200,6 +1200,7 @@ const Editor = () => {
                 🎭 وضع NPC {editor.npcMode ? "✅" : ""}
               </Button>
               <div className="flex items-center gap-1 border border-cyan-500/20 rounded-md px-2 py-1">
+                <Rows3 className="w-3 h-3 text-cyan-400" />
                 <span className="text-[10px] text-muted-foreground whitespace-nowrap">أسطر:</span>
                 {[1, 2, 3].map(n => (
                   <Button
