@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronDown, ChevronUp, Scale, CheckCircle2, X, Sparkles, Check, XCircle, Filter, Pencil } from "lucide-react";
 import { EditorState, categorizeFile, categorizeBdatTable } from "@/components/editor/types";
-import { balanceLines, hasOrphanLines } from "@/lib/balance-lines";
+import { balanceLines, hasOrphanLines, splitEvenlyByLines } from "@/lib/balance-lines";
 
 interface BalanceResult {
   key: string;
