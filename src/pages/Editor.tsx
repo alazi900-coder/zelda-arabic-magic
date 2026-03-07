@@ -791,7 +791,22 @@ const Editor = () => {
             />
           )}
 
-          {/* Newline Split Results */}
+          {/* Unified Split Results */}
+          {editor.unifiedSplitResults && editor.unifiedSplitResults.length > 0 && (
+            <NewlineSplitPanel
+              results={editor.unifiedSplitResults}
+              onAccept={editor.handleApplyUnifiedSplit}
+              onReject={editor.handleRejectUnifiedSplit}
+              onAcceptAll={editor.handleApplyAllUnifiedSplits}
+              onClose={() => editor.setUnifiedSplitResults(null)}
+              charLimit={editor.newlineSplitCharLimit}
+              onCharLimitChange={editor.setNewlineSplitCharLimit}
+              onRescan={editor.handleScanAllSplits}
+              title="✂️ تقسيم ومزامنة الأسطر (كل الملفات)"
+            />
+          )}
+
+          {/* Legacy panels kept for individual tool usage */}
           {editor.newlineSplitResults && editor.newlineSplitResults.length > 0 && (
             <NewlineSplitPanel
               results={editor.newlineSplitResults}
@@ -805,7 +820,6 @@ const Editor = () => {
             />
           )}
 
-          {/* NPC Split Results */}
           {editor.npcSplitResults && editor.npcSplitResults.length > 0 && (
             <NewlineSplitPanel
               results={editor.npcSplitResults}
@@ -820,7 +834,6 @@ const Editor = () => {
             />
           )}
 
-          {/* Line Sync Results */}
           {editor.lineSyncResults && editor.lineSyncResults.length > 0 && (
             <NewlineSplitPanel
               results={editor.lineSyncResults}
@@ -1173,7 +1186,7 @@ const Editor = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              {/* NPC Mode toggle + Max lines selector + Split button */}
+              {/* NPC Mode toggle + Max lines selector */}
               <Button
                 variant={editor.npcMode ? "default" : "outline"}
                 size="sm"
@@ -1200,23 +1213,15 @@ const Editor = () => {
                   </Button>
                 ))}
               </div>
+              {/* Unified Split Button */}
               <Button
-                variant="outline"
+                variant="default"
                 size="sm"
-                className="font-body text-xs border-cyan-500/30 text-cyan-400 hover:text-cyan-300 gap-1.5"
-                onClick={editor.handleScanNpcSplit}
+                className="font-body text-xs gap-1.5 bg-gradient-to-r from-cyan-600 to-amber-600 hover:from-cyan-700 hover:to-amber-700 text-white shadow-lg"
+                onClick={editor.handleScanAllSplits}
                 disabled={editor.translatedCount === 0}
               >
-                💬 تقسيم NPC {editor.npcAffectedCount > 0 && <span className="bg-cyan-500/20 text-cyan-300 rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none">{editor.npcAffectedCount}</span>}
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="font-body text-xs border-amber-500/30 text-amber-400 hover:text-amber-300 gap-1.5"
-                onClick={editor.handleScanLineSync}
-                disabled={editor.translatedCount === 0}
-              >
-                🔄 مزامنة الأسطر {editor.lineSyncAffectedCount > 0 && <span className="bg-amber-500/20 text-amber-300 rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none">{editor.lineSyncAffectedCount}</span>}
+                ✂️ تقسيم ومزامنة الكل {(editor.npcAffectedCount + editor.lineSyncAffectedCount) > 0 && <span className="bg-white/20 rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none">{editor.npcAffectedCount + editor.lineSyncAffectedCount}</span>}
               </Button>
 
               <DropdownMenu>
@@ -1247,9 +1252,6 @@ const Editor = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleScanNewlines} disabled={editor.translatedCount === 0}>
                     🧹 تنظيف رموز غير مرغوبة
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={editor.handleScanNewlineSplit} disabled={editor.translatedCount === 0}>
-                    📐 تقسيم النصوص المضغوطة
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleFlattenAllNewlines} disabled={editor.translatedCount === 0 || editor.multiLineCount === 0}>
                     📏 دمج الأسطر المتعددة (سطر واحد) {editor.multiLineCount > 0 && <span className="text-muted-foreground text-[10px]">({editor.multiLineCount})</span>}
@@ -1371,7 +1373,7 @@ const Editor = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              {/* NPC Mode toggle + Max lines selector + Split button */}
+              {/* NPC Mode toggle + Max lines selector */}
               <Button
                 variant={editor.npcMode ? "default" : "outline"}
                 className={`font-body gap-1.5 text-base px-6 py-3 transition-all ${
@@ -1397,21 +1399,14 @@ const Editor = () => {
                   </Button>
                 ))}
               </div>
+              {/* Unified Split Button */}
               <Button
-                variant="outline"
-                className="font-body border-cyan-500/30 text-cyan-400 hover:text-cyan-300 gap-1.5"
-                onClick={editor.handleScanNpcSplit}
+                variant="default"
+                className="font-body gap-1.5 text-base px-6 py-3 bg-gradient-to-r from-cyan-600 to-amber-600 hover:from-cyan-700 hover:to-amber-700 text-white shadow-lg"
+                onClick={editor.handleScanAllSplits}
                 disabled={editor.translatedCount === 0}
               >
-                💬 تقسيم NPC {editor.npcAffectedCount > 0 && <span className="bg-cyan-500/20 text-cyan-300 rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none">{editor.npcAffectedCount}</span>}
-              </Button>
-              <Button
-                variant="outline"
-                className="font-body border-amber-500/30 text-amber-400 hover:text-amber-300 gap-1.5"
-                onClick={editor.handleScanLineSync}
-                disabled={editor.translatedCount === 0}
-              >
-                🔄 مزامنة الأسطر {editor.lineSyncAffectedCount > 0 && <span className="bg-amber-500/20 text-amber-300 rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none">{editor.lineSyncAffectedCount}</span>}
+                ✂️ تقسيم ومزامنة الكل {(editor.npcAffectedCount + editor.lineSyncAffectedCount) > 0 && <span className="bg-white/20 rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none">{editor.npcAffectedCount + editor.lineSyncAffectedCount}</span>}
               </Button>
 
               {/* ── Cloud Save/Load ── */}
@@ -1453,9 +1448,6 @@ const Editor = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleScanNewlines} disabled={editor.translatedCount === 0}>
                     🧹 تنظيف رموز غير مرغوبة
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={editor.handleScanNewlineSplit} disabled={editor.translatedCount === 0}>
-                    📐 تقسيم النصوص المضغوطة
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleFlattenAllNewlines} disabled={editor.translatedCount === 0 || editor.multiLineCount === 0}>
                     📏 دمج الأسطر المتعددة (سطر واحد) {editor.multiLineCount > 0 && <span className="text-muted-foreground text-[10px]">({editor.multiLineCount})</span>}
