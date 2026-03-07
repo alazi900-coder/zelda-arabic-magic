@@ -70,18 +70,8 @@ const NewlineSplitPanel: React.FC<NewlineSplitPanelProps> = ({
           </div>
         </div>
 
-        {/* Char limit slider */}
-        <div className="flex items-center gap-3 mb-4 p-2 rounded-md bg-muted/30 border border-border/30">
-          <span className="text-xs font-display text-muted-foreground shrink-0">الحد الأقصى:</span>
-          <Slider
-            value={[charLimit]}
-            onValueChange={([v]) => onCharLimitChange(v)}
-            min={20}
-            max={80}
-            step={1}
-            className="flex-1"
-          />
-          <span className="text-sm font-mono font-bold text-primary w-8 text-center">{charLimit}</span>
+        {/* Rescan button */}
+        <div className="flex items-center gap-3 mb-4">
           <Button variant="outline" size="sm" onClick={onRescan} className="h-7 px-2 text-xs font-display">
             <RefreshCw className="w-3 h-3" /> إعادة فحص
           </Button>
