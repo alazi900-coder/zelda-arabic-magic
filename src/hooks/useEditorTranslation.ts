@@ -58,7 +58,7 @@ export function useEditorTranslation({
     } else {
       const isNpc = NPC_FILE_RE.test(key);
       const maxLines = isNpc ? Math.min(englishLineCount, npcMaxLines) : englishLineCount;
-      balanced = balanceLines(flat, npcSplitCharLimit, maxLines);
+      balanced = splitEvenlyByLines(flat, maxLines);
     }
 
     // Restore tags

@@ -326,7 +326,10 @@ const EntryCard: React.FC<EntryCardProps> = ({
               )}
               {translation?.trim() && (
                 <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => {
-                  const balanced = balanceLines(translation);
+                  const englishLineCount = entry.original.split('\n').length;
+                  const balanced = englishLineCount > 1
+                    ? splitEvenlyByLines(translation, englishLineCount)
+                    : translation.replace(/\n/g, ' ').replace(/\s{2,}/g, ' ').trim();
                   if (balanced !== translation) {
                     setBalancePreview(balanced);
                   } else {

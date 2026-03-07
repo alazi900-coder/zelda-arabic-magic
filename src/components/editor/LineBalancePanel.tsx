@@ -71,7 +71,10 @@ export default function LineBalancePanel({ state, onApplyFix, onApplyAll }: Line
         if (!translation) continue;
 
         if (hasOrphanLines(translation)) {
-          const balanced = balanceLines(translation);
+          const englishLineCount = entry.original.split('\n').length;
+          const balanced = englishLineCount > 1
+            ? splitEvenlyByLines(translation, englishLineCount)
+            : translation;
           if (balanced !== translation) {
             const isBdat = /^.+?\[\d+\]\./.test(entry.label);
             const sourceFile = entry.msbtFile.startsWith('bdat-bin:')
