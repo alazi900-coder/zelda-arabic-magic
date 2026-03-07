@@ -56,9 +56,7 @@ export function useEditorTranslation({
     if (englishLineCount <= 1) {
       balanced = flat;
     } else {
-      const isNpc = NPC_FILE_RE.test(key);
-      const maxLines = isNpc ? Math.min(englishLineCount, npcMaxLines) : englishLineCount;
-      balanced = splitEvenlyByLines(flat, maxLines);
+      balanced = splitEvenlyByLines(flat, englishLineCount);
     }
 
     // Restore tags
@@ -682,6 +680,8 @@ export function useEditorTranslation({
             translated = restoreTagsLocally(entry.original, translated);
             translated = autoFixTagBrackets(entry.original, translated);
           }
+          // Auto-sync line count to match English source
+          translated = autoSyncLines(key, translated, entry);
           allTranslations[key] = translated;
         }
       }
