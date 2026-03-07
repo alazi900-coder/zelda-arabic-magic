@@ -1890,7 +1890,7 @@ export function useEditorState() {
         if (englishLineCount <= 1) {
           after = flat;
         } else {
-          after = balanceLines(flat, newlineSplitCharLimit, englishLineCount);
+          after = splitEvenlyByLines(flat, englishLineCount);
         }
         if (after !== translation) {
           results.push({
