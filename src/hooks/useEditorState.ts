@@ -60,6 +60,7 @@ export function useEditorState() {
   const [newlineSplitResults, setNewlineSplitResults] = useState<import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] | null>(null);
   const [npcSplitResults, setNpcSplitResults] = useState<import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] | null>(null);
   const [lineSyncResults, setLineSyncResults] = useState<import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] | null>(null);
+  const [unifiedSplitResults, setUnifiedSplitResults] = useState<import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] | null>(null);
   const [sentenceOrderResults, setSentenceOrderResults] = useState<import("@/components/editor/SentenceOrderPanel").SentenceOrderResult[] | null>(null);
   const [pinnedKeys, setPinnedKeys] = useState<Set<string> | null>(null);
   const [isSearchPinned, setIsSearchPinned] = useState(false);
