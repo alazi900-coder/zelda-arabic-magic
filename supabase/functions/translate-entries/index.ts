@@ -1292,7 +1292,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { entries, glossary, context, userApiKey, provider, myMemoryEmail, rebalanceNewlines, npcMaxLines } = await req.json() as {
+    const { entries, glossary, context, userApiKey, provider, myMemoryEmail, rebalanceNewlines, npcMaxLines, aiModel } = await req.json() as {
       entries: { key: string; original: string }[];
       glossary?: string;
       context?: { key: string; original: string; translation?: string }[];
@@ -1301,6 +1301,7 @@ Deno.serve(async (req) => {
       myMemoryEmail?: string;
       rebalanceNewlines?: boolean;
       npcMaxLines?: number;
+      aiModel?: string;
     };
 
     // Set the global rebalance flag for this request
