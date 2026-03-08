@@ -75,20 +75,35 @@ export function useEditorGlossary({
     return diffs;
   }, [parseGlossaryMap]);
 
-  // === Merge helper ===
+  // === Merge helper (preserves section headers from both sources) ===
   const mergeGlossaryText = (prev: EditorState, newText: string): EditorState => {
     const existing = prev.glossary?.trim() || '';
     const merged = existing ? existing + '\n' + newText : newText;
     const seen = new Map<string, string>();
+    const result: string[] = [];
     for (const line of merged.split('\n')) {
-      const trimmed = line.trim();
-      if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('//')) continue;
+      const trimmed = line.trimEnd();
+      if (!trimmed) continue;
+      if (trimmed.startsWith('#') || trimmed.startsWith('//')) {
+        result.push(trimmed);
+        continue;
+      }
       const eqIdx = trimmed.indexOf('=');
       if (eqIdx < 1) continue;
       const key = trimmed.slice(0, eqIdx).trim().toLowerCase();
-      seen.set(key, trimmed);
+      if (seen.has(key)) {
+        // Replace previous occurrence with new value
+        const prevIdx = result.findIndex(l => {
+          const eq = l.indexOf('=');
+          return eq > 0 && l.slice(0, eq).trim().toLowerCase() === key;
+        });
+        if (prevIdx >= 0) result[prevIdx] = trimmed;
+      } else {
+        seen.set(key, trimmed);
+        result.push(trimmed);
+      }
     }
-    return { ...prev, glossary: Array.from(seen.values()).join('\n') };
+    return { ...prev, glossary: result.join('\n') };
   };
 
   // === Apply accepted diffs ===
@@ -112,20 +127,36 @@ export function useEditorGlossary({
     setPendingMerge(null);
   }, [setState, setLastSaved]);
 
-  // === Clean glossary text (comprehensive) ===
+  // === Clean glossary text (comprehensive — preserves section structure) ===
   const cleanGlossaryText = (rawText: string): string => {
-    const seen = new Map<string, string>(); // key -> full line (dedup)
-    const commentLines: string[] = [];
+    const seen = new Map<string, string>(); // normKey -> true (for dedup tracking)
+    const outputLines: string[] = [];
+    const lines = rawText.split('\n');
     
-    for (const line of rawText.split('\n')) {
-      const trimmed = line.trimEnd();
+    // First pass: find last occurrence of each key (last-wins dedup)
+    const lastOccurrence = new Map<string, number>(); // normKey -> line index
+    for (let i = 0; i < lines.length; i++) {
+      const trimmed = lines[i].trim();
+      if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('//')) continue;
+      const eqIdx = trimmed.indexOf('=');
+      if (eqIdx < 1) continue;
+      const eng = trimmed.slice(0, eqIdx).trim();
+      const arb = trimmed.slice(eqIdx + 1).trimEnd();
+      if (!eng || !arb) continue;
+      if (/^[#%+=\-.\\/;:*&^$@!]+$/.test(eng) || /^[#%+=\-.\\/;:*&^$@!]+$/.test(arb)) continue;
+      if (eng.length === 1 && !/^[A-Za-z\u0600-\u06FF]$/.test(eng)) continue;
+      lastOccurrence.set(eng.toLowerCase(), i);
+    }
+    
+    // Second pass: rebuild with section headers inline, keeping only last occurrence of each key
+    for (let i = 0; i < lines.length; i++) {
+      const trimmed = lines[i].trimEnd();
       if (!trimmed) continue;
       
-      // Keep comment/section headers
+      // Keep comment/section headers (filter technical noise)
       if (trimmed.startsWith('#') || trimmed.startsWith('//')) {
-        // Filter out technical noise
         if (/^#\[ML:/.test(trimmed) || /^\+\[ML:/.test(trimmed)) continue;
-        commentLines.push(trimmed);
+        outputLines.push(trimmed);
         continue;
       }
       
@@ -137,26 +168,19 @@ export function useEditorGlossary({
       
       const eng = trimmed.slice(0, eqIdx).trim();
       const arb = trimmed.slice(eqIdx + 1).trimEnd();
-      
-      // Skip empty or pure-symbol entries
       if (!eng || !arb) continue;
-      if (/^[#%+=\-.\\/;:*&^$@!]+$/.test(eng)) continue;
-      if (/^[#%+=\-.\\/;:*&^$@!]+$/.test(arb)) continue;
-      // Skip single character keys that aren't meaningful
+      if (/^[#%+=\-.\\/;:*&^$@!]+$/.test(eng) || /^[#%+=\-.\\/;:*&^$@!]+$/.test(arb)) continue;
       if (eng.length === 1 && !/^[A-Za-z\u0600-\u06FF]$/.test(eng)) continue;
       
       const normKey = eng.toLowerCase();
-      // Last occurrence wins (dedup)
-      seen.set(normKey, `${eng}=${arb}`);
+      // Only emit if this is the last occurrence (dedup) and not already emitted
+      if (lastOccurrence.get(normKey) === i && !seen.has(normKey)) {
+        seen.set(normKey, 'true');
+        outputLines.push(`${eng}=${arb}`);
+      }
     }
     
-    // Rebuild: comments at top, then sorted entries
-    const result: string[] = [];
-    if (commentLines.length > 0) {
-      result.push(...commentLines);
-    }
-    result.push(...Array.from(seen.values()));
-    return result.join('\n');
+    return outputLines.join('\n');
   };
 
   // === Import from file (with merge preview) ===
@@ -339,21 +363,22 @@ export function useEditorGlossary({
     return { duplicates, emptyValues, reversedEntries, singleCharKeys, totalIssues: duplicates + emptyValues + reversedEntries + singleCharKeys };
   }, [state?.glossary]);
 
-  // === Auto-fix glossary issues ===
+  // === Auto-fix glossary issues (preserves section structure) ===
   const handleFixGlossaryIssues = useCallback(() => {
     if (!state?.glossary?.trim()) return;
     
-    const seen = new Map<string, string>();
-    const comments: string[] = [];
+    const lines = state.glossary.split('\n');
+    const seen = new Map<string, number>(); // normKey -> index in result
+    const result: string[] = [];
     let fixed = 0;
     
-    for (const line of state.glossary.split('\n')) {
-      const trimmed = line.trim();
+    for (const line of lines) {
+      const trimmed = line.trimEnd();
       if (!trimmed) continue;
-      if (trimmed.startsWith('#') || trimmed.startsWith('//')) { comments.push(trimmed); continue; }
+      if (trimmed.startsWith('#') || trimmed.startsWith('//')) { result.push(trimmed); continue; }
       
       const eqIdx = trimmed.indexOf('=');
-      if (eqIdx < 1) continue;
+      if (eqIdx < 1) { fixed++; continue; }
       
       let eng = trimmed.slice(0, eqIdx).trim();
       let arb = trimmed.slice(eqIdx + 1).trimEnd();
@@ -369,12 +394,19 @@ export function useEditorGlossary({
       if (/^[#%+=\-.\\/;:*&^$@!]+$/.test(eng) || /^[#%+=\-.\\/;:*&^$@!]+$/.test(arb)) { fixed++; continue; }
       
       const normKey = eng.toLowerCase();
-      if (seen.has(normKey)) { fixed++; continue; } // dedup
-      seen.set(normKey, `${eng}=${arb}`);
+      if (seen.has(normKey)) {
+        // Replace previous occurrence in-place (last wins)
+        result[seen.get(normKey)!] = `${eng}=${arb}`;
+        fixed++;
+      } else {
+        seen.set(normKey, result.length);
+        result.push(`${eng}=${arb}`);
+      }
     }
     
-    const result = [...comments, ...Array.from(seen.values())].join('\n');
-    setState(prev => prev ? { ...prev, glossary: result } : null);
+    // Remove any empty slots from in-place replacements
+    const finalResult = result.filter(l => l !== '');
+    setState(prev => prev ? { ...prev, glossary: finalResult.join('\n') } : null);
     setLastSaved(`🔧 تم إصلاح ${fixed} مشكلة في القاموس (${seen.size} مصطلح نظيف)`);
     setTimeout(() => setLastSaved(""), 4000);
   }, [state?.glossary, setState, setLastSaved]);
