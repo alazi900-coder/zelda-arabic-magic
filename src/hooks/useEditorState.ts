@@ -63,8 +63,15 @@ export function useEditorState() {
   const [lineSyncResults, setLineSyncResults] = useState<import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] | null>(null);
   const [unifiedSplitResults, setUnifiedSplitResults] = useState<import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] | null>(null);
   const [sentenceOrderResults, setSentenceOrderResults] = useState<import("@/components/editor/SentenceOrderPanel").SentenceOrderResult[] | null>(null);
-  const [smartReviewFindings, setSmartReviewFindings] = useState<import("@/components/editor/SmartReviewPanel").SmartReviewFinding[] | null>(null);
-  const [smartReviewing, setSmartReviewing] = useState(false);
+   const [smartReviewFindings, setSmartReviewFindings] = useState<import("@/components/editor/SmartReviewPanel").SmartReviewFinding[] | null>(null);
+   const [smartReviewing, setSmartReviewing] = useState(false);
+   const [autoSmartReview, _setAutoSmartReview] = useState(() => {
+     try { return localStorage.getItem('autoSmartReview') === 'true'; } catch { return false; }
+   });
+   const setAutoSmartReview = useCallback((v: boolean) => {
+     _setAutoSmartReview(v);
+     try { localStorage.setItem('autoSmartReview', String(v)); } catch {}
+   }, []);
   const [pinnedKeys, setPinnedKeys] = useState<Set<string> | null>(null);
   const [isSearchPinned, setIsSearchPinned] = useState(false);
   const [rebalanceNewlines, _setRebalanceNewlines] = useState(() => {
