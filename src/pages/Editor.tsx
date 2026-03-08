@@ -72,6 +72,7 @@ import LineBalancePanel from "@/components/editor/LineBalancePanel";
 import TranslationToolsPanel from "@/components/editor/TranslationToolsPanel";
 import MismatchDetectorPanel from "@/components/editor/MismatchDetectorPanel";
 import GlossaryMergePreviewDialog from "@/components/editor/GlossaryMergePreviewDialog";
+import SmartReviewPanel from "@/components/editor/SmartReviewPanel";
 
 const Editor = () => {
   const editor = useEditorState();
