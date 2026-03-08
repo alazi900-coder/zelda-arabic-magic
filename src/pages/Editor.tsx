@@ -1737,6 +1737,7 @@ const Editor = () => {
           glossary={editor.activeGlossary}
           userGeminiKey={editor.userGeminiKey}
           myMemoryEmail={editor.myMemoryEmail}
+          aiModel={editor.aiModel}
         />
         <ExportEnglishDialog
           open={showExportEnglishDialog}

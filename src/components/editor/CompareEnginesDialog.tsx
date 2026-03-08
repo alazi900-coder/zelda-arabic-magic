@@ -166,6 +166,7 @@ const CompareEnginesDialog: React.FC<CompareEnginesDialogProps> = ({
             provider,
             userApiKey: provider === 'gemini' ? (userGeminiKey || undefined) : undefined,
             myMemoryEmail: provider === 'mymemory' ? (myMemoryEmail || undefined) : undefined,
+            aiModel: provider === 'gemini' ? (aiModel || undefined) : undefined,
           }),
         });
         if (!response.ok) return null;

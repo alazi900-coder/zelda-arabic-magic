@@ -289,7 +289,7 @@ ${chunk.map((e, i) => `[${i}] الأصلي: "${e.original}"
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              model: 'google/gemini-2.5-flash',
+              model: resolvedModel,
               messages: [
                 { role: 'system', content: 'أنت محسّن ترجمات ألعاب. أخرج ONLY JSON arrays.' },
                 { role: 'user', content: prompt },
