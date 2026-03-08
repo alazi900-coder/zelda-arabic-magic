@@ -914,26 +914,33 @@ export function useEditorTranslation({
       if (!e.original.trim()) { skipEmpty++; continue; }
       if (arabicRegex.test(e.original)) { skipArabic++; continue; }
       if (isTechnicalText(e.original) && !state.technicalBypass?.has(key)) { skipTechnical++; continue; }
-      if (state.translations[key]?.trim()) { skipTranslated++; continue; }
 
       const norm = e.original.trim().toLowerCase();
+      const existingTranslation = state.translations[key]?.trim() || '';
 
-      // Try exact match first
-      const exactHit = glossaryMap.get(norm);
-      if (exactHit) {
-        glossaryTranslations[key] = exactHit;
-        exactMatches++;
-        continue;
+      // Try exact match first (only for untranslated entries)
+      if (!existingTranslation) {
+        const exactHit = glossaryMap.get(norm);
+        if (exactHit) {
+          glossaryTranslations[key] = exactHit;
+          previewEntries.push({ key, original: e.original, newTranslation: exactHit, oldTranslation: existingTranslation, matchType: 'exact' });
+          exactMatches++;
+          continue;
+        }
       }
 
       // Try partial matching: replace ALL glossary terms found within the text
-      let result = e.original;
+      // Works on both untranslated (original English) and already-translated entries
+      const sourceText = existingTranslation || e.original;
+      let result = sourceText;
       let matched = false;
       const usedRanges: Array<[number, number]> = []; // prevent overlapping replacements
 
       for (const { key: glossaryKey, value: glossaryValue, regex } of glossaryRegexes) {
         // Quick pre-filter: skip if term not present at all (case-insensitive)
         if (!result.toLowerCase().includes(glossaryKey)) continue;
+        // Skip if the Arabic translation is already present in the result
+        if (result.includes(glossaryValue)) continue;
 
         // Find ALL occurrences (not just first)
         regex.lastIndex = 0;
@@ -962,8 +969,9 @@ export function useEditorTranslation({
         }
       }
 
-      if (matched) {
+      if (matched && result !== sourceText) {
         glossaryTranslations[key] = result;
+        previewEntries.push({ key, original: e.original, newTranslation: result, oldTranslation: existingTranslation, matchType: 'partial' });
         partialMatches++;
       } else {
         skipNoMatch++;
@@ -973,7 +981,6 @@ export function useEditorTranslation({
     const count = Object.keys(glossaryTranslations).length;
     if (count === 0) {
       const reasons: string[] = [];
-      if (skipTranslated > 0) reasons.push(`${skipTranslated} مترجم بالفعل`);
       if (skipNoMatch > 0) reasons.push(`${skipNoMatch} بدون تطابق في القاموس`);
       if (skipArabic > 0) reasons.push(`${skipArabic} نص عربي`);
       if (skipTechnical > 0) reasons.push(`${skipTechnical} نص تقني`);
@@ -982,13 +989,36 @@ export function useEditorTranslation({
       return;
     }
 
-    const safeTranslations = autoFixTags(glossaryTranslations);
-    setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...safeTranslations } } : null);
+    // Show preview instead of applying directly
+    setPendingGlossaryTranslations(glossaryTranslations);
+    setGlossaryPreviewEntries(previewEntries);
+    setShowGlossaryPreview(true);
     const parts: string[] = [];
     if (exactMatches > 0) parts.push(`${exactMatches} تطابق كامل`);
     if (partialMatches > 0) parts.push(`${partialMatches} تطابق جزئي`);
-    setTranslateProgress(`✅ تم ترجمة ${count} نص من القاموس 📖 (${parts.join(' + ')})${skipNoMatch > 0 ? ` — ${skipNoMatch} بدون تطابق` : ''}`);
+    setTranslateProgress(`📋 تم العثور على ${count} تطابق (${parts.join(' + ')}) — راجع المعاينة للتطبيق`);
     setTimeout(() => setTranslateProgress(""), 6000);
+  };
+
+  const applyGlossaryPreview = (selectedKeys: Set<string>) => {
+    if (!state) return;
+    const toApply: Record<string, string> = {};
+    for (const [key, val] of Object.entries(pendingGlossaryTranslations)) {
+      if (selectedKeys.has(key)) toApply[key] = val;
+    }
+    const safeTranslations = autoFixTags(toApply);
+    setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...safeTranslations } } : null);
+    setShowGlossaryPreview(false);
+    setGlossaryPreviewEntries([]);
+    setPendingGlossaryTranslations({});
+    setTranslateProgress(`✅ تم تطبيق ${Object.keys(toApply).length} ترجمة من القاموس 📖`);
+    setTimeout(() => setTranslateProgress(""), 5000);
+  };
+
+  const discardGlossaryPreview = () => {
+    setShowGlossaryPreview(false);
+    setGlossaryPreviewEntries([]);
+    setPendingGlossaryTranslations({});
   };
 
   return {
@@ -1002,6 +1032,10 @@ export function useEditorTranslation({
     showPageCompare,
     applyPendingTranslations,
     discardPendingTranslations,
+    glossaryPreviewEntries,
+    showGlossaryPreview,
+    applyGlossaryPreview,
+    discardGlossaryPreview,
     handleTranslateSingle,
     handleAutoTranslate,
     handleTranslatePage,
