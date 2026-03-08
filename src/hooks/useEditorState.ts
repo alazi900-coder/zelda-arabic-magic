@@ -1173,6 +1173,7 @@ export function useEditorState() {
       setTranslateProgress("");
     } finally { setSmartReviewing(false); }
   };
+  handleSmartReviewRef.current = handleSmartReview;
 
   const handleApplySmartFix = (key: string, fix: string) => {
     setState(prev => prev ? { ...prev, translations: { ...prev.translations, [key]: fix } } : null);
