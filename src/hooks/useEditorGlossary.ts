@@ -273,6 +273,8 @@ export function useEditorGlossary({
 
       if (original.includes('\n') || original.includes('[ML:') || original.includes('{')) continue;
       if (original.length > 60) continue;
+      // Skip entries that are mostly numbers/symbols
+      if (/^[\d\s\-+*/=<>.,;:!?%$#@&^()[\]{}|\\~`'"]+$/.test(original)) continue;
 
       const normKey = original.toLowerCase();
       if (existingMap.has(normKey)) continue;
@@ -307,6 +309,75 @@ export function useEditorGlossary({
     setLastSaved(`📖 تم إنشاء ${newTerms} مصطلح جديد من الترجمات المكتملة`);
     setTimeout(() => setLastSaved(""), 4000);
   }, [state, parseGlossaryMap, setState, setLastSaved]);
+
+  // === Glossary health check — detect issues ===
+  const getGlossaryHealth = useCallback((): { duplicates: number; emptyValues: number; reversedEntries: number; singleCharKeys: number; totalIssues: number } => {
+    if (!state?.glossary?.trim()) return { duplicates: 0, emptyValues: 0, reversedEntries: 0, singleCharKeys: 0, totalIssues: 0 };
+    
+    const keyCount = new Map<string, number>();
+    let emptyValues = 0, reversedEntries = 0, singleCharKeys = 0;
+    
+    for (const line of state.glossary.split('\n')) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('//')) continue;
+      const eqIdx = trimmed.indexOf('=');
+      if (eqIdx < 1) continue;
+      
+      const eng = trimmed.slice(0, eqIdx).trim();
+      const arb = trimmed.slice(eqIdx + 1).trim();
+      const normKey = eng.toLowerCase();
+      
+      keyCount.set(normKey, (keyCount.get(normKey) || 0) + 1);
+      
+      if (!arb) emptyValues++;
+      // Check if English/Arabic might be reversed (Arabic on left side)
+      if (/[\u0600-\u06FF]/.test(eng) && /^[a-zA-Z\s]+$/.test(arb)) reversedEntries++;
+      if (eng.length === 1 && !/^[A-Za-z]$/.test(eng)) singleCharKeys++;
+    }
+    
+    const duplicates = Array.from(keyCount.values()).filter(c => c > 1).reduce((sum, c) => sum + (c - 1), 0);
+    return { duplicates, emptyValues, reversedEntries, singleCharKeys, totalIssues: duplicates + emptyValues + reversedEntries + singleCharKeys };
+  }, [state?.glossary]);
+
+  // === Auto-fix glossary issues ===
+  const handleFixGlossaryIssues = useCallback(() => {
+    if (!state?.glossary?.trim()) return;
+    
+    const seen = new Map<string, string>();
+    const comments: string[] = [];
+    let fixed = 0;
+    
+    for (const line of state.glossary.split('\n')) {
+      const trimmed = line.trim();
+      if (!trimmed) continue;
+      if (trimmed.startsWith('#') || trimmed.startsWith('//')) { comments.push(trimmed); continue; }
+      
+      const eqIdx = trimmed.indexOf('=');
+      if (eqIdx < 1) continue;
+      
+      let eng = trimmed.slice(0, eqIdx).trim();
+      let arb = trimmed.slice(eqIdx + 1).trimEnd();
+      
+      // Skip empty
+      if (!eng || !arb) { fixed++; continue; }
+      // Fix reversed entries (Arabic=English → English=Arabic)
+      if (/[\u0600-\u06FF]/.test(eng) && /^[a-zA-Z\s]+$/.test(arb)) {
+        [eng, arb] = [arb, eng];
+        fixed++;
+      }
+      // Skip pure symbols
+      if (/^[#%+=\-.\\/;:*&^$@!]+$/.test(eng) || /^[#%+=\-.\\/;:*&^$@!]+$/.test(arb)) { fixed++; continue; }
+      
+      const normKey = eng.toLowerCase();
+      if (seen.has(normKey)) { fixed++; continue; } // dedup
+      seen.set(normKey, `${eng}=${arb}`);
+    }
+    
+    const result = [...comments, ...Array.from(seen.values())].join('\n');
+    setState(prev => prev ? { ...prev, glossary: result } : null);
+    setLastSaved(`🔧 تم إصلاح ${fixed} مشكلة في القاموس (${seen.size} مصطلح نظيف)`);
+    setTimeout(() => setLastSaved(""), 4000);
+  }, [state?.glossary, setState, setLastSaved]);
 
   return {
     glossaryEnabled, setGlossaryEnabled,
