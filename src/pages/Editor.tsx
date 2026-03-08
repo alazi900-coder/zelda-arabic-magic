@@ -75,6 +75,7 @@ import MismatchDetectorPanel from "@/components/editor/MismatchDetectorPanel";
 import GlossaryMergePreviewDialog from "@/components/editor/GlossaryMergePreviewDialog";
 import SmartReviewPanel from "@/components/editor/SmartReviewPanel";
 import GlossaryCompliancePanel from "@/components/editor/GlossaryCompliancePanel";
+import GlossaryTranslationPreview from "@/components/editor/GlossaryTranslationPreview";
 
 const Editor = () => {
   const editor = useEditorState();
@@ -1883,6 +1884,16 @@ const Editor = () => {
             newTranslations={editor.pendingPageTranslations}
             onApply={(selectedKeys) => editor.applyPendingTranslations(selectedKeys)}
             onDiscard={editor.discardPendingTranslations}
+          />
+        )}
+
+        {/* Glossary Translation Preview Dialog */}
+        {editor.showGlossaryPreview && editor.glossaryPreviewEntries.length > 0 && (
+          <GlossaryTranslationPreview
+            open={editor.showGlossaryPreview}
+            entries={editor.glossaryPreviewEntries}
+            onApply={(selectedKeys) => editor.applyGlossaryPreview(selectedKeys)}
+            onDiscard={editor.discardGlossaryPreview}
           />
         )}
 
