@@ -891,7 +891,8 @@ export function useEditorTranslation({
     }
     const arabicRegex = /[\u0600-\u06FF]/;
     const glossaryTranslations: Record<string, string> = {};
-    let skipEmpty = 0, skipArabic = 0, skipTechnical = 0, skipTranslated = 0, skipNoMatch = 0;
+    const previewEntries: Array<{ key: string; original: string; newTranslation: string; oldTranslation: string; matchType: 'exact' | 'partial' }> = [];
+    let skipEmpty = 0, skipArabic = 0, skipTechnical = 0, skipNoMatch = 0;
     let exactMatches = 0, partialMatches = 0;
 
     // Sort glossary entries by key length (longest first) for greedy partial matching
