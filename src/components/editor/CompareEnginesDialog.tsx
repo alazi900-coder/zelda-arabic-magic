@@ -21,6 +21,7 @@ interface CompareEnginesDialogProps {
   glossary: string;
   userGeminiKey: string;
   myMemoryEmail: string;
+  aiModel?: string;
 }
 
 const ENGINE_LABELS: Record<string, { label: string; emoji: string }> = {
@@ -138,7 +139,7 @@ function renderTranslationWithProtectedTags(text: string) {
 }
 
 const CompareEnginesDialog: React.FC<CompareEnginesDialogProps> = ({
-  open, onOpenChange, entry, onSelect, glossary, userGeminiKey, myMemoryEmail,
+  open, onOpenChange, entry, onSelect, glossary, userGeminiKey, myMemoryEmail, aiModel,
 }) => {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<CompareResult>({});
@@ -165,6 +166,7 @@ const CompareEnginesDialog: React.FC<CompareEnginesDialogProps> = ({
             provider,
             userApiKey: provider === 'gemini' ? (userGeminiKey || undefined) : undefined,
             myMemoryEmail: provider === 'mymemory' ? (myMemoryEmail || undefined) : undefined,
+            aiModel: provider === 'gemini' ? (aiModel || undefined) : undefined,
           }),
         });
         if (!response.ok) return null;

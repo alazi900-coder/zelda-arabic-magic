@@ -990,7 +990,7 @@ export function useEditorState() {
       const response = await fetch(`${supabaseUrl}/functions/v1/review-translations`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ entries: reviewEntries, glossary: activeGlossary }),
+        body: JSON.stringify({ entries: reviewEntries, glossary: activeGlossary, aiModel }),
       });
       if (!response.ok) throw new Error(`خطأ ${response.status}`);
       setReviewResults(await response.json());
@@ -1013,7 +1013,7 @@ export function useEditorState() {
       const response = await fetch(`${supabaseUrl}/functions/v1/review-translations`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ entries: reviewEntries, glossary: activeGlossary, action: 'suggest-short' }),
+        body: JSON.stringify({ entries: reviewEntries, glossary: activeGlossary, action: 'suggest-short', aiModel }),
       });
       if (!response.ok) throw new Error(`خطأ ${response.status}`);
       const data = await response.json();
@@ -1166,7 +1166,7 @@ export function useEditorState() {
       const response = await fetch(`${supabaseUrl}/functions/v1/review-translations`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ entries: reviewEntries, glossary: activeGlossary, action: 'smart-review' }),
+        body: JSON.stringify({ entries: reviewEntries, glossary: activeGlossary, action: 'smart-review', aiModel }),
       });
       if (!response.ok) {
         const errData = await response.json().catch(() => ({}));
@@ -1219,7 +1219,7 @@ export function useEditorState() {
       const response = await fetch(`${supabaseUrl}/functions/v1/review-translations`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ entries: translatedEntries, glossary: activeGlossary, action: 'improve' }),
+        body: JSON.stringify({ entries: translatedEntries, glossary: activeGlossary, action: 'improve', aiModel }),
       });
       if (!response.ok) throw new Error(`خطأ ${response.status}`);
       const data = await response.json();
@@ -1258,7 +1258,7 @@ export function useEditorState() {
       const response = await fetch(`${supabaseUrl}/functions/v1/review-translations`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ entries: [{ key, original: entry.original, translation, maxBytes: entry.maxBytes || 0 }], glossary: activeGlossary, action: 'improve' }),
+        body: JSON.stringify({ entries: [{ key, original: entry.original, translation, maxBytes: entry.maxBytes || 0 }], glossary: activeGlossary, action: 'improve', aiModel }),
       });
       if (!response.ok) throw new Error(`خطأ ${response.status}`);
       const data = await response.json();
