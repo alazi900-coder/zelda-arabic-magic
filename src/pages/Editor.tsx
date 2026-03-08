@@ -75,6 +75,7 @@ import MismatchDetectorPanel from "@/components/editor/MismatchDetectorPanel";
 import GlossaryMergePreviewDialog from "@/components/editor/GlossaryMergePreviewDialog";
 import SmartReviewPanel from "@/components/editor/SmartReviewPanel";
 import GlossaryCompliancePanel from "@/components/editor/GlossaryCompliancePanel";
+import GlossaryTranslationPreview from "@/components/editor/GlossaryTranslationPreview";
 
 const Editor = () => {
   const editor = useEditorState();
