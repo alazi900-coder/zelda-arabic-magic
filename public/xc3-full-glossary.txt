@@ -22456,6 +22456,167 @@ Fun grandpa and grandkid=جد مرح وحفيده
 Beloved father=أب محبوب
 Generous=كريم
 
+
+# ═══════════════════════════════════════════════════
+# أحداث القصة والمشاهد (Story Events)
+# ═══════════════════════════════════════════════════
+Prologue=المقدمة
+The Next Target=الهدف التالي
+Samon's Ship=سفينة سامون
+Reflecting on Joran=التفكير في جوران
+The Erythia Sea=بحر إيريثيا
+A Seaside Rest=استراحة على شاطئ البحر
+Sena and Shania=سينا وشانيّا
+Plotting the Break-In=التخطيط للاقتحام
+Li Garte Prison Camp=معسكر سجن لي غارتي
+Talking With Your Fists=التحدث بالقبضات
+The Battle Begins!=لتبدأ المعركة!
+Mio's Resolve=عزيمة ميو
+Recognizing Your Own Purpose=إدراك هدفك الخاص
+The Night Before=الليلة السابقة
+We're Outta Here!=سنخرج من هنا!
+N and M=إن و إم
+Not Ready to Die Yet=لست مستعداً للموت بعد
+M's Power=قوة إم
+Showdown with N=المواجهة مع إن
+Taken By Surprise (A)=مأخوذ على حين غرة (أ)
+It's Been Fun...Noah=لقد كان ممتعاً... يا نوح
+The Flame of Life=شعلة الحياة
+The Endless Now=الحاضر اللانهائي
+Remnants of Memories=بقايا الذكريات
+A Tragedy on Loop=مأساة تتكرر
+Torn Apart=مُمزق
+Two Paths=مساران
+The Sword of the End=سيف النهاية
+Shania the Traitor=شانيا الخائنة
+Breaking the Never-Ending Curse=كسر اللعنة الأبدية
+At Hope's Rest=في استراحة الأمل
+Helping Out with Repairs=المساعدة في الإصلاحات
+Attack of the Automatons=هجوم الآليين
+To the Cloudkeep=إلى قلعة السحاب
+Talking With Riku=التحدث مع ريكو
+M's Memories=ذكريات إم
+Where Queen Nia Slumbers=حيث ترقد الملكة نيا
+D and Joran Return=عودة دي وجوران
+Joran's Soul, D's Darkness=روح جوران، ظلام دي
+Spreading His True Wings=نشر أجنحته الحقيقية
+Queen Nia's Story, Part 1=قصة الملكة نيا، الجزء 1
+Queen Nia's Story, Part 2=قصة الملكة نيا، الجزء 2
+Eager For a Way in=متلهف للدخول
+Ouroboros Stone=حجر أوربوروس
+A New Vessel=سفينة جديدة
+Incomplete Engine=محرك غير مكتمل
+Visiting Queen Nia Again=زيارة الملكة نيا مجدداً
+Coming-of-Age Commences (A)=بدء مراسم بلوغ الرشد (أ)
+What Lies Beyond Death=ما يكمن خلف الموت
+All Aboard Origin!=الجميع على متن أوريجين!
+Those Who Thwart Hope=أولئك الذين يحبطون الأمل
+The Battle with N=المعركة مع إن
+Regret and Hope=ندم وأمل
+Meeting Queen Melia=لقاء الملكة ميليا
+
+# ═══════════════════════════════════════════════════
+# خيارات التخييم والاستراحة (Camp Options)
+# ═══════════════════════════════════════════════════
+Discuss=مناقشة
+Rest=استراحة
+Craft Gems=صناعة الجواهر
+Cook=طبخ
+Order Food=طلب طعام
+Clean Clothes=تنظيف الملابس
+Cook with ingredients=طبخ بالمكونات
+Spend coins to cook=طبخ بالعملات
+Craft with materials=صناعة بالمواد
+Craft with coins=صناعة بالعملات
+Meal Effects=تأثيرات الوجبة
+Coin Cost=تكلفة العملات
+Duration=المدة
+Manana's Menu=قائمة مانانا
+Pin Items=تثبيت العناصر
+Dismantle=تفكيك
+Craft Accessories=صناعة الملحقات
+Upgrade X-Reader=ترقية قارئ إكس
+
+# ═══════════════════════════════════════════════════
+# أيقونات الخريطة والاستكشاف (Map Icons)
+# ═══════════════════════════════════════════════════
+Area Map=خريطة المنطقة
+Unknown Mast Signal=إشارة صاري مجهولة
+Named Grave=قبر باسم
+Rest Spot=نقطة استراحة
+Current Location=الموقع الحالي
+Skip Travel=سفر سريع
+Ship=سفينة
+Accessory Shop=متجر ملحقات
+Ether Cylinder Shop=متجر أسطوانات إيثر
+Rarities Shop=متجر نوادر
+Nopon Shop=متجر نوبون
+Ether Channels=قنوات إيثر
+Sand Spike=مسمار رملي
+Fabricators=مُصنّعات
+Points of Interest=نقاط الاهتمام
+User Marker=علامة المستخدم
+Icon Filters=فلاتر الأيقونات
+Warning Level=مستوى التحذير
+Iron Giant God Hulk=هيكل إله الحديد العملاق
+Rebooted=أُعيد تشغيله
+Ether Spheres=كرات الإيثر
+Location Names=أسماء المواقع
+Relics=آثار
+City Survivors=ناجون من المدينة
+Ether Lifts=مصاعد إيثر
+Ether Slides=منزلقات إيثر
+Ether Masts=صواري إيثر
+Unique Monsters=وحوش فريدة
+Interventions=تدخلات
+Fog Rifts=صدوع الضباب
+Elevators=مصاعد
+Battle Missions=مهمات المعركة
+
+# ═══════════════════════════════════════════════════
+# تفاعلات الشاشة (HUD Actions)
+# ═══════════════════════════════════════════════════
+Talk=تحدث
+Use=استخدام
+Lure=استدراج
+Community=المجتمع
+Open=فتح
+Interact=تفاعل
+Embark=ركوب
+Disembark=نزول
+Harvest Ether=حصاد الإيثر
+Send Off=توديع
+Help Up=مساعدة في النهوض
+Start=بدء
+
+# ═══════════════════════════════════════════════════
+# فئات المقتنيات (Collectopedia Categories)
+# ═══════════════════════════════════════════════════
+Wood=خشب
+Machine Parts=أجزاء آلية
+Shells=أصداف
+Seeds=بذور
+Plants=نباتات
+Flowers=زهور
+Fruit=فواكه
+Vegetables=خضروات
+Mushrooms=فطر
+Gemstones=أحجار كريمة
+Fossils=حفريات
+
+# ═══════════════════════════════════════════════════
+# إضافات المحتوى (DLC Info)
+# ═══════════════════════════════════════════════════
+Expendable Items=عناصر استهلاكية
+Clothing=أزياء
+New Hero=بطل جديد
+Challenge Battles=تحديات المعارك
+New Challenge Battle Rules=قواعد تحديات معارك جديدة
+New Story with a New Cast=قصة جديدة مع طاقم جديد
+An All-New Original Story=قصة أصلية جديدة كلياً
+Future Redeemed=المستقبل المسترد
+Adventure Support Pack=حزمة دعم المغامرة
+
 # ============================================================
 # --- نهاية القاموس الشامل ---
 # End of Comprehensive Glossary
