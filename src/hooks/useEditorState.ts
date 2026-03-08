@@ -2586,7 +2586,7 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 4000);
   }, [state, arabicTextFixResults]);
 
-
+  return {
     // State
     state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, showFindReplace, userGeminiKey, translationProvider, myMemoryEmail, myMemoryCharsUsed, aiRequestsToday, aiRequestsMonth, rebalanceNewlines, aiModel,
     pendingRecovery, handleRecoverSession, handleStartFresh,
