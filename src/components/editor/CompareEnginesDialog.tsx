@@ -139,7 +139,7 @@ function renderTranslationWithProtectedTags(text: string) {
 }
 
 const CompareEnginesDialog: React.FC<CompareEnginesDialogProps> = ({
-  open, onOpenChange, entry, onSelect, glossary, userGeminiKey, myMemoryEmail,
+  open, onOpenChange, entry, onSelect, glossary, userGeminiKey, myMemoryEmail, aiModel,
 }) => {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<CompareResult>({});
