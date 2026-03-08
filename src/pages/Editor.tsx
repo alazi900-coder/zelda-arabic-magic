@@ -482,7 +482,40 @@ const Editor = () => {
                 )}
 
                 {editor.translationProvider === 'gemini' && (
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-3">
+                    {/* Model Selector */}
+                    <div className="flex flex-col gap-1.5">
+                      <span className="text-xs font-display text-muted-foreground">🧠 نموذج الذكاء الاصطناعي:</span>
+                      <div className="grid grid-cols-2 gap-1.5">
+                        {[
+                          { id: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash', desc: 'سريع ومتوازن', badge: '⚡' },
+                          { id: 'gemini-2.5-pro', label: 'Gemini 2.5 Pro', desc: 'الأدق للمصطلحات', badge: '🎯' },
+                          { id: 'gemini-3.1-pro-preview', label: 'Gemini 3.1 Pro', desc: 'أحدث نموذج Google', badge: '🆕' },
+                          { id: 'gpt-5', label: 'GPT-5', desc: 'استدلال متقدم', badge: '🧠' },
+                        ].map(m => (
+                          <button
+                            key={m.id}
+                            onClick={() => editor.setAiModel(m.id)}
+                            className={`flex flex-col items-start p-2 rounded-md border text-xs transition-colors ${
+                              editor.aiModel === m.id
+                                ? 'border-primary bg-primary/10 text-foreground'
+                                : 'border-border bg-background text-muted-foreground hover:border-primary/50'
+                            }`}
+                          >
+                            <span className="font-display">{m.badge} {m.label}</span>
+                            <span className="text-[10px] opacity-70">{m.desc}</span>
+                          </button>
+                        ))}
+                      </div>
+                      {(editor.aiModel === 'gemini-2.5-pro' || editor.aiModel === 'gpt-5') && (
+                        <p className="text-[10px] text-amber-500 font-body">⚠️ هذا النموذج أبطأ ويستهلك نقاطاً أكثر — مناسب للنصوص المهمة</p>
+                      )}
+                      {(editor.aiModel === 'gemini-3.1-pro-preview' || editor.aiModel === 'gpt-5') && !editor.userGeminiKey && (
+                        <p className="text-[10px] text-muted-foreground font-body">يعمل عبر Lovable AI فقط (لا يدعم المفتاح الشخصي)</p>
+                      )}
+                    </div>
+
+                    {/* API Key */}
                     <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-3">
                       <div className="flex gap-2 flex-1">
                         <input

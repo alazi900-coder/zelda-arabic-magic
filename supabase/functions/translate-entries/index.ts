@@ -915,6 +915,7 @@ async function translateWithAI(
   glossary: string | undefined,
   context: { key: string; original: string; translation?: string }[] | undefined,
   userApiKey: string | undefined,
+  aiModel: string | undefined,
 ): Promise<{ translations: Record<string, string>; glossaryStats: GlossaryStats }> {
   const glossaryMap = glossary ? parseGlossaryToMap(glossary) : new Map<string, string>();
   const tmMap = buildTranslationMemory(context);
@@ -1176,7 +1177,9 @@ ${textsBlock}
   };
 
   if (effectiveKey) {
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${effectiveKey}`;
+    // Map model names for direct Gemini API; only gemini models work with personal key
+    const geminiModelName = (aiModel === 'gemini-2.5-pro') ? 'gemini-2.5-pro' : (aiModel === 'gemini-2.5-flash') ? 'gemini-2.5-flash' : 'gemini-2.0-flash';
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${geminiModelName}:generateContent?key=${effectiveKey}`;
     const geminiResponse = await fetch(geminiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -1220,7 +1223,7 @@ ${textsBlock}
         method: 'POST',
         headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'google/gemini-2.5-flash',
+          model: aiModel === 'gpt-5' ? 'openai/gpt-5' : aiModel === 'gemini-2.5-pro' ? 'google/gemini-2.5-pro' : aiModel === 'gemini-3.1-pro-preview' ? 'google/gemini-3.1-pro-preview' : 'google/gemini-2.5-flash',
           messages: [
             { role: 'system', content: 'You are a Xenoblade Chronicles 3 game text translator. Output ONLY a valid JSON object with keys like K0, K1, K2... and Arabic translation values. Never modify ⟪T#⟫ placeholders. ALWAYS use glossary terms exactly. ALWAYS maintain consistency with previously translated texts — same English word = same Arabic translation. CRITICAL: Never use unescaped double quotes inside translation values. Use single quotes or escaped quotes (\\\") instead. Ensure the JSON is complete and valid.' },
             { role: 'user', content: aiPrompt },
@@ -1289,7 +1292,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { entries, glossary, context, userApiKey, provider, myMemoryEmail, rebalanceNewlines, npcMaxLines } = await req.json() as {
+    const { entries, glossary, context, userApiKey, provider, myMemoryEmail, rebalanceNewlines, npcMaxLines, aiModel } = await req.json() as {
       entries: { key: string; original: string }[];
       glossary?: string;
       context?: { key: string; original: string; translation?: string }[];
@@ -1298,6 +1301,7 @@ Deno.serve(async (req) => {
       myMemoryEmail?: string;
       rebalanceNewlines?: boolean;
       npcMaxLines?: number;
+      aiModel?: string;
     };
 
     // Set the global rebalance flag for this request
@@ -1329,7 +1333,7 @@ Deno.serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     } else {
-      const { translations, glossaryStats } = await translateWithAI(entries, protectedEntries, glossary, context, userApiKey);
+      const { translations, glossaryStats } = await translateWithAI(entries, protectedEntries, glossary, context, userApiKey, aiModel);
       return new Response(JSON.stringify({ translations, glossaryStats }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });

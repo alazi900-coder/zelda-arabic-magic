@@ -114,6 +114,13 @@ export function useEditorState() {
     _setUserGeminiKey(key);
     try { if (key) localStorage.setItem('userGeminiKey', key); else localStorage.removeItem('userGeminiKey'); } catch {}
   }, []);
+  const [aiModel, _setAiModel] = useState<string>(() => {
+    try { return localStorage.getItem('aiModel') || 'gemini-2.5-flash'; } catch { return 'gemini-2.5-flash'; }
+  });
+  const setAiModel = useCallback((m: string) => {
+    _setAiModel(m);
+    try { localStorage.setItem('aiModel', m); } catch {}
+  }, []);
   const [translationProvider, _setTranslationProvider] = useState<'gemini' | 'mymemory' | 'google'>(() => {
     try { return (localStorage.getItem('translationProvider') as 'gemini' | 'mymemory' | 'google') || 'gemini'; } catch { return 'gemini'; }
   });
@@ -813,7 +820,7 @@ export function useEditorState() {
 
   const translation = useEditorTranslation({
     state, setState, setLastSaved, setTranslateProgress, setPreviousTranslations, updateTranslation,
-    filterCategory, activeGlossary, parseGlossaryMap, paginatedEntries, filteredEntries, totalPages, setCurrentPage, userGeminiKey, translationProvider, myMemoryEmail, addMyMemoryChars, addAiRequest, rebalanceNewlines, npcMaxLines, npcMode, npcSplitCharLimit,
+    filterCategory, activeGlossary, parseGlossaryMap, paginatedEntries, filteredEntries, totalPages, setCurrentPage, userGeminiKey, translationProvider, myMemoryEmail, addMyMemoryChars, addAiRequest, rebalanceNewlines, npcMaxLines, npcMode, npcSplitCharLimit, aiModel,
   });
   const { translating, translatingSingle, tmStats, glossarySessionStats, handleTranslateSingle, handleAutoTranslate, handleTranslatePage, handleTranslateAllPages, handleTranslateFromGlossaryOnly, handleStopTranslate, handleRetranslatePage, handleFixDamagedTags, pendingPageTranslations, oldPageTranslations, pageTranslationOriginals, showPageCompare, applyPendingTranslations: _applyPendingRaw, discardPendingTranslations } = translation;
 
@@ -2532,7 +2539,7 @@ export function useEditorState() {
 
   return {
     // State
-    state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, showFindReplace, userGeminiKey, translationProvider, myMemoryEmail, myMemoryCharsUsed, aiRequestsToday, aiRequestsMonth, rebalanceNewlines,
+    state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, showFindReplace, userGeminiKey, translationProvider, myMemoryEmail, myMemoryCharsUsed, aiRequestsToday, aiRequestsMonth, rebalanceNewlines, aiModel,
     pendingRecovery, handleRecoverSession, handleStartFresh,
     hasStoredOriginals, originalsDetectedAsPreviousBuild,
     building, buildProgress, dismissBuildProgress, translating, translateProgress,
@@ -2561,7 +2568,7 @@ export function useEditorState() {
     setSearch, setFilterFile, setFilterCategory, setFilterStatus, setFilterTechnical, setFilterTable, setFilterColumn,
     setFiltersOpen, setShowQualityStats, setQuickReviewMode, setQuickReviewIndex, setShowFindReplace,
     setCurrentPage, setShowRetranslateConfirm,
-    setArabicNumerals, setMirrorPunctuation, setUserGeminiKey, setTranslationProvider, setMyMemoryEmail, setRebalanceNewlines,
+    setArabicNumerals, setMirrorPunctuation, setUserGeminiKey, setTranslationProvider, setMyMemoryEmail, setRebalanceNewlines, setAiModel,
     setReviewResults, setShortSuggestions, setImproveResults, setBuildStats, setShowBuildConfirm,
     setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults, setDiacriticsCleanResults, setDuplicateAlefResults, setMissingAlefResults, setMirrorCharsResults, setTagBracketFixResults, setNewlineSplitResults, setNpcSplitResults, setLineSyncResults, setUnifiedSplitResults, setSentenceOrderResults,
     setSmartReviewFindings,
