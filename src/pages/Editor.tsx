@@ -882,6 +882,16 @@ const Editor = () => {
             />
           )}
 
+          {/* Glossary Compliance Panel */}
+          {editor.glossaryComplianceResults && editor.glossaryComplianceResults.length > 0 && (
+            <GlossaryCompliancePanel
+              violations={editor.glossaryComplianceResults}
+              onApplyFix={editor.handleApplyGlossaryFix}
+              onApplyAll={editor.handleApplyAllGlossaryFixes}
+              onClose={() => editor.setGlossaryComplianceResults(null)}
+            />
+          )}
+
           {/* Tag Repair Panel */}
           {showTagRepair && editor.state && (
             <TagRepairPanel
