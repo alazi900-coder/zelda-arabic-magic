@@ -1997,6 +1997,7 @@ export function useEditorFileIO({ state, setState, setLastSaved, filteredEntries
     handleExportCSV,
     handleImportCSV,
     handleExportAllEnglishJson,
+    handleExportAllEnglishTxt,
     handleImportExternalJson,
     handleExportXLIFF,
     handleExportTMX,
