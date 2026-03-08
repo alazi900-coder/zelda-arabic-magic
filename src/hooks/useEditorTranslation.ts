@@ -604,6 +604,7 @@ export function useEditorTranslation({
             provider: translationProvider,
             myMemoryEmail: myMemoryEmail || undefined,
             npcMaxLines,
+            aiModel,
           }),
         });
         if (!response.ok) throw new Error(`خطأ ${response.status}`);
