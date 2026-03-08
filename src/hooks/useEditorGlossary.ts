@@ -75,20 +75,35 @@ export function useEditorGlossary({
     return diffs;
   }, [parseGlossaryMap]);
 
-  // === Merge helper ===
+  // === Merge helper (preserves section headers from both sources) ===
   const mergeGlossaryText = (prev: EditorState, newText: string): EditorState => {
     const existing = prev.glossary?.trim() || '';
     const merged = existing ? existing + '\n' + newText : newText;
     const seen = new Map<string, string>();
+    const result: string[] = [];
     for (const line of merged.split('\n')) {
-      const trimmed = line.trim();
-      if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('//')) continue;
+      const trimmed = line.trimEnd();
+      if (!trimmed) continue;
+      if (trimmed.startsWith('#') || trimmed.startsWith('//')) {
+        result.push(trimmed);
+        continue;
+      }
       const eqIdx = trimmed.indexOf('=');
       if (eqIdx < 1) continue;
       const key = trimmed.slice(0, eqIdx).trim().toLowerCase();
-      seen.set(key, trimmed);
+      if (seen.has(key)) {
+        // Replace previous occurrence with new value
+        const prevIdx = result.findIndex(l => {
+          const eq = l.indexOf('=');
+          return eq > 0 && l.slice(0, eq).trim().toLowerCase() === key;
+        });
+        if (prevIdx >= 0) result[prevIdx] = trimmed;
+      } else {
+        seen.set(key, trimmed);
+        result.push(trimmed);
+      }
     }
-    return { ...prev, glossary: Array.from(seen.values()).join('\n') };
+    return { ...prev, glossary: result.join('\n') };
   };
 
   // === Apply accepted diffs ===
