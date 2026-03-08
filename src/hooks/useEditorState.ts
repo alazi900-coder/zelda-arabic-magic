@@ -1211,6 +1211,7 @@ export function useEditorState() {
   const handleImproveTranslations = async () => {
     if (!state) return;
     setImprovingTranslations(true); setImproveResults(null);
+    toast({ title: "✨ بدأ التحسين", description: "جاري تحسين الترجمات في الخلفية..." });
     try {
       const translatedEntries = filteredEntries
         .filter(e => { const key = `${e.msbtFile}:${e.index}`; return state.translations[key]?.trim(); })
