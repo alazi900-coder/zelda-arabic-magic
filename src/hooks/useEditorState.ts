@@ -1166,7 +1166,7 @@ export function useEditorState() {
       const response = await fetch(`${supabaseUrl}/functions/v1/review-translations`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ entries: reviewEntries, glossary: activeGlossary, action: 'smart-review' }),
+        body: JSON.stringify({ entries: reviewEntries, glossary: activeGlossary, action: 'smart-review', aiModel }),
       });
       if (!response.ok) {
         const errData = await response.json().catch(() => ({}));
