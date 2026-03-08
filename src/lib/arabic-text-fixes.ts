@@ -43,18 +43,20 @@ export function fixTaaMarbutaHaa(text: string): { fixed: string; changes: number
   const { shielded, tags } = shieldTags(text);
   let changes = 0;
   
-  // Use lookbehind-free approach: match (non-Arabic|start)(Arabic+ه)(non-Arabic|end)
-  const regex = new RegExp(`(^|[^\\u0600-\\u06FF])(${AR}+)(ه)($|[^\\u0600-\\u06FF])`, 'g');
-  const fixed = shielded.replace(regex, (match, before, stem, _haa, after) => {
-    const withTaa = stem + 'ة';
-    if (TAA_MARBUTA_WORDS.has(withTaa)) {
-      changes++;
-      return before + withTaa + after;
+  // Split into words, check each word ending with ه
+  const words = shielded.split(/(\s+|[^\u0600-\u06FF\uE800\uE801\d]+)/);
+  const fixedParts = words.map(word => {
+    if (word.endsWith('ه') && word.length >= 2) {
+      const withTaa = word.slice(0, -1) + 'ة';
+      if (TAA_MARBUTA_WORDS.has(withTaa)) {
+        changes++;
+        return withTaa;
+      }
     }
-    return match;
+    return word;
   });
   
-  return { fixed: unshieldTags(fixed, tags), changes };
+  return { fixed: unshieldTags(fixedParts.join(''), tags), changes };
 }
 
 // ============================================================
