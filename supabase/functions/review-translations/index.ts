@@ -185,7 +185,7 @@ AR: "${e.translation}"`).join('\n\n')}
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              model: 'google/gemini-2.5-flash',
+               model: resolvedModel,
               messages: [
                 { role: 'system', content: 'أنت مدقق لغوي دقيق. أخرج ONLY valid JSON arrays. لا تخرج أي شيء آخر.' },
                 { role: 'user', content: prompt },
