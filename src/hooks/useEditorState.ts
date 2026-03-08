@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { fixTagBracketsStrict, hasTechnicalBracketTag } from "@/lib/tag-bracket-fix";
 import { detectReversedSentences } from "@/components/editor/SentenceOrderPanel";
 import { balanceLines, visualLength, splitEvenlyByLines } from "@/lib/balance-lines";
+import { scanAllTextFixes } from "@/lib/arabic-text-fixes";
 
 import { useEditorGlossary } from "@/hooks/useEditorGlossary";
 import { useEditorFileIO } from "@/hooks/useEditorFileIO";
@@ -58,6 +59,7 @@ export function useEditorState() {
   const [missingAlefResults, setMissingAlefResults] = useState<import("@/components/editor/DuplicateAlefCleanPanel").DuplicateAlefResult[] | null>(null);
   const [mirrorCharsResults, setMirrorCharsResults] = useState<import("@/components/editor/MirrorCharsCleanPanel").MirrorCharsResult[] | null>(null);
   const [tagBracketFixResults, setTagBracketFixResults] = useState<import("@/components/editor/TagBracketFixPanel").TagBracketFixResult[] | null>(null);
+  const [arabicTextFixResults, setArabicTextFixResults] = useState<import("@/lib/arabic-text-fixes").TextFixResult[] | null>(null);
   const [newlineSplitResults, setNewlineSplitResults] = useState<import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] | null>(null);
   const [npcSplitResults, setNpcSplitResults] = useState<import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] | null>(null);
   const [lineSyncResults, setLineSyncResults] = useState<import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] | null>(null);
@@ -2541,6 +2543,49 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 4000);
   }, [state, sentenceOrderResults]);
 
+  // === Arabic Text Fixes (تاء/هاء، ياء/ألف مقصورة، كلمات مكررة، مخلفات AI) ===
+  const handleScanArabicTextFixes = useCallback(() => {
+    if (!state) return;
+    const results = scanAllTextFixes(state.translations);
+    setArabicTextFixResults(results);
+    if (results.length === 0) {
+      setLastSaved("✅ لا توجد مشاكل في النصوص العربية");
+      setTimeout(() => setLastSaved(""), 4000);
+    } else {
+      toast({ title: `✨ تم العثور على ${results.length} مشكلة`, description: "راجع النتائج وقرر ما تريد تطبيقه" });
+    }
+  }, [state]);
+
+  const handleApplyArabicTextFix = useCallback((key: string, fixType: string) => {
+    if (!state || !arabicTextFixResults) return;
+    const item = arabicTextFixResults.find(r => r.key === key && r.fixType === fixType);
+    if (!item) return;
+    setState(prev => prev ? { ...prev, translations: { ...prev.translations, [key]: item.after } } : null);
+    setArabicTextFixResults(prev => prev ? prev.map(r => (r.key === key && r.fixType === fixType) ? { ...r, status: 'accepted' as const } : r) : null);
+  }, [state, arabicTextFixResults]);
+
+  const handleRejectArabicTextFix = useCallback((key: string, fixType: string) => {
+    setArabicTextFixResults(prev => prev ? prev.map(r => (r.key === key && r.fixType === fixType) ? { ...r, status: 'rejected' as const } : r) : null);
+  }, []);
+
+  const handleApplyAllArabicTextFixes = useCallback(() => {
+    if (!state || !arabicTextFixResults) return;
+    const pending = arabicTextFixResults.filter(r => r.status === 'pending');
+    const newTranslations = { ...state.translations };
+    // Apply in order: each fix is based on original text, so apply sequentially per key
+    const appliedKeys = new Set<string>();
+    for (const item of pending) {
+      if (!appliedKeys.has(item.key)) {
+        newTranslations[item.key] = item.after;
+        appliedKeys.add(item.key);
+      }
+    }
+    setState(prev => prev ? { ...prev, translations: newTranslations } : null);
+    setArabicTextFixResults(prev => prev ? prev.map(r => r.status === 'pending' ? { ...r, status: 'accepted' as const } : r) : null);
+    setLastSaved(`✅ تم تطبيق ${pending.length} إصلاح نصي`);
+    setTimeout(() => setLastSaved(""), 4000);
+  }, [state, arabicTextFixResults]);
+
   return {
     // State
     state, search, filterFile, filterCategory, filterStatus, filterTechnical, filterTable, filterColumn, showFindReplace, userGeminiKey, translationProvider, myMemoryEmail, myMemoryCharsUsed, aiRequestsToday, aiRequestsMonth, rebalanceNewlines, aiModel,
@@ -2558,7 +2603,7 @@ export function useEditorState() {
     applyingArabic, improvingTranslations, improveResults,
     fixingMixed, filtersOpen, buildStats, buildPreview, showBuildConfirm, bdatFileStats,
     checkingConsistency, consistencyResults,
-    scanningSentences, sentenceSplitResults, newlineCleanResults, diacriticsCleanResults, duplicateAlefResults, missingAlefResults, mirrorCharsResults, tagBracketFixResults, newlineSplitResults, npcSplitResults, lineSyncResults, unifiedSplitResults, sentenceOrderResults,
+    scanningSentences, sentenceSplitResults, newlineCleanResults, diacriticsCleanResults, duplicateAlefResults, missingAlefResults, mirrorCharsResults, tagBracketFixResults, newlineSplitResults, npcSplitResults, lineSyncResults, unifiedSplitResults, sentenceOrderResults, arabicTextFixResults,
     smartReviewing, smartReviewFindings,
     glossaryComplianceResults, checkingGlossaryCompliance,
     isSearchPinned, pinnedKeys,
@@ -2574,7 +2619,7 @@ export function useEditorState() {
     setCurrentPage, setShowRetranslateConfirm,
     setArabicNumerals, setMirrorPunctuation, setUserGeminiKey, setTranslationProvider, setMyMemoryEmail, setRebalanceNewlines, setAiModel,
     setReviewResults, setShortSuggestions, setImproveResults, setBuildStats, setShowBuildConfirm,
-    setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults, setDiacriticsCleanResults, setDuplicateAlefResults, setMissingAlefResults, setMirrorCharsResults, setTagBracketFixResults, setNewlineSplitResults, setNpcSplitResults, setLineSyncResults, setUnifiedSplitResults, setSentenceOrderResults,
+    setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults, setDiacriticsCleanResults, setDuplicateAlefResults, setMissingAlefResults, setMirrorCharsResults, setTagBracketFixResults, setNewlineSplitResults, setNpcSplitResults, setLineSyncResults, setUnifiedSplitResults, setSentenceOrderResults, setArabicTextFixResults,
     setSmartReviewFindings,
     setGlossaryComplianceResults,
     autoSmartReview, setAutoSmartReview,
@@ -2609,6 +2654,7 @@ export function useEditorState() {
     handleScanLineSync, handleApplyLineSync, handleRejectLineSync, handleApplyAllLineSyncs,
     handleScanAllSplits, handleApplyUnifiedSplit, handleRejectUnifiedSplit, handleApplyAllUnifiedSplits,
     handleScanSentenceOrder, handleApplySentenceOrder, handleRejectSentenceOrder, handleApplyAllSentenceOrders,
+    handleScanArabicTextFixes, handleApplyArabicTextFix, handleRejectArabicTextFix, handleApplyAllArabicTextFixes,
     handleTogglePin,
     handleClearTranslations, handleUndoClear, clearUndoBackup, isFilterActive,
     integrityResult, showIntegrityDialog, setShowIntegrityDialog, checkingIntegrity,
