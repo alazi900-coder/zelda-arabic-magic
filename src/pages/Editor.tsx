@@ -58,6 +58,7 @@ import DuplicateAlefCleanPanel from "@/components/editor/DuplicateAlefCleanPanel
 import MirrorCharsCleanPanel from "@/components/editor/MirrorCharsCleanPanel";
 import MergeToBundledPanel from "@/components/editor/MergeToBundledPanel";
 import SentenceOrderPanel from "@/components/editor/SentenceOrderPanel";
+import ArabicTextFixPanel from "@/components/editor/ArabicTextFixPanel";
 import ExportEnglishDialog from "@/components/editor/ExportEnglishDialog";
 import GlossaryStatsPanel from "@/components/editor/GlossaryStatsPanel";
 import TranslationStatsPanel from "@/components/editor/TranslationStatsPanel";
