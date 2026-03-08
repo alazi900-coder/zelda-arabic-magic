@@ -72,6 +72,7 @@ import LineBalancePanel from "@/components/editor/LineBalancePanel";
 import TranslationToolsPanel from "@/components/editor/TranslationToolsPanel";
 import MismatchDetectorPanel from "@/components/editor/MismatchDetectorPanel";
 import GlossaryMergePreviewDialog from "@/components/editor/GlossaryMergePreviewDialog";
+import SmartReviewPanel from "@/components/editor/SmartReviewPanel";
 
 const Editor = () => {
   const editor = useEditorState();
@@ -869,6 +870,17 @@ const Editor = () => {
             />
           )}
 
+          {/* Smart Review Panel */}
+          {editor.smartReviewFindings && editor.smartReviewFindings.length > 0 && (
+            <SmartReviewPanel
+              findings={editor.smartReviewFindings}
+              onApply={editor.handleApplySmartFix}
+              onApplyAll={editor.handleApplyAllSmartFixes}
+              onDismiss={editor.handleDismissSmartFinding}
+              onClose={() => editor.setSmartReviewFindings(null)}
+            />
+          )}
+
           {/* Tag Repair Panel */}
           {showTagRepair && editor.state && (
             <TagRepairPanel
@@ -1241,6 +1253,9 @@ const Editor = () => {
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={editor.handleReviewTranslations} disabled={editor.reviewing || editor.translatedCount === 0}><ShieldCheck className="w-4 h-4" /> مراجعة ذكية 🔍</DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleSmartReview} disabled={editor.smartReviewing || editor.translatedCount === 0}>
+                    {editor.smartReviewing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Eye className="w-4 h-4" />} مراجعة عميقة بالذكاء 🔬
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleImproveTranslations} disabled={editor.improvingTranslations || editor.translatedCount === 0}><Sparkles className="w-4 h-4" /> تحسين الترجمات ✨</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleCheckConsistency} disabled={editor.checkingConsistency || editor.translatedCount === 0}>
                     {editor.checkingConsistency ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />} فحص اتساق المصطلحات 🔍
@@ -1421,6 +1436,9 @@ const Editor = () => {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={editor.handleReviewTranslations} disabled={editor.reviewing || editor.translatedCount === 0}>
                     {editor.reviewing ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />} مراجعة ذكية 🔍
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleSmartReview} disabled={editor.smartReviewing || editor.translatedCount === 0}>
+                    {editor.smartReviewing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Eye className="w-4 h-4" />} مراجعة عميقة بالذكاء 🔬
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleImproveTranslations} disabled={editor.improvingTranslations || editor.translatedCount === 0}>
                     {editor.improvingTranslations ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />} تحسين الترجمات ✨

@@ -133,6 +133,103 @@ ${tooLongEntries.map((e, i) => {
        });
      }
 
+      // --- Handle "smart-review" action (AI deep analysis) ---
+      if (action === 'smart-review') {
+        const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+        if (!LOVABLE_API_KEY) throw new Error('LOVABLE_API_KEY is not configured');
+
+        const translatedEntries = entries.filter(e => e.translation?.trim());
+        if (translatedEntries.length === 0) {
+          return new Response(JSON.stringify({ findings: [] }), {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          });
+        }
+
+        const CHUNK_SIZE = 15;
+        const allFindings: any[] = [];
+
+        for (let c = 0; c < translatedEntries.length; c += CHUNK_SIZE) {
+          const chunk = translatedEntries.slice(c, c + CHUNK_SIZE);
+
+          const prompt = `أنت مدقق لغوي متخصص في ترجمة ألعاب الفيديو (Xenoblade Chronicles 3). حلّل كل ترجمة وأبلغ عن المشاكل التالية فقط:
+
+1. **literal** — ترجمة حرفية جامدة لا تبدو طبيعية بالعربية (مثل "اذهب إلى الأمام" بدل "تقدّم")
+2. **grammar** — خطأ نحوي أو صرفي (تذكير/تأنيث خاطئ، تصريف أفعال، إعراب)
+3. **inconsistency** — مصطلح مترجم بشكل مختلف عن المتوقع حسب سياق اللعبة
+4. **naturalness** — صياغة ركيكة يمكن تحسينها لتبدو أكثر سلاسة
+
+${glossary ? `\nالقاموس المعتمد (التزم به):\n${glossary.slice(0, 3000)}\n` : ''}
+
+النصوص:
+${chunk.map((e, i) => `[${i}] EN: "${e.original}"
+AR: "${e.translation}"`).join('\n\n')}
+
+أخرج JSON array فقط. كل عنصر:
+{"i": رقم_النص, "type": "literal"|"grammar"|"inconsistency"|"naturalness", "issue": "وصف المشكلة بالعربية", "fix": "الترجمة المقترحة"}
+إذا كان النص سليماً لا تضعه في النتائج. أخرج [] إذا لم تجد مشاكل.`;
+
+          const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              model: 'google/gemini-2.5-flash',
+              messages: [
+                { role: 'system', content: 'أنت مدقق لغوي دقيق. أخرج ONLY valid JSON arrays. لا تخرج أي شيء آخر.' },
+                { role: 'user', content: prompt },
+              ],
+              temperature: 0.2,
+            }),
+          });
+
+          if (!response.ok) {
+            if (response.status === 429) {
+              return new Response(JSON.stringify({ error: "تم تجاوز حد الطلبات، حاول لاحقاً" }), {
+                status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+              });
+            }
+            if (response.status === 402) {
+              return new Response(JSON.stringify({ error: "يجب إضافة رصيد لاستخدام الذكاء الاصطناعي" }), {
+                status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+              });
+            }
+            const err = await response.text();
+            console.error('AI gateway error:', err);
+            continue; // skip this chunk
+          }
+
+          const data = await response.json();
+          const content = data.choices?.[0]?.message?.content || '';
+          const jsonMatch = content.match(/\[[\s\S]*\]/);
+          if (!jsonMatch) continue;
+
+          try {
+            const sanitized = jsonMatch[0].replace(/[\x00-\x1F\x7F]/g, ' ');
+            const findings: any[] = JSON.parse(sanitized);
+            for (const f of findings) {
+              if (typeof f.i === 'number' && f.i >= 0 && f.i < chunk.length) {
+                allFindings.push({
+                  key: chunk[f.i].key,
+                  original: chunk[f.i].original,
+                  current: chunk[f.i].translation,
+                  type: f.type || 'naturalness',
+                  issue: f.issue || '',
+                  fix: f.fix || '',
+                });
+              }
+            }
+          } catch (e) {
+            console.error('JSON parse error in smart-review chunk:', e);
+          }
+        }
+
+        return new Response(JSON.stringify({ findings: allFindings }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
       // --- Handle "improve translations" action ---
       if (action === 'improve') {
         const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');

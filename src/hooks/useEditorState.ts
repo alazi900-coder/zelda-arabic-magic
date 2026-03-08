@@ -63,6 +63,8 @@ export function useEditorState() {
   const [lineSyncResults, setLineSyncResults] = useState<import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] | null>(null);
   const [unifiedSplitResults, setUnifiedSplitResults] = useState<import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] | null>(null);
   const [sentenceOrderResults, setSentenceOrderResults] = useState<import("@/components/editor/SentenceOrderPanel").SentenceOrderResult[] | null>(null);
+  const [smartReviewFindings, setSmartReviewFindings] = useState<import("@/components/editor/SmartReviewPanel").SmartReviewFinding[] | null>(null);
+  const [smartReviewing, setSmartReviewing] = useState(false);
   const [pinnedKeys, setPinnedKeys] = useState<Set<string> | null>(null);
   const [isSearchPinned, setIsSearchPinned] = useState(false);
   const [rebalanceNewlines, _setRebalanceNewlines] = useState(() => {
@@ -1117,6 +1119,62 @@ export function useEditorState() {
 
   const fileIO = useEditorFileIO({ state, setState, setLastSaved, filteredEntries, filterLabel });
   const { normalizeArabicPresentationForms } = fileIO;
+
+  // === Smart Review (AI deep analysis) ===
+  const handleSmartReview = async () => {
+    if (!state) return;
+    setSmartReviewing(true);
+    setSmartReviewFindings(null);
+    try {
+      const reviewEntries = filteredEntries
+        .filter(e => { const key = `${e.msbtFile}:${e.index}`; return state.translations[key]?.trim(); })
+        .map(e => ({ key: `${e.msbtFile}:${e.index}`, original: e.original, translation: state.translations[`${e.msbtFile}:${e.index}`], maxBytes: e.maxBytes || 0 }));
+      if (reviewEntries.length === 0) {
+        toast({ title: "لا توجد ترجمات للمراجعة" });
+        return;
+      }
+      setTranslateProgress(`🔬 جاري المراجعة الذكية العميقة (${reviewEntries.length} نص)...`);
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+      const response = await fetch(`${supabaseUrl}/functions/v1/review-translations`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ entries: reviewEntries, glossary: activeGlossary, action: 'smart-review' }),
+      });
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.error || `خطأ ${response.status}`);
+      }
+      const data = await response.json();
+      setSmartReviewFindings(data.findings || []);
+      const count = data.findings?.length || 0;
+      setTranslateProgress(count > 0 ? `🔬 تم العثور على ${count} مشكلة` : `✅ لم يتم العثور على مشاكل!`);
+      setTimeout(() => setTranslateProgress(""), 4000);
+    } catch (err) {
+      toast({ title: "خطأ في المراجعة الذكية", description: err instanceof Error ? err.message : 'غير معروف', variant: "destructive" });
+      setTranslateProgress("");
+    } finally { setSmartReviewing(false); }
+  };
+
+  const handleApplySmartFix = (key: string, fix: string) => {
+    setState(prev => prev ? { ...prev, translations: { ...prev.translations, [key]: fix } } : null);
+    setSmartReviewFindings(prev => prev ? prev.filter(f => f.key !== key) : null);
+  };
+
+  const handleApplyAllSmartFixes = () => {
+    if (!smartReviewFindings || !state) return;
+    const updates: Record<string, string> = {};
+    for (const f of smartReviewFindings) {
+      if (f.fix) updates[f.key] = f.fix;
+    }
+    setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...updates } } : null);
+    setSmartReviewFindings([]);
+    toast({ title: `✅ تم تطبيق ${Object.keys(updates).length} إصلاح` });
+  };
+
+  const handleDismissSmartFinding = (_key: string) => {
+    // Dismissal is handled in the panel via local state
+  };
 
   // === Improve translations ===
   const handleImproveTranslations = async () => {
@@ -2348,6 +2406,7 @@ export function useEditorState() {
     fixingMixed, filtersOpen, buildStats, buildPreview, showBuildConfirm, bdatFileStats,
     checkingConsistency, consistencyResults,
     scanningSentences, sentenceSplitResults, newlineCleanResults, diacriticsCleanResults, duplicateAlefResults, missingAlefResults, mirrorCharsResults, tagBracketFixResults, newlineSplitResults, npcSplitResults, lineSyncResults, unifiedSplitResults, sentenceOrderResults,
+    smartReviewing, smartReviewFindings,
     isSearchPinned, pinnedKeys,
     categoryProgress, qualityStats, needsImproveCount, translatedCount, tagsCount, fuzzyCount, byteOverflowCount, multiLineCount, newlinesCount, npcAffectedCount, lineSyncAffectedCount,
     bdatTableNames, bdatColumnNames, bdatTableCounts, bdatColumnCounts,
@@ -2362,6 +2421,7 @@ export function useEditorState() {
     setArabicNumerals, setMirrorPunctuation, setUserGeminiKey, setTranslationProvider, setMyMemoryEmail, setRebalanceNewlines,
     setReviewResults, setShortSuggestions, setImproveResults, setBuildStats, setShowBuildConfirm,
     setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults, setDiacriticsCleanResults, setDuplicateAlefResults, setMissingAlefResults, setMirrorCharsResults, setTagBracketFixResults, setNewlineSplitResults, setNpcSplitResults, setLineSyncResults, setUnifiedSplitResults, setSentenceOrderResults,
+    setSmartReviewFindings,
 
     // Handlers
     toggleProtection, toggleTechnicalBypass,
@@ -2376,6 +2436,7 @@ export function useEditorState() {
     handleImproveTranslations, handleApplyImprovement, handleApplyAllImprovements,
     handleImproveSingleTranslation,
     handleCheckConsistency, handleApplyConsistencyFix, handleApplyAllConsistencyFixes,
+    handleSmartReview, handleApplySmartFix, handleApplyAllSmartFixes, handleDismissSmartFinding,
     handleAcceptFuzzy, handleRejectFuzzy, handleAcceptAllFuzzy, handleRejectAllFuzzy,
     handleCloudSave, handleCloudLoad,
     handleApplyArabicProcessing, handleUndoArabicProcessing, handlePreBuild, handleBuild, handleBulkReplace, loadDemoBdatData, handleCheckIntegrity, handleRestoreOriginals, handleRemoveAllDiacritics,
