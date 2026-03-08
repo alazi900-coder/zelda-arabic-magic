@@ -1154,6 +1154,7 @@ export function useEditorState() {
     if (!state) return;
     setSmartReviewing(true);
     setSmartReviewFindings(null);
+    toast({ title: "🔬 بدأت المراجعة الذكية", description: "تحليل عميق للترجمات في الخلفية..." });
     try {
       const reviewEntries = filteredEntries
         .filter(e => { const key = `${e.msbtFile}:${e.index}`; return state.translations[key]?.trim(); })
