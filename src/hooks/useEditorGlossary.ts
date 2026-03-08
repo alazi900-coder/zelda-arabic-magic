@@ -36,7 +36,7 @@ export function useEditorGlossary({
 
   const activeGlossary = glossaryEnabled ? (state?.glossary || '') : '';
 
-  // === Parse glossary into lookup map ===
+  // === Parse glossary into lookup map (with dedup, last-wins) ===
   const parseGlossaryMap = useCallback((glossaryText: string): Map<string, string> => {
     const map = new Map<string, string>();
     if (!glossaryText?.trim()) return map;
@@ -46,8 +46,12 @@ export function useEditorGlossary({
       const eqIdx = trimmed.indexOf('=');
       if (eqIdx < 1) continue;
       const eng = trimmed.slice(0, eqIdx).trim().toLowerCase();
-      const arb = trimmed.slice(eqIdx + 1).trim();
-      if (eng && arb) map.set(eng, arb);
+      const arb = trimmed.slice(eqIdx + 1).trimEnd();
+      // Skip invalid entries: empty values, single chars, pure symbols
+      if (!eng || !arb) continue;
+      if (/^[#%+=\-.\\/;:*&^$@!]+$/.test(eng)) continue;
+      if (/^[#%+=\-.\\/;:*&^$@!]+$/.test(arb)) continue;
+      map.set(eng, arb);
     }
     return map;
   }, []);
