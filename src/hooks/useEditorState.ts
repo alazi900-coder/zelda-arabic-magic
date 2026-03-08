@@ -63,8 +63,15 @@ export function useEditorState() {
   const [lineSyncResults, setLineSyncResults] = useState<import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] | null>(null);
   const [unifiedSplitResults, setUnifiedSplitResults] = useState<import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] | null>(null);
   const [sentenceOrderResults, setSentenceOrderResults] = useState<import("@/components/editor/SentenceOrderPanel").SentenceOrderResult[] | null>(null);
-  const [smartReviewFindings, setSmartReviewFindings] = useState<import("@/components/editor/SmartReviewPanel").SmartReviewFinding[] | null>(null);
-  const [smartReviewing, setSmartReviewing] = useState(false);
+   const [smartReviewFindings, setSmartReviewFindings] = useState<import("@/components/editor/SmartReviewPanel").SmartReviewFinding[] | null>(null);
+   const [smartReviewing, setSmartReviewing] = useState(false);
+   const [autoSmartReview, _setAutoSmartReview] = useState(() => {
+     try { return localStorage.getItem('autoSmartReview') === 'true'; } catch { return false; }
+   });
+   const setAutoSmartReview = useCallback((v: boolean) => {
+     _setAutoSmartReview(v);
+     try { localStorage.setItem('autoSmartReview', String(v)); } catch {}
+   }, []);
   const [pinnedKeys, setPinnedKeys] = useState<Set<string> | null>(null);
   const [isSearchPinned, setIsSearchPinned] = useState(false);
   const [rebalanceNewlines, _setRebalanceNewlines] = useState(() => {
@@ -806,7 +813,18 @@ export function useEditorState() {
     state, setState, setLastSaved, setTranslateProgress, setPreviousTranslations, updateTranslation,
     filterCategory, activeGlossary, parseGlossaryMap, paginatedEntries, filteredEntries, totalPages, setCurrentPage, userGeminiKey, translationProvider, myMemoryEmail, addMyMemoryChars, addAiRequest, rebalanceNewlines, npcMaxLines, npcMode, npcSplitCharLimit,
   });
-  const { translating, translatingSingle, tmStats, glossarySessionStats, handleTranslateSingle, handleAutoTranslate, handleTranslatePage, handleTranslateAllPages, handleTranslateFromGlossaryOnly, handleStopTranslate, handleRetranslatePage, handleFixDamagedTags, pendingPageTranslations, oldPageTranslations, pageTranslationOriginals, showPageCompare, applyPendingTranslations, discardPendingTranslations } = translation;
+  const { translating, translatingSingle, tmStats, glossarySessionStats, handleTranslateSingle, handleAutoTranslate, handleTranslatePage, handleTranslateAllPages, handleTranslateFromGlossaryOnly, handleStopTranslate, handleRetranslatePage, handleFixDamagedTags, pendingPageTranslations, oldPageTranslations, pageTranslationOriginals, showPageCompare, applyPendingTranslations: _applyPendingRaw, discardPendingTranslations } = translation;
+
+  const handleSmartReviewRef = useRef<(() => void) | null>(null);
+  // Wrap applyPendingTranslations to auto-trigger smart review
+  const applyPendingTranslations = useCallback((selectedKeys?: Set<string>) => {
+    _applyPendingRaw(selectedKeys);
+    if (autoSmartReview) {
+      setTimeout(() => {
+        handleSmartReviewRef.current?.();
+      }, 500);
+    }
+  }, [_applyPendingRaw, autoSmartReview]);
 
   // === Local (offline) fix for damaged tags — no AI needed ===
   const handleLocalFixDamagedTag = useCallback((entry: ExtractedEntry) => {
@@ -1155,6 +1173,7 @@ export function useEditorState() {
       setTranslateProgress("");
     } finally { setSmartReviewing(false); }
   };
+  handleSmartReviewRef.current = handleSmartReview;
 
   const handleApplySmartFix = (key: string, fix: string) => {
     setState(prev => prev ? { ...prev, translations: { ...prev.translations, [key]: fix } } : null);
@@ -1330,7 +1349,6 @@ export function useEditorState() {
     } catch (err) { setCloudStatus(`❌ ${err instanceof Error ? err.message : 'خطأ في التحميل'}`); }
     finally { setCloudSyncing(false); setTimeout(() => setCloudStatus(""), 4000); }
   };
-
 
   const loadDemoBdatData = useCallback(() => {
     const tableData: { table: string; cols: string[]; rows: number; texts: Record<string, string[]> }[] = [
@@ -2422,6 +2440,7 @@ export function useEditorState() {
     setReviewResults, setShortSuggestions, setImproveResults, setBuildStats, setShowBuildConfirm,
     setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults, setDiacriticsCleanResults, setDuplicateAlefResults, setMissingAlefResults, setMirrorCharsResults, setTagBracketFixResults, setNewlineSplitResults, setNpcSplitResults, setLineSyncResults, setUnifiedSplitResults, setSentenceOrderResults,
     setSmartReviewFindings,
+    autoSmartReview, setAutoSmartReview,
 
     // Handlers
     toggleProtection, toggleTechnicalBypass,
