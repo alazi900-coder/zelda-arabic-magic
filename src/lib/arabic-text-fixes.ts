@@ -19,11 +19,13 @@ function unshieldTags(text: string, tags: string[]): string {
   return text.replace(/\uE800(\d+)\uE801/g, (_, i) => tags[parseInt(i)] || '');
 }
 
+// Arabic char class (no word boundary — \b doesn't work with Arabic in JS)
+const AR = '[\u0600-\u064A\u066E-\u06FF\u0671-\u06D3]';
+
 // ============================================================
 // 1. Taa Marbuta (ة) vs Haa (ه) fix
 // ============================================================
 
-// Common words that end with ة (not ه)
 const TAA_MARBUTA_WORDS = new Set([
   'لعبة', 'مرة', 'قوة', 'مهمة', 'منطقة', 'قطعة', 'شخصية', 'قصة', 'معركة', 'مغامرة',
   'رحلة', 'جزيرة', 'قرية', 'مدينة', 'قلعة', 'غرفة', 'ساحة', 'طريقة', 'حالة', 'نتيجة',
@@ -31,36 +33,36 @@ const TAA_MARBUTA_WORDS = new Set([
   'حركة', 'ضربة', 'هجمة', 'دورة', 'جولة', 'محطة', 'نقطة', 'خطوة', 'كلمة', 'جملة',
   'قدرة', 'مهارة', 'سرعة', 'قفزة', 'لحظة', 'فترة', 'مرحلة', 'بداية', 'نهاية', 'عودة',
   'أداة', 'تجربة', 'ميزة', 'عملية', 'حماية', 'طاقة', 'شجرة', 'صخرة', 'بحيرة', 'كهفة',
-  'مساحة', 'مسافة', 'سلسلة', 'حلقة', 'وحدة', 'مجموعة', 'قطعة', 'درجة', 'مرتبة', 'رتبة',
+  'مساحة', 'مسافة', 'سلسلة', 'حلقة', 'وحدة', 'مجموعة', 'درجة', 'مرتبة', 'رتبة',
   'عائلة', 'ذكرى', 'ثروة', 'جائزة', 'شارة', 'علامة', 'إشارة', 'خزانة', 'حقيبة', 'زجاجة',
   'بوابة', 'نافذة', 'شاشة', 'واجهة', 'لوحة', 'خلفية', 'أمامية', 'جانبية', 'سفلية', 'علوية',
   'ترجمة', 'لغة', 'كتابة', 'قراءة', 'محادثة', 'عبارة', 'حوارية',
 ]);
 
-// Patterns: word ending with ه that should be ة
-// We check if removing the final ه and adding ة gives a known word
 export function fixTaaMarbutaHaa(text: string): { fixed: string; changes: number } {
   const { shielded, tags } = shieldTags(text);
   let changes = 0;
   
-  // Match Arabic words ending with ه
-  const fixed = shielded.replace(/(\b[\u0600-\u064A\u066E-\u06FF]+)(ه)(\s|$|[^\u0600-\u06FF])/g, (match, stem, haa, after) => {
-    const withTaa = stem + 'ة';
-    if (TAA_MARBUTA_WORDS.has(withTaa)) {
-      changes++;
-      return withTaa + after;
+  // Split into words, check each word ending with ه
+  const words = shielded.split(/(\s+|[^\u0600-\u06FF\uE800\uE801\d]+)/);
+  const fixedParts = words.map(word => {
+    if (word.endsWith('ه') && word.length >= 2) {
+      const withTaa = word.slice(0, -1) + 'ة';
+      if (TAA_MARBUTA_WORDS.has(withTaa)) {
+        changes++;
+        return withTaa;
+      }
     }
-    return match;
+    return word;
   });
   
-  return { fixed: unshieldTags(fixed, tags), changes };
+  return { fixed: unshieldTags(fixedParts.join(''), tags), changes };
 }
 
 // ============================================================
 // 2. Yaa (ي) vs Alef Maqsura (ى) fix
 // ============================================================
 
-// Common words/prepositions that end with ى (not ي)
 const ALEF_MAQSURA_WORDS = new Set([
   'على', 'إلى', 'حتى', 'متى', 'أنى', 'لدى', 'سوى', 'مدى', 'هدى', 'ندى',
   'رؤى', 'قرى', 'ذكرى', 'أخرى', 'كبرى', 'صغرى', 'إحدى', 'منتهى', 'مستوى', 'مغزى',
@@ -68,35 +70,25 @@ const ALEF_MAQSURA_WORDS = new Set([
   'مصطفى', 'مرتضى', 'أدنى', 'أعلى', 'أقصى', 'أدفى', 'أولى',
 ]);
 
-// Words that end with ي (not ى) - adjectives/nisba
-const YAA_WORDS_SUFFIXES = ['ي', 'تي', 'ني', 'لي', 'بي', 'في', 'كي'];
-
 export function fixYaaAlefMaqsura(text: string): { fixed: string; changes: number } {
   const { shielded, tags } = shieldTags(text);
   let changes = 0;
   
-  const fixed = shielded.replace(/(\b[\u0600-\u064A\u066E-\u06FF]+)(ي|ى)(\s|$|[^\u0600-\u06FF])/g, (match, stem, lastChar, after) => {
+  const regex = new RegExp(`(^|[^\\u0600-\\u06FF])(${AR}*)(ي|ى)($|[^\\u0600-\\u06FF])`, 'g');
+  const fixed = shielded.replace(regex, (match, before, stem, lastChar, after) => {
     const fullWord = stem + lastChar;
     
-    // If ends with ي but known to end with ى
-    if (lastChar === 'ي') {
-      const withAlefMaqsura = stem + 'ى';
-      if (ALEF_MAQSURA_WORDS.has(withAlefMaqsura)) {
-        changes++;
-        return withAlefMaqsura + after;
-      }
+    // ي that should be ى
+    if (lastChar === 'ي' && ALEF_MAQSURA_WORDS.has(stem + 'ى')) {
+      changes++;
+      return before + stem + 'ى' + after;
     }
     
-    // If ends with ى but known to end with ي
+    // ى that should be ي — common mistakes
     if (lastChar === 'ى') {
-      const withYaa = stem + 'ي';
-      if (ALEF_MAQSURA_WORDS.has(fullWord)) {
-        return match; // Correct as is
-      }
-      // Check common ى→ي patterns: preposition "في" written as "فى"
       if (fullWord === 'فى' || fullWord === 'الذى' || fullWord === 'التى') {
         changes++;
-        return withYaa + after;
+        return before + stem + 'ي' + after;
       }
     }
     
@@ -114,12 +106,30 @@ export function fixRepeatedWords(text: string): { fixed: string; changes: number
   const { shielded, tags } = shieldTags(text);
   let changes = 0;
   
-  // Match consecutive duplicate words (Arabic or English, 2+ chars)
-  const fixed = shielded.replace(/\b([\u0600-\u06FF\w]{2,})\s+\1\b/g, (match, word) => {
-    changes++;
-    return word;
-  });
+  // Split by whitespace, remove consecutive duplicates
+  const words = shielded.split(/(\s+)/);
+  const result: string[] = [];
+  let lastWord = '';
   
+  for (const token of words) {
+    if (/^\s+$/.test(token)) {
+      result.push(token);
+      continue;
+    }
+    // Only skip if the word is 2+ chars and matches the previous word exactly
+    if (token.length >= 2 && token === lastWord) {
+      // Remove the preceding whitespace too
+      if (result.length > 0 && /^\s+$/.test(result[result.length - 1])) {
+        result.pop();
+      }
+      changes++;
+      continue;
+    }
+    result.push(token);
+    lastWord = token;
+  }
+  
+  const fixed = result.join('');
   return { fixed: unshieldTags(fixed, tags), changes };
 }
 
@@ -187,46 +197,52 @@ export function scanAllTextFixes(translations: Record<string, string>): TextFixR
   for (const [key, value] of Object.entries(translations)) {
     if (!value?.trim()) continue;
     
-    // 1. Taa/Haa
-    const taaResult = fixTaaMarbutaHaa(value);
-    if (taaResult.changes > 0) {
+    // Apply fixes sequentially so they chain correctly
+    let current = value;
+    
+    // 1. AI artifacts first (may change text structure)
+    const aiResult = cleanAIArtifacts(current);
+    if (aiResult.changes > 0) {
       results.push({
-        key, before: value, after: taaResult.fixed,
-        fixType: 'taa-haa', fixLabel: 'تاء/هاء',
-        details: `${taaResult.changes} إصلاح (ه→ة)`,
+        key, before: current, after: aiResult.fixed,
+        fixType: 'ai-artifact', fixLabel: 'مخلفات AI',
+        details: aiResult.removedLabels.join('، '),
         status: 'pending',
       });
+      current = aiResult.fixed;
     }
     
-    // 2. Yaa/Alef Maqsura
-    const yaaResult = fixYaaAlefMaqsura(value);
-    if (yaaResult.changes > 0) {
-      results.push({
-        key, before: value, after: yaaResult.fixed,
-        fixType: 'yaa-alef', fixLabel: 'ياء/ألف مقصورة',
-        details: `${yaaResult.changes} إصلاح (ي↔ى)`,
-        status: 'pending',
-      });
-    }
-    
-    // 3. Repeated words
-    const repResult = fixRepeatedWords(value);
+    // 2. Repeated words
+    const repResult = fixRepeatedWords(current);
     if (repResult.changes > 0) {
       results.push({
-        key, before: value, after: repResult.fixed,
+        key, before: current, after: repResult.fixed,
         fixType: 'repeated', fixLabel: 'كلمات مكررة',
         details: `${repResult.changes} تكرار`,
         status: 'pending',
       });
+      current = repResult.fixed;
     }
     
-    // 4. AI artifacts
-    const aiResult = cleanAIArtifacts(value);
-    if (aiResult.changes > 0) {
+    // 3. Taa/Haa
+    const taaResult = fixTaaMarbutaHaa(current);
+    if (taaResult.changes > 0) {
       results.push({
-        key, before: value, after: aiResult.fixed,
-        fixType: 'ai-artifact', fixLabel: 'مخلفات AI',
-        details: aiResult.removedLabels.join('، '),
+        key, before: current, after: taaResult.fixed,
+        fixType: 'taa-haa', fixLabel: 'تاء/هاء',
+        details: `${taaResult.changes} إصلاح (ه→ة)`,
+        status: 'pending',
+      });
+      current = taaResult.fixed;
+    }
+    
+    // 4. Yaa/Alef Maqsura
+    const yaaResult = fixYaaAlefMaqsura(current);
+    if (yaaResult.changes > 0) {
+      results.push({
+        key, before: current, after: yaaResult.fixed,
+        fixType: 'yaa-alef', fixLabel: 'ياء/ألف مقصورة',
+        details: `${yaaResult.changes} إصلاح (ي↔ى)`,
         status: 'pending',
       });
     }
