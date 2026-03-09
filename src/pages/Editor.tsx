@@ -112,7 +112,7 @@ const Editor = () => {
     setQuickReviewMode: editor.setQuickReviewMode,
     quickReviewIndex: editor.quickReviewIndex,
     setQuickReviewIndex: editor.setQuickReviewIndex,
-    filteredCount: editor.filteredCount,
+    filteredCount: editor.filteredEntries.length,
     hasState: !!editor.state,
   });
 
