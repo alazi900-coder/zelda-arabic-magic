@@ -2012,6 +2012,18 @@ const Editor = () => {
             diffs={editor.pendingMerge.diffs}
           />
         )}
+
+        {/* Tool Help Dialog */}
+        <ToolHelpDialog
+          tool={showToolHelp}
+          onClose={() => {
+            const toolToRun = showToolHelp;
+            setShowToolHelp(null);
+            if (toolToRun) {
+              editor.handleAdvancedAnalysis(toolToRun);
+            }
+          }}
+        />
       </div>
     </TooltipProvider>
   );
