@@ -283,6 +283,76 @@ export function useEditorTranslation({
     setGlossarySessionStats({ directMatches: 0, lockedTerms: 0, contextTerms: 0, batchesCompleted: 0, totalBatches, textsTranslated: 0, freeTranslations: freeCount });
     abortControllerRef.current = new AbortController();
 
+    // Helper: fetch a batch with auto-split retry on 500 errors
+    const fetchBatchWithRetry = async (
+      batchEntries: { key: string; original: string }[],
+      signal: AbortSignal,
+      depth = 0,
+    ): Promise<{ translations: Record<string, string>; charsUsed?: number; glossaryStats?: any }> => {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+      try {
+        const response = await fetch(`${supabaseUrl}/functions/v1/translate-entries`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
+          signal,
+          body: JSON.stringify({ entries: batchEntries, glossary: activeGlossary, userApiKey: userGeminiKey || undefined, provider: translationProvider, myMemoryEmail: myMemoryEmail || undefined, rebalanceNewlines: rebalanceNewlines || undefined, npcMaxLines, aiModel }),
+        });
+        if (response.status === 429) {
+          // Rate limit: wait and retry once
+          await new Promise(r => setTimeout(r, 3000));
+          const retry = await fetch(`${supabaseUrl}/functions/v1/translate-entries`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
+            signal,
+            body: JSON.stringify({ entries: batchEntries, glossary: activeGlossary, userApiKey: userGeminiKey || undefined, provider: translationProvider, myMemoryEmail: myMemoryEmail || undefined, rebalanceNewlines: rebalanceNewlines || undefined, npcMaxLines, aiModel }),
+          });
+          if (!retry.ok) throw new Error(`خطأ ${retry.status}`);
+          return await retry.json();
+        }
+        if (response.status >= 500 && batchEntries.length > 1 && depth < 3) {
+          // Auto-split: divide batch in half and retry each sub-batch
+          console.warn(`[auto-split] Batch of ${batchEntries.length} failed (${response.status}), splitting into halves (depth ${depth + 1})`);
+          const mid = Math.ceil(batchEntries.length / 2);
+          const [r1, r2] = await Promise.all([
+            fetchBatchWithRetry(batchEntries.slice(0, mid), signal, depth + 1),
+            fetchBatchWithRetry(batchEntries.slice(mid), signal, depth + 1),
+          ]);
+          return {
+            translations: { ...r1.translations, ...r2.translations },
+            charsUsed: (r1.charsUsed || 0) + (r2.charsUsed || 0),
+            glossaryStats: {
+              directMatches: (r1.glossaryStats?.directMatches || 0) + (r2.glossaryStats?.directMatches || 0),
+              lockedTerms: (r1.glossaryStats?.lockedTerms || 0) + (r2.glossaryStats?.lockedTerms || 0),
+              contextTerms: (r1.glossaryStats?.contextTerms || 0) + (r2.glossaryStats?.contextTerms || 0),
+            },
+          };
+        }
+        if (!response.ok) throw new Error(`خطأ ${response.status}`);
+        return await response.json();
+      } catch (err) {
+        if ((err as Error).name === 'AbortError') throw err;
+        // Single-entry batch can't be split further
+        if (batchEntries.length <= 1 || depth >= 3) throw err;
+        // Try splitting on any error
+        console.warn(`[auto-split] Batch error, splitting (depth ${depth + 1}):`, (err as Error).message);
+        const mid = Math.ceil(batchEntries.length / 2);
+        const [r1, r2] = await Promise.all([
+          fetchBatchWithRetry(batchEntries.slice(0, mid), signal, depth + 1),
+          fetchBatchWithRetry(batchEntries.slice(mid), signal, depth + 1),
+        ]);
+        return {
+          translations: { ...r1.translations, ...r2.translations },
+          charsUsed: (r1.charsUsed || 0) + (r2.charsUsed || 0),
+          glossaryStats: {
+            directMatches: (r1.glossaryStats?.directMatches || 0) + (r2.glossaryStats?.directMatches || 0),
+            lockedTerms: (r1.glossaryStats?.lockedTerms || 0) + (r2.glossaryStats?.lockedTerms || 0),
+            contextTerms: (r1.glossaryStats?.contextTerms || 0) + (r2.glossaryStats?.contextTerms || 0),
+          },
+        };
+      }
+    };
+
     try {
       for (let b = 0; b < totalBatches; b++) {
         if (abortControllerRef.current.signal.aborted) {
@@ -293,21 +363,12 @@ export function useEditorTranslation({
         const batch = needsAI.slice(b * AI_BATCH_SIZE, (b + 1) * AI_BATCH_SIZE);
         setTranslateProgress(`🔄 ترجمة الدفعة ${b + 1}/${totalBatches} (${batch.length} نص)...`);
 
-        // Send original text directly — server handles tag protection
         const entries = batch.map(e => ({
           key: `${e.msbtFile}:${e.index}`,
           original: e.original,
         }));
-        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-        const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-        const response = await fetch(`${supabaseUrl}/functions/v1/translate-entries`, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
-          signal: abortControllerRef.current.signal,
-           body: JSON.stringify({ entries, glossary: activeGlossary, userApiKey: userGeminiKey || undefined, provider: translationProvider, myMemoryEmail: myMemoryEmail || undefined, rebalanceNewlines: rebalanceNewlines || undefined, npcMaxLines, aiModel }),
-        });
-        if (!response.ok) throw new Error(`خطأ ${response.status}`);
-        const data = await response.json();
+        
+        const data = await fetchBatchWithRetry(entries, abortControllerRef.current.signal);
         addAiRequest(1);
         if (data.charsUsed) addMyMemoryChars(data.charsUsed);
         // Accumulate glossary stats
