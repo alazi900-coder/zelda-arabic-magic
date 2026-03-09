@@ -69,6 +69,8 @@ export function useEditorState() {
     const [smartReviewing, setSmartReviewing] = useState(false);
     const [glossaryComplianceResults, setGlossaryComplianceResults] = useState<import("@/components/editor/GlossaryCompliancePanel").GlossaryViolation[] | null>(null);
     const [checkingGlossaryCompliance, setCheckingGlossaryCompliance] = useState(false);
+    const [enhanceResults, setEnhanceResults] = useState<import("@/components/editor/TranslationEnhancePanel").EnhanceResult[] | null>(null);
+    const [enhancingTranslations, setEnhancingTranslations] = useState(false);
    const [autoSmartReview, _setAutoSmartReview] = useState(() => {
      try { return localStorage.getItem('autoSmartReview') === 'true'; } catch { return false; }
    });
