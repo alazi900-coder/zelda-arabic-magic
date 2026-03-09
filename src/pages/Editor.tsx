@@ -83,6 +83,7 @@ import ToolHelpDialog, { ToolType } from "@/components/editor/ToolHelpDialog";
 import TranslationProgressDashboard from "@/components/editor/TranslationProgressDashboard";
 import ConsistencyCheckPanel from "@/components/editor/ConsistencyCheckPanel";
 import { useEditorKeyboard } from "@/hooks/useEditorKeyboard";
+import VirtualizedEntryList from "@/components/editor/VirtualizedEntryList";
 
 const Editor = () => {
   const editor = useEditorState();
