@@ -80,6 +80,7 @@ import GlossaryTranslationPreview from "@/components/editor/GlossaryTranslationP
 import TranslationEnhancePanel from "@/components/editor/TranslationEnhancePanel";
 import AdvancedTranslationPanel from "@/components/editor/AdvancedTranslationPanel";
 import ToolHelpDialog, { ToolType } from "@/components/editor/ToolHelpDialog";
+import { useEditorKeyboard } from "@/hooks/useEditorKeyboard";
 
 const Editor = () => {
   const editor = useEditorState();
@@ -99,6 +100,21 @@ const Editor = () => {
   const [showToolHelp, setShowToolHelp] = React.useState<ToolType>(null);
   const gameType = "xenoblade";
   const processPath = "/process";
+
+  // Keyboard shortcuts
+  useEditorKeyboard({
+    currentPage: editor.currentPage,
+    totalPages: editor.totalPages,
+    setCurrentPage: editor.setCurrentPage,
+    showFindReplace: editor.showFindReplace,
+    setShowFindReplace: editor.setShowFindReplace,
+    quickReviewMode: editor.quickReviewMode,
+    setQuickReviewMode: editor.setQuickReviewMode,
+    quickReviewIndex: editor.quickReviewIndex,
+    setQuickReviewIndex: editor.setQuickReviewIndex,
+    filteredCount: editor.filteredEntries.length,
+    hasState: !!editor.state,
+  });
 
   // Prevent accidental navigation when page is locked (back button + tab close)
   React.useEffect(() => {
