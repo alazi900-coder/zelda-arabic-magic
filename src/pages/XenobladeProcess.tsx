@@ -416,8 +416,8 @@ const XenobladeProcess = () => {
         // Build legacy-to-new key mapping for old sequential keys
         const entriesByFile: Record<string, typeof allEntries> = {};
         for (const entry of allEntries) {
-          const parts = (entry as any).msbtFile.split(':');
-          const filename = parts.length >= 2 ? parts[1] : (entry as any).msbtFile;
+          const parts = entry.msbtFile.split(':');
+          const filename = parts.length >= 2 ? parts[1] : entry.msbtFile;
           if (!entriesByFile[filename]) entriesByFile[filename] = [];
           entriesByFile[filename].push(entry);
         }
