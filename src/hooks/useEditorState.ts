@@ -2719,6 +2719,7 @@ export function useEditorState() {
     checkingConsistency, consistencyResults,
     scanningSentences, sentenceSplitResults, newlineCleanResults, diacriticsCleanResults, duplicateAlefResults, missingAlefResults, mirrorCharsResults, tagBracketFixResults, newlineSplitResults, npcSplitResults, lineSyncResults, unifiedSplitResults, sentenceOrderResults, arabicTextFixResults,
     smartReviewing, smartReviewFindings,
+    enhanceResults, enhancingTranslations,
     glossaryComplianceResults, checkingGlossaryCompliance,
     isSearchPinned, pinnedKeys,
     categoryProgress, qualityStats, needsImproveCount, translatedCount, tagsCount, fuzzyCount, byteOverflowCount, multiLineCount, newlinesCount, npcAffectedCount, lineSyncAffectedCount,
