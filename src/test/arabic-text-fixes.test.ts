@@ -204,13 +204,15 @@ describe('Arabic Text Fixes', () => {
         'k3': 'الذهاب الذهاب',
         'k4': 'بالتأكيد! مرحبا',
         'k5': 'نص سليم تماماً',
+        'k6': 'هذا ل يمكن',
       });
       
-      expect(results.length).toBeGreaterThanOrEqual(4);
+      expect(results.length).toBeGreaterThanOrEqual(5);
       expect(results.find(r => r.fixType === 'taa-haa')).toBeTruthy();
       expect(results.find(r => r.fixType === 'yaa-alef')).toBeTruthy();
       expect(results.find(r => r.fixType === 'repeated')).toBeTruthy();
       expect(results.find(r => r.fixType === 'ai-artifact')).toBeTruthy();
+      expect(results.find(r => r.fixType === 'lonely-lam')).toBeTruthy();
       // k5 should produce no results
       expect(results.filter(r => r.key === 'k5')).toHaveLength(0);
     });
