@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { AlertTriangle, Check, GitCompareArrows, ChevronDown, ChevronRight, Pencil, X } from "lucide-react";
+import { AlertTriangle, Check, GitCompareArrows, ChevronDown, ChevronRight, Pencil, X, Copy } from "lucide-react";
 import type { EditorState } from "./types";
 import { detectInconsistencies } from "./TranslationProgressDashboard";
 
