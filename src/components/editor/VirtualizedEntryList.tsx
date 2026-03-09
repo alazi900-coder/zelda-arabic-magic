@@ -126,7 +126,7 @@ const VirtualizedEntryList = React.memo(({
   }, [entries, state, qualityStats, activeGlossary, isMobile, translatingSingle, improvingTranslations, previousTranslations, isTranslationTooShort, isTranslationTooLong, hasStuckChars, isMixedLanguage, updateTranslation, handleTranslateSingle, handleImproveSingleTranslation, handleUndoTranslation, handleFixReversed, handleLocalFixDamagedTag, onAcceptFuzzy, onRejectFuzzy, onCompare, onSplitNewline, findSimilar, setRowHeight]);
 
   return (
-    <List
+    <VList
       ref={listRef}
       height={height}
       itemCount={entries.length}
@@ -136,7 +136,7 @@ const VirtualizedEntryList = React.memo(({
       overscanCount={3}
     >
       {Row}
-    </List>
+    </VList>
   );
 });
 
