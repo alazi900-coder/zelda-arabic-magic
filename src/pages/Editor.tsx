@@ -61,7 +61,9 @@ import SentenceOrderPanel from "@/components/editor/SentenceOrderPanel";
 import ArabicTextFixPanel from "@/components/editor/ArabicTextFixPanel";
 import ExportEnglishDialog from "@/components/editor/ExportEnglishDialog";
 import GlossaryStatsPanel from "@/components/editor/GlossaryStatsPanel";
+import GlossaryCategoryFilter from "@/components/editor/GlossaryCategoryFilter";
 import GlossaryDuplicatesPanel from "@/components/editor/GlossaryDuplicatesPanel";
+import TranslationAIEnhancePanel from "@/components/editor/TranslationAIEnhancePanel";
 import TranslationStatsPanel from "@/components/editor/TranslationStatsPanel";
 import ImportConflictDialog from "@/components/editor/ImportConflictDialog";
 import TagRepairPanel from "@/components/editor/TagRepairPanel";
@@ -799,6 +801,14 @@ const Editor = () => {
             onApplyTranslation={(key, val) => editor.updateTranslation(key, val)}
           />
 
+          {/* AI Translation Enhancement */}
+          <TranslationAIEnhancePanel
+            entries={editor.state?.entries || []}
+            translations={editor.state?.translations || {}}
+            onApplySuggestion={(key, newText) => editor.updateTranslation(key, newText)}
+            glossary={editor.activeGlossary}
+          />
+
           {/* Review Results */}
           <ReviewPanel
             reviewResults={editor.reviewResults}
@@ -1288,6 +1298,10 @@ const Editor = () => {
                   />
                 )}
                 <GlossaryStatsPanel glossaryText={editor.activeGlossary} />
+                <GlossaryCategoryFilter 
+                  glossaryText={editor.activeGlossary} 
+                  onCopyFiltered={(text) => navigator.clipboard.writeText(text)}
+                />
               </div>
             );
           })()}
