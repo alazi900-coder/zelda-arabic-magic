@@ -1418,6 +1418,15 @@ const Editor = () => {
                     {editor.autoSmartReview ? <CheckCircle2 className="w-4 h-4 text-green-500" /> : <Eye className="w-4 h-4 opacity-40" />} مراجعة تلقائية بعد الترجمة
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleImproveTranslations} disabled={editor.improvingTranslations || editor.translatedCount === 0}><Sparkles className="w-4 h-4" /> تحسين الترجمات ✨</DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleAutoCorrect} disabled={editor.smartReviewing || editor.translatedCount === 0}>
+                    {editor.smartReviewing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Type className="w-4 h-4" />} تصحيح إملائي تلقائي ✏️
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleDetectWeak} disabled={editor.detectingWeak || editor.translatedCount === 0}>
+                    {editor.detectingWeak ? <Loader2 className="w-4 h-4 animate-spin" /> : <AlertTriangle className="w-4 h-4" />} كشف الترجمات الركيكة 🔍
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleContextRetranslate} disabled={editor.smartReviewing || editor.translatedCount === 0}>
+                    {editor.smartReviewing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Languages className="w-4 h-4" />} إعادة ترجمة بالسياق 🎯
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleCheckConsistency} disabled={editor.checkingConsistency || editor.translatedCount === 0}>
                     {editor.checkingConsistency ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />} فحص اتساق المصطلحات
                   </DropdownMenuItem>
