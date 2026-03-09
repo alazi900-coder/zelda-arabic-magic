@@ -1165,6 +1165,14 @@ const Editor = () => {
                     </Button>
                   </div>
                 )}
+                {editor.glossaryDuplicates?.length > 0 && (
+                  <GlossaryDuplicatesPanel
+                    duplicates={editor.glossaryDuplicates}
+                    onFix={editor.handleFixGlossaryDuplicate}
+                    onFixAll={editor.handleFixAllGlossaryDuplicates}
+                    onClose={editor.handleCloseGlossaryDuplicates}
+                  />
+                )}
                 <GlossaryStatsPanel glossaryText={editor.activeGlossary} />
               </div>
             );
