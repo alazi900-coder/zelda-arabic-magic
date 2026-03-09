@@ -952,7 +952,25 @@ const Editor = () => {
             />
           )}
 
-          {/* Tag Repair Panel */}
+          {/* Advanced Translation Analysis Panel */}
+          {(editor.literalResults || editor.styleResults || editor.consistencyCheckResult || editor.alternativeResults || editor.fullAnalysisResults) && (
+            <AdvancedTranslationPanel
+              activeTab={editor.advancedAnalysisTab}
+              literalResults={editor.literalResults}
+              styleResults={editor.styleResults}
+              consistencyResult={editor.consistencyCheckResult}
+              alternativeResults={editor.alternativeResults}
+              fullResults={editor.fullAnalysisResults}
+              analyzing={editor.advancedAnalyzing}
+              onApply={editor.handleApplyAdvancedSuggestion}
+              onApplyAll={editor.handleApplyAllAdvanced}
+              onClose={editor.handleCloseAdvancedPanel}
+              onTabChange={(tab) => editor.setAdvancedAnalysisTab(tab)}
+              onSaveToMemory={editor.saveToEnhancedMemory}
+            />
+          )}
+
+
           {showTagRepair && editor.state && (
             <TagRepairPanel
               entries={editor.state.entries}
