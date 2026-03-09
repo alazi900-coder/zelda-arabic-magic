@@ -540,7 +540,7 @@ const XenobladeProcess = () => {
         let restoredByDecoding = 0;
 
         for (let i = 0; i < allEntries.length; i++) {
-          const entry = allEntries[i] as any;
+          const entry = allEntries[i];
           if (!hasArabicPresentationForms(entry.original)) continue;
 
           const key = `${entry.msbtFile}:${entry.index}`;
