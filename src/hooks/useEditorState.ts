@@ -80,6 +80,7 @@ export function useEditorState() {
     const [alternativeResults, setAlternativeResults] = useState<import("@/components/editor/AdvancedTranslationPanel").AlternativeResult[] | null>(null);
     const [fullAnalysisResults, setFullAnalysisResults] = useState<import("@/components/editor/AdvancedTranslationPanel").FullAnalysisResult[] | null>(null);
     const [advancedAnalyzing, setAdvancedAnalyzing] = useState(false);
+    const advancedAnalysisCancelRef = useRef(false);
     
     // Translation Memory for improvements
     const [enhancedMemory, setEnhancedMemory] = useState<Record<string, { original: string; translation: string }>>(() => {
@@ -1350,6 +1351,7 @@ export function useEditorState() {
     if (!state) return;
     setAdvancedAnalyzing(true);
     setAdvancedAnalysisTab(action);
+    advancedAnalysisCancelRef.current = false;
     
     // Clear previous results
     setLiteralResults(null);
@@ -1410,12 +1412,19 @@ export function useEditorState() {
       
       // Process in batches
       for (let batchIdx = 0; batchIdx < totalBatches; batchIdx++) {
+        // Check for cancellation
+        if (advancedAnalysisCancelRef.current) {
+          setTranslateProgress(`⏹️ تم إيقاف التحليل بعد ${batchIdx} دفعات`);
+          setTimeout(() => setTranslateProgress(""), 4000);
+          break;
+        }
+        
         const start = batchIdx * ADVANCED_BATCH_SIZE;
         const end = Math.min(start + ADVANCED_BATCH_SIZE, totalEntries);
         const batchEntries = allTranslatedEntries.slice(start, end);
         
         const progress = Math.round(((batchIdx + 1) / totalBatches) * 100);
-        setTranslateProgress(`${actionLabels[action]} — دفعة ${batchIdx + 1}/${totalBatches} (${progress}%) — ${end}/${totalEntries} نص`);
+        setTranslateProgress(`${actionLabels[action]} — دفعة ${batchIdx + 1}/${totalBatches} (${progress}%) — ${end}/${totalEntries} نص ⏸️`);
         
         try {
           const response = await fetch(`${supabaseUrl}/functions/v1/translation-analysis`, {
@@ -1585,6 +1594,10 @@ export function useEditorState() {
     }
     setState(prev => prev ? { ...prev, translations: { ...prev.translations, ...updates } } : null);
     toast({ title: `✅ تم تطبيق ${Object.keys(updates).length} تحسين` });
+  };
+
+  const handleStopAdvancedAnalysis = () => {
+    advancedAnalysisCancelRef.current = true;
   };
 
   const handleCloseAdvancedPanel = () => {
@@ -3035,7 +3048,7 @@ export function useEditorState() {
     handleSmartReview, handleApplySmartFix, handleApplyAllSmartFixes, handleDismissSmartFinding,
     handleEnhanceTranslations, handleApplyEnhanceSuggestion, handleApplyAllEnhanceSuggestions, handleCloseEnhanceResults,
     // Advanced Analysis handlers
-    handleAdvancedAnalysis, handleApplyAdvancedSuggestion, handleApplyAllAdvanced, handleCloseAdvancedPanel, saveToEnhancedMemory,
+    handleAdvancedAnalysis, handleApplyAdvancedSuggestion, handleApplyAllAdvanced, handleCloseAdvancedPanel, saveToEnhancedMemory, handleStopAdvancedAnalysis,
     handleGlossaryCompliance, handleApplyGlossaryFix, handleApplyAllGlossaryFixes,
     handleAcceptFuzzy, handleRejectFuzzy, handleAcceptAllFuzzy, handleRejectAllFuzzy,
     handleCloudSave, handleCloudLoad,

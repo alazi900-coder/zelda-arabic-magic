@@ -87,6 +87,7 @@ interface AdvancedTranslationPanelProps {
   onClose: () => void;
   onTabChange: (tab: AnalysisAction) => void;
   onSaveToMemory?: (key: string, original: string, translation: string) => void;
+  onStop?: () => void;
 }
 
 const styleLabels: Record<string, string> = {
@@ -101,7 +102,7 @@ const sceneIcons: Record<string, React.ReactNode> = {
 
 const AdvancedTranslationPanel: React.FC<AdvancedTranslationPanelProps> = ({
   activeTab, literalResults, styleResults, consistencyResult, alternativeResults,
-  fullResults, analyzing, onApply, onApplyAll, onClose, onTabChange, onSaveToMemory,
+  fullResults, analyzing, onApply, onApplyAll, onClose, onTabChange, onSaveToMemory, onStop,
 }) => {
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
@@ -120,9 +121,16 @@ const AdvancedTranslationPanel: React.FC<AdvancedTranslationPanelProps> = ({
               {analyzing && <span className="text-muted-foreground animate-pulse mr-2">— جاري التحليل...</span>}
             </h3>
           </div>
-          <Button variant="ghost" size="sm" onClick={onClose} className="h-7 w-7 p-0">
-            <X className="w-4 h-4" />
-          </Button>
+          <div className="flex items-center gap-1">
+            {analyzing && onStop && (
+              <Button variant="destructive" size="sm" onClick={onStop} className="h-7 px-2 text-xs gap-1">
+                <X className="w-3 h-3" /> إيقاف
+              </Button>
+            )}
+            <Button variant="ghost" size="sm" onClick={onClose} className="h-7 w-7 p-0">
+              <X className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
 
         <Tabs value={activeTab} onValueChange={(v) => onTabChange(v as AnalysisAction)} dir="rtl">
