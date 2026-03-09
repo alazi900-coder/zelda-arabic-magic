@@ -102,7 +102,7 @@ const sceneIcons: Record<string, React.ReactNode> = {
 
 const AdvancedTranslationPanel: React.FC<AdvancedTranslationPanelProps> = ({
   activeTab, literalResults, styleResults, consistencyResult, alternativeResults,
-  fullResults, analyzing, onApply, onApplyAll, onClose, onTabChange, onSaveToMemory,
+  fullResults, analyzing, onApply, onApplyAll, onClose, onTabChange, onSaveToMemory, onStop,
 }) => {
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
