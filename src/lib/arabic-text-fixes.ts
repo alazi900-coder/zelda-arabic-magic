@@ -289,7 +289,19 @@ export function scanAllTextFixes(translations: Record<string, string>): TextFixR
       current = taaResult.fixed;
     }
     
-    // 4. Yaa/Alef Maqsura
+    // 4. Lonely Lam (ل → لا)
+    const lamResult = fixLonelyLam(current);
+    if (lamResult.changes > 0) {
+      results.push({
+        key, before: current, after: lamResult.fixed,
+        fixType: 'lonely-lam', fixLabel: 'ل → لا',
+        details: `${lamResult.changes} إصلاح (ل المنفردة)`,
+        status: 'pending',
+      });
+      current = lamResult.fixed;
+    }
+    
+    // 5. Yaa/Alef Maqsura
     const yaaResult = fixYaaAlefMaqsura(current);
     if (yaaResult.changes > 0) {
       results.push({
