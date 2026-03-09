@@ -79,6 +79,7 @@ import GlossaryCompliancePanel from "@/components/editor/GlossaryCompliancePanel
 import GlossaryTranslationPreview from "@/components/editor/GlossaryTranslationPreview";
 import TranslationEnhancePanel from "@/components/editor/TranslationEnhancePanel";
 import AdvancedTranslationPanel from "@/components/editor/AdvancedTranslationPanel";
+import ToolHelpDialog, { ToolType } from "@/components/editor/ToolHelpDialog";
 
 const Editor = () => {
   const editor = useEditorState();
@@ -95,6 +96,7 @@ const Editor = () => {
   const [showFontTest, setShowFontTest] = React.useState(false);
   const [fontTestWord, setFontTestWord] = React.useState("");
   const [pageLocked, setPageLocked] = React.useState(false);
+  const [showToolHelp, setShowToolHelp] = React.useState<ToolType>(null);
   const gameType = "xenoblade";
   const processPath = "/process";
 
@@ -1421,19 +1423,19 @@ const Editor = () => {
                   
                   <DropdownMenuSeparator />
                   <DropdownMenuLabel className="text-xs text-primary/80">🧠 تحليل متقدم</DropdownMenuLabel>
-                  <DropdownMenuItem onClick={() => editor.handleAdvancedAnalysis('literal-detect')} disabled={editor.advancedAnalyzing || editor.translatedCount === 0}>
+                  <DropdownMenuItem onClick={() => setShowToolHelp('literal-detect')} disabled={editor.advancedAnalyzing || editor.translatedCount === 0}>
                     {editor.advancedAnalyzing && editor.advancedAnalysisTab === 'literal-detect' ? <Loader2 className="w-4 h-4 animate-spin" /> : <AlertTriangle className="w-4 h-4" />} كشف الترجمات الحرفية 📝
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => editor.handleAdvancedAnalysis('style-unify')} disabled={editor.advancedAnalyzing || editor.translatedCount === 0}>
+                  <DropdownMenuItem onClick={() => setShowToolHelp('style-unify')} disabled={editor.advancedAnalyzing || editor.translatedCount === 0}>
                     {editor.advancedAnalyzing && editor.advancedAnalysisTab === 'style-unify' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Type className="w-4 h-4" />} توحيد الأسلوب 🎨
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => editor.handleAdvancedAnalysis('consistency-check')} disabled={editor.advancedAnalyzing || editor.translatedCount === 0}>
+                  <DropdownMenuItem onClick={() => setShowToolHelp('consistency-check')} disabled={editor.advancedAnalyzing || editor.translatedCount === 0}>
                     {editor.advancedAnalyzing && editor.advancedAnalysisTab === 'consistency-check' ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />} فحص اتساق شامل 🛡️
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => editor.handleAdvancedAnalysis('alternatives')} disabled={editor.advancedAnalyzing || editor.translatedCount === 0}>
+                  <DropdownMenuItem onClick={() => setShowToolHelp('alternatives')} disabled={editor.advancedAnalyzing || editor.translatedCount === 0}>
                     {editor.advancedAnalyzing && editor.advancedAnalysisTab === 'alternatives' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Rows3 className="w-4 h-4" />} بدائل متعددة الأسلوب 📝
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => editor.handleAdvancedAnalysis('full-analysis')} disabled={editor.advancedAnalyzing || editor.translatedCount === 0}>
+                  <DropdownMenuItem onClick={() => setShowToolHelp('full-analysis')} disabled={editor.advancedAnalyzing || editor.translatedCount === 0}>
                     {editor.advancedAnalyzing && editor.advancedAnalysisTab === 'full-analysis' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />} تحليل شامل متكامل 🧠
                   </DropdownMenuItem>
 
@@ -2010,6 +2012,18 @@ const Editor = () => {
             diffs={editor.pendingMerge.diffs}
           />
         )}
+
+        {/* Tool Help Dialog */}
+        <ToolHelpDialog
+          tool={showToolHelp}
+          onClose={() => {
+            const toolToRun = showToolHelp;
+            setShowToolHelp(null);
+            if (toolToRun) {
+              editor.handleAdvancedAnalysis(toolToRun);
+            }
+          }}
+        />
       </div>
     </TooltipProvider>
   );
