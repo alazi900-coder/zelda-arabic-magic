@@ -87,6 +87,7 @@ interface AdvancedTranslationPanelProps {
   onClose: () => void;
   onTabChange: (tab: AnalysisAction) => void;
   onSaveToMemory?: (key: string, original: string, translation: string) => void;
+  onStop?: () => void;
 }
 
 const styleLabels: Record<string, string> = {
