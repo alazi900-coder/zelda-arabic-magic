@@ -44,7 +44,7 @@ Deno.serve(async (req) => {
       const { entries, glossary, action, aiModel, contextEntries } = await req.json() as {
         entries: ReviewEntry[];
         glossary?: string;
-        action?: 'review' | 'suggest-short' | 'improve' | 'smart-review' | 'grammar-check' | 'context-review';
+        action?: 'review' | 'suggest-short' | 'improve' | 'smart-review' | 'grammar-check' | 'context-review' | 'quick-alternatives' | 'auto-correct' | 'detect-weak' | 'context-retranslate';
         aiModel?: string;
         contextEntries?: { key: string; original: string; translation: string }[];
       };
