@@ -61,6 +61,7 @@ import SentenceOrderPanel from "@/components/editor/SentenceOrderPanel";
 import ArabicTextFixPanel from "@/components/editor/ArabicTextFixPanel";
 import ExportEnglishDialog from "@/components/editor/ExportEnglishDialog";
 import GlossaryStatsPanel from "@/components/editor/GlossaryStatsPanel";
+import GlossaryDuplicatesPanel from "@/components/editor/GlossaryDuplicatesPanel";
 import TranslationStatsPanel from "@/components/editor/TranslationStatsPanel";
 import ImportConflictDialog from "@/components/editor/ImportConflictDialog";
 import TagRepairPanel from "@/components/editor/TagRepairPanel";
@@ -1164,6 +1165,14 @@ const Editor = () => {
                     </Button>
                   </div>
                 )}
+                {editor.glossaryDuplicates?.length > 0 && (
+                  <GlossaryDuplicatesPanel
+                    duplicates={editor.glossaryDuplicates}
+                    onFix={editor.handleFixGlossaryDuplicate}
+                    onFixAll={editor.handleFixAllGlossaryDuplicates}
+                    onClose={editor.handleCloseGlossaryDuplicates}
+                  />
+                )}
                 <GlossaryStatsPanel glossaryText={editor.activeGlossary} />
               </div>
             );
@@ -1278,6 +1287,7 @@ const Editor = () => {
                   <DropdownMenuLabel className="text-xs">🔄 إنشاء تلقائي</DropdownMenuLabel>
                   <DropdownMenuItem onClick={editor.handleGenerateGlossaryFromTranslations}>✨ إنشاء قاموس من الترجمات</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleFixGlossaryIssues}>🔧 إصلاح مشاكل القاموس</DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleScanGlossaryDuplicates}>🔍 فحص التكرارات المتعارضة</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuLabel className="text-xs">📤 تصدير أقسام</DropdownMenuLabel>
                   <DropdownMenuItem onClick={editor.handleExportSkillsGlossary}>⚔️ تصدير المهارات والفنون فقط</DropdownMenuItem>
