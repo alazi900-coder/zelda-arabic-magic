@@ -167,6 +167,32 @@ const EntryCard: React.FC<EntryCardProps> = ({
     }
   };
 
+  const handleQuickAlternatives = async () => {
+    if (!translation?.trim() || fetchingAlternatives) return;
+    setFetchingAlternatives(true);
+    setAlternatives(null);
+    try {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+      const response = await fetch(`${supabaseUrl}/functions/v1/review-translations`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${supabaseKey}`, 'apikey': supabaseKey, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          entries: [{ key, original: entry.original, translation, maxBytes: entry.maxBytes || 0 }],
+          glossary,
+          action: 'quick-alternatives',
+        }),
+      });
+      if (!response.ok) throw new Error(`خطأ ${response.status}`);
+      const data = await response.json();
+      setAlternatives(data.alternatives || []);
+    } catch (e) {
+      toast({ title: "خطأ", description: "فشل في جلب البدائل", variant: "destructive" });
+    } finally {
+      setFetchingAlternatives(false);
+    }
+  };
+
   return (
     <Card data-entry-key={key} className={`p-3 md:p-4 border-border/50 hover:border-border transition-colors ${hasProblem ? 'border-destructive/30 bg-destructive/5' : ''}`}>
       <div className={`flex ${isMobile ? 'flex-col' : 'items-start'} gap-3 md:gap-4`}>
