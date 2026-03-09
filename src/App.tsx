@@ -46,7 +46,8 @@ const App = () => (
                 <Route path="/install" element={<Install />} />
                 <Route path="/mod-packager" element={<ModPackager />} />
                 <Route path="*" element={<NotFound />} />
-            </Routes>
+              </Routes>
+            </Suspense>
           </ErrorBoundary>
         </BrowserRouter>
       </AuthProvider>
