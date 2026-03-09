@@ -220,14 +220,18 @@ export function fixLonelyLam(text: string): { fixed: string; changes: number } {
   const { shielded, tags } = shieldTags(text);
   let changes = 0;
 
-  // Match standalone 'ل' surrounded by whitespace or at start/end
-  // But NOT 'ل' followed immediately by Arabic chars (that's a prefix)
-  const fixed = shielded.replace(/(^|\s)ل(\s|$)/g, (match, before, after) => {
-    changes++;
-    return before + 'لا' + after;
-  });
+  // Use a loop to handle consecutive standalone 'ل' (regex g flag may skip overlapping matches)
+  let result = shielded;
+  let prev = '';
+  while (prev !== result) {
+    prev = result;
+    result = result.replace(/(^|\s)ل(\s|$)/g, (_, before, after) => {
+      changes++;
+      return before + 'لا' + after;
+    });
+  }
 
-  return { fixed: unshieldTags(fixed, tags), changes };
+  return { fixed: unshieldTags(result, tags), changes };
 }
 
 // ============================================================
