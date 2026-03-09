@@ -77,6 +77,7 @@ import GlossaryMergePreviewDialog from "@/components/editor/GlossaryMergePreview
 import SmartReviewPanel from "@/components/editor/SmartReviewPanel";
 import GlossaryCompliancePanel from "@/components/editor/GlossaryCompliancePanel";
 import GlossaryTranslationPreview from "@/components/editor/GlossaryTranslationPreview";
+import TranslationEnhancePanel from "@/components/editor/TranslationEnhancePanel";
 
 const Editor = () => {
   const editor = useEditorState();
@@ -929,6 +930,17 @@ const Editor = () => {
             />
           )}
 
+          {/* Translation Enhancement Panel */}
+          {editor.enhanceResults && editor.enhanceResults.length > 0 && (
+            <TranslationEnhancePanel
+              results={editor.enhanceResults}
+              onApplySuggestion={editor.handleApplyEnhanceSuggestion}
+              onApplyAll={editor.handleApplyAllEnhanceSuggestions}
+              onClose={editor.handleCloseEnhanceResults}
+              analyzing={editor.enhancingTranslations}
+            />
+          )}
+
           {/* Glossary Compliance Panel */}
           {editor.glossaryComplianceResults && editor.glossaryComplianceResults.length > 0 && (
             <GlossaryCompliancePanel
@@ -1383,6 +1395,9 @@ const Editor = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleGlossaryCompliance} disabled={editor.checkingGlossaryCompliance || editor.translatedCount === 0 || !editor.activeGlossary}>
                     {editor.checkingGlossaryCompliance ? <Loader2 className="w-4 h-4 animate-spin" /> : <BookOpen className="w-4 h-4" />} فحص التزام القاموس 📖
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={editor.handleEnhanceTranslations} disabled={editor.enhancingTranslations || editor.translatedCount === 0}>
+                    {editor.enhancingTranslations ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />} تحسين سياقي شامل 🎯
                   </DropdownMenuItem>
 
                   <DropdownMenuSeparator />
