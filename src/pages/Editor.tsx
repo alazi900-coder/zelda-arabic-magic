@@ -775,6 +775,21 @@ const Editor = () => {
             }}
           />
 
+          {/* Translation Progress Dashboard */}
+          <TranslationProgressDashboard
+            state={editor.state}
+            qualityStats={editor.qualityStats}
+            glossarySessionStats={editor.glossarySessionStats}
+            aiRequestsToday={editor.aiRequestsToday}
+            aiRequestsMonth={editor.aiRequestsMonth}
+          />
+
+          {/* Cross-file Consistency Check */}
+          <ConsistencyCheckPanel
+            state={editor.state}
+            updateTranslation={editor.updateTranslation}
+          />
+
           {/* Translation Tools */}
           <TranslationToolsPanel
             state={editor.state}
