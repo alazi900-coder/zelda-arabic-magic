@@ -61,6 +61,7 @@ import SentenceOrderPanel from "@/components/editor/SentenceOrderPanel";
 import ArabicTextFixPanel from "@/components/editor/ArabicTextFixPanel";
 import ExportEnglishDialog from "@/components/editor/ExportEnglishDialog";
 import GlossaryStatsPanel from "@/components/editor/GlossaryStatsPanel";
+import GlossaryDuplicatesPanel from "@/components/editor/GlossaryDuplicatesPanel";
 import TranslationStatsPanel from "@/components/editor/TranslationStatsPanel";
 import ImportConflictDialog from "@/components/editor/ImportConflictDialog";
 import TagRepairPanel from "@/components/editor/TagRepairPanel";
