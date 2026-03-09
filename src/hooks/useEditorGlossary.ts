@@ -545,6 +545,184 @@ export function useEditorGlossary({
     }
   }, [parseGlossaryMap, setLastSaved, setPendingMerge]);
 
+  // === Scan for duplicate keys with conflicting values ===
+  const [glossaryDuplicates, setGlossaryDuplicates] = useState<Array<{
+    key: string;
+    values: Array<{ value: string; lineNumber: number; section?: string }>;
+  }>>([]);
+
+  const handleScanGlossaryDuplicates = useCallback(() => {
+    const glossaryText = state?.glossary?.trim();
+    if (!glossaryText) {
+      setLastSaved('⚠️ لا يوجد قاموس محمّل');
+      setTimeout(() => setLastSaved(""), 3000);
+      return;
+    }
+
+    const lines = glossaryText.split('\n');
+    const keyOccurrences = new Map<string, Array<{ value: string; lineNumber: number; section?: string }>>();
+    let currentSection = '';
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const trimmed = line.trim();
+      if (!trimmed) continue;
+
+      // Track section headers
+      if (trimmed.startsWith('#') || trimmed.startsWith('//')) {
+        const sectionName = trimmed.replace(/^[#/]+\s*/, '').replace(/[═─\-=]+/g, '').trim();
+        if (sectionName.length > 2 && sectionName.length < 80) {
+          currentSection = sectionName;
+        }
+        continue;
+      }
+
+      const eqIdx = trimmed.indexOf('=');
+      if (eqIdx < 1) continue;
+
+      const eng = trimmed.slice(0, eqIdx).trim();
+      const arb = trimmed.slice(eqIdx + 1).trimEnd();
+      if (!eng || !arb) continue;
+
+      const normKey = eng.toLowerCase();
+      const existing = keyOccurrences.get(normKey) || [];
+      existing.push({ value: arb, lineNumber: i + 1, section: currentSection || undefined });
+      keyOccurrences.set(normKey, existing);
+    }
+
+    // Find keys with multiple DIFFERENT values
+    const duplicates: Array<{
+      key: string;
+      values: Array<{ value: string; lineNumber: number; section?: string }>;
+    }> = [];
+
+    for (const [key, occurrences] of keyOccurrences) {
+      if (occurrences.length < 2) continue;
+      // Check if values are different
+      const uniqueValues = new Set(occurrences.map(o => o.value));
+      if (uniqueValues.size > 1) {
+        duplicates.push({ key, values: occurrences });
+      }
+    }
+
+    setGlossaryDuplicates(duplicates);
+
+    if (duplicates.length === 0) {
+      setLastSaved('✅ لا توجد تكرارات متعارضة في القاموس');
+      setTimeout(() => setLastSaved(""), 4000);
+    } else {
+      const totalConflicts = duplicates.reduce((sum, d) => sum + d.values.length - 1, 0);
+      setLastSaved(`⚠️ تم العثور على ${duplicates.length} مفتاح متكرر (${totalConflicts} تعارض)`);
+      setTimeout(() => setLastSaved(""), 5000);
+    }
+  }, [state?.glossary, setLastSaved]);
+
+  // === Fix a single duplicate by choosing a value ===
+  const handleFixGlossaryDuplicate = useCallback((key: string, chosenValue: string) => {
+    if (!state?.glossary) return;
+
+    const lines = state.glossary.split('\n');
+    const result: string[] = [];
+    const normKey = key.toLowerCase();
+    let found = false;
+
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('//')) {
+        result.push(line);
+        continue;
+      }
+
+      const eqIdx = trimmed.indexOf('=');
+      if (eqIdx < 1) {
+        result.push(line);
+        continue;
+      }
+
+      const eng = trimmed.slice(0, eqIdx).trim();
+      if (eng.toLowerCase() === normKey) {
+        if (!found) {
+          // Keep first occurrence but with chosen value
+          result.push(`${eng}=${chosenValue}`);
+          found = true;
+        }
+        // Skip other occurrences
+      } else {
+        result.push(line);
+      }
+    }
+
+    setState(prev => prev ? { ...prev, glossary: result.join('\n') } : null);
+    setGlossaryDuplicates(prev => prev.filter(d => d.key.toLowerCase() !== normKey));
+    setLastSaved(`✅ تم إصلاح: ${key}`);
+    setTimeout(() => setLastSaved(""), 3000);
+  }, [state?.glossary, setState, setLastSaved]);
+
+  // === Fix all duplicates with a strategy ===
+  const handleFixAllGlossaryDuplicates = useCallback((strategy: 'first' | 'last' | 'longest') => {
+    if (!state?.glossary || glossaryDuplicates.length === 0) return;
+
+    // Build a map of which value to keep for each key
+    const chosenValues = new Map<string, string>();
+    for (const dup of glossaryDuplicates) {
+      let chosen: string;
+      switch (strategy) {
+        case 'first':
+          chosen = dup.values[0].value;
+          break;
+        case 'last':
+          chosen = dup.values[dup.values.length - 1].value;
+          break;
+        case 'longest':
+          chosen = dup.values.reduce((a, b) => a.value.length >= b.value.length ? a : b).value;
+          break;
+      }
+      chosenValues.set(dup.key.toLowerCase(), chosen);
+    }
+
+    const lines = state.glossary.split('\n');
+    const result: string[] = [];
+    const seen = new Set<string>();
+
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('//')) {
+        result.push(line);
+        continue;
+      }
+
+      const eqIdx = trimmed.indexOf('=');
+      if (eqIdx < 1) {
+        result.push(line);
+        continue;
+      }
+
+      const eng = trimmed.slice(0, eqIdx).trim();
+      const normKey = eng.toLowerCase();
+
+      if (chosenValues.has(normKey)) {
+        if (!seen.has(normKey)) {
+          result.push(`${eng}=${chosenValues.get(normKey)}`);
+          seen.add(normKey);
+        }
+        // Skip duplicates
+      } else {
+        result.push(line);
+      }
+    }
+
+    setState(prev => prev ? { ...prev, glossary: result.join('\n') } : null);
+    
+    const strategyLabels = { first: 'الأول', last: 'الأخير', longest: 'الأطول' };
+    setLastSaved(`✅ تم إصلاح ${glossaryDuplicates.length} تكرار (الإبقاء على ${strategyLabels[strategy]})`);
+    setTimeout(() => setLastSaved(""), 4000);
+    setGlossaryDuplicates([]);
+  }, [state?.glossary, glossaryDuplicates, setState, setLastSaved]);
+
+  const handleCloseGlossaryDuplicates = useCallback(() => {
+    setGlossaryDuplicates([]);
+  }, []);
+
   return {
     glossaryEnabled, setGlossaryEnabled,
     glossaryTermCount, activeGlossary,
@@ -556,5 +734,10 @@ export function useEditorGlossary({
     getGlossaryHealth, handleFixGlossaryIssues,
     handleExportSkillsGlossary,
     handleSmartMergeGlossaries,
+    glossaryDuplicates,
+    handleScanGlossaryDuplicates,
+    handleFixGlossaryDuplicate,
+    handleFixAllGlossaryDuplicates,
+    handleCloseGlossaryDuplicates,
   };
 }
