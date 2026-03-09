@@ -969,6 +969,7 @@ const Editor = () => {
               onClose={editor.handleCloseAdvancedPanel}
               onTabChange={(tab) => editor.setAdvancedAnalysisTab(tab)}
               onSaveToMemory={editor.saveToEnhancedMemory}
+              onStop={editor.handleStopAdvancedAnalysis}
             />
           )}
 
