@@ -15,6 +15,8 @@ import { useEditorFileIO } from "@/hooks/useEditorFileIO";
 import { useEditorQuality } from "@/hooks/useEditorQuality";
 import { useEditorBuild } from "@/hooks/useEditorBuild";
 import { useEditorTranslation } from "@/hooks/useEditorTranslation";
+import { useEditorSettings } from "@/hooks/useEditorSettings";
+import { useEditorScanResults } from "@/hooks/useEditorScanResults";
 import {
   ExtractedEntry, EditorState, AUTOSAVE_DELAY, AI_BATCH_SIZE, PAGE_SIZE,
   categorizeFile, categorizeBdatTable, hasArabicChars, unReverseBidi, isTechnicalText, hasTechnicalTags,
