@@ -338,7 +338,7 @@ const XenobladeProcess = () => {
 
       // Early check: is this a re-uploaded built file? (presentation forms in originals)
       const { hasArabicPresentationForms, removeArabicPresentationForms, reverseBidi } = await import("@/lib/arabic-processing");
-      const isReUploadedBuild = allEntries.some((e: any) => hasArabicPresentationForms(e.original));
+      const isReUploadedBuild = allEntries.some(e => hasArabicPresentationForms(e.original));
 
       // Auto-detect Arabic entries — but SKIP if this is a re-uploaded built file
       // because the "originals" contain processed Arabic (reshaped+reversed) which
