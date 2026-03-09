@@ -1125,7 +1125,7 @@ const Editor = () => {
                     <option value="all">كل الملفات</option>
                     {editor.msbtFiles.map(f => <option key={f} value={f}>{f}</option>)}
                   </select>
-                  <select value={editor.filterTechnical} onChange={e => editor.setFilterTechnical(e.target.value as any)} className="px-3 py-2 rounded bg-background border border-border font-body text-sm">
+                  <select value={editor.filterTechnical} onChange={e => editor.setFilterTechnical(e.target.value as FilterTechnical)} className="px-3 py-2 rounded bg-background border border-border font-body text-sm">
                     <option value="all">الكل</option>
                     <option value="exclude">بدون تقني</option>
                     <option value="only">تقني فقط</option>
