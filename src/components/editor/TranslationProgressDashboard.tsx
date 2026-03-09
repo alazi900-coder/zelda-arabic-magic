@@ -7,7 +7,7 @@ import { hasTechnicalTags, isTechnicalText, categorizeFile, categorizeBdatTable 
 
 interface Props {
   state: EditorState;
-  qualityStats: { total: number; translated: number; problems: number; needsImprove: number } | null;
+  qualityStats: { total: number; [key: string]: any } | null;
   glossarySessionStats: { directMatches: number; lockedTerms: number; contextTerms: number; batchesCompleted: number; totalBatches: number; textsTranslated: number; freeTranslations: number };
   aiRequestsToday: number;
   aiRequestsMonth: number;
