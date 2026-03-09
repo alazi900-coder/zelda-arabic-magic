@@ -256,7 +256,7 @@ const CHECK_LABELS: Record<string, string> = {
 };
 
 // Types that can be auto-fixed without AI
-const FIXABLE_TYPES = new Set(["extra_spaces_check", "punctuation_check"]);
+const FIXABLE_TYPES = new Set(["extra_spaces_check", "punctuation_check", "grammar_check"]);
 
 export default function QualityChecksPanel({ state, onApplyFix, onFilterByKeys, onNavigateToEntry, glossary }: QualityChecksPanelProps) {
   const isEnabled = (_id: string) => true;
