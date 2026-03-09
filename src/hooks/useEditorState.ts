@@ -1351,6 +1351,7 @@ export function useEditorState() {
     if (!state) return;
     setAdvancedAnalyzing(true);
     setAdvancedAnalysisTab(action);
+    advancedAnalysisCancelRef.current = false;
     
     // Clear previous results
     setLiteralResults(null);
