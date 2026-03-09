@@ -392,7 +392,7 @@ const XenobladeProcess = () => {
         }
         // Check if ANY entry has Arabic-range chars
         const arabicCheckRegex = /[\u0600-\u06FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
-        const entriesWithArabic = allEntries.filter((e: any) => arabicCheckRegex.test(e.original));
+        const entriesWithArabic = allEntries.filter(e => arabicCheckRegex.test(e.original));
         addLog(`🔎 عدد النصوص التي تحتوي أحرف عربية (أي نطاق): ${entriesWithArabic.length}`);
         if (entriesWithArabic.length > 0 && entriesWithArabic.length <= 5) {
           for (const e of entriesWithArabic) {
