@@ -468,7 +468,7 @@ const XenobladeProcess = () => {
         const noColMap = new Map<string, string[]>();
         const baseMap = new Map<string, string[]>();
         const validKeys = new Set<string>();
-        for (const e of allEntries as any[]) {
+        for (const e of allEntries) {
           const ek = `${e.msbtFile}:${e.index}`;
           validKeys.add(ek);
           if (ek.startsWith('bdat-bin:')) {
