@@ -1646,6 +1646,11 @@ export function useEditorState() {
             allFullResults.push(...mapped);
           }
           
+          // Show live intermediate results every 2 batches
+          if ((batchIdx + 1) % 2 === 0 || batchIdx === totalBatches - 1) {
+            commitPartialResults(action);
+          }
+          
           // Small delay between batches to avoid rate limiting
           if (batchIdx < totalBatches - 1) {
             await new Promise(resolve => setTimeout(resolve, 500));
