@@ -1653,7 +1653,7 @@ export function useEditorState() {
           
           // Small delay between batches to avoid rate limiting
           if (batchIdx < totalBatches - 1) {
-            await new Promise(resolve => setTimeout(resolve, 500));
+            await new Promise(resolve => setTimeout(resolve, 200));
           }
           
         } catch (batchErr) {
