@@ -546,7 +546,6 @@ ${chunk.map((e, i) => `[${i}] "${e.translation}"`).join('\n')}
                 { role: 'system', content: 'أنت مصحح إملائي. أخرج ONLY JSON arrays. لا تغيّر المعنى.' },
                 { role: 'user', content: prompt },
               ],
-              temperature: 0.1,
             }),
           });
 
