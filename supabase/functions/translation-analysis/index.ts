@@ -236,7 +236,6 @@ Deno.serve(async (req) => {
           { role: 'system', content: 'أنت محلل ترجمات ألعاب محترف. أجب دائماً بصيغة JSON صالحة فقط بدون أي نص إضافي.' },
           { role: 'user', content: prompt },
         ],
-        temperature: 0.6,
         max_tokens: 6000,
       }),
     });

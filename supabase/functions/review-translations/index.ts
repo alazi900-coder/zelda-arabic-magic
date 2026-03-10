@@ -833,7 +833,6 @@ ${chunk.map((e, i) => `[${i}] الأصلي: "${e.original}"
                 { role: 'system', content: 'أنت محسّن ترجمات ألعاب. أخرج ONLY JSON arrays.' },
                 { role: 'user', content: prompt },
               ],
-              temperature: 0.4,
             }),
           });
 

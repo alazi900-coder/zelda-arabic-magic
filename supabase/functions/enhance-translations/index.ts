@@ -294,7 +294,6 @@ ${entriesWithContext.map((e, i) => `[${i}]
           { role: 'system', content: 'أنت مترجم ألعاب محترف متخصص في Xenoblade Chronicles 3. أجب دائماً بصيغة JSON صالحة.' },
           { role: 'user', content: analysisPrompt }
         ],
-        temperature: 0.7,
         max_tokens: 4000,
       }),
     });

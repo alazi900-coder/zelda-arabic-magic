@@ -94,7 +94,6 @@ ${groupsToCheck.map((g, i) => `[${i}] "${g.term}" → الترجمات: ${[...ne
           { role: 'system', content: 'أنت خبير اتساق مصطلحات. أخرج ONLY JSON arrays.' },
           { role: 'user', content: prompt },
         ],
-        temperature: 0.2,
       }),
     });
 
