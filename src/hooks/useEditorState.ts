@@ -1475,8 +1475,8 @@ export function useEditorState() {
   };
 
   // === Advanced Translation Analysis (with batch processing) ===
-  const ADVANCED_BATCH_SIZE = 15; // Smaller batches for better AI accuracy
-  const MAX_ENTRIES_FOR_ANALYSIS = 200; // Max entries to analyze
+  const ADVANCED_BATCH_SIZE = 50; // Larger batches for speed
+  const MAX_ENTRIES_FOR_ANALYSIS = 500; // Max entries to analyze
   
   const handleAdvancedAnalysis = async (action: import("@/components/editor/AdvancedTranslationPanel").AnalysisAction) => {
     if (!state) return;
