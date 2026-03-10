@@ -388,7 +388,6 @@ AR: "${e.translation}"`).join('\n\n')}
                 { role: 'system', content: 'أنت مراجع سياقي متخصص. أخرج ONLY valid JSON arrays.' },
                 { role: 'user', content: prompt },
               ],
-              temperature: 0.3,
             }),
           });
 
