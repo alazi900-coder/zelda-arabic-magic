@@ -201,7 +201,6 @@ ${glossary ? `القاموس:\n${glossary.slice(0, 2000)}` : ''}
             { role: 'system', content: 'أنت مترجم محترف. أجب بـ JSON صالح فقط.' },
             { role: 'user', content: enhancePrompt }
           ],
-          temperature: 0.3,
         }),
       });
 
