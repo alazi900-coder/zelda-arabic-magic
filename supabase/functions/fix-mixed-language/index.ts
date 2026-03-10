@@ -63,7 +63,6 @@ ${textsBlock}`;
           { role: 'system', content: 'You are a game text translator. Fix mixed Arabic/English translations by translating remaining English words. Output only valid JSON arrays.' },
           { role: 'user', content: prompt },
         ],
-        temperature: 0.3,
       }),
     });
 

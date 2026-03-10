@@ -64,7 +64,6 @@ ${chunk.map((e, i) => `[${i}] "${e.arabic}"`).join('\n')}
             { role: 'system', content: 'أنت مدقق إملائي عربي. أخرج ONLY JSON arrays. لا تضف أي نص آخر.' },
             { role: 'user', content: prompt },
           ],
-          temperature: 0.1,
         }),
       });
 

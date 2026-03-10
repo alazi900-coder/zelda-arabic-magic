@@ -111,12 +111,11 @@ ${tooLongEntries.map((e, i) => {
              { role: 'system', content: 'أنت متخصص في اختصار النصوص. اخرج ONLY JSON arrays.' },
              { role: 'user', content: prompt },
            ],
-           temperature: 0.3,
-         }),
-       });
+          }),
+        });
 
        if (!response.ok) {
-         const err = await response.text();
+          const err = await response.text();
          console.error('AI gateway error:', err);
          throw new Error(`AI error: ${response.status}`);
        }
@@ -191,7 +190,6 @@ AR: "${e.translation}"`).join('\n\n')}
                 { role: 'system', content: 'أنت مدقق لغوي دقيق. أخرج ONLY valid JSON arrays. لا تخرج أي شيء آخر.' },
                 { role: 'user', content: prompt },
               ],
-              temperature: 0.2,
             }),
           });
 
@@ -291,7 +289,6 @@ AR: "${e.translation}"`).join('\n\n')}
                 { role: 'system', content: 'أنت مدقق نحوي وإملائي دقيق. أخرج ONLY valid JSON arrays.' },
                 { role: 'user', content: prompt },
               ],
-              temperature: 0.1,
             }),
           });
 
@@ -391,7 +388,6 @@ AR: "${e.translation}"`).join('\n\n')}
                 { role: 'system', content: 'أنت مراجع سياقي متخصص. أخرج ONLY valid JSON arrays.' },
                 { role: 'user', content: prompt },
               ],
-              temperature: 0.3,
             }),
           });
 
@@ -480,7 +476,6 @@ ${contextBlock}
               { role: 'system', content: 'أنت مترجم ألعاب. أخرج ONLY valid JSON arrays.' },
               { role: 'user', content: prompt },
             ],
-            temperature: 0.5,
           }),
         });
 
@@ -551,7 +546,6 @@ ${chunk.map((e, i) => `[${i}] "${e.translation}"`).join('\n')}
                 { role: 'system', content: 'أنت مصحح إملائي. أخرج ONLY JSON arrays. لا تغيّر المعنى.' },
                 { role: 'user', content: prompt },
               ],
-              temperature: 0.1,
             }),
           });
 
@@ -641,7 +635,6 @@ AR: "${e.translation}"`).join('\n\n')}
                 { role: 'system', content: 'أنت مقيّم جودة ترجمات. أخرج ONLY valid JSON arrays.' },
                 { role: 'user', content: prompt },
               ],
-              temperature: 0.2,
             }),
           });
 
@@ -740,7 +733,6 @@ ${e.maxBytes > 0 ? `الحد: ${e.maxBytes} بايت` : ''}`).join('\n\n')}
                 { role: 'system', content: 'أنت مترجم ألعاب متخصص. أخرج ONLY valid JSON arrays.' },
                 { role: 'user', content: prompt },
               ],
-              temperature: 0.3,
             }),
           });
 
@@ -841,7 +833,6 @@ ${chunk.map((e, i) => `[${i}] الأصلي: "${e.original}"
                 { role: 'system', content: 'أنت محسّن ترجمات ألعاب. أخرج ONLY JSON arrays.' },
                 { role: 'user', content: prompt },
               ],
-              temperature: 0.4,
             }),
           });
 

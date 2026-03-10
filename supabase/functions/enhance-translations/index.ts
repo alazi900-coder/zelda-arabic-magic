@@ -137,7 +137,6 @@ ${entries.map((e, i) => `[${i}] ${e.translation}`).join('\n')}
             { role: 'system', content: 'أنت مدقق نحوي. أجب بـ JSON صالح فقط.' },
             { role: 'user', content: grammarPrompt }
           ],
-          temperature: 0.2,
         }),
       });
 
@@ -202,7 +201,6 @@ ${glossary ? `القاموس:\n${glossary.slice(0, 2000)}` : ''}
             { role: 'system', content: 'أنت مترجم محترف. أجب بـ JSON صالح فقط.' },
             { role: 'user', content: enhancePrompt }
           ],
-          temperature: 0.3,
         }),
       });
 
@@ -296,7 +294,6 @@ ${entriesWithContext.map((e, i) => `[${i}]
           { role: 'system', content: 'أنت مترجم ألعاب محترف متخصص في Xenoblade Chronicles 3. أجب دائماً بصيغة JSON صالحة.' },
           { role: 'user', content: analysisPrompt }
         ],
-        temperature: 0.7,
         max_tokens: 4000,
       }),
     });
