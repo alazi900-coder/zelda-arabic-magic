@@ -635,7 +635,6 @@ AR: "${e.translation}"`).join('\n\n')}
                 { role: 'system', content: 'أنت مقيّم جودة ترجمات. أخرج ONLY valid JSON arrays.' },
                 { role: 'user', content: prompt },
               ],
-              temperature: 0.2,
             }),
           });
 
