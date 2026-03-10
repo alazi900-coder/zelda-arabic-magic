@@ -137,7 +137,6 @@ ${entries.map((e, i) => `[${i}] ${e.translation}`).join('\n')}
             { role: 'system', content: 'أنت مدقق نحوي. أجب بـ JSON صالح فقط.' },
             { role: 'user', content: grammarPrompt }
           ],
-          temperature: 0.2,
         }),
       });
 
