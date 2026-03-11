@@ -1,16 +1,13 @@
 import React from "react";
-import {
-  Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
-} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckCircle2, X } from "lucide-react";
 
 interface PageTranslationCompareProps {
   open: boolean;
-  originals: Record<string, string>; // key -> English original
-  oldTranslations: Record<string, string>; // key -> previous Arabic (may be empty)
-  newTranslations: Record<string, string>; // key -> new Arabic
+  originals: Record<string, string>;
+  oldTranslations: Record<string, string>;
+  newTranslations: Record<string, string>;
   onApply: (selectedKeys: Set<string>) => void;
   onDiscard: () => void;
 }
@@ -21,7 +18,6 @@ const PageTranslationCompare: React.FC<PageTranslationCompareProps> = ({
   const keys = Object.keys(newTranslations);
   const [selected, setSelected] = React.useState<Set<string>>(new Set(keys));
 
-  // Reset selection when new data comes in
   React.useEffect(() => {
     setSelected(new Set(Object.keys(newTranslations)));
   }, [newTranslations]);
@@ -39,21 +35,34 @@ const PageTranslationCompare: React.FC<PageTranslationCompareProps> = ({
     else setSelected(new Set(keys));
   };
 
+  if (!open) return null;
+
   return (
-    <Dialog open={open} onOpenChange={(v) => { if (!v) onDiscard(); }}>
-      <DialogContent
-        className="!grid-rows-[auto_1fr] max-w-4xl w-[95vw] max-h-[85vh] overflow-hidden p-0"
-        dir="rtl"
-        style={{ display: 'flex', flexDirection: 'column' }}
-      >
-        {/* Fixed header */}
-        <div className="shrink-0 p-4 pb-2 border-b space-y-2">
-          <DialogHeader>
-            <DialogTitle className="font-display text-lg">📄 مقارنة ترجمة الصفحة</DialogTitle>
-            <DialogDescription className="font-body">
-              تم ترجمة <span className="font-bold text-primary">{keys.length}</span> نص — راجع النتائج قبل التطبيق
-            </DialogDescription>
-          </DialogHeader>
+    <div className="fixed inset-0 z-[9999]" dir="rtl">
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/70"
+        onClick={onDiscard}
+      />
+
+      {/* Dialog box */}
+      <div className="absolute inset-4 sm:inset-8 md:inset-12 lg:inset-x-[15%] lg:inset-y-10 bg-background border rounded-lg shadow-2xl flex flex-col overflow-hidden">
+        {/* Header */}
+        <div className="shrink-0 p-4 pb-3 border-b space-y-2">
+          <div className="flex items-start justify-between">
+            <div>
+              <h2 className="font-display text-lg font-semibold">📄 مقارنة ترجمة الصفحة</h2>
+              <p className="text-sm text-muted-foreground font-body mt-1">
+                تم ترجمة <span className="font-bold text-primary">{keys.length}</span> نص — راجع النتائج قبل التطبيق
+              </p>
+            </div>
+            <button
+              onClick={onDiscard}
+              className="p-1 rounded-sm hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
 
           <div className="flex flex-wrap gap-2 items-center justify-between">
             <div className="flex items-center gap-2">
@@ -75,10 +84,7 @@ const PageTranslationCompare: React.FC<PageTranslationCompareProps> = ({
         </div>
 
         {/* Scrollable list */}
-        <div
-          className="flex-1 overflow-y-auto p-4"
-          style={{ minHeight: 0, WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain' }}
-        >
+        <div className="flex-1 overflow-y-auto p-4 min-h-0">
           <div className="space-y-2">
             {keys.map((key) => {
               const original = originals[key] || '';
@@ -117,8 +123,8 @@ const PageTranslationCompare: React.FC<PageTranslationCompareProps> = ({
           </div>
         </div>
 
-        {/* Fixed footer */}
-        <div className="shrink-0 p-4 pt-2 border-t flex flex-row-reverse gap-2">
+        {/* Footer */}
+        <div className="shrink-0 p-4 pt-3 border-t flex flex-row-reverse gap-2">
           <Button onClick={() => onApply(selected)} className="font-display gap-1" disabled={selected.size === 0}>
             <CheckCircle2 className="w-4 h-4" /> تطبيق ({selected.size}/{keys.length}) ✅
           </Button>
@@ -126,8 +132,8 @@ const PageTranslationCompare: React.FC<PageTranslationCompareProps> = ({
             <X className="w-4 h-4" /> إلغاء
           </Button>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 };
 
