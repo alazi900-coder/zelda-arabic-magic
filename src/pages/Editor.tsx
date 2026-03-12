@@ -819,16 +819,6 @@ const Editor = () => {
             />
           )}
 
-          {/* Sentence Split Results */}
-          {editor.sentenceSplitResults && editor.sentenceSplitResults.length > 0 && (
-            <SentenceSplitPanel
-              results={editor.sentenceSplitResults}
-              onAccept={editor.handleApplySentenceSplit}
-              onReject={editor.handleRejectSentenceSplit}
-              onAcceptAll={editor.handleApplyAllSentenceSplits}
-              onClose={() => editor.setSentenceSplitResults(null)}
-            />
-          )}
 
           {/* Newline Clean Results */}
           {editor.newlineCleanResults && editor.newlineCleanResults.length > 0 && (
