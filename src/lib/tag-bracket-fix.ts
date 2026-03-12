@@ -18,8 +18,8 @@ export interface TagBracketFixResult {
   stats: TagBracketFixStats;
 }
 
-/** Regex to match valid [Tag:Value] patterns, optionally followed by (description) */
-const TAG_COLON_REGEX = /\[\w+:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?/g;
+/** Regex to match valid [Tag:Value] or [/Tag:Value] patterns, optionally followed by (description) */
+const TAG_COLON_REGEX = /\[\s*\/?\s*\w+\s*:[^\]]*?\s*\](?:\s*\([^)]{1,100}\))?/g;
 
 /** Regex to match [TAG]N patterns (tag then number) e.g. [ML]1 */
 const TAG_BRACKET_NUM_REGEX = /\[[A-Z]{2,10}\]\d+/g;
@@ -37,7 +37,7 @@ const BRACE_TAG_REGEX = /\{\w+:\w[^}]*\}/g;
  * Check if original text contains technical tags in any supported format.
  */
 export function hasTechnicalBracketTag(original: string): boolean {
-  return /\[\w+:[^\]]*?\s*\]/.test(original) 
+  return /\[\s*\/?\s*\w+\s*:[^\]]*?\s*\]/.test(original) 
     || /\[[A-Z]{2,10}\]\d+/.test(original)
     || /\d+\[[A-Z]{2,10}\]/.test(original)
     || /\[\w+=\w[^\]]*\]/.test(original)
