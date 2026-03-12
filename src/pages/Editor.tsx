@@ -715,27 +715,6 @@ const Editor = () => {
             translating={editor.translating}
           />
 
-          {/* Mismatch Detector */}
-          <MismatchDetectorPanel
-            state={editor.state}
-            onClearTranslation={(key) => editor.updateTranslation(key, '')}
-            onClearMultiple={(keys) => { for (const k of keys) editor.updateTranslation(k, ''); }}
-            onNavigateToEntry={(key) => {
-              editor.setFilterStatus('all');
-              editor.setSearch('');
-              setTimeout(() => {
-                const idx = editor.state.entries.findIndex(e => `${e.msbtFile}:${e.index}` === key);
-                if (idx >= 0) {
-                  const page = Math.floor(idx / 50);
-                  editor.setCurrentPage(page);
-                  setTimeout(() => {
-                    const el = document.querySelector(`[data-entry-key="${CSS.escape(key)}"]`);
-                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                  }, 100);
-                }
-              }, 50);
-            }}
-          />
 
           <QualityChecksPanel
             state={editor.state}
