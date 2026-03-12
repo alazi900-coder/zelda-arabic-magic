@@ -2904,42 +2904,6 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 4000);
   }, [state, tagBracketFixResults]);
 
-  // === Sentence Order Fix ===
-  const handleScanSentenceOrder = useCallback(() => {
-    if (!state) return;
-    const results = detectReversedSentences(state.entries, state.translations);
-    setSentenceOrderResults(results);
-    if (results.length === 0) {
-      setLastSaved("✅ لم يتم اكتشاف نصوص متعددة الجمل تحتاج مراجعة");
-      setTimeout(() => setLastSaved(""), 4000);
-    }
-  }, [state]);
-
-  const handleApplySentenceOrder = useCallback((key: string, customText?: string) => {
-    if (!state || !sentenceOrderResults) return;
-    const item = sentenceOrderResults.find(r => r.key === key);
-    if (!item) return;
-    const newText = customText || item.after;
-    setState(prev => prev ? { ...prev, translations: { ...prev.translations, [key]: newText } } : null);
-    setSentenceOrderResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'accepted' as const } : r) : null);
-  }, [state, sentenceOrderResults]);
-
-  const handleRejectSentenceOrder = useCallback((key: string) => {
-    setSentenceOrderResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'rejected' as const } : r) : null);
-  }, []);
-
-  const handleApplyAllSentenceOrders = useCallback(() => {
-    if (!state || !sentenceOrderResults) return;
-    const pending = sentenceOrderResults.filter(r => r.status === 'pending');
-    const newTranslations = { ...state.translations };
-    for (const item of pending) {
-      newTranslations[item.key] = item.after;
-    }
-    setState(prev => prev ? { ...prev, translations: newTranslations } : null);
-    setSentenceOrderResults(prev => prev ? prev.map(r => r.status === 'pending' ? { ...r, status: 'accepted' as const } : r) : null);
-    setLastSaved(`✅ تم عكس ترتيب الجمل في ${pending.length} ترجمة`);
-    setTimeout(() => setLastSaved(""), 4000);
-  }, [state, sentenceOrderResults]);
 
   // === Arabic Text Fixes (تاء/هاء، ياء/ألف مقصورة، كلمات مكررة، مخلفات AI) ===
   const handleScanArabicTextFixes = useCallback(() => {
