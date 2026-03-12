@@ -47,7 +47,7 @@ export function useEditorState() {
     mirrorCharsResults, setMirrorCharsResults, tagBracketFixResults, setTagBracketFixResults,
     arabicTextFixResults, setArabicTextFixResults, newlineSplitResults, setNewlineSplitResults,
     npcSplitResults, setNpcSplitResults, lineSyncResults, setLineSyncResults,
-    
+    unifiedSplitResults, setUnifiedSplitResults,
     smartReviewFindings, setSmartReviewFindings, smartReviewing, setSmartReviewing,
     glossaryComplianceResults, setGlossaryComplianceResults, checkingGlossaryCompliance, setCheckingGlossaryCompliance,
     enhanceResults, setEnhanceResults, enhancingTranslations, setEnhancingTranslations,
