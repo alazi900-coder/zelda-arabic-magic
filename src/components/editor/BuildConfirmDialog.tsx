@@ -120,7 +120,16 @@ const BuildConfirmDialog = ({ open, onOpenChange, preview, onConfirm, building }
                   </div>
                 </div>
               )}
-            </div>
+
+              {(preview.missingClosingTagCount || 0) > 0 && (
+                <div className="flex items-start gap-2 text-xs font-body p-2 rounded border border-destructive/30 bg-destructive/5">
+                  <AlertTriangle className="w-3.5 h-3.5 text-destructive shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold text-destructive">⛔ {preview.missingClosingTagCount} ترجمة تفتقد وسوم إغلاق</span>
+                    <span className="text-muted-foreground"> — مثل [/System:Ruby] — قد تسبب خللاً في اللعبة</span>
+                  </div>
+                </div>
+              )}
           )}
 
           {/* All clear */}
