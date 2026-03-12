@@ -842,16 +842,6 @@ const Editor = () => {
             />
           )}
 
-          {/* Duplicate Alef Clean Results */}
-          {editor.duplicateAlefResults && editor.duplicateAlefResults.length > 0 && (
-            <DuplicateAlefCleanPanel
-              results={editor.duplicateAlefResults}
-              onAccept={editor.handleApplyDuplicateAlefClean}
-              onReject={editor.handleRejectDuplicateAlefClean}
-              onAcceptAll={editor.handleApplyAllDuplicateAlefCleans}
-              onClose={() => editor.setDuplicateAlefResults(null)}
-            />
-           )}
 
           {/* Arabic Text Fix Results */}
           {editor.arabicTextFixResults && editor.arabicTextFixResults.length > 0 && (
