@@ -47,8 +47,11 @@ const TranslationAIEnhancePanel: React.FC<TranslationAIEnhancePanelProps> = ({
   const [activeTab, setActiveTab] = useState<"enhance" | "grammar">("enhance");
   const [progress, setProgress] = useState<{ current: number; total: number } | null>(null);
   const abortRef = useRef(false);
+  const processedKeysRef = useRef<Set<string>>(new Set());
 
-  const analyzeTranslations = async (mode: "enhance" | "grammar") => {
+  const resetProcessedKeys = useCallback(() => {
+    processedKeysRef.current = new Set();
+  }, []);
     const translatedEntries = entries.filter(e => {
       const key = `${e.msbtFile}:${e.index}`;
       return translations[key]?.trim();
