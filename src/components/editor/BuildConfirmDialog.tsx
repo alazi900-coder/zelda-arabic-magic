@@ -130,6 +130,7 @@ const BuildConfirmDialog = ({ open, onOpenChange, preview, onConfirm, building }
                   </div>
                 </div>
               )}
+            </div>
           )}
 
           {/* All clear */}
