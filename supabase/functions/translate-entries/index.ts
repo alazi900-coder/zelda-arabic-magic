@@ -161,7 +161,7 @@ function restoreAndEnforce(original: string, translated: string, tags: Map<strin
 }
 
 /** Tag shielding: replace technical tags with short placeholders for balanced splitting */
-const TAG_SHIELD_PATTERN = /[\uE000-\uE0FF]+|\[\s*\w+\s*:[^\]]*?\s*\]|[\uFFF9-\uFFFC]+/g;
+const TAG_SHIELD_PATTERN = /[\uE000-\uE0FF]+|\[\s*\/?\s*\w+\s*:[^\]]*?\s*\]|[\uFFF9-\uFFFC]+/g;
 
 interface ShieldResult {
   shielded: string;
