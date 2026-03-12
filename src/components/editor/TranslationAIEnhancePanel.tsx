@@ -217,6 +217,12 @@ const TranslationAIEnhancePanel: React.FC<TranslationAIEnhancePanelProps> = ({
               إيقاف
             </Button>
           )}
+          {!isAnalyzing && processedKeysRef.current.size > 0 && (
+            <Button variant="ghost" size="sm" onClick={() => { resetProcessedKeys(); setSuggestions([]); setGrammarIssues([]); }} className="gap-1.5">
+              <RotateCcw className="w-3.5 h-3.5" />
+              إعادة فحص الكل
+            </Button>
+          )}
         </div>
 
         {/* Progress bar */}
