@@ -1663,10 +1663,6 @@ const Editor = () => {
 
                   {/* ─── تنسيق وتقسيم ─── */}
                   <DropdownMenuLabel className="text-xs text-primary/80">✂️ تنسيق وتقسيم</DropdownMenuLabel>
-                  <DropdownMenuItem onClick={editor.handleScanSentenceOrder} disabled={editor.translatedCount === 0}>↕️ فحص ترتيب الجمل</DropdownMenuItem>
-                  <DropdownMenuItem onClick={editor.handleScanMergedSentences} disabled={editor.scanningSentences || editor.translatedCount === 0}>
-                    {editor.scanningSentences ? <Loader2 className="w-4 h-4 animate-spin" /> : <AlertTriangle className="w-4 h-4" />} فصل الجمل المندمجة
-                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleFlattenAllNewlines} disabled={editor.translatedCount === 0 || editor.multiLineCount === 0}>
                     📏 دمج الأسطر المتعددة (سطر واحد) {editor.multiLineCount > 0 && <span className="text-muted-foreground text-[10px]">({editor.multiLineCount})</span>}
                   </DropdownMenuItem>
