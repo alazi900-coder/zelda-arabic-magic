@@ -43,7 +43,7 @@ export function useEditorState() {
     checkingConsistency, setCheckingConsistency, consistencyResults, setConsistencyResults,
     scanningSentences, setScanningSentences, sentenceSplitResults, setSentenceSplitResults,
     newlineCleanResults, setNewlineCleanResults, diacriticsCleanResults, setDiacriticsCleanResults,
-    duplicateAlefResults, setDuplicateAlefResults, missingAlefResults, setMissingAlefResults,
+    duplicateAlefResults, setDuplicateAlefResults,
     mirrorCharsResults, setMirrorCharsResults, tagBracketFixResults, setTagBracketFixResults,
     arabicTextFixResults, setArabicTextFixResults, newlineSplitResults, setNewlineSplitResults,
     npcSplitResults, setNpcSplitResults, lineSyncResults, setLineSyncResults,
