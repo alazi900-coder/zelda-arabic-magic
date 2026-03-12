@@ -895,8 +895,6 @@ const Editor = () => {
             />
           )}
 
-          )}
-
           {/* Mirror Chars Clean Results */}
           {editor.mirrorCharsResults && editor.mirrorCharsResults.length > 0 && (
             <MirrorCharsCleanPanel
