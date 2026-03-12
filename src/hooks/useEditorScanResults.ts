@@ -75,7 +75,6 @@ export function useEditorScanResults() {
     checkingConsistency, setCheckingConsistency,
     consistencyResults, setConsistencyResults,
     scanningSentences, setScanningSentences,
-    sentenceSplitResults, setSentenceSplitResults,
     newlineCleanResults, setNewlineCleanResults,
     diacriticsCleanResults, setDiacriticsCleanResults,
     duplicateAlefResults, setDuplicateAlefResults,
