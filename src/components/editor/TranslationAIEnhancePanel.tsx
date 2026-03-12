@@ -172,6 +172,10 @@ const TranslationAIEnhancePanel: React.FC<TranslationAIEnhancePanelProps> = ({
 
   const currentResults = activeTab === "enhance" ? suggestions : grammarIssues;
 
+  const totalTranslated = entries.filter(e => translations[`${e.msbtFile}:${e.index}`]?.trim()).length;
+  const alreadyProcessed = processedKeysRef.current.size;
+  const remaining = totalTranslated - alreadyProcessed;
+
   return (
     <Card className="border-primary/20">
       <CardHeader className="pb-3">
@@ -179,6 +183,13 @@ const TranslationAIEnhancePanel: React.FC<TranslationAIEnhancePanelProps> = ({
           <Sparkles className="w-4 h-4 text-primary" />
           تحسين الترجمة بالذكاء الاصطناعي
         </CardTitle>
+        {totalTranslated > 0 && (
+          <div className="flex gap-3 text-[11px] text-muted-foreground mt-1">
+            <span>إجمالي: <strong className="text-foreground">{totalTranslated}</strong></span>
+            <span>تم فحصه: <strong className="text-foreground">{alreadyProcessed}</strong></span>
+            <span>متبقي: <strong className={remaining > 0 ? "text-primary" : "text-green-500"}>{remaining}</strong></span>
+          </div>
+        )}
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Action buttons */}
