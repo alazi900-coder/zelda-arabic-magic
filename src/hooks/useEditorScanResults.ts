@@ -18,7 +18,6 @@ export function useEditorScanResults() {
 
   // === Text cleanup scan results ===
   const [scanningSentences, setScanningSentences] = useState(false);
-  const [sentenceSplitResults, setSentenceSplitResults] = useState<import("@/lib/arabic-sentence-splitter").SentenceSplitResult[] | null>(null);
   const [newlineCleanResults, setNewlineCleanResults] = useState<import("@/components/editor/NewlineCleanPanel").NewlineCleanResult[] | null>(null);
   const [diacriticsCleanResults, setDiacriticsCleanResults] = useState<import("@/components/editor/DiacriticsCleanPanel").DiacriticsCleanResult[] | null>(null);
   const [duplicateAlefResults, setDuplicateAlefResults] = useState<import("@/components/editor/DuplicateAlefCleanPanel").DuplicateAlefResult[] | null>(null);
