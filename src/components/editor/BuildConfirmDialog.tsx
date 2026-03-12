@@ -35,8 +35,8 @@ interface BuildConfirmDialogProps {
 const BuildConfirmDialog = ({ open, onOpenChange, preview, onConfirm, building }: BuildConfirmDialogProps) => {
   if (!preview) return null;
 
-  const hasWarnings = (preview.overflowCount || 0) > 0 || (preview.unprocessedArabicCount || 0) > 0 || preview.isDemo;
-  const hasCritical = (preview.overflowCount || 0) > 0 || preview.isDemo;
+  const hasWarnings = (preview.overflowCount || 0) > 0 || (preview.unprocessedArabicCount || 0) > 0 || (preview.missingClosingTagCount || 0) > 0 || preview.isDemo;
+  const hasCritical = (preview.overflowCount || 0) > 0 || (preview.missingClosingTagCount || 0) > 0 || preview.isDemo;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
