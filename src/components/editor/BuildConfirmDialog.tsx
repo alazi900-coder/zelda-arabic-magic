@@ -18,6 +18,7 @@ export interface BuildPreview {
   // Warning stats
   overflowCount?: number;
   unprocessedArabicCount?: number;
+  missingClosingTagCount?: number;
   hasBdatFiles?: boolean;
   isDemo?: boolean;
   affectedFileCount?: number;
