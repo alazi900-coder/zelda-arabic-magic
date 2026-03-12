@@ -51,7 +51,7 @@ import BdatBuildReport from "@/components/editor/BdatBuildReport";
 import IntegrityCheckDialog from "@/components/editor/IntegrityCheckDialog";
 import PreBuildDiagnostic from "@/components/editor/PreBuildDiagnostic";
 import CompareEnginesDialog from "@/components/editor/CompareEnginesDialog";
-import SentenceSplitPanel from "@/components/editor/SentenceSplitPanel";
+
 import NewlineCleanPanel from "@/components/editor/NewlineCleanPanel";
 import DiacriticsCleanPanel from "@/components/editor/DiacriticsCleanPanel";
 import DuplicateAlefCleanPanel from "@/components/editor/DuplicateAlefCleanPanel";
