@@ -2980,7 +2980,7 @@ export function useEditorState() {
     setCurrentPage, setShowRetranslateConfirm,
     ...settings,
     setReviewResults, setShortSuggestions, setImproveResults, setBuildStats, setShowBuildConfirm,
-    setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults, setDiacriticsCleanResults, setDuplicateAlefResults, setMirrorCharsResults, setTagBracketFixResults, setNewlineSplitResults, setNpcSplitResults, setLineSyncResults, setUnifiedSplitResults, setSentenceOrderResults, setArabicTextFixResults,
+    setConsistencyResults, setNewlineCleanResults, setDiacriticsCleanResults, setMirrorCharsResults, setTagBracketFixResults, setNewlineSplitResults, setNpcSplitResults, setLineSyncResults, setUnifiedSplitResults, setArabicTextFixResults,
     setSmartReviewFindings,
     setGlossaryComplianceResults,
     setAdvancedAnalysisTab,
