@@ -2357,44 +2357,6 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 4000);
   }, [state, newlineCleanResults]);
 
-  // === Sentence Splitter ===
-  const handleScanMergedSentences = useCallback(() => {
-    if (!state) return;
-    setScanningSentences(true);
-    const results = scanMergedTranslations(state.translations, state.entries);
-    setSentenceSplitResults(results);
-    setSentenceSplitResults(results);
-    setScanningSentences(false);
-    if (results.length === 0) {
-      setLastSaved("✅ لم يتم اكتشاف جمل مندمجة");
-      setTimeout(() => setLastSaved(""), 4000);
-    }
-  }, [state]);
-
-  const handleApplySentenceSplit = useCallback((key: string) => {
-    if (!state || !sentenceSplitResults) return;
-    const item = sentenceSplitResults.find(r => r.key === key);
-    if (!item) return;
-    setState(prev => prev ? { ...prev, translations: { ...prev.translations, [key]: item.after } } : null);
-    setSentenceSplitResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'accepted' as const } : r) : null);
-  }, [state, sentenceSplitResults]);
-
-  const handleRejectSentenceSplit = useCallback((key: string) => {
-    setSentenceSplitResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'rejected' as const } : r) : null);
-  }, []);
-
-  const handleApplyAllSentenceSplits = useCallback(() => {
-    if (!state || !sentenceSplitResults) return;
-    const pending = sentenceSplitResults.filter(r => r.status === 'pending');
-    const newTranslations = { ...state.translations };
-    for (const item of pending) {
-      newTranslations[item.key] = item.after;
-    }
-    setState(prev => prev ? { ...prev, translations: newTranslations } : null);
-    setSentenceSplitResults(prev => prev ? prev.map(r => r.status === 'pending' ? { ...r, status: 'accepted' as const } : r) : null);
-    setLastSaved(`✅ تم تطبيق فصل ${pending.length} جملة مندمجة`);
-    setTimeout(() => setLastSaved(""), 4000);
-  }, [state, sentenceSplitResults]);
 
   // === Newline Split (auto-split long translations at character limit) ===
   // === Newline Split (auto-split long translations at character limit) ===
