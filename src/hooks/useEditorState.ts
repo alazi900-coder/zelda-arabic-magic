@@ -2,11 +2,11 @@ import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { toast } from "@/hooks/use-toast";
 import { idbSet, idbGet } from "@/lib/idb-storage";
 import { processArabicText, hasArabicChars as hasArabicCharsProcessing, hasArabicPresentationForms, removeArabicPresentationForms } from "@/lib/arabic-processing";
-import { scanAllTranslations as scanMergedTranslations } from "@/lib/arabic-sentence-splitter";
+
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { fixTagBracketsStrict, hasTechnicalBracketTag } from "@/lib/tag-bracket-fix";
-import { detectReversedSentences } from "@/components/editor/SentenceOrderPanel";
+
 import { balanceLines, visualLength, splitEvenlyByLines } from "@/lib/balance-lines";
 import { scanAllTextFixes } from "@/lib/arabic-text-fixes";
 
@@ -41,13 +41,13 @@ export function useEditorState() {
     improvingTranslations, setImprovingTranslations, improveResults, setImproveResults,
     fixingMixed, setFixingMixed,
     checkingConsistency, setCheckingConsistency, consistencyResults, setConsistencyResults,
-    scanningSentences, setScanningSentences, sentenceSplitResults, setSentenceSplitResults,
+    scanningSentences, setScanningSentences,
     newlineCleanResults, setNewlineCleanResults, diacriticsCleanResults, setDiacriticsCleanResults,
-    duplicateAlefResults, setDuplicateAlefResults,
+    
     mirrorCharsResults, setMirrorCharsResults, tagBracketFixResults, setTagBracketFixResults,
     arabicTextFixResults, setArabicTextFixResults, newlineSplitResults, setNewlineSplitResults,
     npcSplitResults, setNpcSplitResults, lineSyncResults, setLineSyncResults,
-    unifiedSplitResults, setUnifiedSplitResults, sentenceOrderResults, setSentenceOrderResults,
+    unifiedSplitResults, setUnifiedSplitResults,
     smartReviewFindings, setSmartReviewFindings, smartReviewing, setSmartReviewing,
     glossaryComplianceResults, setGlossaryComplianceResults, checkingGlossaryCompliance, setCheckingGlossaryCompliance,
     enhanceResults, setEnhanceResults, enhancingTranslations, setEnhancingTranslations,
@@ -2357,44 +2357,6 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 4000);
   }, [state, newlineCleanResults]);
 
-  // === Sentence Splitter ===
-  const handleScanMergedSentences = useCallback(() => {
-    if (!state) return;
-    setScanningSentences(true);
-    const results = scanMergedTranslations(state.translations, state.entries);
-    setSentenceSplitResults(results);
-    setSentenceSplitResults(results);
-    setScanningSentences(false);
-    if (results.length === 0) {
-      setLastSaved("✅ لم يتم اكتشاف جمل مندمجة");
-      setTimeout(() => setLastSaved(""), 4000);
-    }
-  }, [state]);
-
-  const handleApplySentenceSplit = useCallback((key: string) => {
-    if (!state || !sentenceSplitResults) return;
-    const item = sentenceSplitResults.find(r => r.key === key);
-    if (!item) return;
-    setState(prev => prev ? { ...prev, translations: { ...prev.translations, [key]: item.after } } : null);
-    setSentenceSplitResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'accepted' as const } : r) : null);
-  }, [state, sentenceSplitResults]);
-
-  const handleRejectSentenceSplit = useCallback((key: string) => {
-    setSentenceSplitResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'rejected' as const } : r) : null);
-  }, []);
-
-  const handleApplyAllSentenceSplits = useCallback(() => {
-    if (!state || !sentenceSplitResults) return;
-    const pending = sentenceSplitResults.filter(r => r.status === 'pending');
-    const newTranslations = { ...state.translations };
-    for (const item of pending) {
-      newTranslations[item.key] = item.after;
-    }
-    setState(prev => prev ? { ...prev, translations: newTranslations } : null);
-    setSentenceSplitResults(prev => prev ? prev.map(r => r.status === 'pending' ? { ...r, status: 'accepted' as const } : r) : null);
-    setLastSaved(`✅ تم تطبيق فصل ${pending.length} جملة مندمجة`);
-    setTimeout(() => setLastSaved(""), 4000);
-  }, [state, sentenceSplitResults]);
 
   // === Newline Split (auto-split long translations at character limit) ===
   // === Newline Split (auto-split long translations at character limit) ===
@@ -2787,51 +2749,6 @@ export function useEditorState() {
     }
   }, [pinnedKeys, filteredEntries]);
 
-  // === Duplicate Alef Clean ===
-  const handleScanDuplicateAlef = useCallback(() => {
-    if (!state) return;
-    const results: import("@/components/editor/DuplicateAlefCleanPanel").DuplicateAlefResult[] = [];
-    for (const [key, value] of Object.entries(state.translations)) {
-      if (!value?.trim()) continue;
-      // Pattern: "اال" (alef-alef-lam) → "الا" (alef-lam-alef) — swap, don't delete
-      const fixedAlefLam = value.replace(/ا(ال)/g, '$1ا');
-      // Then fix any remaining raw duplicate alefs (not before lam)
-      const after = fixedAlefLam.replace(/ا{2,}/g, 'ا');
-      if (after === value) continue;
-      const count = (value.match(/ا{2,}/g) || []).length + (value.match(/ا(?=ال)/g) || []).length;
-      results.push({ key, before: value, after, count, status: 'pending' });
-    }
-    setDuplicateAlefResults(results);
-    if (results.length === 0) {
-      setLastSaved("✅ لا توجد ألفات مكررة في الترجمات");
-      setTimeout(() => setLastSaved(""), 4000);
-    }
-  }, [state]);
-
-  const handleApplyDuplicateAlefClean = useCallback((key: string) => {
-    if (!state || !duplicateAlefResults) return;
-    const item = duplicateAlefResults.find(r => r.key === key);
-    if (!item) return;
-    setState(prev => prev ? { ...prev, translations: { ...prev.translations, [key]: item.after } } : null);
-    setDuplicateAlefResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'accepted' as const } : r) : null);
-  }, [state, duplicateAlefResults]);
-
-  const handleRejectDuplicateAlefClean = useCallback((key: string) => {
-    setDuplicateAlefResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'rejected' as const } : r) : null);
-  }, []);
-
-  const handleApplyAllDuplicateAlefCleans = useCallback(() => {
-    if (!state || !duplicateAlefResults) return;
-    const pending = duplicateAlefResults.filter(r => r.status === 'pending');
-    const newTranslations = { ...state.translations };
-    for (const item of pending) {
-      newTranslations[item.key] = item.after;
-    }
-    setState(prev => prev ? { ...prev, translations: newTranslations } : null);
-    setDuplicateAlefResults(prev => prev ? prev.map(r => r.status === 'pending' ? { ...r, status: 'accepted' as const } : r) : null);
-    setLastSaved(`✅ تم إصلاح ${pending.length} ألف مكرر`);
-    setTimeout(() => setLastSaved(""), 4000);
-  }, [state, duplicateAlefResults]);
 
   // === Mirror Chars Clean (brackets & arrows) ===
   const handleScanMirrorChars = useCallback(() => {
@@ -2987,42 +2904,6 @@ export function useEditorState() {
     setTimeout(() => setLastSaved(""), 4000);
   }, [state, tagBracketFixResults]);
 
-  // === Sentence Order Fix ===
-  const handleScanSentenceOrder = useCallback(() => {
-    if (!state) return;
-    const results = detectReversedSentences(state.entries, state.translations);
-    setSentenceOrderResults(results);
-    if (results.length === 0) {
-      setLastSaved("✅ لم يتم اكتشاف نصوص متعددة الجمل تحتاج مراجعة");
-      setTimeout(() => setLastSaved(""), 4000);
-    }
-  }, [state]);
-
-  const handleApplySentenceOrder = useCallback((key: string, customText?: string) => {
-    if (!state || !sentenceOrderResults) return;
-    const item = sentenceOrderResults.find(r => r.key === key);
-    if (!item) return;
-    const newText = customText || item.after;
-    setState(prev => prev ? { ...prev, translations: { ...prev.translations, [key]: newText } } : null);
-    setSentenceOrderResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'accepted' as const } : r) : null);
-  }, [state, sentenceOrderResults]);
-
-  const handleRejectSentenceOrder = useCallback((key: string) => {
-    setSentenceOrderResults(prev => prev ? prev.map(r => r.key === key ? { ...r, status: 'rejected' as const } : r) : null);
-  }, []);
-
-  const handleApplyAllSentenceOrders = useCallback(() => {
-    if (!state || !sentenceOrderResults) return;
-    const pending = sentenceOrderResults.filter(r => r.status === 'pending');
-    const newTranslations = { ...state.translations };
-    for (const item of pending) {
-      newTranslations[item.key] = item.after;
-    }
-    setState(prev => prev ? { ...prev, translations: newTranslations } : null);
-    setSentenceOrderResults(prev => prev ? prev.map(r => r.status === 'pending' ? { ...r, status: 'accepted' as const } : r) : null);
-    setLastSaved(`✅ تم عكس ترتيب الجمل في ${pending.length} ترجمة`);
-    setTimeout(() => setLastSaved(""), 4000);
-  }, [state, sentenceOrderResults]);
 
   // === Arabic Text Fixes (تاء/هاء، ياء/ألف مقصورة، كلمات مكررة، مخلفات AI) ===
   const handleScanArabicTextFixes = useCallback(() => {
@@ -3080,7 +2961,7 @@ export function useEditorState() {
     applyingArabic, improvingTranslations, improveResults,
     fixingMixed, filtersOpen, buildStats, buildPreview, showBuildConfirm, bdatFileStats,
     checkingConsistency, consistencyResults,
-    scanningSentences, sentenceSplitResults, newlineCleanResults, diacriticsCleanResults, duplicateAlefResults, mirrorCharsResults, tagBracketFixResults, newlineSplitResults, npcSplitResults, lineSyncResults, unifiedSplitResults, sentenceOrderResults, arabicTextFixResults,
+    scanningSentences, newlineCleanResults, diacriticsCleanResults, mirrorCharsResults, tagBracketFixResults, newlineSplitResults, npcSplitResults, lineSyncResults, unifiedSplitResults, arabicTextFixResults,
     smartReviewing, smartReviewFindings,
     enhanceResults, enhancingTranslations,
     // Advanced Analysis
@@ -3099,7 +2980,7 @@ export function useEditorState() {
     setCurrentPage, setShowRetranslateConfirm,
     ...settings,
     setReviewResults, setShortSuggestions, setImproveResults, setBuildStats, setShowBuildConfirm,
-    setConsistencyResults, setSentenceSplitResults, setNewlineCleanResults, setDiacriticsCleanResults, setDuplicateAlefResults, setMirrorCharsResults, setTagBracketFixResults, setNewlineSplitResults, setNpcSplitResults, setLineSyncResults, setUnifiedSplitResults, setSentenceOrderResults, setArabicTextFixResults,
+    setConsistencyResults, setNewlineCleanResults, setDiacriticsCleanResults, setMirrorCharsResults, setTagBracketFixResults, setNewlineSplitResults, setNpcSplitResults, setLineSyncResults, setUnifiedSplitResults, setArabicTextFixResults,
     setSmartReviewFindings,
     setGlossaryComplianceResults,
     setAdvancedAnalysisTab,
@@ -3130,17 +3011,16 @@ export function useEditorState() {
     handleAcceptFuzzy, handleRejectFuzzy, handleAcceptAllFuzzy, handleRejectAllFuzzy,
     handleCloudSave, handleCloudLoad,
     handleApplyArabicProcessing, handleUndoArabicProcessing, handlePreBuild, handleBuild, handleBulkReplace, loadDemoBdatData, handleCheckIntegrity, handleRestoreOriginals, handleRemoveAllDiacritics,
-    handleScanMergedSentences, handleApplySentenceSplit, handleRejectSentenceSplit, handleApplyAllSentenceSplits,
     handleScanNewlines, handleApplyNewlineClean, handleRejectNewlineClean, handleApplyAllNewlineCleans,
     handleScanDiacritics, handleApplyDiacriticsClean, handleRejectDiacriticsClean, handleApplyAllDiacriticsCleans,
-    handleScanDuplicateAlef, handleApplyDuplicateAlefClean, handleRejectDuplicateAlefClean, handleApplyAllDuplicateAlefCleans,
+    
     handleScanMirrorChars, handleApplyMirrorCharsClean, handleRejectMirrorCharsClean, handleApplyAllMirrorCharsCleans,
     handleScanTagBrackets, handleApplyTagBracketFix, handleRejectTagBracketFix, handleApplyAllTagBracketFixes,
     handleScanNewlineSplit, handleApplyNewlineSplit, handleRejectNewlineSplit, handleApplyAllNewlineSplits, handleSplitSingleEntry, handleFlattenAllNewlines, handleFontTest, newlineSplitCharLimit, setNewlineSplitCharLimit,
     handleScanNpcSplit, handleApplyNpcSplit, handleRejectNpcSplit, handleApplyAllNpcSplits,
     handleScanLineSync, handleApplyLineSync, handleRejectLineSync, handleApplyAllLineSyncs,
     handleScanAllSplits, handleApplyUnifiedSplit, handleRejectUnifiedSplit, handleApplyAllUnifiedSplits,
-    handleScanSentenceOrder, handleApplySentenceOrder, handleRejectSentenceOrder, handleApplyAllSentenceOrders,
+    
     handleScanArabicTextFixes, handleApplyArabicTextFix, handleRejectArabicTextFix, handleApplyAllArabicTextFixes,
     handleTogglePin,
     handleClearTranslations, handleUndoClear, clearUndoBackup, isFilterActive,

@@ -51,13 +51,13 @@ import BdatBuildReport from "@/components/editor/BdatBuildReport";
 import IntegrityCheckDialog from "@/components/editor/IntegrityCheckDialog";
 import PreBuildDiagnostic from "@/components/editor/PreBuildDiagnostic";
 import CompareEnginesDialog from "@/components/editor/CompareEnginesDialog";
-import SentenceSplitPanel from "@/components/editor/SentenceSplitPanel";
+
 import NewlineCleanPanel from "@/components/editor/NewlineCleanPanel";
 import DiacriticsCleanPanel from "@/components/editor/DiacriticsCleanPanel";
-import DuplicateAlefCleanPanel from "@/components/editor/DuplicateAlefCleanPanel";
+
 import MirrorCharsCleanPanel from "@/components/editor/MirrorCharsCleanPanel";
 import MergeToBundledPanel from "@/components/editor/MergeToBundledPanel";
-import SentenceOrderPanel from "@/components/editor/SentenceOrderPanel";
+
 import ArabicTextFixPanel from "@/components/editor/ArabicTextFixPanel";
 import ExportEnglishDialog from "@/components/editor/ExportEnglishDialog";
 import GlossaryStatsPanel from "@/components/editor/GlossaryStatsPanel";
@@ -74,7 +74,7 @@ import QualityChecksPanel from "@/components/editor/QualityChecksPanel";
 import CleanupToolsPanel from "@/components/editor/CleanupToolsPanel";
 import LineBalancePanel from "@/components/editor/LineBalancePanel";
 import TranslationToolsPanel from "@/components/editor/TranslationToolsPanel";
-import MismatchDetectorPanel from "@/components/editor/MismatchDetectorPanel";
+
 import GlossaryMergePreviewDialog from "@/components/editor/GlossaryMergePreviewDialog";
 import SmartReviewPanel from "@/components/editor/SmartReviewPanel";
 import GlossaryCompliancePanel from "@/components/editor/GlossaryCompliancePanel";
@@ -715,27 +715,6 @@ const Editor = () => {
             translating={editor.translating}
           />
 
-          {/* Mismatch Detector */}
-          <MismatchDetectorPanel
-            state={editor.state}
-            onClearTranslation={(key) => editor.updateTranslation(key, '')}
-            onClearMultiple={(keys) => { for (const k of keys) editor.updateTranslation(k, ''); }}
-            onNavigateToEntry={(key) => {
-              editor.setFilterStatus('all');
-              editor.setSearch('');
-              setTimeout(() => {
-                const idx = editor.state.entries.findIndex(e => `${e.msbtFile}:${e.index}` === key);
-                if (idx >= 0) {
-                  const page = Math.floor(idx / 50);
-                  editor.setCurrentPage(page);
-                  setTimeout(() => {
-                    const el = document.querySelector(`[data-entry-key="${CSS.escape(key)}"]`);
-                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                  }, 100);
-                }
-              }, 50);
-            }}
-          />
 
           <QualityChecksPanel
             state={editor.state}
@@ -840,16 +819,6 @@ const Editor = () => {
             />
           )}
 
-          {/* Sentence Split Results */}
-          {editor.sentenceSplitResults && editor.sentenceSplitResults.length > 0 && (
-            <SentenceSplitPanel
-              results={editor.sentenceSplitResults}
-              onAccept={editor.handleApplySentenceSplit}
-              onReject={editor.handleRejectSentenceSplit}
-              onAcceptAll={editor.handleApplyAllSentenceSplits}
-              onClose={() => editor.setSentenceSplitResults(null)}
-            />
-          )}
 
           {/* Newline Clean Results */}
           {editor.newlineCleanResults && editor.newlineCleanResults.length > 0 && (
@@ -873,16 +842,6 @@ const Editor = () => {
             />
           )}
 
-          {/* Duplicate Alef Clean Results */}
-          {editor.duplicateAlefResults && editor.duplicateAlefResults.length > 0 && (
-            <DuplicateAlefCleanPanel
-              results={editor.duplicateAlefResults}
-              onAccept={editor.handleApplyDuplicateAlefClean}
-              onReject={editor.handleRejectDuplicateAlefClean}
-              onAcceptAll={editor.handleApplyAllDuplicateAlefCleans}
-              onClose={() => editor.setDuplicateAlefResults(null)}
-            />
-           )}
 
           {/* Arabic Text Fix Results */}
           {editor.arabicTextFixResults && editor.arabicTextFixResults.length > 0 && (
@@ -974,15 +933,6 @@ const Editor = () => {
             />
           )}
 
-          {editor.sentenceOrderResults && editor.sentenceOrderResults.length > 0 && (
-            <SentenceOrderPanel
-              results={editor.sentenceOrderResults}
-              onAccept={editor.handleApplySentenceOrder}
-              onReject={editor.handleRejectSentenceOrder}
-              onAcceptAll={editor.handleApplyAllSentenceOrders}
-              onClose={() => editor.setSentenceOrderResults(null)}
-            />
-          )}
 
           {/* Smart Review Panel */}
           {editor.smartReviewFindings && editor.smartReviewFindings.length > 0 && (
@@ -1460,7 +1410,6 @@ const Editor = () => {
                   {/* ─── تنظيف النصوص ─── */}
                   <DropdownMenuLabel className="text-xs text-primary/80">🧹 تنظيف النصوص</DropdownMenuLabel>
                   <DropdownMenuItem onClick={editor.handleScanDiacritics}><Type className="w-4 h-4" /> إزالة التشكيلات ✏️</DropdownMenuItem>
-                  <DropdownMenuItem onClick={editor.handleScanDuplicateAlef} disabled={editor.translatedCount === 0}>🔤 إزالة الألف المكرر</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleScanMirrorChars} disabled={editor.translatedCount === 0}>🔄 عكس الأقواس والأسهم</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleScanTagBrackets} disabled={editor.translatedCount === 0}>🔧 إصلاح أقواس الرموز التقنية</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleScanArabicTextFixes} disabled={editor.translatedCount === 0}>✨ تحسين النصوص (تاء/هاء، ياء/ألف)</DropdownMenuItem>
@@ -1475,10 +1424,6 @@ const Editor = () => {
 
                   {/* ─── تنسيق وتقسيم ─── */}
                   <DropdownMenuLabel className="text-xs text-primary/80">✂️ تنسيق وتقسيم</DropdownMenuLabel>
-                  <DropdownMenuItem onClick={editor.handleScanSentenceOrder} disabled={editor.translatedCount === 0}>↕️ فحص ترتيب الجمل</DropdownMenuItem>
-                  <DropdownMenuItem onClick={editor.handleScanMergedSentences} disabled={editor.scanningSentences || editor.translatedCount === 0}>
-                    {editor.scanningSentences ? <Loader2 className="w-4 h-4 animate-spin" /> : <AlertTriangle className="w-4 h-4" />} فصل الجمل المندمجة ✂️
-                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleFlattenAllNewlines} disabled={editor.translatedCount === 0 || editor.multiLineCount === 0}>
                     📏 دمج الأسطر المتعددة {editor.multiLineCount > 0 && <span className="text-muted-foreground text-[10px]">({editor.multiLineCount})</span>}
                   </DropdownMenuItem>
@@ -1703,7 +1648,7 @@ const Editor = () => {
                   <DropdownMenuItem onClick={editor.handleFixAllReversed}><RotateCcw className="w-4 h-4" /> تصحيح الكل (عربي معكوس)</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleFixAllStuckCharacters} disabled={editor.needsImproveCount.stuck === 0}><AlertTriangle className="w-4 h-4" /> إصلاح الأحرف الملتصقة 🔤</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleScanDiacritics}><Type className="w-4 h-4" /> إزالة التشكيلات ✏️</DropdownMenuItem>
-                  <DropdownMenuItem onClick={editor.handleScanDuplicateAlef} disabled={editor.translatedCount === 0}>🔤 إزالة الألف المكرر</DropdownMenuItem>
+                  
                   <DropdownMenuItem onClick={editor.handleScanMirrorChars} disabled={editor.translatedCount === 0}>🔄 عكس الأقواس والأسهم</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleScanTagBrackets} disabled={editor.translatedCount === 0}>🔧 إصلاح أقواس الرموز التقنية</DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleScanArabicTextFixes} disabled={editor.translatedCount === 0}>✨ تحسين النصوص (تاء/هاء، ياء/ألف، مكررات)</DropdownMenuItem>
@@ -1718,10 +1663,6 @@ const Editor = () => {
 
                   {/* ─── تنسيق وتقسيم ─── */}
                   <DropdownMenuLabel className="text-xs text-primary/80">✂️ تنسيق وتقسيم</DropdownMenuLabel>
-                  <DropdownMenuItem onClick={editor.handleScanSentenceOrder} disabled={editor.translatedCount === 0}>↕️ فحص ترتيب الجمل</DropdownMenuItem>
-                  <DropdownMenuItem onClick={editor.handleScanMergedSentences} disabled={editor.scanningSentences || editor.translatedCount === 0}>
-                    {editor.scanningSentences ? <Loader2 className="w-4 h-4 animate-spin" /> : <AlertTriangle className="w-4 h-4" />} فصل الجمل المندمجة
-                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={editor.handleFlattenAllNewlines} disabled={editor.translatedCount === 0 || editor.multiLineCount === 0}>
                     📏 دمج الأسطر المتعددة (سطر واحد) {editor.multiLineCount > 0 && <span className="text-muted-foreground text-[10px]">({editor.multiLineCount})</span>}
                   </DropdownMenuItem>

@@ -18,10 +18,9 @@ export function useEditorScanResults() {
 
   // === Text cleanup scan results ===
   const [scanningSentences, setScanningSentences] = useState(false);
-  const [sentenceSplitResults, setSentenceSplitResults] = useState<import("@/lib/arabic-sentence-splitter").SentenceSplitResult[] | null>(null);
   const [newlineCleanResults, setNewlineCleanResults] = useState<import("@/components/editor/NewlineCleanPanel").NewlineCleanResult[] | null>(null);
   const [diacriticsCleanResults, setDiacriticsCleanResults] = useState<import("@/components/editor/DiacriticsCleanPanel").DiacriticsCleanResult[] | null>(null);
-  const [duplicateAlefResults, setDuplicateAlefResults] = useState<import("@/components/editor/DuplicateAlefCleanPanel").DuplicateAlefResult[] | null>(null);
+  
   const [mirrorCharsResults, setMirrorCharsResults] = useState<import("@/components/editor/MirrorCharsCleanPanel").MirrorCharsResult[] | null>(null);
   const [tagBracketFixResults, setTagBracketFixResults] = useState<import("@/components/editor/TagBracketFixPanel").TagBracketFixResult[] | null>(null);
   const [arabicTextFixResults, setArabicTextFixResults] = useState<import("@/lib/arabic-text-fixes").TextFixResult[] | null>(null);
@@ -29,7 +28,7 @@ export function useEditorScanResults() {
   const [npcSplitResults, setNpcSplitResults] = useState<import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] | null>(null);
   const [lineSyncResults, setLineSyncResults] = useState<import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] | null>(null);
   const [unifiedSplitResults, setUnifiedSplitResults] = useState<import("@/components/editor/NewlineSplitPanel").NewlineSplitResult[] | null>(null);
-  const [sentenceOrderResults, setSentenceOrderResults] = useState<import("@/components/editor/SentenceOrderPanel").SentenceOrderResult[] | null>(null);
+  
 
   // === Smart review ===
   const [smartReviewFindings, setSmartReviewFindings] = useState<import("@/components/editor/SmartReviewPanel").SmartReviewFinding[] | null>(null);
@@ -76,10 +75,9 @@ export function useEditorScanResults() {
     checkingConsistency, setCheckingConsistency,
     consistencyResults, setConsistencyResults,
     scanningSentences, setScanningSentences,
-    sentenceSplitResults, setSentenceSplitResults,
     newlineCleanResults, setNewlineCleanResults,
     diacriticsCleanResults, setDiacriticsCleanResults,
-    duplicateAlefResults, setDuplicateAlefResults,
+    
     mirrorCharsResults, setMirrorCharsResults,
     tagBracketFixResults, setTagBracketFixResults,
     arabicTextFixResults, setArabicTextFixResults,
@@ -87,7 +85,7 @@ export function useEditorScanResults() {
     npcSplitResults, setNpcSplitResults,
     lineSyncResults, setLineSyncResults,
     unifiedSplitResults, setUnifiedSplitResults,
-    sentenceOrderResults, setSentenceOrderResults,
+    
     smartReviewFindings, setSmartReviewFindings,
     smartReviewing, setSmartReviewing,
     glossaryComplianceResults, setGlossaryComplianceResults,
