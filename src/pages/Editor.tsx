@@ -57,7 +57,7 @@ import DiacriticsCleanPanel from "@/components/editor/DiacriticsCleanPanel";
 
 import MirrorCharsCleanPanel from "@/components/editor/MirrorCharsCleanPanel";
 import MergeToBundledPanel from "@/components/editor/MergeToBundledPanel";
-import SentenceOrderPanel from "@/components/editor/SentenceOrderPanel";
+
 import ArabicTextFixPanel from "@/components/editor/ArabicTextFixPanel";
 import ExportEnglishDialog from "@/components/editor/ExportEnglishDialog";
 import GlossaryStatsPanel from "@/components/editor/GlossaryStatsPanel";
