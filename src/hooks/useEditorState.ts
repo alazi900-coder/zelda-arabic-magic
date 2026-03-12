@@ -6,7 +6,7 @@ import { processArabicText, hasArabicChars as hasArabicCharsProcessing, hasArabi
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { fixTagBracketsStrict, hasTechnicalBracketTag } from "@/lib/tag-bracket-fix";
-import { detectReversedSentences } from "@/components/editor/SentenceOrderPanel";
+
 import { balanceLines, visualLength, splitEvenlyByLines } from "@/lib/balance-lines";
 import { scanAllTextFixes } from "@/lib/arabic-text-fixes";
 
