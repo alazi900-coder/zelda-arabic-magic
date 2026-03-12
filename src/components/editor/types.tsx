@@ -468,10 +468,10 @@ export function categorizeByColumnName(columnName: string): string | null {
   return null;
 }
 
-// Check if text contains technical tag markers (PUA, control chars, [Tag:...], N[TAG], [TAG]N, [TAG=Value], {TAG:Value})
+// Check if text contains technical tag markers (PUA, control chars, [Tag:...], [/Tag:...], N[TAG], [TAG]N, [TAG=Value], {TAG:Value})
 export function hasTechnicalTags(text: string): boolean {
   return /[\uFFF9\uFFFA\uFFFB\uFFFC\uE000-\uE0FF]/.test(text)
-    || /\[\s*\w+\s*:[^\]]*\]/.test(text)
+    || /\[\s*\/?\s*\w+\s*:[^\]]*\]/.test(text)
     || /\d+\s*\[[A-Z]{2,10}\]/.test(text)
     || /\[[A-Z]{2,10}\]\s*\d+/.test(text)
     || /\[\s*\w+\s*=\s*\w[^\]]*\]/.test(text)
@@ -483,8 +483,8 @@ export { restoreTagsLocally, previewTagRestore } from "@/lib/xc3-tag-restoration
 
 // Sanitize original text: replace binary tag markers with color-coded, tooltipped badges
 export function displayOriginal(text: string): React.ReactNode {
-  // Split on PUA, control chars, AND [Tag:...] patterns
-  const regex = /([\uFFF9\uFFFA\uFFFB\uFFFC\uE000-\uE0FF\u0000-\u0008\u000E-\u001F]+|\[\w+:[^\]]*\])/g;
+  // Split on PUA, control chars, AND [Tag:...] / [/Tag:...] patterns
+  const regex = /([\uFFF9\uFFFA\uFFFB\uFFFC\uE000-\uE0FF\u0000-\u0008\u000E-\u001F]+|\[\s*\/?\s*\w+\s*:[^\]]*\])/g;
   const parts = text.split(regex);
   if (parts.length === 1 && !regex.test(text)) return text;
   const elements: React.ReactNode[] = [];
@@ -494,8 +494,8 @@ export function displayOriginal(text: string): React.ReactNode {
     if (!part) continue;
     const firstCode = part.charCodeAt(0);
 
-    // [Tag:Value] format tags (e.g. [ML:undisp ], [ML:Feeling ])
-    if (/^\[\w+:[^\]]*\]$/.test(part)) {
+    // [Tag:Value] / [/Tag:Value] format tags (e.g. [ML:undisp ], [/System:Ruby])
+    if (/^\[\s*\/?\s*\w+\s*:[^\]]*\]$/.test(part)) {
       mlCounter++;
       const tagContent = part.slice(1, -1); // Remove brackets
       const tagType = tagContent.split(':')[0]; // e.g. "ML"
@@ -602,9 +602,9 @@ export function isTechnicalText(text: string): boolean {
   if (/^[a-z]+([A-Z][a-z]*)+$|^[a-z]+(_[a-z]+)+$/.test(t)) return true;
   // Short alphanumeric codes (e.g. zY1, yY1, xA3) — not real sentences
   if (/^[a-zA-Z0-9]{1,6}$/.test(t) && !/^[A-Z][a-z]{2,}$/.test(t)) return true;
-  // Text that is ONLY [ML:...] tags with no real translatable content
-  const strippedML = text.replace(/\[\s*\w+\s*:[^\]]*\]/g, '').trim();
-  if (strippedML.length === 0 && /\[\s*\w+\s*:[^\]]*\]/.test(text)) return true;
+  // Text that is ONLY [ML:...] / [/ML:...] tags with no real translatable content
+  const strippedML = text.replace(/\[\s*\/?\s*\w+\s*:[^\]]*\]/g, '').trim();
+  if (strippedML.length === 0 && /\[\s*\/?\s*\w+\s*:[^\]]*\]/.test(text)) return true;
   return false;
 }
 
