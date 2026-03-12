@@ -54,7 +54,7 @@ import CompareEnginesDialog from "@/components/editor/CompareEnginesDialog";
 
 import NewlineCleanPanel from "@/components/editor/NewlineCleanPanel";
 import DiacriticsCleanPanel from "@/components/editor/DiacriticsCleanPanel";
-import DuplicateAlefCleanPanel from "@/components/editor/DuplicateAlefCleanPanel";
+
 import MirrorCharsCleanPanel from "@/components/editor/MirrorCharsCleanPanel";
 import MergeToBundledPanel from "@/components/editor/MergeToBundledPanel";
 import SentenceOrderPanel from "@/components/editor/SentenceOrderPanel";
