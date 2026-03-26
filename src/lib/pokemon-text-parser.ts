@@ -320,10 +320,7 @@ function readLines(
     let userParam = 0;
 
     if (dataLength > 0 && dataOffset + dataLength <= bytes.length) {
-      const sliced = bytes.slice(dataOffset, dataOffset + dataLength);
-      let lineBytes = new Uint8Array(sliced.buffer instanceof ArrayBuffer ? sliced.buffer : new ArrayBuffer(sliced.length)) as Uint8Array<ArrayBuffer>;
-      if (!(sliced.buffer instanceof ArrayBuffer)) lineBytes.set(sliced);
-      else lineBytes = new Uint8Array(sliced) as Uint8Array<ArrayBuffer>;
+      let lineBytes = new Uint8Array(Array.from(bytes.slice(dataOffset, dataOffset + dataLength))) as Uint8Array<ArrayBuffer>;
 
       if (useEncryption) {
         lineBytes = cryptLineData(lineBytes, lineKey);
@@ -402,7 +399,7 @@ function readSectionBased(
       const byteLen = strLen * 2;
 
       if (absOffset + byteLen <= bytes.length) {
-        let lineBytes = new Uint8Array(bytes.slice(absOffset, absOffset + byteLen));
+        let lineBytes = new Uint8Array(Array.from(bytes.slice(absOffset, absOffset + byteLen))) as Uint8Array<ArrayBuffer>;
 
         if (useEncryption) {
           lineBytes = cryptLineData(lineBytes, lineKey);
