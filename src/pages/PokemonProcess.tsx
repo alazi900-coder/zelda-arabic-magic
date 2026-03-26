@@ -214,12 +214,9 @@ export default function PokemonProcess() {
     await idbSet("editorState", {
       entries: editorEntries,
       translations,
+      glossary: glossary || "",
       freshExtraction: true,
     });
-
-    if (glossary) {
-      await idbSet("editorGlossary", glossary);
-    }
 
     navigate("/editor");
   }, [entries, glossary, navigate]);
