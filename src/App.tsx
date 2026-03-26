@@ -12,6 +12,8 @@ import { Loader2 } from "lucide-react";
 
 const Xenoblade = lazy(() => import("./pages/Xenoblade"));
 const XenobladeProcess = lazy(() => import("./pages/XenobladeProcess"));
+const Pokemon = lazy(() => import("./pages/Pokemon"));
+const PokemonProcess = lazy(() => import("./pages/PokemonProcess"));
 const Editor = lazy(() => import("./pages/Editor"));
 const Auth = lazy(() => import("./pages/Auth"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -44,6 +46,8 @@ const App = () => (
                 <Route path="/editor" element={<ErrorBoundary fallbackTitle="خطأ في المحرر"><Editor /></ErrorBoundary>} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/install" element={<Install />} />
+                <Route path="/pokemon" element={<Pokemon />} />
+                <Route path="/pokemon/process" element={<ErrorBoundary fallbackTitle="خطأ في معالجة بوكيمون"><PokemonProcess /></ErrorBoundary>} />
                 <Route path="/mod-packager" element={<ModPackager />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
