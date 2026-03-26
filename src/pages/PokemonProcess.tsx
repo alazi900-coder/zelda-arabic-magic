@@ -24,6 +24,7 @@ interface FileInfo {
 
 export default function PokemonProcess() {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const glossaryInputRef = useRef<HTMLInputElement>(null);
 
