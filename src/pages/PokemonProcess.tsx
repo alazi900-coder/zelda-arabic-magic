@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Upload, FileText, ArrowRight, Download, Loader2, ArrowLeft, BookOpen, FileJson, Eye, Shield, Zap } from "lucide-react";
 import { loadPokemonTextFile, parseTblFile, readFileBufferRobust, buildDat, type PokemonTextFile, type AhtbLabel } from "@/lib/pokemon-text-parser";
 import { autoDecompressZstd } from "@/lib/zstd-utils";
+import { idbSet } from "@/lib/idb-storage";
 
 interface ParsedEntry {
   key: string;
