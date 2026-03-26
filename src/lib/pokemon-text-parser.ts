@@ -49,7 +49,7 @@ function rotateKey(key: number): number {
   return ((key << 3) | (key >>> 13)) & 0xFFFF;
 }
 
-function cryptLineData(data: Uint8Array, lineKey: number): Uint8Array {
+function cryptLineData(data: Uint8Array<ArrayBuffer>, lineKey: number): Uint8Array<ArrayBuffer> {
   const out = new Uint8Array(data.length);
   let k = lineKey;
   for (let i = 0; i + 1 < data.length; i += 2) {
