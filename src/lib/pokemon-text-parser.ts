@@ -348,6 +348,43 @@ function validateTableLayout(
   return sampleCount === 0 || nonEmptySeen > 0;
 }
 
+// ─── Raw UTF-16LE fallback ───────────────────────────────────────────────────
+
+function tryRawUtf16(bytes: Uint8Array): PokemonTextEntry[] {
+  if (bytes.length < 4 || bytes.length % 2 !== 0) return [];
+  
+  const codeCount = bytes.length / 2;
+  const codes = new Uint16Array(codeCount);
+  for (let i = 0; i < codeCount; i++) {
+    codes[i] = bytes[i * 2] | (bytes[i * 2 + 1] << 8);
+  }
+  
+  const entries: PokemonTextEntry[] = [];
+  let start = 0;
+  for (let i = 0; i <= codeCount; i++) {
+    if (i === codeCount || codes[i] === 0) {
+      if (i > start) {
+        const slice = codes.slice(start, i);
+        const text = decodeLine(slice);
+        if (text.trim()) {
+          entries.push({
+            index: entries.length,
+            label: String(entries.length),
+            text,
+            originalText: text,
+            userParam: 0,
+            rawCodes: slice,
+          });
+        }
+      }
+      start = i + 1;
+    }
+  }
+  
+  if (entries.length > 0 && readabilityScore(entries) > 0.5) return entries;
+  return [];
+}
+
 // ─── Read Lines ──────────────────────────────────────────────────────────────
 
 function readLines(
@@ -537,40 +574,43 @@ export function loadPokemonTextFile(
   const detected = detectHeader(view, buffer.byteLength);
 
   if (!detected) {
+    // Fallback: try as raw UTF-16LE text file
+    const fallbackEntries = tryRawUtf16(bytes);
+    if (fallbackEntries.length > 0) {
+      return {
+        filename,
+        headerType: 'unknown' as const,
+        sectionCount: 1,
+        lineCount: fallbackEntries.length,
+        encrypted: false,
+        entries: fallbackEntries,
+        _rawBuffer: buffer,
+        _headerOffset: 0,
+      };
+    }
     throw new Error(`لم يتم التعرف على صيغة الملف: ${filename}`);
   }
 
   const { header, offset: headerOffset } = detected;
 
-  // Try with encryption first
+  // Try BOTH encrypted and unencrypted, pick the best result
+  const readFn = header.type === 'v1-flat' ? readLines : readSectionBased;
+
+  const entriesEncrypted = readFn(view, bytes, headerOffset, header, true);
+  const entriesPlain = readFn(view, bytes, headerOffset, header, false);
+
+  const scoreEncrypted = readabilityScore(entriesEncrypted);
+  const scorePlain = readabilityScore(entriesPlain);
+
   let entries: PokemonTextEntry[];
+  let encrypted: boolean;
 
-  if (header.type === 'v1-flat') {
-    entries = readLines(view, bytes, headerOffset, header, true);
-  } else {
-    entries = readSectionBased(view, bytes, headerOffset, header, true);
-  }
-
-  // Check for gibberish — retry without encryption
-  const sampleTexts = entries.slice(0, Math.min(20, entries.length)).filter(e => e.text.length > 0);
-  const gibberishCount = sampleTexts.filter(e => isGibberish(e.text)).length;
-
-  // Check readability — try without encryption and compare
-  let encrypted = true;
-  const scoreEncrypted = readabilityScore(entries);
-
-  let entriesNoEncrypt: PokemonTextEntry[];
-  if (header.type === 'v1-flat') {
-    entriesNoEncrypt = readLines(view, bytes, headerOffset, header, false);
-  } else {
-    entriesNoEncrypt = readSectionBased(view, bytes, headerOffset, header, false);
-  }
-  const scoreNoEncrypt = readabilityScore(entriesNoEncrypt);
-
-  // Pick whichever produces more readable text
-  if (scoreNoEncrypt > scoreEncrypted) {
-    entries = entriesNoEncrypt;
+  if (scorePlain >= scoreEncrypted) {
+    entries = entriesPlain;
     encrypted = false;
+  } else {
+    entries = entriesEncrypted;
+    encrypted = true;
   }
 
   // Apply TBL labels if provided
