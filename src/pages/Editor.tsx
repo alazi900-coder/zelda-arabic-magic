@@ -104,8 +104,12 @@ const Editor = () => {
   const [fontTestWord, setFontTestWord] = React.useState("");
   const [pageLocked, setPageLocked] = React.useState(false);
   const [showToolHelp, setShowToolHelp] = React.useState<ToolType>(null);
-  const gameType = "xenoblade";
-  const processPath = "/process";
+  const isPokemon = React.useMemo(() => {
+    if (!editor.state?.entries?.length) return false;
+    return !editor.state.entries[0].msbtFile.startsWith("bdat-bin:");
+  }, [editor.state?.entries]);
+  const gameType = isPokemon ? "pokemon" : "xenoblade";
+  const processPath = isPokemon ? "/pokemon/process" : "/process";
 
   // Keyboard shortcuts
   useEditorKeyboard({
