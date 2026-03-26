@@ -1,11 +1,12 @@
 import { useState, useCallback, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { Upload, FileText, ArrowRight, Download, Loader2, ArrowLeft, BookOpen, FileJson, Eye, Shield, Zap } from "lucide-react";
 import { loadPokemonTextFile, parseTblFile, readFileBufferRobust, buildDat, type PokemonTextFile, type AhtbLabel } from "@/lib/pokemon-text-parser";
 import { autoDecompressZstd } from "@/lib/zstd-utils";
+import { idbSet } from "@/lib/idb-storage";
 
 interface ParsedEntry {
   key: string;
@@ -24,6 +25,7 @@ interface FileInfo {
 
 export default function PokemonProcess() {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const glossaryInputRef = useRef<HTMLInputElement>(null);
 
@@ -197,22 +199,27 @@ export default function PokemonProcess() {
     toast({ title: "تم تصدير ملفات .dat", description: `${parsedFiles.size} ملف` });
   }, [entries, parsedFiles, toast]);
 
-  const handleOpenEditor = useCallback(() => {
-    const editorData = {
-      entries: entries.map((e, i) => ({
-        msbtFile: e.sourceFile,
-        index: i,
-        label: e.key,
-        original: e.original,
-        maxBytes: 9999,
-      })),
-      translations: Object.fromEntries(entries.filter(e => e.translation).map(e => [e.key, e.translation])),
-      glossary,
-      game: "pokemon",
-    };
-    sessionStorage.setItem("pokemon-editor-data", JSON.stringify(editorData));
-    window.location.href = "/editor?source=pokemon";
-  }, [entries, glossary]);
+  const handleOpenEditor = useCallback(async () => {
+    const editorEntries = entries.map((e, i) => ({
+      msbtFile: e.sourceFile,
+      index: i,
+      label: e.key,
+      original: e.original,
+      maxBytes: 9999,
+    }));
+    const translations = Object.fromEntries(
+      entries.filter(e => e.translation?.trim()).map(e => [`${e.sourceFile}:${entries.indexOf(e)}`, e.translation])
+    );
+
+    await idbSet("editorState", {
+      entries: editorEntries,
+      translations,
+      glossary: glossary || "",
+      freshExtraction: true,
+    });
+
+    navigate("/editor");
+  }, [entries, glossary, navigate]);
 
   const translatedCount = entries.filter(e => e.translation.trim()).length;
   const datFilesCount = loadedFiles.filter(f => f.type === "dat").length;
