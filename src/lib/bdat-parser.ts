@@ -470,15 +470,13 @@ export function parseBdatFile(data: Uint8Array, unhashFn?: (hash: number) => str
 
   // Build legacy offset entries for the writer to preserve file structure
   let legacyOffsetEntries: BdatFile['_legacyOffsetEntries'];
-  if (magic !== 'BDAT' && typeof allOffsets !== 'undefined') {
+  if (allLegacyOffsets) {
     legacyOffsetEntries = [];
-    // Sort all offsets to compute extents
     const validOffsetsSet = new Set(tableOffsets);
-    for (let i = 0; i < allOffsets.length; i++) {
-      const off = allOffsets[i];
+    for (let i = 0; i < allLegacyOffsets.length; i++) {
+      const off = allLegacyOffsets[i];
       const isTable = validOffsetsSet.has(off);
       if (isTable) {
-        // Find this table's data in the parsed tables
         const tbl = tables.find(t => t._raw.tableOffset === off);
         legacyOffsetEntries.push({
           offset: off,
@@ -486,7 +484,6 @@ export function parseBdatFile(data: Uint8Array, unhashFn?: (hash: number) => str
           isTable: true,
         });
       } else {
-        // Sentinel or non-table entry
         legacyOffsetEntries.push({ offset: off, data: new Uint8Array(0), isTable: false });
       }
     }
