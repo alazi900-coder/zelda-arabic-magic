@@ -466,29 +466,44 @@ export function patchBdatFile(
 
     for (let i = 0; i < newStringEntries.length; i++) {
       const entry = newStringEntries[i];
-      const newOff = entryOffsets[i];
+      const newRelOff = entryOffsets[i]; // relative to string table start
 
       for (const cell of entry.cells) {
         if (cell.isMessageId) {
-          if (!safeSetUint16(newTableView, cell.cellOffset, newOff, true)) {
+          if (!safeSetUint16(newTableView, cell.cellOffset, newRelOff, true)) {
             overflowErrors.push({
               key: cell.translationKey,
               originalBytes: encoder.encode(cell.origStr).length + 1,
               translationBytes: entry.bytes.length + 1,
               reason: 'write_error',
-              newOffset: newOff,
+              newOffset: newRelOff,
             });
             skippedCount++;
             continue;
           }
-        } else {
-          if (!safeSetUint32(newTableView, cell.cellOffset, newOff, true)) {
+        } else if (isLegacyTable) {
+          // Legacy: write ABSOLUTE pointer (from table start)
+          const absOff = raw.stringTableOffset + newRelOff;
+          if (!safeSetUint32(newTableView, cell.cellOffset, absOff, true)) {
             overflowErrors.push({
               key: cell.translationKey,
               originalBytes: encoder.encode(cell.origStr).length + 1,
               translationBytes: entry.bytes.length + 1,
               reason: 'bounds_exceeded',
-              newOffset: newOff,
+              newOffset: absOff,
+            });
+            skippedCount++;
+            continue;
+          }
+        } else {
+          // Modern: write relative offset
+          if (!safeSetUint32(newTableView, cell.cellOffset, newRelOff, true)) {
+            overflowErrors.push({
+              key: cell.translationKey,
+              originalBytes: encoder.encode(cell.origStr).length + 1,
+              translationBytes: entry.bytes.length + 1,
+              reason: 'bounds_exceeded',
+              newOffset: newRelOff,
             });
             skippedCount++;
             continue;
@@ -498,7 +513,10 @@ export function patchBdatFile(
     }
 
     // ---- Step 7: Update stringTableLength in table header ----
-    if (raw.isU32Layout) {
+    if (isLegacyTable) {
+      // Legacy header: stringTableOffset at 0x18, stringTableLength at 0x1C
+      safeSetUint32(newTableView, 0x1C, finalStringTableLength, true);
+    } else if (raw.isU32Layout) {
       safeSetUint32(newTableView, 0x2C, finalStringTableLength, true);
     } else {
       safeSetUint32(newTableView, 0x24, finalStringTableLength, true);
