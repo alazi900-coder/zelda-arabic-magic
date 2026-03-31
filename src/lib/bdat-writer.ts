@@ -167,7 +167,8 @@ export function patchBdatFile(
 
   for (const table of bdatFile.tables) {
     const raw = table._raw;
-    const origTableData = raw.tableData; // original bytes for this table
+    const origTableData = raw.tableData; // parsed/unscrambled bytes for logical editing
+    const originalTableBytes = raw.originalTableData ?? raw.tableData; // original on-disk bytes for untouched regions
 
     const stringColumns = table.columns.filter(
       c => c.valueType === BdatValueType.String || c.valueType === BdatValueType.DebugString || c.valueType === BdatValueType.MessageId,
@@ -450,13 +451,27 @@ export function patchBdatFile(
     const finalStringTableLength = entryOffsets.length > 0
       ? entryOffsets[entryOffsets.length - 1] + newStringEntries[newStringEntries.length - 1].bytes.length + 1
       : metadataEnd;
-    const newTableSize = preStringLength + finalStringTableLength;
+    const requiredTableSize = preStringLength + finalStringTableLength;
+    const newTableSize = Math.max(originalTableBytes.length, requiredTableSize);
     const newTableData = new Uint8Array(newTableSize);
 
-    // Copy everything before string table (header, column defs, hash table, row data)
-    newTableData.set(origTableData.subarray(0, preStringLength));
+    // Start from original on-disk bytes so untouched regions/padding are preserved.
+    newTableData.set(originalTableBytes.subarray(0, Math.min(originalTableBytes.length, newTableSize)));
 
-    // Copy string table metadata (flag byte, names/hashes)
+    // For scrambled legacy tables, restore the regions that will be re-scrambled back to
+    // logical/plain bytes first. Otherwise they would get scrambled twice.
+    if (isLegacyTable && raw.isScrambled) {
+      const nameTableOff = new DataView(origTableData.buffer, origTableData.byteOffset, origTableData.byteLength).getUint16(0x06, true);
+      if (nameTableOff < raw.hashTableOffset) {
+        newTableData.set(origTableData.subarray(nameTableOff, raw.hashTableOffset), nameTableOff);
+      }
+    } else {
+      // Non-scrambled path: use parsed bytes for the editable prefix.
+      newTableData.set(origTableData.subarray(0, preStringLength), 0);
+    }
+
+    // Copy string-table metadata prefix (table/column name area) in plain form before
+    // optional re-scramble below.
     if (metadataEnd > 0) {
       const metaSrc = origTableData.subarray(raw.stringTableOffset, raw.stringTableOffset + metadataEnd);
       newTableData.set(metaSrc, raw.stringTableOffset);

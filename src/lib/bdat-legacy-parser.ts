@@ -276,8 +276,9 @@ export function parseLegacyTable(
   // Calculate table size — use full extent to preserve padding/alignment
   const parsedSize = hdr.stringTableOffset + hdr.stringTableLength;
   const tableSize = maxExtent ? Math.max(parsedSize, maxExtent) : parsedSize;
+  const originalTableData = fileData.slice(tableOffset, tableOffset + tableSize);
   // Make a COPY so we can unscramble in-place without modifying original
-  const tableData = fileData.slice(tableOffset, tableOffset + tableSize);
+  const tableData = originalTableData.slice();
   
   // Unscramble if needed (flags bit 1)
   const isScrambled = (hdr.flags & 0x02) !== 0;
@@ -399,6 +400,7 @@ export function parseLegacyTable(
   const raw: BdatTable['_raw'] = {
     tableOffset,
     tableData,
+    originalTableData,
     columnCount: columns.length,
     rowCount: hdr.rowCount,
     rowLength: hdr.rowLength,

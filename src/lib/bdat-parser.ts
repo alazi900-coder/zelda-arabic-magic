@@ -67,6 +67,7 @@ export interface BdatTable {
   _raw: {
     tableOffset: number;
     tableData: Uint8Array;
+    originalTableData?: Uint8Array; // original bytes before legacy unscramble
     columnCount: number;
     rowCount: number;
     rowLength: number;
