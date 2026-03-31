@@ -93,6 +93,26 @@ const Xenoblade = forwardRef<HTMLDivElement>((_, ref) => {
         </div>
       </section>
 
+      {/* WILAY Tool Section */}
+      <section className="py-16 px-4">
+        <div className="max-w-3xl mx-auto text-center">
+          <div className="rounded-2xl border border-primary/30 bg-card p-8 md:p-12 shadow-lg">
+            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
+              <span className="text-3xl">🖼️</span>
+            </div>
+            <h2 className="text-2xl md:text-3xl font-display font-bold mb-4">أداة صور WILAY</h2>
+            <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
+              عرض واستخراج وتعديل صور واجهة اللعبة بصيغة WILAY — استبدل الصور بسهولة وأعد بناء الملف
+            </p>
+            <Link to="/mod-packager#wilay-viewer">
+              <Button size="lg" className="font-display font-bold text-xl px-12 py-7 bg-primary hover:bg-primary/90 shadow-xl shadow-primary/30">
+                🖼️ افتح أداة WILAY
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Game Info */}
       <GameInfoSection
         accentColor="hsl(200, 70%, 45%)"
