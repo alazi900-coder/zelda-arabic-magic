@@ -400,6 +400,7 @@ export function parseLegacyTable(
   const raw: BdatTable['_raw'] = {
     tableOffset,
     tableData,
+    originalTableData,
     columnCount: columns.length,
     rowCount: hdr.rowCount,
     rowLength: hdr.rowLength,
