@@ -343,24 +343,50 @@ function getTableName(tableData: Uint8Array, raw: BdatTable['_raw'], tableIndex:
 export function parseBdatFile(data: Uint8Array, unhashFn?: (hash: number) => string): BdatFile {
   const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
   
-  // File header
   const magic = String.fromCharCode(data[0], data[1], data[2], data[3]);
-  if (magic !== 'BDAT') {
-    throw new Error(`Invalid BDAT file: expected magic "BDAT", got "${magic}"`);
-  }
-
-  const version = view.getUint32(4, true);
-  const tableCount = view.getUint32(8, true);
-  const fileSize = view.getUint32(12, true);
-
   const defaultUnhash = unhashFn || ((h: number) => `0x${h.toString(16).padStart(8, '0')}`);
+
+  let version: number;
+  let tableCount: number;
+  let fileSize: number;
+  let tableOffsets: number[];
+
+  if (magic === 'BDAT') {
+    // XC3 format: BDAT magic + version + tableCount + fileSize + offsets
+    version = view.getUint32(4, true);
+    tableCount = view.getUint32(8, true);
+    fileSize = view.getUint32(12, true);
+    tableOffsets = [];
+    for (let t = 0; t < tableCount; t++) {
+      tableOffsets.push(view.getUint32(16 + t * 4, true));
+    }
+  } else {
+    // XC1/XC2 legacy format: tableCount (u32) + offset array (first may be sentinel = fileSize)
+    tableCount = view.getUint32(0, true);
+    if (tableCount > 10000 || tableCount === 0) {
+      throw new Error(`Invalid BDAT file: expected magic "BDAT", got "${magic}"`);
+    }
+    version = 0;
+    fileSize = data.byteLength;
+    tableOffsets = [];
+    for (let t = 0; t < tableCount; t++) {
+      const off = view.getUint32(4 + t * 4, true);
+      // Skip sentinel entries (offset = fileSize or beyond data)
+      if (off < data.byteLength) {
+        // Verify this offset actually has BDAT magic
+        if (off + 4 <= data.byteLength && data[off] === 0x42 && data[off+1] === 0x44 && data[off+2] === 0x41 && data[off+3] === 0x54) {
+          tableOffsets.push(off);
+        }
+      }
+    }
+    console.log(`[BDAT-PARSER] Legacy format detected: ${tableCount} entries, ${tableOffsets.length} valid tables`);
+  }
 
   const tables: BdatTable[] = [];
 
-  // Table offsets start at byte 16
-  console.log(`[BDAT-PARSER] File: version=0x${version.toString(16)}, tableCount=${tableCount}, fileSize=${fileSize}`);
-  for (let t = 0; t < tableCount; t++) {
-    const tableOffset = view.getUint32(16 + t * 4, true);
+  console.log(`[BDAT-PARSER] File: version=0x${version.toString(16)}, tableCount=${tableOffsets.length}, fileSize=${fileSize}`);
+  for (let t = 0; t < tableOffsets.length; t++) {
+    const tableOffset = tableOffsets[t];
     
     const rawInfo = parseTableHeader(data, tableOffset);
     if (!rawInfo.valid) {
@@ -368,7 +394,6 @@ export function parseBdatFile(data: Uint8Array, unhashFn?: (hash: number) => str
       continue;
     }
 
-    // Diagnostic: dump raw header bytes for first few tables
     if (t < 5) {
       const headerHex = Array.from(data.slice(tableOffset, tableOffset + Math.min(48, rawInfo.tableData.length)))
         .map(b => b.toString(16).padStart(2, '0')).join(' ');
@@ -396,7 +421,6 @@ export function parseBdatFile(data: Uint8Array, unhashFn?: (hash: number) => str
     const rows = parseRows(rawInfo.tableData, raw, columns);
     const { name, hash } = getTableName(rawInfo.tableData, raw, t, defaultUnhash);
 
-    // Diagnostic: log column details
     if (t < 5) {
       const colSummary = columns.map(c => `${c.name}(type=${c.valueType})`).join(', ');
       console.log(`[BDAT-PARSER] Table ${t} "${name}": columns=[${colSummary}]`);
