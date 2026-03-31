@@ -17,9 +17,6 @@ function scrambleSection(buf: Uint8Array, startIdx: number, endIdx: number, key:
     k2 = (k2 + buf[pos + 1]) & 0xFF;
     pos += 2;
   }
-  if (pos < endIdx) {
-    buf[pos] ^= k1;
-  }
 }
 
 // bdat-rs test vectors
