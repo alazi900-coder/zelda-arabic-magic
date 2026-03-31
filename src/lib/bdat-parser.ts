@@ -391,6 +391,17 @@ export function parseBdatFile(data: Uint8Array, unhashFn?: (hash: number) => str
   for (let t = 0; t < tableOffsets.length; t++) {
     const tableOffset = tableOffsets[t];
     
+    // Check if this table uses legacy format (XC1/XC2/XCDE)
+    if (isLegacyTable(data, tableOffset)) {
+      const legacyTable = parseLegacyTable(data, tableOffset, t);
+      if (legacyTable) {
+        tables.push(legacyTable);
+      } else {
+        console.warn(`[BDAT-PARSER] Table ${t} at offset ${tableOffset}: legacy parse failed`);
+      }
+      continue;
+    }
+
     const rawInfo = parseTableHeader(data, tableOffset);
     if (!rawInfo.valid) {
       console.warn(`[BDAT-PARSER] Table ${t} at offset ${tableOffset}: INVALID (no BDAT magic)`);
