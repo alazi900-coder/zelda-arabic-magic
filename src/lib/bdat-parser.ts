@@ -79,6 +79,8 @@ export interface BdatTable {
     baseId: number;
     isU32Layout: boolean;  // true = 48-byte header (u32 offsets), false = 40-byte header (u16 offsets)
     isLegacy?: boolean;    // true = XC1/XC2/XCDE legacy format (absolute string pointers)
+    isScrambled?: boolean; // true = name/string tables were scrambled (XOR)
+    scrambleKey?: number;  // XOR key for re-scrambling on write
   };
 }
 
@@ -87,6 +89,8 @@ export interface BdatFile {
   version: number;
   fileSize: number;
   _raw: Uint8Array;  // original file bytes for writer
+  /** For legacy files: raw bytes for each offset entry (including non-table entries) */
+  _legacyOffsetEntries?: { offset: number; data: Uint8Array; isTable: boolean }[];
 }
 
 // ============= String Table Reading =============
