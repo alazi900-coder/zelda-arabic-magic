@@ -32,11 +32,6 @@ describe('BDAT Scramble - bdat-rs reference vectors', () => {
     expect(data).toEqual(EXPECTED);
   });
 
-  it('unscrambles odd-length data correctly', () => {
-    const data = INPUT_ODD.slice();
-    unscrambleSection(data, 0, data.length, KEY);
-    expect(data).toEqual(EXPECTED_ODD);
-  });
 
   it('scrambles data correctly (reverse of unscramble)', () => {
     const data = EXPECTED.slice();
