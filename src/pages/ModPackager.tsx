@@ -5,8 +5,9 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { ArrowRight, ArrowUp, ArrowDown, ArrowLeft, Package, Upload, FileType, FolderArchive, CheckCircle2, Info, Download, Loader2, MoveVertical, Search, Eye, Grid3X3, ImageDown, ImageUp, Replace, Trash2, Pencil, AlignCenter, AlignHorizontalDistributeCenter, AlignVerticalDistributeCenter, ChevronDown, Crosshair, Type } from "lucide-react";
+import { ArrowRight, ArrowUp, ArrowDown, ArrowLeft, Package, Upload, FileType, FolderArchive, CheckCircle2, Info, Download, Loader2, MoveVertical, Search, Eye, Grid3X3, ImageDown, ImageUp, Replace, Trash2, Pencil, AlignCenter, AlignHorizontalDistributeCenter, AlignVerticalDistributeCenter, ChevronDown, Crosshair, Type, Image as ImageIcon } from "lucide-react";
 import { analyzeWifnt, decodeWifntTexture, renderAtlasToCanvas, rebuildWifnt, type WifntInfo } from "@/lib/wifnt-parser";
+import { analyzeWilay, decodeWilayTextureAsync, exportWilayTextureAsPNG, replaceWilayTexture, type WilayInfo, type WilayTextureInfo } from "@/lib/wilay-parser";
 import GlyphDrawingEditor from "@/components/editor/GlyphDrawingEditor";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
@@ -37,6 +38,15 @@ export default function ModPackager() {
   const [showDrawingEditor, setShowDrawingEditor] = useState(false);
   const [glyphTextInput, setGlyphTextInput] = useState("");
   const [zstdReady, setZstdReady] = useState(false);
+
+  // WILAY Viewer state
+  const [wilayFile, setWilayFile] = useState<{ name: string; data: ArrayBuffer } | null>(null);
+  const [wilayInfo, setWilayInfo] = useState<WilayInfo | null>(null);
+  const [wilayPreviews, setWilayPreviews] = useState<Map<number, HTMLCanvasElement>>(new Map());
+  const [wilayLoading, setWilayLoading] = useState(false);
+  const wilayInputRef = useRef<HTMLInputElement>(null);
+  const wilayReplaceRef = useRef<HTMLInputElement>(null);
+  const [wilayReplaceIndex, setWilayReplaceIndex] = useState<number>(-1);
 
   // DAT Explorer state
   const [exploredFiles, setExploredFiles] = useState<{ name: string; size: number; magic: string; isZstd: boolean; decompressedSize?: number; decompressedMagic?: string; rawBytes: Uint8Array; decompressedBytes?: Uint8Array }[]>([]);
@@ -268,6 +278,97 @@ export default function ModPackager() {
     }
     void handleScanDatForFonts(files);
   }, [handleScanDatForFonts]);
+
+  // ── WILAY handlers ──────────────────────────────────────────────────
+  const handleWilayUpload = useCallback(async (file: File) => {
+    setWilayLoading(true);
+    setWilayPreviews(new Map());
+    try {
+      const buf = await file.arrayBuffer();
+      const info = analyzeWilay(buf);
+      setWilayFile({ name: file.name, data: buf });
+      setWilayInfo(info);
+      // Decode previews
+      const previews = new Map<number, HTMLCanvasElement>();
+      for (const tex of info.textures) {
+        try {
+          const result = await decodeWilayTextureAsync(buf, tex);
+          if (result) {
+            previews.set(tex.index, result.canvas);
+            // Update dimensions if unknown (JPEG)
+            if (tex.width === 0) { tex.width = result.width; tex.height = result.height; }
+          }
+        } catch (e) { console.warn(`Failed to decode texture ${tex.index}:`, e); }
+      }
+      setWilayPreviews(previews);
+    } catch (e) { console.error('WILAY parse error:', e); }
+    setWilayLoading(false);
+  }, []);
+
+  const handleWilayExportTexture = useCallback(async (tex: WilayTextureInfo) => {
+    if (!wilayFile) return;
+    const blob = await exportWilayTextureAsPNG(wilayFile.data, tex);
+    if (!blob) return;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${wilayFile.name}_texture_${tex.index}.png`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [wilayFile]);
+
+  const handleWilayExportAll = useCallback(async () => {
+    if (!wilayFile || !wilayInfo) return;
+    for (const tex of wilayInfo.textures) {
+      await handleWilayExportTexture(tex);
+    }
+  }, [wilayFile, wilayInfo, handleWilayExportTexture]);
+
+  const handleWilayReplaceTexture = useCallback(async (file: File, texIndex: number) => {
+    if (!wilayFile || !wilayInfo) return;
+    const tex = wilayInfo.textures[texIndex];
+    if (!tex || tex.type !== 'mibl') return;
+
+    // Load replacement image
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    await new Promise<void>((res, rej) => { img.onload = () => res(); img.onerror = rej; img.src = url; });
+    URL.revokeObjectURL(url);
+
+    const canvas = document.createElement('canvas');
+    canvas.width = tex.width; canvas.height = tex.height;
+    const ctx = canvas.getContext('2d')!;
+    ctx.drawImage(img, 0, 0, tex.width, tex.height);
+    const imgData = ctx.getImageData(0, 0, tex.width, tex.height);
+
+    const newData = replaceWilayTexture(wilayFile.data, tex, new Uint8Array(imgData.data.buffer), tex.width, tex.height);
+    if (!newData) return;
+
+    // Update state with new file
+    setWilayFile({ name: wilayFile.name, data: newData });
+    const newInfo = analyzeWilay(newData);
+    setWilayInfo(newInfo);
+
+    // Re-decode previews
+    const previews = new Map<number, HTMLCanvasElement>();
+    for (const t of newInfo.textures) {
+      try {
+        const result = await decodeWilayTextureAsync(newData, t);
+        if (result) previews.set(t.index, result.canvas);
+      } catch {}
+    }
+    setWilayPreviews(previews);
+  }, [wilayFile, wilayInfo]);
+
+  const handleWilayDownload = useCallback(() => {
+    if (!wilayFile) return;
+    const blob = new Blob([wilayFile.data]);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = wilayFile.name;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [wilayFile]);
 
   // DAT Explorer: analyze files in a folder
   const getMagicString = useCallback((bytes: Uint8Array): string => {
@@ -1583,6 +1684,130 @@ export default function ModPackager() {
             </p>
           )}
         </div>
+
+        {/* WILAY Texture Viewer Section */}
+        <Card id="wilay-viewer" className="p-6 space-y-4 border-primary/30 scroll-mt-24">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <ImageIcon className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <h2 className="font-display font-bold text-lg">🖼️ عارض صور WILAY</h2>
+              <p className="text-xs text-muted-foreground">عرض واستخراج وتعديل صور واجهة اللعبة (.wilay)</p>
+            </div>
+          </div>
+
+          <input
+            ref={wilayInputRef}
+            type="file"
+            className="sr-only"
+            accept=".wilay,.WILAY"
+            onChange={(e) => {
+              if (e.target.files?.[0]) void handleWilayUpload(e.target.files[0]);
+              e.currentTarget.value = "";
+            }}
+          />
+          <input
+            ref={wilayReplaceRef}
+            type="file"
+            className="sr-only"
+            accept="image/png,image/jpeg,image/webp"
+            onChange={(e) => {
+              if (e.target.files?.[0] && wilayReplaceIndex >= 0) {
+                void handleWilayReplaceTexture(e.target.files[0], wilayReplaceIndex);
+              }
+              e.currentTarget.value = "";
+            }}
+          />
+
+          <div className="flex flex-wrap gap-2">
+            <Button variant="outline" onClick={() => wilayInputRef.current?.click()} disabled={wilayLoading}>
+              <Upload className="w-4 h-4 ml-2" />
+              {wilayLoading ? 'جاري التحليل...' : 'رفع ملف WILAY'}
+            </Button>
+            {wilayInfo && wilayInfo.textures.length > 0 && (
+              <>
+                <Button variant="outline" onClick={() => void handleWilayExportAll()}>
+                  <ImageDown className="w-4 h-4 ml-2" />
+                  تصدير الكل كـ PNG
+                </Button>
+                <Button variant="outline" onClick={handleWilayDownload}>
+                  <Download className="w-4 h-4 ml-2" />
+                  تحميل الملف المعدّل
+                </Button>
+              </>
+            )}
+          </div>
+
+          {wilayInfo && (
+            <div className="space-y-3">
+              <div className="text-sm space-y-1 bg-muted/50 rounded-lg p-3">
+                <div className="flex gap-4 flex-wrap">
+                  <span>📦 <strong>الصيغة:</strong> {wilayInfo.magic}</span>
+                  <span>📐 <strong>الإصدار:</strong> {wilayInfo.version}</span>
+                  <span>🖼️ <strong>الصور:</strong> {wilayInfo.textures.length}</span>
+                  <span>📏 <strong>الحجم:</strong> {(wilayInfo.fileSize / 1024).toFixed(1)} KB</span>
+                </div>
+              </div>
+
+              {wilayInfo.textures.length === 0 && (
+                <div className="text-center py-8 text-muted-foreground">
+                  <p>لم يتم العثور على صور في هذا الملف</p>
+                  <p className="text-xs mt-1">قد يكون ملف LAPS (بيانات واجهة بدون صور)</p>
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {wilayInfo.textures.map((tex) => {
+                  const preview = wilayPreviews.get(tex.index);
+                  return (
+                    <div key={tex.index} className="border border-border rounded-lg overflow-hidden bg-card">
+                      {/* Preview */}
+                      <div className="aspect-video bg-muted/30 flex items-center justify-center overflow-hidden relative">
+                        {preview ? (
+                          <img
+                            src={preview.toDataURL()}
+                            alt={`Texture ${tex.index}`}
+                            className="max-w-full max-h-full object-contain"
+                            style={{ imageRendering: tex.width < 256 ? 'pixelated' : 'auto' }}
+                          />
+                        ) : (
+                          <span className="text-muted-foreground text-sm">جاري فك الصورة...</span>
+                        )}
+                        <span className="absolute top-1 right-1 bg-background/80 text-xs px-2 py-0.5 rounded font-mono">
+                          #{tex.index}
+                        </span>
+                      </div>
+                      {/* Info */}
+                      <div className="p-2 text-xs space-y-1">
+                        <div className="flex justify-between">
+                          <span>{tex.width}×{tex.height}</span>
+                          <span className="text-muted-foreground">{tex.formatName}</span>
+                        </div>
+                        <div className="text-muted-foreground">
+                          {(tex.dataSize / 1024).toFixed(1)} KB • {tex.type === 'jpeg' ? 'JPEG' : 'Mibl/LBIM'}
+                        </div>
+                        <div className="flex gap-1 mt-1">
+                          <Button size="sm" variant="ghost" className="h-7 text-xs flex-1" onClick={() => void handleWilayExportTexture(tex)}>
+                            <ImageDown className="w-3 h-3 ml-1" /> PNG
+                          </Button>
+                          {tex.type === 'mibl' && (
+                            <Button size="sm" variant="ghost" className="h-7 text-xs flex-1" onClick={() => {
+                              setWilayReplaceIndex(tex.index);
+                              wilayReplaceRef.current?.click();
+                            }}>
+                              <Replace className="w-3 h-3 ml-1" /> استبدال
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </Card>
 
         {/* XBC1 Extractor Section */}
         <Card id="dat-extractor" className="p-6 space-y-4 border-primary/30 scroll-mt-24">
