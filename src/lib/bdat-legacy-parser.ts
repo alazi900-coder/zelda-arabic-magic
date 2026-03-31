@@ -35,71 +35,12 @@ function readNullTerminatedString(data: Uint8Array, offset: number): string {
   return new TextDecoder('utf-8').decode(new Uint8Array(bytes));
 }
 
-/** Unscramble (decrypt) a section using the XOR key */
-function unscramble(data: Uint8Array, start: number, end: number, key: number): void {
-  let k1 = ((key >> 8) & 0xFF) ^ 0xFF;
-  let k2 = (key & 0xFF) ^ 0xFF;
-  let i = start;
-  while (i < end - 1) {
-    const a = data[i];
-    const b = data[i + 1];
-    data[i + 1] ^= k1;
-    data[i + 1] = data[i + 1] & 0xFF;
-    i++;
-    data[i + 1] ^= k2;
-    data[i + 1] = data[i + 1] & 0xFF;
-    i++;
-    k1 = (k1 + a) & 0xFF;
-    k2 = (k2 + b) & 0xFF;
-  }
-}
-
-// Wait, the unscramble logic is tricky. Let me re-read the spec:
-// void unscramble(char* start, char* end, u16 key) {
-//   u8 k1 = (key >> 8) ^ 0xff;
-//   u8 k2 = key ^ 0xff;
-//   while (start < end) {
-//     char a = *start;
-//     char b = *(start + 1);
-//     *(++start) ^= k1;  // XOR byte at start+1 with k1
-//     *(++start) ^= k2;  // XOR byte at start+2 with k2, then start is now at start+2
-//     k1 += a;
-//     k2 += b;
-//   }
-// }
-// So it processes 2 bytes at a time: saves originals, XORs [i+1] with k1, XORs [i+2] with k2,
-// then advances by 2 and updates keys with the ORIGINAL values.
-// Wait no - *(++start) means start is incremented FIRST, then dereferenced.
-// So: start points to byte[0]
-//   a = byte[0], b = byte[1]
-//   ++start → start now at byte[1], byte[1] ^= k1
-//   ++start → start now at byte[2], byte[2] ^= k2
-//   k1 += a (original byte[0]), k2 += b (original byte[1])
-// Next iteration: start at byte[2], process byte[2] and byte[3]...
-// Wait that means byte[2] was already modified. Let me re-read.
-// Actually the C code: *(++start) means increment start then dereference.
-// First iteration: start=0
-//   a = data[0], b = data[1]
-//   start becomes 1, data[1] ^= k1
-//   start becomes 2, data[2] ^= k2
-//   k1 += a, k2 += b
-// Second iteration: start=2, check start < end
-//   a = data[2] (already modified!), b = data[3]
-//   start becomes 3, data[3] ^= k1
-//   start becomes 4, data[4] ^= k2
-// Hmm, that means byte 2 is both XORed and then used as 'a'. That seems wrong for decryption.
-// Let me look at this more carefully... Actually, the loop increments start by 2 each time
-// (two ++start), and the while condition checks if the new position < end.
-// So it processes bytes in pairs: (0,1), (2,3), (4,5), etc.
-// For pair (i, i+1):
-//   a = data[i], b = data[i+1]  (these are the ENCRYPTED values)
-//   data[i+1] ^= k1  (but wait, this is byte i+1, and 'b' already captured its value)
-//   Actually no: *(++start) modifies data[start+1]. After first ++start, start=i+1
-//   So data[i+1] ^= k1. Then ++start makes start=i+2, data[i+2] ^= k2.
-// That's processing bytes i+1 and i+2, NOT i and i+1! The pair skips byte i.
-// Hmm, this is confusing. Let me just use a simpler implementation.
-
-function unscrambleSection(buf: Uint8Array, startIdx: number, endIdx: number, key: number): void {
+/**
+ * Unscramble (decrypt) a section using the XOR key.
+ * Algorithm verified against bdat-rs reference implementation (unscramble_chunks).
+ * Processes byte pairs: XOR both bytes, then update keys with ORIGINAL (encrypted) values.
+ */
+export function unscrambleSection(buf: Uint8Array, startIdx: number, endIdx: number, key: number): void {
   let k1 = ((key >> 8) & 0xFF) ^ 0xFF;
   let k2 = (key & 0xFF) ^ 0xFF;
   let pos = startIdx;
@@ -111,6 +52,10 @@ function unscrambleSection(buf: Uint8Array, startIdx: number, endIdx: number, ke
     k1 = (k1 + a) & 0xFF;
     k2 = (k2 + b) & 0xFF;
     pos += 2;
+  }
+  // Handle odd byte
+  if (pos < endIdx) {
+    buf[pos] ^= k1;
   }
 }
 
