@@ -39,6 +39,15 @@ export default function ModPackager() {
   const [glyphTextInput, setGlyphTextInput] = useState("");
   const [zstdReady, setZstdReady] = useState(false);
 
+  // WILAY Viewer state
+  const [wilayFile, setWilayFile] = useState<{ name: string; data: ArrayBuffer } | null>(null);
+  const [wilayInfo, setWilayInfo] = useState<WilayInfo | null>(null);
+  const [wilayPreviews, setWilayPreviews] = useState<Map<number, HTMLCanvasElement>>(new Map());
+  const [wilayLoading, setWilayLoading] = useState(false);
+  const wilayInputRef = useRef<HTMLInputElement>(null);
+  const wilayReplaceRef = useRef<HTMLInputElement>(null);
+  const [wilayReplaceIndex, setWilayReplaceIndex] = useState<number>(-1);
+
   // DAT Explorer state
   const [exploredFiles, setExploredFiles] = useState<{ name: string; size: number; magic: string; isZstd: boolean; decompressedSize?: number; decompressedMagic?: string; rawBytes: Uint8Array; decompressedBytes?: Uint8Array }[]>([]);
   const [exploringFolder, setExploringFolder] = useState(false);
