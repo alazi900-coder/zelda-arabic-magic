@@ -174,16 +174,17 @@ export function patchBdatFile(
       c => c.valueType === BdatValueType.String || c.valueType === BdatValueType.DebugString || c.valueType === BdatValueType.MessageId,
     );
 
-    // If no string columns or no translations match this table, keep original
+    // If no string columns or no translations match this table, keep ORIGINAL ON-DISK bytes
+    // (preserves scrambling, padding, and exact binary layout)
     if (stringColumns.length === 0) {
-      newTableBuffers.push(origTableData);
+      newTableBuffers.push(originalTableBytes);
       continue;
     }
 
     // Check if any translations exist for this table
     const hasTranslations = [...translations.keys()].some(k => k.startsWith(table.name + ':'));
     if (!hasTranslations) {
-      newTableBuffers.push(origTableData);
+      newTableBuffers.push(originalTableBytes);
       continue;
     }
 
