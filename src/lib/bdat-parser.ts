@@ -1,9 +1,12 @@
 /**
- * BDAT Binary Parser for Xenoblade Chronicles 3
+ * BDAT Binary Parser for Xenoblade Chronicles 3 (Modern) + XC1/XC2/XCDE (Legacy)
  * 
  * Parses "Modern" BDAT format (XC3) based on bdat-rs specifications.
+ * Legacy format (XC1 DE, XC2) is handled by bdat-legacy-parser.ts.
  * Supports hashed column/table names (Murmur3) and all 14 value types.
  */
+
+import { isLegacyTable, parseLegacyTable } from './bdat-legacy-parser';
 
 // ============= Types =============
 
@@ -388,6 +391,17 @@ export function parseBdatFile(data: Uint8Array, unhashFn?: (hash: number) => str
   for (let t = 0; t < tableOffsets.length; t++) {
     const tableOffset = tableOffsets[t];
     
+    // Check if this table uses legacy format (XC1/XC2/XCDE)
+    if (isLegacyTable(data, tableOffset)) {
+      const legacyTable = parseLegacyTable(data, tableOffset, t);
+      if (legacyTable) {
+        tables.push(legacyTable);
+      } else {
+        console.warn(`[BDAT-PARSER] Table ${t} at offset ${tableOffset}: legacy parse failed`);
+      }
+      continue;
+    }
+
     const rawInfo = parseTableHeader(data, tableOffset);
     if (!rawInfo.valid) {
       console.warn(`[BDAT-PARSER] Table ${t} at offset ${tableOffset}: INVALID (no BDAT magic)`);

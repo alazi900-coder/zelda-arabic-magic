@@ -126,8 +126,20 @@ export function patchBdatFile(
   const originalData = bdatFile._raw;
   const originalView = new DataView(originalData.buffer, originalData.byteOffset, originalData.byteLength);
 
-  const tableCount = originalView.getUint32(8, true);
-  const fileHeaderSize = 16 + tableCount * 4; // magic(4) + version(4) + count(4) + fileSize(4) + offsets
+  // Detect file format: XC3 (starts with "BDAT") vs Legacy (starts with table count)
+  const fileMagic = String.fromCharCode(originalData[0], originalData[1], originalData[2], originalData[3]);
+  const isLegacyFile = fileMagic !== 'BDAT';
+  
+  let fileHeaderSize: number;
+  if (isLegacyFile) {
+    // Legacy: count(u32) + count * u32 offsets (includes sentinel)
+    const entryCount = originalView.getUint32(0, true);
+    fileHeaderSize = 4 + entryCount * 4;
+  } else {
+    // Modern XC3: magic(4) + version(4) + count(4) + fileSize(4) + offsets
+    const tableCount = originalView.getUint32(8, true);
+    fileHeaderSize = 16 + tableCount * 4;
+  }
 
   const overflowErrors: OverflowError[] = [];
   let patchedCount = 0;
@@ -504,17 +516,26 @@ export function patchBdatFile(
   }
   const newFileSize = currentFileOffset;
 
-  // Build the new file
   const result = new Uint8Array(newFileSize);
   const resultView = new DataView(result.buffer);
 
-  // Write file header (magic + version + tableCount + fileSize)
-  result.set(originalData.subarray(0, 16));
-  resultView.setUint32(12, newFileSize, true); // update file size
-
-  // Write table offsets
-  for (let t = 0; t < newTableOffsets.length; t++) {
-    resultView.setUint32(16 + t * 4, newTableOffsets[t], true);
+  if (isLegacyFile) {
+    // Legacy header: count(u32) + offset array (first entry = file size sentinel)
+    const entryCount = originalView.getUint32(0, true);
+    resultView.setUint32(0, entryCount, true);
+    // First offset entry is the file size sentinel
+    resultView.setUint32(4, newFileSize, true);
+    // Remaining entries are the actual table offsets
+    for (let t = 0; t < newTableOffsets.length; t++) {
+      resultView.setUint32(4 + (t + 1) * 4, newTableOffsets[t], true);
+    }
+  } else {
+    // Modern XC3 header
+    result.set(originalData.subarray(0, 16));
+    resultView.setUint32(12, newFileSize, true);
+    for (let t = 0; t < newTableOffsets.length; t++) {
+      resultView.setUint32(16 + t * 4, newTableOffsets[t], true);
+    }
   }
 
   // Write table data
