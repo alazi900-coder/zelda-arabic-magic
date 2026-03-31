@@ -126,8 +126,20 @@ export function patchBdatFile(
   const originalData = bdatFile._raw;
   const originalView = new DataView(originalData.buffer, originalData.byteOffset, originalData.byteLength);
 
-  const tableCount = originalView.getUint32(8, true);
-  const fileHeaderSize = 16 + tableCount * 4; // magic(4) + version(4) + count(4) + fileSize(4) + offsets
+  // Detect file format: XC3 (starts with "BDAT") vs Legacy (starts with table count)
+  const fileMagic = String.fromCharCode(originalData[0], originalData[1], originalData[2], originalData[3]);
+  const isLegacyFile = fileMagic !== 'BDAT';
+  
+  let fileHeaderSize: number;
+  if (isLegacyFile) {
+    // Legacy: count(u32) + count * u32 offsets (includes sentinel)
+    const entryCount = originalView.getUint32(0, true);
+    fileHeaderSize = 4 + entryCount * 4;
+  } else {
+    // Modern XC3: magic(4) + version(4) + count(4) + fileSize(4) + offsets
+    const tableCount = originalView.getUint32(8, true);
+    fileHeaderSize = 16 + tableCount * 4;
+  }
 
   const overflowErrors: OverflowError[] = [];
   let patchedCount = 0;
