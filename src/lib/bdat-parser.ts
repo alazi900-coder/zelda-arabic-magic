@@ -358,9 +358,9 @@ export function parseBdatFile(data: Uint8Array, unhashFn?: (hash: number) => str
   let tableCount: number;
   let fileSize: number;
   let tableOffsets: number[];
+  let allLegacyOffsets: number[] | undefined;
 
   if (magic === 'BDAT') {
-    // XC3 format: BDAT magic + version + tableCount + fileSize + offsets
     version = view.getUint32(4, true);
     tableCount = view.getUint32(8, true);
     fileSize = view.getUint32(12, true);
@@ -369,7 +369,6 @@ export function parseBdatFile(data: Uint8Array, unhashFn?: (hash: number) => str
       tableOffsets.push(view.getUint32(16 + t * 4, true));
     }
   } else {
-    // XC1/XC2 legacy format: tableCount (u32) + offset array (first may be sentinel = fileSize)
     tableCount = view.getUint32(0, true);
     if (tableCount > 10000 || tableCount === 0) {
       throw new Error(`Invalid BDAT file: expected magic "BDAT", got "${magic}"`);
@@ -377,14 +376,13 @@ export function parseBdatFile(data: Uint8Array, unhashFn?: (hash: number) => str
     version = 0;
     fileSize = data.byteLength;
     
-    // Read ALL offset entries (including sentinels)
-    const allOffsets: number[] = [];
+    allLegacyOffsets = [];
     for (let t = 0; t < tableCount; t++) {
-      allOffsets.push(view.getUint32(4 + t * 4, true));
+      allLegacyOffsets.push(view.getUint32(4 + t * 4, true));
     }
     
     tableOffsets = [];
-    for (const off of allOffsets) {
+    for (const off of allLegacyOffsets) {
       if (off < data.byteLength && off + 4 <= data.byteLength &&
           data[off] === 0x42 && data[off+1] === 0x44 && data[off+2] === 0x41 && data[off+3] === 0x54) {
         tableOffsets.push(off);
