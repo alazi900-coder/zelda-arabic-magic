@@ -454,12 +454,14 @@ export function patchBdatFile(
     const newTableSize = preStringLength + finalStringTableLength;
     const newTableData = new Uint8Array(newTableSize);
 
-    // Copy everything before string table (header, column defs, hash table, row data)
-    newTableData.set(origTableData.subarray(0, preStringLength));
+    // Copy everything before string table.
+    // For scrambled legacy tables, preserve original on-disk bytes for untouched regions,
+    // then only patch row pointers/string lengths and rewritten strings.
+    newTableData.set(originalTableBytes.subarray(0, preStringLength));
 
-    // Copy string table metadata (flag byte, names/hashes)
+    // Copy string-table metadata prefix (table/column name area)
     if (metadataEnd > 0) {
-      const metaSrc = origTableData.subarray(raw.stringTableOffset, raw.stringTableOffset + metadataEnd);
+      const metaSrc = originalTableBytes.subarray(raw.stringTableOffset, raw.stringTableOffset + metadataEnd);
       newTableData.set(metaSrc, raw.stringTableOffset);
     }
 
