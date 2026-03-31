@@ -79,6 +79,8 @@ export interface BdatTable {
     baseId: number;
     isU32Layout: boolean;  // true = 48-byte header (u32 offsets), false = 40-byte header (u16 offsets)
     isLegacy?: boolean;    // true = XC1/XC2/XCDE legacy format (absolute string pointers)
+    isScrambled?: boolean; // true = name/string tables were scrambled (XOR)
+    scrambleKey?: number;  // XOR key for re-scrambling on write
   };
 }
 
@@ -87,6 +89,8 @@ export interface BdatFile {
   version: number;
   fileSize: number;
   _raw: Uint8Array;  // original file bytes for writer
+  /** For legacy files: raw bytes for each offset entry (including non-table entries) */
+  _legacyOffsetEntries?: { offset: number; data: Uint8Array; isTable: boolean }[];
 }
 
 // ============= String Table Reading =============
@@ -354,9 +358,9 @@ export function parseBdatFile(data: Uint8Array, unhashFn?: (hash: number) => str
   let tableCount: number;
   let fileSize: number;
   let tableOffsets: number[];
+  let allLegacyOffsets: number[] | undefined;
 
   if (magic === 'BDAT') {
-    // XC3 format: BDAT magic + version + tableCount + fileSize + offsets
     version = view.getUint32(4, true);
     tableCount = view.getUint32(8, true);
     fileSize = view.getUint32(12, true);
@@ -365,36 +369,44 @@ export function parseBdatFile(data: Uint8Array, unhashFn?: (hash: number) => str
       tableOffsets.push(view.getUint32(16 + t * 4, true));
     }
   } else {
-    // XC1/XC2 legacy format: tableCount (u32) + offset array (first may be sentinel = fileSize)
     tableCount = view.getUint32(0, true);
     if (tableCount > 10000 || tableCount === 0) {
       throw new Error(`Invalid BDAT file: expected magic "BDAT", got "${magic}"`);
     }
     version = 0;
     fileSize = data.byteLength;
-    tableOffsets = [];
+    
+    allLegacyOffsets = [];
     for (let t = 0; t < tableCount; t++) {
-      const off = view.getUint32(4 + t * 4, true);
-      // Skip sentinel entries (offset = fileSize or beyond data)
-      if (off < data.byteLength) {
-        // Verify this offset actually has BDAT magic
-        if (off + 4 <= data.byteLength && data[off] === 0x42 && data[off+1] === 0x44 && data[off+2] === 0x41 && data[off+3] === 0x54) {
-          tableOffsets.push(off);
-        }
+      allLegacyOffsets.push(view.getUint32(4 + t * 4, true));
+    }
+    
+    tableOffsets = [];
+    for (const off of allLegacyOffsets) {
+      if (off < data.byteLength && off + 4 <= data.byteLength &&
+          data[off] === 0x42 && data[off+1] === 0x44 && data[off+2] === 0x41 && data[off+3] === 0x54) {
+        tableOffsets.push(off);
       }
     }
     console.log(`[BDAT-PARSER] Legacy format detected: ${tableCount} entries, ${tableOffsets.length} valid tables`);
   }
 
   const tables: BdatTable[] = [];
+  // For legacy files: compute table extents (each table's full size including padding)
+  const sortedOffsets = [...tableOffsets].sort((a, b) => a - b);
 
   console.log(`[BDAT-PARSER] File: version=0x${version.toString(16)}, tableCount=${tableOffsets.length}, fileSize=${fileSize}`);
   for (let t = 0; t < tableOffsets.length; t++) {
     const tableOffset = tableOffsets[t];
     
+    // Calculate max extent for this table (up to next table or EOF)
+    const sortIdx = sortedOffsets.indexOf(tableOffset);
+    const nextTableOffset = sortIdx + 1 < sortedOffsets.length ? sortedOffsets[sortIdx + 1] : data.byteLength;
+    const maxExtent = nextTableOffset - tableOffset;
+    
     // Check if this table uses legacy format (XC1/XC2/XCDE)
     if (isLegacyTable(data, tableOffset)) {
-      const legacyTable = parseLegacyTable(data, tableOffset, t);
+      const legacyTable = parseLegacyTable(data, tableOffset, t, maxExtent);
       if (legacyTable) {
         tables.push(legacyTable);
       } else {
@@ -456,7 +468,28 @@ export function parseBdatFile(data: Uint8Array, unhashFn?: (hash: number) => str
     });
   }
 
-  return { tables, version, fileSize, _raw: data };
+  // Build legacy offset entries for the writer to preserve file structure
+  let legacyOffsetEntries: BdatFile['_legacyOffsetEntries'];
+  if (allLegacyOffsets) {
+    legacyOffsetEntries = [];
+    const validOffsetsSet = new Set(tableOffsets);
+    for (let i = 0; i < allLegacyOffsets.length; i++) {
+      const off = allLegacyOffsets[i];
+      const isTable = validOffsetsSet.has(off);
+      if (isTable) {
+        const tbl = tables.find(t => t._raw.tableOffset === off);
+        legacyOffsetEntries.push({
+          offset: off,
+          data: tbl ? tbl._raw.tableData : data.slice(off, off),
+          isTable: true,
+        });
+      } else {
+        legacyOffsetEntries.push({ offset: off, data: new Uint8Array(0), isTable: false });
+      }
+    }
+  }
+
+  return { tables, version, fileSize, _raw: data, _legacyOffsetEntries: legacyOffsetEntries };
 }
 
 /**

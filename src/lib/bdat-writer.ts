@@ -76,7 +76,6 @@ const encoder = new TextEncoder();
 
 /**
  * Read a null-terminated UTF-8 string from a buffer at the given offset.
- * Returns the string and the number of bytes consumed (including null terminator).
  */
 function readNullTermStr(data: Uint8Array, offset: number): { str: string; byteLen: number } {
   if (offset >= data.length) return { str: '', byteLen: 1 };
@@ -85,13 +84,31 @@ function readNullTermStr(data: Uint8Array, offset: number): { str: string; byteL
   const bytes = data.slice(offset, end);
   return {
     str: new TextDecoder('utf-8').decode(bytes),
-    byteLen: end - offset + 1, // +1 for null terminator
+    byteLen: end - offset + 1,
   };
 }
 
 /**
+ * Scramble (encrypt) a section using the XOR key — inverse of unscramble.
+ * In unscramble: save encrypted bytes → XOR → update keys with encrypted bytes.
+ * In scramble: XOR first → save encrypted bytes → update keys with encrypted bytes.
+ */
+function scrambleSection(buf: Uint8Array, startIdx: number, endIdx: number, key: number): void {
+  let k1 = ((key >> 8) & 0xFF) ^ 0xFF;
+  let k2 = (key & 0xFF) ^ 0xFF;
+  let pos = startIdx;
+  while (pos + 1 < endIdx) {
+    buf[pos] ^= k1;
+    buf[pos + 1] ^= k2;
+    // After XOR, the values are now encrypted — use them for key update
+    k1 = (k1 + buf[pos]) & 0xFF;
+    k2 = (k2 + buf[pos + 1]) & 0xFF;
+    pos += 2;
+  }
+}
+
+/**
  * Safely write a Uint16 value, checking for overflow.
- * Returns true if successful, false if value exceeds u16 range.
  */
 function safeSetUint16(view: DataView, offset: number, value: number, littleEndian: boolean): boolean {
   if (value > 0xFFFF || value < 0) return false;
@@ -102,7 +119,6 @@ function safeSetUint16(view: DataView, offset: number, value: number, littleEndi
 
 /**
  * Safely write a Uint32 value, checking bounds.
- * Returns true if successful, false if out of bounds.
  */
 function safeSetUint32(view: DataView, offset: number, value: number, littleEndian: boolean): boolean {
   if (offset + 4 > view.byteLength) return false;
@@ -514,12 +530,24 @@ export function patchBdatFile(
 
     // ---- Step 7: Update stringTableLength in table header ----
     if (isLegacyTable) {
-      // Legacy header: stringTableOffset at 0x18, stringTableLength at 0x1C
       safeSetUint32(newTableView, 0x1C, finalStringTableLength, true);
     } else if (raw.isU32Layout) {
       safeSetUint32(newTableView, 0x2C, finalStringTableLength, true);
     } else {
       safeSetUint32(newTableView, 0x24, finalStringTableLength, true);
+    }
+
+    // ---- Step 7.5: Re-scramble legacy tables if originally scrambled ----
+    if (isLegacyTable && raw.isScrambled && raw.scrambleKey) {
+      const nameTableOff = newTableView.getUint16(0x06, true);
+      const hashTableOff = newTableView.getUint16(0x0A, true);
+      const newStrTableOff = newTableView.getUint32(0x18, true);
+      const newStrTableLen = newTableView.getUint32(0x1C, true);
+      // Section 1: name table → hash table
+      scrambleSection(newTableData, nameTableOff, hashTableOff, raw.scrambleKey);
+      // Section 2: string table
+      scrambleSection(newTableData, newStrTableOff, newStrTableOff + newStrTableLen, raw.scrambleKey);
+      console.log(`[BDAT-WRITER] Re-scrambled table "${table.name}" with key 0x${raw.scrambleKey.toString(16)}`);
     }
 
     patchedCount += tablePatchedCount;
@@ -536,6 +564,67 @@ export function patchBdatFile(
   }
 
   // ---- Step 8: Rebuild the full file ----
+  if (isLegacyFile && bdatFile._legacyOffsetEntries) {
+    // Use legacy offset entries to preserve exact file structure
+    const entries = bdatFile._legacyOffsetEntries;
+    
+    // Map parsed table offsets → new table buffers
+    const tableBufferMap = new Map<number, Uint8Array>();
+    for (let t = 0; t < bdatFile.tables.length; t++) {
+      tableBufferMap.set(bdatFile.tables[t]._raw.tableOffset, newTableBuffers[t]);
+    }
+    
+    // Calculate new offsets and total size
+    let currentOffset = fileHeaderSize;
+    const newEntryOffsets: { offset: number; data: Uint8Array }[] = [];
+    
+    for (const entry of entries) {
+      if (entry.isTable) {
+        const buf = tableBufferMap.get(entry.offset) || entry.data;
+        newEntryOffsets.push({ offset: currentOffset, data: buf });
+        currentOffset += buf.length;
+      } else {
+        // Sentinel — will be updated to file size later
+        newEntryOffsets.push({ offset: 0, data: new Uint8Array(0) });
+      }
+    }
+    const newFileSize = currentOffset;
+    
+    const result = new Uint8Array(newFileSize);
+    const resultView = new DataView(result.buffer);
+    
+    // Write header
+    const entryCount = originalView.getUint32(0, true);
+    resultView.setUint32(0, entryCount, true);
+    
+    for (let i = 0; i < entries.length; i++) {
+      if (entries[i].isTable) {
+        resultView.setUint32(4 + i * 4, newEntryOffsets[i].offset, true);
+      } else {
+        resultView.setUint32(4 + i * 4, newFileSize, true);
+      }
+    }
+    
+    // Write table data
+    for (let i = 0; i < entries.length; i++) {
+      if (entries[i].isTable && newEntryOffsets[i].data.length > 0) {
+        result.set(newEntryOffsets[i].data, newEntryOffsets[i].offset);
+      }
+    }
+    
+    console.log(`[BDAT-WRITER] Patch complete: ${patchedCount} patched, ${skippedCount} skipped, ${overflowErrors.length} errors`);
+    console.log(`[BDAT-WRITER] Legacy file: ${originalData.byteLength} → ${newFileSize} bytes`);
+    for (const stat of tableStats) {
+      if (stat.stringsPatched > 0 || stat.stringsSkipped > 0) {
+        const growth = stat.newStringTableSize - stat.originalStringTableSize;
+        console.log(`[BDAT-WRITER]   ${stat.tableName}: ${stat.stringsPatched} patched, ${stat.stringsSkipped} skipped, string table ${growth >= 0 ? '+' : ''}${growth} bytes${stat.hasU16Columns ? ' (has u16 MessageId)' : ''}`);
+      }
+    }
+    
+    return { result, overflowErrors, patchedCount, skippedCount, tableStats };
+  }
+
+  // Non-legacy path (XC3) or legacy without offset entries
   const newTableOffsets: number[] = [];
   let currentFileOffset = fileHeaderSize;
   for (const buf of newTableBuffers) {
@@ -548,33 +637,23 @@ export function patchBdatFile(
   const resultView = new DataView(result.buffer);
 
   if (isLegacyFile) {
-    // Legacy header: preserve original offset array structure exactly
-    // Original: count(u32) + count × u32 offsets
-    // Some files have sentinel entries (fileSize), some don't — we preserve the exact count
-    // and rebuild offsets to match new table positions
     const entryCount = originalView.getUint32(0, true);
     resultView.setUint32(0, entryCount, true);
-    
-    // Read original offsets to understand the structure (which are tables, which are sentinels)
     let tableIdx = 0;
     for (let i = 0; i < entryCount; i++) {
       const origOff = originalView.getUint32(4 + i * 4, true);
-      // Check if this was a valid table offset in the original file
       if (origOff < originalData.byteLength && origOff + 4 <= originalData.byteLength &&
           originalData[origOff] === 0x42 && originalData[origOff+1] === 0x44 &&
           originalData[origOff+2] === 0x41 && originalData[origOff+3] === 0x54) {
-        // This was a real table — write the new offset
         if (tableIdx < newTableOffsets.length) {
           resultView.setUint32(4 + i * 4, newTableOffsets[tableIdx], true);
           tableIdx++;
         }
       } else {
-        // This was a sentinel or padding — write new file size
         resultView.setUint32(4 + i * 4, newFileSize, true);
       }
     }
   } else {
-    // Modern XC3 header
     result.set(originalData.subarray(0, 16));
     resultView.setUint32(12, newFileSize, true);
     for (let t = 0; t < newTableOffsets.length; t++) {

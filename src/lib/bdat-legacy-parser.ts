@@ -268,12 +268,14 @@ export function parseLegacyTable(
   fileData: Uint8Array,
   tableOffset: number,
   tableIndex: number,
+  maxExtent?: number,
 ): BdatTable | null {
   const hdr = parseLegacyTableHeader(fileData, tableOffset);
   if (!hdr.valid) return null;
 
-  // Calculate table size and extract table data
-  const tableSize = hdr.stringTableOffset + hdr.stringTableLength;
+  // Calculate table size — use full extent to preserve padding/alignment
+  const parsedSize = hdr.stringTableOffset + hdr.stringTableLength;
+  const tableSize = maxExtent ? Math.max(parsedSize, maxExtent) : parsedSize;
   // Make a COPY so we can unscramble in-place without modifying original
   const tableData = fileData.slice(tableOffset, tableOffset + tableSize);
   
@@ -409,6 +411,8 @@ export function parseLegacyTable(
     baseId: hdr.baseId,
     isU32Layout: false,
     isLegacy: true,
+    isScrambled: (hdr.flags & 0x02) !== 0 && hdr.scrambleKey !== 0,
+    scrambleKey: hdr.scrambleKey,
   };
 
   if (tableIndex < 5) {
