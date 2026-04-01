@@ -522,8 +522,6 @@ function scanForJPEGTextures(bytes: Uint8Array, textures: WilayTextureInfo[]): v
     }
   }
 }
-  }
-}
 
 // ── Decode texture to RGBA canvas ────────────────────────────────────
 
