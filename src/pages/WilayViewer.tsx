@@ -468,7 +468,7 @@ export default function WilayViewer() {
             type="file"
             className="sr-only"
             multiple
-            onChange={(e) => { if (e.target.files && e.target.files.length > 0) void handleFilesUpload(e.target.files); e.currentTarget.value = ""; }}
+            onChange={(e) => { if (e.target.files && e.target.files.length > 0) void handleFilesUpload(Array.from(e.target.files)); e.currentTarget.value = ""; }}
           />
           <Button size="lg" className="font-display font-bold text-lg px-12 py-7" onClick={() => fileInputRef.current?.click()}>
             <Upload className="w-5 h-5 ml-2" />
