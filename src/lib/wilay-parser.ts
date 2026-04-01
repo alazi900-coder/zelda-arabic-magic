@@ -235,7 +235,7 @@ function rgb565(c: number): number[] {
 // ── Mibl decoder ─────────────────────────────────────────────────────
 
 interface MiblFooter {
-  imageSize: number; unk: number; width: number; height: number;
+  imageSize: number; blockHeightLog2: number; width: number; height: number;
   depth: number; viewDimension: number; imageFormat: number;
   mipmapCount: number; version: number;
 }
@@ -246,7 +246,7 @@ function parseMiblFooter(buf: Uint8Array): MiblFooter | null {
   if (buf[off + 36] !== 0x4C || buf[off + 37] !== 0x42 || buf[off + 38] !== 0x49 || buf[off + 39] !== 0x4D) return null;
   const v = new DataView(buf.buffer, buf.byteOffset + off, MIBL_FOOTER_SIZE);
   return {
-    imageSize: v.getUint32(0, true), unk: v.getUint32(4, true),
+    imageSize: v.getUint32(0, true), blockHeightLog2: v.getUint32(4, true),
     width: v.getUint32(8, true), height: v.getUint32(12, true),
     depth: v.getUint32(16, true), viewDimension: v.getUint32(20, true),
     imageFormat: v.getUint32(24, true), mipmapCount: v.getUint32(28, true),
