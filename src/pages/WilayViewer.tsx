@@ -509,7 +509,7 @@ export default function WilayViewer() {
           type="file"
           className="sr-only"
           multiple
-          onChange={(e) => { if (e.target.files && e.target.files.length > 0) void handleFilesUpload(e.target.files); e.currentTarget.value = ""; }}
+          onChange={(e) => { if (e.target.files && e.target.files.length > 0) void handleFilesUpload(Array.from(e.target.files)); e.currentTarget.value = ""; }}
         />
         <Button variant="ghost" size="sm" className="h-8 text-xs" onClick={() => fileInputRef.current?.click()}>
           <Upload className="w-3.5 h-3.5 ml-1" /> إضافة ملفات
