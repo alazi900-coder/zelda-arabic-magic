@@ -50,6 +50,7 @@ const App = () => (
                 <Route path="/pokemon" element={<Pokemon />} />
                 <Route path="/pokemon/process" element={<ErrorBoundary fallbackTitle="خطأ في معالجة بوكيمون"><PokemonProcess /></ErrorBoundary>} />
                 <Route path="/mod-packager" element={<ModPackager />} />
+                <Route path="/wilay" element={<WilayViewer />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
