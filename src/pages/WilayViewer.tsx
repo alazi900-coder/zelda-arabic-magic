@@ -113,20 +113,14 @@ export default function WilayViewer() {
     return [];
   }, []);
 
-  const handleFilesFromArray = useCallback(async (fileArray: File[]) => {
+  const handleFilesUpload = useCallback(async (fileArray: File[]) => {
     if (fileArray.length === 0) return;
-    const dt = new DataTransfer();
-    fileArray.forEach(f => dt.items.add(f));
-    await handleFilesUploadRaw(fileArray);
-  }, []);
-
-  const handleFilesUploadRaw = useCallback(async (fileArray: File[]) => {
     setLoading(true);
     const errors: string[] = [];
     const newFiles: LoadedFile[] = [];
 
-    for (let i = 0; i < newFileList.length; i++) {
-      const file = newFileList[i];
+    for (let i = 0; i < fileArray.length; i++) {
+      const file = fileArray[i];
       try {
         const buf = await file.arrayBuffer();
         const info = analyzeWilay(buf);
@@ -144,13 +138,8 @@ export default function WilayViewer() {
     }
 
     setParseErrors(errors);
+    setFiles(prev => [...prev, ...newFiles]);
 
-    setFiles(prev => {
-      const merged = [...prev, ...newFiles];
-      return merged;
-    });
-
-    // Decode textures for new files
     const existingFileCount = files.length;
     const newDecoded = new Map(decoded);
     let totalNew = newFiles.reduce((s, f) => s + f.info.textures.length, 0);
@@ -179,20 +168,42 @@ export default function WilayViewer() {
     }
 
     setDecoded(newDecoded);
-
-    // Auto-select first texture if none selected
     if (newFiles.length > 0 && newFiles.some(f => f.info.textures.length > 0)) {
       setSelectedGlobalIndex(prev => prev < 0 ? 0 : prev);
     }
-
     setLoading(false);
   }, [files, decoded]);
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
+  const handleDrop = useCallback(async (e: React.DragEvent) => {
     e.preventDefault();
     setDragOver(false);
-    if (e.dataTransfer.files.length > 0) void handleFilesUpload(e.dataTransfer.files);
-  }, [handleFilesUpload]);
+    const items = e.dataTransfer.items;
+    const allFiles: File[] = [];
+
+    // Check for directory entries (webkitGetAsEntry)
+    if (items && items.length > 0) {
+      const entries: FileSystemEntry[] = [];
+      for (let i = 0; i < items.length; i++) {
+        const entry = items[i].webkitGetAsEntry?.();
+        if (entry) entries.push(entry);
+      }
+      if (entries.length > 0) {
+        for (const entry of entries) {
+          const extracted = await readEntriesRecursive(entry);
+          allFiles.push(...extracted);
+        }
+      }
+    }
+
+    // Fallback to regular files if no entries
+    if (allFiles.length === 0 && e.dataTransfer.files.length > 0) {
+      for (let i = 0; i < e.dataTransfer.files.length; i++) {
+        allFiles.push(e.dataTransfer.files[i]);
+      }
+    }
+
+    if (allFiles.length > 0) void handleFilesUpload(allFiles);
+  }, [handleFilesUpload, readEntriesRecursive]);
 
   const handleRemoveFile = useCallback((fileIndex: number) => {
     setFiles(prev => prev.filter((_, i) => i !== fileIndex));
