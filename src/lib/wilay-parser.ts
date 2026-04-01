@@ -82,10 +82,10 @@ function deswizzle(src: Uint8Array, wUnits: number, hUnits: number, bytesPerPx: 
   return out;
 }
 
-function swizzle(src: Uint8Array, wUnits: number, hUnits: number, bytesPerPx: number): Uint8Array {
+function swizzle(src: Uint8Array, wUnits: number, hUnits: number, bytesPerPx: number, blockHeightOverride?: number): Uint8Array {
   const byteW = wUnits * bytesPerPx;
   const gobsX = divRoundUp(byteW, 64);
-  const blockH = getBlockHeight(hUnits);
+  const blockH = blockHeightOverride ?? getBlockHeight(hUnits);
   const gobsY = divRoundUp(hUnits, 8 * blockH);
   const out = new Uint8Array(gobsX * gobsY * blockH * 512);
   for (let y = 0; y < hUnits; y++) {
