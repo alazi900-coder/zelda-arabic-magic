@@ -87,7 +87,40 @@ export default function WilayViewer() {
 
   const texKey = (fi: number, ti: number) => `${fi}:${ti}`;
 
-  const handleFilesUpload = useCallback(async (newFileList: FileList) => {
+  // Recursively read all files from directory entries (for drag & drop folders)
+  const readEntriesRecursive = useCallback(async (entry: FileSystemEntry): Promise<File[]> => {
+    if (entry.isFile) {
+      return new Promise((resolve) => {
+        (entry as FileSystemFileEntry).file(f => resolve([f]), () => resolve([]));
+      });
+    }
+    if (entry.isDirectory) {
+      const dirReader = (entry as FileSystemDirectoryEntry).createReader();
+      const entries = await new Promise<FileSystemEntry[]>((resolve) => {
+        const allEntries: FileSystemEntry[] = [];
+        const readBatch = () => {
+          dirReader.readEntries((batch) => {
+            if (batch.length === 0) { resolve(allEntries); return; }
+            allEntries.push(...batch);
+            readBatch();
+          }, () => resolve(allEntries));
+        };
+        readBatch();
+      });
+      const filesArrays = await Promise.all(entries.map(e => readEntriesRecursive(e)));
+      return filesArrays.flat();
+    }
+    return [];
+  }, []);
+
+  const handleFilesFromArray = useCallback(async (fileArray: File[]) => {
+    if (fileArray.length === 0) return;
+    const dt = new DataTransfer();
+    fileArray.forEach(f => dt.items.add(f));
+    await handleFilesUploadRaw(fileArray);
+  }, []);
+
+  const handleFilesUploadRaw = useCallback(async (fileArray: File[]) => {
     setLoading(true);
     const errors: string[] = [];
     const newFiles: LoadedFile[] = [];
