@@ -342,6 +342,28 @@ export default function WilayViewer() {
     URL.revokeObjectURL(url);
   }, [files]);
 
+  // Download all modified files as ZIP (skip unmodified)
+  const handleDownloadAllModified = useCallback(async () => {
+    if (modifiedFiles.size === 0) return;
+    if (modifiedFiles.size === 1) {
+      const idx = Array.from(modifiedFiles)[0];
+      handleDownloadModified(idx);
+      return;
+    }
+    const zip = new JSZip();
+    for (const idx of modifiedFiles) {
+      const lf = files[idx];
+      if (lf) zip.file(lf.name, lf.data);
+    }
+    const zipBlob = await zip.generateAsync({ type: 'blob' });
+    const url = URL.createObjectURL(zipBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'modified_wilay_files.zip';
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [files, modifiedFiles, handleDownloadModified]);
+
   // Channel filter canvas
   const getChannelImage = useCallback((dec: DecodedTexture, mode: ChannelMode): string => {
     if (mode === 'rgba') return dec.dataUrl;
