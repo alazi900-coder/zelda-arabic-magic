@@ -603,6 +603,11 @@ export default function WilayViewer() {
         <Button variant="ghost" size="sm" className="h-8 text-xs" onClick={() => void handleExportAllZip()} disabled={totalTextures === 0}>
           <Download className="w-3.5 h-3.5 ml-1" /> تصدير ZIP
         </Button>
+        {modifiedFiles.size > 0 && (
+          <Button variant="default" size="sm" className="h-8 text-xs" onClick={() => void handleDownloadAllModified()}>
+            <Download className="w-3.5 h-3.5 ml-1" /> حفظ المعدلة ({modifiedFiles.size})
+          </Button>
+        )}
       </header>
 
       {/* Parse errors banner */}
