@@ -316,6 +316,7 @@ export default function WilayViewer() {
 
     const newInfo = analyzeWilay(newData);
     setFiles(prev => prev.map((f, i) => i === ct.fileIndex ? { ...f, data: newData, info: newInfo } : f));
+    setModifiedFiles(prev => new Set(prev).add(ct.fileIndex));
 
     // Re-decode for this file
     const newDecoded = new Map(decoded);
