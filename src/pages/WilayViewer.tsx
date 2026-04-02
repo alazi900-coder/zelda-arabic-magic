@@ -331,11 +331,12 @@ export default function WilayViewer() {
     setDecoded(newDecoded);
   }, [replacePreview, files, decoded]);
 
-  // Download modified file
-  const handleDownloadModified = useCallback((fileIndex: number) => {
+  // Download modified file (re-wrapped with original compression)
+  const handleDownloadModified = useCallback(async (fileIndex: number) => {
     const lf = files[fileIndex];
     if (!lf) return;
-    const blob = new Blob([lf.data], { type: 'application/octet-stream' });
+    const rewrapped = await rewrapWilayData(lf.data, lf.compressionSteps, lf.xbc1Header);
+    const blob = new Blob([rewrapped], { type: 'application/octet-stream' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
