@@ -29,6 +29,8 @@ interface LoadedFile {
   name: string;
   data: ArrayBuffer;
   info: WilayInfo;
+  compressionSteps: string[];
+  xbc1Header: Uint8Array | null;
 }
 
 // Combined texture reference pointing to its parent file
