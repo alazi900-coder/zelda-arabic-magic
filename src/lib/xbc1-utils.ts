@@ -245,4 +245,3 @@ async function compressDeflate(data: Uint8Array): Promise<Uint8Array> {
   }
   return out;
 }
-}
