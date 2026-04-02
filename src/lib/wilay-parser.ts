@@ -208,7 +208,7 @@ function decodeMiblToRGBA(miblData: Uint8Array): { rgba: Uint8Array; width: numb
     case 66: rgba = decodeDXT1(linear, w, h); break;
     case 73: rgba = decodeBC4(linear, w, h); break;
     case 68: rgba = decodeBC3(linear, w, h); break;
-    case 77: rgba = decodeBC7(linear, w, h); break;
+    case 77: rgba = decodeBC7Full(linear, w, h); break;
     case 37: // RGBA8 – already decoded
       rgba = new Uint8Array(w * h * 4);
       rgba.set(linear.subarray(0, rgba.length));
