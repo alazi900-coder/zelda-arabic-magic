@@ -12,7 +12,7 @@ import {
   analyzeWilay, decodeWilayTextureAsync, exportWilayTextureAsPNG,
   replaceWilayTexture, type WilayInfo, type WilayTextureInfo
 } from "@/lib/wilay-parser";
-import { unwrapWilaySource } from "@/lib/xbc1-utils";
+import { unwrapWilaySource, rewrapWilayData } from "@/lib/xbc1-utils";
 import JSZip from "jszip";
 
 type ChannelMode = 'rgba' | 'red' | 'green' | 'blue' | 'alpha';
