@@ -7,6 +7,8 @@ export interface UnwrappedWilaySource {
   steps: string[];
   archiveName: string;
   changed: boolean;
+  xbc1Header: Uint8Array | null;
+  originalRaw: ArrayBuffer;
 }
 
 function getMagicString(data: ArrayBuffer | Uint8Array): string {
