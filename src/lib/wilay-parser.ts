@@ -13,6 +13,7 @@
  */
 
 import { decodeDXT1, decodeBC4 } from './wifnt-parser';
+import { decodeBC7 as decodeBC7Full } from './bc7-decoder';
 
 // ── Mibl helpers (shared with wifnt-parser) ──────────────────────────
 
@@ -150,88 +151,6 @@ function decodeBC3(data: Uint8Array, w: number, h: number): Uint8Array {
   return out;
 }
 
-// ── BC7 decoder (mode 6 fast path + basic modes) ─────────────────────
-
-function decodeBC7(data: Uint8Array, w: number, h: number): Uint8Array {
-  const bx = Math.ceil(w / 4), by = Math.ceil(h / 4);
-  const out = new Uint8Array(w * h * 4);
-  for (let row = 0; row < by; row++) {
-    for (let col = 0; col < bx; col++) {
-      const off = (row * bx + col) * 16;
-      if (off + 16 > data.length) break;
-      // Detect mode from first byte's trailing zeros
-      const b0 = data[off];
-      let mode = -1;
-      for (let m = 0; m < 8; m++) { if (b0 & (1 << m)) { mode = m; break; } }
-      // For simplicity, decode mode 6 fully (most common) and fallback to gray for others
-      let rgba: [number, number, number, number][] | null = null;
-      if (mode === 6) rgba = decodeBC7Mode6(data, off);
-      if (!rgba) {
-        // Fallback: treat as uniform gray
-        rgba = Array(16).fill([128, 128, 128, 255]) as [number, number, number, number][];
-      }
-      for (let py = 0; py < 4; py++) {
-        for (let px = 0; px < 4; px++) {
-          const x = col * 4 + px, y = row * 4 + py;
-          if (x >= w || y >= h) continue;
-          const c = rgba[py * 4 + px];
-          const o = (y * w + x) * 4;
-          out[o] = c[0]; out[o + 1] = c[1]; out[o + 2] = c[2]; out[o + 3] = c[3];
-        }
-      }
-    }
-  }
-  return out;
-}
-
-function decodeBC7Mode6(data: Uint8Array, off: number): [number, number, number, number][] {
-  // Mode 6: 1 subset, 7-bit endpoints RGBA, 4-bit indices, 1 p-bit per endpoint
-  // bit layout: [0] mode bit (bit 6), then 7 bits R0, 7 R1, 7 G0, 7 G1, 7 B0, 7 B1, 7 A0, 7 A1, 1 P0, 1 P1, 63 index bits
-  const bits = new Uint8Array(data.buffer, data.byteOffset + off, 16);
-  let bitPos = 7; // skip mode bits (7 zeros + 1)
-
-  function readBits(n: number): number {
-    let val = 0;
-    for (let i = 0; i < n; i++) {
-      const byteI = Math.floor(bitPos / 8);
-      const bitI = bitPos % 8;
-      val |= ((bits[byteI] >> bitI) & 1) << i;
-      bitPos++;
-    }
-    return val;
-  }
-
-  const r0 = readBits(7), r1 = readBits(7);
-  const g0 = readBits(7), g1 = readBits(7);
-  const b0 = readBits(7), b1 = readBits(7);
-  const a0 = readBits(7), a1 = readBits(7);
-  const p0 = readBits(1), p1 = readBits(1);
-
-  // Expand 7+1 p-bit to 8 bits
-  const ep = [
-    [(r0 << 1) | p0, (g0 << 1) | p0, (b0 << 1) | p0, (a0 << 1) | p0],
-    [(r1 << 1) | p1, (g1 << 1) | p1, (b1 << 1) | p1, (a1 << 1) | p1],
-  ];
-
-  // Read 16 4-bit indices (anchor index 0 is 3-bit)
-  const indices: number[] = [];
-  indices.push(readBits(3)); // anchor
-  for (let i = 1; i < 16; i++) indices.push(readBits(4));
-
-  const result: [number, number, number, number][] = [];
-  for (let i = 0; i < 16; i++) {
-    const w4 = indices[i];
-    const iw = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15][w4]; // weight
-    const c: [number, number, number, number] = [0, 0, 0, 0];
-    for (let ch = 0; ch < 4; ch++) {
-      c[ch] = Math.round(((64 - iw) * ep[0][ch] + iw * ep[1][ch] + 32) / 64);
-      if (c[ch] > 255) c[ch] = 255;
-    }
-    result.push(c);
-  }
-  return result;
-}
-
 function rgb565(c: number): number[] {
   return [
     Math.round(((c >> 11) & 0x1F) * 255 / 31),
@@ -276,20 +195,37 @@ function decodeMiblToRGBA(miblData: Uint8Array): { rgba: Uint8Array; width: numb
   if (bc) { wU = divRoundUp(w, 4); hU = divRoundUp(h, 4); }
   else { wU = w; hU = h; }
 
-  // The footer field at +0x04 is not a reliable block-height hint for WILAY textures.
-  // Infer the Tegra layout like the working WIFNT decoder to avoid the noisy dotted output.
-  const blockH = getBlockHeight(hU);
-  const expectedSurfaceSize = getSurfaceSize(wU, hU, bytesPerPx, blockH);
+  // Try multiple block heights to find the one that matches the payload.
+  // The footer's blockHeightLog2 field is sometimes unreliable, so we try:
+  // 1. Footer hint  2. Calculated from height  3. Common powers of 2
   const payloadLimit = Math.max(0, miblData.length - MIBL_FOOTER_SIZE);
+  const footerBH = 1 << Math.min(footer.blockHeightLog2, 4); // clamp to max 16
+  const calcBH = getBlockHeight(hU);
+  const candidates = [footerBH, calcBH];
+  // Add nearby powers of 2 as fallbacks
+  for (const bh of [1, 2, 4, 8, 16]) {
+    if (!candidates.includes(bh)) candidates.push(bh);
+  }
+
+  // Pick the block height whose surface size best matches the available payload
+  let bestBH = calcBH;
+  let bestDiff = Infinity;
+  for (const bh of candidates) {
+    const ss = getSurfaceSize(wU, hU, bytesPerPx, bh);
+    const diff = Math.abs(ss - payloadLimit);
+    if (diff < bestDiff) { bestDiff = diff; bestBH = bh; }
+  }
+
+  const expectedSurfaceSize = getSurfaceSize(wU, hU, bytesPerPx, bestBH);
   const surface = miblData.subarray(0, Math.min(expectedSurfaceSize, payloadLimit || miblData.length));
-  const linear = deswizzle(surface, wU, hU, bytesPerPx, blockH);
+  const linear = deswizzle(surface, wU, hU, bytesPerPx, bestBH);
 
   let rgba: Uint8Array;
   switch (fmt) {
     case 66: rgba = decodeDXT1(linear, w, h); break;
     case 73: rgba = decodeBC4(linear, w, h); break;
     case 68: rgba = decodeBC3(linear, w, h); break;
-    case 77: rgba = decodeBC7(linear, w, h); break;
+    case 77: rgba = decodeBC7Full(linear, w, h); break;
     case 37: // RGBA8 – already decoded
       rgba = new Uint8Array(w * h * 4);
       rgba.set(linear.subarray(0, rgba.length));
