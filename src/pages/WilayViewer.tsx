@@ -145,7 +145,7 @@ export default function WilayViewer() {
           errors.push(`${displayName}: لا يحتوي على صور${unwrapLabel} (${info.magic} v${info.version}، ${(source.data.byteLength / 1024).toFixed(0)} KB)`);
         }
 
-        newFiles.push({ name: displayName, data: source.data, info });
+        newFiles.push({ name: displayName, data: source.data, info, compressionSteps: source.steps, xbc1Header: source.xbc1Header });
       } catch (e) {
         errors.push(`${file.name}: خطأ في القراءة — ${e instanceof Error ? e.message : String(e)}`);
       }
