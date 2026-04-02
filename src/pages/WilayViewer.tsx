@@ -830,7 +830,7 @@ export default function WilayViewer() {
                   src={channelMode === 'rgba' ? selectedDec.dataUrl : getChannelImage(selectedDec, channelMode)}
                   alt={`Texture #${selectedGlobalIndex}`}
                   className="max-w-none"
-                  style={{ imageRendering: 'auto' }}
+                  style={{ imageRendering: pixelPerfect ? 'pixelated' : 'auto' }}
                   draggable={false}
                 />
               </div>
