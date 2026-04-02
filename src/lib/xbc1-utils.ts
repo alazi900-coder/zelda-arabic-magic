@@ -1,4 +1,4 @@
-import { autoDecompressZstd } from "@/lib/zstd-utils";
+import { autoDecompressZstd, compressZstd } from "@/lib/zstd-utils";
 
 export interface UnwrappedWilaySource {
   data: ArrayBuffer;
