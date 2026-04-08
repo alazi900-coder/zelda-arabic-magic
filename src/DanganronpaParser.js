@@ -20,29 +20,45 @@ class DanganronpaParser {
      * @returns {Array} - مصفوفة تحتوي على ملفات الـ .lin المستخرجة
      */
     extractPak(pakBuffer) {
+        if (!Buffer.isBuffer(pakBuffer)) {
+            throw new TypeError('pakBuffer must be a Buffer');
+        }
+
+        if (pakBuffer.length < 4) {
+            throw new Error('Invalid PAK file: too small to contain file count');
+        }
+
         const linFiles = [];
         let offset = 0;
 
-        // قراءة عدد الملفات (أول 4 بايت)
         const numFiles = pakBuffer.readUInt32LE(offset);
         offset += 4;
 
+        if (numFiles < 0 || numFiles > 100000) {
+            throw new RangeError('Invalid number of files in PAK');
+        }
+
+        const headerSize = 4 + (numFiles * 8);
+        if (pakBuffer.length < headerSize) {
+            throw new Error('Invalid PAK file: header truncated');
+        }
+
         const fileEntries = [];
-        // قراءة جدول العناوين والأحجام
         for (let i = 0; i < numFiles; i++) {
             const fileOffset = pakBuffer.readUInt32LE(offset);
             const fileSize = pakBuffer.readUInt32LE(offset + 4);
-            fileEntries.push({ fileOffset, fileSize });
             offset += 8;
+
+            if (fileOffset < headerSize || fileSize < 0 || fileOffset + fileSize > pakBuffer.length) {
+                throw new RangeError(`Invalid file entry at index ${i}`);
+            }
+
+            fileEntries.push({ fileOffset, fileSize });
         }
 
-        // استخراج البيانات الخام (ملفات .lin)
         for (let i = 0; i < fileEntries.length; i++) {
             const { fileOffset, fileSize } = fileEntries[i];
             const linBuffer = pakBuffer.slice(fileOffset, fileOffset + fileSize);
-            
-            // ملاحظة: ملفات .pak لا تخزن الأسماء، لذا نستخدم Index كاسم مؤقت
-            // يمكنك لاحقاً ربطها بملف JSON خارجي يحتوي على الأسماء الحقيقية إذا توفرت
             linFiles.push({ name: `script_${i.toString().padStart(3, '0')}.lin`, buffer: linBuffer });
         }
 
@@ -55,6 +71,10 @@ class DanganronpaParser {
      * @returns {Array} - مصفوفة تحتوي على النصوص وعناوينها
      */
     extractLin(linBuffer) {
+        if (!Buffer.isBuffer(linBuffer)) {
+            throw new TypeError('linBuffer must be a Buffer');
+        }
+
         const texts = [];
         let currentOffset = 0;
 
@@ -99,39 +119,55 @@ class DanganronpaParser {
      * @returns {Buffer} - ملف الـ .lin الجديد
      */
     repackLin(originalLinBuffer, translatedTexts) {
+        if (!Buffer.isBuffer(originalLinBuffer)) {
+            throw new TypeError('originalLinBuffer must be a Buffer');
+        }
+
+        if (!Array.isArray(translatedTexts)) {
+            throw new TypeError('translatedTexts must be an array');
+        }
+
+        const sortedTexts = [...translatedTexts].sort((a, b) => a.offset - b.offset);
         let newLinBuffer = Buffer.alloc(0);
         let lastOffset = 0;
 
-        for (const textEntry of translatedTexts) {
-            // 1. نسخ الـ Bytecode الذي يسبق النص
+        for (const textEntry of sortedTexts) {
+            const offset = Number(textEntry.offset);
+            const length = Number(textEntry.length);
+
+            if (!Number.isInteger(offset) || offset < 1 || !Number.isInteger(length) || length < 0) {
+                throw new TypeError('translatedTexts entries must include valid offset and length');
+            }
+
+            if (offset - 1 < lastOffset) {
+                throw new Error('translatedTexts entries must be non-overlapping and ordered by offset');
+            }
+
+            if (offset + length > originalLinBuffer.length) {
+                throw new RangeError('translated text range is outside the original .lin buffer');
+            }
+
             newLinBuffer = Buffer.concat([
                 newLinBuffer,
-                originalLinBuffer.slice(lastOffset, textEntry.offset - 1) // -1 لتجاوز الـ Opcode القديم
+                originalLinBuffer.slice(lastOffset, offset - 1) // -1 لتجاوز الـ Opcode القديم
             ]);
 
-            // 2. كتابة أمر النص (0x02)
             newLinBuffer = Buffer.concat([
                 newLinBuffer,
                 Buffer.from([this.TEXT_OPCODE])
             ]);
 
-            // 3. معالجة النص العربي (قلب ووصل)
-            // استدعِ دالة الـ Reshape الخاصة بأداتك هنا
-            // const reshapedText = reshape(textEntry.translated).split('').reverse().join('');
-            const reshapedText = textEntry.translated; // استبدل هذا بسطر الـ Reshape
+            const reshapedText = this.reshapeArabicText(textEntry.translated);
 
-            // 4. كتابة النص الجديد ونهايته (0x00)
             newLinBuffer = Buffer.concat([
                 newLinBuffer,
                 Buffer.from(reshapedText, 'utf8'),
                 Buffer.from([this.END_OF_STRING])
             ]);
 
-            // تحديث المؤشر لتجاوز النص القديم
-            lastOffset = textEntry.offset + textEntry.length + 1;
+            lastOffset = offset + length + 1;
         }
 
-        // 5. نسخ ما تبقى من الملف (Bytecode النهائي)
         newLinBuffer = Buffer.concat([
             newLinBuffer,
             originalLinBuffer.slice(lastOffset)
@@ -140,13 +176,32 @@ class DanganronpaParser {
         return newLinBuffer;
     }
 
+    reshapeArabicText(text) {
+        if (typeof text !== 'string') {
+            throw new TypeError('translated text must be a string');
+        }
+
+        // إذا كنت تستخدم مكتبة reshaper، ففعل السطر التالي:
+        // return reshape(text);
+
+        return text;
+    }
+
     /**
      * 4. إعادة ضغط ملفات .lin داخل ملف .pak جديد
      * @param {Array} linFiles - مصفوفة ملفات الـ .lin المعربة
      * @returns {Buffer} - ملف الـ .pak الجديد
      */
     repackPak(linFiles) {
+        if (!Array.isArray(linFiles)) {
+            throw new TypeError('linFiles must be an array');
+        }
+
         const numFiles = linFiles.length;
+        if (numFiles < 0 || numFiles > 100000) {
+            throw new RangeError('Invalid number of files in PAK');
+        }
+
         const headerSize = 4 + (numFiles * 8); // 4 بايت للعدد + (4 للعنوان + 4 للحجم) لكل ملف
         let currentDataOffset = headerSize;
 
@@ -156,20 +211,23 @@ class DanganronpaParser {
         const dataBuffers = [];
 
         for (let i = 0; i < numFiles; i++) {
-            const linBuffer = linFiles[i].buffer;
+            const linFile = linFiles[i];
+            if (!linFile || !Buffer.isBuffer(linFile.buffer)) {
+                throw new TypeError(`linFiles[${i}].buffer must be a Buffer`);
+            }
+
+            const linBuffer = linFile.buffer;
             const fileSize = linBuffer.length;
 
-            // كتابة العنوان (Offset) والحجم (Size) في الترويسة
             headerBuffer.writeUInt32LE(currentDataOffset, 4 + (i * 8));
             headerBuffer.writeUInt32LE(fileSize, 4 + (i * 8) + 4);
 
             dataBuffers.push(linBuffer);
-            currentDataOffset += fileSize; // تحديث العنوان للملف التالي
+            currentDataOffset += fileSize;
         }
 
-        // دمج الترويسة مع البيانات
         return Buffer.concat([headerBuffer, ...dataBuffers]);
     }
 }
 
-module.exports = DanganronpaParser;
+export default DanganronpaParser;

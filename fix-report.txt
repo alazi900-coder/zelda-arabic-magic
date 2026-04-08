@@ -1,0 +1,35 @@
+Fix Report for zelda-arabic-magic
+Date: April 8, 2026
+
+1. File changed:
+- src/DanganronpaParser.js
+
+2. Problems found:
+- The parser file used CommonJS-style export (`module.exports`) inside a project configured as ESM (`package.json` has "type": "module").
+- `extractPak()` lacked sufficient input validation and could accept invalid PAK data leading to out-of-bounds buffer reads.
+- `repackLin()` assumed translated text entries were valid, ordered, and non-overlapping without validation.
+- `repackLin()` also could incorrectly rebuild the .lin file if offsets or lengths were invalid.
+- `repackPak()` did not verify that provided LIN file buffers were valid or that each file entry contained a proper buffer.
+
+3. Fixes applied:
+- Converted `src/DanganronpaParser.js` to ES module format with `export default DanganronpaParser`.
+- Added explicit type checks for `Buffer` inputs in `extractPak()`, `extractLin()`, and `repackPak()`.
+- Added header and file entry validation in `extractPak()`:
+  * verified total header size against buffer length
+  * checked file offsets are not before the header and do not extend past the buffer
+  * limited number of files to a sane maximum
+- Added validation in `repackLin()`:
+  * enforced translated entries contain valid integer `offset` and `length`
+  * ensured offsets are ordered, non-overlapping, and inside the original buffer
+  * ensured replacement text is a string before encoding
+- Preserved non-text bytes correctly when rebuilding `.lin` data and appended the terminating byte for text opcodes.
+- Added validation in `repackPak()` for each `linFiles[i].buffer` being a valid Buffer.
+
+4. Validation results:
+- `npm install` completed successfully.
+- `npm run build` completed successfully.
+- `npm test` completed successfully with 336 passing tests.
+
+5. Notes:
+- `npm run lint` still reports many existing lint issues across the repository, but these were not part of the targeted parser fix.
+- The changes are isolated to the Danganronpa parser and the core app build and tests now pass.
